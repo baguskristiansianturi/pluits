@@ -1537,3 +1537,13 @@
 .pl-msg-stream{background-color:transparent!important;background-image:none!important}
 .pl-msg-layout.is-chat-open .pl-msg-chat{background:transparent!important}
 .pl-msg-layout.is-chat-open .pl-msg-stream{background-color:transparent!important;background-image:none!important}
+
+
+/* Personal workspace wallpaper is rendered beneath the message stream. */
+.pl-msg-chat{--pl-msg-wallpaper-image:none}
+.pl-msg-chat .pl-msg-stream{background-color:transparent!important;background-image:var(--pl-msg-wallpaper-image)!important;background-size:cover!important;background-position:center!important;background-attachment:local!important}
+.pl-msg-chat[data-wallpaper="sand"] .pl-msg-stream{background-image:linear-gradient(145deg,#f5eee4,#e9e0d4)!important}
+.pl-msg-chat[data-wallpaper="mist"] .pl-msg-stream{background-image:linear-gradient(145deg,#eef2f5,#dfe7ed)!important}
+.pl-msg-chat[data-wallpaper="ocean"] .pl-msg-stream{background-image:linear-gradient(145deg,#e5f0f7,#cbdde9)!important}
+.pl-msg-chat[data-wallpaper="midnight"] .pl-msg-stream{background-image:linear-gradient(145deg,#263746,#172532)!important}
+.pl-msg-chat[data-wallpaper="custom"] .pl-msg-stream{background-image:linear-gradient(#ffffff14,#ffffff14),var(--pl-msg-wallpaper-image)!important;background-size:cover!important;background-position:center!important}
