@@ -34,10 +34,18 @@ export function renderMessageMarkup(row, { currentUserId, pending = false, recei
           : '<div class="pl-msg-text">' + esc(row.body) + '</div>';
   const sentAt = new Date(row.created_at).getTime();
   const canDeleteForEveryone = mine && Number.isFinite(sentAt) && Date.now() >= sentAt && Date.now() - sentAt <= 48 * 60 * 60 * 1000;
+  const actions = !pending && !deleted && row.id
+    ? '<div class="pl-msg-actions-menu" data-message-menu hidden>' +
+      '<button type="button" data-message-action="reply">Balas</button><button type="button" data-message-action="forward">Teruskan</button><button type="button" data-message-action="star">' + (row.is_starred ? 'Hapus tanda' : 'Tandai pesan') + '</button>' +
+      (type === 'text' ? '<button type="button" data-message-action="copy">Salin pesan</button>' : '') +
+      '<button type="button" data-message-action="hide">Hapus untuk saya</button>' +
+      (canDeleteForEveryone ? '<button type="button" data-message-action="delete-everyone">Hapus untuk semua</button>' : '') +
+      '</div>'
+    : '';
   const reply = row.reply_preview ? '<div class="pl-msg-reply-preview"><b>Balasan</b><span>' + esc(row.reply_preview) + '</span></div>' : '';
   const starred = row.is_starred ? '<span class="pl-msg-starred" aria-label="Pesan ditandai" title="Pesan ditandai">★</span>' : '';
   const status = mine ? renderMessageStatus({ pending, receipt, voice, recipientOnline }) : '';
   return '<article class="pl-msg-bubble ' + (mine ? 'mine' : 'theirs') + (type === 'image' && !deleted ? ' has-image' : '') + (pending ? ' is-pending' : '') + (deleted ? ' is-deleted' : '') + '" data-message-id="' + esc(row.id || '') + '" data-message-type="' + esc(type) + '" data-media-path="' + esc(row.media_path || '') + '" data-media-name="' + esc(row.media_name || '') + '" data-media-mime="' + esc(row.media_mime_type || '') + '" data-media-duration="' + esc(row.media_duration_seconds || '') + '" data-message-body="' + esc(row.body || '') + '" data-can-delete-everyone="' + (canDeleteForEveryone ? 'true' : 'false') + '">' +
-    '<input class="pl-msg-select-box" type="checkbox" data-select-message aria-label="Pilih pesan" tabindex="-1">' + reply + content + starred +
+    '<input class="pl-msg-select-box" type="checkbox" data-select-message aria-label="Pilih pesan" tabindex="-1">' + reply + content + starred + actions +
     '<footer class="pl-msg-meta"><time datetime="' + esc(row.created_at || '') + '">' + formatMessageTime(row.created_at) + '</time>' + status + '</footer></article>';
 }
