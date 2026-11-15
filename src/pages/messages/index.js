@@ -627,7 +627,8 @@ async function openConversation(id) {
   ]):[{data:[],error:null},{data:[],error:null},{data:[],error:null}];
   const receiptByMessage=new Map((receipts.data||[]).map(receipt=>[receipt.message_id,receipt]));
   const hiddenIds=new Set((hidden.data||[]).map(row=>row.message_id));
-  let visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id));
+  const starredIds=new Set((stars.data||[]).map(row=>row.message_id));
+  let visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id)).map(message=>({...message,is_starred:starredIds.has(message.id)}));
   const replyIds=[...new Set(visibleMessages.map(message=>message.reply_to_id).filter(Boolean))];
   if(replyIds.length){const replies=await db.from('user_messages').select('id,body,deleted_at,message_type').in('id',replyIds);const replyMap=new Map((replies.data||[]).map(row=>[row.id,row]));visibleMessages=visibleMessages.map(row=>({...row,reply_preview:row.reply_to_id?(replyMap.get(row.reply_to_id)?.deleted_at?'Pesan dihapus':replyMap.get(row.reply_to_id)?.body||'Lampiran') : ''}));}
   if((messages.error||members.error)&&navigator.onLine){chat.textContent=(messages.error||members.error).message;return;}
