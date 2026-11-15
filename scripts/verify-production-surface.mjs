@@ -219,7 +219,7 @@ assert.ok(socialHome.includes('function profileMenuMarkup()') && socialHome.incl
 assert.equal(socialHome.split('function bindProfileMenu').length - 1, 1, 'Profile menu composition must have exactly one binding entry point.');
 const socialHeaderMenu = read('src/components/social/header-menu.js');
 assert.ok(socialHeaderMenu.includes("document.addEventListener('click'") && socialHeaderMenu.includes("document.addEventListener('keydown'"), 'Shared social header menu must own delegated click and Escape handling.');
-assert.ok(socialHome.includes("event.target.closest('.pl-social-menu-trigger')"), 'Profile menu must support dynamically rendered profile and preview controls.');
+assert.ok(socialHeaderMenu.includes("event.target.closest('.pl-social-menu-trigger')"), 'Shared profile menu must support dynamically rendered profile and preview controls.');
 const profileHeroStyles = read('src/features/profile/profile-hero.css');
 assert.ok(profileHeroStyles.includes('.ua-profile-main .ua-cover{') && profileHeroStyles.includes('width:100%') && profileHeroStyles.includes('.ua-profile-main .ua-cover::after'), 'Profile hero cover must remain full-width and fade smoothly into the profile surface.');
 const navigationStyles = read('src/styles/social-navigation.css');
