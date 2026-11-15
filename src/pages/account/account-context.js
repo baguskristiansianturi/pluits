@@ -1,14 +1,25 @@
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const initials=v=>String(v||'P').trim().slice(0,1).toUpperCase();
 const rupiah=v=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(Number(v||0));
+function isMissingOptionalTable(error,table){
+ if(!error)return false;
+ const code=String(error.code||'');
+ const message=String(error.message||'').toLowerCase();
+ return code==='42P01'||code==='PGRST205'||(message.includes(table.toLowerCase())&&(message.includes('does not exist')||message.includes('could not find the table')||message.includes('schema cache')));
+}
 export async function loadAccountContext(db,user){
- const [pref,professional,owned,members]=await Promise.all([
+ const [prefResult,professionalResult,owned,members]=await Promise.all([
   db.from('account_context_preferences').select('*').eq('user_id',user.id).maybeSingle(),
   db.from('professional_profiles').select('*').eq('user_id',user.id).maybeSingle(),
   db.from('stores').select('id,name,username,store_status,verification_status,owner_user_id').eq('owner_user_id',user.id),
   db.from('store_members').select('store_id,member_status').eq('user_id',user.id).eq('member_status','active')
  ]);
- if(pref.error)throw pref.error;if(professional.error)throw professional.error;
+ // These context tables are optional during staged rollout. Their absence must
+ // never prevent the core personal account, Circle, Inbox, or Profile from loading.
+ if(prefResult.error&&!isMissingOptionalTable(prefResult.error,'account_context_preferences'))throw prefResult.error;
+ if(professionalResult.error&&!isMissingOptionalTable(professionalResult.error,'professional_profiles'))throw professionalResult.error;
+ const pref={data:prefResult.error?null:prefResult.data};
+ const professional={data:professionalResult.error?null:professionalResult.data};
  let stores=owned.data||[];
  const ids=(members.data||[]).map(x=>x.store_id).filter(id=>!stores.some(s=>s.id===id));
  if(ids.length){const r=await db.from('stores').select('id,name,username,store_status,verification_status,owner_user_id').in('id',ids);if(!r.error)stores=stores.concat(r.data||[]);}
@@ -48,7 +59,8 @@ export function professionalFormPage(ctx,profile){
  <div class="ua-form-actions"><button class="ua-primary" type="submit">${p.id?'Simpan & ajukan pemeriksaan':'Buat & ajukan profil'}</button><span id="ua-professional-note" class="ua-form-note"></span></div></form>`;
 }
 export async function accountSettingsPage(db,user){
- const {data,error}=await db.from('account_content_preferences').select('*').eq('user_id',user.id).maybeSingle();if(error)throw error;
+ const {data,error}=await db.from('account_content_preferences').select('*').eq('user_id',user.id).maybeSingle();
+ if(error&&!isMissingOptionalTable(error,'account_content_preferences'))throw error;
  const p=data||{};
  return `<div class="ua-page-heading"><div><span class="ua-eyebrow">PUSAT PENGATURAN</span><h1>Privasi & audiens</h1><p>Atur pilihan bawaan agar proses posting lebih ringkas. Audiens masih dapat diubah per postingan.</p></div></div>${nav()}
  <form id="ua-content-settings-form" class="ua-panel ua-settings-form"><div class="ua-settings-section"><span class="ua-eyebrow">AUDIENS DEFAULT</span><h2>Siapa yang dapat melihat konten?</h2>
