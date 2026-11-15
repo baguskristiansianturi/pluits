@@ -10,6 +10,7 @@ import {rankPeopleRecommendations,renderPeopleRecommendations,CIRCLE_DEMO_PEOPLE
 import '../../features/discovery/people-recommendations.css';
 import '../../features/posts/post-actions.css';
 import {renderSocialHeader,renderSocialMobileNav} from '../../components/social/navigation.js';
+import {renderDiscoveryHeader,bindDiscoveryHeader} from '../../components/social/discovery-header.js';
 import {updateSEO} from '../seo.js';
 import './user-account.css';
 import './circle-experience.css';
@@ -50,7 +51,7 @@ function frame(content,active='explore',avatarUrl=''){
  const profileView=active==='profile'||active==='preview'||active==='profile-edit';
  const showEditProfile=active==='profile'||active==='preview';
  return `<div class="ua-app ua-social-app">
-  ${renderSocialHeader({active,profileView,showEditProfile,user,profile,userAvatar,notificationCount:unreadNotificationCount})}
+  ${active==='post'?renderDiscoveryHeader({notificationCount:unreadNotificationCount}):renderSocialHeader({active,profileView,showEditProfile,user,profile,userAvatar,notificationCount:unreadNotificationCount})}
    <main class="ua-main plds-container ${profileView?'ua-profile-main':''} ${active==='create'?'ua-create-main':''}">${content}</main>
   ${renderSocialMobileNav({active,profileView,user,profile,userAvatar,notificationCount:unreadNotificationCount})}
      <div id="ua-toast" class="ua-toast" role="status"></div>
@@ -911,7 +912,7 @@ async function mountAccount(section='profile',parameter=''){
   user=session?.user||null;
   if(!user&&(section==='user'||section==='post')){
    const page=section==='user'?await publicProfilePage(parameter):await postDetailPage(parameter||location.hash.split('/')[3]||'');if(!isCurrent())return;
-   document.querySelector('#app').innerHTML=frame(page,'explore');bindProfileTabs();return;
+   document.querySelector('#app').innerHTML=frame(page,section==='post'?'post':'explore');if(section==='post')bindDiscoveryHeader();bindProfileTabs();return;
   }
   if(['auth','register','login'].includes(section)){authScreen(section==='auth'?parameter:section);return;}
   if(!user){authScreen('login');return;}
@@ -927,6 +928,7 @@ async function mountAccount(section='profile',parameter=''){
   app.classList.remove('pl-page-enter');app.innerHTML=frame(page,navActive,headerAvatar);requestAnimationFrame(()=>{if(isCurrent())app.classList.add('pl-page-enter');});
   document.querySelector('#ua-logout')?.addEventListener('click',async()=>{await supabase.auth.signOut();user=null;profile=null;authScreen('login');});
   bindAccountContext({db:supabase,user,ctx:accountContext,profile,refresh:mountAccount});
+  if(section==='post')bindDiscoveryHeader();
   if(section==='explore')bindHomeDiscoveryLocation();
   bindProfileMenu();
   if(section==='security')bindAccountSecurity(supabase,user);

@@ -1342,3 +1342,15 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - **Production URL:** https://baguskristiansianturi.github.io/pluits/#/search
 - **Status:** IMPLEMENTED / AUTOMATED TESTED / PRODUCTION DEPLOYED / ANDROID REAL-DEVICE UAT NOT TESTED / FOUNDER ACCEPTANCE PENDING.
 - **Next:** founder checks 360/390 px screens, category carousel, search, video autoplay/pause, and navigation to Post/Reel detail on Android. Adjust only the specific UI details that need refinement.
+
+## CP-084 — Jelajah header and visual tile refinement (15 November 2026)
+
+- **PR:** #30 — https://github.com/baguskristiansianturi/pluits/pull/30 (open; CI in progress).
+- **Branch:** `fix/explore-header-video-preview-refinement`.
+- **Shared header:** Jelajah and opened Post detail reuse one sticky header: search field with compact `Jelajah` context label and notification bell. Post detail keeps the same search affordance and notification route for signed-in and public visitors.
+- **Category carousel:** soft translucent grey chips, subtle borders, compact text, and 34 px minimum touch target.
+- **Media grid:** no creator avatar/name overlays; photo tiles have no type badge; video tiles alone show a small video glyph at top-left. Eye indicator is a small icon only, without a surrounding badge or border.
+- **Video preview:** one active preview at a time; only a stable subset of videos is eligible for autoplay. Video resources start loading only when tiles enter the viewport; previews are muted, looping, inline, and pause when off-screen, on tab background, or route navigation. The browser captures a still frame as a poster when decoding permits; ineligible videos remain still.
+- **Scope:** no Supabase schema or production data changes; Circle/Story/Reels remain untouched.
+- **Validation:** all 98 tests and Vite build passed on intermediate head #2021 after fixing the shared icon import; final selective-autoplay head #2023 is running. Production deployment NOT YET RELEASED; Android UAT NOT TESTED.
+- **Next:** verify final CI, merge PR, verify Pages deployment, then inspect the header and tile behavior on 360–390 px Android screens.
