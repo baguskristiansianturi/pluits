@@ -602,7 +602,7 @@ function bindMessageActions(chat,conversationId) {
   chat.querySelector('[data-selection-delete]')?.addEventListener('click',async()=>{if(!selected.size||!window.confirm('Hapus '+selected.size+' pesan untuk Anda?'))return;for(const id of selected){const {error}=await db.rpc('hide_message_for_me',{p_message_id:id});if(error){if(status)status.textContent=error.message;break;}}selected.clear();await openConversation(conversationId);});
   chat.querySelector('[data-selection-forward]')?.addEventListener('click',()=>{if(selected.size!==1){if(status)status.textContent='Pilih satu pesan untuk diteruskan.';return;}const dialog=chat.querySelector('#pl-msg-forward-dialog');dialog.dataset.messageId=[...selected][0];dialog.showModal();});
   const dialog=chat.querySelector('#pl-msg-forward-dialog');
-  dialog?.querySelector('[data-forward-send]')?.addEventListener('click',async()=>{const messageId=dialog.dataset.messageId,target=dialog.querySelector('select')?.value,source=chat.querySelector('[data-message-id="'+CSS.escape(messageId)+'"]');if(!target||!source)return;const body=source.dataset.messageBody||'';if(!body){if(status)status.textContent='Saat ini hanya pesan teks yang dapat diteruskan.';return;}const {error}=await db.from('user_messages').insert({conversation_id:target,sender_id:currentUser.id,body:'Diteruskan: '+body,message_type:'text',client_message_id:crypto.randomUUID()});if(error){if(status)status.textContent='Gagal meneruskan pesan: '+error.message;return;}dialog.close();if(status)status.textContent='Pesan diteruskan.';await loadConversations();});
+  dialog?.querySelector('[data-forward-send]')?.addEventListener('click',async()=>{const messageId=dialog.dataset.messageId,target=dialog.querySelector('select')?.value,source=chat.querySelector('[data-message-id="'+CSS.escape(messageId)+'"]');if(!target||!source)return;const type=source.dataset.messageType||'text',body=source.dataset.messageBody||'',path=source.dataset.mediaPath||'';let payload={conversation_id:target,sender_id:currentUser.id,body:body?'Diteruskan: '+body:'',message_type:type,client_message_id:crypto.randomUUID()};if(path){const signed=await db.storage.from('pluits-message-media').createSignedUrl(path,300);if(signed.error){if(status)status.textContent='Media sumber tidak dapat dibuka.';return;}const downloaded=await fetch(signed.data.signedUrl);if(!downloaded.ok){if(status)status.textContent='Media gagal diunduh untuk diteruskan.';return;}const blob=await downloaded.blob(),mime=blob.type||'application/octet-stream',name=source.dataset.mediaName||'lampiran',ext=(name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,8),newPath=target+'/'+currentUser.id+'/'+crypto.randomUUID()+'.'+ext;const uploaded=await db.storage.from('pluits-message-media').upload(newPath,blob,{contentType:mime,upsert:false});if(uploaded.error){if(status)status.textContent='Media gagal diunggah: '+uploaded.error.message;return;}payload.media_path=newPath;payload.media_mime_type=mime;payload.media_name=name;if(type==='voice')payload.media_duration_seconds=Number(source.dataset.mediaDuration)||1;}const {error}=await db.from('user_messages').insert(payload);if(error){if(payload.media_path)await db.storage.from('pluits-message-media').remove([payload.media_path]);if(status)status.textContent='Gagal meneruskan pesan: '+error.message;return;}dialog.close();if(status)status.textContent='Pesan diteruskan.';await loadConversations();});
   dialog?.querySelector('[data-forward-cancel]')?.addEventListener('click',()=>dialog.close());
   chat.querySelectorAll('[data-contact-action]').forEach(button=>button.onclick=async()=>{const otherId=button.dataset.userId,action=button.dataset.contactAction;if(!otherId)return;if(action==='block'){if(!window.confirm('Blokir akun ini? Akun tersebut tidak dapat memulai atau mengirim pesan kepada Anda.'))return;const {error}=await db.rpc('block_user',{p_blocked_user_id:otherId});if(status)status.textContent=error?'Gagal memblokir: '+error.message:'Akun berhasil diblokir.';if(!error){chat.querySelector('#pl-msg-compose')?.setAttribute('hidden','');chat.querySelector('[data-contact-menu]')?.removeAttribute('open');}}if(action==='report'){const details=window.prompt('Jelaskan alasan laporan (opsional):','');if(details===null)return;const {error}=await db.rpc('report_content',{p_target_type:'user',p_target_id:otherId,p_reason:'other',p_details:details});if(status)status.textContent=error?'Laporan gagal: '+error.message:'Laporan akun telah dikirim untuk ditinjau.';}});
 }
@@ -615,7 +615,7 @@ async function openConversation(id) {
   chat.innerHTML='<div class="pl-msg-empty">Memuat pesan…</div>';
   const thread=conversationCache.find(item=>item.id===id);
   const [messages,members]=await Promise.all([
-    db.from('user_messages').select('id,sender_id,body,created_at,deleted_at,message_type,media_path,media_duration_seconds,media_mime_type,media_name').eq('conversation_id',id).order('created_at',{ascending:true}).limit(150),
+    db.from('user_messages').select('id,sender_id,body,created_at,deleted_at,message_type,media_path,media_duration_seconds,media_mime_type,media_name,reply_to_id').eq('conversation_id',id).order('created_at',{ascending:true}).limit(150),
     db.from('user_conversation_members').select('user_id,last_read_at').eq('conversation_id',id)
   ]);
   const messageIds=(messages.data||[]).map(message=>message.id);
@@ -625,7 +625,7 @@ async function openConversation(id) {
   ]):[{data:[],error:null},{data:[],error:null}];
   const receiptByMessage=new Map((receipts.data||[]).map(receipt=>[receipt.message_id,receipt]));
   const hiddenIds=new Set((hidden.data||[]).map(row=>row.message_id));
-  const visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id));
+  let visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id));\n  const replyIds=[...new Set(visibleMessages.map(message=>message.reply_to_id).filter(Boolean))];\n  if(replyIds.length){const replies=await db.from('user_messages').select('id,body,deleted_at,message_type').in('id',replyIds);const replyMap=new Map((replies.data||[]).map(row=>[row.id,row]));visibleMessages=visibleMessages.map(row=>({...row,reply_preview:row.reply_to_id?(replyMap.get(row.reply_to_id)?.deleted_at?'Pesan dihapus':replyMap.get(row.reply_to_id)?.body||'Lampiran') : ''}));}
   if((messages.error||members.error)&&navigator.onLine){chat.textContent=(messages.error||members.error).message;return;}
   const queued=queueFor(id);
   const preferences=getInboxPreferences();
@@ -655,12 +655,12 @@ async function openConversation(id) {
   form.onsubmit=async event=>{
     event.preventDefault();
     const body=String(new FormData(form).get('body')||'').trim(); if(!body)return;
-    const item={client_message_id:crypto.randomUUID(),conversation_id:id,sender_id:currentUser.id,body,created_at:new Date().toISOString()};
+    const textarea=form.querySelector('textarea');\n    const item={client_message_id:crypto.randomUUID(),conversation_id:id,sender_id:currentUser.id,body,reply_to_id:textarea?.dataset.replyTo||null,created_at:new Date().toISOString()};
     const button=form.querySelector('[type="submit"]'); button.disabled=true;
     if(!navigator.onLine) {
       const queue=readQueue(); queue.push(item);
       if(!writeQueue(queue)){alert('Penyimpanan offline di perangkat tidak tersedia. Pesan belum disimpan.');button.disabled=false;return;}
-      form.reset(); await openConversation(id); await loadConversations(); updateNetworkStatus(); return;
+      form.reset();if(textarea){delete textarea.dataset.replyTo;textarea.placeholder='Ketik pesan';} await openConversation(id); await loadConversations(); updateNetworkStatus(); return;
     }
     const {created_at,...messagePayload}=item;
     const {error}=await db.from('user_messages').upsert(messagePayload,{onConflict:'sender_id,client_message_id',ignoreDuplicates:true});
