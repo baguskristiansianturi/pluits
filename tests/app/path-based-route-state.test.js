@@ -27,7 +27,7 @@ test('Inbox and Seller Center read route state from readable URLs', async () => 
   const seller = await readFile(new URL('../../src/pages/seller/index.js', import.meta.url), 'utf8');
   assert.match(inbox, /const routeQuery=location\.search/);
   assert.match(inbox, /new URLSearchParams\(routeQuery\)/);
-  assert.match(seller, /const currentSellerRoute=\(\)=>\(\(location\.pathname\|\|''\)\+\s*\(location\.hash\|\|''\)\)/);
+  assert.match(seller, /const currentSellerRoute=.*location\.pathname.*location\.hash.*toLowerCase\(\)/);
   assert.match(seller, /authView\(currentSellerRoute\(\)\.includes\('register'\)/);
 });
 
