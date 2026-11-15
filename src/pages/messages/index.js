@@ -591,7 +591,7 @@ function bindMessageActions(chat,conversationId) {
   chat.querySelectorAll('[data-message-action]').forEach(button=>button.onclick=async()=>{
     const article=button.closest('[data-message-id]'),messageId=article?.dataset.messageId;if(!messageId)return;
     const action=button.dataset.messageAction;article.querySelector('.pl-msg-actions')?.removeAttribute('open');
-    if(action==='select'){selected.add(messageId);update();return;}
+    if(action==='select'){selected.add(messageId);update();return;}\n    if(action==='star'){const existing=await db.from('user_message_stars').select('message_id').eq('user_id',currentUser.id).eq('message_id',messageId).maybeSingle();const result=existing.data?await db.from('user_message_stars').delete().eq('user_id',currentUser.id).eq('message_id',messageId):await db.from('user_message_stars').insert({user_id:currentUser.id,message_id:messageId});if(status)status.textContent=result.error?'Gagal mengubah tanda pesan: '+result.error.message:existing.data?'Tanda pesan dihapus.':'Pesan ditandai.';if(!result.error)await openConversation(conversationId);return;}
     if(action==='reply'){const area=chat.querySelector('#pl-msg-compose textarea');if(area){area.dataset.replyTo=messageId;area.placeholder='Balas pesan terpilih…';area.focus();}if(status)status.textContent='Mode balas aktif. Tulis balasan Anda.';return;}
     if(action==='forward'){const dialog=chat.querySelector('#pl-msg-forward-dialog');if(dialog){dialog.dataset.messageId=messageId;dialog.showModal();}return;}
     if(action==='copy'){try{await navigator.clipboard.writeText(article.dataset.messageBody||'');if(status)status.textContent='Pesan disalin.';}catch{if(status)status.textContent='Browser tidak mengizinkan penyalinan pesan.';}return;}
@@ -619,7 +619,7 @@ async function openConversation(id) {
     db.from('user_conversation_members').select('user_id,last_read_at').eq('conversation_id',id)
   ]);
   const messageIds=(messages.data||[]).map(message=>message.id);
-  const [receipts,hidden]=messageIds.length?await Promise.all([
+  const [receipts,hidden,stars]=messageIds.length?await Promise.all([
     db.from('user_message_receipts').select('message_id,delivered_at,read_at,played_at').in('message_id',messageIds),
     db.from('user_message_hidden').select('message_id').eq('user_id',currentUser.id).in('message_id',messageIds)
   ]):[{data:[],error:null},{data:[],error:null}];
