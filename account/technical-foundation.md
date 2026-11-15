@@ -26,6 +26,17 @@ For every agreed account capability, record:
 11. **Operations:** logging, monitoring, rate limits, performance, and recovery.
 12. **Open risks:** feasibility questions, third-party/platform dependencies, and unresolved decisions.
 
+## Technical notes: comment permission
+
+The comment submission path must enforce two independent gates on the server:
+
+1. **Content gate:** comments are enabled for the target blog/article, post, or Reel, and the requesting user is allowed to view/interact with that content under its audience and block rules.
+2. **Account gate:** the account has a verified status and is otherwise permitted to interact (for example, it is not suspended or restricted from commenting).
+
+Membership tier alone must not grant or deny the basic comment capability. A verified Regular account is eligible on the same basis as a verified premium account. An unverified premium account must be rejected. The frontend may show or hide the composer and explain the verification requirement, but the backend must be authoritative and reject direct API attempts that fail either gate.
+
+The final design must define consistent behavior for comments disabled by the content owner, blog-level comment availability, blocked relationships, restricted accounts, and verification status changes. Avoid leaking private content or comment permissions through API responses.
+
 ## Architecture principles to evaluate
 
 - The backend must enforce permissions; hiding a frontend control is not sufficient authorization.
