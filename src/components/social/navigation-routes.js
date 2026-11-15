@@ -99,6 +99,9 @@ export function getInternalRoute(locationLike = window.location) {
   else if (a === 'marketplace' && b === 'orders') internal = 'market-orders';
   else if (a === 'marketplace' && b === 'product') internal = 'market-product/' + (c || '');
   else if (a === 'places' && b) internal = 'place/' + b;
+  else if (a === 'posts' && b) internal = 'account/post/' + b;
+  else if (a === 'blog-studio') internal = 'account/blog';
+  else if (['wallet','addresses'].includes(a)) internal = 'account/' + a;
   else if (a === 'blog' && b) internal = 'blog/' + b;
   else if (a?.startsWith('@')) internal = a;
   else if (!internal && a) internal = a + (parts.length > 1 ? '/' + parts.slice(1).join('/') : '');
