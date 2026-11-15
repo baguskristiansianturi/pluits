@@ -1330,9 +1330,11 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 
 - **PR:** #29 — https://github.com/baguskristiansianturi/pluits/pull/29
 - **Branch:** `fix/explore-discovery-grid-mobile`.
-- **Founder-approved scope:** search bar sederhana di bagian atas, carousel horizontal kategori/filter, grid media tiga kolom mobile dengan rasio 4:5, avatar kreator kecil, ikon media profesional, serta video autoplay muted/loop ketika terlihat dan pause ketika tidak terlihat.
-- **Frontend IMPLEMENTED IN BRANCH:** feature module baru `src/features/discovery/explore-grid.js` dan `explore-grid.css`; Account Explore dirender sebagai discovery grid, bukan susunan blok Circle. Pemanggilan data untuk Story, rekomendasi orang, profil rekomendasi, dan Top 10 yang tidak tampil pada Jelajah dihapus dari jalur feed. Hydrasi Explore dapat melewati query Story tanpa mengubah pemakaian hydrator di halaman lain.
-- **Privacy/performance:** tetap menggunakan postingan publik yang lolos moderation, mematuhi block/mute/hidden-content, memakai signed media URLs yang sudah ada, tidak membuat angka view atau engagement palsu, dan hanya satu video diputar pada satu waktu.
-- **Backend/database:** tidak ada perubahan schema, migration, atau data produksi.
-- **Validation:** automated CI/build NOT VERIFIED; Pages NOT DEPLOYED; Android real-device UAT NOT TESTED; founder acceptance PENDING.
-- **Next:** tunggu PR CI, periksa build dan regression suite, lalu release dan verifikasi Pages. Setelah itu uji dari Android pada lebar 360/390 px, scroll grid, autoplay/pause video, kategori, search, dan navigasi ke detail post.
+- **Canonical route:** Jelajah `#/search`, owned by `src/pages/search/discovery.js`; Circle `#/account/explore` is a separate workspace and is intentionally unchanged.
+- **Founder-approved scope:** one compact search bar at the top, one horizontal carousel of available content categories, then the media grid. No editorial intro, extra sort bar, or long captions above the grid.
+- **Frontend IMPLEMENTED IN BRANCH:** Jelajah uses a three-column mobile media grid with portrait 3:4 cards, 2–3 px gutters, compact 21–22 px creator avatars and username, a restrained eye affordance, and SVG video/multi-media marks.
+- **Video behavior IMPLEMENTED IN BRANCH:** muted, looping, inline previews play only when at least 55% visible; off-screen and background playback pauses; navigation cleanup disconnects the observer; reduced-motion preference disables autoplay. The viewer does not invent view counts.
+- **Circle isolation:** `src/pages/account/index.js` has been restored to the main-branch version. Circle Story, recommendation and feed behavior remain under their existing owner and contracts.
+- **Backend/database:** no schema, migration, ranking, or production-data changes.
+- **Validation:** an initial CI run (#2005) caught an incorrect first implementation that touched Circle; that implementation was reverted and the change was moved to the canonical Jelajah route. The latest head is awaiting its fresh CI run. Pages NOT DEPLOYED; Android real-device UAT NOT TESTED; founder acceptance PENDING.
+- **Next:** verify the latest PR CI and Vite build; after success, merge/release and verify Pages. Then test 360/390 px screens, category carousel, search, video autoplay/pause, and navigation to post/Reel detail on Android.
