@@ -1403,7 +1403,7 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - Fix: canonicalize legacy account/user links to the existing public /@username/ profile route; preserve older direct /user/:username/ links; map professional-create to the existing mountAccount('professional-create') section. No page controller, business rule, database schema, or visual design was changed.
 - Regression coverage: extend tests/app/social-navigation-flow.test.js to exercise both legacy URL conversions, direct-path resolution, and the actual home/account-context link sources.
 - Commit mode: direct commit to main as requested; no pull request.
-- Status: IMPLEMENTED; CI, Pages deployment and live browser/Android verification pending at commit time. This is a source-backed route correction, not a claim that every visible button or authenticated journey has passed runtime UAT.
+- Status: IMPLEMENTED and DEPLOYED at commit f25513d1212957cf91aca1d2098eaafe60f6aebc. Main push workflow #43711573279 / check run #132804075226 SUCCESS; 139/139 Node tests passed, Vite build and Pages deployment reported success. Live signed-in browser and Android UAT remain NOT TESTED.
 - Remaining audit: continue checking the rest of the route families and all interactive controls; validate signed-in flows with founder-controlled accounts and real Android browser interaction before marking ACCEPTED.
 
 
@@ -1414,4 +1414,5 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - Fix: consume location.search with legacy-hash fallback for query state; compare the full current address for stale nearby requests; pass the place slug from router to the place binder; read Seller route mode from pathname plus hash; derive Account's active view from the canonical internal route and preserve that view after post mutations; share canonical post URLs.
 - Regression coverage: add tests/app/path-based-route-state.test.js for route query mapping, Directory place slug binding, Inbox/Seller URL state and Account post-action preservation.
 - Commit mode: direct commit to main; no pull request.
-- Status: IMPLEMENTED; CI and Pages deployment pending. Authenticated browser, two-account and Android UAT remain NOT TESTED.
+- Status: IMPLEMENTED in commit be9fd9f7640f1659137c108b7fed53cb681fe738; push-triggered CI/Pages verification pending. Authenticated browser, two-account and Android UAT remain NOT TESTED.
+- Verification trigger: this follow-up main-branch contents commit dispatches the repository's standard push workflow for the grouped route-state changes.
