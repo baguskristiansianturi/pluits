@@ -68,6 +68,13 @@ test('desktop and mobile social navigation use the shared route registry', () =>
   }
 });
 
+test('Create preserves its destination through login and online inbox contacts start chats', async () => {
+  const messages = await readFile(new URL('../../src/pages/messages/index.js', import.meta.url), 'utf8');
+  assert.ok(account.includes("requested==='create'?'#/create':'#/account/explore'"), 'Successful authentication should return a guest from Create to Create.');
+  assert.ok(messages.includes('data-start-chat="'+esc(person.id)+'"'), 'Online contact chips must be actionable chat controls, not profile links.');
+  assert.ok(messages.includes('bindStartChat(strip);'), 'Online contact chips must bind the direct-conversation action.');
+});
+
 test('profile edit keeps its nested URL and is dispatched through the account route', () => {
   assert.equal(ROUTES.editProfile, '/pluits/profile/edit/');
   assert.ok(router.includes("r==='account'"));
