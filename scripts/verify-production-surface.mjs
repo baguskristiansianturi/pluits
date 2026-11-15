@@ -294,7 +294,7 @@ assert.ok(!socialNavigationCss.includes('.ua-profile-savebar'), 'Profile edit co
 assert.ok(socialNavigationCss.includes('.ua-social-app .pl-social-mobile-nav > a .ua-avatar'), 'Mobile profile avatar must share the navigation icon sizing rules.');
 assert.ok(socialNavigationCss.includes('flex: 0 0 22px'), 'Mobile navigation symbols must use a consistent 22px visual size.');
 
-const profileCss = read('src/pages/account/user-account.css');
+const profileCss = accountCss;
 assert.ok(profileCss.includes('grid-template-columns: repeat(4, minmax(0, 1fr))'), 'Profile tabs must align in four equal columns.');
 assert.ok(profileCss.includes('height: 142px !important'), 'Mobile profile cover must use a compact hero height.');
 assert.ok(profileCss.includes('grid-template-columns: 78px minmax(0, 1fr) !important'), 'Mobile profile identity must use an explicit two-column grid.');
@@ -305,7 +305,7 @@ assert.ok(postDetailSource.includes('class="ua-post-detail-page"'), 'Post detail
 assert.ok(postDetailSource.includes('class="ua-post-detail-stream"'), 'Post detail must have a dedicated content stream.');
 assert.ok(postDetailSource.includes('.ua-post-detail-page .ua-media img'), 'Media normalizer must include opened post detail images.');
 assert.ok(postDetailSource.includes('const ratio=isDetail(el)?boundedRatio(w,h):4/5'), 'Feed media frames must use a consistent 4:5 ratio while detail preserves source proportions.');
-const postLayoutCss = read('src/pages/account/user-account.css');
+const postLayoutCss = accountCss;
 assert.ok(postLayoutCss.includes('aspect-ratio: 4 / 5'), 'Feed media must use a consistent responsive frame.');
 assert.ok(postLayoutCss.includes('.ua-post-detail-page .ua-media img'), 'Post detail images must have responsive sizing rules.');
 assert.ok(postLayoutCss.includes('overflow-y: auto;'), 'Mobile social pages must retain vertical document scrolling.');
@@ -348,7 +348,7 @@ assert.ok(postActionFeature.includes('data-action="like"') && postActionFeature.
 assert.ok(postActionFeature.includes('pl-post-icon') && !postActionFeature.includes('pluits-like'), 'Post actions must use their own restrained SVG icon set.');
 assert.ok(read('src/features/posts/post-actions.css').includes('.pl-post-actions'), 'Post action controls must own their feature-scoped styles.');
 assert.ok(read('src/pages/account/index.js').includes('renderPostCard') && read('src/features/posts/post-card.js').includes('renderActions({user,liked:post.liked,saved:post.saved})'), 'Canonical post cards must delegate action rendering to the post feature module.');
-assert.ok(read('src/pages/account/user-account.css').includes('.ua-social-app .ua-post-caption'), 'Post caption spacing must be explicitly compacted.');
+assert.ok(accountCss.includes('.ua-social-app .ua-post-caption'), 'Post caption spacing must be explicitly compacted.');
 
 import { ROUTES, NAVIGATION_CONTEXTS, getRoute } from '../src/components/social/navigation-routes.js';
 assert.equal(ROUTES.inbox, '/pluits/inbox/', 'Inbox must have one canonical route.');
