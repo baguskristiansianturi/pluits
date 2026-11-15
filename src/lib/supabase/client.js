@@ -1,4 +1,4 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.119.0';
 
 // Browser publishable key only. Never place service-role credentials here.
 export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://ytndswhqxayqpftszwfh.supabase.co';
