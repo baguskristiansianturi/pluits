@@ -115,7 +115,7 @@ function bindVoiceRecorder(chat, conversationId) {
     clearTimeout(limitTimer);clearInterval(clockTimer);stopTracks();
     if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl='';}
     panel.hidden=true;panel.innerHTML='';
-    button.disabled=false;button.textContent='🎙 Suara';button.classList.remove('is-recording');
+    button.disabled=false;button.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8"/></svg>';button.classList.remove('is-recording');
   };
   const elapsed=()=>Math.max(0,Date.now()-startedAt-pausedMs-(pauseStartedAt?Date.now()-pauseStartedAt:0));
   const showPreview=blob=>{
@@ -162,7 +162,7 @@ function bindVoiceRecorder(chat, conversationId) {
       recorder.onerror=()=>{if(status)status.textContent='Perekaman gagal. Periksa izin mikrofon.';resetPanel();};
       recorder.onstop=()=>{
         clearTimeout(limitTimer);clearInterval(clockTimer);stopTracks();
-        button.classList.remove('is-recording');button.textContent='🎙 Suara';
+        button.classList.remove('is-recording');button.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8"/></svg>';
         const blob=new Blob(chunks,{type:recorder.mimeType||'audio/webm'});
         if(cancelled){resetPanel();if(status)status.textContent='Rekaman dibatalkan.';return;}
         const duration=Math.round(elapsed()/1000);
@@ -195,7 +195,7 @@ function bindVoiceRecorder(chat, conversationId) {
 
       if(status)status.textContent='Sedang merekam. Maksimal 3 menit.';
     }catch(error){
-      stopTracks();button.textContent='🎙 Suara';button.classList.remove('is-recording');
+      stopTracks();button.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8"/></svg>';button.classList.remove('is-recording');
       if(status)status.textContent='Mikrofon tidak tersedia. Izinkan akses mikrofon di browser.';
     }
   };
@@ -568,7 +568,7 @@ async function loadConversations() {
   list.innerHTML=visibleConversations.length?visibleConversations.map(conversation=>{
     const pending=queueFor(conversation.id).length;
     const avatar=contactAvatar(conversation.other).replace('class="pl-msg-avatar"','class="pl-msg-avatar" data-thread-avatar="'+esc(conversation.other.id||'')+'"');
-    return '<button class="pl-msg-thread '+(currentConversation===conversation.id?'active':'')+(conversation.unread?' is-unread':'')+'" data-open-chat="'+conversation.id+'">'+avatar+'<span class="pl-msg-thread-copy"><span class="pl-msg-thread-head"><b>'+esc(conversation.other.display_name||conversation.other.username)+'</b><time>'+formatTime(conversation.last?.created_at||conversation.updated_at)+'</time></span><small>@'+esc(conversation.other.username)+'</small><p>'+esc(conversation.last?.deleted_at?'Pesan ini dihapus':conversation.last?.message_type==='voice'?'🎙 Pesan suara':conversation.last?.body||'Belum ada pesan')+(pending?' · '+pending+' menunggu':'')+'</p></span>'+(conversation.unread?'<i class="pl-msg-unread-badge" aria-label="Belum dibaca"></i>':'')+'</button>';
+    return '<button class="pl-msg-thread '+(currentConversation===conversation.id?'active':'')+(conversation.unread?' is-unread':'')+'" data-open-chat="'+conversation.id+'">'+avatar+'<span class="pl-msg-thread-copy"><span class="pl-msg-thread-head"><b>'+esc(conversation.other.display_name||conversation.other.username)+'</b><time>'+formatTime(conversation.last?.created_at||conversation.updated_at)+'</time></span><small>@'+esc(conversation.other.username)+'</small><p>'+esc(conversation.last?.deleted_at?'Pesan ini dihapus':conversation.last?.message_type==='voice'?'Pesan suara':conversation.last?.message_type==='image'?'Foto':conversation.last?.message_type==='file'?'Dokumen':conversation.last?.body||'Belum ada pesan')+(pending?' · '+pending+' menunggu':'')+'</p></span>'+(conversation.unread?'<i class="pl-msg-unread-badge" aria-label="Belum dibaca"></i>':'')+'</button>';
   }).join(''):emptyStateMarkup({variant:'message',title:activeInboxTab==='unread'?'Tidak ada pesan belum dibaca':'Belum ada percakapan',description:activeInboxTab==='unread'?'Semua percakapan sudah dibaca.':'Pilih kontak atau cari nama pengguna untuk memulai percakapan.'});
   list.querySelectorAll('[data-open-chat]').forEach(button=>button.onclick=()=>openConversation(button.dataset.openChat));
   list.hidden=false;
