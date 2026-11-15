@@ -49,3 +49,8 @@ Initial public contracts:
 - Profile image-frame helpers: `src/features/profile/index.js`.
 - App download section renderer: `src/features/app-download/index.js`.
 
+
+
+## Page stylesheet boundary enforcement
+
+CSS files under `src/pages/` are now included in `scripts/verify-style-boundaries.mjs`. Page-owned selectors must use a unique `.pl-*`, `.ua-*`, `.pluits-*`, or `#pl-*` root. The only approved page-root exceptions are the three exact Inbox mobile viewport selectors (`html:has(.pl-msg)`, `body:has(.pl-msg)`, `#app:has(.pl-msg)`); keep them documented and do not widen the allowlist. Global `src/style.css` and `src/styles/` remain under a separate migration audit.

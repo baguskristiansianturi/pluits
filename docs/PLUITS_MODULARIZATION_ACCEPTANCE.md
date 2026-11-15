@@ -59,7 +59,7 @@ Exit: every source area has an owner, consumer map, risk rating, and proposed sa
 
 ### Phase 1 — Guardrails
 - Add or strengthen automated module-boundary checks (`scripts/verify-module-boundaries.mjs`).
-- Add CI enforcement for scoped component/feature CSS (`scripts/verify-style-boundaries.mjs`); legacy page/global styles remain outside this initial guard until their selectors are inventoried and safely migrated.
+- Add CI enforcement for scoped component/feature/page CSS (`scripts/verify-style-boundaries.mjs`). Page CSS is now covered; only three exact Inbox mobile viewport selectors are approved exceptions. Global `src/style.css` and `src/styles/` remain outside the guard pending selector ownership inventory.
 - Add checks for forbidden cross-feature imports and unapproved global CSS selectors.
 - Require the per-change owner/consumer/protected-surface record in `docs/pluits/CHANGE-SCOPE-SAFETY-CHECKLIST.md`.
 - Define stable shared component, layout, icon, and asset contracts.

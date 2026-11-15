@@ -299,6 +299,7 @@
  .pl-msg-people-counts small{font-size:9px}
 }
 
+/* Approved page-root exception: Inbox locks the mobile viewport while its own thread list scrolls. */
 /* Mobile Inbox viewport: fit an empty inbox to the screen and scroll only its list. */
 @media(max-width:760px){
   html:has(.pl-msg),body:has(.pl-msg){

@@ -59,3 +59,11 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - The split was generated at top-level section boundaries and verified by concatenating the slices back to the exact original CSS text before commit.
 - No selector, declaration, token, media query, value or rule order was intentionally changed.
 - This reduces the single-file editing surface but does **not** complete semantic CSS ownership. The next phase must map selectors and migrate feature-specific rules into their canonical owners with regression coverage.
+
+
+## 15 November 2026 — Page CSS boundary audit
+
+- Audited all CSS files under `src/pages/` after the Account stylesheet split. Page selectors are namespaced with `.pl-*`, `.ua-*`, `.pluits-*` or `#pl-*`.
+- Extended the automated CSS boundary checker to include `src/pages/`.
+- Three exact Inbox viewport selectors are allowlisted because they lock `html`, `body` and `#app` only while `.pl-msg` is mounted. The exception is documented next to the CSS block and in the engineering contract.
+- The legacy global files `src/style.css`, `src/styles/*` and top-level `styles/home-layout.css` are still not covered by the page/component guard. Their selector-to-owner audit and staged migration remain outstanding.

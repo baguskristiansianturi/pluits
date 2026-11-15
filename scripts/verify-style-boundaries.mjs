@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
-const roots = ['src/components', 'src/features'];
+const roots = ['src/components', 'src/features', 'src/pages'];
 const allowedRoots = /^(?:\.pl-|\.ua-|\.ds-|\.plds-)/;
 const keyframeStep = /^(?:from|to|\d+(?:\.\d+)?%)$/i;
 const files = [];
@@ -50,7 +50,7 @@ for (const file of files) {
     if (!selectorBlock || selectorBlock.startsWith('@')) continue;
     for (const selector of splitSelectorList(selectorBlock)) {
       if (keyframeStep.test(selector)) continue;
-      if (!allowedRoots.test(selector)) {
+      if (!allowedRoots.test(selector) && !approvedPageRootSelectors.has(selector)) {
         violations.push(path.relative(process.cwd(), file) + ': ' + selector);
       }
     }
@@ -60,6 +60,6 @@ for (const file of files) {
 assert.deepEqual(
   violations,
   [],
-  'Component/feature CSS must be scoped to an owned root (.pl-, .ua-, .ds-, or .plds-). Move truly global rules to src/styles or document a reviewed exception:\n- ' + violations.join('\n- ')
+  'Component, feature and page CSS must be scoped to an owned root (.pl-, .ua-, .ds-, .plds-, .pluits- or #pl-). Move truly global rules to src/styles; page-root exceptions must be exact and reviewed:\n- ' + violations.join('\n- ')
 );
 console.log('CSS ownership verified across ' + files.length + ' component/feature stylesheets.');
