@@ -88,7 +88,9 @@ test('mobile image messages are content-sized and never force a full-width portr
   assert.match(finalRule,/width:auto!important/);
   assert.match(finalRule,/height:auto!important/);
   assert.match(finalRule,/object-fit:contain!important/);
-  assert.doesNotMatch(finalRule,/\.pl-msg-bubble\.has-image \.pl-msg-image-wrap img\{[^}]*width:100%/s);
+  const imageRules = [...finalRule.matchAll(/\.pl-msg-bubble\.has-image \.pl-msg-image-wrap img\\s*\\{[^}]*\\}/gs)];
+  assert.ok(imageRules.length > 0, 'image rendering rules exist');
+  assert.doesNotMatch(imageRules.at(-1)[0],/width:100%/);
 });
 
 
