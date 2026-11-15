@@ -1263,3 +1263,9 @@ Implementation boundary:
 - **Label membership sebagai sinyal komitmen:** founder mengusulkan label tier terlihat sebagai penanda membership berbayar/aktif. Harga Rp1.900.000 per bulan hanya ilustrasi diskusi, bukan harga final. Label tidak boleh dianggap sebagai verifikasi, bukti kekayaan, kredibilitas, integritas, kesuksesan, atau jaminan perilaku.
 - **Validasi bisnis terbuka:** uji willingness to pay, manfaat nyata per tier, harga, retensi, biaya layanan/infrastruktur/moderasi/pembayaran, serta hubungan membership dengan komisi transaksi dan promosi berbayar. Jangan membuat proyeksi pendapatan sebelum asumsi diuji.
 - **Batas keputusan:** tetap PROPOSED/HYPOTHESIS; tidak mengesahkan harga, benefit matrix, komisi, strategi pemasaran, model transaksi, atau perubahan roadmap/implementasi. Detail dicatat di Bagian 18 dokumen konsep.
+
+
+- **Tambahan founder — struktur membership dan harga (PROPOSED):** dua kategori utama: Regular (Free) dan Premium (Paid). Level Premium yang diusulkan: Silver Member Rp450.000/bulan; Gold Member Rp700.000/bulan; Platinum Member Rp1.200.000/bulan; Golden Rp1.900.000/bulan. Urutan usulan: Silver → Gold → Platinum → Golden.
+- **Catatan penamaan:** Golden kini diusulkan sebagai level di atas Platinum; jangan lagi mengasumsikan Platinum sebagai level tertinggi. Nama dan positioning masih dapat dievaluasi.
+- **Pertanyaan terbuka:** validitas harga bulanan, rincian manfaat setiap level, pajak/biaya, periode tahunan, upgrade/downgrade, pembatalan/refund, dan batas fitur dibanding verifikasi. Regular tetap diharapkan dapat menjelajahi ruang publik.
+- **Batas keputusan:** semua harga dan struktur tetap PROPOSED sampai founder mengesahkan; belum ada billing, benefit matrix final, atau perubahan implementasi/roadmap.
