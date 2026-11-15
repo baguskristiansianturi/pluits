@@ -42,7 +42,8 @@ export function renderMessageMarkup(row, { currentUserId, pending = false, recei
       (canDeleteForEveryone ? '<button type="button" data-message-action="delete-everyone">Hapus untuk semua</button>' : '') +
       '</div></details>'
     : '';
-  const reply = row.reply_preview ? '<div class="pl-msg-reply-preview"><b>Balasan</b><span>' + esc(row.reply_preview) + '</span></div>' : '';\n  const status = mine ? renderMessageStatus({ pending, receipt, voice }) : '';
+  const reply = row.reply_preview ? '<div class="pl-msg-reply-preview"><b>Balasan</b><span>' + esc(row.reply_preview) + '</span></div>' : '';
+  const status = mine ? renderMessageStatus({ pending, receipt, voice }) : '';
   return '<article class="pl-msg-bubble ' + (mine ? 'mine' : 'theirs') + (pending ? ' is-pending' : '') + (deleted ? ' is-deleted' : '') + '" data-message-id="' + esc(row.id || '') + '" data-message-type="' + esc(type) + '" data-media-path="' + esc(row.media_path || '') + '" data-media-name="' + esc(row.media_name || '') + '" data-media-duration="' + esc(row.media_duration_seconds || '') + '" data-message-body="' + esc(row.body || '') + '">' +
     '<input class="pl-msg-select-box" type="checkbox" data-select-message aria-label="Pilih pesan" tabindex="-1">' + content + actions +
     '<footer class="pl-msg-meta"><time datetime="' + esc(row.created_at || '') + '">' + formatMessageTime(row.created_at) + '</time>' + status + '</footer></article>';
