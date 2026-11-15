@@ -59,7 +59,8 @@ export function professionalFormPage(ctx,profile){
  <div class="ua-form-actions"><button class="ua-primary" type="submit">${p.id?'Simpan & ajukan pemeriksaan':'Buat & ajukan profil'}</button><span id="ua-professional-note" class="ua-form-note"></span></div></form>`;
 }
 export async function accountSettingsPage(db,user){
- const {data,error}=await db.from('account_content_preferences').select('*').eq('user_id',user.id).maybeSingle();if(error)throw error;
+ const {data,error}=await db.from('account_content_preferences').select('*').eq('user_id',user.id).maybeSingle();
+ if(error&&!isMissingOptionalTable(error,'account_content_preferences'))throw error;
  const p=data||{};
  return `<div class="ua-page-heading"><div><span class="ua-eyebrow">PUSAT PENGATURAN</span><h1>Privasi & audiens</h1><p>Atur pilihan bawaan agar proses posting lebih ringkas. Audiens masih dapat diubah per postingan.</p></div></div>${nav()}
  <form id="ua-content-settings-form" class="ua-panel ua-settings-form"><div class="ua-settings-section"><span class="ua-eyebrow">AUDIENS DEFAULT</span><h2>Siapa yang dapat melihat konten?</h2>
