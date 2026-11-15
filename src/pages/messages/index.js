@@ -21,6 +21,7 @@ let onlineUserIds = new Set();
 let sendingQueue = false;
 let networkListenersBound = false;
 let activeInboxTab = 'primary';
+const notifiedIncomingMessageIds = new Set();
 
 const queueKey = () => 'pluits:dm:outbox:v1:' + currentUser.id;
 const contactsKey = () => 'pluits:dm:contacts:v2:' + currentUser.id;
@@ -265,6 +266,37 @@ function updateNetworkStatus() {
   const node = document.querySelector('#pl-msg-network');
   if (node) { node.textContent = navigator.onLine ? '● Connected' : '○ Offline'; node.classList.toggle('is-offline', !navigator.onLine); }
 }
+function updateInboxUnreadBadge(count=0) {
+  const link=document.querySelector('.pl-msg-mobile-nav .pl-mobile-inbox');
+  if(!link)return;
+  let badge=link.querySelector('[data-inbox-nav-badge]');
+  if(!badge){badge=document.createElement('i');badge.className='pl-nav-unread';badge.dataset.inboxNavBadge='';link.appendChild(badge);}
+  badge.textContent=count>99?'99+':String(count);
+  badge.hidden=!count;
+  link.setAttribute('aria-label',count?('Inbox, '+count+' pesan belum dibaca'):'Inbox');
+}
+function showIncomingMessageNotification(message) {
+  if(!message?.id||notifiedIncomingMessageIds.has(message.id))return;
+  notifiedIncomingMessageIds.add(message.id);
+  if(notifiedIncomingMessageIds.size>150)notifiedIncomingMessageIds.clear();
+  const isOpen=document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')&&currentConversation===message.conversation_id;
+  if(isOpen)return;
+  let toast=document.querySelector('#pl-msg-incoming-toast');
+  if(!toast){
+    toast=document.createElement('button');toast.type='button';toast.id='pl-msg-incoming-toast';toast.className='pl-msg-incoming-toast';toast.setAttribute('aria-live','polite');
+    document.querySelector('.pl-msg')?.appendChild(toast);
+  }
+  const sender=conversationCache.find(item=>item.id===message.conversation_id)?.other;
+  const senderName=sender?.display_name||sender?.username||'Pesan baru';
+  const preview=message.body||(message.message_type==='image'?'Mengirim foto':message.message_type==='voice'?'Mengirim pesan suara':message.message_type==='file'?'Mengirim dokumen':'Anda menerima pesan baru');
+  toast.innerHTML='<span class="pl-msg-toast-avatar">'+esc(senderName.slice(0,1).toUpperCase())+'</span><span><b>'+esc(senderName)+'</b><small>'+esc(preview)+'</small></span><span class="pl-msg-toast-mark">●</span>';
+  toast.hidden=false;
+  toast.onclick=()=>{toast.hidden=true;void openConversation(message.conversation_id);};
+  if(typeof Notification!=='undefined'&&Notification.permission==='granted'&&document.visibilityState==='hidden'){
+    try{const notification=new Notification(senderName,{body:preview,tag:'pluits-'+message.conversation_id});notification.onclick=()=>{window.focus();void openConversation(message.conversation_id);notification.close();};}catch{}
+  }
+}
+
 function contactAvatar(person, imageUrl='') {
   const name=person.display_name||person.username||'P';
   const avatar=imageUrl?'<img src="'+esc(imageUrl)+'" alt="" loading="lazy">':'<span>'+esc(name.slice(0,1).toUpperCase())+'</span>';
@@ -455,10 +487,14 @@ export async function bindMessagesPage() {
   if(!networkListenersBound){window.addEventListener('online',onOnline);window.addEventListener('offline',updateNetworkStatus);networkListenersBound=true;}
   realtimeChannel=db.channel('pluits-dm-'+user.id)
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'user_messages'},payload=>{
-      const conversationId=payload.new?.conversation_id;
-      if(conversationId&&payload.new?.sender_id!==currentUser.id) db.rpc('mark_conversation_delivered',{p_conversation_id:conversationId});
-      if(conversationId===currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
-      else loadConversations();
+      const incoming=payload.new;
+      const conversationId=incoming?.conversation_id;
+      if(conversationId&&incoming?.sender_id!==currentUser.id){
+        void db.rpc('mark_conversation_delivered',{p_conversation_id:conversationId});
+        showIncomingMessageNotification(incoming);
+      }
+      if(conversationId===currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) void openConversation(currentConversation);
+      else void loadConversations();
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_messages'},payload=>{
       if(payload.new?.conversation_id===currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
@@ -574,6 +610,7 @@ async function loadConversations() {
      const otherProfile=isSelfConversation?{...currentProfile,display_name:'Pesan untuk diri sendiri',is_self:true}:pmap.get(other?.user_id)||{display_name:'Akun Pluits',username:'akun'};
      return {...conversation,other:otherProfile,last,unread};
   });
+  updateInboxUnreadBadge(conversationCache.filter(item=>item.unread).length);
   try { localStorage.setItem(threadsKey(),JSON.stringify(conversationCache.map(item=>({id:item.id,updated_at:item.updated_at,other:item.other,unread:item.unread})))); } catch {}
   const visibleConversations=activeInboxTab==='unread'?conversationCache.filter(item=>item.unread):conversationCache;
   list.innerHTML=visibleConversations.length?visibleConversations.map(conversation=>{
