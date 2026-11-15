@@ -16,5 +16,5 @@ test('route page modules are lazy-loaded instead of statically bundled at app st
  assert.match(publicLayout,/renderPublicNavbar\(\)/,'The public homepage layout must render its dedicated guest navbar.');
  assert.match(home,/stillOnRequestedHome/,'A delayed public-home auth lookup must not overwrite a page opened afterward.');
  assert.match(source,/else if\(r==='account'\)/,'The signed-in workspace must be entered only through its explicit account route.');
- assert.match(routes,/home:\s*'#\/account\/explore'/,'The signed-in Beranda destination must be the current Explore workspace.');
+ assert.match(routes,/home:\s*SITE_BASE \+ 'circle\/'/,'The signed-in Beranda destination must use the readable Circle URL.');
 });
