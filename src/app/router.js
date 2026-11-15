@@ -144,7 +144,7 @@ export async function route(homeFn){
    h='<div class="pl-page-loading" role="status" aria-live="polite"><span class="pl-page-spinner" aria-hidden="true"></span><span class="pl-page-loading-label">Menyiapkan pengaturan</span></div>';
    defer(async()=>{const {mountUserAccount}=await import('../pages/account/index.js');await mountUserAccount('settings');},version,()=>route(homeFn));
   }
-  else if(r==='account'&&v==='blog'){
+  else if((r==='account'&&v==='blog')||r==='blog-studio'){
    h='<div class="pl-page-loading" role="status" aria-live="polite"><span class="pl-page-spinner" aria-hidden="true"></span><span class="pl-page-loading-label">Membuka Blog</span></div>';
    defer(async()=>{const mod=await import('../pages/blog-studio/index.js');await mod.mountBlogStudio();},version,()=>route(homeFn));
   }
