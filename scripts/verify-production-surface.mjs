@@ -340,9 +340,9 @@ assert.ok(read('src/pages/account/index.js').includes('renderPostCard') && read(
 assert.ok(read('src/pages/account/user-account.css').includes('.ua-social-app .ua-post-caption'), 'Post caption spacing must be explicitly compacted.');
 
 import { ROUTES, NAVIGATION_CONTEXTS, getRoute } from '../src/components/social/navigation-routes.js';
-assert.equal(ROUTES.inbox, '#/inbox', 'Inbox must have one canonical route.');
-assert.equal(ROUTES.profile, '#/account/profile', 'Profile must have one canonical route.');
-assert.equal(getRoute('inbox', true), '#/inbox', 'Authenticated Inbox must never route to Profile.');
+assert.equal(ROUTES.inbox, '/pluits/inbox/', 'Inbox must have one canonical route.');
+assert.equal(ROUTES.profile, '/pluits/profile/', 'Profile must have one canonical route.');
+assert.equal(getRoute('inbox', true), '/pluits/inbox/', 'Authenticated Inbox must never route to Profile.');
 assert.equal(getRoute('inbox', false), ROUTES.login, 'Anonymous Inbox must route to login.');
 assert.deepEqual(NAVIGATION_CONTEXTS.social, ['home','discover','create','inbox','profile']);
 assert.deepEqual(NAVIGATION_CONTEXTS.inbox, ['home','discover','create','activity','profile']);
@@ -381,8 +381,8 @@ const circleAccountSource = read('src/pages/account/index.js');
 assert.match(routeSource, /else if\(r==='circle'\)[\s\S]*mountUserAccount\('explore'\)/, 'The Circle route must mount the personalized Circle feed directly.');
 assert.match(circleAccountSource, /if\(\['circle','home','feed'\]\.includes\(section\)\)section='explore'/, 'Account route aliases for Circle must never fall through to the Profile page.');
 const canonicalRoutes = read('src/components/social/navigation-routes.js');
-assert.match(canonicalRoutes, /home:\s*'#\/account\/explore'/, 'Circle navigation must use the direct Circle route.');
-assert.match(canonicalRoutes, /discover:\s*'#\/search'/, 'Jelajah must remain a separate public discovery route.');
+assert.match(canonicalRoutes, /home:\s*SITE_BASE \+ 'circle\\/'/, 'Circle navigation must use the readable Circle route.');
+assert.match(canonicalRoutes, /discover:\s*SITE_BASE \+ 'discover\\/'/, 'Jelajah must remain a separate public discovery route.');
 const mobileNavigationSource = read('src/components/social/navigation.js');
 assert.match(mobileNavigationSource, /key: 'home',[\s\S]*label: publicHome \? 'Beranda' : 'Circle'/, 'Circle must be the first mobile navigation destination.');
 assert.match(mobileNavigationSource, /key: 'discover',[\s\S]*label: 'Jelajah'/, 'Jelajah must be the second mobile navigation destination.');
