@@ -1445,7 +1445,7 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - **Database migration applied:** `20261115122348_enforce_marketplace_order_payment_read_permissions`. Marketplace order reads now require buyer ownership or explicit `orders.manage` / `payments.manage`; payment metadata reads require buyer ownership or `payments.manage`. This closes the previous membership-only read path for store staff without those permissions.
 - Matching SQL is committed at `supabase/migrations/20261115122348_enforce_marketplace_order_payment_read_permissions.sql`.
 - No user account, post, message, media or transaction data was deleted or rewritten.
-- **Deployment evidence:** commit `61d632b544541a901485cc6f54e85b2558d5a0f3`; GitHub Actions run `43714307219` (#2188) SUCCESS; 150/150 automated tests passed; Vite build, PWA asset output verification, Pages artifact upload and deployment succeeded.
+- **Deployment evidence:** code-bearing commit `6d53909ef799a278023dd7ef63c1b6d460ca7ccf`; GitHub Actions run `43714961593` (#2208) SUCCESS; 154/154 automated tests passed; Vite build, PWA asset output verification, Pages artifact upload and deployment succeeded.
 - **Not tested:** Android real-media UAT, two-account authorization/Realtime, DM reconnect/outbox exactly-once, notification recipient/deep-link, MFA/SMS, accessibility and measured performance.
 - **Founder acceptance:** PENDING.
 
@@ -1504,13 +1504,13 @@ This rollback reopens access to customer/order/payment metadata for every active
 - Updated `manifest.webmanifest` and `index.html` to reference the raster assets.
 - Added regression tests that validate PNG signatures and exact dimensions.
 - Updated GitHub Actions build-output verification to require the manifest, 192px icon, 512px icon and Apple touch icon in `dist/`.
-- Latest verified deployment: commit `61d632b544541a901485cc6f54e85b2558d5a0f3`; workflow `43714307219` (#2188) SUCCESS; 150/150 tests passed.
+- Latest verified code deployment: commit `6d53909ef799a278023dd7ef63c1b6d460ca7ccf`; workflow `43714961593` (#2208) SUCCESS; 154/154 tests passed.
 - Actual Chrome Android / iOS Add to Home Screen test remains NOT TESTED. The PWA has no offline app-shell/service worker; do not claim full offline support.
 
 
 ## CP-094 — Protect moderation state and report action semantics (15 November 2026)
 
-**Status:** IMPLEMENTED · LIVE DATABASE TESTED · FRONTEND DEPLOYMENT PENDING
+**Status:** IMPLEMENTED · LIVE DATABASE TESTED · DEPLOYED
 
 - Found that `user_posts_update_self` allowed an owner to change `moderation_status`, which could restore a moderator-removed post to `published`.
 - Applied migration `20261115123634_protect_user_post_moderation_status`: a private, non-SECURITY-DEFINER trigger function forces normal-user inserts to the existing `published` default and rejects owner-side moderation-status changes. Moderator/admin app_metadata and service_role actions remain allowed.
@@ -1519,5 +1519,8 @@ This rollback reopens access to customer/order/payment metadata for every active
 - Applied migration `20261115123729_prevent_false_actioned_user_reports`: user-target reports cannot be marked actioned until account-level enforcement/appeal exists. Moderation UI now explains this and removes the false action button.
 - A rollback-safe SQL test created a temporary report row, confirmed the RPC rejects false actioned state, confirmed review state still works, and rolled back.
 - No user post, account or report data was modified by verification.
+- Frontend moderation UI limitation is deployed in code-bearing commit `6d53909ef799a278023dd7ef63c1b6d460ca7ccf` (workflow #2208, 154/154 tests).
 - **Important product gap:** new posts still publish immediately; pre-publication moderation is not implemented. Founder must decide whether this is acceptable for Social First Release.
+- **Important product gap:** DM initiation is open to any authenticated user for public profiles; private profiles require accepted follow. This does not satisfy the documented friend-first rule until the qualifying relationship is decided and enforced.
+- Post/Story audience controls expose public/private only; follower-only audience for public profiles is not implemented.
 - Matching SQL files are committed; migration parity remains blocked for CLI push/replay.
