@@ -416,3 +416,106 @@ Pemilik mengatur distribusi rekomendasi hanya kepada Gold/Platinum, tetapi mengi
 ### 16.7 Batas keputusan
 
 Semua pengaturan distribusi lintas tier, interaksi lintas tier, rekomendasi same-tier, dan pengecualian teman masih PROPOSED. Belum ada permission matrix final, desain UI, schema, RLS, ranking contract, atau persetujuan implementasi.
+
+
+## 17. Verifikasi, kemampuan profesional, dan ruang kerja bisnis — tambahan diskusi founder
+
+### 17.1 Pendaftaran dan eksplorasi publik
+
+Alur awal yang diusulkan:
+1. Seseorang mendaftar dan memperoleh akun PLUITS dasar.
+2. Ia dapat menjelajahi ruang publik dan konten yang memang terbuka untuknya.
+3. Ia tidak diwajibkan berlangganan premium atau menyelesaikan verifikasi identitas hanya untuk menjadi penjelajah/pembaca.
+4. Ketika ingin melakukan tindakan yang membawa tanggung jawab lebih besar—misalnya menerbitkan blog, membuka toko, atau menawarkan layanan—PLUITS meminta verifikasi dan persyaratan yang relevan untuk tindakan tersebut.
+
+Dengan demikian, **akses untuk menjelajahi ruang publik dipisahkan dari kelayakan untuk menerbitkan, berdagang, atau menjalankan aktivitas profesional**.
+
+### 17.2 Verifikasi sebagai gerbang kelayakan, bukan paket premium
+
+Founder memberi contoh alur:
+- Membaca dan menjelajahi ruang publik: dapat dilakukan oleh akun dasar sesuai aturan akses.
+- Membuat/menerbitkan blog: meminta verifikasi akun sebelum fitur publikasi digunakan.
+- Membuat toko: meminta verifikasi identitas dan informasi tambahan yang diperlukan.
+- Mengelola rekening atau menerima pembayaran: memerlukan kecocokan identitas pemilik dengan data rekening dan pemeriksaan sesuai persyaratan penyedia pembayaran serta hukum yang berlaku.
+
+Arah pentingnya: kemampuan membuat blog, toko, atau layanan tidak otomatis harus dijual sebagai manfaat premium. Verifikasi dapat menjadi syarat dasar untuk mengaktifkan tanggung jawab penerbit/pelaku usaha. Syarat spesifik, jenis dokumen, dan proses verifikasi masih perlu dirancang per jenis aktivitas.
+
+Kecocokan identitas dan rekening adalah contoh kontrol untuk mengurangi penyalahgunaan, akun/toko ganda yang tidak bertanggung jawab, dan risiko transaksi. Namun, jangan menjanjikan bahwa satu identitas hanya boleh memiliki satu toko sebelum aturan legal, kebutuhan usaha yang sah, beneficial ownership, dan model multi-brand diteliti. Sistem perlu membedakan pemilik terverifikasi, entitas usaha, outlet/toko, dan akun operasional.
+
+### 17.3 Pisahkan tiga konsep: membership, verification, dan workspace
+
+Agar pengguna tidak bingung, rancangan PLUITS perlu membedakan:
+
+1. **Membership tier:** paket/level keanggotaan yang mengatur pengalaman sosial dan kemampuan tambahan sesuai manfaat tier.
+2. **Verification & eligibility:** pemeriksaan identitas atau kelayakan yang diperlukan untuk tindakan tertentu, seperti publikasi, perdagangan, layanan, atau pembayaran. Verifikasi bukan bukti bahwa semua konten atau klaim pengguna benar.
+3. **Professional/business workspace:** ruang kerja untuk mengelola publikasi, toko, layanan, data operasional, dan tim. Workspace dapat memiliki owner dan staf dengan izin yang berbeda.
+
+Ketiganya dapat terhubung di satu akun PLUITS, tetapi tidak boleh dianggap sebagai hal yang sama. Pengguna premium yang tidak berjualan tetap dapat menikmati membership dan kemampuan workspace yang termasuk dalam paketnya, tanpa harus menjadi penjual atau penyedia layanan.
+
+### 17.4 Satu identitas sosial, banyak konteks aktivitas
+
+Visi founder adalah agar seseorang tidak perlu berpindah-pindah aplikasi atau akun untuk bersosial, menulis, mengelola usaha, dan bekerja. Akun PLUITS dapat menjadi pintu masuk ke beberapa konteks:
+- Identitas sosial personal.
+- Blog dan publikasi.
+- Toko dan katalog produk.
+- Layanan/profesional.
+- Workspace organisasi atau bisnis.
+- Dashboard aktivitas dan operasional.
+
+Pengguna hanya mengaktifkan konteks yang dibutuhkan. Memiliki akun sosial tidak berarti otomatis menjadi bisnis; memiliki toko tidak berarti semua aktivitas personal harus ditampilkan sebagai aktivitas toko.
+
+### 17.5 Workspace bisnis dan delegasi staf
+
+Contoh founder: sebuah bisnis transportasi mengelola ketersediaan kendaraan melalui dashboard PLUITS. Operator yang bertugas memperbarui kendaraan tersedia/tidak tersedia; owner atau manager dapat melihat data terbaru di workspace bisnis tanpa menunggu laporan manual.
+
+Owner dapat mengundang staf dan memberi akses sesuai tanggung jawab, misalnya:
+- **Owner:** pengaturan bisnis, pengelolaan staf, dan kontrol seluruh permission.
+- **Manager:** melihat dan mengelola bagian operasional sesuai delegasi.
+- **Content/blog staff:** menulis atau menyiapkan artikel tanpa otomatis memperoleh akses keuangan atau pengaturan bisnis.
+- **Product staff:** membuat dan memperbarui data produk/katalog.
+- **Transport operator:** memperbarui ketersediaan armada atau penugasan operasional yang diizinkan.
+- **Finance staff:** akses ke data transaksi/keuangan sesuai kewenangan khusus, jika kelak disetujui.
+
+Prinsipnya adalah least privilege: staf hanya memperoleh izin yang dibutuhkan untuk pekerjaannya. Izin melihat, membuat, mengubah, menerbitkan, menghapus, mengelola uang, dan mengundang staf harus dibedakan. Aktivitas penting perlu mempunyai jejak audit: siapa melakukan apa, pada workspace mana, dan kapan.
+
+### 17.6 Alur kerja konten dan katalog
+
+Contoh alur produk:
+1. Staf menyiapkan aset gambar menggunakan alat desain yang dipilihnya, misalnya Canva atau Photoshop.
+2. Staf memasukkan aset ke PLUITS.
+3. Staf membuat copy/deskripsi dan mengisi data produk.
+4. Perubahan disimpan sebagai draft atau menunggu review jika owner mengaktifkan approval.
+5. Owner/manager dapat melihat hasil pekerjaan dan statusnya di workspace.
+6. Produk diterbitkan hanya oleh peran yang memiliki izin publish.
+
+Alur serupa dapat diterapkan untuk blog, layanan, katalog, dan data operasional. Integrasi langsung dengan aplikasi desain eksternal belum diasumsikan; unggah aset yang dibuat di aplikasi tersebut adalah contoh workflow, bukan komitmen integrasi API.
+
+### 17.7 Satu ruang digital untuk kehidupan sosial dan pekerjaan
+
+Visi jangka panjang founder adalah pengalaman seperti seseorang duduk di kafe dengan satu desktop/ruang digital: ia dapat bersosial, membaca dan menulis, menyusun rencana, mengelola pekerjaan, memperbarui operasional usaha, serta memantau tim dari satu ekosistem.
+
+PLUITS dengan demikian dieksplorasi bukan hanya sebagai media sosial, tetapi sebagai platform yang menghubungkan:
+- Kehidupan sosial dan identitas personal.
+- Publikasi dan komunikasi.
+- Aktivitas profesional dan bisnis.
+- Kolaborasi tim dan operasional.
+- Alur kerja dan pemantauan hasil.
+
+Ini adalah visi produk jangka panjang, bukan izin untuk memperluas scope implementasi saat ini secara otomatis.
+
+### 17.8 Pertanyaan desain dan risiko tambahan
+
+1. Aktivitas apa yang memerlukan verifikasi personal, verifikasi entitas bisnis, atau pemeriksaan pembayaran?
+2. Bagaimana membedakan individu, pemilik manfaat usaha, badan usaha, brand, toko, dan outlet?
+3. Apakah satu identitas dapat mengelola beberapa toko/brand secara sah melalui satu atau beberapa entitas?
+4. Apa manfaat workspace yang termasuk dalam setiap membership tier, dan fitur apa yang tetap tersedia gratis setelah verifikasi?
+5. Apakah workspace bisnis merupakan fitur akun personal, entitas bisnis terpisah, atau konteks yang dapat dipilih dari satu identitas login?
+6. Bagaimana undangan staf, pemulihan akses owner, pergantian staf, approval, audit log, dan konflik kepemilikan ditangani?
+7. Bagaimana membatasi akses staf ke data pelanggan, keuangan, rekening, dan data sensitif?
+8. Bagaimana menjaga agar konten personal tidak tercampur atau terpublikasi sebagai konten bisnis tanpa sengaja?
+9. Apa yang perlu dibangun sendiri dan apa yang sebaiknya diintegrasikan dengan alat eksternal?
+10. Bagaimana visi workspace ini diprioritaskan tanpa mengganggu penyelesaian Social Media P0?
+
+### 17.9 Batas keputusan
+
+Semua alur verifikasi, eligibility blog/toko/layanan, persyaratan rekening, model multi-store, workspace, staff roles, approval, audit log, integrasi desain, dan desktop workspace masih PROPOSED. Belum ada keputusan harga, tier benefit matrix, legal/KYC policy, schema, RLS, API, atau persetujuan implementasi.
