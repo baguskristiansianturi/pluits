@@ -203,3 +203,6 @@ Salin untuk keputusan berikutnya:
   5. Media markup and preview lifecycle belong to `src/features/discovery/explore-grid/`; the route controller owns feed data and filtering. No media behavior is shared with Circle, Story or Reels.
 - **Batas:** no forced transcoding or source-quality downgrade is performed in the browser. Playback concurrency is reduced before image/video source quality is changed; original media remains available when opened.
 - **Dokumen implementasi:** `src/features/discovery/explore-grid/README.md`, checkpoint CP-085.
+
+
+- **D-012 implementation update (15 November 2026):** PR #31 merged to main at `c98fcb7a7e1fde919e6eeb129519dd9e88b31369`; PR CI run #2034 SUCCESS (production-surface checks, module boundaries, tests, Vite build and Pages artifact upload). Production Pages deployment after merge is not yet verified. Android UAT remains pending.
