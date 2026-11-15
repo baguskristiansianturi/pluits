@@ -16,8 +16,8 @@ export function renderIcon(name, { size = 20, className = '' } = {}) {
 
   const legacyMarkup = legacyGeneralIcons[name] || appIcons[name];
   if (!legacyMarkup) return '';
-  const classes = ['pl-icon', className].filter(Boolean).join(' ').replace(/["<>]/g, '');
-  return legacyMarkup.replace(/<svg\b([^>]*)>/, (opening, rawAttributes) => {
+  const classes = ['pl-icon', className].filter(Boolean).join(' ').replace(/[^a-zA-Z0-9 _-]/g, '').trim();
+  return legacyMarkup.trimStart().replace(/<svg\b([^>]*)>/, (opening, rawAttributes) => {
     const attributes = rawAttributes || '';
     const additions = [];
     if (!/\bclass\s*=/.test(attributes)) additions.push('class="' + classes + '"');
