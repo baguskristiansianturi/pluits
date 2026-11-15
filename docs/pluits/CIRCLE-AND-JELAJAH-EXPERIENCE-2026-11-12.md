@@ -91,9 +91,9 @@ The Story Ring Rail uses the same native horizontal carousel interaction pattern
 The live Circle path no longer imports or renders synthetic recommendation profiles, Story cards, local-product samples, or fabricated Top 10 fallback entries. Marketplace product detail also no longer resolves local showcase products as if they were catalog records. Regression tests enforce real backend data or honest empty/error states.
 
 Deployment evidence:
-- Commit: `61d632b544541a901485cc6f54e85b2558d5a0f3`
-- GitHub Actions run: `43714307219` (#2188), SUCCESS
-- Automated tests: 150 passed, 0 failed
+- Commit: `6d53909ef799a278023dd7ef63c1b6d460ca7ccf`
+- GitHub Actions run: `43714961593` (#2208), SUCCESS
+- Automated tests: 154 passed, 0 failed
 - Vite production build and output verification: SUCCESS
 - GitHub Pages artifact upload and deployment: SUCCESS
 - Android UAT: NOT TESTED
