@@ -1380,3 +1380,17 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - **PR:** #32 merged to main at `8e4fe58a6505575d2dfb2fb5c66ddd295d1588ac`.
 - **CI:** workflow #2039 SUCCESS — production-surface verification, module-boundary verification, unit tests, Vite production build, and Pages artifact upload all passed. Pages deployment after merge not independently verified here.
 - **Runtime limitation:** no authenticated browser session/device automation was available for clicking through a live signed-in account. Android UAT remains pending.
+
+
+## CP-087 — Legacy SVG icon rendering and registry validation (15 November 2026)
+
+- **Problem confirmed:** `src/design-system/icons/index.js` used over-escaped regular expressions for SVG opening tags and attribute detection. The patterns matched literal backslash sequences rather than regex word boundaries, so legacy registry SVGs could be returned without the intended class, dimensions, and accessibility attributes.
+- **Additional validation defects:** the registry-wide test expected SVG markup at byte zero although legacy source templates contain leading whitespace; its class-injection assertion also exposed that unsafe punctuation was retained in caller class strings. The settings icon inventory matcher was too broad and incorrectly interpreted the `admin` role list as an icon declaration.
+- **Fix:** corrected SVG and attribute regexes; trim leading template whitespace; sanitize caller class tokens in both general and social icon paths; tighten the settings matcher to actual icon tuples; add regression coverage for legacy icon dimensions, classes, accessibility attributes, clamped size, and unknown names.
+- **PR:** #42 — https://github.com/baguskristiansianturi/pluits/pull/42 (MERGED).
+- **Merge commit:** `86cd4da418409d593cd26f30e7d8352273c4f403`.
+- **PR CI:** run #2152 / ID `43711034825` SUCCESS — production-surface verification, JS module boundaries, CSS boundaries, all 138 Node tests (138 passed, 0 failed), Vite production build, dist/index.html verification, and Pages artifact upload passed. PR deployment step was correctly skipped by workflow policy.
+- **Production deployment:** merge to main triggers the Pages workflow; the GitHub connector available in this session does not expose push-triggered workflow listing, so the production deployment result is NOT INDEPENDENTLY VERIFIED here.
+- **Android/browser UAT:** NOT TESTED. Founder visual acceptance remains pending.
+- **Build observation:** Vite output reports global CSS 290.09 kB (49.47 kB gzip), account CSS 307.54 kB (49.70 kB gzip), and account JS 197.43 kB (57.48 kB gzip). These are measured artifact sizes, not proof of a runtime bottleneck. Keep staged CSS/module isolation as a separate performance workstream; do not mass-move legacy styles without selector/consumer mapping.
+- **Next:** verify the main-branch Pages deployment and visually inspect common navigation/settings icons on Android; then profile actual startup/network/render performance before selecting the next optimization.
