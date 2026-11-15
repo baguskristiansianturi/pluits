@@ -331,7 +331,7 @@ export async function bindMessagesPage() {
       else loadConversations();
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_messages'},payload=>{
-      if(payload.new?.conversation_id===currentConversation) openConversation(currentConversation);
+      if(payload.new?.conversation_id===currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
       else loadConversations();
     })
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'user_message_receipts'},payload=>{
@@ -392,7 +392,7 @@ async function loadConversations() {
   const [convs,memberRows,msgRows]=await Promise.all([
     db.from('user_conversations').select('id,title,updated_at').in('id',ids).order('updated_at',{ascending:false}),
     db.from('user_conversation_members').select('conversation_id,user_id,last_read_at').in('conversation_id',ids),
-    db.from('user_messages').select('conversation_id,body,sender_id,created_at,message_type,deleted_at').in('conversation_id',ids).order('created_at',{ascending:false}).limit(200)
+    db.from('user_messages').select('id,conversation_id,body,sender_id,created_at,message_type,deleted_at').in('conversation_id',ids).order('created_at',{ascending:false}).limit(200)
   ]);
   if(activeInboxTab!=='primary')return;
   if(convs.error||memberRows.error||msgRows.error){
