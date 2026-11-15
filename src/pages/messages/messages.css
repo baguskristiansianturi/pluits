@@ -1653,3 +1653,44 @@
     aspect-ratio:auto!important;
   }
 }
+
+
+/* Mobile chat header: contact identity on the left, back navigation on the right. */
+.pl-msg .pl-msg-chat-head{display:flex!important;align-items:center!important;gap:10px!important}
+.pl-msg .pl-msg-chat-head .pl-msg-chat-avatar{order:0!important;flex:0 0 40px!important}
+.pl-msg .pl-msg-chat-head>div{order:1!important;flex:1 1 auto!important;min-width:0!important}
+.pl-msg .pl-msg-chat-head .pl-msg-contact-menu{order:2!important;flex:0 0 auto!important}
+.pl-msg .pl-msg-chat-head .pl-msg-back{order:3!important;margin-left:0!important;flex:0 0 38px!important;width:38px!important;height:38px!important}
+.pl-msg .pl-msg-chat-head .pl-msg-chat-avatar .pl-msg-avatar{width:40px;height:40px;flex-basis:40px}
+/* Keep the composer visually compact and inset from the chat's outer edges. */
+.pl-msg #pl-msg-compose{
+  box-sizing:border-box!important;
+  margin:0 9px 8px!important;
+  padding:5px 0 calc(7px + env(safe-area-inset-bottom))!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.pl-msg #pl-msg-compose .pl-msg-input-bar{
+  width:100%!important;
+  min-height:50px!important;
+  padding:4px 6px!important;
+  border:1px solid #d8e0e6!important;
+  border-radius:25px!important;
+  background:#fff!important;
+  box-shadow:0 1px 3px #1b344510!important;
+}
+.pl-msg #pl-msg-compose .pl-msg-input-bar textarea{min-height:38px!important;padding:9px 6px!important}
+@media(max-width:760px){
+  .pl-msg-layout.is-chat-open .pl-msg-chat{
+    height:calc(var(--pl-msg-viewport-height, 100dvh) - var(--pl-msg-chat-top, 170px))!important;
+    min-height:0!important;
+    max-height:none!important;
+  }
+  .pl-msg-layout.is-chat-open .pl-msg-stream{min-height:0!important;max-height:none!important}
+  .pl-msg #pl-msg-compose{margin:0 9px 10px!important;padding:5px 0 calc(10px + env(safe-area-inset-bottom))!important}
+  .pl-msg-keyboard-open .pl-msg-mobile-nav{display:none!important}
+  .pl-msg-keyboard-open{padding-bottom:0!important}
+  .pl-msg-keyboard-open .pl-msg #pl-msg-compose{margin-bottom:12px!important;padding-bottom:8px!important}
+}
