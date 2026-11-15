@@ -120,3 +120,21 @@ test('nested trip, marketplace and place routes retain all dynamic segments', ()
   assert.equal(canonicalizeLegacyRoute('#/place/pantai-kuta/claim'), '/pluits/places/pantai-kuta/claim/');
   assert.equal(getInternalRoute(address('/pluits/places/pantai-kuta/claim/')), 'place/pantai-kuta/claim');
 });
+
+
+test('legacy public-user links and professional profile editing resolve to real page controllers', async () => {
+  const address = pathname => ({ pathname, search: '', hash: '' });
+
+  assert.equal(canonicalizeLegacyRoute('#/account/user/bagus'), '/pluits/@bagus/');
+  assert.equal(getInternalRoute(address('/pluits/@bagus/')), '@bagus');
+  assert.equal(getInternalRoute(address('/pluits/user/bagus/')), '@bagus');
+
+  assert.equal(canonicalizeLegacyRoute('#/account/professional-create'), '/pluits/professional-create/');
+  assert.equal(getInternalRoute(address('/pluits/professional-create/')), 'account/professional-create');
+  assert.ok(router.includes("else if(r==='account')"));
+  assert.ok(account.includes("section==='professional-create'?professionalFormPage"));
+  const accountContext = await readFile(new URL('../../src/pages/account/account-context.js', import.meta.url), 'utf8');
+  assert.ok(accountContext.includes('href="#/account/professional-create"'));
+  const home = await readFile(new URL('../../src/pages/home/index.js', import.meta.url), 'utf8');
+  assert.ok(home.includes('#/account/user/'), 'Public profile cards must use the covered legacy alias.');
+});

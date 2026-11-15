@@ -54,6 +54,9 @@ Audit basis: `src/app/router.js`, `src/components/social/navigation-routes.js`, 
 These are known aliases from the router and must not be created as duplicate page modules:
 - `#/home`, `#/feed`, `#/beranda` → public home `#/`.
 - `#/messages` → Inbox `#/inbox`.
+- `#/account/user/:username` → public profile `#/@username` (legacy account-card destination).
+- `#/user/:username` → public profile `#/@username` (older direct-path compatibility).
+- `#/account/professional-create` → professional profile form `/professional-create/` → account controller section `professional-create`.
 - `#/cart` → `#/market-cart`.
 - `#/checkout` → `#/market-checkout`.
 - `#/orders` → `#/market-orders`.

@@ -58,13 +58,14 @@ export function canonicalizeLegacyRoute(value = '') {
       inbox:'inbox/', message:'inbox/', messages:'inbox/', activity:'notifications/',
       profile:'profile/', followers:'followers/', following:'following/', requests:'follow-requests/',
       saved:'saved/', reels:'reels/', settings:'settings/', auth:'login/', login:'login/',
-      register:'register/', blog:'blog-studio/', wallet:'wallet/', addresses:'addresses/', reel:'reels/create/', story:'stories/create/', preview:'profile/preview/', drafts:'create/drafts/'
+      register:'register/', blog:'blog-studio/', wallet:'wallet/', addresses:'addresses/', reel:'reels/create/', story:'stories/create/', preview:'profile/preview/', drafts:'create/drafts/', 'professional-create':'professional-create/'
     };
     path += accountMap[b] || (b ? b + '/' : '');
     if (b === 'profile' && c === 'edit') path = SITE_BASE + 'profile/edit/';
     else if (b === 'profile' && c) path += encodeURIComponent(c) + '/';
     else if (b === 'post' && c) path = SITE_BASE + 'posts/' + encodeURIComponent(c) + '/';
-  } else if (a === 'inbox' && b === 'settings') path += 'inbox/settings/';
+  } else if (a === 'account' && b === 'user' && c) path = SITE_BASE + '@' + encodeURIComponent(decodePathSegment(c)) + '/';
+  else if (a === 'inbox' && b === 'settings') path += 'inbox/settings/';
   else if (a === 'market-cart' || a === 'cart') path += 'marketplace/cart/';
   else if (a === 'market-checkout' || a === 'checkout') path += 'marketplace/checkout/';
   else if (a === 'market-orders' || a === 'orders') path += 'marketplace/orders/';
@@ -94,7 +95,7 @@ export function getInternalRoute(locationLike = window.location) {
     circle:'circle', discover:'search', create:'create', inbox:'inbox',
     notifications:'account/activity', profile:'profile', login:'login', register:'register',
     followers:'account/followers', following:'account/following', 'follow-requests':'account/requests',
-    saved:'account/saved', places:'places', marketplace:'marketplace', trips:'trip',
+    saved:'account/saved', places:'places', marketplace:'marketplace', trips:'trip', 'professional-create':'account/professional-create',
     reels:'account/reels', settings:'account/settings', 'profile/edit':'profile/edit'
   };
   let internal = reverse[path] || '';
@@ -111,6 +112,7 @@ export function getInternalRoute(locationLike = window.location) {
   else if (a === 'marketplace' && b === 'orders' && c) internal = 'market-order/' + c;
   else if (a === 'marketplace' && b === 'orders') internal = 'market-orders';
   else if (a === 'marketplace' && b === 'product') internal = 'market-product/' + (c || '');
+  else if (a === 'user' && b) internal = '@' + decodePathSegment(b);
   else if (a === 'places' && b) internal = 'place/' + parts.slice(1).join('/');
   else if (a === 'posts' && b) internal = 'account/post/' + b;
   else if (a === 'blog-studio') internal = 'account/blog';

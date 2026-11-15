@@ -1394,3 +1394,14 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - **Android/browser UAT:** NOT TESTED. Founder visual acceptance remains pending.
 - **Build observation:** Vite output reports global CSS 290.09 kB (49.47 kB gzip), account CSS 307.54 kB (49.70 kB gzip), and account JS 197.43 kB (57.48 kB gzip). These are measured artifact sizes, not proof of a runtime bottleneck. Keep staged CSS/module isolation as a separate performance workstream; do not mass-move legacy styles without selector/consumer mapping.
 - **Next:** verify the main-branch Pages deployment and visually inspect common navigation/settings icons on Android; then profile actual startup/network/render performance before selecting the next optimization.
+
+
+## CP-088 — Navigation destination integrity: public profiles and professional editor (15 November 2026)
+
+- Audit scope: inspected the current main route registry, router dispatch, global link normalization, public-home profile-card links, account-context professional-profile actions, and existing route regression tests.
+- Confirmed defects: public profile cards emitted #/account/user/:username, which normalized to an unhandled /user/:username/ route; the professional profile editor emitted #/account/professional-create, which normalized to an unhandled top-level route instead of the existing account subflow.
+- Fix: canonicalize legacy account/user links to the existing public /@username/ profile route; preserve older direct /user/:username/ links; map professional-create to the existing mountAccount('professional-create') section. No page controller, business rule, database schema, or visual design was changed.
+- Regression coverage: extend tests/app/social-navigation-flow.test.js to exercise both legacy URL conversions, direct-path resolution, and the actual home/account-context link sources.
+- Commit mode: direct commit to main as requested; no pull request.
+- Status: IMPLEMENTED; CI, Pages deployment and live browser/Android verification pending at commit time. This is a source-backed route correction, not a claim that every visible button or authenticated journey has passed runtime UAT.
+- Remaining audit: continue checking the rest of the route families and all interactive controls; validate signed-in flows with founder-controlled accounts and real Android browser interaction before marking ACCEPTED.
