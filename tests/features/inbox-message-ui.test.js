@@ -7,6 +7,7 @@ test('message status differentiates queued, sent, delivered and read', () => {
   assert.match(renderMessageStatus({}), /Terkirim ke server/);
   assert.match(renderMessageStatus({ receipt: { delivered_at: '2026-11-15T10:00:00Z' } }), /Terkirim ke perangkat/);
   assert.match(renderMessageStatus({ receipt: { delivered_at: '2026-11-15T10:00:00Z', read_at: '2026-11-15T10:01:00Z' } }), /Dibaca/);
+  assert.match(renderMessageStatus({ voice: true, receipt: { delivered_at: '2026-11-15T10:00:00Z', read_at: '2026-11-15T10:01:00Z', played_at: '2026-11-15T10:02:00Z' } }), /Pesan suara diputar/);
 });
 
 test('message markup escapes content and only exposes delete-for-everyone to sender', () => {
