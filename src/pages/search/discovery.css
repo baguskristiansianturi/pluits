@@ -111,6 +111,6 @@
 .ds-tile-video-mark svg{display:block;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .ds-tile-video-mark svg path:last-child{fill:currentColor;stroke:none}
 .ds-tile-video{background:#e9eeee;object-fit:cover}
-.ds-tile-video.is-preview-unavailable{visibility:hidden}
+.ds-tile-video.is-preview-unavailable{visibility:visible;background:linear-gradient(145deg,#dfe7e7,#edf1f1)}
 .ds-tile-play{display:none!important}
 @media(max-width:420px){.ds-chips{gap:6px;padding:7px 7px 9px}.ds-chips button{min-height:34px;padding-inline:11px;font-size:9.5px}.ds-feed-wrap{padding:2px 2px 20px}.ds-feed{gap:2px}.ds-tile-view{right:5px;bottom:5px}.ds-tile-view svg{width:16px;height:16px}}
