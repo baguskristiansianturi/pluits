@@ -627,3 +627,7 @@
 .ua-social-app .ua-home-desktop-nav a{color:#66767c;font-size:12px;font-weight:650;text-decoration:none}
 .ua-social-app .ua-home-desktop-nav a.active{color:#138f87}
 @media(max-width:760px){.ua-social-app .ua-home-desktop-nav{display:none!important}}
+
+/* Shared compact header geometry: align Circle search and brand mark with Jelajah. */
+.ua-social-app .ua-home-searchbar{height:40px;min-height:40px}
+.ua-social-app .ua-home-header .pluits-brand-mark.ua-brand{--brand-size:40px}
