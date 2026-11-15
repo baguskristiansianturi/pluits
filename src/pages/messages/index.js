@@ -52,6 +52,9 @@ async function hydrateVoicePlayers(container) {
       player.playbackRate=rates[(current+1)%rates.length];
       speed.textContent=player.playbackRate+'×';
     };
+    if(!player.closest('.pl-msg-bubble')?.classList.contains('mine')&&player.dataset.messageId) {
+      player.addEventListener('ended',()=>db.rpc('mark_message_played',{p_message_id:player.dataset.messageId}));
+    }
   }));
 }
 function bindVoiceRecorder(chat, conversationId) {
@@ -541,7 +544,7 @@ async function openConversation(id) {
   ]);
   const messageIds=(messages.data||[]).map(message=>message.id);
   const [receipts,hidden]=messageIds.length?await Promise.all([
-    db.from('user_message_receipts').select('message_id,delivered_at,read_at').in('message_id',messageIds),
+    db.from('user_message_receipts').select('message_id,delivered_at,read_at,played_at').in('message_id',messageIds),
     db.from('user_message_hidden').select('message_id').eq('user_id',currentUser.id).in('message_id',messageIds)
   ]):[{data:[],error:null},{data:[],error:null}];
   const receiptByMessage=new Map((receipts.data||[]).map(receipt=>[receipt.message_id,receipt]));
