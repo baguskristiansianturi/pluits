@@ -74,3 +74,10 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - Extracted Profile Posts/Reels/Trips/Blog tab interaction into `src/features/profile/profile-tabs.js`; the Account page now supplies data/rendering dependencies through a small adapter.
 - Added stale-response protection so a slow Blog request cannot overwrite a tab the user has already switched away from.
 - Added a focused architecture regression test. This is a bounded controller extraction; it does not claim the remaining Account controller is decomposed.
+
+
+## 15 November 2026 — Profile image-frame controls extraction
+
+- Moved the Profile image-frame preview/input synchronization binder to `src/features/profile/image-frame-controls.js`.
+- The Account controller now passes the current frame and the existing frame read/render functions explicitly; the frame model and persistence remain unchanged.
+- Added a focused architecture regression test.

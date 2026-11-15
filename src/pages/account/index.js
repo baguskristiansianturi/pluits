@@ -6,6 +6,7 @@ import {renderPostActions,renderPostCard} from '../../features/posts/index.js';
 import {bindPostGalleries,normalizeFeedMediaFrames} from '../../features/posts/post-media-layout.js';
 import {bindSocialHeaderMenu} from '../../components/social/header-menu.js';
 import {bindProfileTabs as bindAccountProfileTabs} from '../../features/profile/profile-tabs.js';
+import {bindProfileImageFrameControls} from '../../features/profile/image-frame-controls.js';
 import {bindExploreFilters} from '../../features/discovery/explore-filters.js';
 import '../../features/posts/post-card.css';
 import '../../features/posts/comments.css';
@@ -927,20 +928,11 @@ function bindProfile(){
  bindProfileImageFrames(); bindImageUpload('ua-avatar-file','avatar_path','avatar');bindImageUpload('ua-cover-file','cover_path','cover');
 }
 function bindProfileImageFrames(){
- const form=document.querySelector('#ua-profile-form');if(!form)return;
- const update=()=>{
-  const frame=readProfileImageFrame(form,profileImageFrame);
-  ['avatar','card'].forEach(variant=>{
-   const preview=form.querySelector('[data-image-frame-preview="'+variant+'"]');
-   if(preview)preview.setAttribute('style',profileImageFrameCss(frame,variant));
-  });
-  form.querySelectorAll('[data-image-frame]').forEach(input=>{
-   const output=form.querySelector('[data-frame-output="'+input.dataset.imageFrame+'"]');
-   if(output)output.value=input.value;
-  });
- };
- form.querySelectorAll('[data-image-frame]').forEach(input=>input.addEventListener('input',update));
- update();
+ bindProfileImageFrameControls({
+  currentFrame:profileImageFrame,
+  readFrame:readProfileImageFrame,
+  renderFrameCss:profileImageFrameCss
+ });
 }
 function bindImageUpload(inputId,column,label){
  const input=document.getElementById(inputId);input?.addEventListener('change',async()=>{
