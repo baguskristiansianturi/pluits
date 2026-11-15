@@ -4,7 +4,7 @@
 export const assetRegistry = Object.freeze({
   icons: Object.freeze({
     general: Object.freeze({ path:'src/design-system/icons/registry.js', names:Object.freeze(['search','heart','cart','user','location','chevron','arrow','menu','truck','check','star','app']) }),
-    social: Object.freeze({ path:'src/design-system/icons/social-registry.js', names:Object.freeze(['search','heart','heart-crack','pluits-like','pluits-comment','pluits-share','pluits-mark','comment','send','bookmark','more','camera','image','radio','edit','plus','home','compass','reels','user','bell','message','settings','shield','globe','map-pin','store','briefcase','users','shopping-bag','shopping-cart','wallet','help','book','lock','logout']) }),
+    social: Object.freeze({ path:'src/design-system/icons/social-registry.js', names:Object.freeze(['search','heart','heart-crack','pluits-like','pluits-comment','pluits-share','pluits-mark','comment','send','bookmark','more','camera','image','radio','edit','plus','home','compass','reels','user','bell','message','settings','shield','eye-off','flag','message-circle','palette','sliders-horizontal','globe','map-pin','store','briefcase','users','shopping-bag','shopping-cart','wallet','help','book','lock','logout']) }),
     application: Object.freeze({ path:'src/design-system/icons/app-registry.js', names:Object.freeze(['location','truck','store','box','menu','search','cart','heart','back','arrow','user','check']) }),
     sprite: Object.freeze({ path:'public/icons.svg', names:Object.freeze(['bluesky-icon','discord-icon','documentation-icon','github-icon','social-icon','x-icon']) })
   }),

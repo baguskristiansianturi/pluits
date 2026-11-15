@@ -23,6 +23,11 @@ const paths={
  message:'<path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.2-3.5A7.5 7.5 0 1 1 20 11.5Z"></path>',
  settings:'<circle cx="12" cy="12" r="3"></circle><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.7-1.4-2.4 1.4-1.1a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.7 1.4 2.4-1.4 1.1a8 8 0 0 1 0 2Z"></path>',
  shield:'<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"></path><path d="m9 12 2 2 4-4"></path>',
+ 'eye-off':'<path d="M3 3l18 18"></path><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path><path d="M9.9 5.2A10.5 10.5 0 0 1 12 5c5.3 0 8.7 5.2 8.7 7-.4 1.5-1.4 2.8-2.8 3.9M6.6 6.6C4.6 7.9 3.3 9.8 2.8 12c.8 2.8 4.2 7 9.2 7 1 0 2-.2 2.9-.5"></path>',
+ flag:'<path d="M4 22V4"></path><path d="M4 4c5-3 8 3 13 0v10c-5 3-8-3-13 0"></path>',
+ 'message-circle':'<path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.2-3.5A7.5 7.5 0 1 1 20 11.5Z"></path>',
+ palette:'<circle cx="12" cy="12" r="9"></circle><circle cx="8" cy="10" r="1"></circle><circle cx="12" cy="7.5" r="1"></circle><circle cx="16" cy="10" r="1"></circle><path d="M13 20c-.7-1.2-.2-2.8 1.2-3.3 1.1-.4 2.3.2 3.1-.4"></path>',
+ 'sliders-horizontal':'<path d="M4 6h16M4 12h16M4 18h16"></path><circle cx="9" cy="6" r="2"></circle><circle cx="15" cy="12" r="2"></circle><circle cx="7" cy="18" r="2"></circle>',
  globe:'<circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path>',
  'map-pin':'<path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle>',
  store:'<path d="M4 10v10h16V10M3 4h18l-1 6H4Z"></path><path d="M9 20v-6h6v6M4 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 5 0"></path>',
@@ -36,6 +41,7 @@ const paths={
  lock:'<rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 1 1 8 0v3"></path>',
  logout:'<path d="M10 17l5-5-5-5M15 12H3M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path>'
 };
+export const SOCIAL_ICON_NAMES = Object.freeze(Object.keys(paths));
 export function socialIcon(name,{size=20,className=''}={}){
  const body=paths[name];if(!body)return '';
  return '<svg class="pl-icon '+className+'" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+body+'</svg>';

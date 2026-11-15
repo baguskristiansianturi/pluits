@@ -97,3 +97,13 @@ test('GitHub Pages build includes a direct-route fallback document', async () =>
   assert.match(config, /github-pages-spa-fallback/);
   assert.match(config, /copyFileSync\(index, resolve\('dist\/404\.html'\)\)/);
 });
+
+
+test('public username and Blog links retain their complete canonical route', () => {
+  const address = pathname => ({ pathname, search: '', hash: '' });
+  assert.equal(canonicalizeLegacyRoute('#/@bagus'), '/pluits/@bagus/');
+  assert.equal(canonicalizeLegacyRoute('#/@bagus/blog/catatan/cerita-pertama'), '/pluits/@bagus/blog/catatan/cerita-pertama/');
+  assert.equal(canonicalizeLegacyRoute('#/%40bagus/blog/catatan/cerita-pertama'), '/pluits/@bagus/blog/catatan/cerita-pertama/');
+  assert.equal(getInternalRoute(address('/pluits/@bagus/')), '@bagus');
+  assert.equal(getInternalRoute(address('/pluits/%40bagus/blog/catatan/cerita-pertama/')), '@bagus/blog/catatan/cerita-pertama');
+});
