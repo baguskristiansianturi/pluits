@@ -71,8 +71,9 @@ test('Circle, Profile and Messages resolve directly to their own page controller
  const router=await (await import('node:fs/promises')).readFile(new URL('../../src/app/router.js',import.meta.url),'utf8');
  assert.ok(router.includes("else if(r==='circle')") && router.includes("mountUserAccount('explore')"),'Circle must mount the Circle feed directly.');
  assert.ok(router.includes("else if(r==='profile')") && router.includes("mountUserAccount('profile',v||'')"),'Profile must mount the personal profile directly.');
- assert.ok(router.includes("else if(r==='messages'||r==='inbox')") && router.includes("messagesPage()"),'Messages and Inbox must mount the Inbox controller directly.');
- assert.doesNotMatch(router,/location\.hash='#\/inbox';return;/,'Messages must not depend on a second redirect before opening.');
+ assert.ok(router.includes("r==='messages'||r==='inbox'") && router.includes("messagesPage()"),'Messages and Inbox must mount the Inbox controller directly.');
+ const directInbox=router.match(/else if\(r==='message'\|\|r==='messages'\|\|r==='inbox'\)\{([\s\S]*?)\n  else if\(r==='admin'/)?.[1]||'';
+ assert.ok(directInbox.includes('messagesPage()')&&!directInbox.includes("location.hash='#/inbox';return;"),'The direct Inbox route must mount without redirecting.');
 });
 
 
@@ -270,4 +271,15 @@ test('Nearby See All preserves the same device location and five-kilometre radiu
  assert.ok(source.includes('href="#/places?from=nearby"'));
  assert.ok(source.includes('window.__pluitsNearbyContext={latitude:location.latitude,longitude:location.longitude}'));
  assert.ok(source.includes("params.get('from')==='nearby'")&&source.includes('state.radius=5000'));
+});
+
+
+test('legacy Circle and messaging routes never fall through to Profile',async()=>{
+ const router=await readFile(new URL('../../src/app/router.js',import.meta.url),'utf8');
+ const account=await readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
+ assert.ok(router.includes("r==='account'&&['circle','home','feed'].includes(v)")&&router.includes("location.hash='#/account/explore'"),'Legacy Circle aliases must resolve to Circle.');
+ assert.ok(router.includes("r==='account'&&['message','messages','inbox'].includes(v)")&&router.includes("location.hash='#/inbox'"),'Legacy message aliases must resolve to Inbox.');
+ assert.ok(router.includes("r==='message'||r==='messages'||r==='inbox'")&&router.includes('messagesPage()'),'Message routes must mount the Inbox page.');
+ assert.ok(account.includes("if(['message','messages','inbox'].includes(section)){location.hash='#/inbox';return;}"),'Account mounting must redirect message aliases to Inbox.');
+ assert.ok(account.includes('Halaman akun tidak ditemukan')&&!account.includes(":section==='content-settings'?await accountSettingsPage(supabase,user):await profilePage();"),'Unknown account routes must not silently render Profile.');
 });
