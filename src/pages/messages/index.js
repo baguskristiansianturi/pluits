@@ -397,8 +397,12 @@ export async function bindMessagesPage() {
       if(currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
       else loadConversations();
     })
+    .on('postgres_changes',{event:'*',schema:'public',table:'user_message_hidden'},payload=>{
+      if(currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
+      else loadConversations();
+    })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_conversation_members'},payload=>{
-      if(payload.new?.conversation_id===currentConversation) openConversation(currentConversation);
+      if(payload.new?.conversation_id===currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
       else loadConversations();
     }).subscribe();
   await flushOutbox();
