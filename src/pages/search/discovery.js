@@ -4,7 +4,15 @@ import '../../styles/social-navigation.css';
 import './discovery.css';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-let activeCategory='all',sortMode='trending',loading=false,requestVersion=0;
+let activeCategory='all',loading=false,requestVersion=0;
+let videoObserver=null,videoVisibilityHandler=null,videoRouteHandler=null;
+function stopDiscoveryVideoPreviews(){
+ if(videoObserver){videoObserver.disconnect();videoObserver=null;}
+ if(videoVisibilityHandler)document.removeEventListener('visibilitychange',videoVisibilityHandler);
+ if(videoRouteHandler)window.removeEventListener('hashchange',videoRouteHandler);
+ document.querySelectorAll('[data-discovery-video]').forEach(video=>{if(!video.paused)video.pause();});
+ videoVisibilityHandler=null;videoRouteHandler=null;
+}
 const slug=value=>String(value||'').toLowerCase().replace(/^#/,'').trim().replace(/\s+/g,'-');
 const initials=value=>String(value||'P').trim().slice(0,1).toUpperCase();
 const dateLabel=value=>{const date=new Date(value);return Number.isFinite(date.getTime())?new Intl.DateTimeFormat('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).format(date):''};
@@ -12,15 +20,12 @@ const dateLabel=value=>{const date=new Date(value);return Number.isFinite(date.g
 export function discoverySearch(q=''){
  return `<div class="ds-page">
   <header class="ds-top">
-   <a href="#/account/explore" aria-label="Kembali ke Circle">‹</a>
-   <div class="ds-title"><strong>Jelajah</strong><small>Temukan apa yang sedang terjadi di PLUITS</small></div>
-   <form id="ds-form" class="ds-search"><span>⌕</span><input id="ds-query" value="${esc(q)}" placeholder="Cari konten, orang, atau topik…" aria-label="Cari"><button aria-label="Cari">⌕</button></form>
+   <h1 class="ds-sr-only">Jelajah PLUITS</h1>
+   <form id="ds-form" class="ds-search" role="search" aria-label="Cari di Jelajah"><span class="ds-search-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></span><input id="ds-query" name="q" type="search" autocomplete="off" value="${esc(q)}" placeholder="Cari konten, orang, atau topik…" aria-label="Cari konten, orang, atau topik"><button type="submit" aria-label="Cari"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></form>
   </header>
   <main class="ds-main plds-container">
-   <section class="ds-intro"><h1>Jelajah</h1><p>Konten publik dari personal, kreator, pemilik usaha, penyedia layanan, komunitas, dan berbagai entitas.</p></section>
-   <nav class="ds-sort" id="ds-sort" aria-label="Urutan konten"><button data-sort="trending" class="selected">Sedang populer</button><button data-sort="latest">Terbaru</button><button data-sort="random">Acak</button></nav>
-   <nav class="ds-chips" id="ds-chips" aria-label="Kategori konten"><button data-cat="all" class="selected">Semua</button></nav>
-   <section class="ds-feed-wrap"><div class="ds-feed" id="ds-feed" aria-label="Feed publik"></div><div class="ds-loading" id="ds-loading" role="status">Memuat konten publik…</div></section>
+   <nav class="ds-chips" id="ds-chips" aria-label="Kategori konten"><button type="button" data-cat="all" class="selected">Semua</button></nav>
+   <section class="ds-feed-wrap"><div class="ds-feed" id="ds-feed" aria-label="Konten publik"></div><div class="ds-loading" id="ds-loading" role="status">Memuat konten publik…</div></section>
   </main>
   ${renderSocialMobileNav({active:'discover'})}
  </div>`;
@@ -78,41 +83,44 @@ async function feed(){
   const chipRoot=document.querySelector('#ds-chips');
   if(chipRoot)chipRoot.innerHTML=chips.map(([key,label])=>'<button type="button" data-cat="'+esc(key)+'" class="'+(activeCategory===key?'selected':'')+'">'+esc(label)+'</button>').join('');
   const now=Date.now();
-  if(sortMode==='latest')hydrated.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
-  else if(sortMode==='random')hydrated.sort(()=>Math.random()-.5);
-  else hydrated.sort((a,b)=>{
+  hydrated.sort((a,b)=>{
    const score=post=>{const age=Math.max(0,(now-new Date(post.created_at).getTime())/3600000);return Math.min(80,post.likes*2+post.comments*3)+28*Math.exp(-age/36);};
    return score(b)-score(a)||new Date(b.created_at)-new Date(a.created_at);
   });
   if(version!==requestVersion)return;
   const cards=hydrated.map(post=>{
-   const media=post.media[0],owner=post.owner,name=esc(owner.display_name||'Pengguna PLUITS');
+   const media=post.media[0],owner=post.owner,name=esc(owner.display_name||'Pengguna PLUITS'),username=esc(owner.username||'pengguna');
    const avatar=post.avatarUrl?'<img src="'+esc(post.avatarUrl)+'" alt="" loading="lazy">':'<b>'+esc(initials(owner.display_name))+'</b>';
-   const mediaMarkup=media?(media.media_type==='video'?'<video class="ds-tile-video" src="'+esc(media.url)+'" muted playsinline preload="auto" aria-label="Pratinjau Reel"></video><span class="ds-tile-play" aria-hidden="true">▶</span>':'<img src="'+esc(media.url)+'" loading="lazy" alt="Pratinjau postingan">'):'<span class="ds-text-tile">'+esc((post.caption||'PLUITS').slice(0,110))+'</span>';
-   const context=post.profile_context==='business'?'Bisnis':post.profile_context==='professional'?'Profesional':'';
+   const mediaMarkup=media?(media.media_type==='video'?'<video class="ds-tile-video" data-discovery-video src="'+esc(media.url)+'" muted playsinline loop preload="none" aria-label="Pratinjau video dari @'+username+'"></video><span class="ds-tile-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 6 10 6-10 6z"></path></svg></span>':'<img src="'+esc(media.url)+'" loading="lazy" decoding="async" alt="Konten dari @'+username+'">'+(post.media.length>1?'<span class="ds-tile-stack" aria-label="Beberapa media"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"></rect><path d="M3 8V3h5M16 3h5v5M21 16v5h-5M8 21H3v-5"></path></svg></span>':'')):'<span class="ds-text-tile">'+esc((post.caption||'PLUITS').slice(0,110))+'</span>';
    const target=post.content_kind==='reel'?'#/account/reels/'+encodeURIComponent(post.id):'#/account/post/'+encodeURIComponent(post.id);
-   return '<article class="ds-grid-tile'+(media?.media_type==='video'?' is-video':'')+(post.content_kind==='reel'?' is-reel':'')+'"><a class="ds-tile-link" href="'+target+'" aria-label="'+(post.content_kind==='reel'?'Tonton Reel':'Buka postingan')+' dari '+name+'"><div class="ds-tile-media">'+mediaMarkup+'</div><div class="ds-tile-overlay"><span class="ds-tile-author">'+avatar+'</span><span class="ds-tile-stats">♡ '+post.likes+'　◯ '+post.comments+'</span></div>'+(post.content_kind==='reel'?'<span class="ds-tile-reel-mark" aria-label="Reel">▶</span>':'')+(context?'<span class="ds-tile-context">'+context+'</span>':'')+'</a></article>';
+   return '<article class="ds-grid-tile'+(media?.media_type==='video'?' is-video':'')+(post.content_kind==='reel'?' is-reel':'')+'"><a class="ds-tile-link" href="'+target+'" aria-label="'+(post.content_kind==='reel'?'Tonton Reel':'Buka postingan')+' dari '+name+'"><div class="ds-tile-media">'+mediaMarkup+'</div><div class="ds-tile-overlay"><span class="ds-tile-author">'+avatar+'</span><span class="ds-tile-username">@'+username+'</span></div><span class="ds-tile-view" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg></span></a></article>';
   }).join('');
+  stopDiscoveryVideoPreviews();
   el.innerHTML=cards||'';
-  // Decode only visible Reel tiles; use the first decoded frame as an in-memory cover.
-  const tileVideos=[...el.querySelectorAll('.ds-tile-video')];
-  if('IntersectionObserver'in window){
-   const covers=new IntersectionObserver(entries=>entries.forEach(entry=>{
-    if(!entry.isIntersecting)return;
-    const video=entry.target;covers.unobserve(video);video.preload='auto';
-    video.addEventListener('loadeddata',()=>{
-     try{
-      if(video.videoWidth&&video.videoHeight){
-       const canvas=document.createElement('canvas');canvas.width=video.videoWidth;canvas.height=video.videoHeight;
-       const context=canvas.getContext('2d');context.drawImage(video,0,0,canvas.width,canvas.height);
-       video.poster=canvas.toDataURL('image/jpeg',.82);
-      }
-     }catch(error){console.debug('PLUITS Reel tile cover frame unavailable',error);}
-     video.pause();
-    },{once:true});
-   }),{rootMargin:'240px 0px',threshold:.01});
-   tileVideos.forEach(video=>covers.observe(video));
-  }else tileVideos.slice(0,6).forEach(video=>{video.preload='auto';});
+  const tileVideos=[...el.querySelectorAll('[data-discovery-video]')];
+  if(tileVideos.length&&!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches){
+   let activeVideo=null;
+   const activate=video=>{
+    if(document.hidden)return;
+    if(activeVideo&&activeVideo!==video)activeVideo.pause();
+    activeVideo=video;video.muted=true;video.loop=true;video.playsInline=true;
+    const attempt=video.play();if(attempt?.catch)attempt.catch(()=>{});
+   };
+   videoVisibilityHandler=()=>{
+    if(document.hidden){tileVideos.forEach(video=>video.pause());activeVideo=null;}
+   };
+   document.addEventListener('visibilitychange',videoVisibilityHandler);
+   videoRouteHandler=()=>stopDiscoveryVideoPreviews();
+   window.addEventListener('hashchange',videoRouteHandler,{once:true});
+   if('IntersectionObserver'in window){
+    videoObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+     const video=entry.target;
+     if(entry.isIntersecting&&entry.intersectionRatio>=.55)activate(video);
+     else if(video===activeVideo){video.pause();activeVideo=null;}
+    }),{threshold:[0,.2,.55,.8],rootMargin:'100px 0px'});
+    tileVideos.forEach(video=>videoObserver.observe(video));
+   }else activate(tileVideos[0]);
+  }
   if(status)status.textContent=cards?'':'Belum ada konten publik yang cocok. Coba kategori atau kata kunci lain.';
  }catch(error){
   if(status)status.textContent='Jelajah belum dapat dimuat. Periksa koneksi lalu coba lagi.';
@@ -122,12 +130,6 @@ async function feed(){
 
 export function bindDiscoverySearch(){
  document.querySelector('#ds-form')?.addEventListener('submit',event=>{event.preventDefault();feed();});
- document.querySelector('#ds-sort')?.addEventListener('click',event=>{
-  const button=event.target.closest('[data-sort]');if(!button)return;
-  sortMode=button.dataset.sort;
-  document.querySelectorAll('#ds-sort [data-sort]').forEach(item=>item.classList.toggle('selected',item===button));
-  feed();
- });
  document.querySelector('#ds-chips')?.addEventListener('click',event=>{
   const button=event.target.closest('[data-cat]');if(!button)return;
   activeCategory=button.dataset.cat;
