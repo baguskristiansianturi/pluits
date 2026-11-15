@@ -1425,6 +1425,8 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - The Account controller already implements the professional profile view, but the readable route registry did not map this alias; it could resolve to an unhandled top-level /professional/ page.
 - Fix: map the legacy account/professional URL to /professional/ and route it back to the existing account/professional controller section. Keep the existing professional-create route separate.
 - Regression coverage: assert the path mapping, Account controller section, and actual account-context navigation source.
-- Commit mode: direct main commit; no PR. CI/Pages verification pending.
-- Verification trigger: follow-up roadmap contents commit dispatches the standard push workflow for the CP-090 route change.
+- Commit mode: direct main commit; no PR.
+- Status: IMPLEMENTED and DEPLOYED. Code commit 7827bba9e33d9880802e5b6320b17fe7dda21615; verification commit c3176e14cda54345d01c38791597d38c7e70a427. Workflow #43712194123 / job #132806212955 SUCCESS after retry: 143/143 Node tests passed, Vite build and output verification passed, Pages artifact uploaded, and GitHub Pages deployment reported success.
+- CI correction: the first run identified a missing test import for canonicalizeLegacyRoute; the test import was added and the full suite then passed. Two Pages artifact-metadata attempts failed transiently; the third deployment attempt reported success.
+- Browser/device UAT remains NOT TESTED.
 - Browser/device UAT remains NOT TESTED.
