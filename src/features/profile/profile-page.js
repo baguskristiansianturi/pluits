@@ -6,6 +6,7 @@ export async function renderProfilePage({
  supabaseClient,
  signed,
  hydratePosts,
+ onProfilePosts=()=>{},
  onProfileReels=()=>{},
  imageFrame={},
  imageFrameCss=()=> '',
@@ -21,6 +22,7 @@ export async function renderProfilePage({
  ]);
  if(postsResult.error)throw postsResult.error;
  const ownPosts=await hydratePosts(postsResult.data||[]);
+ onProfilePosts(ownPosts);
  onProfileReels(ownPosts.filter(post=>post.content_kind==='reel'&&post.media?.length===1&&post.media[0].media_type==='video'&&Number(post.media[0].duration_ms||0)>0&&Number(post.media[0].duration_ms||0)<=60000));
  const [followersCount,followingCount,pendingCount]=await Promise.all([
   supabaseClient.from('user_follows').select('*',{count:'exact',head:true}).eq('following_id',user.id).eq('status','accepted'),
