@@ -1,3 +1,4 @@
+import {readAccountCss} from '../helpers/account-css.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -19,7 +20,7 @@ test('all app icon references resolve to the one public canonical PLUITS SVG',as
 
 test('profile settings menu is rendered as a direct child of each profile card',async()=>{
  const source=await readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
- const css=await readFile(new URL('../../src/pages/account/user-account.css',import.meta.url),'utf8');
+ const css=readAccountCss();
  assert.match(source,/function profileMenuMarkup\(\)/);
  assert.ok((source.match(/\$\{profileMenuMarkup\(\)\}/g)||[]).length>=2,'Both profile and preview must render the shared menu.');
  assert.match(source,/href="#\/account\/settings"/);

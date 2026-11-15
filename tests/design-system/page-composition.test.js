@@ -1,3 +1,4 @@
+import {readAccountCss} from '../helpers/account-css.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { layoutPresets, getLayoutPreset } from '../../src/design-system/layouts/presets.js';
@@ -137,7 +138,7 @@ test('Discovery and Help pages adopt shared content containers', () => {
 
 test('Account social pages use the shared content container while preserving profile variants', () => {
   const pageSource = readFileSync(new URL('../../src/pages/account/index.js', import.meta.url), 'utf8');
-  const accountCss = readFileSync(new URL('../../src/pages/account/user-account.css', import.meta.url), 'utf8');
+  const accountCss = readAccountCss();
   assert.match(pageSource, /ua-main plds-container/);
   assert.match(accountCss, /--pl-layout-content-max:1080px/);
   assert.match(accountCss, /max-width:var\(--pl-layout-content-max,1080px\)/);

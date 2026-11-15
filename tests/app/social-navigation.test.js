@@ -1,3 +1,4 @@
+import {readAccountCss} from '../helpers/account-css.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {renderSocialHeader,renderSocialMobileNav} from '../../src/components/social/navigation.js';
@@ -141,7 +142,7 @@ test('GeoDirectory is map-first with a touch-enabled globe and clickable real pl
 test('signed-in home leads with Bali experiences, search, wishlist and the personal feed',async()=>{
  const account=await readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
  const navigation=await readFile(new URL('../../src/components/social/navigation.js',import.meta.url),'utf8');
- const css=await readFile(new URL('../../src/pages/account/user-account.css',import.meta.url),'utf8');
+ const css=readAccountCss();
  const topTen=await readFile(new URL('../../src/features/discovery/top-ten-cards.js',import.meta.url),'utf8');
  assert.ok(topTen.includes('Top 10 Trending')&&topTen.includes('ua-topten-grid')&&((topTen.match(/className:'ua-topten-card-/g)||[]).length===10),'Explore must show ten individual trending subjects, not category tiles.');
  const topTenSlider=await readFile(new URL('../../src/features/discovery/top-ten-slider.js',import.meta.url),'utf8');
