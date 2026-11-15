@@ -575,3 +575,19 @@
 .pl-msg-chat-status [data-undo-hide]:disabled{opacity:.55}
 
 .pl-msg-played{display:inline-flex;align-items:center;margin-left:2px;color:#2788c4;font-size:11px;line-height:1}
+
+/* Conversation rows use the familiar avatar / name / preview / time hierarchy. */
+.pl-msg-thread{grid-template-columns:42px minmax(0,1fr) 8px;align-items:center;column-gap:10px;padding:11px 8px}
+.pl-msg-thread .pl-msg-avatar{width:42px;height:42px;flex:0 0 42px;border-radius:50%;font-size:13px}
+.pl-msg-thread .pl-msg-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.pl-msg-thread-copy{display:grid;gap:4px;min-width:0}
+.pl-msg-thread-head{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+.pl-msg-thread-head b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+.pl-msg-thread-head time{flex:0 0 auto;color:#8793a1;font-size:9px;font-variant-numeric:tabular-nums}
+.pl-msg-thread-copy>small{font-size:10px}
+.pl-msg-thread-copy>p{font-size:10px;line-height:1.35}
+.pl-msg-unread-badge{width:8px;height:8px;border-radius:50%;background:#2f709f}
+.pl-msg-chat-avatar{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center}
+.pl-msg-chat-avatar .pl-msg-avatar{width:40px;height:40px;border-radius:50%;font-size:12px}
+.pl-msg-chat-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.pl-msg-chat-head>span:last-child{font-size:inherit;color:inherit}
