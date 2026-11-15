@@ -25,7 +25,7 @@ export function createPresenceManager(client, { now = () => new Date().toISOStri
         config: { presence: { key: userId } }
       });
       channel = nextChannel;
-      nextChannel.on('presence', { event: 'sync' }, () => {
+      nextChannel.on?.('presence', { event: 'sync' }, () => {
         const state = nextChannel.presenceState();
         if (typeof window !== 'undefined') {
           window.__pluitsPresenceState = state;
