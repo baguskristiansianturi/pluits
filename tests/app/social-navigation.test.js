@@ -234,7 +234,7 @@ test('Circle home provides ten realistic Bali local-product cards using marketpl
  const cards=LOCAL_PRODUCT_SHOWCASE.map(item=>renderLocalProductCard(item,{demo:true}));
  assert.equal(cards.length,10);
  assert.ok(cards.every(card=>card.includes('class="pl-market-product ua-home-market-product"')));
- assert.ok(cards.every(card=>card.includes('href="#/market-product/demo-')));
+ assert.ok(cards.every(card=>card.includes('href="#/market-product/showcase-')));
  assert.ok(cards.every(card=>!/\bDEMO\b/i.test(card)));
  const home=await readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
  assert.ok(home.includes('public_marketplace_products')&&home.includes('renderLocalProductCard'));
