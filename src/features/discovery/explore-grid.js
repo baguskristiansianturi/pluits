@@ -41,9 +41,11 @@ export function renderExploreGrid({posts=[],categories=[],selectedCategory='all'
 
 let playbackObserver=null;
 let playbackVisibilityHandler=null;
+let playbackRouteHandler=null;
 export function bindExploreGridPlayback(){
  if(playbackObserver){playbackObserver.disconnect();playbackObserver=null;}
  if(playbackVisibilityHandler)document.removeEventListener('visibilitychange',playbackVisibilityHandler);
+ if(playbackRouteHandler)window.removeEventListener('hashchange',playbackRouteHandler);
  const searchForm=document.querySelector('[data-explore-search]');
  searchForm?.addEventListener('submit',event=>{event.preventDefault();const query=String(searchForm.querySelector('input[name="q"]')?.value||'').trim();location.hash=query?'#/search?q='+encodeURIComponent(query):'#/search';});
  const videos=[...document.querySelectorAll('[data-explore-video]')];
@@ -63,6 +65,8 @@ export function bindExploreGridPlayback(){
   if(document.hidden){pauseAll();activeVideo=null;}
  };
  document.addEventListener('visibilitychange',playbackVisibilityHandler);
+ playbackRouteHandler=()=>{if(playbackObserver){playbackObserver.disconnect();playbackObserver=null;}pauseAll();document.removeEventListener('visibilitychange',playbackVisibilityHandler);playbackVisibilityHandler=null;window.removeEventListener('hashchange',playbackRouteHandler);playbackRouteHandler=null;};
+ window.addEventListener('hashchange',playbackRouteHandler,{once:true});
  if(!('IntersectionObserver'in window)){activate(videos[0]);return;}
  playbackObserver=new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
