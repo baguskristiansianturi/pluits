@@ -114,3 +114,11 @@
 .ds-tile-video.is-preview-unavailable{visibility:visible;background:linear-gradient(145deg,#dfe7e7,#edf1f1)}
 .ds-tile-play{display:none!important}
 @media(max-width:420px){.ds-chips{gap:6px;padding:7px 7px 9px}.ds-chips button{min-height:34px;padding-inline:11px;font-size:9.5px}.ds-feed-wrap{padding:2px 2px 20px}.ds-feed{gap:2px}.ds-tile-view{right:5px;bottom:5px}.ds-tile-view svg{width:16px;height:16px}}
+
+/* Ensure the shared Jelajah header wins over legacy discovery header selectors. */
+.ds-top>a.ds-header-notification{display:grid;width:39px;height:39px;flex:0 0 39px;min-width:39px;border:1px solid #e6ebeb;border-radius:11px;background:rgba(244,246,246,.72);color:#52676a;font-size:initial}
+.ds-search .ds-search-label{padding-right:8px;border-right:1px solid #d9dfdf;color:#526467;font-size:10px;font-weight:700}
+.ds-search .ds-search-icon{font-size:initial}
+.ds-search input{height:36px;flex:1;font-size:11px}
+.ds-search button{display:grid;width:28px;height:30px;flex:0 0 28px;place-items:center;padding:0}
+@media(max-width:420px){.ds-top>a.ds-header-notification{width:37px;height:37px;flex-basis:37px;min-width:37px}.ds-search .ds-search-label{font-size:9px}.ds-search input{font-size:10.5px}}
