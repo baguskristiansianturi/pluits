@@ -637,3 +637,227 @@
   background:#eef1f2;
   box-shadow:inset 0 0 0 1px rgba(32,55,70,.035);
 }
+
+
+/* Login-only cleanup: consistent spacing, alignment and responsive controls. */
+.pl-auth-mode-login .pl-register-main{
+  grid-template-columns:minmax(0,1fr) minmax(360px,448px);
+  align-items:center;
+}
+.pl-auth-mode-login .pl-register-card{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  padding:30px;
+  border-radius:20px;
+}
+.pl-auth-mode-login .pl-register-card-head{
+  display:grid;
+  gap:7px;
+  margin:0 0 20px;
+}
+.pl-auth-mode-login .pl-register-card-head>.pl-register-step{
+  margin:0;
+  line-height:1.4;
+}
+.pl-auth-mode-login .pl-register-card-head h2{
+  margin:0;
+  line-height:1.18;
+}
+.pl-auth-mode-login .pl-register-card-head>p{
+  margin:0;
+  max-width:36em;
+  line-height:1.65;
+}
+.pl-auth-mode-login .pl-auth-tabs{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:4px;
+  margin:0 0 17px;
+  padding:4px;
+}
+.pl-auth-mode-login .pl-auth-tabs a{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  min-height:39px;
+  margin:0;
+  border:0;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:750;
+}
+.pl-auth-mode-login .pl-register-form{
+  gap:13px;
+}
+.pl-auth-mode-login .pl-auth-field{
+  padding-top:8px;
+}
+.pl-auth-mode-login .pl-auth-field>label{
+  top:0;
+  left:12px;
+  padding:0 5px;
+  line-height:16px;
+}
+.pl-auth-mode-login .pl-register-form input:not([type=checkbox]){
+  height:49px;
+  padding:0 14px;
+  border-radius:10px;
+  font-size:15px;
+}
+.pl-auth-mode-login .pl-register-password-wrap{
+  width:100%;
+}
+.pl-auth-mode-login .pl-register-password-wrap input{
+  padding-right:52px!important;
+}
+.pl-auth-mode-login .pl-register-show{
+  top:8px;
+  right:5px;
+  height:49px;
+  width:40px;
+}
+.pl-auth-mode-login .pl-register-submit{
+  width:100%;
+  min-height:49px;
+  margin:0;
+  border-radius:10px;
+}
+.pl-auth-mode-login .pl-register-message{
+  margin:0;
+}
+.pl-auth-mode-login .pl-auth-social{
+  gap:10px;
+  margin-top:17px;
+}
+.pl-auth-mode-login .pl-auth-divider{
+  margin:0 0 1px;
+}
+.pl-auth-mode-login .pl-auth-provider-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.pl-auth-mode-login .pl-auth-provider-grid .pl-auth-provider{
+  min-width:0;
+  min-height:42px;
+  padding:0 10px;
+  gap:8px;
+  border-radius:10px;
+}
+.pl-auth-mode-login .pl-auth-provider>span{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.pl-auth-mode-login .pl-auth-provider-status{
+  max-width:66px;
+  font-size:7px;
+}
+.pl-auth-mode-login .pl-auth-phone{
+  margin:8px 0 0;
+  padding:4px;
+  line-height:1.5;
+}
+.pl-auth-mode-login .pl-auth-social-note{
+  margin:5px auto 0;
+  line-height:1.6;
+}
+.pl-auth-mode-login .pl-auth-invite{
+  margin:0 auto;
+}
+.pl-auth-mode-login .pl-register-login{
+  margin:15px 0 0;
+  line-height:1.5;
+}
+.pl-auth-mode-login .pl-register-security{
+  margin:9px 0 0;
+  line-height:1.5;
+}
+.pl-auth-mode-login .pl-register-footer{
+  margin-top:auto;
+}
+.pl-auth-mode-login :is(.pl-auth-provider,.pl-register-submit,.pl-auth-tabs a){
+  -webkit-tap-highlight-color:transparent;
+}
+@media(max-width:760px){
+  .pl-auth-mode-login .pl-register-main{
+    width:min(440px,100%);
+    grid-template-columns:minmax(0,1fr);
+    padding:16px 0 13px;
+  }
+  .pl-auth-mode-login .pl-register-card{
+    padding:22px 20px;
+    border-radius:17px;
+  }
+  .pl-auth-mode-login .pl-register-card-head{
+    gap:7px;
+    margin-bottom:17px;
+  }
+  .pl-auth-mode-login .pl-register-card-head h2{
+    font-size:25px;
+  }
+  .pl-auth-mode-login .pl-auth-tabs{
+    margin-bottom:14px;
+  }
+  .pl-auth-mode-login .pl-register-form{
+    gap:11px;
+  }
+  .pl-auth-mode-login .pl-register-form input:not([type=checkbox]){
+    height:48px;
+    font-size:16px;
+  }
+  .pl-auth-mode-login .pl-register-show{
+    top:8px;
+    height:48px;
+  }
+  .pl-auth-mode-login .pl-auth-social{
+    margin-top:15px;
+    gap:9px;
+  }
+  .pl-auth-mode-login .pl-auth-provider-grid .pl-auth-provider{
+    min-height:42px;
+  }
+  .pl-auth-mode-login .pl-register-footer{
+    padding-top:7px;
+  }
+}
+@media(max-width:380px){
+  .pl-auth-mode-login .pl-register-card{
+    padding:19px 16px;
+  }
+  .pl-auth-mode-login .pl-auth-provider-grid .pl-auth-provider{
+    padding-inline:8px;
+    gap:6px;
+  }
+  .pl-auth-mode-login .pl-auth-provider-status{
+    max-width:58px;
+    font-size:6.5px;
+  }
+}
+@media(max-height:720px) and (max-width:760px){
+  .pl-auth-mode-login .pl-register-main{
+    align-items:flex-start;
+    padding:10px 0 12px;
+  }
+  .pl-auth-mode-login .pl-register-card{
+    padding:17px 16px;
+  }
+  .pl-auth-mode-login .pl-register-card-head{
+    margin-bottom:12px;
+  }
+  .pl-auth-mode-login .pl-register-form{
+    gap:8px;
+  }
+  .pl-auth-mode-login .pl-auth-social{
+    margin-top:10px;
+    gap:6px;
+  }
+  .pl-auth-mode-login .pl-auth-provider-grid .pl-auth-provider{
+    min-height:38px;
+  }
+  .pl-auth-mode-login .pl-register-footer{
+    padding-top:5px;
+  }
+}
