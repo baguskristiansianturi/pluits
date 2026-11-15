@@ -397,7 +397,14 @@ function bindStartChat(box) {
     button.disabled=true;
     const {data:id,error}=await db.rpc('start_direct_conversation',{p_other_user_id:button.dataset.startChat});
     if(error){alert(error.message);button.disabled=false;return;}
-    await loadConversations(); await openConversation(id);
+    const isSelf=button.dataset.startChat===currentUser.id;
+    const fallbackPerson=isSelf
+      ? {...currentProfile,display_name:'Pesan untuk diri sendiri',is_self:true}
+      : (contactsCache.find(person=>person.id===button.dataset.startChat)||{id:button.dataset.startChat,display_name:'Percakapan baru',username:''});
+    if(!conversationCache.some(item=>item.id===id))conversationCache.unshift({id,updated_at:new Date().toISOString(),other:fallbackPerson,last:null,unread:false});
+    await loadConversations();
+    if(!conversationCache.some(item=>item.id===id))conversationCache.unshift({id,updated_at:new Date().toISOString(),other:fallbackPerson,last:null,unread:false});
+    await openConversation(id);
   });
 }
 export async function bindMessagesPage() {
@@ -577,7 +584,7 @@ async function loadConversations() {
   }
   const ids=(members||[]).map(row=>row.conversation_id);
   if(navigator.onLine&&ids.length) await Promise.all(ids.map(conversationId=>db.rpc('mark_conversation_delivered',{p_conversation_id:conversationId})));
-  if(!ids.length){conversationCache=[];list.innerHTML=emptyStateMarkup({variant:'message',title:activeInboxTab==='unread'?'Tidak ada pesan belum dibaca':'Belum ada percakapan',description:activeInboxTab==='unread'?'Semua percakapan sudah dibaca.':'Pilih kontak atau cari nama pengguna untuk memulai percakapan.'});return;}
+  if(!ids.length){conversationCache=[];updateInboxUnreadBadge(0);list.innerHTML=emptyStateMarkup({variant:'message',title:activeInboxTab==='unread'?'Tidak ada pesan belum dibaca':'Belum ada percakapan',description:activeInboxTab==='unread'?'Semua percakapan sudah dibaca.':'Pilih kontak atau cari nama pengguna untuk memulai percakapan.'});return;}
   const [convs,memberRows,msgRows,unreadRows]=await Promise.all([
     db.from('user_conversations').select('id,title,direct_key,updated_at').in('id',ids).order('updated_at',{ascending:false}),
     db.from('user_conversation_members').select('conversation_id,user_id,last_read_at').in('conversation_id',ids),
