@@ -206,3 +206,9 @@ Salin untuk keputusan berikutnya:
 
 
 - **D-012 implementation update (15 November 2026):** PR #31 merged to main at `c98fcb7a7e1fde919e6eeb129519dd9e88b31369`; PR CI run #2034 SUCCESS (production-surface checks, module boundaries, tests, Vite build and Pages artifact upload). Production Pages deployment after merge is not yet verified. Android UAT remains pending.
+
+
+## D-013 — Circle aliases must never resolve to Profile
+- **Tanggal:** 15 November 2026
+- **Keputusan:** Circle is canonically `#/account/explore`. Human-readable aliases `#/circle` and `#/account/circle` must resolve to the same Circle feed, never Profile. Jelajah remains `#/search`, a distinct public discovery surface. Mobile navigation order remains Circle → Jelajah → Buat → Pesan → Profil.
+- **Implementasi:** PR #32 merged at `8e4fe58a6505575d2dfb2fb5c66ddd295d1588ac`; CI #2039 passed all automated checks and produced the Pages artifact. Live Pages deployment and authenticated Android walkthrough still require verification.
