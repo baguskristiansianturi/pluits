@@ -66,7 +66,7 @@ async function hydrateMessageMedia(container) {
   await Promise.all([...images.map(async node=>{
     const {data,error}=await db.storage.from('pluits-message-media').createSignedUrl(node.dataset.imagePath,1800);
     if(error||!data?.signedUrl){node.alt='Foto tidak dapat dimuat';node.closest('.pl-msg-image-wrap')?.classList.add('is-error');return;}
-    node.src=data.signedUrl;node.closest('.pl-msg-image-wrap')?.querySelector('.pl-msg-image-loading')?.remove();
+    node.src=data.signedUrl;const link=node.closest('[data-image-link]');if(link)link.href=data.signedUrl;
   }),...files.map(async node=>{
     const {data,error}=await db.storage.from('pluits-message-media').createSignedUrl(node.dataset.filePath,1800);
     if(error||!data?.signedUrl){node.textContent='File tidak dapat dimuat';return;}
