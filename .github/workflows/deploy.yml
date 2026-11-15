@@ -16,7 +16,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pluits-pages-v3-${{ github.ref }}
+  group: pluits-pages-v4-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
