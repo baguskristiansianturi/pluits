@@ -1,11 +1,21 @@
 # Profile
 
-**Status:** Partially implemented; profile hero and image framing exist, while Account retains substantial profile behavior.
+**Status:** Partially implemented; Profile interactions are being extracted from the legacy Account controller in bounded, behavior-preserving modules.
 
-**Current runtime owner:** `src/pages/account/` and `src/features/profile/`.
+**Runtime owners:** `src/pages/account/` orchestrates the signed-in account route and supplies current session/data dependencies. `src/features/profile/` owns extracted Profile presentation and interaction modules.
 
-**Target responsibility:** Profile presentation, identity display, public profile sections and profile interactions.
+## Extracted modules
 
-**Implementation boundary:** Auth/session and data permissions stay in services/backend.
+- `profile-hero.css` — Profile hero presentation.
+- `image-framing.js` and `image-framing.css` — image-frame model, normalization and presentation helpers.
+- `image-frame-controls.js` — frame input and preview synchronization.
+- `image-upload.js` — avatar/cover file validation, Storage upload and profile-row update; Supabase client and page callbacks are injected by Account.
+- `profile-tabs.js` — Posts, Reels, Trips and Blog tab interaction; Blog loading is injected and stale responses cannot overwrite a subsequently selected tab.
 
-This README records the planned module boundary only. It does not imply runtime implementation or a new route. Keep current working behavior in its existing owner until extraction has consumer mapping, regression tests and review.
+## Ownership contract
+
+- Account remains responsible for route mounting, current user/profile state, Supabase session context and page refresh orchestration.
+- Profile owns the extracted tab, image-frame and image-upload interactions.
+- Auth/session and data permissions remain governed by existing services and backend policies.
+- Do not move additional profile behavior until all consumers and data dependencies are explicit and regression tests cover the owning route.
+- These extractions do not claim that the entire Account controller or Profile page is fully modularized.
