@@ -1,4 +1,4 @@
-function bindPostGalleries(root=document){
+export function bindPostGalleries(root=document){
  root.querySelectorAll('.ua-media-gallery[data-gallery]').forEach(gallery=>{
   const track=gallery.querySelector('.ua-gallery-track'),counter=gallery.querySelector('[data-gallery-count]');
   if(!track||!counter||track.dataset.bound==='1')return;
@@ -7,7 +7,7 @@ function bindPostGalleries(root=document){
   track.addEventListener('scroll',update,{passive:true});update();
  });
 }
-function normalizeFeedMediaFrames(root=document){
+export function normalizeFeedMediaFrames(root=document){
  const mediaNodes=root.querySelectorAll('.ua-social-home .ua-media img,.ua-social-home .ua-media video,.ua-social-home .ua-gallery-item img,.ua-social-home .ua-gallery-item video,.ua-post-detail-page .ua-media img,.ua-post-detail-page .ua-media video,.ua-post-detail-page .ua-gallery-item img,.ua-post-detail-page .ua-gallery-item video');
  const dimensions=el=>({w:el.naturalWidth||el.videoWidth,h:el.naturalHeight||el.videoHeight});
  const boundedRatio=(w,h)=>Math.min(4/5,Math.max(1/1.91,w/h));
