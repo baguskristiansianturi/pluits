@@ -25,6 +25,13 @@ export function createPresenceManager(client, { now = () => new Date().toISOStri
         config: { presence: { key: userId } }
       });
       channel = nextChannel;
+      nextChannel.on('presence', { event: 'sync' }, () => {
+        const state = nextChannel.presenceState();
+        if (typeof window !== 'undefined') {
+          window.__pluitsPresenceState = state;
+          window.dispatchEvent(new CustomEvent('pluits:presence-sync', { detail: state }));
+        }
+      });
       nextChannel.subscribe(async status => {
         if (status !== 'SUBSCRIBED' || channel !== nextChannel) return;
         await nextChannel.track({ user_id: userId, online_at: now() });
