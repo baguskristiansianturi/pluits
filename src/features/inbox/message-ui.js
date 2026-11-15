@@ -12,10 +12,10 @@ export function formatMessageDuration(value) {
 }
 
 export function renderMessageStatus({ pending = false, receipt = null, voice = false } = {}) {
-  if (pending) return '<span class="pl-msg-status is-pending" aria-label="Menunggu dikirim" title="Menunggu dikirim">◷</span>';
-  if (receipt?.read_at) return '<span class="pl-msg-status is-read" aria-label="Dibaca" title="Dibaca">✓✓</span>' + (voice && receipt?.played_at ? '<span class="pl-msg-played" aria-label="Pesan suara diputar" title="Pesan suara diputar">🎙</span>' : '');
-  if (receipt?.delivered_at) return '<span class="pl-msg-status is-delivered" aria-label="Terkirim ke perangkat" title="Terkirim ke perangkat">✓✓</span>';
-  return '<span class="pl-msg-status is-sent" aria-label="Terkirim ke server" title="Terkirim ke server">✓</span>';
+  if (pending) return '<span class="pl-msg-status is-pending" aria-label="Menunggu dikirim" title="Menunggu dikirim"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span>';
+  if (receipt?.read_at) return '<span class="pl-msg-status is-read" aria-label="Dibaca" title="Dibaca"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 12 4 4L17 6M10 12l4 4L22 8"/></svg></span>' + (voice && receipt?.played_at ? '<span class="pl-msg-played" aria-label="Pesan suara diputar" title="Pesan suara diputar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span>' : '');
+  if (receipt?.delivered_at) return '<span class="pl-msg-status is-delivered" aria-label="Terkirim ke perangkat" title="Terkirim ke perangkat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 12 4 4L17 6M10 12l4 4L22 8"/></svg></span>';
+  return '<span class="pl-msg-status is-sent" aria-label="Terkirim ke server" title="Terkirim ke server"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span>';
 }
 
 export function renderMessageMarkup(row, { currentUserId, pending = false, receipt = null } = {}) {
