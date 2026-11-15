@@ -219,3 +219,12 @@ Check the same core flows at viewport widths 320, 360, 390, 430, 768, 1024, and 
 - **ACCEPTANCE PENDING:** founder belum melakukan dan merekam UAT pada perangkat nyata.
 - **Data review required:** database saat ini memiliki lima postingan publik berstatus published dari satu profil; sebagian caption kosong atau tampak seperti input uji. Jangan hapus atau mengubah akun/postingan tanpa konfirmasi pemilik data. Review apakah konten tersebut memang layak tetap publik sebelum launch.
 - **Integrity:** synthetic people, Story, local-product, dan Top 10 fallback sudah dihapus dari jalur aktif Circle. Ketika data asli belum tersedia, UI menampilkan empty state atau menyembunyikan section.
+
+
+### Moderation and report-state UAT — required before launch
+1. Publish a normal post and confirm the current behavior: it becomes `published` immediately.
+2. As a moderator, action a report against that post. Confirm the post disappears from public feeds/profile views.
+3. Sign back in as the post owner and edit caption/visibility/media metadata. Confirm the edit works but the owner cannot change `moderation_status` back to `published`.
+4. As a normal user, submit a report against another user's account. In Moderation Center, confirm it can be moved to `reviewing` or `dismissed`, but there is no false `Tindak konten` action for the account.
+5. Confirm only an admin/moderator can apply post moderation status and that the action is reflected after refresh.
+6. Record that pre-publication moderation is NOT IMPLEMENTED. New posts publish immediately; do not claim pre-moderation until a queue and approval workflow exist.
