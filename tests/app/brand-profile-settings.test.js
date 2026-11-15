@@ -20,9 +20,10 @@ test('all app icon references resolve to the one public canonical PLUITS SVG',as
 
 test('profile settings menu is rendered as a direct child of each profile card',async()=>{
  const source=await readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
+ const profilePage=await readFile(new URL('../../src/features/profile/profile-page.js',import.meta.url),'utf8');
  const css=readAccountCss();
  assert.match(source,/function profileMenuMarkup\(\)/);
- assert.ok((source.match(/\$\{profileMenuMarkup\(\)\}/g)||[]).length>=2,'Both profile and preview must render the shared menu.');
+ assert.ok((profilePage.match(/\$\{profileMenuMarkup\(\)\}/g)||[]).length>=2,'Both profile and preview must render the shared menu.');
  assert.match(source,/href="#\/account\/settings"/);
  assert.match(source,/href="#\/account\/profile\/edit"/);
  assert.match(css,/\.ua-profile-card>\.ua-profile-menu\{position:absolute/);
