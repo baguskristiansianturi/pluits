@@ -338,11 +338,11 @@ export async function bindMessagesPage() {
     const presenceNode=document.querySelector('#pl-msg-chat-presence');
     const activeThread=conversationCache.find(item=>item.id===currentConversation);
     if(presenceNode&&activeThread?.other?.id)presenceNode.textContent=onlineUserIds.has(activeThread.other.id)?'Online':'Tidak online';
+    void renderPeopleStrip(contactsCache,true);
   };
   window.addEventListener('pluits:presence-sync',presenceSyncHandler);
   presenceSyncHandler({detail:window.__pluitsPresenceState||{}});
   await loadContacts();
-  await renderPeopleStrip(contactsCache,true);
   bindInboxTabs(app);
   const routeQuery=location.search || (location.hash.includes('?') ? location.hash.slice(location.hash.indexOf('?')+1) : '');
   const requestedConversation=new URLSearchParams(routeQuery).get('conversation');
