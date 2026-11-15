@@ -132,3 +132,10 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - Moved post-comment retrieval, nested reply rendering, comment likes and comment/reply submission into `src/features/posts/comments.js`.
 - The Account page now provides the current user, Supabase client, notification and rendering helpers. Existing comment tables, parent-comment relationships and database authorization policies are unchanged.
 - Added a focused architecture regression test. Signed-out comment-like attempts now receive a clear sign-in notice rather than dereferencing a missing user.
+
+
+## 15 November 2026 — Posts like interaction extraction
+
+- Moved post like toggling, optimistic count updates/rollback and double-tap media animation into `src/features/posts/like-interactions.js`.
+- The Account page injects the card, post ID, current user, Supabase client, notification and icon helpers. Like persistence and RLS remain unchanged.
+- Added a focused architecture regression test.

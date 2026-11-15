@@ -23,6 +23,7 @@ Feed/page controllers own ordering, hydration, authorization and event handling.
 
 ## Comment thread behavior
 - `comments.js` owns comment/reply retrieval, nested thread rendering, comment likes and submission. The Account page injects the current user, Supabase client and UI helpers.
+- `like-interactions.js` owns post like toggling, optimistic count rollback and double-tap media animation.
 - Replies remain nested to a maximum display depth of three; comment data and row-level permissions remain governed by the existing database policies.
 
 ## Media layout behavior

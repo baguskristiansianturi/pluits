@@ -4,6 +4,7 @@ import {socialIcon} from '../../components/common/social-icons.js';
 import {renderBrandLogo} from '../../components/common/brand.js';
 import {renderPostActions,renderPostCard} from '../../features/posts/index.js';
 import {loadPostComments} from '../../features/posts/comments.js';
+import {bindPostLikeInteractions} from '../../features/posts/like-interactions.js';
 import {bindPostGalleries,normalizeFeedMediaFrames} from '../../features/posts/post-media-layout.js';
 import {bindSocialHeaderMenu} from '../../components/social/header-menu.js';
 import {bindProfileTabs as bindAccountProfileTabs} from '../../features/profile/profile-tabs.js';
@@ -1223,45 +1224,8 @@ function bindPostActions(){
   card.querySelector('[data-action="hide-post"]')?.addEventListener('click',async()=>{if(menu)menu.hidden=true;const {error}=await supabase.from('user_hidden_content').upsert({viewer_id:user.id,target_type:'post',target_id:id},{onConflict:'viewer_id,target_type,target_id',ignoreDuplicates:true});if(error){notify(error.message,'error');return;}notify('Postingan disembunyikan dari feed Anda.');card.remove();});
   card.querySelector('[data-action="mute-user"]')?.addEventListener('click',async()=>{if(menu)menu.hidden=true;const ownerId=card.dataset.ownerId;if(!confirm('Sembunyikan semua Post, Reel, dan Story dari akun ini? Anda tetap mengikutinya.'))return;const {error}=await supabase.from('user_hidden_content').upsert({viewer_id:user.id,target_type:'user',target_id:ownerId},{onConflict:'viewer_id,target_type,target_id',ignoreDuplicates:true});if(error){notify(error.message,'error');return;}notify('Konten akun ini disembunyikan. Anda tetap mengikutinya.');document.querySelectorAll('.ua-post-card[data-owner-id="'+ownerId+'"]').forEach(item=>item.remove());});
   card.querySelector('[data-action="report"]')?.addEventListener('click',async()=>{if(menu)menu.hidden=true;const reason=prompt('Alasan laporan: spam, harassment, hate, violence, nudity, scam, misinformation, atau other','other');if(!reason)return;const allowed=['spam','harassment','hate','violence','nudity','scam','misinformation','other'];if(!allowed.includes(reason)){notify('Pilih alasan laporan yang tersedia.','error');return;}const {error}=await supabase.from('content_reports').insert({reporter_user_id:user.id,target_type:'post',target_id:id,reason});if(error)notify(error.message,'error');else notify('Laporan berhasil dikirim untuk ditinjau.');});
-  const likeButton=card.querySelector('[data-action="like"]');
-  const paintLikeState=(liked,count)=>{
-   if(!likeButton)return;
-   likeButton.classList.toggle('is-liked',liked);
-   likeButton.setAttribute('aria-label',liked?'Batalkan suka':'Sukai');
-   const countNode=likeButton.querySelector('b');if(countNode)countNode.textContent=String(count);
-   const captionCount=card.querySelector('.ua-like-count');
-   if(captionCount)captionCount.textContent=count+' suka';
-  };
-  const animateLikeTransition=(area,liked)=>{
-   if(!area)return;
-   area.querySelector('.ua-double-tap-heart')?.remove();
-   const overlay=document.createElement('span');overlay.className='ua-double-tap-heart '+(liked?'is-liking':'is-removing');
-   const core=document.createElement('span');core.className='ua-heart-core';core.innerHTML=socialIcon(liked?'heart':'heart-crack',{size:144});overlay.appendChild(core);
-   const vectors=[[0,-94],[76,-58],[96,20],[42,88],[-46,84],[-96,18],[-76,-58]];
-   vectors.forEach(([dx,dy],index)=>{const particle=document.createElement('i');particle.className='ua-heart-particle';particle.style.setProperty('--dx',dx+'px');particle.style.setProperty('--dy',dy+'px');particle.style.setProperty('--delay',(index*32)+'ms');particle.innerHTML=socialIcon(liked?'heart':'heart-crack',{size:18});overlay.appendChild(particle);});
-   area.appendChild(overlay);setTimeout(()=>overlay.remove(),1550);
-  };
-  const toggleLike=async(animationArea=null)=>{
-   if(!user){notify('Masuk untuk menyukai postingan.','error');return;}
-   if(!likeButton||likeButton.dataset.busy==='1')return;
-   const wasLiked=likeButton.classList.contains('is-liked');
-   const liked=!wasLiked;
-   const oldCount=Number(card.querySelector('.ua-like-count')?.textContent.match(/[0-9]+/)?.[0]||0),nextCount=Math.max(0,oldCount+(liked?1:-1));
-   likeButton.dataset.busy='1';
-   paintLikeState(liked,nextCount);if(animationArea)animateLikeTransition(animationArea,liked);
-   try{
-    const result=wasLiked?await supabase.from('post_likes').delete().eq('post_id',id).eq('user_id',user.id):await supabase.from('post_likes').insert({post_id:id,user_id:user.id});
-    if(result.error)throw result.error;
-   }catch(err){paintLikeState(wasLiked,oldCount);notify(err.message||'Perubahan apresiasi belum tersimpan.','error');}
-   finally{likeButton.dataset.busy='';}
-  };
-  likeButton?.addEventListener('click',toggleLike);
-  card.querySelectorAll('.ua-media img,.ua-gallery-item img').forEach(img=>{
-   let lastTap=0;img.style.touchAction='manipulation';
-   img.addEventListener('pointerup',event=>{
-    if(event.pointerType==='mouse'&&event.button!==0)return;
-    const now=Date.now();if(lastTap&&now-lastTap<330){lastTap=0;event.preventDefault();toggleLike(img.closest('.ua-media,.ua-gallery-item'));}else lastTap=now;
-   });
+  bindPostLikeInteractions({
+   card,postId:id,user,supabaseClient:supabase,notify,socialIcon,documentRef:document
   });
   card.querySelector('[data-action="save"]')?.addEventListener('click',async()=>{
    const p=await supabase.from('post_saves').select('post_id').eq('post_id',id).eq('user_id',user.id).maybeSingle();
