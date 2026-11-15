@@ -132,3 +132,7 @@ Page folders correspond to canonical route ownership, not every tab or UI state.
 
 ## Relationships
 - Follower/following list rendering and follow/accept/remove actions live in `features/relationships/index.js`; Account supplies the current session and route remount callback.
+
+
+## Notifications
+- Activity list rendering, unread counts, navigation badges and realtime/read-state interactions live in `features/notifications/list/index.js`; Account supplies session and route callbacks.

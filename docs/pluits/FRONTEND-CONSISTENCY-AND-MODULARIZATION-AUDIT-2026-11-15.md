@@ -147,3 +147,11 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - Moved people-recommendation follow buttons into `src/features/discovery/people-recommendation-actions.js`.
 - Account now acts as an adapter for the current user, Supabase client, route remounting and shared UI helpers; existing follow states and backend contracts remain unchanged.
 - Added focused architecture regression tests for both feature owners.
+
+
+## 15 November 2026 — Notifications list and realtime extraction
+
+- Moved activity list rendering, unread counts, navigation badge painting, realtime channel ownership and read-state actions to `src/features/notifications/list/index.js`.
+- Account retains the channel handle and route remount adapter, while the Notifications feature owns query composition and UI event behavior.
+- Existing notification/announcement tables, read records and RLS policies are unchanged.
+- Added a focused architecture regression test.

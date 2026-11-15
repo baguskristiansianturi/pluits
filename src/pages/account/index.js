@@ -7,6 +7,7 @@ import {loadPostComments} from '../../features/posts/comments.js';
 import {bindPostLikeInteractions} from '../../features/posts/like-interactions.js';
 import {renderFollowListPage,bindRelationshipFollowActions} from '../../features/relationships/index.js';
 import {bindRecommendationFollowActions} from '../../features/discovery/people-recommendation-actions.js';
+import {renderNotificationPage,getUnreadActivityCount,paintUnreadBadge,bindNotificationInteractions} from '../../features/notifications/list/index.js';
 import {bindPostGalleries,normalizeFeedMediaFrames} from '../../features/posts/post-media-layout.js';
 import {bindSocialHeaderMenu} from '../../components/social/header-menu.js';
 import {bindProfileTabs as bindAccountProfileTabs} from '../../features/profile/profile-tabs.js';
@@ -559,61 +560,21 @@ async function publicProfilePage(username){
  });
 }
 async function notificationPage(){
- const {data,error}=await supabase.from('user_notifications').select('id,actor_user_id,notification_type,entity_type,entity_id,message,created_at,read_at').order('created_at',{ascending:false}).limit(60);
- if(error)throw error;
- const rows=data||[],ids=[...new Set(rows.map(n=>n.actor_user_id).filter(Boolean))];
- const profiles=ids.length?await supabase.rpc('get_user_profile_directory_by_ids',{p_ids:ids}):{data:[],error:null};
- if(profiles.error)throw profiles.error;
- const people=new Map((profiles.data||[]).map(p=>[p.id,p]));
- const language=profile?.preferred_language||'id';
- const [announcementRes,readRes]=await Promise.all([
-  supabase.from('pluits_system_announcements').select('id,title,body,language,severity,published_at').eq('status','published').in('language',language==='en'?['en','id']:['id']).lte('published_at',new Date().toISOString()).or('expires_at.is.null,expires_at.gt.'+new Date().toISOString()).order('published_at',{ascending:false}).limit(20),
-  supabase.from('pluits_system_announcement_reads').select('announcement_id,read_at').eq('user_id',user.id)
- ]);
- if(announcementRes.error)throw announcementRes.error;if(readRes.error)throw readRes.error;
- const readAnnouncements=new Set((readRes.data||[]).map(x=>x.announcement_id));
- const announcements=announcementRes.data||[];
- const unread=rows.filter(n=>!n.read_at).length+announcements.filter(a=>!readAnnouncements.has(a.id)).length;
- const labels={follow_request:'Permintaan mengikuti',new_follower:'Pengikut baru',follow_accepted:'Permintaan diterima',unfollow:'Berhenti mengikuti',post_like:'Suka postingan',post_comment:'Komentar',new_message:'Pesan masuk',system_update:'Informasi sistem Pluits'};
- const items=(await Promise.all(rows.map(async n=>{const actor=people.get(n.actor_user_id),name=actor?.display_name||'Pengguna Pluits';const href=n.notification_type==='follow_request'?'#/account/requests':n.entity_type==='post'&&n.entity_id?'#/account/post/'+n.entity_id:n.entity_type==='conversation'&&n.entity_id?'#/messages?conversation='+encodeURIComponent(n.entity_id):n.notification_type==='system_update'?'#/help':actor?.username?'#/@'+encodeURIComponent(actor.username):'#/account/profile';const photo=actor?.avatar_path?await signed(actor.avatar_path):'';const avatarHtml=photo?'<img src="'+esc(photo)+'" alt="" loading="lazy">':esc(name.slice(0,1).toUpperCase());return '<a class="ua-notification-row '+(n.read_at?'':'is-unread')+'" href="'+href+'" data-notification-id="'+n.id+'" data-notification-href="'+href+'"><span class="ua-notification-avatar">'+avatarHtml+'</span><span class="ua-notification-copy"><strong>'+esc(name)+'</strong><span>'+esc(n.message||labels[n.notification_type]||'Aktivitas baru')+'</span><small>'+esc(labels[n.notification_type]||'Aktivitas')+' · '+fmtDate(n.created_at)+'</small></span>'+(n.read_at?'':'<i aria-label="Belum dibaca"></i>')+'</a>';}))).join('');
- const systemItems=announcements.map(a=>'<button type="button" class="ua-notification-row ua-system-notice '+(readAnnouncements.has(a.id)?'':'is-unread')+'" data-announcement-id="'+a.id+'"><span class="ua-notification-avatar">P</span><span class="ua-notification-copy"><strong>Pluits</strong><span>'+esc(a.title)+'</span><small>'+esc(a.severity==='critical'?'Penting':a.severity==='important'?'Pembaruan':'Informasi')+' · '+fmtDate(a.published_at)+'</small><p>'+esc(a.body)+'</p></span>'+(readAnnouncements.has(a.id)?'':'<i aria-label="Belum dibaca"></i>')+'</button>').join('');
- return '<div class="ua-page-heading"><div><span class="ua-eyebrow">AKTIVITAS AKUN</span><h1>Aktivitas</h1><p>'+(unread?unread+' pemberitahuan belum dibaca':'Semua aktivitas sudah dibaca')+'</p></div>'+(unread?'<button type="button" class="ua-outline" data-notifications-read-all>Tandai semua dibaca</button>':'')+'</div>'+(systemItems?'<section class="ua-panel ua-notification-list ua-system-list"><div class="ua-section-title"><strong>Informasi Pluits</strong></div>'+systemItems+'</section>':'')+'<section class="ua-panel ua-notification-list">'+(items||'<div class="ua-empty"><strong>Belum ada aktivitas</strong><p>Permintaan mengikuti, suka, komentar, dan pesan akan muncul di sini.</p></div>')+'</section>';
+ return renderNotificationPage({user,profile,supabaseClient:supabase,signed,escapeHtml:esc,formatDate:fmtDate});
 }
 async function countUnreadActivity(){
- const language=profile?.preferred_language||'id',now=new Date().toISOString();
- const [notifications,announcements,reads]=await Promise.all([
-  supabase.from('user_notifications').select('id',{count:'exact',head:true}).is('read_at',null),
-  supabase.from('pluits_system_announcements').select('id').eq('status','published').in('language',language==='en'?['en','id']:['id']).lte('published_at',now).or('expires_at.is.null,expires_at.gt.'+now).limit(100),
-  supabase.from('pluits_system_announcement_reads').select('announcement_id').eq('user_id',user.id)
- ]);
- const readIds=new Set((reads.data||[]).map(item=>item.announcement_id));
- return (notifications.error?0:(notifications.count||0))+(announcements.error?0:(announcements.data||[]).filter(item=>!readIds.has(item.id)).length);
+ return getUnreadActivityCount({user,profile,supabaseClient:supabase});
 }
 async function refreshUnreadBadge(){
  unreadNotificationCount=await countUnreadActivity();
- document.querySelectorAll('.pl-nav-activity,.pl-mobile-notice').forEach(link=>{
-  let badge=link.querySelector('.pl-nav-unread');
-  if(unreadNotificationCount>0){
-   if(!badge){badge=document.createElement('i');badge.className='pl-nav-unread';link.appendChild(badge);}
-   badge.textContent=unreadNotificationCount>99?'99+':String(unreadNotificationCount);
-  }else badge?.remove();
- });
+ paintUnreadBadge({documentRef:document,count:unreadNotificationCount});
 }
 function bindNotificationActions(){
- if(activityNotificationChannel){supabase.removeChannel(activityNotificationChannel);activityNotificationChannel=null;}
- if(user){activityNotificationChannel=supabase.channel('pluits-activity-'+user.id).on('postgres_changes',{event:'INSERT',schema:'public',table:'user_notifications',filter:'recipient_user_id=eq.'+user.id},async()=>{await refreshUnreadBadge();if(location.hash.includes('/account/activity'))mountAccount('activity');})
-  .on('postgres_changes',{event:'*',schema:'public',table:'pluits_system_announcements'},async()=>{await refreshUnreadBadge();if(location.hash.includes('/account/activity'))mountAccount('activity');}).subscribe();}
- document.querySelectorAll('[data-notification-id]').forEach(link=>link.addEventListener('click',async e=>{e.preventDefault();const id=link.dataset.notificationId,href=link.dataset.notificationHref;if(link.classList.contains('is-unread')){const {error}=await supabase.from('user_notifications').update({read_at:new Date().toISOString()}).eq('id',id);if(error){notify('Status pemberitahuan belum dapat diperbarui.','error');return;}}location.hash=href;}));
- document.querySelectorAll('[data-announcement-id]').forEach(button=>button.addEventListener('click',async()=>{
-  const {error}=await supabase.from('pluits_system_announcement_reads').upsert({announcement_id:button.dataset.announcementId,user_id:user.id,read_at:new Date().toISOString()},{onConflict:'announcement_id,user_id'});
-  if(error)notify(error.message,'error');else{button.classList.remove('is-unread');button.querySelector('i')?.remove();}
- }));
- document.querySelector('[data-notifications-read-all]')?.addEventListener('click',async()=>{
-  const {error}=await supabase.from('user_notifications').update({read_at:new Date().toISOString()}).is('read_at',null);
-  if(error){notify(error.message,'error');return;}
-  const buttons=[...document.querySelectorAll('[data-announcement-id]')];
-  for(const button of buttons){await supabase.from('pluits_system_announcement_reads').upsert({announcement_id:button.dataset.announcementId,user_id:user.id,read_at:new Date().toISOString()},{onConflict:'announcement_id,user_id'});}
-  await mountAccount('activity');
+ bindNotificationInteractions({
+  user,supabaseClient:supabase,notify,mountAccount,locationRef:location,documentRef:document,
+  getChannel:()=>activityNotificationChannel,
+  setChannel:value=>{activityNotificationChannel=value;},
+  refreshUnreadBadge
  });
 }
 async function followListPage(kind='followers'){
