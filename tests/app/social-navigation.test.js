@@ -33,13 +33,13 @@ test('guest profile navigation opens Login instead of a private profile',()=>{
  assert.ok(inbox.includes('href="/pluits/inbox/"') && inbox.includes('aria-label="Pesan"'),'Inbox must retain its own Inbox destination even before login; the Inbox page handles authentication.');
 });
  
-test('Inbox replaces its fourth slot with notifications but keeps profile separate',()=>{
+test('Inbox keeps its fourth navigation slot linked to the canonical Inbox route',()=>{
  const html=renderSocialMobileNav({active:'messages',user:{id:'u1'}});
- assert.match(html,/href="\/pluits\/notifications\/"[^>]*aria-label="Notifikasi"/);
- assert.match(html,/href="\/pluits\/profile\/"[^>]*aria-label="Profil"/);
- assert.doesNotMatch(html,/aria-label="Messages"/);
+ assert.match(html,/href="\\/pluits\\/inbox\\/"[^>]*aria-label="Pesan" aria-current="page"/);
+ assert.match(html,/href="\\/pluits\\/profile\\/"[^>]*aria-label="Profil"/);
+ assert.match(html,/class="active pl-mobile-inbox"/);
+ assert.doesNotMatch(html,/href="\\/pluits\\/notifications\\/"/);
 });
-
 test('shared header does not render a second profile avatar target',()=>{
  const html=renderSocialHeader({active:'profile',profileView:true,user:{id:'u1'}});
  assert.match(html,/href="\/pluits\/profile\/"/);
