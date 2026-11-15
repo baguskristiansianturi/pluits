@@ -1269,3 +1269,6 @@ Implementation boundary:
 - **Catatan penamaan:** Golden kini diusulkan sebagai level di atas Platinum; jangan lagi mengasumsikan Platinum sebagai level tertinggi. Nama dan positioning masih dapat dievaluasi.
 - **Pertanyaan terbuka:** validitas harga bulanan, rincian manfaat setiap level, pajak/biaya, periode tahunan, upgrade/downgrade, pembatalan/refund, dan batas fitur dibanding verifikasi. Regular tetap diharapkan dapat menjelajahi ruang publik.
 - **Batas keputusan:** semua harga dan struktur tetap PROPOSED sampai founder mengesahkan; belum ada billing, benefit matrix final, atau perubahan implementasi/roadmap.
+
+
+- **Koreksi founder — nama tier tertinggi:** gunakan nama lengkap **Golden PLUITS Priority** (bukan “Golden” saja), harga usulan Rp1.900.000/bulan. Makna “Priority” dan manfaat operasionalnya belum didefinisikan; jangan membuat janji SLA/dukungan/jangkauan sebelum kapasitas dan ketentuannya disepakati. Status tetap PROPOSED.
