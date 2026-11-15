@@ -10,7 +10,7 @@ test('registration is delegated to its own feature and remains reachable before 
   const registerCss = await readFile(new URL('../../src/features/auth/register.css', import.meta.url), 'utf8');
   const mount = account.slice(account.indexOf('async function mountAccount('), account.indexOf('function bindWallet('));
   const registerGate = mount.indexOf("if(['auth','register','login'].includes(section))");
-  const sessionGate = mount.indexOf("if(!user){authScreen('login');return;}");
+  const sessionGate = mount.indexOf("if(!user){if(section==='profile'){location.hash='#/account/login';return;}authScreen('login');return;}");
   assert.ok(registerGate >= 0);
   assert.ok(sessionGate > registerGate);
   assert.match(account, /mountAuthPage/);

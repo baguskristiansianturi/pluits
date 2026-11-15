@@ -44,7 +44,7 @@ test('every primary navigation destination is handled by the router and page mod
     [ROUTES.home, "r==='circle'", "mountUserAccount('explore')"],
     [ROUTES.discover, "r==='search'", 'discoverySearch'],
     [ROUTES.create, "r==='account'", "section==='create'"],
-    [ROUTES.inbox, "r==='message'||r==='messages'||r==='inbox'", 'messagesPage'],
+    [ROUTES.inbox, "r==='inbox'", 'messagesPage'],
     [ROUTES.profile, "r==='profile'", "mountUserAccount('profile'"],
     [ROUTES.reels, "r==='account'", "section==='reels'"],
     [ROUTES.activity, "r==='account'", "section==='activity'"],
