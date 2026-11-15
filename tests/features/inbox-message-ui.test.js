@@ -67,3 +67,26 @@ test('message markup exposes reply and starred state without unsafe HTML', () =>
   assert.match(markup,/Earlier message/);
   assert.doesNotMatch(markup,/<script>/);
 });
+
+
+test('image messages keep original filename and use an intrinsic, non-cropped image element', () => {
+  const markup = renderMessageMarkup({
+    id:'photo-horizontal',sender_id:'u1',body:'',created_at:new Date().toISOString(),
+    message_type:'image',media_path:'conversation/u1/landscape.jpg',media_mime_type:'image/jpeg',
+    media_name:'landscape-original.jpg'
+  }, {currentUserId:'u1'});
+  assert.match(markup,/alt="landscape-original\.jpg"/);
+  assert.match(markup,/decoding="async"/);
+  assert.match(markup,/data-image-path="conversation\/u1\/landscape\.jpg"/);
+});
+
+test('mobile image messages are content-sized and never force a full-width portrait crop', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const css = await readFile(new URL('../../src/pages/messages/messages.css', import.meta.url), 'utf8');
+  const finalRule = css.slice(css.lastIndexOf('/* Final image rendering:'));
+  assert.match(finalRule,/width:fit-content!important/);
+  assert.match(finalRule,/width:auto!important/);
+  assert.match(finalRule,/height:auto!important/);
+  assert.match(finalRule,/object-fit:contain!important/);
+  assert.doesNotMatch(finalRule,/\.pl-msg-bubble\.has-image \.pl-msg-image-wrap img\{[^}]*width:100%/s);
+});
