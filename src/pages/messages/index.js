@@ -480,7 +480,7 @@ async function loadConversations() {
     const other=(memberRows.data||[]).find(row=>row.conversation_id===conversation.id&&row.user_id!==currentUser.id);
     const self=(memberRows.data||[]).find(row=>row.conversation_id===conversation.id&&row.user_id===currentUser.id);
     const last=latest.get(conversation.id);
-    const unread=(msgRows.data||[]).some(message=>message.conversation_id===conversation.id&&message.sender_id!==currentUser.id&&(!self?.last_read_at||new Date(message.created_at)>new Date(self.last_read_at)));
+    const unread=(msgRows.data||[]).some(message=>message.conversation_id===conversation.id&&!message.deleted_at&&!hiddenPreviewIds.has(message.id)&&message.sender_id!==currentUser.id&&(!self?.last_read_at||new Date(message.created_at)>new Date(self.last_read_at)));
     return {...conversation,other:pmap.get(other?.user_id)||{display_name:'Akun Pluits',username:'akun'},last,unread};
   });
   try { localStorage.setItem(threadsKey(),JSON.stringify(conversationCache.map(item=>({id:item.id,updated_at:item.updated_at,other:item.other,unread:item.unread})))); } catch {}
