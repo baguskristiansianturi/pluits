@@ -583,9 +583,9 @@ function bindMessageActions(chat,conversationId) {
   chat.querySelectorAll('.pl-msg-bubble[data-message-id]').forEach(article=>{
     let timer=null;
     article.addEventListener('contextmenu',event=>{event.preventDefault();article.querySelector('.pl-msg-actions')?.setAttribute('open','');});
-    article.addEventListener('touchstart',()=>{timer=setTimeout(()=>{selected.add(article.dataset.messageId);update();},520);},{passive:true});
+    article.addEventListener('touchstart',()=>{timer=setTimeout(()=>{longPressed=true;selected.add(article.dataset.messageId);update();},520);},{passive:true});
     ['touchend','touchmove','touchcancel'].forEach(name=>article.addEventListener(name,()=>clearTimeout(timer),{passive:true}));
-    article.addEventListener('click',event=>{if(!selected.size||event.target.closest('button,a,summary,input,details'))return;selected.has(article.dataset.messageId)?selected.delete(article.dataset.messageId):selected.add(article.dataset.messageId);update();});
+    article.addEventListener('click',event=>{if(longPressed){longPressed=false;return;}if(!selected.size||event.target.closest('button,a,summary,input,details'))return;selected.has(article.dataset.messageId)?selected.delete(article.dataset.messageId):selected.add(article.dataset.messageId);update();});
   });
   chat.querySelectorAll('[data-select-message]').forEach(box=>box.onchange=()=>{const id=box.closest('[data-message-id]')?.dataset.messageId;if(!id)return;box.checked?selected.add(id):selected.delete(id);update();});
   chat.querySelectorAll('[data-message-action]').forEach(button=>button.onclick=async()=>{
@@ -622,8 +622,9 @@ async function openConversation(id) {
   const messageIds=(messages.data||[]).map(message=>message.id);
   const [receipts,hidden,stars]=messageIds.length?await Promise.all([
     db.from('user_message_receipts').select('message_id,delivered_at,read_at,played_at').in('message_id',messageIds),
-    db.from('user_message_hidden').select('message_id').eq('user_id',currentUser.id).in('message_id',messageIds)
-  ]):[{data:[],error:null},{data:[],error:null}];
+    db.from('user_message_hidden').select('message_id').eq('user_id',currentUser.id).in('message_id',messageIds),
+    db.from('user_message_stars').select('message_id').eq('user_id',currentUser.id).in('message_id',messageIds)
+  ]):[{data:[],error:null},{data:[],error:null},{data:[],error:null}];
   const receiptByMessage=new Map((receipts.data||[]).map(receipt=>[receipt.message_id,receipt]));
   const hiddenIds=new Set((hidden.data||[]).map(row=>row.message_id));
   let visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id));
