@@ -36,7 +36,7 @@ export function renderMessageMarkup(row, { currentUserId, pending = false, recei
   const canDeleteForEveryone = mine && Number.isFinite(sentAt) && Date.now() >= sentAt && Date.now() - sentAt <= 48 * 60 * 60 * 1000;
   const actions = !pending && !deleted && row.id
     ? '<details class="pl-msg-actions"><summary aria-label="Menu pesan" title="Opsi pesan"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></summary><div class="pl-msg-actions-menu">' +
-      '<button type="button" data-message-action="reply">Balas</button><button type="button" data-message-action="forward">Teruskan</button><button type="button" data-message-action="select">Pilih pesan</button>' +
+      '<button type="button" data-message-action="reply">Balas</button><button type="button" data-message-action="forward">Teruskan</button><button type="button" data-message-action="star">' + (row.is_starred ? 'Hapus tanda' : 'Tandai pesan') + '</button><button type="button" data-message-action="select">Pilih pesan</button>' +
       (type === 'text' ? '<button type="button" data-message-action="copy">Salin pesan</button>' : '') +
       '<button type="button" data-message-action="hide">Hapus untuk saya</button>' +
       (canDeleteForEveryone ? '<button type="button" data-message-action="delete-everyone">Hapus untuk semua</button>' : '') +
