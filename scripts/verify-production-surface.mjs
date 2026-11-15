@@ -216,7 +216,9 @@ assert.ok(sharedHeader.includes('pl-social-menu-trigger') && sharedHeader.includ
 assert.ok(sharedHeader.includes("profileView?'':") && socialHome.includes('ua-profile-menu'), 'Profile settings must use the profile-specific menu, not a duplicate global header menu.');
 const profileFunction = socialHome.slice(socialHome.indexOf('async function profilePage'), socialHome.indexOf('function bindProfileMenu'));
 assert.ok(socialHome.includes('function profileMenuMarkup()') && socialHome.includes('href="#/account/settings"'), 'The profile three-dot menu must expose the account settings center.');
-assert.equal(socialHome.split('function bindProfileMenu').length - 1, 1, 'Profile menu must have exactly one delegated interaction handler.');
+assert.equal(socialHome.split('function bindProfileMenu').length - 1, 1, 'Profile menu composition must have exactly one binding entry point.');
+const socialHeaderMenu = read('src/components/social/header-menu.js');
+assert.ok(socialHeaderMenu.includes("document.addEventListener('click'") && socialHeaderMenu.includes("document.addEventListener('keydown'"), 'Shared social header menu must own delegated click and Escape handling.');
 assert.ok(socialHome.includes("event.target.closest('.pl-social-menu-trigger')"), 'Profile menu must support dynamically rendered profile and preview controls.');
 const profileHeroStyles = read('src/features/profile/profile-hero.css');
 assert.ok(profileHeroStyles.includes('.ua-profile-main .ua-cover{') && profileHeroStyles.includes('width:100%') && profileHeroStyles.includes('.ua-profile-main .ua-cover::after'), 'Profile hero cover must remain full-width and fade smoothly into the profile surface.');
@@ -276,7 +278,7 @@ for (const tab of ['posts', 'reels', 'trip', 'blog']) {
 }
 assert.ok(profileSource.includes('trip:\'<div class="ua-profile-tab-empty"'), 'Trip tab must render its own profile panel.');
 assert.ok(profileSource.includes('<span>Feed</span>'), 'Profile posts tab must be clearly labelled Feed.');
-assert.ok(profileSource.includes('id="ua-profile-form"') && profileSource.includes('function bindProfileMenu()'), 'Personal profile must expose a dedicated editor and functional profile menu.');
+assert.ok(profileSource.includes('id="ua-profile-form"') && profileSource.includes('function bindProfileMenu()') && profileSource.includes('bindSocialHeaderMenu()'), 'Personal profile must expose a dedicated editor and functional profile menu.');
 assert.ok(profileSource.includes('Simpan perubahan') && profileSource.includes('ua-profile-editor') && profileSource.includes('ua-editor-save'), 'Profile editing must use a dedicated polished editor page with clear save actions.');
 assert.ok(profileSource.includes("parameter==='edit'") && profileSource.includes('href="#/account/profile/edit"') && profileSource.includes('ua-profile-menu'), 'Profile editing must open only on its dedicated canonical route from the profile three-dot menu.');
 assert.ok(!profileSource.includes('ua-profile-savebar'), 'Profile view must not render a sticky save bar.');

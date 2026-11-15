@@ -19,3 +19,5 @@ This feature owns reusable discovery presentation and interaction modules. Route
 
 ## Verification
 Run `npm test` and `npm run build`. The Circle route and the Top Ten mobile interaction must be checked after changes to this module.
+
+- `explore-filters.js`: Circle/Explore content-type, feed-sort, refresh and category controls; receives state accessors and a render callback from the page.

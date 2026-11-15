@@ -4,6 +4,8 @@ import {socialIcon} from '../../components/common/social-icons.js';
 import {renderBrandLogo} from '../../components/common/brand.js';
 import {renderPostActions,renderPostCard} from '../../features/posts/index.js';
 import {bindPostGalleries,normalizeFeedMediaFrames} from '../../features/posts/post-media-layout.js';
+import {bindSocialHeaderMenu} from '../../components/social/header-menu.js';
+import {bindExploreFilters} from '../../features/discovery/explore-filters.js';
 import '../../features/posts/post-card.css';
 import '../../features/posts/comments.css';
 import {renderTopTenSection,loadTopTenTrending} from '../../features/discovery/top-ten-cards.js';
@@ -41,7 +43,7 @@ const uploadMediaFile=createMediaUploader({supabase,bucket:BUCKET,supabaseUrl:SU
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmtDate=v=>new Date(v).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
 const initials=v=>String(v||'P').trim().slice(0,1).toUpperCase();
-let user=null,profile=null,profileImageFrame={...DEFAULT_PROFILE_IMAGE_FRAME},profileReels=[],addresses=[],noticeTimer=null,leafletMap=null,leafletMarker=null,exploreFilter='all',exploreCategory='all',exploreContentType='all',reelsFilter='recommended',activityNotificationChannel=null,unreadNotificationCount=0,currentComposeDraft=null,profileMenuBound=false,accountContext={active:'personal',professional:null,stores:[],prefs:{}};
+let user=null,profile=null,profileImageFrame={...DEFAULT_PROFILE_IMAGE_FRAME},profileReels=[],addresses=[],noticeTimer=null,leafletMap=null,leafletMarker=null,exploreFilter='all',exploreCategory='all',exploreContentType='all',reelsFilter='recommended',activityNotificationChannel=null,unreadNotificationCount=0,currentComposeDraft=null,accountContext={active:'personal',professional:null,stores:[],prefs:{}};
 
 function notify(message,type='success'){
  const el=document.querySelector('#ua-toast');if(!el)return;
@@ -273,51 +275,7 @@ async function profilePage(preview=false,editMode=false){
 `;
 }
 
-function bindProfileMenu(){
- if(profileMenuBound)return;
- profileMenuBound=true;
- document.addEventListener('click',event=>{
-  const trigger=event.target.closest('.pl-social-menu-trigger');
-  const activeMenu=trigger?.closest('.pl-social-header-menu');
-  if(activeMenu){
-   event.preventDefault();
-   event.stopPropagation();
-   const panel=activeMenu.querySelector('.pl-social-menu-panel');
-   if(!panel)return;
-   const shouldOpen=panel.hidden;
-   document.querySelectorAll('.pl-social-header-menu .pl-social-menu-panel').forEach(item=>{item.hidden=true;});
-   document.querySelectorAll('.pl-social-header-menu .pl-social-menu-trigger').forEach(item=>item.setAttribute('aria-expanded','false'));
-   panel.hidden=!shouldOpen;
-   trigger.setAttribute('aria-expanded',String(shouldOpen));
-   return;
-  }
-  const link=event.target.closest('.pl-social-menu-panel a');
-  if(link){
-   const menu=link.closest('.pl-social-header-menu');
-   const panel=menu?.querySelector('.pl-social-menu-panel');
-   const button=menu?.querySelector('.pl-social-menu-trigger');
-   if(panel)panel.hidden=true;
-   if(button)button.setAttribute('aria-expanded','false');
-   return;
-  }
-  document.querySelectorAll('.pl-social-header-menu').forEach(menu=>{
-   if(menu.contains(event.target))return;
-   const panel=menu.querySelector('.pl-social-menu-panel');
-   const button=menu.querySelector('.pl-social-menu-trigger');
-   if(panel)panel.hidden=true;
-   if(button)button.setAttribute('aria-expanded','false');
-  });
- });
- document.addEventListener('keydown',event=>{
-  if(event.key!=='Escape')return;
-  document.querySelectorAll('.pl-social-header-menu').forEach(menu=>{
-   const panel=menu.querySelector('.pl-social-menu-panel');
-   const button=menu.querySelector('.pl-social-menu-trigger');
-   if(panel)panel.hidden=true;
-   if(button)button.setAttribute('aria-expanded','false');
-  });
- });
-}
+function bindProfileMenu(){bindSocialHeaderMenu();}
 
 function bindProfileTabs(){
  const nav=document.querySelector('.ua-profile-tabs'),panel=document.querySelector('#ua-profile-tab-content');
@@ -918,7 +876,7 @@ async function mountAccount(section='profile',parameter=''){
   normalizeFeedMediaFrames(document);bindPostGalleries();
   if(section==='post'){const focusId=parameter||location.hash.split('/')[3]||'';requestAnimationFrame(()=>document.getElementById('ua-post-focus-'+focusId)?.scrollIntoView({block:'start',behavior:'auto'}));}
   bindProfileTabs();bindNotificationActions();if(section==='drafts')bindDrafts();
-  bindProfile();bindCompose();bindStoryCompose();bindStories();bindExploreFilters();bindPeopleRecommendationActions();bindTopTenSlider();bindAddresses();bindWallet();bindPostActions();bindFollowActions();
+  bindProfile();bindCompose();bindStoryCompose();bindStories();bindExploreFilters({getContentType:()=>exploreContentType,setContentType:value=>{exploreContentType=value;},getFilter:()=>exploreFilter,setFilter:value=>{exploreFilter=value;},setCategory:value=>{exploreCategory=value;},rerender:()=>mountAccount('explore')});bindPeopleRecommendationActions();bindTopTenSlider();bindAddresses();bindWallet();bindPostActions();bindFollowActions();
   if(section==='blocked')bindBlockedAccounts();if(section==='hidden-content')bindHiddenContent();if(section==='reels'){bindReelsPlayback();if(parameter)requestAnimationFrame(()=>{const target=[...document.querySelectorAll('[data-reel-post-id]')].find(el=>el.dataset.reelPostId===parameter);target?.scrollIntoView({block:'start'});});}if(section==='addresses')initMap();
  }catch(err){
   if(!isCurrent())return;
@@ -1344,12 +1302,6 @@ function bindFollowActions(){
   notify(incoming ? "Pengikut dihapus." : "Anda berhenti mengikuti akun ini.");
   await mountAccount(incoming ? "followers" : "following");
  }));
-}
-function bindExploreFilters(){
- document.querySelectorAll('[data-content-type]').forEach(button=>button.addEventListener('click',async()=>{const next=button.dataset.contentType;if(!['all','reel','live','blog'].includes(next)||next===exploreContentType)return;exploreContentType=next;await mountAccount('explore');}));
- document.querySelector('[data-feed-refresh]')?.addEventListener('click',async event=>{const el=event.currentTarget;el.disabled=true;el.classList.add('is-loading');exploreFilter='latest';await mountAccount('explore');});
- document.querySelectorAll('[data-explore-filter]').forEach(button=>button.addEventListener('click',async()=>{const next=button.dataset.exploreFilter;if(!['all','latest','random'].includes(next)||next===exploreFilter)return;exploreFilter=next;await mountAccount('explore');}));
- document.querySelector('[data-explore-category]')?.addEventListener('change',async event=>{exploreCategory=String(event.currentTarget.value||'all');await mountAccount('explore');});
 }
 function bindPostActions(){
  document.querySelectorAll('.ua-post-card').forEach(card=>{
