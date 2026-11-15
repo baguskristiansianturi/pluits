@@ -44,7 +44,7 @@ const paths={
 export const SOCIAL_ICON_NAMES = Object.freeze(Object.keys(paths));
 export function socialIcon(name,{size=20,className=''}={}){
  const body=paths[name];if(!body)return '';
- const safeClassName=String(className).replace(/["<>]/g,'');
+ const safeClassName=String(className).replace(/[^a-zA-Z0-9 _-]/g,'').trim();
  const safeSize=Number.isFinite(Number(size))?Math.max(12,Math.min(48,Number(size))):20;
  return '<svg class="pl-icon '+safeClassName+'" width="'+safeSize+'" height="'+safeSize+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+body+'</svg>';
 }
