@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { ROUTES } from '../../src/components/social/navigation-routes.js';
+import { ROUTES, canonicalizeLegacyRoute, getInternalRoute } from '../../src/components/social/navigation-routes.js';
 
 const router = await readFile(new URL('../../src/app/router.js', import.meta.url), 'utf8');
 const account = await readFile(new URL('../../src/pages/account/index.js', import.meta.url), 'utf8');
@@ -72,4 +72,27 @@ test('profile edit keeps its nested URL and is dispatched through the account ro
   assert.equal(ROUTES.editProfile, '/pluits/profile/edit/');
   assert.ok(router.includes("r==='account'"));
   assert.ok(account.includes("parameter==='edit'"));
+});
+
+test('legacy hash bookmarks resolve to readable canonical page URLs', () => {
+  assert.equal(canonicalizeLegacyRoute('#/account/explore'), '/pluits/circle/');
+  assert.equal(canonicalizeLegacyRoute('#/inbox'), '/pluits/inbox/');
+  assert.equal(canonicalizeLegacyRoute('#/account/profile'), '/pluits/profile/');
+  assert.equal(canonicalizeLegacyRoute('#/account/activity'), '/pluits/notifications/');
+  assert.equal(canonicalizeLegacyRoute('#/account/profile/edit'), '/pluits/profile/edit/');
+});
+
+test('direct page URLs dispatch to their intended internal page controllers', () => {
+  const address = pathname => ({ pathname, search: '', hash: '' });
+  assert.equal(getInternalRoute(address('/pluits/circle/')), 'circle');
+  assert.equal(getInternalRoute(address('/pluits/inbox/')), 'inbox');
+  assert.equal(getInternalRoute(address('/pluits/profile/')), 'profile');
+  assert.equal(getInternalRoute(address('/pluits/discover/')), 'search');
+  assert.equal(getInternalRoute(address('/pluits/notifications/')), 'account/activity');
+});
+
+test('GitHub Pages build includes a direct-route fallback document', async () => {
+  const config = await readFile(new URL('../../vite.config.js', import.meta.url), 'utf8');
+  assert.match(config, /github-pages-spa-fallback/);
+  assert.match(config, /copyFileSync\(index, resolve\('dist\/404\.html'\)\)/);
 });
