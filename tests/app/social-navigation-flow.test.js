@@ -86,6 +86,7 @@ test('direct page URLs dispatch to their intended internal page controllers', ()
   const address = pathname => ({ pathname, search: '', hash: '' });
   assert.equal(getInternalRoute(address('/pluits/circle/')), 'circle');
   assert.equal(getInternalRoute(address('/pluits/inbox/')), 'inbox');
+  assert.equal(getInternalRoute(address('/pluits/create/')), 'create');
   assert.equal(getInternalRoute(address('/pluits/profile/')), 'profile');
   assert.equal(getInternalRoute(address('/pluits/discover/')), 'search');
   assert.equal(getInternalRoute(address('/pluits/notifications/')), 'account/activity');

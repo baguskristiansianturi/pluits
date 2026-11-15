@@ -84,7 +84,7 @@ export function getInternalRoute(locationLike = window.location) {
   const parts = path.split('/').filter(Boolean);
   const [a,b,c] = parts;
   const reverse = {
-    circle:'circle', discover:'search', create:'account/create', inbox:'inbox',
+    circle:'circle', discover:'search', create:'create', inbox:'inbox',
     notifications:'account/activity', profile:'profile', login:'login', register:'register',
     followers:'account/followers', following:'account/following', 'follow-requests':'account/requests',
     saved:'account/saved', places:'places', marketplace:'marketplace', trips:'trip',
