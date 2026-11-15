@@ -24,3 +24,12 @@ test('message markup escapes content and only exposes delete-for-everyone to sen
 test('voice duration is formatted as minutes and seconds', () => {
   assert.equal(formatMessageDuration(125), '2:05');
 });
+
+test('voice message markup carries its id for played receipts', () => {
+  const voice = renderMessageMarkup({
+    id: 'voice-1', sender_id: 'u2', body: '', created_at: new Date().toISOString(),
+    message_type: 'voice', media_path: 'conversation/user/audio.webm', media_duration_seconds: 8
+  }, { currentUserId: 'u1' });
+  assert.match(voice, /data-message-id="voice-1"/);
+  assert.match(voice, /data-voice-path=/);
+});
