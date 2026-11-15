@@ -103,3 +103,19 @@ test('self-chat receipt state is rendered as read immediately', () => {
   assert.match(markup,/aria-label="Dibaca"/);
   assert.match(markup,/is-read/);
 });
+
+
+test('message status in conversation previews uses two blue checks for read receipts', () => {
+  const status=renderMessageStatus({receipt:{delivered_at:'2026-11-16T10:00:00Z',read_at:'2026-11-16T10:01:00Z'}});
+  assert.match(status,/is-read/);
+  assert.match(status,/aria-label="Dibaca"/);
+});
+
+test('video messages render a playable inline video element', () => {
+  const markup=renderMessageMarkup({
+    id:'video-1',sender_id:'u1',body:'',created_at:new Date().toISOString(),
+    message_type:'video',media_path:'conversation/u1/clip.mp4',media_mime_type:'video/mp4',media_name:'clip.mp4'
+  },{currentUserId:'u1'});
+  assert.match(markup,/data-video-path="conversation\/u1\/clip\.mp4"/);
+  assert.match(markup,/<video controls playsinline/);
+});
