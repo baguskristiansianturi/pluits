@@ -56,6 +56,7 @@ These are known aliases from the router and must not be created as duplicate pag
 - `#/messages` → Inbox `#/inbox`.
 - `#/account/user/:username` → public profile `#/@username` (legacy account-card destination).
 - `#/user/:username` → public profile `#/@username` (older direct-path compatibility).
+- `#/account/professional` → professional profile `/professional/` → account controller section `professional`.
 - `#/account/professional-create` → professional profile form `/professional-create/` → account controller section `professional-create`.
 - `#/cart` → `#/market-cart`.
 - `#/checkout` → `#/market-checkout`.

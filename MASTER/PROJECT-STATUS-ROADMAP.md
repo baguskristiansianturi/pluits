@@ -1417,3 +1417,13 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - Status: IMPLEMENTED and DEPLOYED. Code commit be9fd9f7640f1659137c108b7fed53cb681fe738; final verification commit 503945786e0c0fd8052b0eef9f22c0b878857d36. Push workflow #43711989408 / check run #132805356207 SUCCESS: 143/143 Node tests passed, Vite production build succeeded, dist output verified, Pages artifact uploaded, and GitHub Pages deployment reported success.
 - CI correction: the first run exposed an overly strict Seller route source assertion (the implementation included a whitespace separator between pathname and hash); the assertion was corrected without changing runtime behavior, then the full suite passed.
 - Authenticated browser, two-account, founder Android UAT and visual acceptance remain NOT TESTED / PENDING.
+
+
+## CP-090 — Professional account context route normalization (15 November 2026)
+
+- Follow-up source audit found a second professional-account destination: selecting an already-created professional context and submitting its profile both navigate to #/account/professional.
+- The Account controller already implements the professional profile view, but the readable route registry did not map this alias; it could resolve to an unhandled top-level /professional/ page.
+- Fix: map the legacy account/professional URL to /professional/ and route it back to the existing account/professional controller section. Keep the existing professional-create route separate.
+- Regression coverage: assert the path mapping, Account controller section, and actual account-context navigation source.
+- Commit mode: direct main commit; no PR. CI/Pages verification pending.
+- Browser/device UAT remains NOT TESTED.

@@ -58,7 +58,7 @@ export function canonicalizeLegacyRoute(value = '') {
       inbox:'inbox/', message:'inbox/', messages:'inbox/', activity:'notifications/',
       profile:'profile/', followers:'followers/', following:'following/', requests:'follow-requests/',
       saved:'saved/', reels:'reels/', settings:'settings/', auth:'login/', login:'login/',
-      register:'register/', blog:'blog-studio/', wallet:'wallet/', addresses:'addresses/', reel:'reels/create/', story:'stories/create/', preview:'profile/preview/', drafts:'create/drafts/', 'professional-create':'professional-create/'
+      register:'register/', blog:'blog-studio/', wallet:'wallet/', addresses:'addresses/', reel:'reels/create/', story:'stories/create/', preview:'profile/preview/', drafts:'create/drafts/', professional:'professional/', 'professional-create':'professional-create/'
     };
     if (b === 'user' && c) path = SITE_BASE + '@' + encodeURIComponent(decodePathSegment(c)) + '/';
     else {
@@ -98,7 +98,7 @@ export function getInternalRoute(locationLike = window.location) {
     circle:'circle', discover:'search', create:'create', inbox:'inbox',
     notifications:'account/activity', profile:'profile', login:'login', register:'register',
     followers:'account/followers', following:'account/following', 'follow-requests':'account/requests',
-    saved:'account/saved', places:'places', marketplace:'marketplace', trips:'trip', 'professional-create':'account/professional-create',
+    saved:'account/saved', places:'places', marketplace:'marketplace', trips:'trip', professional:'account/professional', 'professional-create':'account/professional-create',
     reels:'account/reels', settings:'account/settings', 'profile/edit':'profile/edit'
   };
   let internal = reverse[path] || '';
