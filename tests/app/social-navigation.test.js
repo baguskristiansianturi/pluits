@@ -69,8 +69,8 @@ test('Circle, Profile and Messages resolve directly to their own page controller
  const router=await (await import('node:fs/promises')).readFile(new URL('../../src/app/router.js',import.meta.url),'utf8');
  assert.ok(router.includes("else if(r==='circle')") && router.includes("mountUserAccount('explore')"),'Circle must mount the Circle feed directly.');
  assert.ok(router.includes("else if(r==='profile')") && router.includes("mountUserAccount('profile',v||'')"),'Profile must mount the personal profile directly.');
- assert.ok(router.includes("else if(r==='messages'||r==='inbox')") && router.includes("messagesPage()"),'Messages and Inbox must mount the Inbox controller directly.');
- assert.doesNotMatch(router,/location\.hash='#\/inbox';return;/,'Messages must not depend on a second redirect before opening.');
+ assert.ok(router.includes("else if(r==='messages'){location.hash='#/inbox';return;}") && router.includes("else if(r==='inbox')") && router.includes("messagesPage()"),'Legacy Messages must normalize to canonical Inbox, which mounts the Inbox controller.');
+ assert.ok(account.includes("if(!user){if(section==='profile'){location.hash='#/account/login';return;}authScreen('login');return;}"),'A guest opening Profile directly must be redirected to the canonical Login URL.');
 });
 
 
