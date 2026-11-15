@@ -1102,3 +1102,8 @@
  .pl-msg-head-search:focus-within .pl-msg-search-field input{width:calc(100vw - 170px)!important;padding:0 10px!important;border:1px solid #e0e6eb!important;border-radius:10px!important;opacity:1!important}
  .pl-msg-head-search>button{display:none!important}
 }
+
+/* Self-chat is a first-class Inbox destination, separate from social follows. */
+.pl-msg-person-self{margin-left:0!important}
+.pl-msg-person-self .pl-msg-avatar{border:2px solid #d7e4ef;box-shadow:0 0 0 3px #f2f6fa}
+.pl-msg-person-self small{max-width:64px;text-align:center;line-height:1.25;white-space:normal;font-weight:750;color:#31516e}
