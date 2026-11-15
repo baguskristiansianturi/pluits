@@ -12,3 +12,14 @@ test('CSS boundary policy includes page styles and keeps Inbox root exceptions e
  }
  assert.match(checker,/\.pluits-|#pl-/);
 });
+
+test('global legacy stylesheet selectors are frozen to a reviewed baseline',async()=>{
+ const checker=await readFile(new URL('../../scripts/verify-style-boundaries.mjs',import.meta.url),'utf8');
+ const baseline=await readFile(new URL('../../scripts/global-style-legacy-selectors.txt',import.meta.url),'utf8');
+ assert.match(checker,/globalStyleFiles/);
+ assert.match(checker,/legacyGlobalSelectors\.has\(selector\)/);
+ assert.ok(baseline.includes('.site-header'));
+ assert.ok(baseline.includes(':root'));
+ assert.ok(baseline.includes('html'));
+ assert.ok(baseline.split('\n').filter(Boolean).length>1000);
+});

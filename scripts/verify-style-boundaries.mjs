@@ -3,6 +3,8 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 const roots = ['src/components', 'src/features', 'src/pages'];
+const globalStyleFiles = ['src/style.css', 'src/styles/brand.css', 'src/styles/page-transitions.css', 'src/styles/social-components.css', 'src/styles/social-navigation.css', 'styles/home-layout.css'];
+const legacyGlobalSelectors = new Set(readFileSync('scripts/global-style-legacy-selectors.txt', 'utf8').split('\\n').map(value => value.trim()).filter(Boolean));
 const allowedRoots = /^(?:\.pl-|\.ua-|\.ds-|\.plds-|\.pluits-|#pl-)/;
 const approvedPageRootSelectors = new Set([
   'html:has(.pl-msg)',
@@ -62,9 +64,26 @@ for (const file of files) {
   }
 }
 
+
+// Global legacy styles are grandfathered by exact selector, not by filename.
+// This prevents new broad selectors from silently entering the app-wide cascade.
+for (const file of globalStyleFiles) {
+  const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const match of css.matchAll(/(?:^|[{}])\s*([^@{}][^{}]*)\s*\{/g)) {
+    const selectorBlock = match[1].trim();
+    if (!selectorBlock || selectorBlock.startsWith('@')) continue;
+    for (const selector of splitSelectorList(selectorBlock)) {
+      if (keyframeStep.test(selector) || allowedRoots.test(selector)) continue;
+      if (!legacyGlobalSelectors.has(selector)) {
+        violations.push(path.relative(process.cwd(), file) + ': new unscoped global selector: ' + selector);
+      }
+    }
+  }
+}
+
 assert.deepEqual(
   violations,
   [],
-  'Component, feature and page CSS must be scoped to an owned root (.pl-, .ua-, .ds-, .plds-, .pluits- or #pl-). Move truly global rules to src/styles; page-root exceptions must be exact and reviewed:\n- ' + violations.join('\n- ')
+  'Component, feature and page CSS must be scoped to an owned root. Global styles may only retain exact selectors in scripts/global-style-legacy-selectors.txt; new broad selectors require explicit baseline review. Page-root exceptions must be exact and reviewed:\n- ' + violations.join('\n- ')
 );
 console.log('CSS ownership verified across ' + files.length + ' component, feature and page stylesheets.');

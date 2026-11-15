@@ -81,3 +81,11 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - Moved the Profile image-frame preview/input synchronization binder to `src/features/profile/image-frame-controls.js`.
 - The Account controller now passes the current frame and the existing frame read/render functions explicitly; the frame model and persistence remain unchanged.
 - Added a focused architecture regression test.
+
+
+## 15 November 2026 — Global CSS legacy selector guard
+
+- Mapped the six app-wide stylesheet sources currently imported by the application: `src/style.css`, four files under `src/styles/`, and `styles/home-layout.css`.
+- Captured the existing 1,324 unique unscoped selectors in `scripts/global-style-legacy-selectors.txt` as a reviewed legacy baseline. This is a compatibility freeze, not an endorsement that these selectors are correctly owned.
+- Extended the CSS boundary verifier so new unscoped selectors in these global files fail CI unless the baseline is explicitly reviewed and updated. Scoped `.pl-*` / `.ua-*` / design-system roots remain allowed.
+- Existing global CSS is not mechanically moved: selector ownership and route consumers still need a verified migration. This guard prevents further cascade growth while that audit continues.
