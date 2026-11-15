@@ -4,6 +4,8 @@ import {renderSocialHeader,renderSocialMobileNav} from '../../src/components/soc
 import {ROUTES} from '../../src/components/social/navigation-routes.js';
 import {CIRCLE_DEMO_PEOPLE,renderPeopleRecommendations} from '../../src/features/discovery/people-recommendations.js';
 import {readFile} from 'node:fs/promises';
+import {LOCAL_PRODUCT_SHOWCASE,renderLocalProductCard} from '../../src/features/marketplace/local-product-showcase.js';
+import {TOP_TEN_DEMO_ITEMS} from '../../src/features/discovery/top-ten-cards.js';
 
 test('canonical destinations keep home, inbox and profile on separate routes',()=>{
  assert.equal(ROUTES.home,'#/account/explore');
@@ -224,4 +226,25 @@ test('Circle uses demo content only below ten registered profiles and keeps sect
  assert.match(account,/CIRCLE_DEMO_PEOPLE\.slice\(0,Math\.max\(0,10-renderedStoryCount\)\)/);
  assert.match(account,/data-demo-story='true'/);
  assert.ok(css.includes('.ua-social-home .ua-circle-stories,.ua-social-home .ua-people-recommendations{margin:0 0 20px;padding:17px 0 10px;border:0;border-radius:0;background:transparent'));
+});
+
+
+test('Circle home provides ten realistic Bali local-product cards using marketplace card structure',async()=>{
+ assert.equal(LOCAL_PRODUCT_SHOWCASE.length,10);
+ const cards=LOCAL_PRODUCT_SHOWCASE.map(item=>renderLocalProductCard(item,{demo:true}));
+ assert.equal(cards.length,10);
+ assert.ok(cards.every(card=>card.includes('class="pl-market-product ua-home-market-product"')));
+ assert.ok(cards.every(card=>card.includes('href="#/market-product/demo-')));
+ assert.ok(cards.every(card=>!/\bDEMO\b/i.test(card)));
+ const home=await readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
+ assert.ok(home.includes('public_marketplace_products')&&home.includes('renderLocalProductCard'));
+ assert.ok(home.indexOf('"+maybeLike+discoverMore')>home.indexOf('"+feedMarkup'), 'Local products must follow the Circle post feed.');
+});
+
+test('Top 10 trending sample spans Bali destinations and venue categories, not marketplace products',()=>{
+ assert.equal(TOP_TEN_DEMO_ITEMS.length,10);
+ assert.ok(TOP_TEN_DEMO_ITEMS.some(item=>item.location==='Lovina'));
+ assert.ok(TOP_TEN_DEMO_ITEMS.some(item=>item.location==='Ubud'));
+ assert.ok(TOP_TEN_DEMO_ITEMS.some(item=>item.location==='Sanur'));
+ assert.ok(!TOP_TEN_DEMO_ITEMS.some(item=>item.category==='Produk'));
 });
