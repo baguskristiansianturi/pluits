@@ -273,10 +273,11 @@ assert.ok(discoveryCss.includes('aspect-ratio:3/4')&&discoveryCss.includes('grid
 assert.ok(discoveryCss.includes('rgba(232,236,236,.48)')&&discoveryCss.includes('ds-tile-video-mark')&&discoveryCss.includes('border:0;border-radius:0;background:transparent'), 'Jelajah categories and media indicators must use restrained grey and icon-only treatments.');
 
 const profileSource = read('src/pages/account/index.js');
+const profileTabsSource = read('src/features/profile/profile-tabs.js');
 for (const tab of ['posts', 'reels', 'trip', 'blog']) {
   assert.ok(profileSource.includes('data-profile-tab="' + tab + '"'), 'Profile must expose the ' + tab + ' tab.');
 }
-assert.ok(profileSource.includes('trip:\'<div class="ua-profile-tab-empty"'), 'Trip tab must render its own profile panel.');
+assert.ok(profileTabsSource.includes('trip:\'<div class="ua-profile-tab-empty"'), 'Trip tab must render its own profile panel.');
 assert.ok(profileSource.includes('<span>Feed</span>'), 'Profile posts tab must be clearly labelled Feed.');
 assert.ok(profileSource.includes('id="ua-profile-form"') && profileSource.includes('function bindProfileMenu()') && profileSource.includes('bindSocialHeaderMenu()'), 'Personal profile must expose a dedicated editor and functional profile menu.');
 assert.ok(profileSource.includes('Simpan perubahan') && profileSource.includes('ua-profile-editor') && profileSource.includes('ua-editor-save'), 'Profile editing must use a dedicated polished editor page with clear save actions.');
