@@ -60,14 +60,13 @@ export function renderSocialHeader({ active = 'explore', profileView = false, sh
 }
 
 export function renderSocialMobileNav({ active = 'home', profileView = false, user, profile, userAvatar = '', notificationCount = 0, messageCount = 0, publicHome = false, navClass = 'pl-home-mobile-nav pl-social-mobile-nav' } = {}) {
-  const isInbox = active === 'messages';
   const activeKey = active === 'home' || active === 'explore' ? 'home' : active === 'discover' ? 'discover' : active === 'profile-edit' || active === 'profile' || active === 'preview' ? 'profile' : active;
   const profileHref = getRoute('profile', Boolean(user));
   const items = [
     { key: 'home', href: publicHome ? ROUTES.publicHome : ROUTES.home, label: publicHome ? 'Beranda' : 'Circle', icon: 'users' },
     { key: 'discover', href: ROUTES.discover, label: 'Jelajah', icon: 'compass' },
     { key: 'create', href: getRoute('create', Boolean(user)), label: 'Buat', icon: 'plus' },
-    isInbox ? { key: 'activity', href: getRoute('activity', Boolean(user)), label: 'Notifikasi', icon: 'bell' } : { key: 'messages', href: publicHome ? '#/help' : ROUTES.inbox, label: 'Pesan', icon: 'message' },
+    { key: 'messages', href: publicHome ? '#/help' : ROUTES.inbox, label: publicHome ? 'Bantuan' : 'Pesan', icon: 'message' },
     { key: 'profile', href: publicHome ? ROUTES.login : profileHref, label: 'Profil', icon: 'user', avatar: publicHome ? '' : userAvatar }
   ];
   return `<nav class="${navClass}" aria-label="Navigasi utama Pluits">${items.map(item => {

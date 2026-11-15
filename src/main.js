@@ -13,6 +13,24 @@ import './styles/social-navigation.css';
 import './pages/account/circle-story-layout.css';
 import { route } from './app/router.js';
 
+// Recover once from stale/missing Vite chunks after a deployment.
+// The browser may still hold HTML that references a hashed module from an older release.
+const PRELOAD_RECOVERY_KEY = 'pluits:preload-recovery-at';
+window.addEventListener('vite:preloadError', event => {
+  event.preventDefault();
+  try {
+    const lastAttempt = Number(sessionStorage.getItem(PRELOAD_RECOVERY_KEY) || 0);
+    if (Date.now() - lastAttempt < 20000) {
+      console.error('PLUITS module is still unavailable after recovery reload:', event.payload);
+      return;
+    }
+    sessionStorage.setItem(PRELOAD_RECOVERY_KEY, String(Date.now()));
+    window.location.reload();
+  } catch (error) {
+    console.error('PLUITS could not recover a stale module automatically:', error, event.payload);
+  }
+});
+
 let renderSequence = 0;
 const currentAddress = () => location.pathname + location.search + location.hash;
 
