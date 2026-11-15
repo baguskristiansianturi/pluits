@@ -20,6 +20,12 @@ test('signed-in social bottom navigation points to the intended pages',()=>{
  assert.match(html,/href="#\/account\/profile"[^>]*aria-label="Profil"/);
 });
 
+test('guest profile navigation opens Login instead of a private profile',()=>{
+ const html=renderSocialMobileNav({active:'discover',user:null});
+ assert.ok(html.includes('href="#/account/login"') && html.includes('aria-label="Profil"'),'Guest Profile must link to Login.');
+ assert.ok(!html.includes('href="#/account/profile"'),'Guest navigation must not link to a private profile.');
+});
+ 
 test('Inbox replaces its fourth slot with notifications but keeps profile separate',()=>{
  const html=renderSocialMobileNav({active:'messages',user:{id:'u1'}});
  assert.match(html,/href="#\/account\/activity"[^>]*aria-label="Notifikasi"/);
@@ -59,11 +65,24 @@ test('profile hero has isolated responsive layouts for desktop, mobile and narro
 });
 
 
-test('Inbox has a canonical inbox URL and legacy messages links normalize to it',async()=>{
+test('Circle, Profile and Messages resolve directly to their own page controllers',async()=>{
  const router=await (await import('node:fs/promises')).readFile(new URL('../../src/app/router.js',import.meta.url),'utf8');
- assert.ok(router.includes("else if(r==='messages')") && router.includes("location.hash='#/inbox';return;"),'Legacy messages URL must redirect to canonical Inbox.');
- assert.ok(router.includes("else if(r==='inbox')") && router.includes("messagesPage()"),'Canonical Inbox URL must invoke the Inbox page.');
- assert.doesNotMatch(ROUTES.inbox,/messages/);
+ assert.ok(router.includes("else if(r==='circle')") && router.includes("mountUserAccount('explore')"),'Circle must mount the Circle feed directly.');
+ assert.ok(router.includes("else if(r==='profile')") && router.includes("mountUserAccount('profile',v||'')"),'Profile must mount the personal profile directly.');
+ assert.ok(router.includes("else if(r==='messages'||r==='inbox')") && router.includes("messagesPage()"),'Messages and Inbox must mount the Inbox controller directly.');
+ assert.doesNotMatch(router,/location\.hash='#\/inbox';return;/,'Messages must not depend on a second redirect before opening.');
+});
+
+
+test('Circle and Jelajah use the same compact search and brand geometry',async()=>{
+ const nav=await (await import('node:fs/promises')).readFile(new URL('../../src/components/social/navigation.js',import.meta.url),'utf8');
+ const brand=await (await import('node:fs/promises')).readFile(new URL('../../src/styles/brand.css',import.meta.url),'utf8');
+ const shared=await (await import('node:fs/promises')).readFile(new URL('../../src/styles/social-navigation.css',import.meta.url),'utf8');
+ const discovery=await (await import('node:fs/promises')).readFile(new URL('../../src/components/social/discovery-header.css',import.meta.url),'utf8');
+ assert.ok(nav.includes("size:40,label:'Circle PLUITS'"));
+ assert.ok(shared.includes('.ua-social-app .ua-home-searchbar{height:40px;min-height:40px}'));
+ assert.ok(discovery.includes('height:40px;flex:1'));
+ assert.ok(brand.includes('--brand-size: 40px;'),'Mobile PLUITS logo must match the 40px search control height.');
 });
 
 test('Inbox imports the shared mobile navigation renderer at runtime',async()=>{

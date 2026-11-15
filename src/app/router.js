@@ -47,8 +47,12 @@ export async function route(homeFn){
    defer(async()=>{const {mountUserAccount}=await import('../pages/account/index.js');await mountUserAccount('user',decodeURIComponent(r.slice(1)));},version,()=>route(homeFn));
   }
   else if(r==='circle'){
-   // Circle is the personalized social feed; keep one canonical destination.
-   location.hash='#/account/explore';return;
+   h='<div class="pl-page-loading" role="status" aria-live="polite"><span class="pl-page-spinner" aria-hidden="true"></span><span class="pl-page-loading-label">Membuka Circle</span></div>';
+   defer(async()=>{const {mountUserAccount}=await import('../pages/account/index.js');await mountUserAccount('explore');},version,()=>route(homeFn));
+  }
+  else if(r==='profile'){
+   h='<div class="pl-page-loading" role="status" aria-live="polite"><span class="pl-page-spinner" aria-hidden="true"></span><span class="pl-page-loading-label">Membuka profil</span></div>';
+   defer(async()=>{const {mountUserAccount}=await import('../pages/account/index.js');await mountUserAccount('profile',v||'');},version,()=>route(homeFn));
   }
   else if(r==='places'){
    const mod=await import('../pages/directory/index.js');h=mod.directoryPage();defer(()=>mod.bindDirectoryPage(),version,()=>route(homeFn));
@@ -83,14 +87,10 @@ export async function route(homeFn){
    h=s[1]==='itinerary'?mod.tripItineraryPage(s[2]||''):mod.tripPage();
    defer(()=>{if(s[1]==='itinerary')mod.bindTripItineraryPage(s[2]||'');else mod.bindTripPage();},version,()=>route(homeFn));
   }
-  else if(r==='messages'){
-   // Legacy deep links are normalized to the public Inbox route.
-   location.hash='#/inbox';return;
-  }
   else if(r==='inbox'&&v==='settings'){
    const mod=await import('../pages/messages/settings.js');h=mod.messageSettingsPage();defer(()=>mod.bindMessageSettingsPage(),version,()=>route(homeFn));
   }
-  else if(r==='inbox'){
+  else if(r==='messages'||r==='inbox'){
    const mod=await import('../pages/messages/index.js');h=mod.messagesPage();defer(()=>mod.bindMessagesPage(),version,()=>route(homeFn));
   }
   else if(r==='admin'&&v==='moderation'){
