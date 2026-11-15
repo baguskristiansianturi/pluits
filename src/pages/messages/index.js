@@ -12,7 +12,7 @@ let currentProfile = null;
 let currentConversation = null;
 let conversationCache = [];
 let realtimeChannel = null;
-let presenceChannel = null;
+let presenceSyncHandler = null;
 let contactsCache = [];
 let onlineUserIds = new Set();
 let sendingQueue = false;
@@ -256,23 +256,19 @@ export async function bindMessagesPage() {
   currentUser=user;
   if(!user) { const layout=app.querySelector('#pl-msg-layout'); layout.classList.add('is-auth-empty'); layout.innerHTML=emptyStateMarkup({variant:'login',title:'Masuk untuk mulai berkirim pesan',description:'Hubungkan diri dengan teman dan komunitas Anda melalui percakapan pribadi.',action:'<a class="pl-msg-empty-action" href="#/account/login">Masuk ke PLUITS</a>'}); app.querySelector('.pl-msg-people')?.setAttribute('hidden',''); return; }
   if(realtimeChannel) { await db.removeChannel(realtimeChannel); realtimeChannel=null; }
-  if(presenceChannel) { await db.removeChannel(presenceChannel); presenceChannel=null; }
   onlineUserIds=new Set();contactsCache=[];
   const {data:ownProfile}=await db.from('user_profiles').select('id,display_name,username,avatar_path').eq('id',user.id).maybeSingle();
   currentProfile=ownProfile||{id:user.id,display_name:user.user_metadata?.full_name||'Anda',username:'akun'};
   await Promise.all([loadContacts(),loadConversations()]);
-  presenceChannel=db.channel('pluits-online-v1',{config:{presence:{key:user.id}}})
-    .on('presence',{event:'sync'},()=>{
-      const state=presenceChannel?.presenceState?.()||{};
-      onlineUserIds=new Set(Object.values(state).flat().map(entry=>entry.user_id).filter(Boolean));
-      renderPeopleCounts(contactsCache);
-      renderPeopleStrip(contactsCache,true);
-    })
-    .subscribe(async status=>{
-      if(status==='SUBSCRIBED'){
-        await presenceChannel.track({user_id:user.id,online_at:new Date().toISOString()});
-      }
-    });
+  if(presenceSyncHandler) window.removeEventListener('pluits:presence-sync',presenceSyncHandler);
+  presenceSyncHandler=event=>{
+    const state=event.detail||{};
+    onlineUserIds=new Set(Object.values(state).flat().map(entry=>entry.user_id).filter(Boolean));
+    renderPeopleCounts(contactsCache);
+    renderPeopleStrip(contactsCache,true);
+  };
+  window.addEventListener('pluits:presence-sync',presenceSyncHandler);
+  presenceSyncHandler({detail:window.__pluitsPresenceState||{}});
   bindInboxTabs(app);
   const routeQuery=location.search || (location.hash.includes('?') ? location.hash.slice(location.hash.indexOf('?')+1) : '');
   const requestedConversation=new URLSearchParams(routeQuery).get('conversation');
