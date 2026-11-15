@@ -600,3 +600,12 @@ Urutan level premium yang diusulkan: Silver Member → Gold Member → Platinum 
 7. Fitur mana yang dibatasi oleh membership, dan aktivitas mana yang cukup memerlukan verifikasi tanpa harus premium?
 
 Harga dan nama level di atas merupakan usulan founder, bukan tarif publik yang sudah disahkan. Belum ada implementasi billing, benefit matrix final, atau perubahan roadmap.
+
+
+### Koreksi nama level tertinggi — diskusi founder
+
+Nama level tertinggi yang diusulkan adalah **Golden PLUITS Priority**, dengan harga usulan Rp1.900.000 per bulan. Istilah “Golden” saja tidak lagi digunakan sebagai nama lengkap tier ini.
+
+Makna dan cakupan kata “Priority” belum ditetapkan. Perlu dibedakan apakah prioritas berarti dukungan pelanggan, penanganan permintaan, akses fitur/layanan tertentu, atau bentuk manfaat lain. Jangan menjanjikan prioritas pada moderasi keselamatan, keputusan hukum, hasil rekomendasi, jangkauan organik, atau hasil transaksi. Definisi layanan, SLA, jam operasional, pengecualian, kapasitas tim, dan biaya harus diuji sebelum dipasarkan.
+
+Nama lengkap dan harga tetap berstatus usulan sampai disetujui founder.
