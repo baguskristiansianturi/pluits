@@ -1445,7 +1445,7 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - **Database migration applied:** `20261115122348_enforce_marketplace_order_payment_read_permissions`. Marketplace order reads now require buyer ownership or explicit `orders.manage` / `payments.manage`; payment metadata reads require buyer ownership or `payments.manage`. This closes the previous membership-only read path for store staff without those permissions.
 - Matching SQL is committed at `supabase/migrations/20261115122348_enforce_marketplace_order_payment_read_permissions.sql`.
 - No user account, post, message, media or transaction data was deleted or rewritten.
-- **Deployment evidence:** commit `8f4245bcf5ff158ade4e04dbeafbd44e61c925cb`; GitHub Actions run `43713663249` (#2176) SUCCESS; 148/148 automated tests passed; Vite build, output verification, Pages artifact upload and deployment succeeded.
+- **Deployment evidence:** commit `61d632b544541a901485cc6f54e85b2558d5a0f3`; GitHub Actions run `43714307219` (#2188) SUCCESS; 150/150 automated tests passed; Vite build, PWA asset output verification, Pages artifact upload and deployment succeeded.
 - **Not tested:** Android real-media UAT, two-account authorization/Realtime, DM reconnect/outbox exactly-once, notification recipient/deep-link, MFA/SMS, accessibility and measured performance.
 - **Founder acceptance:** PENDING.
 
@@ -1493,3 +1493,16 @@ This rollback reopens access to customer/order/payment metadata for every active
 - **Deploy readiness:** PASS for the exact frontend commit above.
 - **Social First Release launch readiness:** NOT YET ACCEPTED. Android and two-account UAT, public-content review, Auth security setting and legal publication gate remain open.
 - **Marketplace / Trip / wallet real-money readiness:** BLOCKED / OUT OF CURRENT P0 SCOPE.
+
+
+## CP-093 — PWA installability assets and artifact verification (15 November 2026)
+
+**Status:** IMPLEMENTED · DEPLOYED · AUTOMATED TESTED · DEVICE INSTALL UAT PENDING
+
+- Added raster PNG app icons at 192×192 and 512×512, retaining the existing SVG as vector fallback.
+- Added a 180×180 PNG Apple touch icon for iOS home-screen use.
+- Updated `manifest.webmanifest` and `index.html` to reference the raster assets.
+- Added regression tests that validate PNG signatures and exact dimensions.
+- Updated GitHub Actions build-output verification to require the manifest, 192px icon, 512px icon and Apple touch icon in `dist/`.
+- Latest verified deployment: commit `61d632b544541a901485cc6f54e85b2558d5a0f3`; workflow `43714307219` (#2188) SUCCESS; 150/150 tests passed.
+- Actual Chrome Android / iOS Add to Home Screen test remains NOT TESTED. The PWA has no offline app-shell/service worker; do not claim full offline support.
