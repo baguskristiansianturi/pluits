@@ -412,7 +412,7 @@ async function hiddenContentPage(){
 }
 function bindHiddenContent(){document.querySelectorAll('[data-unhide-content]').forEach(button=>button.addEventListener('click',async()=>{button.disabled=true;const {error}=await supabase.from('user_hidden_content').delete().eq('id',button.dataset.unhideContent).eq('viewer_id',user.id);if(error){notify(error.message,'error');button.disabled=false;return;}notify('Konten akan ditampilkan kembali.');await mountAccount('hidden-content');}));}
 async function feedPage(){
- let trendItems;try{trendItems=await loadTopTenTrending();}catch(error){console.warn('PLUITS Bali trending fallback',error);}
+ let trendItems;try{trendItems=await loadTopTenTrending(supabase);}catch(error){console.warn('PLUITS Bali trending fallback',error);}
  const trendSection=renderTopTenSection(trendItems);
  const [interestQuery,followsResult,blocksResult,profileResult,relationshipResult,postsResult,storiesResult,registeredProfilesResult]=await Promise.all([
   supabase.from('user_interest_preferences').select('preference,directory_categories(name,slug)').eq('user_id',user.id),
