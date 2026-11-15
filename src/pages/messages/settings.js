@@ -12,10 +12,11 @@ const groups = [
     <div class="pl-dm-setting-info"><strong>Perlindungan percakapan</strong><small>RLS dan keanggotaan percakapan membatasi akses pesan. Enkripsi end-to-end belum tersedia; jangan menganggap chat PLUITS setara dengan WhatsApp dalam hal ini.</small></div>`},
   {id:'notifications',icon:'♧',title:'Notifikasi',description:'Status dukungan pemberitahuan pesan.',items:
     `<div class="pl-dm-setting-info"><strong>Notifikasi saat aplikasi terbuka</strong><small>Sinkronisasi pesan berjalan melalui Supabase Realtime. Push notification saat browser ditutup belum tersedia.</small></div>`},
-  {id:'future',icon:'＋',title:'Fitur berikutnya',description:'Fitur yang belum aktif dan tidak ditampilkan sebagai tombol palsu.',items:
-    `<div class="pl-dm-setting-info"><strong>Lampiran foto, video, dan dokumen</strong><small>Belum tersedia pada percakapan.</small></div>
-    <div class="pl-dm-setting-info"><strong>Balas, teruskan, reaksi, edit, dan pin pesan</strong><small>Belum tersedia.</small></div>
-    <div class="pl-dm-setting-info"><strong>Grup, panggilan, perangkat tertaut, dan pesan sementara</strong><small>Belum tersedia.</small></div>`}
+  {id:'future',icon:'＋',title:'Fitur yang belum tersedia',description:'Batas kemampuan Inbox saat ini.',items:
+    `<div class="pl-dm-setting-info"><strong>Grup dan panggilan suara/video</strong><small>Belum tersedia. Panggilan sengaja ditunda.</small></div>
+    <div class="pl-dm-setting-info"><strong>Push notification saat browser tertutup</strong><small>Belum tersedia; notifikasi realtime hanya aktif ketika aplikasi berjalan.</small></div>
+    <div class="pl-dm-setting-info"><strong>Enkripsi end-to-end</strong><small>Belum tersedia. Pesan dilindungi autentikasi, RLS, dan Storage privat, tetapi bukan enkripsi end-to-end.</small></div>
+    <div class="pl-dm-setting-info"><strong>Video, lokasi, kontak, dan pesan sementara</strong><small>Belum tersedia.</small></div>`}
 ];
 
 export function messageSettingsPage(){
