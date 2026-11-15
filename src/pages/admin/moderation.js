@@ -2,7 +2,7 @@ import { supabase as db } from '../../lib/supabase/client.js';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function moderationPage(){
- return `<main class="pl-mod"><header><a href="#/">PLUITS <span>MODERATION</span></a><a href="#/account/profile">Kembali ke akun</a></header><section><small>TRUST & SAFETY</small><h1>Moderation Center</h1><p>Antrean laporan konten, akun, entitas GeoDirectory, dan pengumuman resmi Pluits.</p>
+ return `<main class="pl-mod"><header><a href="#/">PLUITS <span>MODERATION</span></a><a href="#/account/profile">Kembali ke akun</a></header><section><small>TRUST & SAFETY</small><h1>Moderation Center</h1><p>Laporan postingan, komentar, entitas GeoDirectory, dan pengumuman resmi. Laporan akun dapat ditinjau, tetapi tindakan atau suspensi akun belum tersedia.</p>
  <div class="pl-mod-section"><h2>Pembaruan sistem Pluits</h2><div id="pl-mod-announcements">Memuat pengumuman…</div></div>
  <div class="pl-mod-section"><h2>Verifikasi toko</h2><div id="pl-mod-stores">Memuat permohonan toko…</div></div>
  <div class="pl-mod-section"><h2>Laporan konten</h2><div id="pl-mod-list">Memuat laporan…</div></div></section></main>`;
@@ -30,7 +30,7 @@ export async function bindModerationPage(){
  }
  const {data,error}=await db.from('content_reports').select('id,reporter_user_id,target_type,target_id,reason,details,status,moderator_note,created_at').order('created_at',{ascending:false}).limit(100);
  if(error){el.textContent=error.message;return;}
- el.innerHTML=data?.length?data.map(x=>'<article class="pl-mod-report"><header><b>'+esc(x.target_type)+' · '+esc(x.reason)+'</b><span>'+esc(x.status)+'</span></header><p>ID target: <code>'+esc(x.target_id)+'</code></p><p>'+esc(x.details||'Tidak ada detail tambahan.')+'</p><small>'+new Date(x.created_at).toLocaleString('id-ID')+'</small><footer>'+(x.status==='pending'?'<button data-mod="'+x.id+'" data-decision="reviewing">Tinjau</button>':'')+(['pending','reviewing'].includes(x.status)?'<button data-mod="'+x.id+'" data-decision="dismissed">Tutup laporan</button><button data-mod="'+x.id+'" data-decision="actioned">Tindak konten</button>':'')+'</footer></article>').join(''):'<div class="pl-mod-empty">Belum ada laporan.</div>';
+ el.innerHTML=data?.length?data.map(x=>'<article class="pl-mod-report"><header><b>'+esc(x.target_type)+' · '+esc(x.reason)+'</b><span>'+esc(x.status)+'</span></header><p>ID target: <code>'+esc(x.target_id)+'</code></p><p>'+esc(x.details||'Tidak ada detail tambahan.')+'</p><small>'+new Date(x.created_at).toLocaleString('id-ID')+'</small><footer>'+(x.status==='pending'?'<button data-mod="'+x.id+'" data-decision="reviewing">Tinjau</button>':'')+(['pending','reviewing'].includes(x.status)?'<button data-mod="'+x.id+'" data-decision="dismissed">Tutup laporan</button>'+(x.target_type==='user'?'<span class="pl-mod-note">Tindakan akun belum tersedia; laporan tetap dalam proses tinjauan.</span>':'<button data-mod="'+x.id+'" data-decision="actioned">Tindak konten</button>'):'')+'</footer></article>').join(''):'<div class="pl-mod-empty">Belum ada laporan.</div>';
  el.querySelectorAll('[data-mod]').forEach(button=>button.onclick=async()=>{
   const note=prompt('Catatan moderator (opsional):')||'';
   const {error}=await db.rpc('review_content_report',{p_report_id:button.dataset.mod,p_decision:button.dataset.decision,p_note:note});
