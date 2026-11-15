@@ -1208,3 +1208,24 @@ Implementation boundary:
 - Ranking, paid boost, AI moderation, copyright tooling, and payments are separate future workstreams requiring product/security/legal design.
 - No production schema, ranking formula, ad campaign, moderation rule, or release gate is changed by this idea.
 
+
+
+## IDEA-010 — Social Membership Tiers, Audience Eligibility, and Feed Environment
+- **Jenis:** PRODUCT CONCEPT | SOCIAL GRAPH & DISTRIBUTION GOVERNANCE.
+- **Status:** PROPOSED — ongoing founder discussion; NOT APPROVED for implementation.
+- **Sumber:** founder sharing, 15 November 2026.
+- **Tujuan:** memberi setiap individu kendali untuk memilih lingkungan sosial yang ingin dilihat serta kelompok keanggotaan yang boleh mengakses kontennya, tanpa menjadikan level sebagai ukuran martabat manusia.
+- **Konsep inti:** dua arah pengaturan yang independen:
+  1. **Feed preference / incoming environment:** pengguna memilih level akun mana yang ingin masuk ke feed-nya.
+  2. **Audience eligibility / outgoing visibility:** pemilik konten memilih level akun mana yang memenuhi syarat untuk melihat konten/berandanya.
+- **Contoh:** akun Platinum A dapat memilih hanya melihat Gold dan Platinum, tetapi mengizinkan Regular/Silver, Gold, dan Platinum melihat postingannya. Akun Platinum B dapat memilih melihat semua level, tetapi hanya mengizinkan Platinum melihat kontennya. Pengaturan kedua akun tidak saling mengubah.
+- **Prinsip penting:** level keanggotaan bukan identitas manusia, bukan verifikasi, bukan status publik figur, dan bukan bukti kekayaan. Artis, pejabat, profesional, pengusaha, maupun pengguna umum dapat memilih level apa pun yang tersedia. Label level yang ditampilkan pada profil masih perlu diputuskan.
+- **Batas akses:** level adalah satu lapisan eligibility, bukan pengganti follow/friend/circle relationship, block, per-post audience, atau permission. Keanggotaan Platinum tidak otomatis membuka konten privat pengguna lain. Akses efektif harus memenuhi seluruh syarat yang relevan.
+- **Feed vs akses langsung:** menyaring suatu level dari feed pribadi tidak otomatis berarti pengguna dilarang membuka profil/konten publik level tersebut. Feed preference adalah kurasi lingkungan yang dilihat; audience eligibility adalah izin pemilik atas siapa yang dapat melihat. Perbedaan ini harus dijaga pada UI, query, dan backend.
+- **Contoh analogi:** warung, restoran, dan restoran di dalam resort menggambarkan lingkungan dengan aturan dan pengalaman berbeda; analogi ini tidak menyatakan bahwa pengunjung suatu tempat memiliki martabat lebih tinggi/rendah.
+- **Hipotesis nilai:** sebagian orang mungkin enggan menggunakan media sosial karena merasa akses sosial terlalu terbuka dan orang asing dapat bertindak seolah memiliki kedekatan personal. Lingkungan yang dapat dikurasi berpotensi meningkatkan rasa nyaman dan partisipasi mereka. Ini hipotesis yang perlu diuji, bukan klaim pasar yang sudah terbukti.
+- **Risiko dan safeguards:** hindari bahasa/UX yang merendahkan kelompok pekerjaan atau pendapatan; cegah tier dianggap sebagai verifikasi/keamanan; jangan tampilkan konten sensitif hanya karena tier cocok; hormati block, report, safety policy, dan hukum; cegah tier filter dipakai sebagai satu-satunya kontrol akses.
+- **Pertanyaan terbuka:** nama final dan jumlah tier; apakah label tier selalu terlihat; perbedaan konten yang disembunyikan dari feed vs tidak dapat dibuka sama sekali; apakah non-eligible viewer melihat teaser/placeholder atau tidak melihat jejak konten; apakah interaksi (comment, reply, DM, follow, friend request) memiliki audience matrix terpisah; aturan akun bisnis/organisasi dan akun publik figur; bagaimana upgrade/downgrade memengaruhi konten dan relasi yang sudah ada.
+- **Riset/desain berikutnya:** buat matriks viewer tier × author tier × relationship × content audience × action; prototipe pengaturan Feed Preference dan Audience Eligibility; uji pemahaman pengguna lintas kelompok; threat-model query/API/RLS/Storage; evaluasi dampak sosial dan bahasa produk.
+- **Batas implementasi:** tidak mengubah Business Model Master, Decision Log, Social First Release Spec, schema, RLS, ranking, atau roadmap. Jangan implementasikan atau mengubah sistem akun aktif berdasarkan konsep ini sampai founder menyatakan keputusan eksplisit dan kontrak akses telah dirancang.
+- **Dokumen eksplorasi:** `IDEAS/SOCIAL-MEMBERSHIP-TIERS-AND-FEED-ALGORITHM.md`.
