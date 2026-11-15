@@ -1345,14 +1345,14 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 
 ## CP-084 — Jelajah header and visual tile refinement (15 November 2026)
 
-- **PR:** #30 — https://github.com/baguskristiansianturi/pluits/pull/30 (open; CI in progress).
+- **PR:** #30 — https://github.com/baguskristiansianturi/pluits/pull/30 (MERGED).
 - **Branch:** `fix/explore-header-video-preview-refinement`.
 - **Shared header:** Jelajah and opened Post detail reuse one sticky header: search field with compact `Jelajah` context label and notification bell. Post detail keeps the same search affordance and notification route for signed-in and public visitors.
 - **Category carousel:** soft translucent grey chips, subtle borders, compact text, and 34 px minimum touch target.
 - **Media grid:** no creator avatar/name overlays; photo tiles have no type badge; video tiles alone show a small video glyph at top-left. Eye indicator is a small icon only, without a surrounding badge or border.
 - **Video preview:** one active preview at a time; only a stable subset of videos is eligible for autoplay. Video resources start loading only when tiles enter the viewport; previews are muted, looping, inline, and pause when off-screen, on tab background, or route navigation. The browser captures a still frame as a poster when decoding permits; ineligible videos remain still.
 - **Scope:** no Supabase schema or production data changes; Circle/Story/Reels remain untouched.
-- **Validation:** all 98 tests and Vite build passed on intermediate head #2021 after fixing the shared icon import; final selective-autoplay head #2023 is running. Production deployment NOT YET RELEASED; Android UAT NOT TESTED.
+- **Validation:** CI #2024 SUCCESS (98 tests and Vite build); Pages deployment #2025 SUCCESS. Android UAT NOT TESTED.
 - **Next:** verify final CI, merge PR, verify Pages deployment, then inspect the header and tile behavior on 360–390 px Android screens.
 
 
@@ -1366,5 +1366,5 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - **Modularization:** media markup and preview lifecycle moved into `src/features/discovery/explore-grid/index.js`; `src/features/discovery/explore-grid/README.md` defines its public API, responsibilities, performance contract and change boundaries. `src/pages/search/discovery.js` remains responsible for data fetching, category filtering, ranking and route composition.
 - **Isolation:** changes are scoped to Jelajah feature files and `.ds-*` CSS. No Circle, Story, Reels, Post detail, shared header, Supabase schema, storage policy or production data changes.
 - **Regression coverage:** production-surface checks verify module ownership, device-aware concurrency, Save-Data, lazy video metadata, poster capture, fallback surfaces, photo priority and borderless category styles.
-- **Status:** IMPLEMENTED IN FEATURE BRANCH / CI PENDING / NOT DEPLOYED / ANDROID UAT NOT TESTED.
-- **Next:** run complete PR CI, fix any regression, merge only after CI success, verify Pages deployment, then check actual video decode and memory behavior on 2 GB Android plus a higher-capability device.
+- **Status:** PR #31 MERGED / CI #2034 SUCCESS / PR ARTIFACT UPLOADED / PRODUCTION DEPLOYMENT NOT YET VERIFIED / ANDROID UAT NOT TESTED.
+- **Next:** verify main-branch Pages deployment, then check actual video decode and memory behavior on 2 GB Android plus a higher-capability device.
