@@ -116,12 +116,13 @@ Rincian dan batas bukti: docs/pluits/SOCIAL-AND-STORE-UAT-READINESS-AUDIT-2026-1
 - Wallet remains an account/request scaffold, not a real-money ledger, settlement or payout system.
 
 ### Current deployed frontend
-- Latest verified deployed commit: `8f4245bcf5ff158ade4e04dbeafbd44e61c925cb`.
-- GitHub Actions run `43713663249` (#2176): SUCCESS.
-- Automated tests: 148/148 passed; Vite production build, output verification, Pages artifact upload and Pages deployment succeeded.
+- Latest verified deployed commit: `61d632b544541a901485cc6f54e85b2558d5a0f3`.
+- GitHub Actions run `43714307219` (#2188): SUCCESS.
+- Automated tests: 150/150 passed; Vite production build, PWA asset output verification, Pages artifact upload and Pages deployment succeeded.
 - Active Circle no longer renders synthetic people, Story, local-product or Top 10 fallback content. Marketplace product detail no longer serves a local showcase product as a real listing.
 - Marketplace order reads now require buyer ownership or store order/payment permission; payment metadata reads require buyer ownership or `payments.manage`. Applied migration: `20261115122348_enforce_marketplace_order_payment_read_permissions`.
 - Supabase browser SDK is pinned to `@supabase/supabase-js@2.119.0`; it is still loaded from the esm.sh CDN, not bundled locally.
+- PWA manifest now includes 192px and 512px PNG icons plus SVG fallback; iOS Apple touch icon is a 180px PNG. Actual Android/iOS install flow remains NOT TESTED; no offline app-shell/service worker is claimed.
 
 ### Release status
 - Social First Release remains the only active P0 release scope.
