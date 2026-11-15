@@ -287,3 +287,56 @@ The public schema includes Social, GeoDirectory, Professional, Marketplace, Trip
 
 ### Evidence boundaries
 This was a read-only metadata/advisor audit. No schema, migration, Auth setting, user data, or deployment was changed. Android UAT, two-account REST tests, full privileged-function review, and current Pages deployment evidence remain NOT VERIFIED.
+
+
+---
+
+## 2026-11-15 — Current live security review
+
+**Project:** `ytndswhqxayqpftszwfh` · ACTIVE_HEALTHY · PostgreSQL 17.11.0.018 · ap-southeast-1.
+
+### Verified security posture
+- 69 public base tables; RLS enabled on 69/69.
+- Three public views; all three have `security_invoker=true`.
+- Three Storage buckets; all private. User media is limited to 50 MB; store and voice media to 10 MB each.
+- No Edge Functions are deployed.
+- Security Advisor reports 22 authenticated-callable SECURITY DEFINER RPC warnings and one leaked-password-protection warning.
+- Current privilege inspection found no anonymous EXECUTE grants for the reviewed public SECURITY DEFINER functions. This does not replace function-by-function authorization review or negative tests.
+- Leaked-password protection is disabled. Enable it in Supabase Auth security settings before public launch; this requires a controlled Auth configuration change and a fresh sign-up/password-change test.
+- Performance Advisor reports 2 auth RLS init-plan warnings, 2 multiple-permissive-policy warnings, 1 unindexed foreign-key INFO notice and 87 unused-index INFO notices. Do not drop unused indexes without workload evidence.
+- Health Advisor: 0 lints.
+
+### Marketplace read-permission correction — applied 15 November
+The previous `marketplace_orders_participant_read` and `marketplace_payments_participant_read` policies granted SELECT to any active store member. This exceeded the role matrix in `private.has_store_permission` and could expose buyer contact/order information and payment metadata to members without the corresponding permission.
+
+Applied migration:
+- Version: `20261115122348`
+- Name: `enforce_marketplace_order_payment_read_permissions`
+- Repository file: `supabase/migrations/20261115122348_enforce_marketplace_order_payment_read_permissions.sql`
+
+New policy behavior:
+- Orders: buyer can read own order; store operators need `orders.manage` or `payments.manage`.
+- Payment metadata: buyer can read own payment record; store operator needs `payments.manage`.
+- Catalog-only and unprivileged staff no longer inherit order/payment read access merely from active membership.
+- Live `pg_policies` inspection confirms both policies call `private.has_store_permission`.
+- Migration changes policies only; it does not modify or delete rows.
+
+**Rollback plan:** if explicitly approved for emergency recovery, restore the prior buyer-or-active-store-member SELECT conditions. This weakens least privilege and should not be used as a routine workaround. Prefer fixing permission grants or the helper. No rollback was executed.
+
+### Migration parity — do not use Supabase CLI push until reconciled
+A current comparison found:
+- Live migration history: 106 entries.
+- Repository `supabase/migrations/`: 99 SQL files.
+- Exact version + name matches: 56.
+- Same name but different timestamp prefix: 20.
+- Live migration names without an exact repository filename: 30.
+- Repository files with no matching live migration name: 23.
+
+The new 15 November migration has an exact version/name/file match. The older mismatches must be reconciled against `supabase_migrations.schema_migrations.statements` before running `supabase db push`, migration replay, reset, or bulk repair. Do not delete or rewrite applied migration history. The 7 November parity note above is historical and no longer proves current parity.
+
+### Remaining authorization and launch tests
+- Run anonymous, buyer, unrelated authenticated user, owner, manager, catalog, orders, accounting, explicit-grant staff and revoked-staff tests against real test identities.
+- Test private profiles/posts/media, Story visibility/expiry, user addresses, conversation membership, block rules, notification ownership, moderation reports, store permissions and Marketplace order/payment access.
+- Test RPC validation and authorization, not only table policies.
+- Two-account REST/Realtime and Android tests remain NOT TESTED.
+- Do not enable staff invitations, real-money wallet, Marketplace sales or Trip transactions until their permission, operational, legal and end-to-end tests pass.
