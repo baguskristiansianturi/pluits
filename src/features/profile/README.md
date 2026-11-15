@@ -11,6 +11,7 @@
 - `image-frame-controls.js` — frame input and preview synchronization.
 - `image-upload.js` — avatar/cover file validation, Storage upload and profile-row update; Supabase client and page callbacks are injected by Account.
 - `profile-tabs.js` — Posts, Reels, Trips and Blog tab interaction; Blog loading is injected and stale responses cannot overwrite a subsequently selected tab.
+- `profile-editor.js` — personal username/display-name validation, optimistic profile save/rollback, image-frame persistence and SEO refresh.
 
 ## Ownership contract
 
