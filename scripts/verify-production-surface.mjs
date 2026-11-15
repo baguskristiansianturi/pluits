@@ -275,23 +275,24 @@ assert.ok(discoveryCss.includes('rgba(232,236,236,.48)')&&discoveryCss.includes(
 const profileSource = read('src/pages/account/index.js');
 const profileTabsSource = read('src/features/profile/profile-tabs.js');
 const profileEditorSource = read('src/features/profile/profile-editor.js');
+const profilePageSource = read('src/features/profile/profile-page.js');
 for (const tab of ['posts', 'reels', 'trip', 'blog']) {
-  assert.ok(profileSource.includes('data-profile-tab="' + tab + '"'), 'Profile must expose the ' + tab + ' tab.');
+  assert.ok(profilePageSource.includes('data-profile-tab="' + tab + '"'), 'Profile must expose the ' + tab + ' tab.');
 }
 assert.ok(profileTabsSource.includes('trip:\'<div class="ua-profile-tab-empty"'), 'Trip tab must render its own profile panel.');
-assert.ok(profileSource.includes('<span>Feed</span>'), 'Profile posts tab must be clearly labelled Feed.');
-assert.ok(profileSource.includes('id="ua-profile-form"') && profileSource.includes('function bindProfileMenu()') && profileSource.includes('bindSocialHeaderMenu()'), 'Personal profile must expose a dedicated editor and functional profile menu.');
-assert.ok(profileSource.includes('Simpan perubahan') && profileSource.includes('ua-profile-editor') && profileSource.includes('ua-editor-save'), 'Profile editing must use a dedicated polished editor page with clear save actions.');
+assert.ok(profilePageSource.includes('<span>Feed</span>'), 'Profile posts tab must be clearly labelled Feed.');
+assert.ok(profilePageSource.includes('id="ua-profile-form"') && profileSource.includes('function bindProfileMenu()') && profileSource.includes('bindSocialHeaderMenu()'), 'Personal profile must expose a dedicated editor and functional profile menu.');
+assert.ok(profilePageSource.includes('Simpan perubahan') && profilePageSource.includes('ua-profile-editor') && profilePageSource.includes('ua-editor-save'), 'Profile editing must use a dedicated polished editor page with clear save actions.');
 assert.ok(profileSource.includes("parameter==='edit'") && profileSource.includes('href="#/account/profile/edit"') && profileSource.includes('ua-profile-menu'), 'Profile editing must open only on its dedicated canonical route from the profile three-dot menu.');
-assert.ok(!profileSource.includes('ua-profile-savebar'), 'Profile view must not render a sticky save bar.');
+assert.ok(!profileSource.includes('ua-profile-savebar') && !profilePageSource.includes('ua-profile-savebar'), 'Profile view must not render a sticky save bar.');
 assert.ok(profileEditorSource.includes('export function validatePersonalUsername') && profileEditorSource.includes('export function validatePersonalDisplayName'), 'Personal identity must enforce username and display-name rules.');
 assert.ok(profileEditorSource.includes(".update(payload).eq('id',user.id).select().single()"), 'Profile save must update the existing profile row and confirm the persisted result without a full remount.');
 assert.ok(profileEditorSource.includes('setProfile({...getProfile(),...payload});paintIdentity(getProfile())') && profileEditorSource.includes('setProfile(previous);paintIdentity(previous)'), 'Profile save must feel immediate and roll back optimistic UI if the server rejects the change.');
 assert.ok(existsSync('supabase/migrations/20261110091730_enforce_personal_profile_identity_rules.sql'));
 assert.ok(existsSync('supabase/migrations/20261110091739_allow_personal_username_separators.sql'));
 
-assert.ok(!profileSource.includes('<div class="ua-section-title"><strong>Postingan</strong><a class="ua-outline" href="#/account/compose">＋ Buat</a></div>'), 'Profile feed must not repeat the Post/Feed label or create action already present in primary navigation.');
-assert.ok(profileSource.includes('melalui tombol Buat pada navigasi utama'), 'Empty profile feed should direct users to the primary create navigation.');
+assert.ok(!profilePageSource.includes('<div class="ua-section-title"><strong>Postingan</strong><a class="ua-outline" href="#/account/compose">＋ Buat</a></div>'), 'Profile feed must not repeat the Post/Feed label or create action already present in primary navigation.');
+assert.ok(profilePageSource.includes('melalui tombol Buat pada navigasi utama'), 'Empty profile feed should direct users to the primary create navigation.');
 const socialNavigationCss = read('src/styles/social-navigation.css');
 assert.ok(socialNavigationCss.includes('.pl-social-menu-trigger') && socialNavigationCss.includes('.pl-social-menu-panel') && socialNavigationCss.includes('.ua-profile-editor'), 'Profile editing and settings must share one refined three-dot entry point and a dedicated editor surface.');
 assert.ok(!socialNavigationCss.includes('.ua-profile-savebar'), 'Profile edit controls must not be styled as a sticky navbar.');

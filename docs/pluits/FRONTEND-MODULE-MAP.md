@@ -22,7 +22,7 @@ Read before editing. Existing owners remain during incremental migration; target
 - Canonical destinations: `components/social/navigation-routes.js`; all shared nav hrefs use this registry.
 - Social header + bottom nav: `components/social/navigation.js`; compatibility renderer to split incrementally.
 - SVG icon paths: `components/common/social-icons.js`; paths only, no route/data behavior.
-- Profile hero and image framing: `features/profile/profile-hero.*` and `image-framing.*`; tab interaction, frame controls, avatar/cover upload and identity editor/save flow and public Blog tab renderer are extracted to `profile-tabs.js`, `image-frame-controls.js`, `image-upload.js`, `profile-editor.js` and `profile-blog-tab.js`. Account still owns route/session orchestration and remaining profile data flows.
+- Profile hero and image framing: `features/profile/profile-hero.*` and `image-framing.*`; tab interaction, frame controls, avatar/cover upload and identity editor/save flow public Blog tab renderer and Profile page composition are extracted to `profile-tabs.js`, `image-frame-controls.js`, `image-upload.js`, `profile-editor.js`, `profile-blog-tab.js` and `profile-page.js`. Account still owns route/session orchestration and remaining profile data flows.
 - Inbox layout: `pages/messages/*`; Inbox owns content, shared nav stays shared.
 - Media validation/upload: `features/media/*`; pure detection separated from transport. Resumable upload fingerprint must include the destination object path; never resume a matching file into a different path.
 - Blog Studio: `pages/blog-studio/*` owns the current editor/dashboard/public reader; media transport is delegated to `features/media/storage-upload.js`, media validation to `features/media/media-types.js`, and public media authorization remains owned by blog RLS/Storage policies.
@@ -92,7 +92,7 @@ All planned folders are tracked with a README so Git records the directory. A RE
 | Stories | Account/feed owners | `features/stories` | Planned extraction |
 | Reels | Reel card/style extracted; page owns flows | `features/reels` | Partially implemented |
 | Media | Media feature + storage helper | `features/media`, `services/storage` | Partially implemented |
-| Profile | Account route orchestration; hero, image framing, tab interaction, avatar/cover upload, identity editor/save flow and Blog tab renderer extracted | `features/profile` | Partially implemented |
+| Profile | Account route orchestration; hero, image framing, tab interaction, avatar/cover upload, identity editor/save flow, Blog tab renderer and Profile page composition extracted | `features/profile` | Partially implemented |
 | Inbox | Messages page; sidebar extracted | `features/inbox` | Partially implemented |
 | Notifications | Account page | `features/notifications` | Planned extraction |
 | Discovery | Search and public-home owners | `features/discovery` | Partially implemented |

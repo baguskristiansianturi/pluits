@@ -13,6 +13,7 @@
 - `profile-tabs.js` — Posts, Reels, Trips and Blog tab interaction; Blog loading is injected and stale responses cannot overwrite a subsequently selected tab.
 - `profile-editor.js` — personal username/display-name validation, optimistic profile save/rollback, image-frame persistence and SEO refresh.
 - `profile-blog-tab.js` — public Blog route lookup, public published-post query, signed cover URLs and Profile Blog card rendering.
+- `profile-page.js` — Profile view, edit form, preview composition and required follower/post/store reads; dependencies are injected by Account.
 
 ## Ownership contract
 

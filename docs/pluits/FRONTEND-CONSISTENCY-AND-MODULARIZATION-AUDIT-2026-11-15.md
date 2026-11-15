@@ -110,3 +110,11 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - Moved public Blog route lookup, public published-post retrieval, signed cover URL creation and card markup to `src/features/profile/profile-blog-tab.js`.
 - The Account page supplies the active profile/user, Supabase client, media bucket and formatting helpers; Profile tabs continue to load Blog content lazily.
 - Updated the Profile Blog regression test to assert feature ownership while retaining the Account adapter contract.
+
+
+## 15 November 2026 — Profile page composition extraction
+
+- Moved the signed-in Profile view, edit form and preview composition plus their existing post/follower/store reads into `src/features/profile/profile-page.js`.
+- Account now provides the active profile/session, signed-URL helper, post hydration, avatar/frame renderers and shared menu/post renderers through explicit dependencies.
+- Reels eligibility is returned through an explicit callback to preserve the existing Account state contract.
+- Updated route-surface and Profile tab tests to validate the feature owner rather than the legacy Account controller.
