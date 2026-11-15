@@ -144,7 +144,7 @@ test('signed-in home leads with Bali experiences, search, wishlist and the perso
  const navigation=await readFile(new URL('../../src/components/social/navigation.js',import.meta.url),'utf8');
  const css=readAccountCss();
  const topTen=await readFile(new URL('../../src/features/discovery/top-ten-cards.js',import.meta.url),'utf8');
- assert.ok(topTen.includes('Top 10 Trending')&&topTen.includes('ua-topten-grid')&&((topTen.match(/className:'ua-topten-card-/g)||[]).length===10),'Explore must show ten individual trending subjects, not category tiles.');
+ assert.ok(topTen.includes('Top 10 Trending')&&topTen.includes('ua-topten-grid')&&topTen.includes("if(!Array.isArray(items)||!items.length)return ''"),'Top 10 must render a live directory ranking and omit the section when no real trending data exists.');
  const topTenSlider=await readFile(new URL('../../src/features/discovery/top-ten-slider.js',import.meta.url),'utf8');
  assert.ok(account.includes("import {bindTopTenSlider} from '../../features/discovery/top-ten-slider.js'")&&account.includes('bindTopTenSlider()')&&topTenSlider.includes('scheduleAuto(3600)')&&topTenSlider.includes('pointerdown')&&topTenSlider.includes('pointerup')&&topTenSlider.includes('visibilitychange')&&topTenSlider.includes('removeEventListener'),'Top Ten slider must own mobile autoplay, pause/resume interactions and lifecycle cleanup.');
  assert.ok(account.includes("exploreFilter='all'")&&account.includes("ua-home-following")&&account.includes("['all','Semua']")&&account.includes("['latest','Terbaru']"),'Circle feed must default to all posts and offer latest ordering.');
