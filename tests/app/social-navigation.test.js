@@ -271,3 +271,14 @@ test('Nearby See All preserves the same device location and five-kilometre radiu
  assert.ok(source.includes('window.__pluitsNearbyContext={latitude:location.latitude,longitude:location.longitude}'));
  assert.ok(source.includes("params.get('from')==='nearby'")&&source.includes('state.radius=5000'));
 });
+
+
+test('legacy Circle and messaging routes never fall through to Profile',async()=>{
+ const router=await readFile(new URL('../../src/app/router.js',import.meta.url),'utf8');
+ const account=await readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
+ assert.ok(router.includes("r==='account'&&['circle','home','feed'].includes(v)")&&router.includes("location.hash='#/account/explore'"),'Legacy Circle aliases must resolve to Circle.');
+ assert.ok(router.includes("r==='account'&&['message','messages','inbox'].includes(v)")&&router.includes("location.hash='#/inbox'"),'Legacy message aliases must resolve to Inbox.');
+ assert.ok(router.includes("r==='message'||r==='messages'||r==='inbox'")&&router.includes('messagesPage()'),'Message routes must mount the Inbox page.');
+ assert.ok(account.includes("if(['message','messages','inbox'].includes(section)){location.hash='#/inbox';return;}"),'Account mounting must redirect message aliases to Inbox.');
+ assert.ok(account.includes('Halaman akun tidak ditemukan')&&!account.includes(":section==='content-settings'?await accountSettingsPage(supabase,user):await profilePage();"),'Unknown account routes must not silently render Profile.');
+});
