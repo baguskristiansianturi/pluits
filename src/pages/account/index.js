@@ -6,6 +6,7 @@ import {renderPostActions,renderPostCard} from '../../features/posts/index.js';
 import '../../features/posts/post-card.css';
 import '../../features/posts/comments.css';
 import {renderTopTenSection} from '../../features/discovery/top-ten-cards.js';
+import {renderExploreGrid,bindExploreGridPlayback} from '../../features/discovery/explore-grid.js';
 import {rankPeopleRecommendations,renderPeopleRecommendations,CIRCLE_DEMO_PEOPLE} from '../../features/discovery/people-recommendations.js';
 import '../../features/discovery/people-recommendations.css';
 import '../../features/posts/post-actions.css';
@@ -542,7 +543,7 @@ async function feedPage(){
  const blogMarkup=exploreContentType==='blog'?await blogFeedMarkup():'';
  const liveMarkup=exploreContentType==='live'?"<div class='ua-feed-empty'><strong>Live PLUITS</strong><p>Siaran langsung akan muncul di sini saat fitur Live diaktifkan. Kerangka navigasi sudah tersedia.</p></div>":'';
  const feedMarkup=exploreContentType==='blog'?blogMarkup:exploreContentType==='live'?liveMarkup:sorted.length?sorted.map(post=>postCard(post)).join(''):"<div class='ua-feed-empty'><strong>"+empty+"</strong>"+action+"</div>";
- return "<div class='ua-social-home'>"+trendSection+homeNearbySection()+peopleSection+storiesSection+filterNav+homeHeading+"<div class='ua-home-feed-region'><section class='ua-feed'>"+feedMarkup+"</section></div>"+discoverMore+maybeLike.replace("<h2>Produk Lokal</h2>","<h2>Temukan Produk Lokal</h2>")+collections+serviceFilters+"<div class='pl-public-home ua-circle-bottom-promos'>"+renderPublicJoin()+renderAppDownload()+"</div></div>";
+ return "<div class='ua-social-home ua-explore-page'>"+renderExploreGrid({posts:sorted,categories:categoryOptions,selectedCategory:exploreCategory,contentType:exploreContentType,blogMarkup,liveMarkup})+"</div>";
 }
 
 async function reelsPage(initialPostId=''){
@@ -1442,9 +1443,10 @@ function bindToptenSlider(){
 }
 function bindExploreFilters(){
  document.querySelectorAll('[data-content-type]').forEach(button=>button.addEventListener('click',async()=>{const next=button.dataset.contentType;if(!['all','reel','live','blog'].includes(next)||next===exploreContentType)return;exploreContentType=next;await mountAccount('explore');}));
+ document.querySelectorAll('[data-explore-category]').forEach(button=>button.addEventListener('click',async()=>{const next=String(button.dataset.exploreCategory||'all');if(next===exploreCategory)return;exploreCategory=next;await mountAccount('explore');}));
  document.querySelector('[data-feed-refresh]')?.addEventListener('click',async event=>{const el=event.currentTarget;el.disabled=true;el.classList.add('is-loading');exploreFilter='latest';await mountAccount('explore');});
  document.querySelectorAll('[data-explore-filter]').forEach(button=>button.addEventListener('click',async()=>{const next=button.dataset.exploreFilter;if(!['all','latest','random'].includes(next)||next===exploreFilter)return;exploreFilter=next;await mountAccount('explore');}));
- document.querySelector('[data-explore-category]')?.addEventListener('change',async event=>{exploreCategory=String(event.currentTarget.value||'all');await mountAccount('explore');});
+ bindExploreGridPlayback();
 }
 function bindPostActions(){
  document.querySelectorAll('.ua-post-card').forEach(card=>{
