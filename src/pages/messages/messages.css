@@ -1393,3 +1393,96 @@
  #pl-msg-compose .pl-msg-voice,#pl-msg-compose .pl-msg-voice.is-recording{transition:none!important}
  #pl-msg-compose .pl-msg-voice .pl-msg-live-wave i{animation:none!important;transform:scaleY(1.3)}
 }
+
+
+/* One calm, unified composer bar: attachment, text, voice and send stay inside it. */
+.pl-msg #pl-msg-compose{
+  display:block!important;
+  position:relative!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  padding:8px 12px calc(9px + env(safe-area-inset-bottom))!important;
+  border:0!important;
+  background:#f5f7f8!important;
+}
+.pl-msg #pl-msg-compose .pl-msg-input-bar{
+  display:flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  width:100%!important;
+  min-height:54px!important;
+  box-sizing:border-box!important;
+  padding:4px 5px!important;
+  border:1px solid #d8e0e6!important;
+  border-radius:28px!important;
+  background:#fff!important;
+  box-shadow:0 1px 3px #1b34450b!important;
+}
+.pl-msg #pl-msg-compose .pl-msg-input-bar textarea{
+  display:block!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+  width:100%!important;
+  min-height:42px!important;
+  max-height:116px!important;
+  margin:0!important;
+  padding:11px 7px!important;
+  border:0!important;
+  border-radius:18px!important;
+  outline:none!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  color:#263746!important;
+  font:400 16px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif!important;
+  resize:none!important;
+}
+.pl-msg #pl-msg-compose .pl-msg-input-bar textarea::placeholder{color:#8997a2!important;opacity:1}
+.pl-msg #pl-msg-compose .pl-msg-input-bar>button{
+  display:grid!important;
+  place-items:center!important;
+  flex:0 0 38px!important;
+  width:38px!important;
+  min-width:38px!important;
+  max-width:38px!important;
+  height:38px!important;
+  min-height:38px!important;
+  max-height:38px!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:50%!important;
+  box-shadow:none!important;
+  transform:none!important;
+  transition:background-color .16s ease,color .16s ease!important;
+}
+.pl-msg #pl-msg-compose .pl-msg-input-bar>button svg{display:block!important;width:20px!important;height:20px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-attach{background:transparent!important;color:#6c7d89!important}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-voice{background:transparent!important;color:#536b7d!important;touch-action:none!important;user-select:none!important;-webkit-user-select:none!important}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-send{background:#263f52!important;color:#fff!important}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-voice.is-recording{
+  flex:0 0 88px!important;
+  width:88px!important;
+  min-width:88px!important;
+  max-width:88px!important;
+  border-radius:22px!important;
+  background:#b83c43!important;
+  color:#fff!important;
+  box-shadow:0 0 0 3px #b83c4318!important;
+}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-live-wave{display:flex!important;align-items:center!important;justify-content:center!important;gap:2px!important;width:43px!important;height:25px!important;flex:0 0 43px!important}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-live-wave i{display:block!important;width:2px!important;height:7px!important;border-radius:3px!important;background:currentColor!important;animation:pl-msg-wave .9s ease-in-out infinite alternate!important;animation-delay:var(--wave-delay,0s)!important}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-recording-time{font-size:10px!important;line-height:1!important;font-variant-numeric:tabular-nums!important;white-space:nowrap!important;color:inherit!important}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-voice.is-recording:active{transform:none!important}
+.pl-msg #pl-msg-compose .pl-msg-attach-menu{bottom:calc(100% - 1px)!important;left:14px!important}
+@media(max-width:760px){
+ .pl-msg #pl-msg-compose{padding:7px 9px calc(8px + env(safe-area-inset-bottom))!important}
+ .pl-msg #pl-msg-compose .pl-msg-input-bar{min-height:52px!important;gap:3px!important;padding:4px!important}
+ .pl-msg #pl-msg-compose .pl-msg-input-bar>button{flex-basis:36px!important;width:36px!important;min-width:36px!important;max-width:36px!important;height:36px!important;min-height:36px!important;max-height:36px!important}
+ .pl-msg #pl-msg-compose .pl-msg-input-bar textarea{font-size:16px!important;min-height:42px!important;padding:10px 5px!important}
+ .pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-voice.is-recording{flex-basis:82px!important;width:82px!important;min-width:82px!important;max-width:82px!important}
+ .pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-live-wave{width:39px!important;flex-basis:39px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .pl-msg #pl-msg-compose .pl-msg-input-bar *{transition:none!important;animation:none!important}
+}
