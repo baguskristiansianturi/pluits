@@ -149,9 +149,8 @@ assert.match(signedInMobileNav, /<small>Profil<\/small>/, 'Profile must be the f
 assert.equal((signedInMobileNav.match(/<a class=/g) || []).length, 5, 'Signed-in mobile navigation must contain exactly five destinations.');
 assert.match(signedInMobileNav, /pl-create-orb/, 'Rendered central Create action must use the dedicated center control.');
 const inboxMobileNav = renderSocialMobileNav({ active: 'messages', user: { id: 'test-user' }, notificationCount: 3 });
-assert.match(inboxMobileNav, /href="\/pluits\/notifications\/"/, 'Inbox context must replace the Inbox slot with notifications.');
-assert.match(inboxMobileNav, /pl-mobile-activity/, 'Inbox-context notification item must expose its badge anchor.');
-assert.match(inboxMobileNav, />3</, 'Inbox-context notification item must display its unread badge.');
+assert.match(inboxMobileNav, /href="\/pluits\/inbox\/"/, 'Inbox context must keep the Inbox destination linked to the canonical Inbox URL.');
+assert.match(inboxMobileNav, /class="active pl-mobile-inbox"/, 'Inbox destination must remain visibly active while the Inbox page is open.');
 assert.match(inboxMobileNav, /<small>Profil<\/small>/, 'Profile must remain available inside Inbox.');
 assert.doesNotMatch(publicMobileNav, /href="\/pluits\/inbox\/"|href="\/pluits\/notifications\/"/, 'Public navigation must route private destinations through login.');
 assert.equal((publicMobileNav.match(/<a class=/g) || []).length, 5, 'Public mobile navigation must keep the same five-slot structure.');
