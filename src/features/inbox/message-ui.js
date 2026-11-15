@@ -27,9 +27,11 @@ export function renderMessageMarkup(row, { currentUserId, pending = false, recei
     : voice
       ? '<div class="pl-msg-voice-player"><audio controls preload="none" data-voice-path="' + esc(row.media_path) + '"></audio><span>Pesan suara · ' + formatMessageDuration(row.media_duration_seconds) + '</span><button type="button" class="pl-msg-voice-speed" data-voice-speed aria-label="Kecepatan pemutaran">1×</button></div>'
       : '<div class="pl-msg-text">' + esc(row.body) + '</div>';
+  const sentAt = new Date(row.created_at).getTime();
+  const canDeleteForEveryone = mine && Number.isFinite(sentAt) && Date.now() >= sentAt && Date.now() - sentAt <= 48 * 60 * 60 * 1000;
   const actions = !pending && !deleted && row.id
     ? '<details class="pl-msg-actions"><summary aria-label="Opsi pesan">⋮</summary><div class="pl-msg-actions-menu"><button type="button" data-message-action="copy">Salin pesan</button><button type="button" data-message-action="hide">Hapus untuk saya</button>' +
-      (mine ? '<button type="button" data-message-action="delete-everyone">Hapus untuk semua</button>' : '') +
+      (canDeleteForEveryone ? '<button type="button" data-message-action="delete-everyone">Hapus untuk semua</button>' : '') +
       '</div></details>'
     : '';
   const status = mine ? renderMessageStatus({ pending, receipt }) : '';
