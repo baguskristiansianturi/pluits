@@ -1694,3 +1694,26 @@
   .pl-msg-keyboard-open{padding-bottom:0!important}
   .pl-msg-keyboard-open .pl-msg #pl-msg-compose{margin-bottom:12px!important;padding-bottom:8px!important}
 }
+
+
+/* Inbox thread receipt, attachment types and composer alignment. */
+.pl-msg-thread-time{display:inline-flex;align-items:center;justify-content:flex-end;gap:4px;white-space:nowrap;flex:0 0 auto}
+.pl-msg-thread-time .pl-msg-status{display:inline-flex;align-items:center;justify-content:center;width:17px;height:15px;margin:0}
+.pl-msg-thread-time .pl-msg-status svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pl-msg-thread-time .pl-msg-status.is-read{color:#1689df}
+.pl-msg-thread-time .pl-msg-status.is-delivered{color:#8b9aa5}
+.pl-msg-thread-time .pl-msg-status.is-sent{color:#8b9aa5}
+.pl-msg-video-wrap{display:flex;flex-direction:column;gap:5px;max-width:min(78vw,520px)}
+.pl-msg-video-wrap video{display:block;width:auto;height:auto;max-width:100%;max-height:68vh;object-fit:contain;border:0;border-radius:8px;background:#111}
+.pl-msg-video-wrap small{font-size:11px;color:#6c7d89}
+.pl-msg-attachment-thumb.is-video{position:relative}
+.pl-msg-attachment-thumb.is-video video{width:100%;height:100%;object-fit:cover}
+.pl-msg-attachment-thumb.is-video>span{position:absolute;left:4px;bottom:4px;padding:2px 5px;border-radius:4px;background:#172b3bcc;color:#fff;font-size:9px;font-weight:700}
+.pl-msg #pl-msg-compose .pl-msg-input-bar{gap:3px!important;padding-left:4px!important;padding-right:5px!important}
+.pl-msg #pl-msg-compose .pl-msg-input-bar textarea{padding-left:2px!important;padding-right:2px!important;margin-left:0!important;text-align:left!important}
+@media(max-width:760px){
+ .pl-msg #pl-msg-compose{margin-left:12px!important;margin-right:12px!important}
+ .pl-msg #pl-msg-compose .pl-msg-input-bar{gap:2px!important;padding-left:3px!important;padding-right:4px!important}
+ .pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-attach{flex-basis:34px!important;width:34px!important;min-width:34px!important;max-width:34px!important}
+ .pl-msg #pl-msg-compose .pl-msg-input-bar textarea{padding-left:1px!important;padding-right:1px!important}
+}
