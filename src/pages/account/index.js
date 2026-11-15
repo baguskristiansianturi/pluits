@@ -917,7 +917,7 @@ async function mountAccount(section='profile',parameter=''){
    document.querySelector('#app').innerHTML=frame(page,section==='post'?'post':'explore');if(section==='post')bindDiscoveryHeader();bindProfileTabs();return;
   }
   if(['auth','register','login'].includes(section)){authScreen(section==='auth'?parameter:section);return;}
-  if(!user){authScreen('login');return;}
+  if(!user){if(section==='profile'){location.hash='#/account/login';return;}authScreen('login');return;}
   await loadProfile();if(!isCurrent())return;
   accountContext=await loadAccountContext(supabase,user);if(!isCurrent())return;
   unreadNotificationCount=await countUnreadActivity();if(!isCurrent())return;
