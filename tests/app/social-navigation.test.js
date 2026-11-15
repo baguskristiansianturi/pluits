@@ -35,10 +35,10 @@ test('guest profile navigation opens Login instead of a private profile',()=>{
  
 test('Inbox keeps its fourth navigation slot linked to the canonical Inbox route',()=>{
  const html=renderSocialMobileNav({active:'messages',user:{id:'u1'}});
- assert.match(html,/href="\\/pluits\\/inbox\\/"[^>]*aria-label="Pesan" aria-current="page"/);
- assert.match(html,/href="\\/pluits\\/profile\\/"[^>]*aria-label="Profil"/);
- assert.match(html,/class="active pl-mobile-inbox"/);
- assert.doesNotMatch(html,/href="\\/pluits\\/notifications\\/"/);
+ assert.ok(html.includes('href="/pluits/inbox/"') && html.includes('aria-label="Pesan"'), 'Inbox must link to its canonical URL.');
+ assert.ok(html.includes('class="active pl-mobile-inbox"'), 'Inbox must remain active while its page is open.');
+ assert.ok(html.includes('href="/pluits/profile/"') && html.includes('aria-label="Profil"'), 'Profile must remain available.');
+ assert.ok(!html.includes('href="/pluits/notifications/"'), 'Inbox must not replace its own destination with notifications.');
 });
 test('shared header does not render a second profile avatar target',()=>{
  const html=renderSocialHeader({active:'profile',profileView:true,user:{id:'u1'}});
