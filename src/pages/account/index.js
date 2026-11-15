@@ -904,6 +904,8 @@ function bindHomeDiscoveryLocation(){
 }
  let accountMountSequence=0;
 async function mountAccount(section='profile',parameter=''){
+ // Legacy and human-readable Circle route names must never fall through to Profile.
+ if(['circle','home','feed'].includes(section))section='explore';
  const mountSequence=++accountMountSequence,routeVersion=window.__pluitsRouteVersion||0,requestedHash=location.hash;
  const isCurrent=()=>mountSequence===accountMountSequence&&routeVersion===(window.__pluitsRouteVersion||0)&&requestedHash===location.hash;
  if(section!=='activity'&&activityNotificationChannel){supabase.removeChannel(activityNotificationChannel);activityNotificationChannel=null;}
