@@ -33,3 +33,10 @@ Artikel bantuan membedakan AVAILABLE, IN DEVELOPMENT, PLANNED, dan DRAFT. Jangan
 
 ## 11. Belum diputuskan
 Penghapusan akun otomatis setelah 12 bulan tidak aktif masih usulan dan tidak boleh dijalankan. Screenshot blocking lintas browser/perangkat tidak dapat dijamin. Definisi final friend, SLA takedown/banding, retensi bukti, dan vendor deteksi masih perlu spesifikasi.
+
+
+## 12. Current runtime boundary — 15 November 2026
+- New user posts currently default to `published` immediately. The implemented moderation queue is report/review based; pre-publication review is NOT IMPLEMENTED. This differs from the longer-term model in which new content enters `pending_review`. Founder must decide whether that difference blocks Social First Release.
+- A database trigger now prevents post owners from changing `moderation_status` after creation. Moderator/admin and service-role actions remain allowed. Normal content edits remain available.
+- Reports against posts, comments and directory entities can be actioned by a moderator. User-account reports can be submitted and reviewed/dismissed, but cannot be marked actioned because account suspension/enforcement and appeal workflow are not implemented. The UI must state this limitation.
+- Do not describe the system as AI-moderated or fully pre-moderated. Human coverage, response SLA, escalation, appeal and retention processes still need operational sign-off.
