@@ -49,6 +49,10 @@ export async function route(homeFn){
   }
   else if(r==='account'&&['circle','home','feed'].includes(v)){location.hash='#/account/explore';return;}
   else if(r==='account'&&['message','messages','inbox'].includes(v)){location.hash='#/inbox';return;}
+  else if(r==='create'){
+   h='<div class="pl-page-loading" role="status" aria-live="polite"><span class="pl-page-spinner" aria-hidden="true"></span><span class="pl-page-loading-label">Menyiapkan halaman Buat</span></div>';
+   defer(async()=>{const {mountUserAccount}=await import('../pages/account/index.js');await mountUserAccount('create');},version,()=>route(homeFn));
+  }
   else if(r==='circle'){
    h='<div class="pl-page-loading" role="status" aria-live="polite"><span class="pl-page-spinner" aria-hidden="true"></span><span class="pl-page-loading-label">Membuka Circle</span></div>';
    defer(async()=>{const {mountUserAccount}=await import('../pages/account/index.js');await mountUserAccount('explore');},version,()=>route(homeFn));
