@@ -31,6 +31,7 @@ import {createMediaUploader} from '../../features/media/storage-upload.js';
 import {createSignedUrlMap} from '../../services/storage/signed-urls.js';
 import {DEFAULT_PROFILE_IMAGE_FRAME,normalizeProfileImageFrame,profileImageFrameCss,readProfileImageFrame} from '../../features/profile/image-framing.js';
 import {homeNearbySection,bindHomeNearby} from '../directory/index.js';
+import {LOCAL_PRODUCT_SHOWCASE,renderLocalProductCard} from '../../features/marketplace/local-product-showcase.js';
 
 
 const BUCKET='pluits-user-media';
@@ -526,24 +527,38 @@ async function feedPage(){
  const discoverMore="<section class='ua-home-discover-more'><div class='ua-home-section-heading'><div><h2>Temukan Lebih Banyak</h2><small>Perluas koneksi dan temukan cerita baru di PLUITS.</small></div></div><div class='ua-home-discover-links'><a href='#/search'><span>Orang &amp; komunitas</span><b>Jelajahi ↗</b></a><a href='#/places'><span>Tempat dan lingkungan</span><b>Jelajahi ↗</b></a></div></section>";
  let productCards='';
  try{
-  const {data:products,error:productError}=await supabase.from('public_marketplace_products').select('id,store_id,store_name,name,variant_id,online_price,discount_price').order('name').limit(40);
+  const {data:products,error:productError}=await supabase.from('public_marketplace_products').select('id,store_id,store_name,name,variant_id,variant_name,brand,base_unit,online_price,discount_price,stock_quantity').gt('stock_quantity',0).order('name').limit(60);
   if(productError)throw productError;
-  const storeIds=[...new Set((products||[]).map(p=>p.store_id).filter(Boolean))];const {data:localStores,error:storeError}=storeIds.length?await supabase.from('public_marketplace_stores').select('id,public_city,public_area').in('id',storeIds):{data:[],error:null};if(storeError)throw storeError;const cityKey=String(window.__pluitsHomeCity||'').toLocaleLowerCase('id');const localStoreIds=new Set(cityKey?(localStores||[]).filter(store=>String(store.public_city||'').toLocaleLowerCase('id').includes(cityKey)||cityKey.includes(String(store.public_city||'').toLocaleLowerCase('id'))).map(store=>store.id):[]);const localProducts=(products||[]).filter(p=>localStoreIds.has(p.store_id)).slice(0,8);
-  const ids=[...new Set(localProducts.map(p=>p.id))];
-  const {data:images}=ids.length?await supabase.from('product_images').select('product_id,storage_path,sort_order').in('product_id',ids).order('sort_order',{ascending:true}):{data:[]};
-  const paths=[...new Set((images||[]).map(x=>x.storage_path).filter(Boolean))];
-  const {data:signed}=paths.length?await supabase.storage.from('pluits-store-media').createSignedUrls(paths,3600):{data:[]};
-  const urls=new Map((signed||[]).map(x=>[x.path,x.signedUrl])),first=new Map();
-  (images||[]).forEach(x=>{if(!first.has(x.product_id))first.set(x.product_id,urls.get(x.storage_path)||'');});
-  productCards=localProducts.map(p=>"<a class='ua-home-product-card' href='#/market-product/"+encodeURIComponent(p.variant_id)+"'>"+(first.get(p.id)?"<img src='"+esc(first.get(p.id))+"' alt='"+esc(p.name)+"' loading='lazy'>":"<span class='ua-home-product-placeholder'>PLUITS</span>")+"<span><small>"+esc(p.store_name||'Penjual PLUITS')+"</small><b>"+esc(p.name)+"</b><strong>"+rupiah(p.discount_price||p.online_price)+"</strong></span></a>").join('');
- }catch(error){console.warn('PLUITS home product recommendations',error);}
- const maybeLike="<section class='ua-home-products'><div class='ua-home-section-heading'><div><h2>Produk Lokal</h2><small>Produk dari penjual di <span data-home-location-city>Bali</span>, dipilih dari yang ramai dan sesuai minat Anda.</small></div><a href='#/marketplace'>Lihat semua ↗</a></div><div class='ua-home-product-row'>"+(productCards||"<a class='ua-home-product-empty' href='#/marketplace'>Jelajahi produk di Marketplace ↗</a>")+"</div></section>";
+  const storeIds=[...new Set((products||[]).map(p=>p.store_id).filter(Boolean))];
+  const {data:localStores,error:storeError}=storeIds.length?await supabase.from('public_marketplace_stores').select('id,public_city,public_area').in('id',storeIds):{data:[],error:null};
+  if(storeError)throw storeError;
+  const baliAreas=['bali','denpasar','badung','gianyar','tabanan','buleleng','jembrana','karangasem','bangli','klungkung','ubud','kuta','canggu','seminyak','sanur','nusa dua','nusadua','lovina','celuk','tenganan'];
+  const isBaliStore=store=>[store.public_city,store.public_area].some(value=>baliAreas.some(area=>String(value||'').toLocaleLowerCase('id').includes(area)));
+  const baliStoreIds=new Set((localStores||[]).filter(isBaliStore).map(store=>store.id));
+  const localProducts=(products||[]).filter(product=>baliStoreIds.has(product.store_id)).slice(0,10);
+  const ids=[...new Set(localProducts.map(product=>product.id))];
+  const {data:images,error:imageError}=ids.length?await supabase.from('product_images').select('product_id,storage_path,sort_order').in('product_id',ids).order('sort_order',{ascending:true}):{data:[],error:null};
+  if(imageError)throw imageError;
+  const paths=[...new Set((images||[]).map(item=>item.storage_path).filter(Boolean))];
+  const {data:signed,error:signedError}=paths.length?await supabase.storage.from('pluits-store-media').createSignedUrls(paths,3600):{data:[],error:null};
+  if(signedError)throw signedError;
+  const urls=new Map((signed||[]).map(item=>[item.path,item.signedUrl])),firstImages=new Map();
+  (images||[]).forEach(item=>{if(!firstImages.has(item.product_id))firstImages.set(item.product_id,urls.get(item.storage_path)||'');});
+  const realCards=localProducts.map(product=>renderLocalProductCard({...product,image_url:firstImages.get(product.id)||''})).join('');
+  const demoCount=Math.max(0,10-localProducts.length);
+  const sampleCards=LOCAL_PRODUCT_SHOWCASE.slice(0,demoCount).map(product=>renderLocalProductCard(product,{demo:true})).join('');
+  productCards=realCards+sampleCards;
+ }catch(error){
+  console.warn('PLUITS Bali local products could not be loaded',error);
+  productCards=LOCAL_PRODUCT_SHOWCASE.map(product=>renderLocalProductCard(product,{demo:true})).join('');
+ }
+ const maybeLike="<section class='ua-home-products'><div class='ua-home-section-heading'><div><h2>Produk Lokal</h2><small>Temukan produk dari toko dan pelaku usaha lokal di Bali.</small></div><a href='#/marketplace'>Lihat semua ↗</a></div><div class='ua-home-product-row ua-home-market-product-row'>"+productCards+"</div></section>";
  const collections="<section class='ua-home-collections'><div class='ua-home-section-heading'><div><h2>Kumpulan</h2><small>Jasa dan layanan pilihan</small></div><a href='#/places'>Jelajahi ↗</a></div><div class='ua-home-collection-row'><a href='#/places?category=professional-service'><span>✳</span><b>Jasa profesional</b></a><a href='#/places?category=transport'><span>⌁</span><b>Transportasi lokal</b></a><a href='#/trip'><span>◷</span><b>Aktivitas &amp; pengalaman</b></a><a href='#/marketplace'><span>◇</span><b>Produk lokal</b></a></div></section>";
  const serviceFilters="<section class='ua-home-service-filters'><div class='ua-home-section-heading'><div><h2>Layanan PLUITS</h2></div></div><div class='ua-home-service-chip-row'><a href='#/places?category=accommodation'>Akomodasi</a><a href='#/trip'>Tiket</a><a href='#/places?category=transport'>Transportasi</a><a href='#/places?category=professional-service'>Jasa</a></div></section>";
  const blogMarkup=exploreContentType==='blog'?await blogFeedMarkup():'';
  const liveMarkup=exploreContentType==='live'?"<div class='ua-feed-empty'><strong>Live PLUITS</strong><p>Siaran langsung akan muncul di sini saat fitur Live diaktifkan. Kerangka navigasi sudah tersedia.</p></div>":'';
  const feedMarkup=exploreContentType==='blog'?blogMarkup:exploreContentType==='live'?liveMarkup:sorted.length?sorted.map(post=>postCard(post)).join(''):"<div class='ua-feed-empty'><strong>"+empty+"</strong>"+action+"</div>";
- return "<div class='ua-social-home'>"+trendSection+homeNearbySection()+peopleSection+storiesSection+filterNav+homeHeading+"<div class='ua-home-feed-region'><section class='ua-feed'>"+feedMarkup+"</section></div>"+discoverMore+maybeLike.replace("<h2>Produk Lokal</h2>","<h2>Temukan Produk Lokal</h2>")+collections+serviceFilters+"<div class='pl-public-home ua-circle-bottom-promos'>"+renderPublicJoin()+renderAppDownload()+"</div></div>";
+ return " <div class='ua-social-home'>"+trendSection+homeNearbySection()+peopleSection+storiesSection+filterNav+homeHeading+"<div class='ua-home-feed-region'><section class='ua-feed'>"+feedMarkup+"</section></div>"+maybeLike+discoverMore+collections+serviceFilters+"<div class='pl-public-home ua-circle-bottom-promos'>"+renderPublicJoin()+renderAppDownload()+"</div></div>";
 }
 
 async function reelsPage(initialPostId=''){
