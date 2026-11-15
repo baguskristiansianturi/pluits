@@ -74,6 +74,11 @@ export function mountDiscoveryMediaPreviews(root){
  };
  videos.forEach(video=>{
   video.muted=true;video.playsInline=true;video.loop=true;
+  video.addEventListener('loadedmetadata',()=>{
+   if(visible.has(video)&&!video.seeking){
+    try{video.currentTime=Math.min(.1,Number.isFinite(video.duration)?Math.max(.02,video.duration/30):.1);}catch{/* Keep the neutral fallback if seeking is unsupported. */}
+   }
+  },{once:true});
   video.addEventListener('loadeddata',()=>onFrame(video),{once:true});
   video.addEventListener('error',()=>{video.classList.add('is-preview-unavailable');pause(video);},{once:true});
   video.addEventListener('stalled',()=>{if(video.readyState<2)video.classList.add('is-preview-loading');});
