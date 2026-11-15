@@ -4,7 +4,7 @@ import { socialIcon } from '../../components/common/social-icons.js';
 import {renderBrandLogo} from '../../components/common/brand.js';
 import { renderSocialMobileNav } from '../../components/social/navigation.js';
 import { renderInboxSidebar } from '../../features/inbox/inbox-sidebar.js';
-import { renderMessageMarkup, formatMessageDuration } from '../../features/inbox/message-ui.js';
+import { renderMessageMarkup, renderMessageStatus, formatMessageDuration } from '../../features/inbox/message-ui.js';
 import { getInboxPreferences } from '../../features/inbox/preferences.js';
 
 
@@ -546,28 +546,38 @@ export async function bindMessagesPage() {
         void db.rpc('mark_conversation_delivered',{p_conversation_id:conversationId});
         showIncomingMessageNotification(incoming);
       }
-      if(conversationId===currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) void openConversation(currentConversation);
-      else void loadConversations();
+      if(conversationId===currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) {
+        const chat=document.querySelector('#pl-msg-chat');
+        appendMessageToOpenChat(chat,incoming);
+        void hydrateMessageMedia(chat);
+        void hydrateVoicePlayers(chat);
+        if(incoming?.sender_id!==currentUser.id) void db.rpc('mark_conversation_read',{p_conversation_id:conversationId});
+      } else void loadConversations();
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_messages'},payload=>{
       if(payload.new?.conversation_id===currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
       else loadConversations();
     })
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'user_message_receipts'},payload=>{
-      if(currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
-      else loadConversations();
+      const messageId=payload.new?.message_id;
+      const article=messageId?document.querySelector('#pl-msg-chat [data-message-id="'+CSS.escape(String(messageId))+'"]'):null;
+      const status=article?.querySelector('.pl-msg-status');
+      if(status&&article.classList.contains('mine')) status.outerHTML=renderMessageStatus({receipt:payload.new,voice:article.dataset.messageType==='voice'});
+      if(!article) void loadConversations();
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_message_receipts'},payload=>{
-      if(currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
-      else loadConversations();
+      const messageId=payload.new?.message_id;
+      const article=messageId?document.querySelector('#pl-msg-chat [data-message-id="'+CSS.escape(String(messageId))+'"]'):null;
+      const status=article?.querySelector('.pl-msg-status');
+      if(status&&article.classList.contains('mine')) status.outerHTML=renderMessageStatus({receipt:payload.new,voice:article.dataset.messageType==='voice'});
+      if(!article) void loadConversations();
     })
     .on('postgres_changes',{event:'*',schema:'public',table:'user_message_hidden'},payload=>{
       if(currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
       else loadConversations();
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_conversation_members'},payload=>{
-      if(payload.new?.conversation_id===currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
-      else loadConversations();
+      if(payload.new?.conversation_id!==currentConversation||!document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) void loadConversations();
     }).subscribe();
   await flushOutbox();
 }
