@@ -76,7 +76,7 @@ function bindVoiceRecorder(chat, conversationId) {
     clearTimeout(limitTimer);clearInterval(clockTimer);stopTracks();
     if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl='';}
     panel.hidden=true;panel.innerHTML='';
-    button.disabled=false;button.textContent='🎙 Voice';button.classList.remove('is-recording');
+    button.disabled=false;button.textContent='🎙 Suara';button.classList.remove('is-recording');
   };
   const elapsed=()=>Math.max(0,Date.now()-startedAt-pausedMs-(pauseStartedAt?Date.now()-pauseStartedAt:0));
   const showPreview=blob=>{
@@ -123,7 +123,7 @@ function bindVoiceRecorder(chat, conversationId) {
       recorder.onerror=()=>{if(status)status.textContent='Perekaman gagal. Periksa izin mikrofon.';resetPanel();};
       recorder.onstop=()=>{
         clearTimeout(limitTimer);clearInterval(clockTimer);stopTracks();
-        button.classList.remove('is-recording');button.textContent='🎙 Voice';
+        button.classList.remove('is-recording');button.textContent='🎙 Suara';
         const blob=new Blob(chunks,{type:recorder.mimeType||'audio/webm'});
         if(cancelled){resetPanel();if(status)status.textContent='Rekaman dibatalkan.';return;}
         const duration=Math.round(elapsed()/1000);
@@ -156,7 +156,7 @@ function bindVoiceRecorder(chat, conversationId) {
 
       if(status)status.textContent='Sedang merekam. Maksimal 3 menit.';
     }catch(error){
-      stopTracks();button.textContent='🎙 Voice';button.classList.remove('is-recording');
+      stopTracks();button.textContent='🎙 Suara';button.classList.remove('is-recording');
       if(status)status.textContent='Mikrofon tidak tersedia. Izinkan akses mikrofon di browser.';
     }
   };
@@ -587,7 +587,7 @@ async function openConversation(id) {
   const queued=queueFor(id);
   chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Pesan">‹</button><span class="pl-msg-chat-avatar" data-chat-avatar>'+contactAvatar(thread?.other||{display_name:'P'})+'</span><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+' · <span id="pl-msg-chat-presence">'+(thread?.other?.id&&onlineUserIds.has(thread.other.id)?'Online':'Tidak online')+'</span></small></div></header>'+
     '<div class="pl-msg-stream">'+(visibleMessages.length?visibleMessages.map(message=>messageMarkup(message,false,receiptByMessage.get(message.id))).join('') : emptyStateMarkup({variant:'message',title:'Belum ada pesan',description:'Kirim pesan pertama untuk memulai percakapan.'}))+queued.map(row=>messageMarkup(row,true)).join('')+'</div>'+
-    '<form id="pl-msg-compose"><textarea name="body" rows="2" maxlength="5000" placeholder="Tulis pesan…" required></textarea><button type="button" class="pl-msg-voice" data-voice-record aria-label="Record a voice message">🎙 Voice</button><button type="submit">Kirim</button></form>'+
+    '<form id="pl-msg-compose"><textarea name="body" rows="2" maxlength="5000" placeholder="Tulis pesan…" required></textarea><button type="button" class="pl-msg-voice" data-voice-record aria-label="Record a voice message">🎙 Suara</button><button type="submit">Kirim</button></form>'+
     '<p class="pl-msg-chat-status" role="status">'+(queued.length?queued.length+' messages waiting for connection.':'Pesan tersinkron dengan server. Voice message maksimal 3 menit.')+'</p>';
   chat.querySelector('[data-chat-back]')?.addEventListener('click',()=>document.querySelector('#pl-msg-layout')?.classList.remove('is-chat-open'));
   await hydrateVoicePlayers(chat);
