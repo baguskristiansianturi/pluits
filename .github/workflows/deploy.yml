@@ -43,7 +43,12 @@ jobs:
         run: npm run build
 
       - name: Verify build output
-        run: test -f dist/index.html
+        run: |
+          test -f dist/index.html
+          test -f dist/manifest.webmanifest
+          test -f dist/assets/brand/pluits-icon-192.png
+          test -f dist/assets/brand/pluits-icon-512.png
+          test -f dist/assets/brand/apple-touch-icon.png
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
