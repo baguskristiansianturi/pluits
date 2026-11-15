@@ -191,6 +191,17 @@ export function messagesPage() {
       </div>
     </header>
     <section class="pl-msg-content plds-container plds-container--wide">
+      <section class="pl-msg-people" aria-label="Kontak online">
+        <div class="pl-msg-people-heading">
+          <div><strong>Kontak</strong><small><span id="pl-msg-online-count">0 online</span> · <span id="pl-msg-offline-count">0 offline</span></small></div>
+          <span class="pl-msg-network" id="pl-msg-network" role="status">● Connected</span>
+        </div>
+        <div class="pl-msg-people-strip" id="pl-msg-people-strip"><span class="pl-msg-online-empty">Memuat kontak…</span></div>
+        <div id="pl-msg-contacts" hidden></div>
+      </section>
+      <div class="pl-msg-heading">
+        <div><small>PLUITS MESSAGES</small><h1>Pesan</h1><p>Semua percakapan pribadi Anda dalam satu tempat.</p></div>
+      </div>
       <div class="pl-msg-layout" id="pl-msg-layout">
         ${renderInboxSidebar()}
         <section class="pl-msg-chat" id="pl-msg-chat">${emptyStateMarkup({variant:'message',title:'Pesan Anda dimulai di sini',description:'Pilih percakapan di sebelah kiri atau cari seseorang untuk mulai mengirim pesan.'})}</section>
@@ -330,6 +341,8 @@ export async function bindMessagesPage() {
   };
   window.addEventListener('pluits:presence-sync',presenceSyncHandler);
   presenceSyncHandler({detail:window.__pluitsPresenceState||{}});
+  await loadContacts();
+  await renderPeopleStrip(contactsCache,true);
   bindInboxTabs(app);
   const routeQuery=location.search || (location.hash.includes('?') ? location.hash.slice(location.hash.indexOf('?')+1) : '');
   const requestedConversation=new URLSearchParams(routeQuery).get('conversation');
