@@ -33,7 +33,7 @@ export function renderMessageMarkup(row, { currentUserId, pending = false, recei
           ? '<a class="pl-msg-file" data-file-path="' + esc(row.media_path) + '" href="#" target="_blank" rel="noopener"><span class="pl-msg-file-icon" aria-hidden="true">PDF</span><span><b>' + esc(row.media_name || 'Dokumen') + '</b><small>' + esc(row.media_mime_type || 'File') + '</small></span><span aria-hidden="true">↓</span></a>' + (row.body ? '<div class="pl-msg-text">' + esc(row.body) + '</div>' : '')
           : '<div class="pl-msg-text">' + esc(row.body) + '</div>';
   const sentAt = new Date(row.created_at).getTime();
-  const canDeleteForEveryone = mine && Number.isFinite(sentAt) && Date.now() >= sentAt && Date.now() - sentAt <= 60 * 60 * 60 * 1000;
+  const canDeleteForEveryone = mine && Number.isFinite(sentAt) && Date.now() >= sentAt && Date.now() - sentAt <= 48 * 60 * 60 * 1000;
   const actions = !pending && !deleted && row.id
     ? '<div class="pl-msg-actions-menu" data-message-menu hidden>' +
       '<button type="button" data-message-action="reply">Balas</button><button type="button" data-message-action="forward">Teruskan</button><button type="button" data-message-action="star">' + (row.is_starred ? 'Hapus tanda' : 'Tandai pesan') + '</button>' +
