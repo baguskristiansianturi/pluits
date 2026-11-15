@@ -85,7 +85,7 @@ Rincian dan batas bukti: docs/pluits/SOCIAL-AND-STORE-UAT-READINESS-AUDIT-2026-1
 ### Runtime and database
 - Supabase project `ytndswhqxayqpftszwfh`: ACTIVE_HEALTHY; PostgreSQL 17.11.0.018; region ap-southeast-1.
 - Public base tables: 69; RLS enabled on 69/69.
-- Live migration history: 106 entries.
+- Live migration history: 108 entries.
 - Public views: 3; all have `security_invoker=true`.
 - Storage buckets: 3; all private. User media limit 50 MB; store media 10 MB; voice media 10 MB.
 - Edge Functions deployed: 0.
@@ -95,13 +95,13 @@ Rincian dan batas bukti: docs/pluits/SOCIAL-AND-STORE-UAT-READINESS-AUDIT-2026-1
 - Performance Advisor: 2 auth RLS init-plan warnings, 2 multiple-permissive-policy warnings, 1 unindexed FK INFO notice, and 87 unused-index INFO notices. Do not drop unused indexes without workload evidence.
 
 ### Migration parity — critical operational warning
-- Repository `supabase/migrations/`: 99 SQL files.
+- Repository `supabase/migrations/`: 101 SQL files.
 - Live Supabase history: 106 migrations.
-- Exact version + name matches: 56.
+- Exact version + name matches: 58.
 - Same migration name but different timestamp prefix: 20.
 - Live migration names with no exact repository filename: 30.
 - Repository migration files whose names are not present in live history: 23.
-- The migration applied on 15 November, `20261115122348_enforce_marketplace_order_payment_read_permissions`, has an exact matching repository file.
+- The migrations applied on 15 November — `20261115122348_enforce_marketplace_order_payment_read_permissions`, `20261115123634_protect_user_post_moderation_status`, and `20261115123729_prevent_false_actioned_user_reports` — have exact matching repository files.
 - **Do not run `supabase db push`, migration replay, reset, or bulk migration repair** until every mismatch is reconciled against `supabase_migrations.schema_migrations.statements` and a reviewed recovery plan exists. Do not edit or delete applied migration history.
 
 ### Data integrity snapshot
@@ -121,6 +121,8 @@ Rincian dan batas bukti: docs/pluits/SOCIAL-AND-STORE-UAT-READINESS-AUDIT-2026-1
 - Automated tests: 150/150 passed; Vite production build, PWA asset output verification, Pages artifact upload and Pages deployment succeeded.
 - Active Circle no longer renders synthetic people, Story, local-product or Top 10 fallback content. Marketplace product detail no longer serves a local showcase product as a real listing.
 - Marketplace order reads now require buyer ownership or store order/payment permission; payment metadata reads require buyer ownership or `payments.manage`. Applied migration: `20261115122348_enforce_marketplace_order_payment_read_permissions`.
+- Post owners can no longer change `moderation_status` after creation; moderator/admin and service-role actions remain allowed. Normal user posts still default to `published`, so pre-publication moderation is not implemented.
+- User-target reports cannot be marked `actioned` until account suspension/enforcement exists; moderation UI explains this. The report RPC was tested in a rollback transaction.
 - Supabase browser SDK is pinned to `@supabase/supabase-js@2.119.0`; it is still loaded from the esm.sh CDN, not bundled locally.
 - PWA manifest now includes 192px and 512px PNG icons plus SVG fallback; iOS Apple touch icon is a 180px PNG. Actual Android/iOS install flow remains NOT TESTED; no offline app-shell/service worker is claimed.
 
