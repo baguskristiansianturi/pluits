@@ -42,12 +42,19 @@ function formatDuration(value) { return formatMessageDuration(value); }
 function messageMarkup(row, pending = false, receipt = null, recipientOnline = false) {
   return renderMessageMarkup(row, { currentUserId: currentUser?.id, pending, receipt, recipientOnline });
 }
+function isSelfChat(conversationId) {
+  return conversationCache.some(item=>item.id===conversationId&&item.other?.is_self===true);
+}
+function selfChatReadReceipt(conversationId) {
+  return isSelfChat(conversationId)?{delivered_at:new Date().toISOString(),read_at:new Date().toISOString()}:null;
+}
 function appendMessageToOpenChat(chat,row,{pending=false}={}) {
   const stream=chat?.querySelector('.pl-msg-stream');
   if(!stream||!row)return;
   if(row.id&&stream.querySelector('[data-message-id="'+CSS.escape(String(row.id))+'"]'))return;
   stream.querySelector('.pl-msg-empty-state,.pl-msg-empty')?.remove();
-  stream.insertAdjacentHTML('beforeend',messageMarkup(row,pending));
+  const receipt=!pending&&row.sender_id===currentUser?.id?selfChatReadReceipt(row.conversation_id):null;
+  stream.insertAdjacentHTML('beforeend',messageMarkup(row,pending,receipt));
   stream.scrollTop=stream.scrollHeight;
 }
 async function hydrateVoicePlayers(container) {
@@ -784,6 +791,14 @@ async function openConversation(id) {
     db.from('user_message_stars').select('message_id').eq('user_id',currentUser.id).in('message_id',messageIds)
   ]):[{data:[],error:null},{data:[],error:null},{data:[],error:null}];
   const receiptByMessage=new Map((receipts.data||[]).map(receipt=>[receipt.message_id,receipt]));
+  if(isSelfConversation){
+    const readAt=new Date().toISOString();
+    for(const message of messages.data||[]){
+      if(message.sender_id===currentUser.id&&!receiptByMessage.has(message.id)){
+        receiptByMessage.set(message.id,{message_id:message.id,user_id:currentUser.id,delivered_at:readAt,read_at:readAt});
+      }
+    }
+  }
   const hiddenIds=new Set((hidden.data||[]).map(row=>row.message_id));
   const starredIds=new Set((stars.data||[]).map(row=>row.message_id));
   let visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id)).map(message=>({...message,is_starred:starredIds.has(message.id)}));
