@@ -99,9 +99,9 @@ assert.match(messages, /pl-msg-head-search/, 'Inbox header must keep friend sear
 assert.match(messages, /renderSocialMobileNav\(\{active:'messages'/, 'Inbox must reuse the canonical social navigation component.');
 const inboxSidebar = read('src/features/inbox/inbox-sidebar.js');
 assert.match(messages, /renderInboxSidebar\(\)/, 'Inbox page must compose its own isolated sidebar feature.');
-assert.match(inboxSidebar, /data-inbox-tab="primary"/, 'Inbox sidebar must expose the Primary category.');
-assert.match(inboxSidebar, /data-inbox-tab="requests"/, 'Inbox sidebar must expose the Requests category.');
-assert.match(inboxSidebar, /data-inbox-tab="blocked"/, 'Inbox sidebar must expose the Blocked category.');
+assert.match(inboxSidebar, /data-inbox-tab="primary"/, 'Inbox sidebar must expose the All conversations category.');
+assert.match(inboxSidebar, /data-inbox-tab="unread"/, 'Inbox sidebar must expose a functional Unread filter.');
+assert.doesNotMatch(inboxSidebar, /data-inbox-tab="requests"|data-inbox-tab="blocked"/, 'Inbox must not expose placeholder categories without working backend flows.');
 assert.doesNotMatch(messages, /<aside class="pl-msg-sidebar"/, 'Inbox page must not duplicate its sidebar markup.');
 assert.match(messages, /Cari berdasarkan nama atau nama pengguna/, 'Inbox header search must be discoverable.');
 assert.match(messages, /display_name\.ilike/, 'Inbox search must match display names as well as usernames.');
