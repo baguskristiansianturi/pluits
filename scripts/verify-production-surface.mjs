@@ -250,7 +250,8 @@ assert.ok(discovery.includes('video.muted=true')&&discovery.includes('video.loop
 assert.ok(discovery.includes('prefers-reduced-motion')&&discovery.includes('stopDiscoveryVideoPreviews'), 'Jelajah playback must respect reduced motion and clean up on navigation.');
 assert.ok(discovery.includes('ds-tile-view')&&!discovery.includes('ds-tile-username')&&!discovery.includes('ds-tile-author'), 'Jelajah cards must stay visual without creator names or avatars.');
 assert.ok(discovery.includes('visibleCandidates')&&discovery.includes('let activeVideo=null'), 'Jelajah must limit playback to one visible video preview at a time.');
-assert.ok(discovery.includes('preload="metadata"')&&discovery.includes('video.poster=canvas.toDataURL'), 'Video tiles must retain a still-frame poster when autoplay is unavailable.');
+assert.ok(discovery.includes('preload="none"')&&discovery.includes("video.preload='metadata';video.load()")&&discovery.includes('video.poster=canvas.toDataURL'), 'Video tiles must lazy-load on visibility and retain a still-frame poster when autoplay is unavailable.');
+assert.ok(discovery.includes('data-preview-eligible')&&discovery.includes('previewEligible'), 'Only a subset of visible video tiles should autoplay; other videos remain still previews.');
 const discoveryHeader = read('src/components/social/discovery-header.js');
 assert.ok(discoveryHeader.includes('renderDiscoveryHeader')&&discoveryHeader.includes('data-discovery-header-search')&&discoveryHeader.includes('account/activity'), 'Jelajah shared header must provide search and notification access.');
 assert.ok(read('src/pages/account/index.js').includes("active==='post'?renderDiscoveryHeader({notificationCount:unreadNotificationCount})")&&read('src/pages/account/index.js').includes("if(section==='post')bindDiscoveryHeader()"), 'Opened post cards must reuse the Jelajah search and notification header.');
