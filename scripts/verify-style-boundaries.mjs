@@ -4,7 +4,7 @@ import path from 'node:path';
 
 const roots = ['src/components', 'src/features', 'src/pages'];
 const globalStyleFiles = ['src/style.css', 'src/styles/brand.css', 'src/styles/page-transitions.css', 'src/styles/social-components.css', 'src/styles/social-navigation.css', 'styles/home-layout.css'];
-const legacyGlobalSelectors = new Set(readFileSync('scripts/global-style-legacy-selectors.txt', 'utf8').split('\\n').map(value => value.trim()).filter(Boolean));
+const legacyGlobalSelectors = new Set(readFileSync('scripts/global-style-legacy-selectors.txt', 'utf8').split(/\r?\n/).map(value => value.trim()).filter(Boolean));
 const allowedRoots = /^(?:\.pl-|\.ua-|\.ds-|\.plds-|\.pluits-|#pl-)/;
 const approvedPageRootSelectors = new Set([
   'html:has(.pl-msg)',
