@@ -25,7 +25,7 @@ export const NAVIGATION_CONTEXTS = Object.freeze({
   store: Object.freeze(['storeHome','savedProducts','cart','account']),
   checkout: Object.freeze([])
 });
-const PROTECTED = new Set(['home','create','inbox','activity','profile','contacts','saved','settings','editProfile']);
+const PROTECTED = new Set(['home','inbox','activity','profile','contacts','saved','settings','editProfile']);
 export function getRoute(name, authenticated = true) {
   if (!Object.hasOwn(ROUTES, name)) throw new Error(`Unknown PLUITS route: ${name}`);
   return !authenticated && PROTECTED.has(name) ? ROUTES.login : ROUTES[name];
