@@ -263,3 +263,11 @@ test('Showcase product detail returns to the Marketplace and does not enable sam
  assert.ok(source.includes('href="#/marketplace" class="pl-trip-back">← Kembali ke Marketplace'));
  assert.ok(source.includes('Produk ini belum tersedia untuk pemesanan.'));
 });
+
+
+test('Nearby See All preserves the same device location and five-kilometre radius',async()=>{
+ const source=await readFile(new URL('../../src/pages/directory/index.js',import.meta.url),'utf8');
+ assert.ok(source.includes('href="#/places?from=nearby"'));
+ assert.ok(source.includes('window.__pluitsNearbyContext={latitude:location.latitude,longitude:location.longitude}'));
+ assert.ok(source.includes("params.get('from')==='nearby'")&&source.includes('state.radius=5000'));
+});
