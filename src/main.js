@@ -39,12 +39,29 @@ async function render() {
 
 // Existing in-app links are upgraded centrally, so older page modules remain
 // compatible while the visible browser address always uses canonical paths.
+function normalizeInternalLinks(root = document) {
+  root.querySelectorAll?.('a[href^="#/"]').forEach(anchor => {
+    anchor.setAttribute('href', canonicalizeLegacyRoute(anchor.getAttribute('href').slice(1)));
+  });
+}
+const routeLinkObserver = new MutationObserver(records => {
+  for (const record of records) for (const node of record.addedNodes) {
+    if (node.nodeType === 1) {
+      if (node.matches?.('a[href^="#/"]')) node.setAttribute('href', canonicalizeLegacyRoute(node.getAttribute('href').slice(1)));
+      normalizeInternalLinks(node);
+    }
+  }
+});
+routeLinkObserver.observe(document.querySelector('#app') || document.body, {childList:true,subtree:true});
+normalizeInternalLinks();
+
 document.addEventListener('click', event => {
   if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  const anchor = event.target.closest?.('a[href^="#/"]');
+  const anchor = event.target.closest?.('a[href^="#/"],a[href^="/pluits/"]');
   if (!anchor || anchor.target === '_blank' || anchor.hasAttribute('download')) return;
   event.preventDefault();
-  const destination = canonicalizeLegacyRoute(anchor.getAttribute('href').slice(1));
+  const href = anchor.getAttribute('href');
+  const destination = href.startsWith('#/') ? canonicalizeLegacyRoute(href.slice(1)) : href;
   if (destination !== currentAddress()) history.pushState(null, '', destination);
   render();
 });
