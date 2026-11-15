@@ -1191,3 +1191,57 @@
 .pl-msg-attach-menu button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7}
 #pl-msg-compose{position:relative}
 @media(max-width:760px){.pl-msg-image-wrap{max-width:min(78vw,420px)!important}.pl-msg-image-wrap img{max-height:65vh!important}}
+
+
+/* Photo messages: render the source image at its natural aspect ratio, without a card/frame. */
+.pl-msg-bubble.has-image{
+  width:fit-content!important;
+  max-width:min(78%,520px)!important;
+  min-width:0!important;
+  padding:0!important;
+  overflow:visible!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.pl-msg-bubble.has-image .pl-msg-image-wrap{
+  display:inline-block!important;
+  width:auto!important;
+  max-width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  padding:0!important;
+  overflow:visible!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  line-height:0!important;
+  text-decoration:none!important;
+}
+.pl-msg-bubble.has-image .pl-msg-image-wrap img{
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:min(78vw,520px)!important;
+  max-height:min(62vh,560px)!important;
+  min-width:0!important;
+  min-height:0!important;
+  object-fit:contain!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:transparent!important;
+}
+.pl-msg-bubble.has-image .pl-msg-meta{
+  padding:2px 5px 0!important;
+  margin:2px 0 0!important;
+  background:transparent!important;
+}
+.pl-msg-bubble.has-image .pl-msg-text{padding:5px 2px 0!important}
+@media(max-width:760px){
+  .pl-msg-bubble.has-image{max-width:82vw!important}
+  .pl-msg-bubble.has-image .pl-msg-image-wrap img{
+    max-width:78vw!important;
+    max-height:58vh!important;
+  }
+}
