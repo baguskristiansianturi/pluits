@@ -1367,3 +1367,29 @@
  .pl-msg-layout.is-chat-open #pl-msg-compose textarea{min-height:42px;max-height:112px;border-radius:22px;background:#fff;padding:10px 14px}
  .pl-msg-layout.is-chat-open #pl-msg-compose button{width:40px;min-width:40px;height:40px;min-height:40px;padding:0;border-radius:50%}
 }
+
+
+/* Stable press-to-record control: recording feedback must not resize the composer. */
+#pl-msg-compose .pl-msg-voice,
+#pl-msg-compose .pl-msg-voice.is-recording{
+  box-sizing:border-box!important;
+  width:44px!important;
+  min-width:44px!important;
+  max-width:44px!important;
+  height:44px!important;
+  min-height:44px!important;
+  flex:0 0 44px!important;
+  padding:0!important;
+  border-radius:50%!important;
+  transform:none!important;
+  transition:background-color .14s ease,color .14s ease,box-shadow .14s ease!important;
+}
+#pl-msg-compose .pl-msg-voice.is-recording{background:#b83232!important;color:#fff!important;box-shadow:0 0 0 3px #b8323218!important}
+#pl-msg-compose .pl-msg-voice .pl-msg-live-wave{width:22px!important;max-width:22px!important;gap:1px!important}
+#pl-msg-compose .pl-msg-voice .pl-msg-live-wave i{width:2px!important;animation-duration:.9s!important}
+#pl-msg-compose .pl-msg-voice .pl-msg-recording-time{font-size:8px!important;line-height:1!important;white-space:nowrap}
+#pl-msg-compose .pl-msg-voice:active{transform:none!important}
+@media(prefers-reduced-motion:reduce){
+ #pl-msg-compose .pl-msg-voice,#pl-msg-compose .pl-msg-voice.is-recording{transition:none!important}
+ #pl-msg-compose .pl-msg-voice .pl-msg-live-wave i{animation:none!important;transform:scaleY(1.3)}
+}
