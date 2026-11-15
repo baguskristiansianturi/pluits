@@ -5,6 +5,7 @@ import {renderBrandLogo} from '../../components/common/brand.js';
 import { renderSocialMobileNav } from '../../components/social/navigation.js';
 import { renderInboxSidebar } from '../../features/inbox/inbox-sidebar.js';
 import { renderMessageMarkup, formatMessageDuration } from '../../features/inbox/message-ui.js';
+import { getInboxPreferences } from '../../features/inbox/preferences.js';
 
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -201,7 +202,7 @@ export function messagesPage() {
         <div id="pl-msg-contacts" hidden></div>
       </section>
       <div class="pl-msg-heading">
-        <div><small>PLUITS MESSAGES</small><h1>Pesan</h1><p>Semua percakapan pribadi Anda dalam satu tempat.</p></div>
+        <div><small>PLUITS MESSAGES</small><h1>Inbox</h1><p>Semua percakapan pribadi Anda dalam satu tempat.</p></div>
       </div>
       <div class="pl-msg-layout" id="pl-msg-layout">
         ${renderInboxSidebar()}
@@ -437,8 +438,9 @@ export async function bindMessagesPage() {
 function bindTextComposer(form) {
   const textarea=form?.querySelector('textarea');
   if(!textarea)return;
+  const preferences=getInboxPreferences();
   textarea.addEventListener('keydown',event=>{
-    if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){
+    if(preferences.enterToSend&&event.key==='Enter'&&!event.shiftKey&&!event.isComposing){
       event.preventDefault();
       form.requestSubmit();
     }
@@ -457,6 +459,8 @@ async function openDraftConversation(recipientId) {
   const chat=document.querySelector('#pl-msg-chat');if(!chat)return;
   document.querySelector('#pl-msg-layout')?.classList.add('is-chat-open');
   const queued=queueFor(currentConversation);
+  const preferences=getInboxPreferences();
+  chat.dataset.theme=preferences.theme;chat.dataset.fontSize=preferences.fontSize;
   chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Pesan">‹</button><div><b>'+esc(person.display_name||person.username)+'</b><small>@'+esc(person.username)+'</small></div><span>Offline draft</span></header>'+
     '<div class="pl-msg-stream"><div class="pl-msg-empty">A new conversation will be created when you reconnect. Message history is not available offline.</div>'+queued.map(row=>messageMarkup(row,true)).join('')+'</div>'+
     '<form id="pl-msg-compose"><textarea name="body" rows="2" maxlength="5000" placeholder="Tulis pesan…" required></textarea><button type="submit">Save message</button></form>'+
@@ -600,6 +604,8 @@ async function openConversation(id) {
   const visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id));
   if((messages.error||members.error)&&navigator.onLine){chat.textContent=(messages.error||members.error).message;return;}
   const queued=queueFor(id);
+  const preferences=getInboxPreferences();
+  chat.dataset.theme=preferences.theme;chat.dataset.fontSize=preferences.fontSize;
   chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Pesan">‹</button><span class="pl-msg-chat-avatar" data-chat-avatar>'+contactAvatar(thread?.other||{display_name:'P'})+'</span><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+' · <span id="pl-msg-chat-presence">'+(thread?.other?.id&&onlineUserIds.has(thread.other.id)?'Online':'Tidak online')+'</span></small></div></header>'+
     '<div class="pl-msg-stream">'+(visibleMessages.length?visibleMessages.map(message=>messageMarkup(message,false,receiptByMessage.get(message.id))).join('') : emptyStateMarkup({variant:'message',title:'Belum ada pesan',description:'Kirim pesan pertama untuk memulai percakapan.'}))+queued.map(row=>messageMarkup(row,true)).join('')+'</div>'+
     '<form id="pl-msg-compose"><textarea name="body" rows="2" maxlength="5000" placeholder="Tulis pesan…" required></textarea><button type="button" class="pl-msg-voice" data-voice-record aria-label="Record a voice message">🎙 Suara</button><button type="submit">Kirim</button></form>'+

@@ -54,3 +54,12 @@
  .pl-dm-settings-back small{font-size:11px}
  .pl-dm-settings-head-copy h1{font-size:14px}
 }
+
+.pl-dm-setting-control,.pl-dm-setting-info{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid #f0f2f5}
+.pl-dm-setting-control>span{min-width:0;display:grid;gap:4px}
+.pl-dm-setting-control strong,.pl-dm-setting-info strong{display:block;color:#40546a;font-size:12px}
+.pl-dm-setting-control small,.pl-dm-setting-info small{display:block;color:#8491a0;font-size:10px;line-height:1.55}
+.pl-dm-setting-control select{min-width:104px;min-height:38px;padding:0 10px;border:1px solid #dfe6ed;border-radius:9px;background:#fff;color:#30475f;font:inherit;font-size:11px}
+.pl-dm-setting-control input[type="checkbox"]{width:20px;height:20px;accent-color:#294966}
+.pl-dm-setting-info{display:block}
+.pl-dm-setting-info:last-child,.pl-dm-setting-control:last-child{border-bottom:0}

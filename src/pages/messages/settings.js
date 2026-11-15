@@ -1,90 +1,60 @@
 import './settings.css';
+import { getInboxPreferences, saveInboxPreferences } from '../../features/inbox/preferences.js';
 
 const groups = [
-  {
-    id:'privacy', icon:'◉', title:'Privasi & Keamanan', description:'Atur siapa yang dapat menghubungi dan melihat aktivitas pesan Anda.',
-    items:[
-      ['Status Aktivitas','Atur siapa yang dapat melihat saat Anda aktif.'],
-      ['Tanda Dibaca','Atur apakah orang lain dapat melihat pesan telah dibaca.'],
-      ['Indikator Mengetik','Atur apakah orang lain dapat melihat saat Anda mengetik.'],
-      ['Siapa yang Dapat Mengirim Pesan','Semua orang, akun yang Anda ikuti, atau kontak terhubung.'],
-      ['Akun Diblokir','Lihat akun yang tidak dapat menghubungi Anda.']
-    ]
-  },
-  {
-    id:'requests', icon:'✉', title:'Permintaan Pesan', description:'Kelola pesan dari orang yang belum terhubung dengan Anda.',
-    items:[
-      ['Penyaringan Permintaan','Pisahkan pesan dari orang yang dikenal dan yang belum dikenal.'],
-      ['Spam & Permintaan Mencurigakan','Saring spam, tautan berisiko, dan aktivitas mencurigakan.'],
-      ['Persetujuan Percakapan','Atur kapan permintaan menjadi percakapan biasa.']
-    ]
-  },
-  {
-    id:'notifications', icon:'♧', title:'Notifikasi Pesan', description:'Pilih pemberitahuan yang ingin Anda terima.',
-    items:[
-      ['Pesan Baru','Pemberitahuan pesan masuk di kotak masuk utama.'],
-      ['Permintaan Pesan','Pemberitahuan saat ada permintaan percakapan baru.'],
-      ['Suara Notifikasi','Aktifkan atau nonaktifkan suara pesan.'],
-      ['Pratinjau Pesan','Tampilkan atau sembunyikan isi pesan di notifikasi.'],
-      ['Jeda Notifikasi','Atur waktu tenang agar tidak terganggu.']
-    ]
-  },
-  {
-    id:'appearance', icon:'◐', title:'Tampilan & Pengalaman', description:'Sesuaikan tampilan dan pengalaman berkirim pesan.',
-    items:[
-      ['Tema','Terang, gelap, atau mengikuti pengaturan perangkat.'],
-      ['Ukuran Teks','Sesuaikan ukuran teks agar nyaman dibaca.'],
-      ['Enter untuk Mengirim','Pilih apakah Enter mengirim pesan atau membuat baris baru.'],
-      ['Animasi','Kurangi gerakan dan animasi jika diperlukan.']
-    ]
-  },
-  {
-    id:'media', icon:'▧', title:'Media & Data', description:'Atur penggunaan data dan media dalam percakapan.',
-    items:[
-      ['Putar Video Otomatis','Atur apakah video diputar secara otomatis.'],
-      ['Unduh Media Otomatis','Atur kapan foto dan video diunduh otomatis.'],
-      ['Hemat Data','Kurangi penggunaan data seluler saat melihat media.'],
-      ['Kualitas Unggahan','Pilih kualitas foto dan video saat dikirim.']
-    ]
-  },
-  {
-    id:'support', icon:'?', title:'Bantuan & Keamanan Akun', description:'Dapatkan bantuan terkait pesan dan keamanan akun.',
-    items:[
-      ['Laporkan Percakapan','Laporkan spam, pelecehan, atau konten yang melanggar aturan.'],
-      ['Pusat Bantuan Pesan','Panduan mengelola pesan dan melindungi akun Anda.'],
-      ['Informasi Privasi','Pelajari cara PLUITS mengelola data pesan.']
-    ]
-  }
+  {id:'chat',icon:'◉',title:'Tampilan chat',description:'Atur tampilan percakapan pada perangkat ini.',items:
+    `<label class="pl-dm-setting-control"><span><strong>Tema percakapan</strong><small>Terang atau gelap saat membuka chat.</small></span><select data-inbox-preference="theme"><option value="light">Terang</option><option value="dark">Gelap</option></select></label>
+    <label class="pl-dm-setting-control"><span><strong>Ukuran teks</strong><small>Ukuran tulisan di dalam percakapan.</small></span><select data-inbox-preference="fontSize"><option value="small">Kecil</option><option value="normal">Normal</option><option value="large">Besar</option></select></label>`},
+  {id:'composer',icon:'⌨',title:'Penulisan pesan',description:'Atur perilaku tombol Enter pada kolom pesan.',items:
+    `<label class="pl-dm-setting-control"><span><strong>Enter untuk mengirim</strong><small>Jika mati, Enter membuat baris baru. Tombol kirim tetap tersedia.</small></span><input type="checkbox" data-inbox-preference="enterToSend"></label>`},
+  {id:'privacy',icon:'◇',title:'Privasi & keamanan',description:'Kontrol yang saat ini berlaku pada Inbox PLUITS.',items:
+    `<div class="pl-dm-setting-info"><strong>Receipt pesan</strong><small>Status terkirim, diterima, dan dibaca dikelola oleh server. Pengaturan untuk mematikan read receipt belum tersedia.</small></div>
+    <div class="pl-dm-setting-info"><strong>Perlindungan percakapan</strong><small>RLS dan keanggotaan percakapan membatasi akses pesan. Enkripsi end-to-end belum tersedia; jangan menganggap chat PLUITS setara dengan WhatsApp dalam hal ini.</small></div>`},
+  {id:'notifications',icon:'♧',title:'Notifikasi',description:'Status dukungan pemberitahuan pesan.',items:
+    `<div class="pl-dm-setting-info"><strong>Notifikasi saat aplikasi terbuka</strong><small>Sinkronisasi pesan berjalan melalui Supabase Realtime. Push notification saat browser ditutup belum tersedia.</small></div>`},
+  {id:'future',icon:'＋',title:'Fitur berikutnya',description:'Fitur yang belum aktif dan tidak ditampilkan sebagai tombol palsu.',items:
+    `<div class="pl-dm-setting-info"><strong>Lampiran foto, video, dan dokumen</strong><small>Belum tersedia pada percakapan.</small></div>
+    <div class="pl-dm-setting-info"><strong>Balas, teruskan, reaksi, edit, dan pin pesan</strong><small>Belum tersedia.</small></div>
+    <div class="pl-dm-setting-info"><strong>Grup, panggilan, perangkat tertaut, dan pesan sementara</strong><small>Belum tersedia.</small></div>`}
 ];
 
 export function messageSettingsPage(){
   return `<main class="pl-dm-settings">
     <header class="pl-dm-settings-head">
-      <a class="pl-dm-settings-back" href="#/inbox" aria-label="Back to Messages"><span aria-hidden="true">‹</span><small>Pesan</small></a>
-      <div class="pl-dm-settings-head-copy"><span>PLUITS · PESAN</span><h1>Pengaturan Pesan</h1></div>
-      
+      <a class="pl-dm-settings-back" href="#/inbox" aria-label="Kembali ke Inbox"><span aria-hidden="true">‹</span><small>Inbox</small></a>
+      <div class="pl-dm-settings-head-copy"><span>PLUITS · INBOX</span><h1>Pengaturan Inbox</h1></div>
     </header>
     <div class="pl-dm-settings-body">
       <div class="pl-dm-settings-intro">
         <span class="pl-dm-settings-eyebrow">PREFERENSI PESAN</span>
-        <h2>Atur pengalaman berkirim pesan</h2>
-        <p>Pengaturan yang direncanakan untuk privasi, permintaan, notifikasi, tampilan, media, dan bantuan.</p>
+        <h2>Atur pengalaman chat</h2>
+        <p>Preferensi tampilan dan penulisan disimpan otomatis di perangkat ini.</p>
       </div>
       <div class="pl-dm-settings-groups">
-        ${groups.map((group,index)=>`<details class="pl-dm-settings-group"  id="dm-setting-${group.id}">
+        ${groups.map(group=>`<details class="pl-dm-settings-group" id="dm-setting-${group.id}" ${group.id==='chat'||group.id==='composer'?'open':''}>
           <summary><span class="pl-dm-settings-icon" aria-hidden="true">${group.icon}</span><span class="pl-dm-settings-group-copy"><strong>${group.title}</strong><small>${group.description}</small></span><span class="pl-dm-settings-chevron" aria-hidden="true">⌄</span></summary>
-          <div class="pl-dm-settings-items">${group.items.map(item=>`<div class="pl-dm-settings-item"><span><strong>${item[0]}</strong><small>${item[1]}</small></span><em>Rancangan</em></div>`).join('')}</div>
+          <div class="pl-dm-settings-items">${group.items}</div>
         </details>`).join('')}
       </div>
-      <p class="pl-dm-settings-footnote">Pengaturan ini masih berupa rancangan dan belum mengubah preferensi atau kontrol privasi akun Anda.</p>
+      <p class="pl-dm-settings-footnote" role="status" id="pl-dm-settings-status">Pengaturan perangkat ini tidak disinkronkan ke perangkat lain.</p>
     </div>
   </main>`;
 }
 
 export function bindMessageSettingsPage(){
-  document.querySelectorAll('.pl-dm-settings-group').forEach(group=>{
-    group.addEventListener('toggle',()=>{
-      group.classList.toggle('is-open',group.open);
+  const preferences=getInboxPreferences();
+  document.querySelectorAll('[data-inbox-preference]').forEach(control=>{
+    const key=control.dataset.inboxPreference;
+    if(control.type==='checkbox')control.checked=Boolean(preferences[key]);
+    else control.value=preferences[key];
+    control.addEventListener('change',()=>{
+      const value=control.type==='checkbox'?control.checked:control.value;
+      saveInboxPreferences({[key]:value});
+      const status=document.querySelector('#pl-dm-settings-status');
+      if(status)status.textContent='Preferensi tersimpan di perangkat ini.';
     });
+  });
+  document.querySelectorAll('.pl-dm-settings-group').forEach(group=>{
+    group.addEventListener('toggle',()=>group.classList.toggle('is-open',group.open));
   });
 }
