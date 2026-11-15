@@ -96,3 +96,10 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - Moved avatar and cover upload event handling into `src/features/profile/image-upload.js`.
 - Kept the existing 8 MB size limit, JPG/PNG/WebP allowlist, storage bucket, profile-row update and refresh behavior. Supabase, notification and page-refresh dependencies are passed explicitly from Account.
 - Added a focused architecture regression test; storage authorization and RLS contracts are unchanged.
+
+
+## 15 November 2026 — Profile editor extraction
+
+- Moved personal username/display-name validation and profile-save orchestration to `src/features/profile/profile-editor.js`.
+- Account now injects current profile accessors, Supabase client, image-frame persistence helpers, notifications and SEO updates. Existing optimistic update/rollback, unique-username handling and frame persistence remain in the feature.
+- Added direct unit tests for identity validation and updated production-surface assertions to follow the new owner.

@@ -274,6 +274,7 @@ assert.ok(discoveryCss.includes('rgba(232,236,236,.48)')&&discoveryCss.includes(
 
 const profileSource = read('src/pages/account/index.js');
 const profileTabsSource = read('src/features/profile/profile-tabs.js');
+const profileEditorSource = read('src/features/profile/profile-editor.js');
 for (const tab of ['posts', 'reels', 'trip', 'blog']) {
   assert.ok(profileSource.includes('data-profile-tab="' + tab + '"'), 'Profile must expose the ' + tab + ' tab.');
 }
@@ -283,9 +284,9 @@ assert.ok(profileSource.includes('id="ua-profile-form"') && profileSource.includ
 assert.ok(profileSource.includes('Simpan perubahan') && profileSource.includes('ua-profile-editor') && profileSource.includes('ua-editor-save'), 'Profile editing must use a dedicated polished editor page with clear save actions.');
 assert.ok(profileSource.includes("parameter==='edit'") && profileSource.includes('href="#/account/profile/edit"') && profileSource.includes('ua-profile-menu'), 'Profile editing must open only on its dedicated canonical route from the profile three-dot menu.');
 assert.ok(!profileSource.includes('ua-profile-savebar'), 'Profile view must not render a sticky save bar.');
-assert.ok(profileSource.includes('validatePersonalUsername') && profileSource.includes('validatePersonalDisplayName'), 'Personal identity must enforce username and display-name rules.');
-assert.ok(profileSource.includes(".update(payload).eq('id',user.id).select().single()"), 'Profile save must update the existing profile row and confirm the persisted result without a full remount.');
-assert.ok(profileSource.includes('profile={...profile,...payload};paintIdentity(profile)') && profileSource.includes('profile=previous;paintIdentity(previous)'), 'Profile save must feel immediate and roll back optimistic UI if the server rejects the change.');
+assert.ok(profileEditorSource.includes('export function validatePersonalUsername') && profileEditorSource.includes('export function validatePersonalDisplayName'), 'Personal identity must enforce username and display-name rules.');
+assert.ok(profileEditorSource.includes(".update(payload).eq('id',user.id).select().single()"), 'Profile save must update the existing profile row and confirm the persisted result without a full remount.');
+assert.ok(profileEditorSource.includes('setProfile({...getProfile(),...payload});paintIdentity(getProfile())') && profileEditorSource.includes('setProfile(previous);paintIdentity(previous)'), 'Profile save must feel immediate and roll back optimistic UI if the server rejects the change.');
 assert.ok(existsSync('supabase/migrations/20261110091730_enforce_personal_profile_identity_rules.sql'));
 assert.ok(existsSync('supabase/migrations/20261110091739_allow_personal_username_separators.sql'));
 

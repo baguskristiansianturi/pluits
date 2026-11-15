@@ -8,6 +8,7 @@ import {bindSocialHeaderMenu} from '../../components/social/header-menu.js';
 import {bindProfileTabs as bindAccountProfileTabs} from '../../features/profile/profile-tabs.js';
 import {bindProfileImageFrameControls} from '../../features/profile/image-frame-controls.js';
 import {bindProfileImageUpload} from '../../features/profile/image-upload.js';
+import {bindProfileEditor} from '../../features/profile/profile-editor.js';
 import {bindExploreFilters} from '../../features/discovery/explore-filters.js';
 import '../../features/posts/post-card.css';
 import '../../features/posts/comments.css';
@@ -884,47 +885,11 @@ function bindWallet(){
   notify('Permintaan transaksi berhasil dikirim.');await mountAccount('wallet');
  });
 }
-function validatePersonalUsername(value){
- const username=String(value||'').trim().toLowerCase();
- if(!/^[a-z0-9](?:[a-z0-9._-]{1,28}[a-z0-9])$/.test(username)||username.includes('..'))return 'Username 3–30 karakter; gunakan huruf kecil, angka, titik, garis bawah, atau tanda hubung. Awal/akhir harus huruf atau angka.';
- if(/\.(com|co|co\.id|id|net|org|biz|info|xyz|app|dev|io|me|asia|site|online|store|shop)$/i.test(username))return 'Username tidak boleh menggunakan akhiran seperti nama domain (.com, .co.id, .id, dan sejenisnya).';
- return '';
-}
-function validatePersonalDisplayName(value){
- const name=String(value||'').trim();
- if(name.length<2||name.length>80)return 'Nama tampilan harus 2–80 karakter.';
- const first=name.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,' ').trim().split(' ')[0];
- const entityWords=new Set(['toko','warung','restoran','restaurant','hotel','cafe','kafe','shop','store','market','service','jasa','layanan','tour','travel','transport','clinic','klinik','salon','barbershop','company','perusahaan','official','group','foundation','yayasan','community','komunitas','supplier','distributor','contractor','bengkel','laundry']);
- return entityWords.has(first)?'Nama akun personal tidak boleh diawali nama jenis toko, organisasi, atau layanan. Gunakan nama diri; usaha dapat dibuat melalui Toko/Organisasi.':'';
-}
 function bindProfile(){
- const form=document.querySelector('#ua-profile-form');
- form?.addEventListener('submit',async e=>{
-  e.preventDefault();const f=new FormData(form),note=document.querySelector('#ua-profile-note'),btn=form.querySelector('button[type="submit"]');
-  const username=String(f.get('username')||'').trim().toLowerCase(),displayName=String(f.get('display_name')||'').trim();
-  const usernameError=validatePersonalUsername(username),nameError=validatePersonalDisplayName(displayName);
-  if(usernameError){note.textContent=usernameError;form.elements.username.focus();return;}
-  if(nameError){note.textContent=nameError;form.elements.display_name.focus();return;}
-  const previous={...profile};
-  const payload={display_name:displayName,username,bio:String(f.get('bio')||'').trim(),public_city:String(f.get('public_city')||'').trim()||null,public_province:String(f.get('public_province')||'').trim()||null,visibility:String(f.get('visibility')),show_store:f.get('show_store')==='on',updated_at:new Date().toISOString()};
-  const paintIdentity=person=>{
-   document.querySelectorAll('.ua-profile-identity h2,.ua-ac-identity-copy strong').forEach(el=>el.textContent=person.display_name);
-   document.querySelectorAll('.ua-username').forEach(el=>el.textContent='@'+person.username);
-   document.querySelectorAll('.ua-profile-identity p').forEach(el=>el.textContent=person.bio||'Bio belum ditambahkan.');
-   document.querySelectorAll('.ua-location').forEach(el=>el.textContent=person.public_city&&person.public_province?'⌖ '+person.public_city+', '+person.public_province:'');
-  };
-  btn.disabled=true;note.textContent='Menyimpan…';
-  profile={...profile,...payload};paintIdentity(profile);
-  const {data,error}=await supabase.from('user_profiles').update(payload).eq('id',user.id).select().single();
-  btn.disabled=false;
-  if(error){profile=previous;paintIdentity(previous);note.textContent=error.code==='23505'?'Username sudah digunakan orang lain. Pilih username yang berbeda.':error.message;notify(note.textContent,'error');return;}
-  profile=data;paintIdentity(profile);
-  const nextImageFrame=readProfileImageFrame(form,profileImageFrame);
-  const {error:frameError}=await supabase.from('user_profile_image_frames').upsert({user_id:user.id,...nextImageFrame,updated_at:new Date().toISOString()},{onConflict:'user_id'});
-  if(frameError){note.textContent='Profil tersimpan, tetapi pengaturan bingkai foto belum tersimpan: '+frameError.message;notify(note.textContent,'error');}
-  else{profileImageFrame=nextImageFrame;note.textContent='Profil dan pengaturan foto tersimpan.';notify('Profil berhasil diperbarui.');}
-  updateSEO({title:profile.display_name+' (@'+profile.username+') — Pluits',description:(profile.bio||'Profil komunitas '+profile.display_name+' di Pluits.').slice(0,160),path:'#/@'+encodeURIComponent(profile.username)});
-  if(previous.username!==profile.username)note.textContent='Tersimpan. Alamat profil baru: @'+profile.username;
+ bindProfileEditor({
+  documentRef:document,user,getProfile:()=>profile,setProfile:value=>{profile=value;},
+  supabaseClient:supabase,getImageFrame:()=>profileImageFrame,setImageFrame:value=>{profileImageFrame=value;},
+  readImageFrame:readProfileImageFrame,notify,updateSEO
  });
  bindProfileImageFrames(); bindImageUpload('ua-avatar-file','avatar_path','avatar');bindImageUpload('ua-cover-file','cover_path','cover');
 }
