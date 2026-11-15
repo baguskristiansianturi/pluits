@@ -27,11 +27,13 @@ That is not the same as launch acceptance. The release still lacks founder Andro
 
 ### Database authorization
 - Applied migration `20261115122348_enforce_marketplace_order_payment_read_permissions`.
+- Added `20261115123634_protect_user_post_moderation_status`: owners cannot reverse a moderator's post status change; moderator/service role retains control. A rollback-safe SQL test verified normal-user rejection and moderator success.
+- Added `20261115123729_prevent_false_actioned_user_reports`: the moderation RPC rejects `actioned` for user-target reports because account suspension/enforcement is not implemented; the admin UI now explains the limitation. A rollback-safe RPC test passed.
 - Marketplace orders are readable by the buyer or store members with `orders.manage` / `payments.manage`.
 - Payment metadata is readable by the buyer or store members with `payments.manage`.
 - This removes the prior behavior where any active store member could read order/payment rows regardless of the role permission matrix.
 - Live policy inspection confirms the two policies call `private.has_store_permission`.
-- No user account, post, message, media, order or payment row was deleted or rewritten.
+- No user account, post, message, media, order or payment row was deleted or rewritten. SQL verification tests used temporary rows/tables inside transactions and rolled them back.
 
 ### Deployment evidence
 - Verified commit: `61d632b544541a901485cc6f54e85b2558d5a0f3`.
@@ -71,14 +73,14 @@ That is not the same as launch acceptance. The release still lacks founder Andro
 - Do not drop unused indexes without workload evidence.
 
 ### Migration parity — operational blocker
-- Repository `supabase/migrations/`: 99 SQL files.
-- Live migration history: 106 entries.
-- Exact version + name matches: 56.
+- Repository `supabase/migrations/`: 101 SQL files.
+- Live migration history: 108 entries.
+- Exact version + name matches: 58.
 - Same name but different timestamp prefix: 20.
 - Live migration names with no exact repository filename: 30.
 - Repository migration filenames not represented by an exact live migration name: 23.
 
-The 15 November Marketplace policy migration has an exact matching version/name/file. Older migration parity is not clean. **Do not run `supabase db push`, migration replay, reset or bulk repair** until every live migration is reconciled against `supabase_migrations.schema_migrations.statements` and a reviewed recovery plan is prepared. Never delete or rewrite applied migration history.
+The three 15 November migrations have exact matching version/name/files. Older migration parity is not clean. **Do not run `supabase db push`, migration replay, reset or bulk repair** until every live migration is reconciled against `supabase_migrations.schema_migrations.statements` and a reviewed recovery plan is prepared. Never delete or rewrite applied migration history.
 
 ## 4. Production data integrity review
 
@@ -100,6 +102,7 @@ The draft store/product are not eligible for the public catalog under the curren
 ## 5. Launch blockers and release gates
 
 ### P0 — must close before Social First Release public launch
+0. **Moderation policy decision:** new posts currently publish immediately (database default `published`); the implemented report queue is post-publication. The Business Model Master describes pre-publication moderation. Decide whether pre-publication review is a hard launch requirement; if yes, implement and UAT a pending-review queue before public launch.
 1. **Founder Android UAT:** real photo/video selection, upload, progress, playback, refresh persistence, failure/retry and media cleanup.
 2. **Two-account tests:** public/private profile, posts and media; follow/private follow; block/report; comments; DM membership; notification recipient scope; RLS negative tests.
 3. **DM reconnect:** realtime delivery, offline outbox, reconnect and exactly-once behavior.
