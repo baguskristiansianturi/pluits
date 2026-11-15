@@ -30,7 +30,7 @@ export function renderMessageMarkup(row, { currentUserId, pending = false, recei
   const sentAt = new Date(row.created_at).getTime();
   const canDeleteForEveryone = mine && Number.isFinite(sentAt) && Date.now() >= sentAt && Date.now() - sentAt <= 48 * 60 * 60 * 1000;
   const actions = !pending && !deleted && row.id
-    ? '<details class="pl-msg-actions"><summary aria-label="Opsi pesan">⋮</summary><div class="pl-msg-actions-menu"><button type="button" data-message-action="copy">Salin pesan</button><button type="button" data-message-action="hide">Hapus untuk saya</button>' +
+    ? '<details class="pl-msg-actions"><summary aria-label="Opsi pesan">⋮</summary><div class="pl-msg-actions-menu">' + (voice ? '' : '<button type="button" data-message-action="copy">Salin pesan</button>') + '<button type="button" data-message-action="hide">Hapus untuk saya</button>' +
       (canDeleteForEveryone ? '<button type="button" data-message-action="delete-everyone">Hapus untuk semua</button>' : '') +
       '</div></details>'
     : '';
