@@ -23,29 +23,29 @@ test('primary social navigation has canonical destinations', () => {
     marketplace: ROUTES.marketplace,
     trip: ROUTES.trip,
   }, {
-    circle: '#/account/explore',
-    discover: '#/search',
-    create: '#/account/create',
-    messages: '#/inbox',
-    profile: '#/account/profile',
-    reels: '#/account/reels',
-    activity: '#/account/activity',
-    contacts: '#/account/followers',
-    saved: '#/account/saved',
-    settings: '#/account/settings',
-    places: '#/places',
-    marketplace: '#/marketplace',
-    trip: '#/trip',
+    circle: '/pluits/circle/',
+    discover: '/pluits/discover/',
+    create: '/pluits/create/',
+    messages: '/pluits/inbox/',
+    profile: '/pluits/profile/',
+    reels: '/pluits/reels/',
+    activity: '/pluits/notifications/',
+    contacts: '/pluits/followers/',
+    saved: '/pluits/saved/',
+    settings: '/pluits/settings/',
+    places: '/pluits/places/',
+    marketplace: '/pluits/marketplace/',
+    trip: '/pluits/trips/',
   });
 });
 
 test('every primary navigation destination is handled by the router and page module', () => {
   const routeContracts = [
-    [ROUTES.home, "r==='account'", "section==='explore'"],
+    [ROUTES.home, "r==='circle'", "mountUserAccount('explore')"],
     [ROUTES.discover, "r==='search'", 'discoverySearch'],
     [ROUTES.create, "r==='account'", "section==='create'"],
     [ROUTES.inbox, "r==='message'||r==='messages'||r==='inbox'", 'messagesPage'],
-    [ROUTES.profile, "r==='account'", "section==='profile'"],
+    [ROUTES.profile, "r==='profile'", "mountUserAccount('profile'"],
     [ROUTES.reels, "r==='account'", "section==='reels'"],
     [ROUTES.activity, "r==='account'", "section==='activity'"],
     [ROUTES.contacts, "r==='account'", "section==='followers'"],
@@ -56,7 +56,7 @@ test('every primary navigation destination is handled by the router and page mod
     [ROUTES.trip, "r==='trip'", 'tripPage'],
   ];
   for (const [url, routerMarker, pageMarker] of routeContracts) {
-    assert.ok(url.startsWith('#/'), `Expected hash URL for ${url}`);
+    assert.ok(url.startsWith('/pluits/'), `Expected readable canonical URL for ${url}`);
     assert.ok(router.includes(routerMarker), `Router does not dispatch ${url}`);
     assert.ok(account.includes(pageMarker) || router.includes(pageMarker), `No page handler found for ${url}`);
   }
@@ -69,7 +69,7 @@ test('desktop and mobile social navigation use the shared route registry', () =>
 });
 
 test('profile edit keeps its nested URL and is dispatched through the account route', () => {
-  assert.equal(ROUTES.editProfile, '#/account/profile/edit');
+  assert.equal(ROUTES.editProfile, '/pluits/profile/edit/');
   assert.ok(router.includes("r==='account'"));
   assert.ok(account.includes("parameter==='edit'"));
 });
