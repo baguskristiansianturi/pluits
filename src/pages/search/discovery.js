@@ -107,7 +107,7 @@ async function feed(){
    };
    tileVideos.forEach((video,index)=>{
     video.muted=true;video.loop=true;video.playsInline=true;
-    video.addEventListener('loadeddata',()=>{if(video!==activeVideo)video.pause();},{once:true});
+    video.addEventListener('loadeddata',()=>{if(video.dataset.inViewport==='1')activate(video);else video.pause();},{once:true});
     video.addEventListener('error',()=>{video.classList.add('is-preview-unavailable');if(video===activeVideo)pauseActive();},{once:true});
    });
    videoVisibilityHandler=()=>{if(document.hidden){tileVideos.forEach(video=>video.pause());pauseActive();}};
@@ -119,8 +119,10 @@ async function feed(){
      entries.forEach(entry=>{
       const video=entry.target;
       if(entry.isIntersecting&&entry.intersectionRatio>=.65){
+       video.dataset.inViewport='1';
        visibleCandidates=visibleCandidates.filter(item=>item!==video);visibleCandidates.push(video);
       }else{
+       video.dataset.inViewport='0';
        visibleCandidates=visibleCandidates.filter(item=>item!==video);
        if(video===activeVideo){video.pause();activeVideo=null;}
       }
@@ -139,7 +141,6 @@ async function feed(){
 }
 
 export function bindDiscoverySearch(){
- bindDiscoveryHeader();
  document.querySelector('[data-discovery-header-search]')?.addEventListener('submit',event=>{event.preventDefault();feed();});
  document.querySelector('#ds-chips')?.addEventListener('click',event=>{
   const button=event.target.closest('[data-cat]');if(!button)return;
