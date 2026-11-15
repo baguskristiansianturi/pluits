@@ -28,6 +28,7 @@ Read before editing. Existing owners remain during incremental migration; target
 - Blog Studio: `pages/blog-studio/*` owns the current editor/dashboard/public reader; media transport is delegated to `features/media/storage-upload.js`, media validation to `features/media/media-types.js`, and public media authorization remains owned by blog RLS/Storage policies.
 - Reels: `features/reels/*`; dedicated markup and scoped styling.
 - Circle Top Ten carousel interaction: `features/discovery/top-ten-slider.js`;
+- People recommendation follow interactions: `features/discovery/people-recommendation-actions.js`;
 - Circle Explore filters: `features/discovery/explore-filters.js` owns filter-control binding; Account supplies state accessors and rerender callback.
 - Social header menu: `components/social/header-menu.js` owns the delegated click/Escape interaction shared by social page headers. owns mobile autoplay, pause/resume, document visibility handling and cleanup. The Account page remains the data/composition owner.
 - Post media layout: `features/posts/post-media-layout.js` owns gallery counters and feed/detail media-frame normalization; Account only mounts the helpers.
@@ -127,3 +128,7 @@ Page folders correspond to canonical route ownership, not every tab or UI state.
 ### Enforcement
 
 `npm run verify:module-boundaries` is included in `npm test`. It blocks upward imports from shared lower-level modules, private direct cross-feature imports and independent Supabase client construction outside `src/lib/supabase/client.js`. Eleven runtime modules now use that singleton. Data-access extraction from page controllers remains incremental and must include consumer/route tests.
+
+
+## Relationships
+- Follower/following list rendering and follow/accept/remove actions live in `features/relationships/index.js`; Account supplies the current session and route remount callback.

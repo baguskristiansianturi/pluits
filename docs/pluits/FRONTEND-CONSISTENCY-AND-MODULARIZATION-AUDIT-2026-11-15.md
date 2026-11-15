@@ -139,3 +139,11 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - Moved post like toggling, optimistic count updates/rollback and double-tap media animation into `src/features/posts/like-interactions.js`.
 - The Account page injects the card, post ID, current user, Supabase client, notification and icon helpers. Like persistence and RLS remain unchanged.
 - Added a focused architecture regression test.
+
+
+## 15 November 2026 — Relationship and recommendation action extraction
+
+- Moved follower/following list rendering and follow, accept, remove and cancel actions into `src/features/relationships/index.js`.
+- Moved people-recommendation follow buttons into `src/features/discovery/people-recommendation-actions.js`.
+- Account now acts as an adapter for the current user, Supabase client, route remounting and shared UI helpers; existing follow states and backend contracts remain unchanged.
+- Added focused architecture regression tests for both feature owners.
