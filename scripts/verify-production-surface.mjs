@@ -165,8 +165,9 @@ assert.ok(postActions.includes('data-post-menu'), 'Feed cards must expose the po
 assert.ok(postActions.includes('data-action="edit"'), 'Owners must have a functional edit-post action.');
 assert.ok(postActions.includes('data-action="delete-post"'), 'Owners must have a delete-post action.');
 assert.ok(postActions.includes('data-save-post'), 'Post editor must expose a save action.');
-assert.match(postActions, /pointerup/, 'Photo posts must support responsive pointer-based double-tap like.');
-assert.match(postActions, /toggleLike\(img\.closest/, 'Double-tap must toggle like state on the exact photo that was tapped.');
+const postLikeFeature = read('src/features/posts/like-interactions.js');
+assert.match(postLikeFeature, /pointerup/, 'Photo posts must support responsive pointer-based double-tap like.');
+assert.match(postLikeFeature, /toggleLike\(image\.closest/, 'Double-tap must toggle like state on the exact photo that was tapped.');
 
 for (const path of [
   'MASTER/DECISION-LOG.md',
