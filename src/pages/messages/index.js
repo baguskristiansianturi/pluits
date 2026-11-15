@@ -136,7 +136,11 @@ function bindVoiceRecorder(chat, conversationId) {
       panel.hidden=false;
       panel.innerHTML='<div class="pl-msg-recording"><span class="pl-msg-recording-dot"></span><b data-record-clock>0:00</b><button type="button" data-voice-pause>Jeda</button><button type="button" data-voice-finish>Selesai</button><button type="button" data-voice-cancel>Batal</button></div>';
       const clock=panel.querySelector('[data-record-clock]');
-      clockTimer=setInterval(()=>{if(clock)clock.textContent=formatDuration(Math.floor(elapsed()/1000));},250);
+      clockTimer=setInterval(()=>{
+        const seconds=Math.floor(elapsed()/1000);
+        if(clock)clock.textContent=formatDuration(seconds);
+        if(seconds>=180&&recorder?.state!=='inactive')recorder.stop();
+      },250);
       panel.querySelector('[data-voice-pause]').onclick=event=>{
         if(recorder.state==='recording'&&typeof recorder.pause==='function'){
           recorder.pause();pauseStartedAt=Date.now();event.currentTarget.textContent='Lanjutkan';
@@ -148,7 +152,7 @@ function bindVoiceRecorder(chat, conversationId) {
       };
       panel.querySelector('[data-voice-finish]').onclick=()=>{if(recorder.state!=='inactive')recorder.stop();};
       panel.querySelector('[data-voice-cancel]').onclick=()=>{cancelled=true;if(recorder.state!=='inactive')recorder.stop();else resetPanel();};
-      limitTimer=setTimeout(()=>{if(recorder?.state!=='inactive')recorder.stop();},180000);
+
       if(status)status.textContent='Sedang merekam. Maksimal 3 menit.';
     }catch(error){
       stopTracks();button.textContent='🎙 Voice';button.classList.remove('is-recording');
