@@ -245,7 +245,8 @@ test('Top 10 trending uses live directory activity and has no fabricated fallbac
  assert.match(source,/user_post_directory_entities/);
  assert.doesNotMatch(source,/Babi Guling Bu Coco|Beef Slab/);
  assert.deepEqual(await loadTopTenTrending(),[]);
- assert.match(renderTopTenSection([]),/Top 10 Trending/);\n assert.match(renderTopTenSection([]),/Tren komunitas sedang dikumpulkan/);
+ assert.match(renderTopTenSection([]),/Top 10 Trending/);
+ assert.match(renderTopTenSection([]),/Tren komunitas sedang dikumpulkan/);
 });
 
 
