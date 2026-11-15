@@ -74,11 +74,12 @@ test('desktop and mobile social navigation use the shared route registry', () =>
 test('Inbox route renders the WhatsApp-style conversation workspace and binds contacts', async () => {
   const messages = await readFile(new URL('../../src/pages/messages/index.js', import.meta.url), 'utf8');
   const styles = await readFile(new URL('../../src/pages/messages/messages.css', import.meta.url), 'utf8');
+  const inboxSidebar = await readFile(new URL('../../src/features/inbox/inbox-sidebar.js', import.meta.url), 'utf8');
   assert.ok(router.includes("else if(r==='inbox')"), 'Inbox URL must dispatch to the messages page.');
   assert.ok(messages.includes('class="pl-msg-layout" id="pl-msg-layout"'), 'Inbox must render its conversation workspace.');
   assert.ok(messages.includes('id="pl-msg-people-strip"'), 'Inbox must render the contact strip.');
   assert.ok(messages.includes('await loadContacts();'), 'Inbox must hydrate contacts after presence is initialized.');
-  assert.ok(messages.includes('id="pl-msg-conversations"'), 'Inbox must render the conversation list.');
+  assert.ok(inboxSidebar.includes('id="pl-msg-conversations"'), 'Inbox sidebar feature must render the conversation list.');
   assert.ok(messages.includes('id="pl-msg-chat"'), 'Inbox must render the active chat panel.');
   assert.ok(styles.includes('.pl-msg-head-search') && styles.includes('.pl-msg-layout.is-chat-open'), 'Inbox must include responsive chat and search styling.');
 });
