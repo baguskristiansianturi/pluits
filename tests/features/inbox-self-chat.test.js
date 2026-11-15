@@ -18,7 +18,7 @@ test('username search includes the signed-in account for self-chat', () => {
   assert.match(inbox, /username\.ilike/);
   assert.doesNotMatch(inbox, /\.neq\('id',user\.id\)/);
   assert.match(inbox, /person\.id===user\.id\?'Pesan ke diri sendiri'/);
-  assert.match(inbox, /data-start-chat="\'+esc\(currentUser\.id\)/);
+  assert.match(inbox, /data-start-chat="\'\+esc\(currentUser\.id\)/);
 });
 
 test('self-chat creates one stable private conversation membership', () => {
