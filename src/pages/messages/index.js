@@ -307,12 +307,16 @@ async function renderPeopleStrip(people=contactsCache, withSignedImages=false) {
   const strip=document.querySelector('#pl-msg-people-strip');if(!strip)return;
   const onlinePeople=(people||[]).filter(person=>onlineUserIds.has(person.id));
   renderPeopleCounts(people);
+  const ownAvatar=withSignedImages?await signedAvatar(currentProfile?.avatar_path):'';
+  const selfItem=currentProfile
+    ? '<button type="button" class="pl-msg-person pl-msg-person-self" data-start-chat="'+esc(currentUser.id)+'" aria-label="Kirim pesan ke diri sendiri">'+contactAvatar(currentProfile,ownAvatar)+'<small>Pesan ke diri sendiri</small></button>'
+    : '';
   const items=await Promise.all(onlinePeople.map(async person=>{
     const url=withSignedImages?await signedAvatar(person.avatar_path):'';
     return '<button type="button" class="pl-msg-person" data-start-chat="'+esc(person.id)+'" aria-label="Start conversation with '+esc(person.display_name||person.username)+', online">'+contactAvatar(person,url)+'<span class="pl-msg-online-dot" aria-hidden="true"></span><small>'+esc(person.display_name||person.username||'Contact')+'</small></button>';
   }));
   strip.classList.toggle('has-many',onlinePeople.length>=5);
-  strip.innerHTML=items.length?items.join(''):'<span class="pl-msg-online-empty">Contact yang online akan muncul di sini</span>';
+  strip.innerHTML=selfItem+items.join()||'<span class="pl-msg-online-empty">Cari username untuk memulai percakapan</span>';
   bindStartChat(strip);
 }
 
@@ -323,22 +327,27 @@ function renderContactList(box,people,withSignedImages=false) {
 }
 async function loadContacts() {
   const box=document.querySelector('#pl-msg-contacts');
-  const {data:rows,error}=await db.from('user_follows').select('follower_id,following_id,status')
-    .eq('status','accepted').or('follower_id.eq.'+currentUser.id+',following_id.eq.'+currentUser.id);
+  const {data:ownMemberships,error}=await db.from('user_conversation_members')
+    .select('conversation_id').eq('user_id',currentUser.id);
   if(error) {
     try {
       const cached=JSON.parse(localStorage.getItem(contactsKey())||'[]');
       contactsCache=cached;
       renderContactList(box,cached,false);await renderPeopleStrip(cached,false);
-      if(!cached.length&&box)box.innerHTML='<p class="pl-msg-empty">Contacts are not cached on this device. Connect to the internet to load them.</p>';
+      if(!cached.length&&box)box.innerHTML='<p class="pl-msg-empty">Kontak Inbox belum tersimpan di perangkat ini. Hubungkan internet untuk memuatnya.</p>';
     } catch { if(box)box.textContent='Kontak offline tidak tersedia.'; }
     return;
   }
-  const ids=[...new Set((rows||[]).map(row=>row.follower_id===currentUser.id?row.following_id:row.follower_id).filter(id=>id!==currentUser.id))];
+  const conversationIds=[...new Set((ownMemberships||[]).map(row=>row.conversation_id))];
+  const {data:memberRows,error:memberError}=conversationIds.length
+    ? await db.from('user_conversation_members').select('user_id').in('conversation_id',conversationIds)
+    : {data:[],error:null};
+  if(memberError){if(box)box.textContent=memberError.message;return;}
+  const ids=[...new Set((memberRows||[]).map(row=>row.user_id).filter(id=>id!==currentUser.id))];
   if(!ids.length) {
     contactsCache=[];
     try{localStorage.setItem(contactsKey(),'[]');}catch{}
-    if(box)box.innerHTML='<p class="pl-msg-empty">Contacts appear when accounts are connected. You can also search for a username above.</p>';
+    if(box)box.innerHTML='<p class="pl-msg-empty">Belum ada kontak percakapan. Cari username untuk memulai chat baru.</p>';
     await renderPeopleStrip([],false);return;
   }
   const {data:profiles,error:profileError}=await db.rpc('get_user_profile_directory_by_ids',{p_ids:ids});
@@ -392,10 +401,10 @@ export async function bindMessagesPage() {
     const query=String(new FormData(search).get('q')||'').trim().replace(/^@/,'').replace(/[(),]/g,' ').replace(/\s+/g,' ').trim();
     const box=app.querySelector('#pl-msg-search-results');
     if(query.length<2){box.hidden=false;box.innerHTML='<p class="pl-msg-search-hint">Type at least two characters to search.</p>';return;}
-    const {data,error}=await db.from('user_profiles').select('id,display_name,username').or('username.ilike.%'+query+'%,display_name.ilike.%'+query+'%').neq('id',user.id).limit(8);
+    const {data,error}=await db.from('user_profiles').select('id,display_name,username').or('username.ilike.%'+query+'%,display_name.ilike.%'+query+'%').limit(8);
     if(error){box.hidden=false;box.textContent=error.message;return;}
     box.hidden=false;
-    box.innerHTML=data?.length?data.map(person=>'<button class="pl-msg-contact" data-start-chat="'+person.id+'"><b>'+esc(person.display_name||person.username)+'</b><small>@'+esc(person.username)+'</small><span>Message</span></button>').join(''):'<p class="pl-msg-search-hint">No accounts found.</p>';
+    box.innerHTML=data?.length?data.map(person=>'<button class="pl-msg-contact" data-start-chat="'+person.id+'"><b>'+esc(person.id===user.id?'Pesan ke diri sendiri':person.display_name||person.username)+'</b><small>@'+esc(person.username)+(person.id===user.id?' · Akun Anda':'')+'</small><span>'+(person.id===user.id?'Message yourself':'Message')+'</span></button>').join(''):'<p class="pl-msg-search-hint">Tidak ada akun yang ditemukan.</p>';
     bindStartChat(box);
   };
   app.querySelector('[data-new-chat]')?.addEventListener('click',()=>{const field=app.querySelector('#pl-msg-search input');field?.focus();field?.scrollIntoView({block:'nearest'});});
@@ -534,7 +543,7 @@ async function loadConversations() {
   if(navigator.onLine&&ids.length) await Promise.all(ids.map(conversationId=>db.rpc('mark_conversation_delivered',{p_conversation_id:conversationId})));
   if(!ids.length){conversationCache=[];list.innerHTML=emptyStateMarkup({variant:'message',title:activeInboxTab==='unread'?'Tidak ada pesan belum dibaca':'Belum ada percakapan',description:activeInboxTab==='unread'?'Semua percakapan sudah dibaca.':'Pilih kontak atau cari nama pengguna untuk memulai percakapan.'});return;}
   const [convs,memberRows,msgRows,unreadRows]=await Promise.all([
-    db.from('user_conversations').select('id,title,updated_at').in('id',ids).order('updated_at',{ascending:false}),
+    db.from('user_conversations').select('id,title,direct_key,updated_at').in('id',ids).order('updated_at',{ascending:false}),
     db.from('user_conversation_members').select('conversation_id,user_id,last_read_at').in('conversation_id',ids),
     db.from('user_messages').select('id,conversation_id,body,sender_id,created_at,message_type,deleted_at').in('conversation_id',ids).order('created_at',{ascending:false}).limit(200),
     db.rpc('get_unread_conversation_ids')
@@ -561,7 +570,9 @@ async function loadConversations() {
     const unread=unreadRows.error
       ? (msgRows.data||[]).some(message=>message.conversation_id===conversation.id&&!message.deleted_at&&!hiddenPreviewIds.has(message.id)&&message.sender_id!==currentUser.id&&(!self?.last_read_at||new Date(message.created_at)>new Date(self.last_read_at)))
       : new Set((unreadRows.data||[]).map(row=>row.conversation_id)).has(conversation.id);
-    return {...conversation,other:pmap.get(other?.user_id)||{display_name:'Akun Pluits',username:'akun'},last,unread};
+    const isSelfConversation=conversation.direct_key==='self:'+currentUser.id;
+     const otherProfile=isSelfConversation?{...currentProfile,display_name:'Pesan untuk diri sendiri',is_self:true}:pmap.get(other?.user_id)||{display_name:'Akun Pluits',username:'akun'};
+     return {...conversation,other:otherProfile,last,unread};
   });
   try { localStorage.setItem(threadsKey(),JSON.stringify(conversationCache.map(item=>({id:item.id,updated_at:item.updated_at,other:item.other,unread:item.unread})))); } catch {}
   const visibleConversations=activeInboxTab==='unread'?conversationCache.filter(item=>item.unread):conversationCache;
@@ -635,7 +646,7 @@ async function openConversation(id) {
   const queued=queueFor(id);
   const preferences=getInboxPreferences();
   chat.dataset.theme=preferences.theme;chat.dataset.fontSize=preferences.fontSize;
-  chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Inbox">‹</button><span class="pl-msg-chat-avatar" data-chat-avatar>'+contactAvatar(thread?.other||{display_name:'P'})+'</span><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+' · <span id="pl-msg-chat-presence">'+(thread?.other?.id&&onlineUserIds.has(thread.other.id)?'Online':'Tidak online')+'</span></small></div><details class="pl-msg-contact-menu" data-contact-menu><summary aria-label="Opsi kontak"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></summary><div><button type="button" data-contact-action="report" data-user-id="'+esc(thread?.other?.id||'')+'">Laporkan akun</button><button type="button" data-contact-action="block" data-user-id="'+esc(thread?.other?.id||'')+'">Blokir akun</button></div></details></header>'+
+  chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Inbox">‹</button><span class="pl-msg-chat-avatar" data-chat-avatar>'+contactAvatar(thread?.other||{display_name:'P'})+'</span><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+' · <span id="pl-msg-chat-presence">'+(thread?.other?.is_self?'Catatan pribadi':thread?.other?.id&&onlineUserIds.has(thread.other.id)?'Online':'Tidak online')+'</span></small></div>'+(thread?.other?.is_self?'':'<details class="pl-msg-contact-menu" data-contact-menu><summary aria-label="Opsi kontak"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></summary><div><button type="button" data-contact-action="report" data-user-id="'+esc(thread?.other?.id||'')+'">Laporkan akun</button><button type="button" data-contact-action="block" data-user-id="'+esc(thread?.other?.id||'')+'">Blokir akun</button></div></details>')+'</header>'+
     '<div class="pl-msg-stream">'+(visibleMessages.length?visibleMessages.map(message=>messageMarkup(message,false,receiptByMessage.get(message.id))).join('') : emptyStateMarkup({variant:'message',title:'Belum ada pesan',description:'Kirim pesan pertama untuk memulai percakapan.'}))+queued.map(row=>messageMarkup(row,true)).join('')+'</div>'+
     '<div class="pl-msg-selection-bar" data-selection-bar hidden><span data-selection-count>0 dipilih</span><button type="button" data-selection-forward>Teruskan</button><button type="button" data-selection-delete>Hapus</button><button type="button" data-selection-cancel>Batal</button></div>'+
     '<form id="pl-msg-compose"><input id="pl-msg-attachment-input" type="file" hidden multiple accept="image/jpeg,image/png,image/webp,image/gif,application/pdf,text/plain,application/zip,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"><button type="button" class="pl-msg-attach" data-attachment-trigger aria-label="Lampirkan foto atau dokumen" title="Lampirkan foto atau dokumen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 12.5 7.8-7.8a4 4 0 0 1 5.7 5.7l-9.9 9.9a6 6 0 0 1-8.5-8.5l9.2-9.2"/></svg></button><textarea name="body" rows="1" maxlength="5000" placeholder="Ketik pesan"></textarea><button type="button" class="pl-msg-voice" data-voice-record aria-label="Rekam pesan suara" title="Pesan suara"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8"/></svg></button><button type="submit" class="pl-msg-send" aria-label="Kirim pesan" title="Kirim"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12 16-8-6 16-3-6-7-2Z"/><path d="m11 14 9-10"/></svg></button></form>'+
