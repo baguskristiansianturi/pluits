@@ -1466,7 +1466,7 @@ This rollback reopens access to customer/order/payment metadata for every active
 - Public base tables: 69/69 have RLS enabled.
 - Public views: 3/3 use `security_invoker=true`.
 - Storage buckets: 3/3 private.
-- Live migration history: 106 entries.
+- Live migration history: 108 entries.
 - Security Advisor: 22 authenticated-callable SECURITY DEFINER warnings; leaked-password protection disabled.
 - Performance Advisor: 2 auth RLS init-plan warnings, 2 multiple-permissive-policy warnings, 1 unindexed FK INFO, 87 unused-index INFO; Health Advisor: 0 lints.
 - Edge Functions deployed: 0.
@@ -1478,7 +1478,7 @@ This rollback reopens access to customer/order/payment metadata for every active
 - Same name with timestamp mismatch: 20.
 - Live names without exact repository filename: 30.
 - Repository filenames without a matching live migration name: 23.
-- The newest migration CP-091 has an exact file/history match.
+- The three 15 November migrations have exact file/history matches.
 - **Do not run Supabase CLI migration push/replay/reset or bulk repair** until all 106 definitions are reconciled with `supabase_migrations.schema_migrations.statements`. Preserve the live database and existing migration files.
 
 ### Production data review
@@ -1506,3 +1506,18 @@ This rollback reopens access to customer/order/payment metadata for every active
 - Updated GitHub Actions build-output verification to require the manifest, 192px icon, 512px icon and Apple touch icon in `dist/`.
 - Latest verified deployment: commit `61d632b544541a901485cc6f54e85b2558d5a0f3`; workflow `43714307219` (#2188) SUCCESS; 150/150 tests passed.
 - Actual Chrome Android / iOS Add to Home Screen test remains NOT TESTED. The PWA has no offline app-shell/service worker; do not claim full offline support.
+
+
+## CP-094 — Protect moderation state and report action semantics (15 November 2026)
+
+**Status:** IMPLEMENTED · LIVE DATABASE TESTED · FRONTEND DEPLOYMENT PENDING
+
+- Found that `user_posts_update_self` allowed an owner to change `moderation_status`, which could restore a moderator-removed post to `published`.
+- Applied migration `20261115123634_protect_user_post_moderation_status`: a private, non-SECURITY-DEFINER trigger function forces normal-user inserts to the existing `published` default and rejects owner-side moderation-status changes. Moderator/admin app_metadata and service_role actions remain allowed.
+- A rollback-safe temporary-table SQL test confirmed normal-user insert normalization, normal-user update rejection (SQLSTATE 42501), and moderator update success. The transaction was rolled back.
+- Found that `review_content_report(..., 'actioned')` silently closed user-account reports without applying account enforcement.
+- Applied migration `20261115123729_prevent_false_actioned_user_reports`: user-target reports cannot be marked actioned until account-level enforcement/appeal exists. Moderation UI now explains this and removes the false action button.
+- A rollback-safe SQL test created a temporary report row, confirmed the RPC rejects false actioned state, confirmed review state still works, and rolled back.
+- No user post, account or report data was modified by verification.
+- **Important product gap:** new posts still publish immediately; pre-publication moderation is not implemented. Founder must decide whether this is acceptable for Social First Release.
+- Matching SQL files are committed; migration parity remains blocked for CLI push/replay.
