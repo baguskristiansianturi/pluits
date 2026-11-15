@@ -1324,3 +1324,15 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - **Status:** DATABASE MIGRATIONS APPLIED / FRONTEND IMPLEMENTED / AUTOMATED TESTED / PRODUCTION DEPLOYED / ANDROID UAT NOT TESTED / FOUNDER ACCEPTANCE PENDING.
 - **Remaining:** crawler-readable Open Graph metadata, comment reporting/moderation UI, comment/reply notification preferences, institutional News & Media identities, and exhaustive two-account privacy UAT remain future work.
 - **Next:** open PR, inspect full CI output and fix any failures; merge only after CI success; verify main push workflow and live Pages URL; then founder tests template switch/persistence, block order, comments/replies, delete permissions, and public/private isolation on Android.
+
+
+## CP-083 — Jelajah search-first visual discovery grid (15 November 2026)
+
+- **PR:** #29 — https://github.com/baguskristiansianturi/pluits/pull/29
+- **Branch:** `fix/explore-discovery-grid-mobile`.
+- **Founder-approved scope:** search bar sederhana di bagian atas, carousel horizontal kategori/filter, grid media tiga kolom mobile dengan rasio 4:5, avatar kreator kecil, ikon media profesional, serta video autoplay muted/loop ketika terlihat dan pause ketika tidak terlihat.
+- **Frontend IMPLEMENTED IN BRANCH:** feature module baru `src/features/discovery/explore-grid.js` dan `explore-grid.css`; Account Explore dirender sebagai discovery grid, bukan susunan blok Circle. Pemanggilan data untuk Story, rekomendasi orang, profil rekomendasi, dan Top 10 yang tidak tampil pada Jelajah dihapus dari jalur feed. Hydrasi Explore dapat melewati query Story tanpa mengubah pemakaian hydrator di halaman lain.
+- **Privacy/performance:** tetap menggunakan postingan publik yang lolos moderation, mematuhi block/mute/hidden-content, memakai signed media URLs yang sudah ada, tidak membuat angka view atau engagement palsu, dan hanya satu video diputar pada satu waktu.
+- **Backend/database:** tidak ada perubahan schema, migration, atau data produksi.
+- **Validation:** automated CI/build NOT VERIFIED; Pages NOT DEPLOYED; Android real-device UAT NOT TESTED; founder acceptance PENDING.
+- **Next:** tunggu PR CI, periksa build dan regression suite, lalu release dan verifikasi Pages. Setelah itu uji dari Android pada lebar 360/390 px, scroll grid, autoplay/pause video, kategori, search, dan navigasi ke detail post.
