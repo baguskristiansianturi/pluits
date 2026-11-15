@@ -325,14 +325,27 @@ New policy behavior:
 
 ### Migration parity — do not use Supabase CLI push until reconciled
 A current comparison found:
-- Live migration history: 106 entries.
-- Repository `supabase/migrations/`: 99 SQL files.
-- Exact version + name matches: 56.
+- Live migration history: 108 entries.
+- Repository `supabase/migrations/`: 101 SQL files.
+- Exact version + name matches: 58.
 - Same name but different timestamp prefix: 20.
 - Live migration names without an exact repository filename: 30.
 - Repository files with no matching live migration name: 23.
 
-The new 15 November migration has an exact version/name/file match. The older mismatches must be reconciled against `supabase_migrations.schema_migrations.statements` before running `supabase db push`, migration replay, reset, or bulk repair. Do not delete or rewrite applied migration history. The 7 November parity note above is historical and no longer proves current parity.
+The three 15 November migrations have exact version/name/file matches. The older mismatches must be reconciled against `supabase_migrations.schema_migrations.statements` before running `supabase db push`, migration replay, reset, or bulk repair. Do not delete or rewrite applied migration history. The 7 November parity note above is historical and no longer proves current parity.
+
+### Post moderation state protection — applied 15 November
+- Prior owner UPDATE policy allowed the author to change `user_posts.moderation_status`, including restoring a moderator-removed post to `published`.
+- Applied migration `20261115123634_protect_user_post_moderation_status` adds a private, non-SECURITY-DEFINER trigger function with an empty search_path.
+- Normal user INSERT preserves current behavior by setting status to `published`; normal users cannot change the moderation state on UPDATE. Only app_metadata admin/moderator or service_role can change it.
+- Trigger existence, role behavior and SQLSTATE rejection were tested using a temporary table inside a transaction that was rolled back.
+- This does not implement pre-publication review; new posts still publish immediately and moderation remains report/review based.
+
+### User-report action state — applied 15 November
+- Prior `review_content_report` accepted `actioned` for `target_type='user'` but did not apply any account-level action.
+- Applied migration `20261115123729_prevent_false_actioned_user_reports` rejects that false-success transition.
+- Moderation UI now leaves user reports in review/dismiss states and clearly labels account enforcement as unavailable.
+- RPC behavior was tested with a temporary report row in a transaction that was rolled back.
 
 ### Remaining authorization and launch tests
 - Run anonymous, buyer, unrelated authenticated user, owner, manager, catalog, orders, accounting, explicit-grant staff and revoked-staff tests against real test identities.
