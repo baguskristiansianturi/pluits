@@ -8,12 +8,16 @@ Jelajah is public discovery. It combines published public posts from personal an
 Both use canonical content records; their candidate selection and ranking are separate.
 
 ## Circle composition
-Order:
-1. Circle Anda heading and short description.
-2. Story circles from followed accounts with active public Stories.
-3. Orang yang Mungkin Anda Kenal.
-4. Postingan feed.
-5. Nearby/local directory, discovery links, and local product/service collections below the feed.
+Current composition order:
+1. Top 10 Trending, only when real eligible directory/post activity produces a ranking; otherwise the section is omitted.
+2. Nearby/local discovery based on the user's current device location.
+3. Orang yang Mungkin Anda Kenal, using real eligible profiles only.
+4. Story Ring Rail from followed accounts with active public Stories.
+5. Sticky feed filters and the Circle heading.
+6. Real post feed.
+7. Discovery links, local products, services and article collections after the feed.
+
+This order reflects the current deployed Circle composition and its regression tests. Empty datasets must produce an honest empty state or omit the section; never fill the space with fabricated users, Stories, products or trending subjects.
 
 The feed toolbar stays sticky while posts scroll. Controls are Semua, Terbaru, Acak and Kategori.
 The Circle carousel does not show the viewer's own Story or a create-Story action. Story creation remains in the existing Buat flow.
@@ -32,8 +36,8 @@ Categories are derived from actual post tags. Sorting offers Sedang populer, Ter
 The current popularity heuristic uses actual like/comment counts within a bounded candidate window plus freshness. It is not a validated viral recommender, verified-news ranking, or disaster/event-priority ranking. No AI moderation service was activated by this change.
 
 ## Integrity and social proof
-The existing Top 10 renderer contains demo-only content and is not shown as live trending in Circle.
-A real area-based Top 10 requires a trusted data source, region definition, eligibility rules, ranking, abuse resistance and observability.
+Top 10 now queries live Bali directory entities and public published posts linked to those entities within the recent activity window. It renders only eligible rows with real signals and returns no section when the result set is empty. There is no synthetic fallback or hardcoded sample venue list.
+This is an initial activity-based ranking, not a validated viral recommender, verified-news ranking, or disaster/event-priority ranking. It still requires abuse resistance, observability and UAT before its ranking quality can be claimed.
 Social-proof labels such as “Ratna pernah berkunjung”, “teman membeli produk ini” or “teman menggunakan layanan ini” are approved product direction but NOT IMPLEMENTED. They require canonical evidence, explicit sharing consent, RLS-safe aggregates and separate visit/purchase/service rules. GPS presence alone is not proof.
 
 ## Architecture and ownership
@@ -80,3 +84,17 @@ The Story carousel is a **full-bleed horizontal Story Ring Rail**, not a card ca
 
 ### Carousel interaction parity (14 November 2026)
 The Story Ring Rail uses the same native horizontal carousel interaction pattern as `Orang yang Mungkin Anda Kenal`: flex row without wrapping, horizontal overflow, momentum scrolling on touch, hidden scrollbar, and mandatory start snapping. Story-specific sizing remains independent: three visible rings on mobile with 2px spacing. Swiping Story must feel the same as swiping the People Recommendations cards; tapping a Story still opens the Story Viewer and must not be repurposed as carousel navigation.
+
+
+## Production integrity update — 15 November 2026
+
+The live Circle path no longer imports or renders synthetic recommendation profiles, Story cards, local-product samples, or fabricated Top 10 fallback entries. Marketplace product detail also no longer resolves local showcase products as if they were catalog records. Regression tests enforce real backend data or honest empty/error states.
+
+Deployment evidence:
+- Commit: `8f4245bcf5ff158ade4e04dbeafbd44e61c925cb`
+- GitHub Actions run: `43713663249` (#2176), SUCCESS
+- Automated tests: 148 passed, 0 failed
+- Vite production build and output verification: SUCCESS
+- GitHub Pages artifact upload and deployment: SUCCESS
+- Android UAT: NOT TESTED
+- Founder acceptance: PENDING
