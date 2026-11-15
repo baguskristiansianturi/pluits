@@ -1339,3 +1339,31 @@
 .pl-msg-status.is-delivered{color:#8b98a6!important}
 .pl-msg-status.is-read{color:#2587d5!important}
 .pl-msg-bubble{ -webkit-touch-callout:none; }
+
+
+/* WhatsApp Business-inspired workspace: desktop split view and mobile full-screen chat. */
+@media (min-width:761px){
+ .pl-msg{background:#edf1f4}
+ .pl-msg-content{width:min(100%,1440px);padding:18px 22px 28px}
+ .pl-msg-layout{grid-template-columns:minmax(300px,380px) minmax(0,1fr);height:min(780px,calc(100dvh - 190px));min-height:560px;border:1px solid #dfe5e9;border-radius:10px;box-shadow:0 2px 10px #1b34450d}
+ .pl-msg-sidebar{display:flex;flex-direction:column;min-height:0;padding:0;border-right:1px solid #e6ebef}
+ .pl-msg-sidebar>*{flex-shrink:0}
+ .pl-msg-sidebar [data-conversation-list],.pl-msg-sidebar #pl-msg-conversations{min-height:0;overflow-y:auto;overscroll-behavior:contain}
+ .pl-msg-chat{min-height:0;height:100%;background:#f4f1eb}
+ .pl-msg-chat-head{flex:0 0 64px;min-height:64px;background:#f8fafb;border-bottom-color:#e5eaee}
+ .pl-msg-stream{max-height:none;min-height:0;background-color:#efeae2;background-image:radial-gradient(#d8d2c8 0.65px,transparent 0.65px);background-size:16px 16px;padding:22px clamp(18px,3vw,42px)}
+ .pl-msg-bubble{max-width:min(72%,620px);padding:9px 12px;border-radius:8px 8px 8px 2px;box-shadow:0 1px 1px #172b4510;font-size:13px}
+ .pl-msg-bubble.mine{border-radius:8px 8px 2px 8px;background:#e0f2dc;border-color:#d6e9d1}
+ #pl-msg-compose{flex:0 0 auto;gap:10px;padding:12px 18px;background:#f7f9fa;border-top-color:#e5eaee}
+ #pl-msg-compose textarea{min-height:44px;max-height:140px;border-radius:22px;background:#fff;padding:12px 16px;font-size:13px}
+ #pl-msg-compose button{width:42px;min-width:42px;height:42px;min-height:42px;padding:0;border-radius:50%}
+ .pl-msg-chat-status{background:#f7f9fa}
+}
+@media(max-width:760px){
+ .pl-msg-layout.is-chat-open .pl-msg-stream{background-color:#efeae2;background-image:radial-gradient(#d8d2c8 0.55px,transparent 0.55px);background-size:15px 15px}
+ .pl-msg-layout.is-chat-open .pl-msg-bubble{max-width:88%;padding:8px 10px;border-radius:9px 9px 9px 2px;font-size:13px}
+ .pl-msg-layout.is-chat-open .pl-msg-bubble.mine{border-radius:9px 9px 2px 9px;background:#e0f2dc;border-color:#d6e9d1}
+ .pl-msg-layout.is-chat-open #pl-msg-compose{gap:7px;background:#f2f4f5}
+ .pl-msg-layout.is-chat-open #pl-msg-compose textarea{min-height:42px;max-height:112px;border-radius:22px;background:#fff;padding:10px 14px}
+ .pl-msg-layout.is-chat-open #pl-msg-compose button{width:40px;min-width:40px;height:40px;min-height:40px;padding:0;border-radius:50%}
+}
