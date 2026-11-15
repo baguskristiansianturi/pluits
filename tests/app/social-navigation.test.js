@@ -22,8 +22,8 @@ test('signed-in social bottom navigation points to the intended pages',()=>{
 
 test('guest profile navigation opens Login instead of a private profile',()=>{
  const html=renderSocialMobileNav({active:'discover',user:null});
- assert.match(html,/href="#\\/account\\/login"[^>]*aria-label="Profil"/);
- assert.doesNotMatch(html,/href="#\\/account\\/profile"/);
+ assert.ok(html.includes('href="#/account/login"') && html.includes('aria-label="Profil"'),'Guest Profile must link to Login.');
+ assert.ok(!html.includes('href="#/account/profile"'),'Guest navigation must not link to a private profile.');
 });
  
 test('Inbox replaces its fourth slot with notifications but keeps profile separate',()=>{
