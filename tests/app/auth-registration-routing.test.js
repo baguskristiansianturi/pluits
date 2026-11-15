@@ -17,7 +17,7 @@ test('registration is delegated to its own feature and remains reachable before 
   assert.match(feature, /resetPasswordForEmail/);
   assert.match(feature, /updateUser\(\{ password \}\)/);
   assert.match(feature, /signInWithPassword/);
-  assert.match(feature, /account\/auth\?mode=forgot/);
+  assert.match(feature, /login\/\?mode=forgot/);
   assert.match(feature, /supabase\.auth\.signUp/);
   assert.match(feature, /supabase\.auth\.resend/);
   assert.match(feature, /emailRedirectTo:\s*appBase/);
