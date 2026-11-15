@@ -56,7 +56,7 @@ That is not the same as launch acceptance. The release still lacks founder Andro
 | Public views | 3/3 use `security_invoker=true` |
 | Storage | 3/3 buckets private |
 | Edge Functions | 0 deployed |
-| Live migrations | 106 |
+| Live migrations | 108 |
 | Health Advisor | 0 lints |
 
 ### Security Advisor
@@ -110,6 +110,7 @@ The draft store/product are not eligible for the public catalog under the curren
 5. **Auth security:** enable leaked-password protection in Supabase Auth and test sign-up/password-change behavior.
 6. **Legal publication gate:** Privacy Policy, Terms and Community Guidelines are currently internal drafts marked NOT PUBLISHED / LEGAL REVIEW REQUIRED. Reconcile the data inventory, retention, user rights, operator identity, age/jurisdiction rules and moderation commitments; obtain appropriate legal review before publishing final terms.
 7. **Founder acceptance:** record device/browser, test steps, expected/actual result and explicit ACCEPTED status.
+8. **Migration parity:** reconcile the 108 live migrations with the 101 repository SQL files before any future Supabase CLI push/replay/reset or schema repair. Current frontend deploy does not require a schema replay.
 
 ### P1 — close or clearly label before broader promotion
 - **Friend-first DM mismatch:** current RPC allows any signed-in user to start a conversation with a public profile; only private profiles require an accepted follow. This does not match the documented friend-first rule. Define the qualifying relationship (accepted follow, mutual follow, or explicitly open DMs) and enforce it server-side.
@@ -117,7 +118,8 @@ The draft store/product are not eligible for the public catalog under the curren
 - Verify global unread notification badge, notification routing/deep links and announcement recipient targeting.
 - Verify SMS provider for phone OTP and TOTP enrollment/verification; otherwise label unavailable.
 - Complete English translation before claiming a fully bilingual experience.
-- Define and staff human moderation/appeal operations. No AI moderation pipeline is currently evidenced as active.
+- Define and staff human moderation/appeal operations. No AI moderation pipeline is currently evidenced as active; user-account suspension/enforcement and appeal workflow are not implemented.
+- Add an append-only audit trail for moderator actions and system-announcement publish/archive events; current report rows store reviewer metadata, but no general moderation/announcement audit log was found.
 - Measure responsive behavior, accessibility, upload/playback performance and error rates across the device matrix.
 - Verify backup/PITR, recovery, monitoring, incident response, rate limits and operational support coverage.
 
@@ -131,6 +133,8 @@ The draft store/product are not eligible for the public catalog under the curren
 
 The Marketplace read-policy migration changes authorization policies only; it does not alter data or table structure. Emergency rollback would restore the previous buyer-or-active-store-member read behavior. That rollback would weaken least privilege by allowing active catalog/general staff to read order/payment data. It must require explicit approval and should not be used as a routine workaround.
 
+The post moderation guard can be rolled back only by dropping `user_posts_guard_moderation_status` and `private.guard_user_post_moderation_status()`; doing so reopens the owner-side moderation-status bypass. The user-report action guard can be rolled back by restoring the previous `review_content_report` body; doing so allows a user report to be marked actioned without account enforcement. Neither rollback was executed.
+
 No rollback was executed. No user content was deleted or rewritten.
 
 ## 7. Final release classification
@@ -139,7 +143,7 @@ No rollback was executed. No user content was deleted or rewritten.
 |---|---|
 | Frontend implementation | IMPLEMENTED |
 | Exact verified commit deployment | DEPLOYED |
-| Automated regression/build | TESTED — 148/148 |
+| Automated regression/build | TESTED — 154/154 |
 | Supabase metadata and advisor inspection | TESTED |
 | Two-account authorization/Realtime | NOT TESTED |
 | Android real-device UAT | NOT TESTED |
