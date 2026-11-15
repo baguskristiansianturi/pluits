@@ -230,8 +230,9 @@ async function profilePage(preview=false,editMode=false){
 function bindProfileMenu(){bindSocialHeaderMenu();}
 
 function bindProfileTabs(){
+ if(!document.querySelector('.ua-profile-tabs'))return;
  bindAccountProfileTabs({
-  ownPosts,profileReels,postGrid,loadBlog:profileBlogMarkup,escapeHtml:esc
+  ownPosts:profilePosts,profileReels,postGrid,loadBlog:profileBlogMarkup,escapeHtml:esc
  });
 }
 async function profileBlogMarkup(){
