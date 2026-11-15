@@ -377,9 +377,9 @@ assert.match(discoveryStyles, /\.ds-video-poster-placeholder/, 'Video tiles must
 
 
 const routeSource = read('src/app/router.js');
-const accountSource = read('src/pages/account/index.js');
+const circleAccountSource = read('src/pages/account/index.js');
 assert.match(routeSource, /else if\(r==='circle'\)[\s\S]*location\.hash='#\/account\/explore'/, 'The public Circle alias must redirect to the canonical personalized Circle feed.');
-assert.match(accountSource, /if\(\['circle','home','feed'\]\.includes\(section\)\)section='explore'/, 'Account route aliases for Circle must never fall through to the Profile page.');
+assert.match(circleAccountSource, /if\(\['circle','home','feed'\]\.includes\(section\)\)section='explore'/, 'Account route aliases for Circle must never fall through to the Profile page.');
 const canonicalRoutes = read('src/components/social/navigation-routes.js');
 assert.match(canonicalRoutes, /home:\s*'#\/account\/explore'/, 'Circle navigation must use the canonical account Explore route.');
 assert.match(canonicalRoutes, /discover:\s*'#\/search'/, 'Jelajah must remain a separate public discovery route.');
