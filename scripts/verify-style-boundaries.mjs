@@ -47,7 +47,7 @@ for (const file of files) {
   // At-rules and keyframe percentage steps are not page selectors.
   for (const match of css.matchAll(/(?:^|[{}])\s*([^@{}][^{}]*)\s*\{/g)) {
     const selectorBlock = match[1].trim();
-    if (!selectorBlock) continue;
+    if (!selectorBlock || selectorBlock.startsWith('@')) continue;
     for (const selector of splitSelectorList(selectorBlock)) {
       if (keyframeStep.test(selector)) continue;
       if (!allowedRoots.test(selector)) {
