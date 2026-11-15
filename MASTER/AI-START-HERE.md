@@ -116,12 +116,13 @@ Rincian dan batas bukti: docs/pluits/SOCIAL-AND-STORE-UAT-READINESS-AUDIT-2026-1
 - Wallet remains an account/request scaffold, not a real-money ledger, settlement or payout system.
 
 ### Current deployed frontend
-- Latest verified deployed commit: `61d632b544541a901485cc6f54e85b2558d5a0f3`.
-- GitHub Actions run `43714307219` (#2188): SUCCESS.
-- Automated tests: 150/150 passed; Vite production build, PWA asset output verification, Pages artifact upload and Pages deployment succeeded.
+- Latest verified deployed commit: `6d53909ef799a278023dd7ef63c1b6d460ca7ccf`.
+- GitHub Actions run `43714961593` (#2208): SUCCESS.
+- Automated tests: 154/154 passed; Vite production build, PWA asset output verification, Pages artifact upload and Pages deployment succeeded.
 - Active Circle no longer renders synthetic people, Story, local-product or Top 10 fallback content. Marketplace product detail no longer serves a local showcase product as a real listing.
 - Marketplace order reads now require buyer ownership or store order/payment permission; payment metadata reads require buyer ownership or `payments.manage`. Applied migration: `20261115122348_enforce_marketplace_order_payment_read_permissions`.
 - Post owners can no longer change `moderation_status` after creation; moderator/admin and service-role actions remain allowed. Normal user posts still default to `published`, so pre-publication moderation is not implemented.
+- User-target reports cannot be marked `actioned` until account-level enforcement exists; the admin UI explains the limitation. SQL rollback tests passed.
 - User-target reports cannot be marked `actioned` until account suspension/enforcement exists; moderation UI explains this. The report RPC was tested in a rollback transaction.
 - Supabase browser SDK is pinned to `@supabase/supabase-js@2.119.0`; it is still loaded from the esm.sh CDN, not bundled locally.
 - PWA manifest now includes 192px and 512px PNG icons plus SVG fallback; iOS Apple touch icon is a 180px PNG. Actual Android/iOS install flow remains NOT TESTED; no offline app-shell/service worker is claimed.
