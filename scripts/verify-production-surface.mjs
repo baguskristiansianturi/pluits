@@ -91,6 +91,16 @@ const messages = read('src/pages/messages/index.js');
 assert.match(messages, /postgres_changes/, 'DM inbox must subscribe to realtime messages.');
 assert.match(messages, /client_message_id/, 'DM outbox must use idempotent message identifiers.');
 assert.match(messages, /flushOutbox/, 'DM outbox must retry queued messages after connectivity returns.');
+assert.match(messages, /get_unread_conversation_ids/, 'Inbox unread filtering must use the authoritative database query.');
+assert.match(messages, /mark_conversation_delivered/, 'Inbox must acknowledge delivered messages.');
+assert.match(messages, /mark_message_played/, 'Voice notes must publish a played receipt.');
+assert.match(messages, /undo_hide_message_for_me/, 'Delete-for-me must provide a server-enforced undo path.');
+assert.match(messages, /delete_message_for_everyone/, 'Delete-for-everyone must use the protected server RPC.');
+const inboxMessageUI = read('src/features/inbox/message-ui.js');
+assert.match(inboxMessageUI, /Terkirim ke server/, 'Outgoing messages must expose the sent state.');
+assert.match(inboxMessageUI, /Terkirim ke perangkat/, 'Outgoing messages must expose the delivered state.');
+assert.match(inboxMessageUI, /Dibaca/, 'Outgoing messages must expose the read state.');
+
 assert.match(messages, /contactsKey/, 'DM contacts must be cached for offline access.');
 assert.match(messages, /openDraftConversation/, 'A new DM can be drafted offline from a cached contact.');
 assert.match(messages, /recipient_user_id/, 'Offline new-conversation drafts must resolve their recipient when reconnecting.');
