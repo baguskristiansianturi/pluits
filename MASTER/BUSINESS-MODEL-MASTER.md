@@ -954,7 +954,7 @@ Spesifikasi lengkap, user journey, dashboard, status, URL, acceptance criteria d
 - Social proof pada kartu tempat, produk, dan layanan hanya boleh menyatakan kunjungan, pembelian, atau penggunaan jasa jika ada bukti yang benar dan izin berbagi. GPS saja bukan bukti kunjungan atau transaksi.
 - Peristiwa penting dan bencana membutuhkan ranking khusus yang mempertimbangkan kepentingan publik dan verifikasi, tidak hanya engagement. Ranking penting-event dan moderasi AI belum diimplementasikan pada increment ini.
 - Ranking live harus berasal dari data nyata. Renderer Top 10 yang berisi demo-only content tidak boleh ditampilkan sebagai ranking live.
-- Status implementasi: Circle layout, Story carousel publik dari akun yang diikuti, filter sticky, rekomendasi orang, dan Jelajah mixed public feed IMPLEMENTED/DEPLOYED. Social-proof cards, Story receipts/reactions/comments/deep links, area Top 10, event ranking, AI moderation pipeline, business request center, dan feedback center NOT IMPLEMENTED.
+- Status implementasi: Circle layout, Story carousel publik dari akun yang diikuti, filter sticky, rekomendasi orang, dan Jelajah mixed public feed IMPLEMENTED/DEPLOYED. Renderer Top 10 activity-based awal untuk area Bali IMPLEMENTED/DEPLOYED dan hanya menampilkan ranking dari sinyal direktori/post nyata; section disembunyikan jika tidak ada data. Ranking global per negara/kategori, social-proof cards, Story receipts/reactions/comments/deep links, event ranking, AI moderation pipeline, business request center, dan feedback center NOT IMPLEMENTED.
 - Rujukan teknis: docs/pluits/CIRCLE-AND-JELAJAH-EXPERIENCE-2026-11-12.md.
 
 
