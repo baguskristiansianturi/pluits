@@ -7,7 +7,8 @@ const AREAS = {
   badung: { label: 'Badung', lat: -8.58, lon: 115.177 },
   gianyar: { label: 'Gianyar', lat: -8.54, lon: 115.325 },
   tabanan: { label: 'Tabanan', lat: -8.54, lon: 115.125 },
-  singaraja: { label: 'Buleleng', lat: -8.112, lon: 115.088 }
+  singaraja: { label: 'Buleleng', lat: -8.112, lon: 115.088 },
+  bali: { label: 'Bali', lat: -8.4095, lon: 115.1889 }
 };
 const state = { lat: null, lon: null, area: '', radius: 15000, category: '', query: '', rows: [], categories: [], map: null, mapTarget: null, markers: [], mode: 'map', personalization: true };
 let homeNearbyRequest=0;
@@ -195,9 +196,9 @@ export function directoryPage() {
   return `<div class="pl-directory-page">
     <header class="pl-directory-top"><a href="#/" class="pl-directory-brand">PLUITS</a><nav><a href="#/">Beranda</a><a class="active" href="#/places">Direktori</a><a href="#/account/explore">Komunitas</a><a href="#/marketplace">Marketplace</a></nav><a class="pl-directory-profile" href="#/account/profile">Akun</a></header>
     <main class="pl-directory-main plds-container">
-      <section class="pl-directory-intro"><div><span>GEODIRECTORY PLUITS</span><h1>Temukan tempat di sekitarmu.</h1><p>Jelajahi tempat, usaha, layanan, komunitas, dan kegiatan dalam satu direktori.</p></div><div class="pl-directory-intro-actions"><button id="pl-use-location" type="button">⌖ Gunakan lokasi saya</button><label>Area<select id="pl-directory-area"><option value="denpasar">Denpasar</option><option value="current">Lokasi saya</option><option value="badung">Badung</option><option value="gianyar">Gianyar</option><option value="tabanan">Tabanan</option><option value="singaraja">Buleleng</option></select></label></div></section>
+      <section class="pl-directory-intro"><div><span>GEODIRECTORY PLUITS</span><h1>Temukan tempat di sekitarmu.</h1><p>Jelajahi tempat, usaha, layanan, komunitas, dan kegiatan dalam satu direktori.</p></div><div class="pl-directory-intro-actions"><button id="pl-use-location" type="button">⌖ Gunakan lokasi saya</button><label>Area<select id="pl-directory-area"><option value="denpasar">Denpasar</option><option value="bali">Seluruh Bali</option><option value="current">Lokasi saya</option><option value="badung">Badung</option><option value="gianyar">Gianyar</option><option value="tabanan">Tabanan</option><option value="singaraja">Buleleng</option></select></label></div></section>
       <section class="pl-directory-search"><form id="pl-directory-search-form"><input id="pl-directory-query" type="search" placeholder="Cari pantai, masjid, restoran, sekolah, toko…" aria-label="Cari direktori"><button type="submit">Cari</button></form><div class="pl-directory-categories" id="pl-directory-categories"></div></section>
-      <details class="pl-interest-settings"><summary>Atur minat rekomendasi</summary><label class="pl-personalization-toggle"><input id="pl-personalization-toggle" type="checkbox" checked> Gunakan personalisasi adaptif</label><div id="pl-interest-options" class="pl-interest-options">Masuk untuk menyimpan minat.</div></details><section class="pl-directory-toolbar"><div><h2>Jelajahi sekitar <span id="pl-directory-area-label">Denpasar</span></h2><p id="pl-directory-count">Memuat direktori…</p></div><div class="pl-directory-view"><button type="button" data-view="list">Daftar</button><button type="button" class="active" data-view="map">Peta</button><select id="pl-directory-radius" aria-label="Jangkauan pencarian"><option value="5000">5 km</option><option value="10000">10 km</option><option value="15000" selected>15 km</option><option value="25000">25 km</option><option value="50000">50 km</option></select></div></section>
+      <details class="pl-interest-settings"><summary>Atur minat rekomendasi</summary><label class="pl-personalization-toggle"><input id="pl-personalization-toggle" type="checkbox" checked> Gunakan personalisasi adaptif</label><div id="pl-interest-options" class="pl-interest-options">Masuk untuk menyimpan minat.</div></details><section class="pl-directory-toolbar"><div><h2>Jelajahi sekitar <span id="pl-directory-area-label">Denpasar</span></h2><p id="pl-directory-count">Memuat direktori…</p></div><div class="pl-directory-view"><button type="button" data-view="list">Daftar</button><button type="button" class="active" data-view="map">Peta</button><select id="pl-directory-radius" aria-label="Jangkauan pencarian"><option value="5000">5 km</option><option value="10000">10 km</option><option value="15000" selected>15 km</option><option value="25000">25 km</option><option value="50000">50 km</option><option value="100000">Seluruh Bali</option></select></div></section>
       <div class="pl-directory-map-shell"><div class="pl-map-stage pl-directory-map-stage"><div id="pl-directory-map" class="pl-geo-map" role="region" aria-label="Peta GeoDirectory interaktif"></div><div class="pl-map-floating-top"><span>Jelajahi titik lokasi</span><button type="button" data-map-globe="pl-directory-map">◎ Lihat Bumi</button></div><div class="pl-map-touch-hint">Geser · Zoom dengan dua jari · Putar peta dengan dua jari</div></div><section id="pl-directory-results" class="pl-directory-results" hidden></section></div>
       <p class="pl-directory-attribution">Data lokasi ditampilkan berdasarkan sumber dan status verifikasinya. Peta &copy; OpenStreetMap contributors.</p>
     </main>
@@ -262,6 +263,13 @@ export async function bindDirectoryPage() {
     const row=state.rows.find(item=>placeUrl(item.slug)===link.getAttribute('href'));if(row)logActivity('click',row.id);
   });
   await loadDiscoveryPreferences();
+  const region=new URLSearchParams((location.hash.split('?')[1]||'')).get('region');
+  if(region==='bali'){
+    state.area='bali';state.lat=AREAS.bali.lat;state.lon=AREAS.bali.lon;state.radius=100000;
+    const areaLabel=document.querySelector('#pl-directory-area-label');if(areaLabel)areaLabel.textContent='Bali';
+    const areaSelect=document.querySelector('#pl-directory-area');if(areaSelect)areaSelect.value='bali';
+    const radiusSelect=document.querySelector('#pl-directory-radius');if(radiusSelect)radiusSelect.value='100000';
+  }
   await bindInterestSettings();
   document.querySelector('#pl-personalization-toggle')?.addEventListener('change',event=>{state.personalization=event.target.checked;saveDiscoveryPreferences({use_personalization:state.personalization});refreshDirectory();});
   await refreshDirectory();
