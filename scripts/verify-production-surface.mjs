@@ -312,7 +312,7 @@ assert.match(postLayoutCss, /pluits-heart-core 1\.18s/, 'Main heart animation mu
 
 
 
-assert.ok(read('src/main.js').includes("history.replaceState(null, '', location.pathname + location.search + '#/')"), 'Legacy home aliases must normalize to the canonical public home URL.');
+assert.ok(read('src/main.js').includes("history.replaceState(null, '', SITE_BASE)"), 'Legacy home aliases must normalize to the canonical public home URL.');
 assert.ok(read('src/pages/home/index.js').includes("location.hash='#/account/explore'"), 'Authenticated users must enter the canonical signed-in Explore workspace from the root URL.');
 
 assert.ok(read('src/pages/account/index.js').includes('sorted.map(post=>postCard(post)).join(\'\')'),'The home feed must use the defined post-card renderer, not the Reel-only renderer.');
