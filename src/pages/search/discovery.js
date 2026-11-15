@@ -1,6 +1,6 @@
 import { supabase as db } from '../../lib/supabase/client.js';
 import { renderSocialMobileNav } from '../../components/social/navigation.js';
-import {renderDiscoveryHeader,bindDiscoveryHeader} from '../../components/social/discovery-header.js';
+import {renderDiscoveryHeader} from '../../components/social/discovery-header.js';
 import '../../styles/social-navigation.css';
 import './discovery.css';
 
