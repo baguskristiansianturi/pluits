@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { renderMessageMarkup, renderMessageStatus, formatMessageDuration } from '../../src/features/inbox/message-ui.js';
+import { renderInboxSidebar } from '../../src/features/inbox/inbox-sidebar.js';
 
 test('message status differentiates queued, sent, delivered and read', () => {
   assert.match(renderMessageStatus({ pending: true }), /Menunggu dikirim/);
@@ -32,4 +33,11 @@ test('voice message markup carries its id for played receipts', () => {
   }, { currentUserId: 'u1' });
   assert.match(voice, /data-message-id="voice-1"/);
   assert.match(voice, /data-voice-path=/);
+});
+
+test('Inbox tabs expose implemented All and Unread filters only', () => {
+  const sidebar = renderInboxSidebar();
+  assert.match(sidebar, /data-inbox-tab="primary"/);
+  assert.match(sidebar, /data-inbox-tab="unread"/);
+  assert.doesNotMatch(sidebar, /data-inbox-tab="requests"|data-inbox-tab="blocked"/);
 });
