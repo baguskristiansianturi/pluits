@@ -6,7 +6,7 @@ export default defineConfig({
   base: '/pluits/',
   plugins: [{
     name: 'github-pages-spa-fallback',
-    closeBundle() {
+    writeBundle() {
       const index = resolve('dist/index.html')
       copyFileSync(index, resolve('dist/404.html'))
     }
