@@ -44,63 +44,112 @@ async function hydrateVoicePlayers(container) {
   await Promise.all(players.map(async player=>{
     const {data,error}=await db.storage.from('pluits-message-media').createSignedUrl(player.dataset.voicePath,3600);
     if(!error&&data?.signedUrl) player.src=data.signedUrl;
-    else { const note=document.createElement('span');note.className='pl-msg-audio-error';note.textContent='Unable to load audio';player.replaceWith(note); }
+    else { const note=document.createElement('span');note.className='pl-msg-audio-error';note.textContent='Audio tidak dapat dimuat';player.replaceWith(note); }
+    const speed=player.parentElement?.querySelector('[data-voice-speed]');
+    if(speed) speed.onclick=()=>{
+      const rates=[1,1.5,2];
+      const current=rates.indexOf(Number(player.playbackRate)||1);
+      player.playbackRate=rates[(current+1)%rates.length];
+      speed.textContent=player.playbackRate+'×';
+    };
   }));
 }
 function bindVoiceRecorder(chat, conversationId) {
   const button=chat.querySelector('[data-voice-record]');
   const status=chat.querySelector('.pl-msg-chat-status');
-  if(!button)return;
+  const form=chat.querySelector('#pl-msg-compose');
+  if(!button||!form)return;
+  const panel=document.createElement('div');
+  panel.className='pl-msg-voice-draft';
+  panel.hidden=true;
+  form.parentElement.insertBefore(panel,form);
   if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==='undefined') {
-    button.disabled=true;button.title='Voice recording is not supported by this browser';return;
+    button.disabled=true;button.title='Perekaman suara tidak didukung browser ini';return;
   }
-  let recorder=null,stream=null,chunks=[],startedAt=0,limitTimer=null;
+  let recorder=null,stream=null,chunks=[],startedAt=0,pausedMs=0,pauseStartedAt=0,limitTimer=null,clockTimer=null,cancelled=false,previewUrl='';
+  const stopTracks=()=>{stream?.getTracks().forEach(track=>track.stop());stream=null;};
+  const resetPanel=()=>{
+    clearTimeout(limitTimer);clearInterval(clockTimer);stopTracks();
+    if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl='';}
+    panel.hidden=true;panel.innerHTML='';
+    button.disabled=false;button.textContent='🎙 Voice';button.classList.remove('is-recording');
+  };
+  const elapsed=()=>Math.max(0,Date.now()-startedAt-pausedMs-(pauseStartedAt?Date.now()-pauseStartedAt:0));
+  const showPreview=blob=>{
+    previewUrl=URL.createObjectURL(blob);
+    const seconds=Math.min(180,Math.max(1,Math.round(elapsed()/1000)));
+    panel.hidden=false;
+    panel.innerHTML='<div class="pl-msg-voice-preview"><div><b>Pratinjau pesan suara</b><small>'+formatDuration(seconds)+' · '+Math.ceil(blob.size/1024)+' KB</small></div><audio controls preload="metadata"></audio><div class="pl-msg-voice-preview-actions"><button type="button" data-voice-discard>Hapus</button><button type="button" data-voice-send>Kirim suara</button></div></div>';
+    const audio=panel.querySelector('audio');audio.src=previewUrl;
+    panel.querySelector('[data-voice-discard]').onclick=()=>resetPanel();
+    panel.querySelector('[data-voice-send]').onclick=async()=>{
+      const send=panel.querySelector('[data-voice-send]');send.disabled=true;send.textContent='Mengirim…';
+      const mime=String(blob.type||'audio/webm').split(';')[0].toLowerCase();
+      const ext=({'audio/webm':'webm','audio/mp4':'m4a','audio/ogg':'ogg','audio/mpeg':'mp3','audio/wav':'wav','audio/3gpp':'3gp'})[mime];
+      if(!ext){send.disabled=false;send.textContent='Kirim suara';if(status)status.textContent='Format audio browser ini belum didukung.';return;}
+      if(blob.size>10*1024*1024){send.disabled=false;send.textContent='Kirim suara';if(status)status.textContent='Pesan suara melebihi batas 10 MB.';return;}
+      const path=conversationId+'/'+currentUser.id+'/'+crypto.randomUUID()+'.'+ext;
+      if(status)status.textContent='Mengunggah pesan suara…';
+      const uploaded=await db.storage.from('pluits-message-media').upload(path,blob,{contentType:mime,upsert:false});
+      if(uploaded.error){send.disabled=false;send.textContent='Kirim suara';if(status)status.textContent='Upload gagal: '+uploaded.error.message;return;}
+      const saved=await db.from('user_messages').insert({
+        conversation_id:conversationId,sender_id:currentUser.id,body:'',
+        message_type:'voice',media_path:path,media_duration_seconds:seconds,
+        media_mime_type:mime,client_message_id:crypto.randomUUID()
+      });
+      if(saved.error){
+        await db.storage.from('pluits-message-media').remove([path]);
+        send.disabled=false;send.textContent='Kirim suara';if(status)status.textContent='Pesan suara gagal dikirim: '+saved.error.message;return;
+      }
+      resetPanel();
+      if(status)status.textContent='Pesan suara terkirim.';
+      await openConversation(conversationId);await loadConversations();
+    };
+  };
   button.onclick=async()=>{
-    if(recorder?.state==='recording'){recorder.stop();return;}
-    if(!navigator.onLine){status.textContent='Voice messages require an internet connection. Text messages can still be queued.';return;}
-    try {
-      stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    if(recorder?.state==='recording'||recorder?.state==='paused')return;
+    if(!navigator.onLine){if(status)status.textContent='Pesan suara memerlukan koneksi internet.';return;}
+    try{
+      stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
       const preferred=['audio/webm;codecs=opus','audio/mp4','audio/ogg;codecs=opus','audio/webm'];
       const mimeType=preferred.find(type=>MediaRecorder.isTypeSupported(type));
       recorder=new MediaRecorder(stream,mimeType?{mimeType}:undefined);
-      chunks=[];startedAt=Date.now();
+      chunks=[];cancelled=false;startedAt=Date.now();pausedMs=0;pauseStartedAt=0;
       recorder.ondataavailable=event=>{if(event.data?.size)chunks.push(event.data);};
-      recorder.onerror=()=>{status.textContent='Recording failed. Check microphone permissions and try again.';};
-      recorder.onstop=async()=>{
-        clearTimeout(limitTimer);stream?.getTracks().forEach(track=>track.stop());stream=null;
-        button.disabled=true;button.textContent='Uploading…';button.classList.remove('is-recording');
-        const duration=Math.min(180,Math.max(1,Math.round((Date.now()-startedAt)/1000)));
+      recorder.onerror=()=>{if(status)status.textContent='Perekaman gagal. Periksa izin mikrofon.';resetPanel();};
+      recorder.onstop=()=>{
+        clearTimeout(limitTimer);clearInterval(clockTimer);stopTracks();
+        button.classList.remove('is-recording');button.textContent='🎙 Voice';
         const blob=new Blob(chunks,{type:recorder.mimeType||'audio/webm'});
-        if(blob.size>10*1024*1024){status.textContent='Voice message exceeds the 10 MB limit.';button.disabled=false;button.textContent='🎙 Voice';return;}
-        if(duration<1||!blob.size){status.textContent='Recording is too short. Please record for at least one second.';button.disabled=false;button.textContent='🎙 Voice';return;}
-        const mime=blob.type.split(';')[0].toLowerCase();
-        const ext=({'audio/webm':'webm','audio/mp4':'m4a','audio/ogg':'ogg','audio/mpeg':'mp3','audio/wav':'wav','audio/3gpp':'3gp'})[mime];
-        if(!ext){status.textContent='This browser audio format is not supported.';button.disabled=false;button.textContent='🎙 Voice';return;}
-        const path=conversationId+'/'+currentUser.id+'/'+crypto.randomUUID()+'.'+ext;
-        status.textContent='Uploading voice message…';
-        const uploaded=await db.storage.from('pluits-message-media').upload(path,blob,{contentType:mime,upsert:false});
-        if(uploaded.error){status.textContent='Voice upload failed: '+uploaded.error.message;button.disabled=false;button.textContent='🎙 Voice';return;}
-        const saved=await db.from('user_messages').insert({
-          conversation_id:conversationId,sender_id:currentUser.id,body:'',
-          message_type:'voice',media_path:path,media_duration_seconds:duration,
-          media_mime_type:mime,client_message_id:crypto.randomUUID()
-        });
-        if(saved.error){
-          await db.storage.from('pluits-message-media').remove([path]);
-          status.textContent='Voice message was not sent: '+saved.error.message;
-        } else {
-          status.textContent='Voice message sent.';
-          await openConversation(conversationId);await loadConversations();
-        }
-        button.disabled=false;button.textContent='🎙 Voice';
+        if(cancelled){resetPanel();if(status)status.textContent='Rekaman dibatalkan.';return;}
+        const duration=Math.round(elapsed()/1000);
+        if(duration<1||!blob.size){resetPanel();if(status)status.textContent='Rekaman terlalu singkat.';return;}
+        if(blob.size>10*1024*1024){resetPanel();if(status)status.textContent='Rekaman melebihi batas 10 MB.';return;}
+        showPreview(blob);
+        if(status)status.textContent='Dengarkan dahulu, lalu kirim atau hapus rekaman.';
       };
-      recorder.start(250);button.textContent='■ Selesai';button.classList.add('is-recording');
-      status.textContent='Recording… tap Done to send. Maximum 3 minutes.';
-      limitTimer=setTimeout(()=>{if(recorder?.state==='recording')recorder.stop();},180000);
-    } catch(error) {
-      stream?.getTracks().forEach(track=>track.stop());stream=null;
-      status.textContent='Microphone unavailable. Allow microphone access in your browser.';
-      button.textContent='🎙 Voice';button.classList.remove('is-recording');
+      recorder.start(250);
+      button.textContent='● Merekam';button.classList.add('is-recording');
+      panel.hidden=false;
+      panel.innerHTML='<div class="pl-msg-recording"><span class="pl-msg-recording-dot"></span><b data-record-clock>0:00</b><button type="button" data-voice-pause>Jeda</button><button type="button" data-voice-finish>Selesai</button><button type="button" data-voice-cancel>Batal</button></div>';
+      const clock=panel.querySelector('[data-record-clock]');
+      clockTimer=setInterval(()=>{if(clock)clock.textContent=formatDuration(Math.floor(elapsed()/1000));},250);
+      panel.querySelector('[data-voice-pause]').onclick=event=>{
+        if(recorder.state==='recording'&&typeof recorder.pause==='function'){
+          recorder.pause();pauseStartedAt=Date.now();event.currentTarget.textContent='Lanjutkan';
+          if(status)status.textContent='Rekaman dijeda.';
+        }else if(recorder.state==='paused'&&typeof recorder.resume==='function'){
+          pausedMs+=Date.now()-pauseStartedAt;pauseStartedAt=0;recorder.resume();
+          event.currentTarget.textContent='Jeda';if(status)status.textContent='Merekam…';
+        }
+      };
+      panel.querySelector('[data-voice-finish]').onclick=()=>{if(recorder.state!=='inactive')recorder.stop();};
+      panel.querySelector('[data-voice-cancel]').onclick=()=>{cancelled=true;if(recorder.state!=='inactive')recorder.stop();else resetPanel();};
+      limitTimer=setTimeout(()=>{if(recorder?.state!=='inactive')recorder.stop();},180000);
+      if(status)status.textContent='Sedang merekam. Maksimal 3 menit.';
+    }catch(error){
+      stopTracks();button.textContent='🎙 Voice';button.classList.remove('is-recording');
+      if(status)status.textContent='Mikrofon tidak tersedia. Izinkan akses mikrofon di browser.';
     }
   };
 }
