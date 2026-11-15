@@ -87,7 +87,7 @@ async function feed(){
   });
   if(version!==requestVersion)return;
   const cards=hydrated.map(post=>{
-   const media=post.media[0],owner=post.owner,name=esc(owner.display_name||'Pengguna PLUITS');
+   const media=post.media[0];
 
    const mediaMarkup=media?(media.media_type==='video'?'<video class="ds-tile-video" data-discovery-video src="'+esc(media.url)+'" muted playsinline loop preload="metadata" aria-label="Pratinjau video"></video><span class="ds-tile-video-mark" aria-label="Video"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m10 9 5 3-5 3z"></path></svg></span>':'<img src="'+esc(media.url)+'" loading="lazy" decoding="async" alt="Foto publik">'+(post.media.length>1?'<span class="ds-tile-stack" aria-label="Beberapa media"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"></rect><path d="M3 8V3h5M16 3h5v5M21 16v5h-5M8 21H3v-5"></path></svg></span>':'')):'<span class="ds-text-tile">'+esc((post.caption||'PLUITS').slice(0,110))+'</span>';
    const target=post.content_kind==='reel'?'#/account/reels/'+encodeURIComponent(post.id):'#/account/post/'+encodeURIComponent(post.id);
@@ -107,7 +107,7 @@ async function feed(){
    };
    tileVideos.forEach((video,index)=>{
     video.muted=true;video.loop=true;video.playsInline=true;
-    video.addEventListener('loadeddata',()=>{if(video.dataset.inViewport==='1')activate(video);else video.pause();},{once:true});
+    video.addEventListener('loadeddata',()=>{try{const canvas=document.createElement('canvas');canvas.width=video.videoWidth;canvas.height=video.videoHeight;canvas.getContext('2d')?.drawImage(video,0,0);if(canvas.width&&canvas.height)video.poster=canvas.toDataURL('image/jpeg',.76);}catch{}if(video.dataset.inViewport==='1')activate(video);else video.pause();},{once:true});
     video.addEventListener('error',()=>{video.classList.add('is-preview-unavailable');if(video===activeVideo)pauseActive();},{once:true});
    });
    videoVisibilityHandler=()=>{if(document.hidden){tileVideos.forEach(video=>video.pause());pauseActive();}};
