@@ -374,3 +374,18 @@ assert.match(discoveryStyles, /\.ds-chips button\{[^}]*border:0!important/, 'Mob
 assert.match(discoveryStyles, /font-size:8\.5px/, 'Mobile category labels must use compact typography.');
 assert.match(discoveryStyles, /\.ds-tile-video-mark svg\{width:12px/, 'Video mark must be smaller on the discovery grid.');
 assert.match(discoveryStyles, /\.ds-video-poster-placeholder/, 'Video tiles must retain a neutral fallback while the first frame loads.');
+
+
+const routeSource = read('src/app/router.js');
+const circleAccountSource = read('src/pages/account/index.js');
+assert.match(routeSource, /else if\(r==='circle'\)[\s\S]*location\.hash='#\/account\/explore'/, 'The public Circle alias must redirect to the canonical personalized Circle feed.');
+assert.match(circleAccountSource, /if\(\['circle','home','feed'\]\.includes\(section\)\)section='explore'/, 'Account route aliases for Circle must never fall through to the Profile page.');
+const canonicalRoutes = read('src/components/social/navigation-routes.js');
+assert.match(canonicalRoutes, /home:\s*'#\/account\/explore'/, 'Circle navigation must use the canonical account Explore route.');
+assert.match(canonicalRoutes, /discover:\s*'#\/search'/, 'Jelajah must remain a separate public discovery route.');
+const mobileNavigationSource = read('src/components/social/navigation.js');
+assert.match(mobileNavigationSource, /key: 'home',[\s\S]*label: publicHome \? 'Beranda' : 'Circle'/, 'Circle must be the first mobile navigation destination.');
+assert.match(mobileNavigationSource, /key: 'discover',[\s\S]*label: 'Jelajah'/, 'Jelajah must be the second mobile navigation destination.');
+assert.match(mobileNavigationSource, /key: 'create',[\s\S]*label: 'Buat'/, 'Create must remain the third mobile navigation destination.');
+assert.match(mobileNavigationSource, /key: 'messages',[\s\S]*label: 'Pesan'/, 'Messages must remain the fourth mobile navigation destination.');
+assert.match(mobileNavigationSource, /key: 'profile',[\s\S]*label: 'Profil'/, 'Profile must remain the fifth mobile navigation destination.');

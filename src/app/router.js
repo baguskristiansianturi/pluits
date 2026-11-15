@@ -46,6 +46,10 @@ export async function route(homeFn){
    h='<div class="pl-page-loading" role="status" aria-live="polite"><span class="pl-page-spinner" aria-hidden="true"></span><span class="pl-page-loading-label">Membuka profil</span></div>';
    defer(async()=>{const {mountUserAccount}=await import('../pages/account/index.js');await mountUserAccount('user',decodeURIComponent(r.slice(1)));},version,()=>route(homeFn));
   }
+  else if(r==='circle'){
+   // Circle is the personalized social feed; keep one canonical destination.
+   location.hash='#/account/explore';return;
+  }
   else if(r==='places'){
    const mod=await import('../pages/directory/index.js');h=mod.directoryPage();defer(()=>mod.bindDirectoryPage(),version,()=>route(homeFn));
   }
