@@ -174,6 +174,7 @@ export function messagesPage() {
         <button type="submit" aria-label="Search">${socialIcon('search',{size:18})}</button>
         <div id="pl-msg-search-results" class="pl-msg-search-results" hidden></div>
       </form>
+      <button type="button" class="pl-msg-new-chat" data-new-chat aria-label="Mulai percakapan baru">＋</button>
       <div class="pl-msg-head-menu">
         <button type="button" class="pl-msg-menu-toggle" aria-label="Pengaturan pesan" aria-expanded="false" aria-controls="pl-msg-head-menu">⋮</button>
         <nav class="pl-msg-head-menu-panel" id="pl-msg-head-menu" aria-label="Menu pesan" hidden>
@@ -182,10 +183,6 @@ export function messagesPage() {
       </div>
     </header>
     <section class="pl-msg-content plds-container plds-container--wide">
-      <section class="pl-msg-people" aria-label="Online contacts">
-        <div class="pl-msg-people-heading"><div class="pl-msg-people-counts"><strong>Kontak</strong><small><span id="pl-msg-online-count">0 online</span><span aria-hidden="true"> · </span><span id="pl-msg-offline-count">0 offline</span></small></div><a href="#/account/followers">Lihat semua</a></div>
-        <div id="pl-msg-people-strip" class="pl-msg-people-strip"><span class="pl-msg-people-loading">Memuat kontak…</span></div>
-      </section>
       <div class="pl-msg-layout" id="pl-msg-layout">
         ${renderInboxSidebar()}
         <section class="pl-msg-chat" id="pl-msg-chat">${emptyStateMarkup({variant:'message',title:'Pesan Anda dimulai di sini',description:'Pilih percakapan di sebelah kiri atau cari seseorang untuk mulai mengirim pesan.'})}</section>
@@ -301,13 +298,14 @@ export async function bindMessagesPage() {
   onlineUserIds=new Set();contactsCache=[];
   const {data:ownProfile}=await db.from('user_profiles').select('id,display_name,username,avatar_path').eq('id',user.id).maybeSingle();
   currentProfile=ownProfile||{id:user.id,display_name:user.user_metadata?.full_name||'Anda',username:'akun'};
-  await Promise.all([loadContacts(),loadConversations()]);
+  await loadConversations();
   if(presenceSyncHandler) window.removeEventListener('pluits:presence-sync',presenceSyncHandler);
   presenceSyncHandler=event=>{
     const state=event.detail||{};
     onlineUserIds=new Set(Object.values(state).flat().map(entry=>entry.user_id).filter(Boolean));
-    renderPeopleCounts(contactsCache);
-    renderPeopleStrip(contactsCache,true);
+    const presenceNode=document.querySelector('#pl-msg-chat-presence');
+    const activeThread=conversationCache.find(item=>item.id===currentConversation);
+    if(presenceNode&&activeThread?.other?.id)presenceNode.textContent=onlineUserIds.has(activeThread.other.id)?'Online':'Tidak online';
   };
   window.addEventListener('pluits:presence-sync',presenceSyncHandler);
   presenceSyncHandler({detail:window.__pluitsPresenceState||{}});
@@ -327,6 +325,7 @@ export async function bindMessagesPage() {
     box.innerHTML=data?.length?data.map(person=>'<button class="pl-msg-contact" data-start-chat="'+person.id+'"><b>'+esc(person.display_name||person.username)+'</b><small>@'+esc(person.username)+'</small><span>Message</span></button>').join(''):'<p class="pl-msg-search-hint">No accounts found.</p>';
     bindStartChat(box);
   };
+  app.querySelector('[data-new-chat]')?.addEventListener('click',()=>{const field=app.querySelector('#pl-msg-search input');field?.focus();field?.scrollIntoView({block:'nearest'});});
   const headMenu=app.querySelector('.pl-msg-head-menu');
   const menuToggle=app.querySelector('.pl-msg-menu-toggle');
   const menuPanel=app.querySelector('#pl-msg-head-menu');
