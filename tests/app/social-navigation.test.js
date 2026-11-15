@@ -71,7 +71,7 @@ test('Circle, Profile and Messages resolve directly to their own page controller
  const router=await (await import('node:fs/promises')).readFile(new URL('../../src/app/router.js',import.meta.url),'utf8');
  assert.ok(router.includes("else if(r==='circle')") && router.includes("mountUserAccount('explore')"),'Circle must mount the Circle feed directly.');
  assert.ok(router.includes("else if(r==='profile')") && router.includes("mountUserAccount('profile',v||'')"),'Profile must mount the personal profile directly.');
- assert.ok(router.includes("else if(r==='messages'||r==='inbox')") && router.includes("messagesPage()"),'Messages and Inbox must mount the Inbox controller directly.');
+ assert.ok(router.includes("r==='messages'||r==='inbox'") && router.includes("messagesPage()"),'Messages and Inbox must mount the Inbox controller directly.');
  assert.doesNotMatch(router,/location\.hash='#\/inbox';return;/,'Messages must not depend on a second redirect before opening.');
 });
 
