@@ -241,7 +241,8 @@ assert.ok(discovery.includes("renderSocialMobileNav({active:'discover'})"), 'Exp
 assert.ok(discovery.includes('social-navigation.css'), 'Explore must load shared social navigation styles.');
 const discoveryCss = read('src/pages/search/discovery.css');
 assert.ok(discoveryCss.includes('.ds-feed{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px}'), 'Jelajah must render a compact three-column discovery gallery.');
-assert.ok(discovery.includes('ds-grid-tile') && discoveryFeature.includes('ds-text-tile') && discoveryFeature.includes('ds-tile-video'), 'Jelajah feature must preserve text, photo and video discovery tiles.');
+const discoveryFeatureSource = read('src/features/discovery/explore-grid/index.js');
+assert.ok(discovery.includes('ds-grid-tile') && discoveryFeatureSource.includes('ds-text-tile') && discoveryFeatureSource.includes('ds-tile-video'), 'Jelajah feature must preserve text, photo and video discovery tiles.');
 assert.match(discoveryCss, /safe-area-inset-bottom/, 'Explore bottom navigation must respect device safe areas.');
 assert.doesNotMatch(discovery, /class="ds-intro"|id="ds-sort"/, 'Jelajah must not add editorial copy or a separate sort bar above its categories.');
 assert.ok(discovery.indexOf('class="ds-search"')<discovery.indexOf('id="ds-chips"')&&discovery.indexOf('id="ds-chips"')<discovery.indexOf('id="ds-feed"'), 'Jelajah must order search, category carousel, then media grid.');
