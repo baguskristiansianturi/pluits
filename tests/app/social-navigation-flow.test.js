@@ -138,3 +138,11 @@ test('legacy public-user links and professional profile editing resolve to real 
   const home = await readFile(new URL('../../src/pages/home/index.js', import.meta.url), 'utf8');
   assert.ok(home.includes('#/account/user/'), 'Public profile cards must use the covered legacy alias.');
 });
+
+test('profile page returns hydrated own posts to the profile tab controller', async () => {
+  const profilePage = await readFile(new URL('../../src/features/profile/profile-page.js', import.meta.url), 'utf8');
+  assert.match(profilePage, /onProfilePosts=\(\)=>\{\}/);
+  assert.match(profilePage, /onProfilePosts\(ownPosts\)/);
+  assert.match(account, /ownPosts:profilePosts/);
+  assert.match(account, /if\(!document\.querySelector\('\.ua-profile-tabs'\)\)return/);
+});
