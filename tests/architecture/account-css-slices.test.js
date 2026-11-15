@@ -17,7 +17,7 @@ const names=[
 test('Account legacy CSS aggregator preserves the canonical ordered slices',async()=>{
  const aggregator=await readFile(new URL('user-account.css',root),'utf8');
  const expected=names.map(name=>`@import url('./styles/${name}');`);
- assert.deepEqual(aggregator.split('\\n').filter(line=>line.startsWith('@import')),expected);
+ assert.deepEqual(aggregator.split(/\r?\n/).filter(line=>line.startsWith('@import')),expected);
  for(const name of names){
   const css=await readFile(new URL('styles/'+name,root),'utf8');
   assert.ok(css.trim().length>0,name+' must not be an empty placeholder.');
