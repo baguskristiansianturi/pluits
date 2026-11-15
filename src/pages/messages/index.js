@@ -59,6 +59,44 @@ async function hydrateVoicePlayers(container) {
     }
   }));
 }
+async function hydrateMessageMedia(container) {
+  const images=[...container.querySelectorAll('[data-image-path]')];
+  const files=[...container.querySelectorAll('[data-file-path]')];
+  await Promise.all([...images.map(async node=>{
+    const {data,error}=await db.storage.from('pluits-message-media').createSignedUrl(node.dataset.imagePath,1800);
+    if(error||!data?.signedUrl){node.alt='Foto tidak dapat dimuat';node.closest('.pl-msg-image-wrap')?.classList.add('is-error');return;}
+    node.src=data.signedUrl;node.closest('.pl-msg-image-wrap')?.querySelector('.pl-msg-image-loading')?.remove();
+  }),...files.map(async node=>{
+    const {data,error}=await db.storage.from('pluits-message-media').createSignedUrl(node.dataset.filePath,1800);
+    if(error||!data?.signedUrl){node.textContent='File tidak dapat dimuat';return;}
+    node.href=data.signedUrl;
+  })]);
+}
+function bindAttachmentComposer(chat,conversationId) {
+  const form=chat.querySelector('#pl-msg-compose'),input=chat.querySelector('#pl-msg-attachment-input');
+  const status=chat.querySelector('.pl-msg-chat-status'),trigger=chat.querySelector('[data-attachment-trigger]');
+  if(!form||!input||!trigger)return;
+  trigger.onclick=()=>input.click();
+  input.onchange=async()=>{
+    const files=[...input.files||[]];input.value='';
+    for(const file of files){
+      const image=file.type.startsWith('image/');
+      const allowedImages=['image/jpeg','image/png','image/webp','image/gif'];
+      const allowedFiles=['application/pdf','text/plain','application/zip','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation'];
+      if(!(allowedImages.includes(file.type)||allowedFiles.includes(file.type))){if(status)status.textContent='Format file tidak didukung: '+file.name;continue;}
+      if(file.size>20*1024*1024){if(status)status.textContent='Ukuran file maksimal 20 MB: '+file.name;continue;}
+      if(!navigator.onLine){if(status)status.textContent='Lampiran membutuhkan koneksi internet.';continue;}
+      const ext=(file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,8);
+      const path=conversationId+'/'+currentUser.id+'/'+crypto.randomUUID()+'.'+ext;
+      if(status)status.textContent='Mengunggah '+file.name+'…';
+      const uploaded=await db.storage.from('pluits-message-media').upload(path,file,{contentType:file.type,upsert:false});
+      if(uploaded.error){if(status)status.textContent='Upload gagal: '+uploaded.error.message;continue;}
+      const {error}=await db.from('user_messages').insert({conversation_id:conversationId,sender_id:currentUser.id,body:'',message_type:image?'image':'file',media_path:path,media_mime_type:file.type,media_name:file.name,client_message_id:crypto.randomUUID()});
+      if(error){await db.storage.from('pluits-message-media').remove([path]);if(status)status.textContent='Gagal mengirim lampiran: '+error.message;continue;}
+    }
+    await openConversation(conversationId);await loadConversations();
+  };
+}
 function bindVoiceRecorder(chat, conversationId) {
   const button=chat.querySelector('[data-voice-record]');
   const status=chat.querySelector('.pl-msg-chat-status');
@@ -535,52 +573,38 @@ async function loadConversations() {
   list.querySelectorAll('[data-open-chat]').forEach(button=>button.onclick=()=>openConversation(button.dataset.openChat));
   list.hidden=false;
 }
-async function bindMessageActions(chat,conversationId) {
+function bindMessageActions(chat,conversationId) {
+  const status=chat.querySelector('.pl-msg-chat-status'),selected=new Set(),bar=chat.querySelector('[data-selection-bar]');
+  const update=()=>{
+    chat.classList.toggle('is-selecting',selected.size>0);
+    if(bar){bar.hidden=!selected.size;bar.querySelector('[data-selection-count]').textContent=selected.size+' dipilih';}
+    chat.querySelectorAll('[data-message-id]').forEach(article=>{const box=article.querySelector('[data-select-message]');if(box)box.checked=selected.has(article.dataset.messageId);article.classList.toggle('is-selected',selected.has(article.dataset.messageId));});
+  };
   chat.querySelectorAll('.pl-msg-bubble[data-message-id]').forEach(article=>{
-    article.addEventListener('contextmenu',event=>{
-      const menu=article.querySelector('.pl-msg-actions');
-      if(!menu)return;
-      event.preventDefault();
-      menu.open=true;
-    });
+    let timer=null;
+    article.addEventListener('contextmenu',event=>{event.preventDefault();article.querySelector('.pl-msg-actions')?.setAttribute('open','');});
+    article.addEventListener('touchstart',()=>{timer=setTimeout(()=>{selected.add(article.dataset.messageId);update();},520);},{passive:true});
+    ['touchend','touchmove','touchcancel'].forEach(name=>article.addEventListener(name,()=>clearTimeout(timer),{passive:true}));
+    article.addEventListener('click',event=>{if(!selected.size||event.target.closest('button,a,summary,input,details'))return;selected.has(article.dataset.messageId)?selected.delete(article.dataset.messageId):selected.add(article.dataset.messageId);update();});
   });
+  chat.querySelectorAll('[data-select-message]').forEach(box=>box.onchange=()=>{const id=box.closest('[data-message-id]')?.dataset.messageId;if(!id)return;box.checked?selected.add(id):selected.delete(id);update();});
   chat.querySelectorAll('[data-message-action]').forEach(button=>button.onclick=async()=>{
-    const article=button.closest('[data-message-id]');
-    const messageId=article?.dataset.messageId;
-    if(!messageId)return;
-    const action=button.dataset.messageAction;
-    if(action==='copy') {
-      try { await navigator.clipboard.writeText(article.dataset.messageBody||''); button.textContent='Tersalin'; }
-      catch { const status=chat.querySelector('.pl-msg-chat-status');if(status)status.textContent='Browser tidak mengizinkan penyalinan pesan.'; }
-      return;
-    }
-    if(action==='hide') {
-      const {error}=await db.rpc('hide_message_for_me',{p_message_id:messageId});
-      if(error){const status=chat.querySelector('.pl-msg-chat-status');if(status)status.textContent=error.message;return;}
-      await openConversation(conversationId);
-      const status=document.querySelector('#pl-msg-chat .pl-msg-chat-status');
-      if(status){
-        status.innerHTML='Pesan dihapus dari tampilan Anda. <button type="button" data-undo-hide>Urungkan</button>';
-        const undo=status.querySelector('[data-undo-hide]');
-        undo.onclick=async()=>{
-          undo.disabled=true;
-          const restored=await db.rpc('undo_hide_message_for_me',{p_message_id:messageId});
-          if(restored.error||!restored.data){status.textContent=restored.error?.message||'Waktu urungkan sudah habis.';return;}
-          await openConversation(conversationId);
-        };
-        setTimeout(()=>{if(status.isConnected&&status.querySelector('[data-undo-hide]'))status.textContent='Pesan dihapus dari tampilan Anda.';},5000);
-      }
-      return;
-    }
-    if(action==='delete-everyone') {
-      if(!window.confirm('Hapus pesan ini untuk semua peserta?'))return;
-      const {data:mediaPath,error}=await db.rpc('delete_message_for_everyone',{p_message_id:messageId});
-      if(error){const status=chat.querySelector('.pl-msg-chat-status');if(status)status.textContent=error.message;return;}
-      if(mediaPath)await db.storage.from('pluits-message-media').remove([mediaPath]);
-      await openConversation(conversationId);
-      await loadConversations();
-    }
+    const article=button.closest('[data-message-id]'),messageId=article?.dataset.messageId;if(!messageId)return;
+    const action=button.dataset.messageAction;article.querySelector('.pl-msg-actions')?.removeAttribute('open');
+    if(action==='select'){selected.add(messageId);update();return;}
+    if(action==='reply'){const area=chat.querySelector('#pl-msg-compose textarea');if(area){area.dataset.replyTo=messageId;area.placeholder='Balas pesan terpilih…';area.focus();}if(status)status.textContent='Mode balas aktif. Tulis balasan Anda.';return;}
+    if(action==='forward'){const dialog=chat.querySelector('#pl-msg-forward-dialog');if(dialog){dialog.dataset.messageId=messageId;dialog.showModal();}return;}
+    if(action==='copy'){try{await navigator.clipboard.writeText(article.dataset.messageBody||'');if(status)status.textContent='Pesan disalin.';}catch{if(status)status.textContent='Browser tidak mengizinkan penyalinan pesan.';}return;}
+    if(action==='hide'){const {error}=await db.rpc('hide_message_for_me',{p_message_id:messageId});if(error){if(status)status.textContent=error.message;return;}await openConversation(conversationId);const note=document.querySelector('#pl-msg-chat .pl-msg-chat-status');if(note){note.innerHTML='Pesan dihapus dari tampilan Anda. <button type="button" data-undo-hide>Urungkan</button>';note.querySelector('[data-undo-hide]').onclick=async()=>{const restored=await db.rpc('undo_hide_message_for_me',{p_message_id:messageId});if(restored.error||!restored.data){note.textContent=restored.error?.message||'Waktu urungkan sudah habis.';return;}await openConversation(conversationId);};}return;}
+    if(action==='delete-everyone'){if(!window.confirm('Hapus pesan ini untuk semua peserta?'))return;const {data:mediaPath,error}=await db.rpc('delete_message_for_everyone',{p_message_id:messageId});if(error){if(status)status.textContent=error.message;return;}if(mediaPath)await db.storage.from('pluits-message-media').remove([mediaPath]);await openConversation(conversationId);await loadConversations();}
   });
+  chat.querySelector('[data-selection-cancel]')?.addEventListener('click',()=>{selected.clear();update();});
+  chat.querySelector('[data-selection-delete]')?.addEventListener('click',async()=>{if(!selected.size||!window.confirm('Hapus '+selected.size+' pesan untuk Anda?'))return;for(const id of selected){const {error}=await db.rpc('hide_message_for_me',{p_message_id:id});if(error){if(status)status.textContent=error.message;break;}}selected.clear();await openConversation(conversationId);});
+  chat.querySelector('[data-selection-forward]')?.addEventListener('click',()=>{if(selected.size!==1){if(status)status.textContent='Pilih satu pesan untuk diteruskan.';return;}const dialog=chat.querySelector('#pl-msg-forward-dialog');dialog.dataset.messageId=[...selected][0];dialog.showModal();});
+  const dialog=chat.querySelector('#pl-msg-forward-dialog');
+  dialog?.querySelector('[data-forward-send]')?.addEventListener('click',async()=>{const messageId=dialog.dataset.messageId,target=dialog.querySelector('select')?.value,source=chat.querySelector('[data-message-id="'+CSS.escape(messageId)+'"]');if(!target||!source)return;const body=source.dataset.messageBody||'';if(!body){if(status)status.textContent='Saat ini hanya pesan teks yang dapat diteruskan.';return;}const {error}=await db.from('user_messages').insert({conversation_id:target,sender_id:currentUser.id,body:'Diteruskan: '+body,message_type:'text',client_message_id:crypto.randomUUID()});if(error){if(status)status.textContent='Gagal meneruskan pesan: '+error.message;return;}dialog.close();if(status)status.textContent='Pesan diteruskan.';await loadConversations();});
+  dialog?.querySelector('[data-forward-cancel]')?.addEventListener('click',()=>dialog.close());
+  chat.querySelectorAll('[data-contact-action]').forEach(button=>button.onclick=async()=>{const otherId=button.dataset.userId,action=button.dataset.contactAction;if(!otherId)return;if(action==='block'){if(!window.confirm('Blokir akun ini? Akun tersebut tidak dapat memulai atau mengirim pesan kepada Anda.'))return;const {error}=await db.rpc('block_user',{p_blocked_user_id:otherId});if(status)status.textContent=error?'Gagal memblokir: '+error.message:'Akun berhasil diblokir.';if(!error){chat.querySelector('#pl-msg-compose')?.setAttribute('hidden','');chat.querySelector('[data-contact-menu]')?.removeAttribute('open');}}if(action==='report'){const details=window.prompt('Jelaskan alasan laporan (opsional):','');if(details===null)return;const {error}=await db.rpc('report_content',{p_target_type:'user',p_target_id:otherId,p_reason:'other',p_details:details});if(status)status.textContent=error?'Laporan gagal: '+error.message:'Laporan akun telah dikirim untuk ditinjau.';}});
 }
 
 async function openConversation(id) {
@@ -591,7 +615,7 @@ async function openConversation(id) {
   chat.innerHTML='<div class="pl-msg-empty">Memuat pesan…</div>';
   const thread=conversationCache.find(item=>item.id===id);
   const [messages,members]=await Promise.all([
-    db.from('user_messages').select('id,sender_id,body,created_at,deleted_at,message_type,media_path,media_duration_seconds').eq('conversation_id',id).order('created_at',{ascending:true}).limit(150),
+    db.from('user_messages').select('id,sender_id,body,created_at,deleted_at,message_type,media_path,media_duration_seconds,media_mime_type,media_name').eq('conversation_id',id).order('created_at',{ascending:true}).limit(150),
     db.from('user_conversation_members').select('user_id,last_read_at').eq('conversation_id',id)
   ]);
   const messageIds=(messages.data||[]).map(message=>message.id);
