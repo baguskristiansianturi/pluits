@@ -28,7 +28,7 @@ export function renderMessageMarkup(row, { currentUserId, pending = false, recei
     : voice
       ? '<div class="pl-msg-voice-player"><audio controls preload="none" data-voice-path="' + esc(row.media_path) + '" data-message-id="' + esc(row.id || '') + '"></audio><span>Pesan suara · ' + formatMessageDuration(row.media_duration_seconds) + '</span><button type="button" class="pl-msg-voice-speed" data-voice-speed aria-label="Kecepatan pemutaran">1×</button></div>'
       : type === 'image' && row.media_path
-        ? '<div class="pl-msg-image-wrap"><img data-image-path="' + esc(row.media_path) + '" alt="Foto yang dikirim" loading="lazy"><span class="pl-msg-image-loading">Memuat foto…</span></div>' + (row.body ? '<div class="pl-msg-text">' + esc(row.body) + '</div>' : '')
+        ? '<a class="pl-msg-image-wrap" data-image-link href="#" target="_blank" rel="noopener" aria-label="Buka foto ukuran penuh"><img data-image-path="' + esc(row.media_path) + '" alt="Foto yang dikirim" loading="lazy"></a>' + (row.body ? '<div class="pl-msg-text">' + esc(row.body) + '</div>' : '')
         : type === 'file' && row.media_path
           ? '<a class="pl-msg-file" data-file-path="' + esc(row.media_path) + '" href="#" target="_blank" rel="noopener"><span class="pl-msg-file-icon" aria-hidden="true">PDF</span><span><b>' + esc(row.media_name || 'Dokumen') + '</b><small>' + esc(row.media_mime_type || 'File') + '</small></span><span aria-hidden="true">↓</span></a>' + (row.body ? '<div class="pl-msg-text">' + esc(row.body) + '</div>' : '')
           : '<div class="pl-msg-text">' + esc(row.body) + '</div>';
@@ -45,7 +45,7 @@ export function renderMessageMarkup(row, { currentUserId, pending = false, recei
   const reply = row.reply_preview ? '<div class="pl-msg-reply-preview"><b>Balasan</b><span>' + esc(row.reply_preview) + '</span></div>' : '';
   const starred = row.is_starred ? '<span class="pl-msg-starred" aria-label="Pesan ditandai" title="Pesan ditandai">★</span>' : '';
   const status = mine ? renderMessageStatus({ pending, receipt, voice }) : '';
-  return '<article class="pl-msg-bubble ' + (mine ? 'mine' : 'theirs') + (pending ? ' is-pending' : '') + (deleted ? ' is-deleted' : '') + '" data-message-id="' + esc(row.id || '') + '" data-message-type="' + esc(type) + '" data-media-path="' + esc(row.media_path || '') + '" data-media-name="' + esc(row.media_name || '') + '" data-media-mime="' + esc(row.media_mime_type || '') + '" data-media-duration="' + esc(row.media_duration_seconds || '') + '" data-message-body="' + esc(row.body || '') + '">' +
+  return '<article class="pl-msg-bubble ' + (mine ? 'mine' : 'theirs') + (type === 'image' && !deleted ? ' has-image' : '') + (pending ? ' is-pending' : '') + (deleted ? ' is-deleted' : '') + '" data-message-id="' + esc(row.id || '') + '" data-message-type="' + esc(type) + '" data-media-path="' + esc(row.media_path || '') + '" data-media-name="' + esc(row.media_name || '') + '" data-media-mime="' + esc(row.media_mime_type || '') + '" data-media-duration="' + esc(row.media_duration_seconds || '') + '" data-message-body="' + esc(row.body || '') + '">' +
     '<input class="pl-msg-select-box" type="checkbox" data-select-message aria-label="Pilih pesan" tabindex="-1">' + reply + content + starred + actions +
     '<footer class="pl-msg-meta"><time datetime="' + esc(row.created_at || '') + '">' + formatMessageTime(row.created_at) + '</time>' + status + '</footer></article>';
 }
