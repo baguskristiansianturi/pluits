@@ -3,7 +3,12 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 const roots = ['src/components', 'src/features', 'src/pages'];
-const allowedRoots = /^(?:\.pl-|\.ua-|\.ds-|\.plds-)/;
+const allowedRoots = /^(?:\.pl-|\.ua-|\.ds-|\.plds-|\.pluits-|#pl-)/;
+const approvedPageRootSelectors = new Set([
+  'html:has(.pl-msg)',
+  'body:has(.pl-msg)',
+  '#app:has(.pl-msg)'
+]);
 const keyframeStep = /^(?:from|to|\d+(?:\.\d+)?%)$/i;
 const files = [];
 
@@ -62,4 +67,4 @@ assert.deepEqual(
   [],
   'Component, feature and page CSS must be scoped to an owned root (.pl-, .ua-, .ds-, .plds-, .pluits- or #pl-). Move truly global rules to src/styles; page-root exceptions must be exact and reviewed:\n- ' + violations.join('\n- ')
 );
-console.log('CSS ownership verified across ' + files.length + ' component/feature stylesheets.');
+console.log('CSS ownership verified across ' + files.length + ' component, feature and page stylesheets.');
