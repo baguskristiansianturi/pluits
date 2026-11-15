@@ -227,5 +227,5 @@ Check the same core flows at viewport widths 320, 360, 390, 430, 768, 1024, and 
 3. Sign back in as the post owner and edit caption/visibility/media metadata. Confirm the edit works but the owner cannot change `moderation_status` back to `published`.
 4. As a normal user, submit a report against another user's account. In Moderation Center, confirm it can be moved to `reviewing` or `dismissed`, but there is no false `Tindak konten` action for the account.
 5. Confirm only an admin/moderator can apply post moderation status and that the action is reflected after refresh.
-7. Test DM initiation against the approved friend-first rule. Current backend allows any signed-in user to start a conversation with a public profile; private profiles require an accepted follow. This does not yet satisfy the documented friend-first rule.
-6. Record that pre-publication moderation is NOT IMPLEMENTED. New posts publish immediately; do not claim pre-moderation until a queue and approval workflow exist.
+6. Test DM initiation against the approved friend-first rule. Current backend allows any signed-in user to start a conversation with a public profile; private profiles require an accepted follow. This does not yet satisfy the documented friend-first rule.
+7. Record that pre-publication moderation is NOT IMPLEMENTED. New posts publish immediately; do not claim pre-moderation until a queue and approval workflow exist.
