@@ -89,3 +89,10 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - Captured the existing 1,324 unique unscoped selectors in `scripts/global-style-legacy-selectors.txt` as a reviewed legacy baseline. This is a compatibility freeze, not an endorsement that these selectors are correctly owned.
 - Extended the CSS boundary verifier so new unscoped selectors in these global files fail CI unless the baseline is explicitly reviewed and updated. Scoped `.pl-*` / `.ua-*` / design-system roots remain allowed.
 - Existing global CSS is not mechanically moved: selector ownership and route consumers still need a verified migration. This guard prevents further cascade growth while that audit continues.
+
+
+## 15 November 2026 — Profile image upload extraction
+
+- Moved avatar and cover upload event handling into `src/features/profile/image-upload.js`.
+- Kept the existing 8 MB size limit, JPG/PNG/WebP allowlist, storage bucket, profile-row update and refresh behavior. Supabase, notification and page-refresh dependencies are passed explicitly from Account.
+- Added a focused architecture regression test; storage authorization and RLS contracts are unchanged.

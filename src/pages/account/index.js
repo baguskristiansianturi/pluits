@@ -7,6 +7,7 @@ import {bindPostGalleries,normalizeFeedMediaFrames} from '../../features/posts/p
 import {bindSocialHeaderMenu} from '../../components/social/header-menu.js';
 import {bindProfileTabs as bindAccountProfileTabs} from '../../features/profile/profile-tabs.js';
 import {bindProfileImageFrameControls} from '../../features/profile/image-frame-controls.js';
+import {bindProfileImageUpload} from '../../features/profile/image-upload.js';
 import {bindExploreFilters} from '../../features/discovery/explore-filters.js';
 import '../../features/posts/post-card.css';
 import '../../features/posts/comments.css';
@@ -935,15 +936,10 @@ function bindProfileImageFrames(){
  });
 }
 function bindImageUpload(inputId,column,label){
- const input=document.getElementById(inputId);input?.addEventListener('change',async()=>{
-  const file=input.files?.[0];if(!file)return;
-  if(file.size>8*1024*1024){notify('Foto maksimal 8 MB.', 'error');return;}
-  if(!['image/jpeg','image/png','image/webp'].includes(file.type)){notify('Gunakan JPG, PNG, atau WebP.','error');return;}
-  try{notify('Mengunggah '+label+'…','info');const ext=file.name.split('.').pop().toLowerCase(),path=user.id+'/'+(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2))+'.'+ext;
-   const {error}=await supabase.storage.from(BUCKET).upload(path,file,{contentType:file.type,upsert:false});if(error)throw error;
-   const {data,error:updateError}=await supabase.from('user_profiles').update({[column]:path,updated_at:new Date().toISOString()}).eq('id',user.id).select().single();if(updateError)throw updateError;
-   profile=data;notify(label==='avatar'?'Foto profil diperbarui.':'Foto sampul diperbarui.');await mountAccount('profile',location.hash.includes('/edit')?'edit':'');
-  }catch(err){notify(err.message||'Upload gagal.','error');}
+ bindProfileImageUpload({
+  inputId,column,label,documentRef:document,supabaseClient:supabase,bucket:BUCKET,userId:user?.id,
+  notify,onProfileUpdated:data=>{profile=data;},
+  refreshProfile:()=>mountAccount('profile',location.hash.includes('/edit')?'edit':'')
  });
 }
 
