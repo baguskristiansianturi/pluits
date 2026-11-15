@@ -876,6 +876,7 @@ async function flushOutbox() {
   sendingQueue=true; updateNetworkStatus();
   try {
     const queue=readQueue(),remaining=[];
+    let draftConversationToOpen=null;
     for(const item of queue) {
       if(!navigator.onLine){remaining.push(item,...queue.slice(queue.indexOf(item)+1));break;}
       let targetConversation=item.conversation_id;
@@ -883,7 +884,7 @@ async function flushOutbox() {
         const started=await db.rpc('start_direct_conversation',{p_other_user_id:item.recipient_user_id});
         if(started.error){remaining.push(item);continue;}
         targetConversation=started.data;
-        if(currentConversation==='draft:'+item.recipient_user_id)currentConversation=targetConversation;
+        if(currentConversation==='draft:'+item.recipient_user_id){currentConversation=targetConversation;draftConversationToOpen=targetConversation;}
       }
       const {created_at,recipient_user_id,...messagePayload}=item;
       messagePayload.conversation_id=targetConversation;
@@ -896,7 +897,7 @@ async function flushOutbox() {
       }
     }
     writeQueue(remaining);
-    if(String(currentConversation||'').startsWith('draft:')&&remaining.length===0) await openConversation(currentConversation);
+    if(draftConversationToOpen&&!remaining.some(item=>item.recipient_user_id)) await openConversation(draftConversationToOpen);
     await loadConversations();
   } finally { sendingQueue=false; }
 }
