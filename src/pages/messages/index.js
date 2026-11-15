@@ -591,7 +591,8 @@ function bindMessageActions(chat,conversationId) {
   chat.querySelectorAll('[data-message-action]').forEach(button=>button.onclick=async()=>{
     const article=button.closest('[data-message-id]'),messageId=article?.dataset.messageId;if(!messageId)return;
     const action=button.dataset.messageAction;article.querySelector('.pl-msg-actions')?.removeAttribute('open');
-    if(action==='select'){selected.add(messageId);update();return;}\n    if(action==='star'){const existing=await db.from('user_message_stars').select('message_id').eq('user_id',currentUser.id).eq('message_id',messageId).maybeSingle();const result=existing.data?await db.from('user_message_stars').delete().eq('user_id',currentUser.id).eq('message_id',messageId):await db.from('user_message_stars').insert({user_id:currentUser.id,message_id:messageId});if(status)status.textContent=result.error?'Gagal mengubah tanda pesan: '+result.error.message:existing.data?'Tanda pesan dihapus.':'Pesan ditandai.';if(!result.error)await openConversation(conversationId);return;}
+    if(action==='select'){selected.add(messageId);update();return;}
+    if(action==='star'){const existing=await db.from('user_message_stars').select('message_id').eq('user_id',currentUser.id).eq('message_id',messageId).maybeSingle();const result=existing.data?await db.from('user_message_stars').delete().eq('user_id',currentUser.id).eq('message_id',messageId):await db.from('user_message_stars').insert({user_id:currentUser.id,message_id:messageId});if(status)status.textContent=result.error?'Gagal mengubah tanda pesan: '+result.error.message:existing.data?'Tanda pesan dihapus.':'Pesan ditandai.';if(!result.error)await openConversation(conversationId);return;}
     if(action==='reply'){const area=chat.querySelector('#pl-msg-compose textarea');if(area){area.dataset.replyTo=messageId;area.placeholder='Balas pesan terpilih…';area.focus();}if(status)status.textContent='Mode balas aktif. Tulis balasan Anda.';return;}
     if(action==='forward'){const dialog=chat.querySelector('#pl-msg-forward-dialog');if(dialog){dialog.dataset.messageId=messageId;dialog.showModal();}return;}
     if(action==='copy'){try{await navigator.clipboard.writeText(article.dataset.messageBody||'');if(status)status.textContent='Pesan disalin.';}catch{if(status)status.textContent='Browser tidak mengizinkan penyalinan pesan.';}return;}
@@ -625,7 +626,9 @@ async function openConversation(id) {
   ]):[{data:[],error:null},{data:[],error:null}];
   const receiptByMessage=new Map((receipts.data||[]).map(receipt=>[receipt.message_id,receipt]));
   const hiddenIds=new Set((hidden.data||[]).map(row=>row.message_id));
-  let visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id));\n  const replyIds=[...new Set(visibleMessages.map(message=>message.reply_to_id).filter(Boolean))];\n  if(replyIds.length){const replies=await db.from('user_messages').select('id,body,deleted_at,message_type').in('id',replyIds);const replyMap=new Map((replies.data||[]).map(row=>[row.id,row]));visibleMessages=visibleMessages.map(row=>({...row,reply_preview:row.reply_to_id?(replyMap.get(row.reply_to_id)?.deleted_at?'Pesan dihapus':replyMap.get(row.reply_to_id)?.body||'Lampiran') : ''}));}
+  let visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id));
+  const replyIds=[...new Set(visibleMessages.map(message=>message.reply_to_id).filter(Boolean))];
+  if(replyIds.length){const replies=await db.from('user_messages').select('id,body,deleted_at,message_type').in('id',replyIds);const replyMap=new Map((replies.data||[]).map(row=>[row.id,row]));visibleMessages=visibleMessages.map(row=>({...row,reply_preview:row.reply_to_id?(replyMap.get(row.reply_to_id)?.deleted_at?'Pesan dihapus':replyMap.get(row.reply_to_id)?.body||'Lampiran') : ''}));}
   if((messages.error||members.error)&&navigator.onLine){chat.textContent=(messages.error||members.error).message;return;}
   const queued=queueFor(id);
   const preferences=getInboxPreferences();
@@ -637,7 +640,8 @@ async function openConversation(id) {
     '<dialog class="pl-msg-forward-dialog" id="pl-msg-forward-dialog"><h3>Teruskan pesan</h3><label>Pilih percakapan<select>'+conversationCache.map(item=>'<option value="'+esc(item.id)+'">'+esc(item.other.display_name||item.other.username)+'</option>').join('')+'</select></label><div><button type="button" data-forward-cancel>Batal</button><button type="button" data-forward-send>Kirim</button></div></dialog>'+
     '<p class="pl-msg-chat-status" role="status">'+(queued.length?queued.length+' pesan menunggu koneksi.':'Pesan tersinkron. Voice note maksimal 3 menit; foto/dokumen maksimal 20 MB.')+'</p>';
   chat.querySelector('[data-chat-back]')?.addEventListener('click',()=>document.querySelector('#pl-msg-layout')?.classList.remove('is-chat-open'));
-  await hydrateVoicePlayers(chat);\n  await hydrateMessageMedia(chat);
+  await hydrateVoicePlayers(chat);
+  await hydrateMessageMedia(chat);
   const selfMember=(members.data||[]).find(member=>member.user_id===currentUser.id);
   const readAt=selfMember?.last_read_at;
   const latestIncoming=visibleMessages.filter(message=>message.sender_id!==currentUser.id).at(-1);
@@ -649,13 +653,15 @@ async function openConversation(id) {
   }
   hydrateChatAvatar(chat,thread?.other);
   bindMessageActions(chat,id);
-  bindVoiceRecorder(chat,id);\n  bindAttachmentComposer(chat,id);
+  bindVoiceRecorder(chat,id);
+  bindAttachmentComposer(chat,id);
   const form=chat.querySelector('#pl-msg-compose');
   bindTextComposer(form);
   form.onsubmit=async event=>{
     event.preventDefault();
     const body=String(new FormData(form).get('body')||'').trim(); if(!body)return;
-    const textarea=form.querySelector('textarea');\n    const item={client_message_id:crypto.randomUUID(),conversation_id:id,sender_id:currentUser.id,body,reply_to_id:textarea?.dataset.replyTo||null,created_at:new Date().toISOString()};
+    const textarea=form.querySelector('textarea');
+    const item={client_message_id:crypto.randomUUID(),conversation_id:id,sender_id:currentUser.id,body,reply_to_id:textarea?.dataset.replyTo||null,created_at:new Date().toISOString()};
     const button=form.querySelector('[type="submit"]'); button.disabled=true;
     if(!navigator.onLine) {
       const queue=readQueue(); queue.push(item);
