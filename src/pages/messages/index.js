@@ -218,7 +218,7 @@ export function messagesPage() {
       ${renderBrandLogo({href:'#/account/explore',className:'pl-msg-brand',size:40,label:'PLUITS Beranda'})}
       <span class="pl-msg-mobile-title">Inbox</span>
       <form id="pl-msg-search" class="pl-msg-head-search" role="search">
-        <div class="pl-msg-search-field"><span class="pl-msg-search-symbol">${socialIcon('search',{size:18})}</span><input name="q" type="search" placeholder="Cari orang…" autocomplete="off" aria-label="Cari berdasarkan nama atau nama pengguna"></div>
+        <div class="pl-msg-search-field"><span class="pl-msg-search-symbol">${socialIcon('search',{size:18})}</span><input name="q" type="search" placeholder="Cari username atau nama…"  autocomplete="off" aria-label="Cari berdasarkan nama atau nama pengguna"></div>
         <button type="submit" aria-label="Search">${socialIcon('search',{size:18})}</button>
         <div id="pl-msg-search-results" class="pl-msg-search-results" hidden></div>
       </form>
@@ -233,7 +233,7 @@ export function messagesPage() {
     <section class="pl-msg-content plds-container plds-container--wide">
       <section class="pl-msg-people" aria-label="Kontak online">
         <div class="pl-msg-people-heading">
-          <div><strong>Kontak</strong><small><span id="pl-msg-online-count">0 online</span> · <span id="pl-msg-offline-count">0 offline</span></small></div>
+          <div><strong>Kontak Inbox</strong><small>Terpisah dari pertemanan sosial · <span id="pl-msg-online-count">0 online</span> · <span id="pl-msg-offline-count">0 offline</span></small></div>
           <span class="pl-msg-network" id="pl-msg-network" role="status">● Connected</span>
         </div>
         <div class="pl-msg-people-strip" id="pl-msg-people-strip"><span class="pl-msg-online-empty">Memuat kontak…</span></div>
@@ -501,8 +501,8 @@ function onOnline() { updateNetworkStatus(); flushOutbox(); }
 async function openDraftConversation(recipientId) {
   currentConversation='draft:'+recipientId;
   let person=null;
-  try { person=(JSON.parse(localStorage.getItem(contactsKey())||'[]')).find(item=>item.id===recipientId)||null; } catch {}
-  if(!person){document.querySelector('#pl-msg-chat').innerHTML='<div class="pl-msg-empty">This contact is not cached. Load contacts while online before starting an offline DM.</div>';return;}
+  try { person=recipientId===currentUser.id?currentProfile:(JSON.parse(localStorage.getItem(contactsKey())||'[]')).find(item=>item.id===recipientId)||null; } catch {}
+  if(!person){document.querySelector('#pl-msg-chat').innerHTML='<div class="pl-msg-empty">Kontak ini belum tersimpan di perangkat. Hubungkan internet untuk memulai percakapan.</div>';return;}
   const chat=document.querySelector('#pl-msg-chat');if(!chat)return;
   document.querySelector('#pl-msg-layout')?.classList.add('is-chat-open');
   const queued=queueFor(currentConversation);
