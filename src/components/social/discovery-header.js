@@ -1,3 +1,4 @@
+import './discovery-header.css';
 import { socialIcon } from './social-icons.js';
 
 export function renderDiscoveryHeader({query='',notificationCount=0}={}){
