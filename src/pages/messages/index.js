@@ -712,6 +712,8 @@ async function openConversation(id) {
     db.from('user_messages').select('id,sender_id,body,created_at,deleted_at,message_type,media_path,media_duration_seconds,media_mime_type,media_name,reply_to_id').eq('conversation_id',id).order('created_at',{ascending:true}).limit(150),
     db.from('user_conversation_members').select('user_id,last_read_at').eq('conversation_id',id)
   ]);
+  const isSelfConversation=thread?.other?.is_self===true;
+  if(navigator.onLine&&isSelfConversation) await db.rpc('mark_conversation_read',{p_conversation_id:id});
   const messageIds=(messages.data||[]).map(message=>message.id);
   const [receipts,hidden,stars]=messageIds.length?await Promise.all([
     db.from('user_message_receipts').select('message_id,delivered_at,read_at,played_at').in('message_id',messageIds),
@@ -742,7 +744,7 @@ async function openConversation(id) {
   const latestIncoming=visibleMessages.filter(message=>message.sender_id!==currentUser.id).at(-1);
   if(navigator.onLine) {
     await db.rpc('mark_conversation_delivered',{p_conversation_id:id});
-    if(latestIncoming&&(!readAt||new Date(readAt)<new Date(latestIncoming.created_at))) {
+    if(!isSelfConversation&&latestIncoming&&(!readAt||new Date(readAt)<new Date(latestIncoming.created_at))) {
       await db.rpc('mark_conversation_read',{p_conversation_id:id});
     }
   }
