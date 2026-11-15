@@ -1,5 +1,5 @@
 import './discovery-header.css';
-import { socialIcon } from './social-icons.js';
+import { socialIcon } from '../common/social-icons.js';
 
 export function renderDiscoveryHeader({query='',notificationCount=0}={}){
  const badge=notificationCount>0?'<i class="ds-header-badge">'+(notificationCount>99?'99+':notificationCount)+'</i>':'';
