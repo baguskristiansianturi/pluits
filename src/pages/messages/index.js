@@ -15,6 +15,7 @@ let conversationCache = [];
 let realtimeChannel = null;
 let presenceSyncHandler = null;
 let contactsCache = [];
+const avatarUrlCache = new Map();
 let onlineUserIds = new Set();
 let sendingQueue = false;
 let networkListenersBound = false;
@@ -234,8 +235,13 @@ async function hydrateChatAvatar(container,person) {
 }
 async function signedAvatar(path) {
   if(!path||!navigator.onLine)return '';
+  const key=(currentUser?.id||'anonymous')+':'+path;
+  const cached=avatarUrlCache.get(key);
+  if(cached&&cached.expiresAt>Date.now())return cached.url;
   const {data,error}=await db.storage.from('pluits-user-media').createSignedUrl(path,1800);
-  return error?'':data?.signedUrl||'';
+  const url=error?'':data?.signedUrl||'';
+  if(url)avatarUrlCache.set(key,{url,expiresAt:Date.now()+25*60*1000});
+  return url;
 }
 async function renderPeopleCounts(people=contactsCache) {
   const rows=Array.isArray(people)?people:[];
