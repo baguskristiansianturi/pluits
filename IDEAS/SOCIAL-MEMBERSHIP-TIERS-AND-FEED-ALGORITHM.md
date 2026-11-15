@@ -570,3 +570,33 @@ Batas wajib:
 ### 18.6 Batas keputusan
 
 Pendapatan membership sebagai sumber awal, keterkaitan dengan toko/restoran/layanan, label membership sebagai sinyal komitmen, dan harga Rp1.900.000/bulan tetap HIPOTESIS/PROPOSAL diskusi. Belum ada harga, proyeksi pendapatan, paket benefit, strategi pemasaran, komisi, atau model transaksi yang disetujui. Tidak ada perubahan implementasi maupun roadmap aktif.
+
+
+## 19. Struktur kategori membership dan harga — usulan founder terbaru
+
+Founder mengusulkan dua kategori utama akun membership:
+
+- **Regular — Free:** akun dasar tanpa biaya membership.
+- **Premium — Paid:** kategori berbayar dengan empat level yang diusulkan.
+
+| Kategori | Level | Harga usulan per bulan |
+|---|---|---:|
+| Free | Regular | Gratis |
+| Premium | Silver Member | Rp450.000 |
+| Premium | Gold Member | Rp700.000 |
+| Premium | Platinum Member | Rp1.200.000 |
+| Premium | Golden | Rp1.900.000 |
+
+Urutan level premium yang diusulkan: Silver Member → Gold Member → Platinum Member → Golden. Dengan struktur ini, Golden berada di atas Platinum. Nama “Golden” menggantikan asumsi sebelumnya bahwa Platinum adalah level tertinggi; istilah dan positioning tetap perlu divalidasi.
+
+### Batas dan pertanyaan yang belum diputuskan
+
+1. Apakah angka di atas merupakan harga bulanan final, atau masih angka awal untuk diuji?
+2. Apakah semua harga mencakup pajak/biaya pembayaran atau ditampilkan sebelum biaya tambahan?
+3. Apa perbedaan manfaat yang terukur antara Silver, Gold, Platinum, dan Golden?
+4. Apakah upgrade/downgrade berlaku langsung atau pada periode tagihan berikutnya?
+5. Apakah tersedia periode tahunan, masa percobaan, pembatalan, dan pengembalian dana?
+6. Apakah Regular tetap memiliki akses penuh untuk menjelajahi ruang publik, membaca konten publik, dan menemukan toko/restoran/layanan?
+7. Fitur mana yang dibatasi oleh membership, dan aktivitas mana yang cukup memerlukan verifikasi tanpa harus premium?
+
+Harga dan nama level di atas merupakan usulan founder, bukan tarif publik yang sudah disahkan. Belum ada implementasi billing, benefit matrix final, atau perubahan roadmap.
