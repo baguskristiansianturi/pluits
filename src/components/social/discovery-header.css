@@ -1,5 +1,5 @@
 /* Shared search header used by Jelajah and opened Post cards. */
-.ds-top{display:flex;align-items:center;gap:9px;min-height:54px;padding:7px 12px;border-bottom:1px solid #edf0f0;background:rgba(255,255,255,.97)}
+.ds-top{position:sticky;top:0;z-index:230;display:flex;align-items:center;gap:9px;min-height:54px;padding:7px 12px;border-bottom:1px solid #edf0f0;background:rgba(255,255,255,.97)}
 .ds-search{display:flex;min-width:0;min-height:40px;height:40px;flex:1;align-items:center;gap:8px;padding:0 9px;border:1px solid #e5e9e9;border-radius:11px;background:rgba(239,242,242,.76);box-shadow:none}
 .ds-search-icon{display:grid;flex:0 0 17px;place-items:center;color:#778487}
 .ds-search-icon svg,.ds-search button svg{display:block;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
