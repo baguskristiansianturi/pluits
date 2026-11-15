@@ -170,3 +170,21 @@ Salin untuk keputusan berikutnya:
 - **Batas:** lima template awal berlaku untuk Personal Blog. News & Media memerlukan identitas organisasi terverifikasi, role editor/delegasi, dan aturan moderasi tersendiri sebelum diaktifkan. Reorder dan theme customization tidak mengubah skema isi artikel.
 - **Status implementasi:** migration template/layout dan blog_comments telah diterapkan pada Supabase production; PR #24 merged ke main pada commit 8e41d5850df184299ac6faf30ddc9a2b2e7d5a82; CI run #1873 SUCCESS (70/70 tests, Vite build, Pages deploy). Android UAT dan founder acceptance masih pending.
 - **Dokumen turunan:** docs/pluits/PERSONAL-BLOG-TEMPLATE-AND-BLOCK-SPEC.md, src/pages/blog-studio/README.md, dan checkpoint CP-082.
+
+
+## D-011 — Jelajah search-first visual discovery grid
+
+- **Tanggal keputusan:** 15 November 2026
+- **Status:** DECIDED
+- **Founder approval:** eksplisit melalui arahan desain founder pada 15 November 2026.
+- **Konteks:** halaman Jelajah terlalu padat dengan beberapa blok pengantar, rekomendasi orang, Story, dan modul lain sebelum konten utama. Tujuan Jelajah adalah membantu pengguna menemukan konten publik secara visual dan cepat.
+- **Keputusan final:**
+  1. Bagian paling atas Jelajah hanya menampilkan search bar yang ringkas.
+  2. Di bawah search bar ada satu carousel horizontal berisi filter jenis konten dan kategori/topik yang tersedia. Teks kecil, elegan, dan dapat digeser.
+  3. Konten utama langsung berupa grid media. Pada HP gunakan tiga kolom, rasio portrait 4:5, gutter sekitar 3 px, dan pemanfaatan lebar layar agar sekitar 3,5–4 baris dapat terlihat pada area layar utama.
+  4. Kartu tidak menampilkan caption panjang. Identitas kreator cukup berupa avatar kecil yang tetap jelas dan username ringkas.
+  5. Video diputar otomatis dalam keadaan muted, loop, dan playsinline hanya ketika kartu terlihat; hentikan saat keluar viewport atau aplikasi berada di background. Hormati preferensi reduced motion dan batasi video aktif agar perangkat mobile tidak terbebani.
+  6. Gunakan ikon SVG yang konsisten dan profesional untuk penanda video/multi-media dan affordance melihat konten. Jangan menampilkan jumlah view palsu atau menganggap ikon mata sebagai metrik jika data view belum tersedia.
+  7. Jelajah tetap terpisah dari Circle. Blok Story Circle, rekomendasi orang, nearby, Top 10, dan promosi lain tidak menjadi pengantar halaman Jelajah.
+- **Batas:** keputusan ini adalah perubahan presentation dan efisiensi pemuatan frontend. Tidak mengubah ranking, model bisnis, schema Supabase, atau aturan privasi/eligibility konten.
+- **Status implementasi:** PR #29 terbuka pada branch `fix/explore-discovery-grid-mobile`; automated CI belum terverifikasi; Pages belum deploy; Android UAT dan founder acceptance belum dilakukan.
