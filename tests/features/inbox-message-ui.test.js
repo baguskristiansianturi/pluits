@@ -10,7 +10,7 @@ test('message status differentiates queued, sent, delivered and read', () => {
 });
 
 test('message markup escapes content and only exposes delete-for-everyone to sender', () => {
-  const row = { id: 'm1', sender_id: 'u1', body: '<script>alert(1)</script>', created_at: '2026-11-15T10:00:00Z', message_type: 'text' };
+  const row = { id: 'm1', sender_id: 'u1', body: '<script>alert(1)</script>', created_at: new Date().toISOString(), message_type: 'text' };
   const own = renderMessageMarkup(row, { currentUserId: 'u1' });
   const other = renderMessageMarkup(row, { currentUserId: 'u2' });
   assert.doesNotMatch(own, /<script>/);
