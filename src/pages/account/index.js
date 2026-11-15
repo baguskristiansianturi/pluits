@@ -3,6 +3,7 @@ import { mountAuthPage } from '../../features/auth/auth.js';
 import {socialIcon} from '../../components/common/social-icons.js';
 import {renderBrandLogo} from '../../components/common/brand.js';
 import {renderPostActions,renderPostCard} from '../../features/posts/index.js';
+import {loadPostComments} from '../../features/posts/comments.js';
 import {bindPostGalleries,normalizeFeedMediaFrames} from '../../features/posts/post-media-layout.js';
 import {bindSocialHeaderMenu} from '../../components/social/header-menu.js';
 import {bindProfileTabs as bindAccountProfileTabs} from '../../features/profile/profile-tabs.js';
@@ -1286,53 +1287,8 @@ function bindPostActions(){
  });
 }
 async function loadComments(postId,box){
- box.innerHTML='<p class="ua-muted">Memuat komentar…</p>';
- const {data,error}=await supabase.from('post_comments').select('id,post_id,user_id,body,created_at,parent_comment_id').eq('post_id',postId).order('created_at',{ascending:true});
- if(error){box.innerHTML='<p class="ua-muted">'+esc(error.message)+'</p>';return;}
- const comments=data||[],ids=[...new Set(comments.map(c=>c.user_id))],commentIds=comments.map(c=>c.id);
- const [pr,likesRes]=await Promise.all([
-  ids.length?supabase.from('user_profiles').select('id,display_name,username').in('id',ids):Promise.resolve({data:[],error:null}),
-  commentIds.length?supabase.from('post_comment_likes').select('comment_id,user_id').in('comment_id',commentIds):Promise.resolve({data:[],error:null})
- ]);
- if(pr.error||likesRes.error){box.innerHTML='<p class="ua-muted">'+esc((pr.error||likesRes.error).message)+'</p>';return;}
- const people=new Map((pr.data||[]).map(p=>[p.id,p])),likes=likesRes.data||[];
- const children=new Map();
- comments.forEach(c=>{const parent=c.parent_comment_id||'root';if(!children.has(parent))children.set(parent,[]);children.get(parent).push(c);});
- const render=(c,depth=0)=>{
-  const person=people.get(c.user_id),username=person?.username||'pengguna',liked=likes.some(x=>x.comment_id===c.id&&x.user_id===user.id),count=likes.filter(x=>x.comment_id===c.id).length;
-  const replies=(children.get(c.id)||[]).map(x=>render(x,Math.min(depth+1,3))).join('');
-  return '<article class="ua-comment-item '+(depth?'ua-comment-nested':'ua-comment-root')+'" data-comment-id="'+c.id+'" data-comment-depth="'+Math.min(depth,3)+'" style="--comment-depth:'+Math.min(depth,3)+'"><div class="ua-comment-copy"><a href="#/@'+encodeURIComponent(username)+'" class="ua-comment-author">'+esc(person?.display_name||'Pengguna Pluits')+'</a><p>'+esc(c.body)+'</p><small>'+fmtDate(c.created_at)+'</small><div class="ua-comment-actions"><button type="button" data-comment-like="'+c.id+'" class="'+(liked?'is-liked':'')+'" aria-label="'+(liked?'Batal suka komentar':'Sukai komentar')+'">'+socialIcon("heart",{size:14})+'<span>'+(liked?'Disukai':'Suka')+'</span><b>'+count+'</b></button><button type="button" data-comment-reply="'+c.id+'">Balas</button></div><form class="ua-reply-form" data-reply-form="'+c.id+'" hidden><input name="body" maxlength="1200" required placeholder="Tulis balasan…"><button type="submit">Kirim</button></form></div>'+replies+'</article>';
- };
- box.innerHTML='<div class="ua-comment-thread" aria-live="polite">'+(children.get('root')||[]).map(c=>render(c)).join('')+'</div>'+'<form class="ua-comment-form" aria-label="Kirim komentar"><input name="body" maxlength="1200" required autocomplete="off" aria-label="Tulis komentar" placeholder="Tulis komentar…"><button type="submit"><span>Kirim</span></button></form>';
- box.querySelectorAll('[data-comment-like]').forEach(button=>button.addEventListener('click',async()=>{
-  const commentId=button.dataset.commentLike;button.disabled=true;
-  const exists=likes.some(x=>x.comment_id===commentId&&x.user_id===user.id);
-  const result=exists?await supabase.from('post_comment_likes').delete().eq('comment_id',commentId).eq('user_id',user.id):await supabase.from('post_comment_likes').insert({comment_id:commentId,user_id:user.id});
-  if(result.error){notify(result.error.message,'error');button.disabled=false;}else await loadComments(postId,box);
- }));
- box.querySelectorAll('[data-comment-reply]').forEach(button=>button.addEventListener('click',()=>{
-  const form=box.querySelector('[data-reply-form="'+button.dataset.commentReply+'"]');if(form){form.hidden=!form.hidden;if(!form.hidden)form.querySelector('input')?.focus();}
- }));
- const submitComment=async(form,parentId=null)=>{
-  const body=String(new FormData(form).get('body')||'').trim();if(!body)return;
-  if(!user?.id){notify('Masuk kembali untuk mengirim komentar.','error');return;}
-  const submit=form.querySelector('button'),input=form.querySelector('[name="body"]');
-  if(submit?.disabled)return;
-  if(submit){submit.disabled=true;submit.dataset.originalLabel=submit.textContent;submit.textContent='Mengirim…';}
-  try{
-   const {error:insertError}=await supabase.from('post_comments').insert({post_id:postId,user_id:user.id,body,parent_comment_id:parentId});
-   if(insertError)throw insertError;
-   if(input)input.value='';
-   const counter=document.querySelector('[data-post-id="'+postId+'"] [data-action="comments"] b');
-   if(counter)counter.textContent=String(Number(counter.textContent||0)+1);
-   await loadComments(postId,box);
-  }catch(error){
-   notify(error?.message||'Komentar belum berhasil dikirim. Periksa koneksi lalu coba lagi.','error');
-  }finally{
-   if(submit){submit.disabled=false;submit.textContent=submit.dataset.originalLabel||'Kirim';}
-  }
- };
- box.querySelector('.ua-comment-form')?.addEventListener('submit',e=>{e.preventDefault();submitComment(e.currentTarget);});
- box.querySelectorAll('[data-reply-form]').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();submitComment(form,form.dataset.replyForm);}));
+ return loadPostComments({
+  postId,box,supabaseClient:supabase,user,notify,escapeHtml:esc,formatDate:fmtDate,socialIcon,documentRef:document
+ });
 }
 export function mountUserAccount(section='profile',parameter=''){return mountAccount(section,parameter);}

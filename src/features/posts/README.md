@@ -1,6 +1,6 @@
 # Posts
 
-**Status:** Canonical shared post-card renderer and action controls implemented; composer, comment flows and feed data orchestration remain in page controllers.
+**Status:** Canonical shared post-card renderer, action controls, comment-thread loading and reply/like interactions are feature-owned; composer and feed data orchestration remain in page controllers.
 
 ## Public API
 - `src/features/posts/index.js` exports `renderPostCard` and `renderPostActions`.
@@ -20,6 +20,10 @@
 ## Boundaries
 Feed/page controllers own ordering, hydration, authorization and event handling. The card renderer owns shared markup and visual contract. Public guest-home feed is still rendered by `pages/home` and remains a separate migration target; do not claim it uses the canonical card until migrated and tested.
 
+
+## Comment thread behavior
+- `comments.js` owns comment/reply retrieval, nested thread rendering, comment likes and submission. The Account page injects the current user, Supabase client and UI helpers.
+- Replies remain nested to a maximum display depth of three; comment data and row-level permissions remain governed by the existing database policies.
 
 ## Media layout behavior
 - `post-media-layout.js` owns the page-independent DOM behavior for gallery counters and responsive media-frame normalization.
