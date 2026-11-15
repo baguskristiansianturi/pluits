@@ -103,3 +103,10 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - Moved personal username/display-name validation and profile-save orchestration to `src/features/profile/profile-editor.js`.
 - Account now injects current profile accessors, Supabase client, image-frame persistence helpers, notifications and SEO updates. Existing optimistic update/rollback, unique-username handling and frame persistence remain in the feature.
 - Added direct unit tests for identity validation and updated production-surface assertions to follow the new owner.
+
+
+## 15 November 2026 — Profile Blog tab renderer extraction
+
+- Moved public Blog route lookup, public published-post retrieval, signed cover URL creation and card markup to `src/features/profile/profile-blog-tab.js`.
+- The Account page supplies the active profile/user, Supabase client, media bucket and formatting helpers; Profile tabs continue to load Blog content lazily.
+- Updated the Profile Blog regression test to assert feature ownership while retaining the Account adapter contract.
