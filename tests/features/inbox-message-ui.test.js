@@ -41,3 +41,29 @@ test('Inbox tabs expose implemented All and Unread filters only', () => {
   assert.match(sidebar, /data-inbox-tab="unread"/);
   assert.doesNotMatch(sidebar, /data-inbox-tab="requests"|data-inbox-tab="blocked"/);
 });
+
+
+test('image and file attachments render as private media cards', () => {
+  const image = renderMessageMarkup({
+    id:'img-1',sender_id:'u1',body:'',created_at:new Date().toISOString(),
+    message_type:'image',media_path:'conversation/u1/photo.jpg',media_mime_type:'image/jpeg'
+  }, {currentUserId:'u1'});
+  const file = renderMessageMarkup({
+    id:'file-1',sender_id:'u1',body:'',created_at:new Date().toISOString(),
+    message_type:'file',media_path:'conversation/u1/brief.pdf',media_mime_type:'application/pdf',media_name:'brief.pdf'
+  }, {currentUserId:'u1'});
+  assert.match(image,/data-image-path=/);
+  assert.match(file,/data-file-path=/);
+  assert.match(file,/brief\.pdf/);
+});
+
+test('message markup exposes reply and starred state without unsafe HTML', () => {
+  const markup=renderMessageMarkup({
+    id:'m-star',sender_id:'u1',body:'Safe text',created_at:new Date().toISOString(),
+    message_type:'text',is_starred:true,reply_preview:'Earlier message'
+  },{currentUserId:'u1'});
+  assert.match(markup,/data-message-action="star"/);
+  assert.match(markup,/Pesan ditandai/);
+  assert.match(markup,/Earlier message/);
+  assert.doesNotMatch(markup,/<script>/);
+});
