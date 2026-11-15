@@ -3,6 +3,22 @@
 **Status:** PROPOSED — catatan hasil diskusi founder, belum menjadi spesifikasi implementasi.  
 **Ruang lingkup:** aturan akun untuk penggunaan media sosial PLUITS. Tidak mencakup aturan toko, bisnis, layanan, transaksi, atau keuangan.
 
+## Tujuan dokumen
+
+Dokumen ini menjadi acuan aturan tentang **apa yang boleh dilakukan setiap level akun dalam lingkungan media sosial PLUITS**. Dokumen ini menjelaskan hak, batasan, privasi, dan perilaku fitur sosial berdasarkan level Regular, Silver, Gold, Platinum, dan Golden PLUITS Priority.
+
+Cakupannya meliputi seluruh pengalaman sosial PLUITS, bukan hanya fitur pertemanan. Termasuk akun dan profil, privasi serta audiens, menemukan orang, hubungan/follow, feed dan distribusi konten, postingan, foto/video/Reels, komentar dan interaksi, notifikasi sosial, kunjungan profil, pemblokiran, serta fitur sosial lain yang nantinya ditambahkan.
+
+Dokumen ini harus dipakai sebagai dasar bersama ketika:
+- Merancang alur produk dan aturan setiap fitur sosial.
+- Menentukan halaman, layar, navigasi, dan state yang diperlukan.
+- Merancang UI/UX serta pengalaman pengguna untuk setiap level akun.
+- Menentukan entitlement/permission dan perilaku frontend.
+- Merancang kebutuhan backend, API, database, keamanan, dan algoritma distribusi/rekomendasi.
+- Menyusun skenario pengujian agar semua level dan pengaturan privasi berjalan konsisten.
+
+**Cara membacanya:** aturan di sini menentukan kebutuhan dan batas perilaku produk; bukan otomatis menjadi desain layar atau spesifikasi teknis final. Frontend dan backend harus mengikuti aturan yang telah disepakati di sini. Jika ada fitur baru atau perubahan hak akun, aturan dokumen diperbarui terlebih dahulu sebelum implementasi.
+
 ## 1. Level akun
 
 Urutan membership yang sedang digunakan dalam pemetaan:
