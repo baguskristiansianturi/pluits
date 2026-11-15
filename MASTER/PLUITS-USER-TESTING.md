@@ -62,7 +62,7 @@
 
 ### 5. Uji Stories 24 jam
 1. Pastikan profil Publik bila ingin menguji Story publik.
-2. Buka Explore. Di bagian Stories, pilih Buat Story.
+2. Buka menu Buat, lalu pilih jenis konten Story. Jangan mencari tombol buat pada Story Ring Circle: rail tersebut hanya menampilkan Story aktif dari akun yang diikuti.
 3. Unggah satu foto, tambahkan caption singkat, pilih Publik, lalu Bagikan Story.
 4. Pastikan Story muncul di strip horizontal; ketuk untuk membuka viewer.
 5. Ulangi dengan video MP4/WebM dan pastikan video dapat diputar serta tidak dipotong/diregangkan.
@@ -98,7 +98,10 @@
 - Kembali ke akun pertama dan ubah lagi menjadi Publik bila ingin melanjutkan tes feed.
 
 ## Catatan batas fitur pada build ini
-- Chat pribadi, followers/following, notifikasi tag, moderasi/report/block, edit/hapus postingan, halaman profil publik yang dapat dibuka lewat username, dan tampilan toko di profil masih menjadi PR. Stories dan feed Reels dasar sudah tersedia; upload/view nyata dan uji perangkat masih menunggu. Full-screen swipe/autoplay Reels belum dibuat.
+- Chat/Inbox, follow/follower lists, public username profiles, edit/hapus postingan, report/block, dan fondasi moderation queue sudah memiliki implementasi dasar. Status tersebut **belum ACCEPTED** karena two-account RLS/API/Realtime dan Android founder UAT belum dilakukan.
+- Stories dan feed Reels dasar tersedia; upload media nyata, playback Android, audience/privacy, dan reconnect masih menunggu UAT. Full-screen swipe/autoplay Reels belum dibuat.
+- Notifikasi dasar memiliki event backend dan UI, tetapi unread badge global, recipient scope, deep-link routing, dan seluruh event perlu diverifikasi lintas akun.
+- Tampilan toko di profil, staff invitation/permission management, wallet uang sungguhan, dan transaksi marketplace tidak termasuk Social First Release dan belum boleh dipromosikan sebagai fitur aktif.
 - Share menggunakan native share sheet Android bila tersedia; browser lain menggunakan salin tautan.
 - Peta menggunakan OpenStreetMap/Leaflet dan membutuhkan koneksi internet. Jika peta gagal dimuat, koordinat tetap dapat dimasukkan manual.
 - Saldo/wallet dan transaksi uang sungguhan tidak diaktifkan.
@@ -119,7 +122,7 @@ Catat halaman, langkah, pesan error persis, tipe file/ukuran file, dan waktu kej
 Gunakan dua akun nyata berbeda (A dan B). Jangan memakai akun orang lain tanpa izin.
 
 1. Login akun A dan buka postingan publik akun B.
-2. Ketuk nama/username B. Pastikan profil publik B terbuka melalui URL hash username.
+2. Ketuk nama/username B. Pastikan profil publik B terbuka melalui URL canonical `/pluits/@username/`; alias hash lama harus dinormalisasi ke profil yang sama.
 3. Dari A, tekan **Ikuti**. Pastikan tombol berubah menjadi **Mengikuti** dan jumlah mengikuti/pengikut berubah setelah halaman dimuat ulang.
 4. Buka profil A dan pastikan daftar Pengikut memuat A/B sesuai hubungan yang benar.
 5. Ubah akun B menjadi privat. Pastikan pengunjung anonim hanya melihat username, nama tampilan, dan status privat; bio, avatar, cover, wilayah, Story, serta postingan tidak terbuka.
@@ -205,3 +208,13 @@ Check the same core flows at viewport widths 320, 360, 390, 430, 768, 1024, and 
 10. Jangan menghapus data browser selama masih membutuhkan draf; penyimpanan saat ini lokal dan belum memiliki sinkronisasi lintas perangkat.
 
 **Lulus jika:** draf terpisah per user_id, dapat disimpan/dipulihkan/dihapus, lampiran dipulihkan pada browser yang mendukung DataTransfer, dan tidak pernah diterbitkan sebelum pengguna menekan Bagikan. Android runtime UAT masih harus dilakukan founder.
+
+
+## Status implementasi dan pengujian — 15 November 2026
+
+- **IMPLEMENTED:** fondasi post/feed, profile visibility, follow/private follow, comments/replies, Inbox/DM, offline outbox, notifications, report/block, account settings, Stories/Reels dasar, dan public username routes.
+- **DEPLOYED:** GitHub Pages commit `8f4245bcf5ff158ade4e04dbeafbd44e61c925cb`; workflow run `43713663249` (#2176) berhasil. Automated tests 148/148 lulus; production build, output verification, artifact upload, dan Pages deploy berhasil.
+- **NOT TESTED:** real Android photo/video upload and playback; two-account RLS and Realtime; private profile/media isolation; DM reconnect/outbox exactly-once behavior; notifications recipient/deep-link behavior; TOTP/SMS provider flows; full responsive/accessibility/performance matrix.
+- **ACCEPTANCE PENDING:** founder belum melakukan dan merekam UAT pada perangkat nyata.
+- **Data review required:** database saat ini memiliki lima postingan publik berstatus published dari satu profil; sebagian caption kosong atau tampak seperti input uji. Jangan hapus atau mengubah akun/postingan tanpa konfirmasi pemilik data. Review apakah konten tersebut memang layak tetap publik sebelum launch.
+- **Integrity:** synthetic people, Story, local-product, dan Top 10 fallback sudah dihapus dari jalur aktif Circle. Ketika data asli belum tersedia, UI menampilkan empty state atau menyembunyikan section.
