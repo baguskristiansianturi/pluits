@@ -126,7 +126,7 @@ function emptyStateMarkup({variant='message',title,description,action=''}) {
 export function messagesPage() {
   return `<main class="pl-msg ua-social-app">
     <header class="pl-msg-head">
-      ${renderBrandLogo({href:'#/account/explore',className:'pl-msg-brand',size:36,label:'PLUITS Beranda'})}
+      ${renderBrandLogo({href:'#/account/explore',className:'pl-msg-brand',size:40,label:'PLUITS Beranda'})}
       <form id="pl-msg-search" class="pl-msg-head-search" role="search">
         <div class="pl-msg-search-field"><span class="pl-msg-search-symbol">${socialIcon('search',{size:18})}</span><input name="q" type="search" placeholder="Cari orang…" autocomplete="off" aria-label="Cari berdasarkan nama atau nama pengguna"></div>
         <button type="submit" aria-label="Search">${socialIcon('search',{size:18})}</button>
