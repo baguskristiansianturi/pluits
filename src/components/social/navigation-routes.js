@@ -52,7 +52,7 @@ export function canonicalizeLegacyRoute(value = '') {
       inbox:'inbox/', message:'inbox/', messages:'inbox/', activity:'notifications/',
       profile:'profile/', followers:'followers/', following:'following/', requests:'follow-requests/',
       saved:'saved/', reels:'reels/', settings:'settings/', auth:'login/', login:'login/',
-      register:'register/', blog:'blog-studio/', wallet:'wallet/', addresses:'addresses/'
+      register:'register/', blog:'blog-studio/', wallet:'wallet/', addresses:'addresses/', reel:'reels/create/', story:'stories/create/', preview:'profile/preview/', drafts:'create/drafts/'
     };
     path += accountMap[b] || (b ? b + '/' : '');
     if (b === 'profile' && c === 'edit') path = SITE_BASE + 'profile/edit/';
@@ -93,6 +93,12 @@ export function getInternalRoute(locationLike = window.location) {
   let internal = reverse[path] || '';
   if (path === 'inbox/settings') internal = 'inbox/settings';
   else if (a === 'profile' && b === 'edit') internal = 'profile/edit';
+  else if (a === 'profile' && b === 'preview') internal = 'account/preview';
+  else if (a === 'reels' && b === 'create') internal = 'account/reel';
+  else if (a === 'stories' && b === 'create') internal = 'account/story';
+  else if (a === 'create' && b === 'drafts') internal = 'account/drafts';
+  else if (a === 'trips' && b === 'itinerary') internal = 'trip/itinerary/' + (c || '');
+  else if (a === 'trips') internal = 'trip';
   else if (a === 'marketplace' && b === 'cart') internal = 'market-cart';
   else if (a === 'marketplace' && b === 'checkout') internal = 'market-checkout';
   else if (a === 'marketplace' && b === 'orders' && c) internal = 'market-order/' + c;
