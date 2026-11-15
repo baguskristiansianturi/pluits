@@ -1,5 +1,5 @@
-import { socialIcon } from '../common/social-icons.js';
-import { renderBrandLogo } from '../common/brand.js';
+import   socialIcon } from '../common/social-icons.js';
+import   renderBrandLogo } from '../common/brand.js';
 import { ROUTES, getRoute } from './navigation-routes.js';
 
 export function renderSocialHeader({ active = 'explore', profileView = false, showEditProfile = profileView, user, profile, userAvatar = '', notificationCount = 0, publicHome = false } = {}) {
