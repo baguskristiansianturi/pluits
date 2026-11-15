@@ -4,6 +4,7 @@ import { socialIcon } from '../../components/common/social-icons.js';
 import {renderBrandLogo} from '../../components/common/brand.js';
 import { renderSocialMobileNav } from '../../components/social/navigation.js';
 import { renderInboxSidebar } from '../../features/inbox/inbox-sidebar.js';
+import { renderMessageMarkup, formatMessageDuration } from '../../features/inbox/message-ui.js';
 
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -34,17 +35,9 @@ function queueFor(conversationId) { return readQueue().filter(row => row.convers
 function formatTime(value) {
   return new Date(value).toLocaleString('id-ID', {dateStyle:'short',timeStyle:'short'});
 }
-function formatDuration(value) {
-  const seconds=Math.max(0,Number(value)||0);
-  return Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');
-}
-function messageMarkup(row, pending = false, readByOther = false) {
-  const voice=row.message_type==='voice'&&row.media_path&&!row.deleted_at;
-  const content=voice
-    ? '<div class="pl-msg-voice-player"><audio controls preload="none" data-voice-path="'+esc(row.media_path)+'"></audio><span>Voice message · '+formatDuration(row.media_duration_seconds)+'</span></div>'
-    : esc(row.body);
-  return '<article class="pl-msg-bubble '+(row.sender_id===currentUser.id?'mine':'')+(pending?' is-pending':'')+'">'+
-    content+'<small>'+formatTime(row.created_at)+(pending?' · Saved on this device · Waiting for connection':readByOther?' · ✓✓ Read':'')+'</small></article>';
+function formatDuration(value) { return formatMessageDuration(value); }
+function messageMarkup(row, pending = false, receipt = null) {
+  return renderMessageMarkup(row, { currentUserId: currentUser?.id, pending, receipt });
 }
 async function hydrateVoicePlayers(container) {
   const players=[...container.querySelectorAll('audio[data-voice-path]')];
@@ -332,8 +325,20 @@ export async function bindMessagesPage() {
   if(!networkListenersBound){window.addEventListener('online',onOnline);window.addEventListener('offline',updateNetworkStatus);networkListenersBound=true;}
   realtimeChannel=db.channel('pluits-dm-'+user.id)
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'user_messages'},payload=>{
+      const conversationId=payload.new?.conversation_id;
+      if(conversationId&&payload.new?.sender_id!==currentUser.id) db.rpc('mark_conversation_delivered',{p_conversation_id:conversationId});
+      if(conversationId===currentConversation) openConversation(currentConversation);
+      else loadConversations();
+    })
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_messages'},payload=>{
       if(payload.new?.conversation_id===currentConversation) openConversation(currentConversation);
       else loadConversations();
+    })
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'user_message_receipts'},payload=>{
+      if(currentConversation) openConversation(currentConversation);
+    })
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_message_receipts'},payload=>{
+      if(currentConversation) openConversation(currentConversation);
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_conversation_members'},payload=>{
       if(payload.new?.conversation_id===currentConversation) openConversation(currentConversation);
@@ -413,6 +418,33 @@ async function loadConversations() {
   list.querySelectorAll('[data-open-chat]').forEach(button=>button.onclick=()=>openConversation(button.dataset.openChat));
   list.hidden=false;
 }
+async function bindMessageActions(chat,conversationId) {
+  chat.querySelectorAll('[data-message-action]').forEach(button=>button.onclick=async()=>{
+    const article=button.closest('[data-message-id]');
+    const messageId=article?.dataset.messageId;
+    if(!messageId)return;
+    const action=button.dataset.messageAction;
+    if(action==='copy') {
+      try { await navigator.clipboard.writeText(article.dataset.messageBody||''); button.textContent='Tersalin'; }
+      catch { const status=chat.querySelector('.pl-msg-chat-status');if(status)status.textContent='Browser tidak mengizinkan penyalinan pesan.'; }
+      return;
+    }
+    if(action==='hide') {
+      const {error}=await db.rpc('hide_message_for_me',{p_message_id:messageId});
+      if(error){const status=chat.querySelector('.pl-msg-chat-status');if(status)status.textContent=error.message;return;}
+      await openConversation(conversationId);return;
+    }
+    if(action==='delete-everyone') {
+      if(!window.confirm('Hapus pesan ini untuk semua peserta?'))return;
+      const {data:mediaPath,error}=await db.rpc('delete_message_for_everyone',{p_message_id:messageId});
+      if(error){const status=chat.querySelector('.pl-msg-chat-status');if(status)status.textContent=error.message;return;}
+      if(mediaPath)await db.storage.from('pluits-message-media').remove([mediaPath]);
+      await openConversation(conversationId);
+      await loadConversations();
+    }
+  });
+}
+
 async function openConversation(id) {
   if(String(id).startsWith('draft:'))return openDraftConversation(String(id).slice(6));
   currentConversation=id;
@@ -424,22 +456,32 @@ async function openConversation(id) {
     db.from('user_messages').select('id,sender_id,body,created_at,deleted_at,message_type,media_path,media_duration_seconds').eq('conversation_id',id).order('created_at',{ascending:true}).limit(150),
     db.from('user_conversation_members').select('user_id,last_read_at').eq('conversation_id',id)
   ]);
+  const messageIds=(messages.data||[]).map(message=>message.id);
+  const [receipts,hidden]=messageIds.length?await Promise.all([
+    db.from('user_message_receipts').select('message_id,delivered_at,read_at').in('message_id',messageIds),
+    db.from('user_message_hidden').select('message_id').eq('user_id',currentUser.id).in('message_id',messageIds)
+  ]):[{data:[],error:null},{data:[],error:null}];
+  const receiptByMessage=new Map((receipts.data||[]).map(receipt=>[receipt.message_id,receipt]));
+  const hiddenIds=new Set((hidden.data||[]).map(row=>row.message_id));
+  const visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id));
   if((messages.error||members.error)&&navigator.onLine){chat.textContent=(messages.error||members.error).message;return;}
   const queued=queueFor(id);
-  chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Pesan">‹</button><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+'</small></div><span>'+ (navigator.onLine?'Connected':'Offline · messages queued')+'</span></header>'+
-    '<div class="pl-msg-stream">'+((messages.data||[]).length? (messages.data||[]).map(message=>{
-      const deleted=Boolean(message.deleted_at);
-      const otherMember=(members.data||[]).find(member=>member.user_id!==currentUser.id);
-      const readByOther=message.sender_id===currentUser.id&&Boolean(otherMember?.last_read_at)&&new Date(otherMember.last_read_at)>=new Date(message.created_at);
-      return messageMarkup({...message,body:deleted?'Pesan dihapus':message.body,message_type:deleted?'text':message.message_type,media_path:deleted?null:message.media_path},false,readByOther);
-    }).join('') : emptyStateMarkup({variant:'message',title:'Belum ada pesan',description:'Kirim pesan pertama untuk memulai percakapan.'}))+queued.map(row=>messageMarkup(row,true)).join('')+'</div>'+
+  chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Pesan">‹</button><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+'</small></div><span>'+ (navigator.onLine?'Online':'Offline · pesan akan diantrekan')+'</span></header>'+
+    '<div class="pl-msg-stream">'+(visibleMessages.length?visibleMessages.map(message=>messageMarkup(message,false,receiptByMessage.get(message.id))).join('') : emptyStateMarkup({variant:'message',title:'Belum ada pesan',description:'Kirim pesan pertama untuk memulai percakapan.'}))+queued.map(row=>messageMarkup(row,true)).join('')+'</div>'+
     '<form id="pl-msg-compose"><textarea name="body" rows="2" maxlength="5000" placeholder="Tulis pesan…" required></textarea><button type="button" class="pl-msg-voice" data-voice-record aria-label="Record a voice message">🎙 Voice</button><button type="submit">Kirim</button></form>'+
     '<p class="pl-msg-chat-status" role="status">'+(queued.length?queued.length+' messages waiting for connection.':'Pesan tersinkron dengan server. Voice message maksimal 3 menit.')+'</p>';
   chat.querySelector('[data-chat-back]')?.addEventListener('click',()=>document.querySelector('#pl-msg-layout')?.classList.remove('is-chat-open'));
   await hydrateVoicePlayers(chat);
   const selfMember=(members.data||[]).find(member=>member.user_id===currentUser.id);
   const readAt=selfMember?.last_read_at;
-  if(navigator.onLine&&(!readAt||new Date(readAt)<new Date())) await db.rpc('mark_conversation_read',{p_conversation_id:id});
+  const latestIncoming=visibleMessages.filter(message=>message.sender_id!==currentUser.id).at(-1);
+  if(navigator.onLine) {
+    await db.rpc('mark_conversation_delivered',{p_conversation_id:id});
+    if(latestIncoming&&(!readAt||new Date(readAt)<new Date(latestIncoming.created_at))) {
+      await db.rpc('mark_conversation_read',{p_conversation_id:id});
+    }
+  }
+  bindMessageActions(chat,id);
   bindVoiceRecorder(chat,id);
   const form=chat.querySelector('#pl-msg-compose');
   form.onsubmit=async event=>{
