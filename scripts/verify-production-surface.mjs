@@ -366,6 +366,7 @@ assert.match(discoveryFeature, /connection\?\.saveData/, 'Video preview concurre
 assert.match(discoveryFeature, /slice\(0,budget\)/, 'Autoplay concurrency must be bounded by device capability.');
 assert.match(discoveryFeature, /preload='metadata'/, 'Video metadata must load only after a tile enters the viewport.');
 assert.match(discoveryFeature, /capturePoster/, 'Decoded video frames should be captured as static posters where allowed.');
+assert.match(discoveryFeature, /addEventListener\('loadedmetadata'/, 'Visible video tiles must attempt to decode a static first frame even when not autoplaying.');
 assert.match(discoveryFeature, /is-preview-unavailable/, 'Failed video decoding must preserve a visible fallback tile.');
 assert.match(discoveryFeature, /const loading=index<9/, 'Initial photo rows must be loaded eagerly while later tiles remain lazy.');
 assert.match(discoveryStyles, /\.ds-chips button\{[^}]*border:0!important/, 'Mobile category controls must not show pill borders.');
