@@ -66,7 +66,7 @@ export function renderSocialMobileNav({ active = 'home', profileView = false, us
     { key: 'home', href: publicHome ? ROUTES.publicHome : ROUTES.home, label: publicHome ? 'Beranda' : 'Circle', icon: 'users' },
     { key: 'discover', href: ROUTES.discover, label: 'Jelajah', icon: 'compass' },
     { key: 'create', href: ROUTES.create, label: 'Buat', icon: 'plus' },
-    { key: 'messages', href: publicHome ? '#/help' : ROUTES.inbox, label: publicHome ? 'Bantuan' : 'Pesan', icon: 'message' },
+    { key: 'messages', href: publicHome ? '#/help' : ROUTES.inbox, label: 'Pesan', icon: 'message' },
     { key: 'profile', href: publicHome ? ROUTES.login : profileHref, label: 'Profil', icon: 'user', avatar: publicHome ? '' : userAvatar }
   ];
   return `<nav class="${navClass}" aria-label="Navigasi utama Pluits">${items.map(item => {
