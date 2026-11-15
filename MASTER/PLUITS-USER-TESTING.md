@@ -213,7 +213,7 @@ Check the same core flows at viewport widths 320, 360, 390, 430, 768, 1024, and 
 ## Status implementasi dan pengujian — 15 November 2026
 
 - **IMPLEMENTED:** fondasi post/feed, profile visibility, follow/private follow, comments/replies, Inbox/DM, offline outbox, notifications, report/block, account settings, Stories/Reels dasar, dan public username routes.
-- **DEPLOYED:** GitHub Pages commit `61d632b544541a901485cc6f54e85b2558d5a0f3`; workflow run `43714307219` (#2188) berhasil. Automated tests 150/150 lulus; production build, PWA asset output verification, artifact upload, dan Pages deploy berhasil.
+- **DEPLOYED:** GitHub Pages commit `6d53909ef799a278023dd7ef63c1b6d460ca7ccf`; workflow run `43714961593` (#2208) berhasil. Automated tests 154/154 lulus; production build, PWA asset output verification, artifact upload, dan Pages deploy berhasil.
 - **NOT TESTED:** real Android photo/video upload and playback; two-account RLS and Realtime; private profile/media isolation; DM reconnect/outbox exactly-once behavior; notifications recipient/deep-link behavior; TOTP/SMS provider flows; full responsive/accessibility/performance matrix.
 - **PWA install smoke test (NOT TESTED):** buka URL HTTPS di Chrome Android, periksa menu Install app / Add to Home screen, pasang ikon, buka dari launcher, dan pastikan tampil standalone serta semua route tetap memakai scope `/pluits/`. Manifest menyediakan ikon PNG 192px/512px dan Apple touch icon 180px. Offline app-shell belum tersedia; jangan menganggap aplikasi bekerja offline selain outbox DM lokal.
 - **ACCEPTANCE PENDING:** founder belum melakukan dan merekam UAT pada perangkat nyata.
@@ -227,4 +227,5 @@ Check the same core flows at viewport widths 320, 360, 390, 430, 768, 1024, and 
 3. Sign back in as the post owner and edit caption/visibility/media metadata. Confirm the edit works but the owner cannot change `moderation_status` back to `published`.
 4. As a normal user, submit a report against another user's account. In Moderation Center, confirm it can be moved to `reviewing` or `dismissed`, but there is no false `Tindak konten` action for the account.
 5. Confirm only an admin/moderator can apply post moderation status and that the action is reflected after refresh.
+7. Test DM initiation against the approved friend-first rule. Current backend allows any signed-in user to start a conversation with a public profile; private profiles require an accepted follow. This does not yet satisfy the documented friend-first rule.
 6. Record that pre-publication moderation is NOT IMPLEMENTED. New posts publish immediately; do not claim pre-moderation until a queue and approval workflow exist.
