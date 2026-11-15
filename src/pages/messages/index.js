@@ -493,7 +493,7 @@ export async function bindMessagesPage() {
     onlineUserIds=new Set(Object.values(state).flat().map(entry=>entry.user_id).filter(Boolean));
     const presenceNode=document.querySelector('#pl-msg-chat-presence');
     const activeThread=conversationCache.find(item=>item.id===currentConversation);
-    if(presenceNode&&activeThread?.other?.id)presenceNode.textContent=activeThread.other.is_self?'Catatan pribadi':onlineUserIds.has(activeThread.other.id)?'Online':'Tidak online';
+    if(presenceNode&&activeThread?.other?.id)presenceNode.textContent=activeThread.other.is_self||activeThread.other.id===currentUser.id?'Online':onlineUserIds.has(activeThread.other.id)?'Online':'Offline';
     void renderPeopleStrip(contactsCache,true);
   };
   window.addEventListener('pluits:presence-sync',presenceSyncHandler);
