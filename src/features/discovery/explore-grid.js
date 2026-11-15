@@ -36,7 +36,7 @@ export function renderExploreGrid({posts=[],categories=[],selectedCategory='all'
  }).join('');
  const content=contentType==='blog'?blogMarkup:contentType==='live'?liveMarkup:posts.length?posts.map(renderCard).join(''):'<div class="pl-explore-empty">Belum ada konten publik yang cocok.</div>';
  const contentClass=contentType==='blog'?'pl-explore-blog-feed':'pl-explore-grid';
- return '<section class="pl-explore-discovery" aria-label="Jelajah PLUITS"><header class="pl-explore-header"><h1>Jelajah</h1><a href="#/search" aria-label="Cari konten, orang, atau topik">'+icon('search')+'</a></header><nav class="pl-explore-category-carousel" aria-label="Kategori Jelajah">'+typeChips+categoryChips+'</nav><div class="'+contentClass+'">'+content+'</div></section>';
+ return '<section class="pl-explore-discovery" aria-label="Jelajah PLUITS"><h1 class="pl-explore-sr-only">Jelajah</h1><form class="pl-explore-search" data-explore-search role="search" aria-label="Cari di Jelajah"><span class="pl-explore-search-icon">'+icon('search')+'</span><input name="q" type="search" autocomplete="off" placeholder="Cari video, orang, atau topik..." aria-label="Cari video, orang, atau topik"><button type="submit" aria-label="Cari">Cari</button></form><nav class="pl-explore-category-carousel" aria-label="Kategori Jelajah">'+typeChips+categoryChips+'</nav><div class="'+contentClass+'">'+content+'</div></section>';
 }
 
 let playbackObserver=null;
@@ -44,6 +44,8 @@ let playbackVisibilityHandler=null;
 export function bindExploreGridPlayback(){
  if(playbackObserver){playbackObserver.disconnect();playbackObserver=null;}
  if(playbackVisibilityHandler)document.removeEventListener('visibilitychange',playbackVisibilityHandler);
+ const searchForm=document.querySelector('[data-explore-search]');
+ searchForm?.addEventListener('submit',event=>{event.preventDefault();const query=String(searchForm.querySelector('input[name="q"]')?.value||'').trim();location.hash=query?'#/search?q='+encodeURIComponent(query):'#/search';});
  const videos=[...document.querySelectorAll('[data-explore-video]')];
  if(!videos.length)return;
  let activeVideo=null;
