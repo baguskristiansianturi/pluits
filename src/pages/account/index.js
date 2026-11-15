@@ -912,7 +912,7 @@ async function mountAccount(section='profile',parameter=''){
   user=session?.user||null;
   if(!user&&(section==='user'||section==='post')){
    const page=section==='user'?await publicProfilePage(parameter):await postDetailPage(parameter||location.hash.split('/')[3]||'');if(!isCurrent())return;
-   document.querySelector('#app').innerHTML=frame(page,'explore');bindProfileTabs();return;
+   document.querySelector('#app').innerHTML=frame(page,section==='post'?'post':'explore');if(section==='post')bindDiscoveryHeader();bindProfileTabs();return;
   }
   if(['auth','register','login'].includes(section)){authScreen(section==='auth'?parameter:section);return;}
   if(!user){authScreen('login');return;}
