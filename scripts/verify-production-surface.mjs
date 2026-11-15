@@ -308,9 +308,10 @@ assert.ok(exploreGrid.includes('data-explore-search') && exploreGrid.includes('d
 assert.ok(exploreGrid.includes('data-explore-video') && exploreGrid.includes('IntersectionObserver') && exploreGrid.includes('entry.intersectionRatio>=.55'), 'Explore video previews must play only while sufficiently visible.');
 assert.ok(exploreGrid.includes('video.muted=true') && exploreGrid.includes('video.loop=true') && exploreGrid.includes('playsInline=true'), 'Explore video previews must be muted, looping and inline.');
 assert.ok(exploreGrid.includes('prefers-reduced-motion') && exploreGrid.includes('playbackRouteHandler'), 'Explore playback must respect reduced motion and clean up on navigation.');
-assert.match(exploreGridCss, /grid-template-columns:repeat\\(3,minmax\\(0,1fr\\)\\)/, 'Explore mobile discovery must use three columns.');
-assert.match(exploreGridCss, /aspect-ratio:4\\/5/, 'Explore media tiles must use a portrait 4:5 ratio.');
-assert.ok(accountExplore.includes('sorted.map(post=>renderReelCard(post,{user,avatar,socialIcon,esc}))'),'Reels must use the dedicated Reel card renderer.');assert.ok(read('src/features/reels/reel-card.js').includes('data-reel-sound') && read('src/features/reels/reels.css').includes('ua-reels-app'), 'Reel viewer must provide full-screen controls and sound toggle.');
+assert.ok(exploreGridCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))'), 'Explore mobile discovery must use three columns.');
+assert.ok(exploreGridCss.includes('aspect-ratio:4/5'), 'Explore media tiles must use a portrait 4:5 ratio.');
+assert.ok(accountExplore.includes('sorted.map(post=>renderReelCard(post,{user,avatar,socialIcon,esc}))'),'Reels must use the dedicated Reel card renderer.');
+assert.ok(read('src/features/reels/reel-card.js').includes('data-reel-sound') && read('src/features/reels/reels.css').includes('ua-reels-app'), 'Reel viewer must provide full-screen controls and sound toggle.');
 assert.ok(read('src/pages/account/index.js').includes('content_kind:contentKind'), 'Publishing must persist the explicit Post or Reel content kind.');
 assert.ok(read('src/pages/account/index.js').includes('accept="video/*,.mp4,.m4v,.mov,.webm,.3gp,.3gpp,.3g2,.3gp2"'),'Reel picker must request common Android video formats explicitly.');
 assert.ok(read('src/features/reels/reel-card.js').includes('ua-reel-stage'),'Reel card module must own its stage.');
