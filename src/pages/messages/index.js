@@ -502,7 +502,20 @@ async function bindMessageActions(chat,conversationId) {
     if(action==='hide') {
       const {error}=await db.rpc('hide_message_for_me',{p_message_id:messageId});
       if(error){const status=chat.querySelector('.pl-msg-chat-status');if(status)status.textContent=error.message;return;}
-      await openConversation(conversationId);return;
+      await openConversation(conversationId);
+      const status=document.querySelector('#pl-msg-chat .pl-msg-chat-status');
+      if(status){
+        status.innerHTML='Pesan dihapus dari tampilan Anda. <button type="button" data-undo-hide>Urungkan</button>';
+        const undo=status.querySelector('[data-undo-hide]');
+        undo.onclick=async()=>{
+          undo.disabled=true;
+          const restored=await db.rpc('undo_hide_message_for_me',{p_message_id:messageId});
+          if(restored.error||!restored.data){status.textContent=restored.error?.message||'Waktu urungkan sudah habis.';return;}
+          await openConversation(conversationId);
+        };
+        setTimeout(()=>{if(status.isConnected&&status.querySelector('[data-undo-hide]'))status.textContent='Pesan dihapus dari tampilan Anda.';},5000);
+      }
+      return;
     }
     if(action==='delete-everyone') {
       if(!window.confirm('Hapus pesan ini untuk semua peserta?'))return;
