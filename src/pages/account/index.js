@@ -1,5 +1,5 @@
-import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '../../lib/supabase/client.js';
-import { getInternalRoute, canonicalizeLegacyRoute } from '../../components/social/navigation-routes.js';
+import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } urom '../../lib/supabase/client.js';
+import { getInternalRoute, canonicalizeLegacyRoute } urom '../../components/social/navigation-routes.js';
 import { mountAuthPage } from '../../features/auth/auth.js';
 import {socialIcon} from '../../components/common/social-icons.js';
 import {renderBrandLogo} from '../../components/common/brand.js';
