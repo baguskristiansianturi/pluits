@@ -1264,3 +1264,71 @@
 .pl-msg-attach-menu button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7}
 #pl-msg-compose{position:relative}
 @media(max-width:760px){.pl-msg-image-wrap{max-width:min(78vw,420px)!important}.pl-msg-image-wrap img{max-height:65vh!important}}
+
+
+/* Final mobile conversation layout: full-width media, content-sized text bubbles. */
+@media(max-width:760px){
+  .pl-msg-stream{
+    align-items:stretch!important;
+    padding-inline:10px!important;
+  }
+  .pl-msg-bubble:not(.has-image){
+    box-sizing:border-box!important;
+    width:fit-content!important;
+    max-width:100%!important;
+    min-width:0!important;
+    flex:0 1 auto!important;
+    overflow-wrap:anywhere!important;
+  }
+  .pl-msg-bubble:not(.has-image).mine{align-self:flex-end!important}
+  .pl-msg-bubble:not(.has-image).theirs{align-self:flex-start!important}
+  .pl-msg-bubble.has-image{
+    display:block!important;
+    box-sizing:border-box!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    align-self:stretch!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+  .pl-msg-bubble.has-image .pl-msg-image-wrap{
+    display:block!important;
+    box-sizing:border-box!important;
+    width:100%!important;
+    max-width:100%!important;
+    padding:0!important;
+    margin:0!important;
+  }
+  .pl-msg-bubble.has-image .pl-msg-image-wrap img{
+    display:block!important;
+    box-sizing:border-box!important;
+    width:100%!important;
+    height:auto!important;
+    max-width:100%!important;
+    max-height:70vh!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    border:0!important;
+    border-radius:8px!important;
+  }
+  .pl-msg-bubble.has-image .pl-msg-meta{
+    display:flex!important;
+    justify-content:flex-end!important;
+    padding:3px 2px 0!important;
+    margin:0!important;
+  }
+}
+/* Desktop text bubbles stay compact for short messages and expand for long ones. */
+@media(min-width:761px){
+  .pl-msg-bubble:not(.has-image){
+    width:fit-content!important;
+    max-width:min(78%,520px)!important;
+  }
+  .pl-msg-bubble.has-image{
+    width:fit-content!important;
+    max-width:min(78%,520px)!important;
+  }
+}
