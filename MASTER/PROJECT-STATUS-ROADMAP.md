@@ -1368,3 +1368,15 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - **Regression coverage:** production-surface checks verify module ownership, device-aware concurrency, Save-Data, lazy video metadata, poster capture, fallback surfaces, photo priority and borderless category styles.
 - **Status:** PR #31 MERGED / CI #2034 SUCCESS / PR ARTIFACT UPLOADED / PRODUCTION DEPLOYMENT NOT YET VERIFIED / ANDROID UAT NOT TESTED.
 - **Next:** verify main-branch Pages deployment, then check actual video decode and memory behavior on 2 GB Android plus a higher-capability device.
+
+
+## CP-086 — Circle/Profile route integrity and social navigation order (15 November 2026)
+
+- **Problem observed:** entering the human-readable account route `#/account/circle` could fall through the account renderer's default branch and display Profile, because only `explore` was recognized as the Circle feed section.
+- **Canonical navigation order:** Circle → Jelajah → Buat → Pesan → Profil.
+- **Canonical routes:** Circle `#/account/explore`; Jelajah `#/search`; Profile `#/account/profile`. Circle and Jelajah remain distinct product surfaces: personalized/relevant Circle feed versus public discovery Jelajah.
+- **Fix:** root alias `#/circle` redirects to `#/account/explore`; account section aliases `circle`, `home`, and `feed` normalize to `explore` before the account page switch, so they cannot fall through to Profile.
+- **Regression coverage:** checks assert Circle canonical route, Jelajah separate route, account alias normalization, and exact five-slot mobile navigation order.
+- **PR:** #32 merged to main at `8e4fe58a6505575d2dfb2fb5c66ddd295d1588ac`.
+- **CI:** workflow #2039 SUCCESS — production-surface verification, module-boundary verification, unit tests, Vite production build, and Pages artifact upload all passed. Pages deployment after merge not independently verified here.
+- **Runtime limitation:** no authenticated browser session/device automation was available for clicking through a live signed-in account. Android UAT remains pending.
