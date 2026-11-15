@@ -243,6 +243,13 @@ const discoveryCss = read('src/pages/search/discovery.css');
 assert.ok(discoveryCss.includes('.ds-feed{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px}'), 'Jelajah must render a compact three-column discovery gallery.');
 assert.ok(discovery.includes('ds-grid-tile') && discovery.includes('ds-text-tile') && discovery.includes('ds-tile-video'), 'Jelajah must preserve text, photo and video discovery tiles.');
 assert.match(discoveryCss, /safe-area-inset-bottom/, 'Explore bottom navigation must respect device safe areas.');
+assert.doesNotMatch(discovery, /class="ds-intro"|id="ds-sort"/, 'Jelajah must not add editorial copy or a separate sort bar above its categories.');
+assert.ok(discovery.indexOf('class="ds-search"')<discovery.indexOf('id="ds-chips"')&&discovery.indexOf('id="ds-chips"')<discovery.indexOf('id="ds-feed"'), 'Jelajah must order search, category carousel, then media grid.');
+assert.ok(discovery.includes('data-discovery-video')&&discovery.includes('IntersectionObserver')&&discovery.includes('entry.intersectionRatio>=.55'), 'Jelajah videos must autoplay only while sufficiently visible.');
+assert.ok(discovery.includes('video.muted=true')&&discovery.includes('video.loop=true')&&discovery.includes('video.playsInline=true'), 'Jelajah video previews must be muted, looping and inline.');
+assert.ok(discovery.includes('prefers-reduced-motion')&&discovery.includes('stopDiscoveryVideoPreviews'), 'Jelajah playback must respect reduced motion and clean up on navigation.');
+assert.ok(discovery.includes('ds-tile-view')&&discovery.includes('ds-tile-username'), 'Jelajah cards must show a restrained view icon and compact creator identity.');
+assert.ok(discoveryCss.includes('aspect-ratio:3/4')&&discoveryCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))'), 'Jelajah cards must keep a three-column portrait grid on mobile.');
 
 const profileSource = read('src/pages/account/index.js');
 for (const tab of ['posts', 'reels', 'trip', 'blog']) {
@@ -300,17 +307,8 @@ assert.match(postLayoutCss, /pluits-heart-core 1\.18s/, 'Main heart animation mu
 assert.ok(read('src/main.js').includes("history.replaceState(null, '', location.pathname + location.search + '#/')"), 'Legacy home aliases must normalize to the canonical public home URL.');
 assert.ok(read('src/pages/home/index.js').includes("location.hash='#/account/explore'"), 'Authenticated users must enter the canonical signed-in Explore workspace from the root URL.');
 
-const accountExplore = read('src/pages/account/index.js');
-assert.ok(accountExplore.includes('renderExploreGrid({posts:sorted,categories:categoryOptions,selectedCategory:exploreCategory,contentType:exploreContentType,blogMarkup,liveMarkup})'), 'Explore must compose the isolated visual discovery grid.');
-const exploreGrid = read('src/features/discovery/explore-grid.js');
-const exploreGridCss = read('src/features/discovery/explore-grid.css');
-assert.ok(exploreGrid.includes('data-explore-search') && exploreGrid.includes('data-explore-category'), 'Explore must expose its search field and horizontal category controls.');
-assert.ok(exploreGrid.includes('data-explore-video') && exploreGrid.includes('IntersectionObserver') && exploreGrid.includes('entry.intersectionRatio>=.55'), 'Explore video previews must play only while sufficiently visible.');
-assert.ok(exploreGrid.includes('video.muted=true') && exploreGrid.includes('video.loop=true') && exploreGrid.includes('playsInline=true'), 'Explore video previews must be muted, looping and inline.');
-assert.ok(exploreGrid.includes('prefers-reduced-motion') && exploreGrid.includes('playbackRouteHandler'), 'Explore playback must respect reduced motion and clean up on navigation.');
-assert.ok(exploreGridCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))'), 'Explore mobile discovery must use three columns.');
-assert.ok(exploreGridCss.includes('aspect-ratio:4/5'), 'Explore media tiles must use a portrait 4:5 ratio.');
-assert.ok(accountExplore.includes('sorted.map(post=>renderReelCard(post,{user,avatar,socialIcon,esc}))'),'Reels must use the dedicated Reel card renderer.');
+assert.ok(read('src/pages/account/index.js').includes('sorted.map(post=>postCard(post)).join(\'\')'),'The home feed must use the defined post-card renderer, not the Reel-only renderer.');
+assert.ok(read('src/pages/account/index.js').includes('sorted.map(post=>renderReelCard(post,{user,avatar,socialIcon,esc}))'),'Reels must use the dedicated Reel card renderer.');
 assert.ok(read('src/features/reels/reel-card.js').includes('data-reel-sound') && read('src/features/reels/reels.css').includes('ua-reels-app'), 'Reel viewer must provide full-screen controls and sound toggle.');
 assert.ok(read('src/pages/account/index.js').includes('content_kind:contentKind'), 'Publishing must persist the explicit Post or Reel content kind.');
 assert.ok(read('src/pages/account/index.js').includes('accept="video/*,.mp4,.m4v,.mov,.webm,.3gp,.3gpp,.3g2,.3gp2"'),'Reel picker must request common Android video formats explicitly.');
