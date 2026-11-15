@@ -25,13 +25,12 @@ async function render() {
   }
   const internal = getInternalRoute(location);
   const path = internal.split('?')[0].replace(/\/$/, '');
-  const expectedAddress = currentAddress();
   if (['home', 'feed', 'beranda', 'guest'].includes(path)) {
     history.replaceState(null, '', SITE_BASE);
   }
   const finalAddress = currentAddress();
   await route();
-  if (sequence !== renderSequence || currentAddress() !== finalAddress || expectedAddress !== finalAddress && path !== '') return;
+  if (sequence !== renderSequence || currentAddress() !== finalAddress) return;
   if ((!path || path === 'guest') && document.querySelector('#pl-public-feed')) {
     const {bindHome}=await import('./pages/home/index.js');
     await bindHome();
