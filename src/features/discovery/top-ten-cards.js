@@ -1,4 +1,3 @@
-import {supabase} from '../../lib/supabase/client.js';
 const TOP_TEN_DEMO_ITEMS=[
  {className:'ua-topten-card-1',href:'#/places?category=restaurant',image:'photo-1555939594-58d7cb561ad1',width:1000,title:'Babi Guling Bu Coco',location:'Kuta',category:'Kuliner',alt:'Hidangan kuliner khas',priority:true},
  {className:'ua-topten-card-2',href:'#/places?category=restaurant',image:'photo-1607623814075-e51df1bdc82f',width:1000,title:'Beef Slab',location:'Seminyak',category:'Kuliner',alt:'Hidangan beef steak'},
@@ -11,14 +10,15 @@ const TOP_TEN_DEMO_ITEMS=[
  {className:'ua-topten-card-9',href:'#/places',image:'photo-1521737711867-e3b97375f902',width:850,title:'Private Bali Driver',location:'Bali',category:'Layanan',alt:'Layanan dan komunitas'},
  {className:'ua-topten-card-10',href:'#/trip',image:'photo-1500530855697-b586d89ba3ee',width:850,title:'Air Terjun Sekumpul',location:'Buleleng',category:'Pengalaman',alt:'Perjalanan alam'}
 ];
-export async function loadTopTenTrending(){
+export async function loadTopTenTrending(db){
+ if(!db)return TOP_TEN_DEMO_ITEMS;
  const center={lat:-8.4095,lon:115.1889};
- const {data:rows,error}=await supabase.rpc('directory_nearby',{p_lat:center.lat,p_lon:center.lon,p_radius_m:100000,p_limit:100,p_category_slug:null,p_query:null});
+ const {data:rows,error}=await db.rpc('directory_nearby',{p_lat:center.lat,p_lon:center.lon,p_radius_m:100000,p_limit:100,p_category_slug:null,p_query:null});
  if(error)throw error;
  if(!rows?.length)return TOP_TEN_DEMO_ITEMS;
  const ids=rows.map(row=>row.id).filter(Boolean);
  const since=new Date(Date.now()-7*86400000).toISOString();
- const {data:links,error:linkError}=await supabase.from('user_post_directory_entities').select('entity_id,post_id,created_at').in('entity_id',ids).gte('created_at',since).order('created_at',{ascending:false}).limit(1000);
+ const {data:links,error:linkError}=await db.from('user_post_directory_entities').select('entity_id,post_id,created_at').in('entity_id',ids).gte('created_at',since).order('created_at',{ascending:false}).limit(1000);
  if(linkError)throw linkError;
  const postIds=[...new Set((links||[]).map(link=>link.post_id).filter(Boolean))];
  const {data:published,error:postError}=postIds.length?await supabase.from('user_posts').select('id').in('id',postIds).eq('visibility','public').eq('moderation_status','published'):{data:[],error:null};
