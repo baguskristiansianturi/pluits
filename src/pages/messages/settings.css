@@ -63,3 +63,19 @@
 .pl-dm-setting-control input[type="checkbox"]{width:20px;height:20px;accent-color:#294966}
 .pl-dm-setting-info{display:block}
 .pl-dm-setting-info:last-child,.pl-dm-setting-control:last-child{border-bottom:0}
+
+
+/* Professional settings controls and accessible mobile layout. */
+.pl-dm-setting-reset,.pl-dm-setting-action{min-height:40px;padding:0 13px;border:1px solid #dce4eb;border-radius:9px;background:#fff;color:#304b65;font:inherit;font-size:11px;font-weight:750;cursor:pointer;margin:8px 0}
+.pl-dm-setting-reset:focus-visible,.pl-dm-setting-action:focus-visible,.pl-dm-setting-control select:focus-visible{outline:2px solid #5a83a6;outline-offset:2px}
+.pl-dm-wallpaper-upload input{max-width:170px;font-size:10px;color:#64758a}
+.pl-dm-settings-group summary:focus-visible{outline:2px solid #6a8ca9;outline-offset:-3px}
+.pl-dm-settings-note{font-size:10px;line-height:1.6;color:#8793a1}
+.pl-dm-setting-info{gap:5px}
+@media(max-width:600px){
+ .pl-dm-settings-intro h2{font-size:23px}
+ .pl-dm-setting-control{align-items:flex-start;flex-wrap:wrap}
+ .pl-dm-setting-control>span{flex:1 1 160px}
+ .pl-dm-wallpaper-upload input{max-width:100%;width:100%}
+ .pl-dm-settings-items{padding-left:14px}
+}
