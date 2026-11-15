@@ -8,6 +8,7 @@ const account = await readFile(new URL('../../src/pages/account/index.js', impor
 const navigation = await readFile(new URL('../../src/components/social/navigation.js', import.meta.url), 'utf8');
 
 test('primary social navigation has canonical destinations', () => {
+  assert.equal(getRoute('create', false), ROUTES.create, 'Guest Create navigation must preserve the requested destination.');
   assert.deepEqual({
     circle: ROUTES.home,
     discover: ROUTES.discover,
