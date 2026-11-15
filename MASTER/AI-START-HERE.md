@@ -59,7 +59,7 @@ Jika dokumen bertentangan, jangan menebak. Ikuti keputusan aktif terbaru di Busi
 - Founder bekerja mobile-first; laporan harus mudah diuji dari Android.
 
 ## Baseline audit
-Snapshot live 9 November 2026, sekitar 03:13 WITA:
+Historical baseline live 9 November 2026, sekitar 03:13 WITA (superseded by the 15 November snapshot below):
 - Supabase project ytndswhqxayqpftszwfh, ACTIVE_HEALTHY, PostgreSQL 17.11.0.018, region ap-southeast-1.
 - 62 public base tables; seluruh 62 mengaktifkan RLS.
 - Live migration history: 81 entries; cocokkan versi/nama/konten dengan folder migration sebelum DDL.
@@ -77,3 +77,55 @@ Seller Center/business onboarding/URL wajib mengikuti docs/pluits/SELLER-CENTER-
 Rincian dan batas bukti: docs/pluits/SOCIAL-AND-STORE-UAT-READINESS-AUDIT-2026-11-09.md, docs/pluits/PLUITS-TECHNOLOGY-ROADMAP-AND-AUDIT-2026-11-09.md, docs/pluits/GEODIRECTORY-TRUST-AND-CLAIM-AUDIT-2026-11-09.md, docs/pluits/SOCIAL-PRIVACY-AND-RELEASE-AUDIT-2026-11-09.md, docs/pluits/RLS-REMEDIATION-PLAN-AND-SQL-2026-11-09.md, dan MASTER/PLUITS-SECURITY-REVIEW.md.
 
 **Prinsip wajib:** cerita founder dan masalah manusia—terutama perjalanan Ibu Nia—adalah alasan PLUITS dibuat. UX harus familiar bagi pengguna media sosial visual; GeoDirectory menghubungkan kehidupan lokal. Turunkan keputusan teknis dari model bisnis, bukan sebaliknya.
+
+## Current verified production snapshot — 15 November 2026
+
+**This section supersedes the 9 November baseline counts.** Keep the older snapshot as history only.
+
+### Runtime and database
+- Supabase project `ytndswhqxayqpftszwfh`: ACTIVE_HEALTHY; PostgreSQL 17.11.0.018; region ap-southeast-1.
+- Public base tables: 69; RLS enabled on 69/69.
+- Live migration history: 106 entries.
+- Public views: 3; all have `security_invoker=true`.
+- Storage buckets: 3; all private. User media limit 50 MB; store media 10 MB; voice media 10 MB.
+- Edge Functions deployed: 0.
+- Health Advisor: 0 lints.
+- Security Advisor: 22 authenticated-executable SECURITY DEFINER RPC warnings and 1 leaked-password-protection warning. Current inspection found no anonymous EXECUTE grants for the reviewed public SECURITY DEFINER functions; do not treat the advisor warning alone as proof of exploitability. Function-by-function authz and negative tests remain required.
+- Leaked-password protection is **disabled** and must be enabled through a controlled Supabase Auth security change before public launch.
+- Performance Advisor: 2 auth RLS init-plan warnings, 2 multiple-permissive-policy warnings, 1 unindexed FK INFO notice, and 87 unused-index INFO notices. Do not drop unused indexes without workload evidence.
+
+### Migration parity — critical operational warning
+- Repository `supabase/migrations/`: 99 SQL files.
+- Live Supabase history: 106 migrations.
+- Exact version + name matches: 56.
+- Same migration name but different timestamp prefix: 20.
+- Live migration names with no exact repository filename: 30.
+- Repository migration files whose names are not present in live history: 23.
+- The migration applied on 15 November, `20261115122348_enforce_marketplace_order_payment_read_permissions`, has an exact matching repository file.
+- **Do not run `supabase db push`, migration replay, reset, or bulk migration repair** until every mismatch is reconciled against `supabase_migrations.schema_migrations.statements` and a reviewed recovery plan exists. Do not edit or delete applied migration history.
+
+### Data integrity snapshot
+- Profiles: 3 public.
+- Posts: 5 public/published; some captions are empty or appear test-like. Owner review is required before launch; do not alter or delete any account/post without explicit confirmation.
+- Stories: 1 expired and private; no active Story was counted in this snapshot.
+- Store: 1 draft/unverified; online sales disabled.
+- Product: 1 draft.
+- Marketplace orders/payment records: 0.
+- Trip service requests: 0.
+- Blog posts: 1 public/published.
+- Wallet remains an account/request scaffold, not a real-money ledger, settlement or payout system.
+
+### Current deployed frontend
+- Latest verified deployed commit: `8f4245bcf5ff158ade4e04dbeafbd44e61c925cb`.
+- GitHub Actions run `43713663249` (#2176): SUCCESS.
+- Automated tests: 148/148 passed; Vite production build, output verification, Pages artifact upload and Pages deployment succeeded.
+- Active Circle no longer renders synthetic people, Story, local-product or Top 10 fallback content. Marketplace product detail no longer serves a local showcase product as a real listing.
+- Marketplace order reads now require buyer ownership or store order/payment permission; payment metadata reads require buyer ownership or `payments.manage`. Applied migration: `20261115122348_enforce_marketplace_order_payment_read_permissions`.
+- Supabase browser SDK is pinned to `@supabase/supabase-js@2.119.0`; it is still loaded from the esm.sh CDN, not bundled locally.
+
+### Release status
+- Social First Release remains the only active P0 release scope.
+- Android media upload/playback, two-account RLS/Realtime, DM reconnect/outbox exactly-once, notification recipient/deep-link, Auth MFA/SMS and full device/accessibility/performance UAT are NOT TESTED.
+- Founder acceptance is PENDING.
+- Privacy Policy, Terms and Community Guidelines remain internal drafts marked NOT PUBLISHED / LEGAL REVIEW REQUIRED. They must not be represented as final legal terms.
+- Marketplace, Trip transactions, wallet funds, staff invitation management and external email/SMS automation are not launch-ready and must not be advertised as active capabilities.
