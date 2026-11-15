@@ -23,7 +23,7 @@ import '../../features/posts/post-card.css';
 import '../../features/posts/comments.css';
 import {renderTopTenSection,loadTopTenTrending} from '../../features/discovery/top-ten-cards.js';
 import {bindTopTenSlider} from '../../features/discovery/top-ten-slider.js';
-import {rankPeopleRecommendations,renderPeopleRecommendations,CIRCLE_DEMO_PEOPLE} from '../../features/discovery/people-recommendations.js';
+import {rankPeopleRecommendations,renderPeopleRecommendations} from '../../features/discovery/people-recommendations.js';
 import '../../features/discovery/people-recommendations.css';
 import '../../features/posts/post-actions.css';
 import {renderSocialHeader,renderSocialMobileNav} from '../../components/social/navigation.js';
@@ -48,7 +48,7 @@ import {createMediaUploader} from '../../features/media/storage-upload.js';
 import {createSignedUrlMap} from '../../services/storage/signed-urls.js';
 import {DEFAULT_PROFILE_IMAGE_FRAME,normalizeProfileImageFrame,profileImageFrameCss,readProfileImageFrame} from '../../features/profile/image-framing.js';
 import {homeNearbySection,bindHomeNearby} from '../directory/index.js';
-import {LOCAL_PRODUCT_SHOWCASE,renderLocalProductCard} from '../../features/marketplace/local-product-showcase.js';
+import {renderLocalProductCard} from '../../features/marketplace/local-product-showcase.js';
 
 
 const BUCKET='pluits-user-media';
@@ -342,10 +342,7 @@ async function feedPage(){
  ]);
  if(peopleFramesResult.error)throw peopleFramesResult.error;
  const peopleImageFrames=new Map((peopleFramesResult.data||[]).map(frame=>[frame.user_id,frame]));
- const registeredProfileCount=registeredProfilesResult.count??0;
- const showCircleDemo=registeredProfileCount<10;
- const demoPeople=showCircleDemo?CIRCLE_DEMO_PEOPLE.slice(0,Math.max(0,10-people.length)):[];
- const peopleSection=renderPeopleRecommendations({people,avatarUrls:peopleAvatarUrls,imageFrames:peopleImageFrames,demoPeople});
+ const peopleSection=renderPeopleRecommendations({people,avatarUrls:peopleAvatarUrls,imageFrames:peopleImageFrames});
  const followedSet=new Set(followingIds);
  const visibleStories=(storiesResult.data||[]).filter(story=>followedSet.has(story.user_id)&&!blockedIds.includes(story.user_id)&&!mutedUserIds.includes(story.user_id));
  const storyOwners=new Map();
@@ -370,11 +367,7 @@ async function feedPage(){
   return "<button type='button' class='ua-story-group' data-story-items='"+payload+"' data-story-owner='"+esc(owner.display_name||'Pengguna PLUITS')+"' aria-label='Lihat Story "+name+"'><span class='ua-story-ring'><span class='ua-story-avatar'>"+(avatarUrl?"<img src='"+esc(avatarUrl)+"' alt='' loading='lazy' style='"+esc(profileImageFrameCss(storyImageFrames.get(ownerId)||{},'avatar'))+"'>":"<b>"+esc(initials(owner.display_name))+"</b>")+"</span></span><strong>"+name+"</strong><small>"+ready.length+" Story</small></button>";
  }).filter(Boolean).join('');
  const renderedStoryCount=(storyCards.match(/class='ua-story-group/g)||[]).length;
- const demoStoryCards=showCircleDemo?CIRCLE_DEMO_PEOPLE.slice(0,Math.max(0,10-renderedStoryCount)).map((person,index)=>{
-  const payload=esc(JSON.stringify([{url:person.avatarUrl,type:'image',caption:['Menikmati hari yang cerah.','Sedikit cerita dari sekitar.','Momen sederhana hari ini.','Berbagi inspirasi dan suasana.','Hari yang penuh warna.'][index%5],createdAt:new Date(Date.now()-index*3600000).toISOString()}]));
-  return "<button type='button' class='ua-story-group ua-story-group-demo' data-story-items='"+payload+"' data-story-owner='"+esc(person.name)+"' data-demo-story='true' aria-label='Lihat contoh Story "+esc(person.name)+"'><span class='ua-story-ring'><span class='ua-story-avatar'><img src='"+esc(person.avatarUrl)+"' alt='Foto contoh "+esc(person.name)+"' loading='lazy'></span></span><strong>"+esc(person.name)+"</strong></button>";
- }).join(''):'';
- const storiesSection="<section class='ua-circle-stories' aria-labelledby='ua-circle-stories-title'><div class='ua-circle-section-heading'><div><h2 id='ua-circle-stories-title'>Cerita dari circle</h2><p>Cerita dan hal baru yang dibagikan orang-orang di circle Anda.</p></div>"+"</div>"+(storyCards||demoStoryCards?"<div class='ua-circle-story-track'>"+storyCards+demoStoryCards+"</div>":"<div class='ua-circle-story-empty'>Belum ada Story teman yang aktif. Cerita dari circle Anda akan muncul di sini.</div>")+"</section>";
+ const storiesSection="<section class='ua-circle-stories' aria-labelledby='ua-circle-stories-title'><div class='ua-circle-section-heading'><div><h2 id='ua-circle-stories-title'>Cerita dari circle</h2><p>Cerita dan hal baru yang dibagikan orang-orang di circle Anda.</p></div>"+"</div>"+(storyCards?"<div class='ua-circle-story-track'>"+storyCards+"</div>":"<div class='ua-circle-story-empty'>Belum ada Story teman yang aktif. Cerita dari circle Anda akan muncul di sini.</div>")+"</section>";
  const interestSlugs=new Set(interests.map(x=>String(x.slug||'').toLowerCase()));
  const score=p=>{const age=Math.max(0,(Date.now()-new Date(p.created_at).getTime())/3600000),tags=(p.tags||[]).map(x=>String(x).toLowerCase().replace(/^#/,'').replace(/ /g,'-')),interestMatch=tags.filter(tag=>interestSlugs.has(tag)).length;return (followingIds.includes(p.user_id)?80:0)+interestMatch*28+36*Math.exp(-age/72)+Math.min(45,(p.likes||0)*1.5+(p.comments||0)*2.5);};
  let typedPosts=exploreContentType==='reel'?hydrated.filter(post=>post.media?.length===1&&post.media[0].media_type==='video'&&Number(post.media[0].duration_ms||0)>0&&Number(post.media[0].duration_ms||0)<=60000):hydrated;
@@ -432,12 +425,10 @@ async function feedPage(){
   const urls=new Map((signed||[]).map(item=>[item.path,item.signedUrl])),firstImages=new Map();
   (images||[]).forEach(item=>{if(!firstImages.has(item.product_id))firstImages.set(item.product_id,urls.get(item.storage_path)||'');});
   const realCards=localProducts.map(product=>renderLocalProductCard({...product,image_url:firstImages.get(product.id)||''})).join('');
-  const demoCount=Math.max(0,10-localProducts.length);
-  const sampleCards=LOCAL_PRODUCT_SHOWCASE.slice(0,demoCount).map(product=>renderLocalProductCard(product,{demo:true})).join('');
-  productCards=realCards+sampleCards;
+  productCards=realCards||"<div class='ua-home-product-empty'>Belum ada produk lokal tersedia di area ini.</div>";
  }catch(error){
   console.warn('PLUITS Bali local products could not be loaded',error);
-  productCards=LOCAL_PRODUCT_SHOWCASE.map(product=>renderLocalProductCard(product,{demo:true})).join('');
+  productCards="<div class='ua-home-product-empty'>Produk lokal belum dapat dimuat saat ini.</div>";
  }
  const maybeLike="<section class='ua-home-products'><div class='ua-home-section-heading'><div><h2>Produk Lokal</h2><small>Temukan produk dari toko dan pelaku usaha lokal di Bali.</small></div><a href='#/marketplace'>Lihat semua ↗</a></div><div class='ua-home-product-row ua-home-market-product-row'>"+productCards+"</div></section>";
  const collections="<section class='ua-home-collections'><div class='ua-home-section-heading'><div><h2>Kumpulan</h2><small>Jasa dan layanan pilihan</small></div><a href='#/places'>Jelajahi ↗</a></div><div class='ua-home-collection-row'><a href='#/places?category=professional-service'><span>✳</span><b>Jasa profesional</b></a><a href='#/places?category=transport'><span>⌁</span><b>Transportasi lokal</b></a><a href='#/trip'><span>◷</span><b>Aktivitas &amp; pengalaman</b></a><a href='#/marketplace'><span>◇</span><b>Produk lokal</b></a></div></section>";
