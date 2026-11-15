@@ -1,8 +1,8 @@
 import { supabase as presenceDb } from './lib/supabase/client.js';
 import { startGlobalPresence } from './services/realtime/presence/index.js';
+import { canonicalizeLegacyRoute, getInternalRoute, SITE_BASE } from './components/social/navigation-routes.js';
 
 void startGlobalPresence(presenceDb);
-
 
 import './design-system/tokens/foundation.css';
 import './design-system/layouts/foundation.css';
@@ -14,27 +14,59 @@ import './pages/account/circle-story-layout.css';
 import { route } from './app/router.js';
 
 let renderSequence = 0;
+const currentAddress = () => location.pathname + location.search + location.hash;
 
 async function render() {
   const sequence = ++renderSequence;
-  const initialHash = location.hash || '#/';
-  let path = initialHash.replace(/^#\/?/, '').split('?')[0].replace(/\/$/, '');
-  // Keep one canonical URL for the public home; older aliases resolve to #/.
-  if (['home', 'feed', 'beranda'].includes(path)) {
-    history.replaceState(null, '', location.pathname + location.search + '#/');
-    path = '';
+  // Convert bookmarked hash URLs to their readable page addresses once.
+  if (location.hash.startsWith('#/')) {
+    const clean = canonicalizeLegacyRoute(location.hash.slice(1));
+    history.replaceState(null, '', clean);
   }
-  const expectedHash = location.hash || '#/';
+  const internal = getInternalRoute(location);
+  const path = internal.split('?')[0].replace(/\/$/, '');
+  if (['home', 'feed', 'beranda', 'guest'].includes(path)) {
+    history.replaceState(null, '', SITE_BASE);
+  }
+  const finalAddress = currentAddress();
   await route();
-  // A delayed route or auth lookup must never paint the previous page over
-  // the page the visitor has navigated to in the meantime.
-  if (sequence !== renderSequence || (location.hash || '#/') !== expectedHash) return;
+  if (sequence !== renderSequence || currentAddress() !== finalAddress) return;
   if ((!path || path === 'guest') && document.querySelector('#pl-public-feed')) {
     const {bindHome}=await import('./pages/home/index.js');
     await bindHome();
   }
 }
 
+// Existing in-app links are upgraded centrally, so older page modules remain
+// compatible while the visible browser address always uses canonical paths.
+function normalizeInternalLinks(root = document) {
+  root.querySelectorAll?.('a[href^="#/"]').forEach(anchor => {
+    anchor.setAttribute('href', canonicalizeLegacyRoute(anchor.getAttribute('href').slice(1)));
+  });
+}
+const routeLinkObserver = new MutationObserver(records => {
+  for (const record of records) for (const node of record.addedNodes) {
+    if (node.nodeType === 1) {
+      if (node.matches?.('a[href^="#/"]')) node.setAttribute('href', canonicalizeLegacyRoute(node.getAttribute('href').slice(1)));
+      normalizeInternalLinks(node);
+    }
+  }
+});
+routeLinkObserver.observe(document.querySelector('#app') || document.body, {childList:true,subtree:true});
+normalizeInternalLinks();
+
+document.addEventListener('click', event => {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const anchor = event.target.closest?.('a[href^="#/"],a[href^="/pluits/"]');
+  if (!anchor || anchor.target === '_blank' || anchor.hasAttribute('download')) return;
+  event.preventDefault();
+  const href = anchor.getAttribute('href');
+  const destination = href.startsWith('#/') ? canonicalizeLegacyRoute(href.slice(1)) : href;
+  if (destination !== currentAddress()) history.pushState(null, '', destination);
+  render();
+});
+
+window.addEventListener('popstate', render);
 window.addEventListener('hashchange', render);
 render();
 

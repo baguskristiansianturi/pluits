@@ -106,7 +106,7 @@ assert.match(accountSettings, /visibility/, 'Account privacy setting must persis
 
 const navigation = read('src/components/social/navigation.js');
 assert.match(navigation, /ROUTES\.inbox|ROUTES\.activity/, 'Social navigation must consume the canonical route registry.');
-assert.match(navigation, /getRoute\('inbox'/, 'Inbox destinations must resolve through the canonical route registry.');
+assert.match(navigation, /ROUTES\.inbox/, 'Inbox destinations must resolve through the canonical route registry.');
 assert.match(navigation, /label: 'Pesan'/, 'Mobile bottom navigation must label the messaging destination Pesan.');
 assert.match(navigation, /label: 'Notifikasi'/, 'Inbox context must replace its own bottom slot with notifications.');
 assert.match(navigation, /label: 'Profil'/, 'Profile must remain the fifth mobile destination.');
@@ -122,17 +122,17 @@ assert.match(brandStyles, /object-fit: contain !important/, 'The original PLUITS
 const signedInHeader = renderSocialHeader({ active: 'explore', user: { id: 'test-user' }, profile: {}, userAvatar: '<span>U</span>', notificationCount: 3 });
 const signedInMobileNav = renderSocialMobileNav({ active: 'explore', user: { id: 'test-user' }, profile: {}, userAvatar: '<span>U</span>', notificationCount: 3 });
 const publicMobileNav = renderSocialMobileNav({ active: 'home', publicHome: true });
-assert.match(signedInHeader, /href="#\/account\/profile"/, 'Header avatar must open the signed-in profile.');
-assert.match(signedInMobileNav, /href="#\/inbox"/, 'Rendered signed-in mobile navigation must expose Inbox.');
+assert.match(signedInHeader, /href="\/pluits\/profile\/"/, 'Header avatar must open the signed-in profile.');
+assert.match(signedInMobileNav, /href="\/pluits\/inbox\/"/, 'Rendered signed-in mobile navigation must expose Inbox.');
 assert.match(signedInMobileNav, /<small>Profil<\/small>/, 'Profile must be the fifth bottom-navigation destination.');
 assert.equal((signedInMobileNav.match(/<a class=/g) || []).length, 5, 'Signed-in mobile navigation must contain exactly five destinations.');
 assert.match(signedInMobileNav, /pl-create-orb/, 'Rendered central Create action must use the dedicated center control.');
 const inboxMobileNav = renderSocialMobileNav({ active: 'messages', user: { id: 'test-user' }, notificationCount: 3 });
-assert.match(inboxMobileNav, /href="#\/account\/activity"/, 'Inbox context must replace the Inbox slot with notifications.');
+assert.match(inboxMobileNav, /href="\/pluits\/notifications\/"/, 'Inbox context must replace the Inbox slot with notifications.');
 assert.match(inboxMobileNav, /pl-mobile-activity/, 'Inbox-context notification item must expose its badge anchor.');
 assert.match(inboxMobileNav, />3</, 'Inbox-context notification item must display its unread badge.');
 assert.match(inboxMobileNav, /<small>Profil<\/small>/, 'Profile must remain available inside Inbox.');
-assert.doesNotMatch(publicMobileNav, /href="#\/inbox"|href="#\/account\/activity"/, 'Public navigation must route private destinations through login.');
+assert.doesNotMatch(publicMobileNav, /href="\/pluits\/inbox\/"|href="\/pluits\/notifications\/"/, 'Public navigation must route private destinations through login.');
 assert.equal((publicMobileNav.match(/<a class=/g) || []).length, 5, 'Public mobile navigation must keep the same five-slot structure.');
 const account = read('src/pages/account/index.js');
 assert.match(account, /unreadNotificationCount/, 'Social navigation must receive unread notification count.');
@@ -312,7 +312,7 @@ assert.match(postLayoutCss, /pluits-heart-core 1\.18s/, 'Main heart animation mu
 
 
 
-assert.ok(read('src/main.js').includes("history.replaceState(null, '', location.pathname + location.search + '#/')"), 'Legacy home aliases must normalize to the canonical public home URL.');
+assert.ok(read('src/main.js').includes("history.replaceState(null, '', SITE_BASE)"), 'Legacy home aliases must normalize to the canonical public home URL.');
 assert.ok(read('src/pages/home/index.js').includes("location.hash='#/account/explore'"), 'Authenticated users must enter the canonical signed-in Explore workspace from the root URL.');
 
 assert.ok(read('src/pages/account/index.js').includes('sorted.map(post=>postCard(post)).join(\'\')'),'The home feed must use the defined post-card renderer, not the Reel-only renderer.');
@@ -340,9 +340,9 @@ assert.ok(read('src/pages/account/index.js').includes('renderPostCard') && read(
 assert.ok(read('src/pages/account/user-account.css').includes('.ua-social-app .ua-post-caption'), 'Post caption spacing must be explicitly compacted.');
 
 import { ROUTES, NAVIGATION_CONTEXTS, getRoute } from '../src/components/social/navigation-routes.js';
-assert.equal(ROUTES.inbox, '#/inbox', 'Inbox must have one canonical route.');
-assert.equal(ROUTES.profile, '#/account/profile', 'Profile must have one canonical route.');
-assert.equal(getRoute('inbox', true), '#/inbox', 'Authenticated Inbox must never route to Profile.');
+assert.equal(ROUTES.inbox, '/pluits/inbox/', 'Inbox must have one canonical route.');
+assert.equal(ROUTES.profile, '/pluits/profile/', 'Profile must have one canonical route.');
+assert.equal(getRoute('inbox', true), '/pluits/inbox/', 'Authenticated Inbox must never route to Profile.');
 assert.equal(getRoute('inbox', false), ROUTES.login, 'Anonymous Inbox must route to login.');
 assert.deepEqual(NAVIGATION_CONTEXTS.social, ['home','discover','create','inbox','profile']);
 assert.deepEqual(NAVIGATION_CONTEXTS.inbox, ['home','discover','create','activity','profile']);
@@ -381,8 +381,8 @@ const circleAccountSource = read('src/pages/account/index.js');
 assert.match(routeSource, /else if\(r==='circle'\)[\s\S]*mountUserAccount\('explore'\)/, 'The Circle route must mount the personalized Circle feed directly.');
 assert.match(circleAccountSource, /if\(\['circle','home','feed'\]\.includes\(section\)\)section='explore'/, 'Account route aliases for Circle must never fall through to the Profile page.');
 const canonicalRoutes = read('src/components/social/navigation-routes.js');
-assert.match(canonicalRoutes, /home:\s*'#\/account\/explore'/, 'Circle navigation must use the direct Circle route.');
-assert.match(canonicalRoutes, /discover:\s*'#\/search'/, 'Jelajah must remain a separate public discovery route.');
+assert.ok(canonicalRoutes.includes("home: SITE_BASE + 'circle/'"), 'Circle navigation must use the readable Circle route.');
+assert.ok(canonicalRoutes.includes("discover: SITE_BASE + 'discover/'"), 'Jelajah must remain a separate public discovery route.');
 const mobileNavigationSource = read('src/components/social/navigation.js');
 assert.match(mobileNavigationSource, /key: 'home',[\s\S]*label: publicHome \? 'Beranda' : 'Circle'/, 'Circle must be the first mobile navigation destination.');
 assert.match(mobileNavigationSource, /key: 'discover',[\s\S]*label: 'Jelajah'/, 'Jelajah must be the second mobile navigation destination.');

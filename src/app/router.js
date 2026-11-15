@@ -1,4 +1,5 @@
 import {updateSEO} from '../pages/seo.js';
+import {getInternalRoute} from '../components/social/navigation-routes.js';
 
 let routeVersion=0;
 
@@ -29,7 +30,7 @@ export async function route(homeFn){
    defer(async()=>{const {mountUserAccount}=await import('../pages/account/index.js');await mountUserAccount('auth','reset');},version,()=>route(homeFn));
    return;
   }
-  const raw=(location.hash||'#/').replace(/^#\/?/,'');
+  const raw=getInternalRoute(location);
   const [path,q='']=raw.split('?');
   const s=path.split('/').filter(Boolean),r=s[0],v=s[1],p=new URLSearchParams(q);
   let h;
@@ -143,7 +144,7 @@ export async function route(homeFn){
    h='<div class="pl-page-loading" role="status" aria-live="polite"><span class="pl-page-spinner" aria-hidden="true"></span><span class="pl-page-loading-label">Menyiapkan pengaturan</span></div>';
    defer(async()=>{const {mountUserAccount}=await import('../pages/account/index.js');await mountUserAccount('settings');},version,()=>route(homeFn));
   }
-  else if(r==='account'&&v==='blog'){
+  else if((r==='account'&&v==='blog')||r==='blog-studio'){
    h='<div class="pl-page-loading" role="status" aria-live="polite"><span class="pl-page-spinner" aria-hidden="true"></span><span class="pl-page-loading-label">Membuka Blog</span></div>';
    defer(async()=>{const mod=await import('../pages/blog-studio/index.js');await mod.mountBlogStudio();},version,()=>route(homeFn));
   }
