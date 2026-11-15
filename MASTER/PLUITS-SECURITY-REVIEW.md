@@ -353,3 +353,10 @@ The three 15 November migrations have exact version/name/file matches. The older
 - Test RPC validation and authorization, not only table policies.
 - Two-account REST/Realtime and Android tests remain NOT TESTED.
 - Do not enable staff invitations, real-money wallet, Marketplace sales or Trip transactions until their permission, operational, legal and end-to-end tests pass.
+
+
+### Moderation auditability gap — 15 November
+- The database contains `content_reports`, `pluits_system_announcements`, `pluits_system_announcement_reads`, and `store_audit_logs`.
+- No general append-only audit table for post moderation decisions or announcement publish/archive events was found.
+- `content_reports` records reviewer ID, note and reviewed timestamp per report, but this is not a complete immutable admin audit trail.
+- Before broader public launch, record actor, action, target, previous/new state, reason, policy version, timestamp and request/correlation ID for moderator and announcement actions. Restrict audit writes to server-side functions and make records append-only.
