@@ -1486,3 +1486,54 @@
 @media(prefers-reduced-motion:reduce){
  .pl-msg #pl-msg-compose .pl-msg-input-bar *{transition:none!important;animation:none!important}
 }
+
+
+/* Inbox composer refinement: compact, transparent dock with safe touch spacing. */
+.pl-msg #pl-msg-compose{
+  background:transparent!important;
+  padding:6px 12px calc(7px + env(safe-area-inset-bottom))!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.pl-msg #pl-msg-compose .pl-msg-input-bar{
+  min-height:50px!important;
+  gap:9px!important;
+  padding:4px 8px 4px 7px!important;
+  border-radius:25px!important;
+  background:rgba(255,255,255,.94)!important;
+}
+.pl-msg #pl-msg-compose .pl-msg-input-bar>button,
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-voice,
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-send{
+  flex:0 0 40px!important;
+  width:40px!important;min-width:40px!important;max-width:40px!important;
+  height:40px!important;min-height:40px!important;max-height:40px!important;
+  border-radius:50%!important;
+}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-voice.is-recording{
+  flex:0 0 40px!important;width:40px!important;min-width:40px!important;max-width:40px!important;
+  background:#b83c43!important;color:#fff!important;
+}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-live-wave{width:25px!important;flex:0 0 25px!important;gap:2px!important}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-recording-time{display:none!important}
+.pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-live-wave i{width:2px!important}
+.pl-msg #pl-msg-compose .pl-msg-input-bar textarea{
+  min-height:40px!important;max-height:108px!important;
+  padding:10px 5px!important;
+}
+@media(max-width:760px){
+ .pl-msg #pl-msg-compose{padding:5px 12px calc(6px + env(safe-area-inset-bottom))!important}
+ .pl-msg #pl-msg-compose .pl-msg-input-bar{min-height:48px!important;gap:9px!important;padding:3px 8px!important}
+ .pl-msg #pl-msg-compose .pl-msg-input-bar>button,
+ .pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-voice,
+ .pl-msg #pl-msg-compose .pl-msg-input-bar .pl-msg-send{
+   flex-basis:40px!important;width:40px!important;min-width:40px!important;max-width:40px!important;
+   height:40px!important;min-height:40px!important;max-height:40px!important;
+ }
+ .pl-msg #pl-msg-compose .pl-msg-input-bar textarea{min-height:40px!important;padding:9px 5px!important}
+}
+/* Keep the conversation canvas unobstructed; user-selected wallpaper can sit beneath bubbles. */
+.pl-msg-chat{background:transparent!important}
+.pl-msg-stream{background-color:transparent!important;background-image:none!important}
+.pl-msg-layout.is-chat-open .pl-msg-chat{background:transparent!important}
+.pl-msg-layout.is-chat-open .pl-msg-stream{background-color:transparent!important;background-image:none!important}
