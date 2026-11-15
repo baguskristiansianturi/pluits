@@ -72,7 +72,7 @@ export function canonicalizeLegacyRoute(value = '') {
   else if (a === 'market-product') path += 'marketplace/product/' + (b ? encodeURIComponent(b) + '/' : '');
   else if (a === 'place') path += 'places/' + (b ? encodeURIComponent(b) + '/' : '') + (c === 'claim' ? 'claim/' : '');
   else if (a?.startsWith('@')) path += '@' + encodeURIComponent(a.slice(1)) + '/' + parts.slice(1).map(segment => encodeURIComponent(decodePathSegment(segment))).join('/') + (parts.length > 1 ? '/' : '');
-  else if (a && fixed[a] !== undefined) path += fixed[a] + (b ? encodeURIComponent(b) + '/' : '');
+  else if (a && fixed[a] !== undefined) path += fixed[a] + parts.slice(1).map(segment => encodeURIComponent(decodePathSegment(segment))).join('/') + (parts.length > 1 ? '/' : '');
   else if (a) path += encodeURIComponent(a) + '/' + parts.slice(1).map(encodeURIComponent).join('/') + (parts.length > 1 ? '/' : '');
   return path + (query ? '?' + query : '');
 }
@@ -111,7 +111,7 @@ export function getInternalRoute(locationLike = window.location) {
   else if (a === 'marketplace' && b === 'orders' && c) internal = 'market-order/' + c;
   else if (a === 'marketplace' && b === 'orders') internal = 'market-orders';
   else if (a === 'marketplace' && b === 'product') internal = 'market-product/' + (c || '');
-  else if (a === 'places' && b) internal = 'place/' + b;
+  else if (a === 'places' && b) internal = 'place/' + parts.slice(1).join('/');
   else if (a === 'posts' && b) internal = 'account/post/' + b;
   else if (a === 'blog-studio') internal = 'account/blog';
   else if (['wallet','addresses'].includes(a)) internal = 'account/' + a;

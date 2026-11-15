@@ -107,3 +107,16 @@ test('public username and Blog links retain their complete canonical route', () 
   assert.equal(getInternalRoute(address('/pluits/@bagus/')), '@bagus');
   assert.equal(getInternalRoute(address('/pluits/%40bagus/blog/catatan/cerita-pertama/')), '@bagus/blog/catatan/cerita-pertama');
 });
+
+
+test('nested trip, marketplace and place routes retain all dynamic segments', () => {
+  const address = pathname => ({ pathname, search: '', hash: '' });
+  assert.equal(canonicalizeLegacyRoute('#/trips/itinerary/42'), '/pluits/trips/itinerary/42/');
+  assert.equal(getInternalRoute(address('/pluits/trips/itinerary/42/')), 'trip/itinerary/42');
+  assert.equal(canonicalizeLegacyRoute('#/marketplace/orders/order-42'), '/pluits/marketplace/orders/order-42/');
+  assert.equal(getInternalRoute(address('/pluits/marketplace/orders/order-42/')), 'market-order/order-42');
+  assert.equal(canonicalizeLegacyRoute('#/marketplace/product/item-42'), '/pluits/marketplace/product/item-42/');
+  assert.equal(getInternalRoute(address('/pluits/marketplace/product/item-42/')), 'market-product/item-42');
+  assert.equal(canonicalizeLegacyRoute('#/place/pantai-kuta/claim'), '/pluits/places/pantai-kuta/claim/');
+  assert.equal(getInternalRoute(address('/pluits/places/pantai-kuta/claim/')), 'place/pantai-kuta/claim');
+});
