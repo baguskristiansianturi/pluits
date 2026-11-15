@@ -1,21 +1,9 @@
-const TOP_TEN_DEMO_ITEMS=[
- {className:'ua-topten-card-1',href:'#/places?category=restaurant',image:'photo-1555939594-58d7cb561ad1',width:1000,title:'Babi Guling Bu Coco',location:'Kuta',category:'Kuliner',alt:'Hidangan kuliner khas',priority:true},
- {className:'ua-topten-card-2',href:'#/places?category=restaurant',image:'photo-1607623814075-e51df1bdc82f',width:1000,title:'Beef Slab',location:'Seminyak',category:'Kuliner',alt:'Hidangan beef steak'},
- {className:'ua-topten-card-3',href:'#/places?category=beach',image:'photo-1510414842594-a61c69b5ae57',width:850,title:'Atlas Beach Club',location:'Canggu',category:'Destinasi',alt:'Suasana pantai'},
- {className:'ua-topten-card-4',href:'#/trip',image:'photo-1544551763-46a013bb70d5',width:850,title:'Diving Nusa Penida',location:'Nusa Penida',category:'Aktivitas',alt:'Aktivitas menyelam di laut'},
- {className:'ua-topten-card-5',href:'#/places',image:'photo-1537996194471-e657df975ab4',width:850,title:'Jelajah Ubud',location:'Ubud',category:'Destinasi',alt:'Pemandangan Ubud dan Bali'},
- {className:'ua-topten-card-6',href:'#/places',image:'photo-1514525253161-7a46d19cd819',width:850,title:'Tari Kecak Uluwatu',location:'Uluwatu',category:'Hiburan',alt:'Hiburan dan musik'},
- {className:'ua-topten-card-7',href:'#/trip',image:'photo-1507525428034-b723cf961d3e',width:850,title:'Lovina Dolphin Tour',location:'Lovina',category:'Aktivitas',alt:'Laut biru dan pantai'},
- {className:'ua-topten-card-8',href:'#/places?category=cafe',image:'photo-1495474472287-4d71bcdd2085',width:850,title:'Kopi Pagi di Sanur',location:'Sanur',category:'Kafe',alt:'Suasana kedai kopi'},
- {className:'ua-topten-card-9',href:'#/places?category=beach',image:'photo-1500375592092-40eb2168fd21',width:850,title:'Pantai Pandawa',location:'Kutuh',category:'Pantai',alt:'Pemandangan pantai di Bali'},
- {className:'ua-topten-card-10',href:'#/trip',image:'photo-1500530855697-b586d89ba3ee',width:850,title:'Air Terjun Sekumpul',location:'Buleleng',category:'Pengalaman',alt:'Perjalanan alam'}
-];
 export async function loadTopTenTrending(db){
- if(!db)return TOP_TEN_DEMO_ITEMS;
+ if(!db)return [];
  const center={lat:-8.4095,lon:115.1889};
  const {data:rows,error}=await db.rpc('directory_nearby',{p_lat:center.lat,p_lon:center.lon,p_radius_m:100000,p_limit:100,p_category_slug:null,p_query:null});
  if(error)throw error;
- if(!rows?.length)return TOP_TEN_DEMO_ITEMS;
+ if(!rows?.length)return [];
  const ids=rows.map(row=>row.id).filter(Boolean);
  const since=new Date(Date.now()-7*86400000).toISOString();
  const {data:links,error:linkError}=await db.from('user_post_directory_entities').select('entity_id,post_id,created_at').in('entity_id',ids).gte('created_at',since).order('created_at',{ascending:false}).limit(1000);
@@ -28,11 +16,11 @@ export async function loadTopTenTrending(db){
  const categoryLabels={restaurant:'Kuliner',cafe:'Kafe',bar:'Hiburan malam','beach-club':'Beach Club',beach:'Pantai','tourist-attraction':'Destinasi','tour-activity':'Aktivitas',event:'Acara','arts-culture':'Budaya'};
  const images={restaurant:'photo-1555939594-58d7cb561ad1',cafe:'photo-1495474472287-4d71bcdd2085',bar:'photo-1514525253161-7a46d19cd819','beach-club':'photo-1510414842594-a61c69b5ae57',beach:'photo-1507525428034-b723cf961d3e','tourist-attraction':'photo-1537996194471-e657df975ab4','tour-activity':'photo-1544551763-46a013bb70d5',event:'photo-1492684223066-81342ee5ff30','arts-culture':'photo-1514525253161-7a46d19cd819'};
  const ranked=rows.map(row=>{const category=(row.category_slugs||[]).find(slug=>categoryLabels[slug])||(row.entity_type==='event'?'event':'tourist-attraction');return {...row,_trend:counts.get(row.id)||0,_category:category};}).filter(row=>row._trend>0).sort((a,b)=>b._trend-a._trend||String(a.name).localeCompare(String(b.name))).slice(0,10);
- if(!ranked.length)return TOP_TEN_DEMO_ITEMS;
+ if(!ranked.length)return [];
  return ranked.map((row,index)=>({className:`ua-topten-card-${index+1}`,href:'#/place/'+encodeURIComponent(row.slug),image:images[row._category]||images['tourist-attraction'],width:index<2?1000:850,title:row.name,location:[row.locality,row.district,row.city].filter(Boolean)[0]||row.region||'Bali',category:categoryLabels[row._category]||'Bali',alt:row.name,priority:index===0}));
 }
-export function renderTopTenSection(items=TOP_TEN_DEMO_ITEMS){
+export function renderTopTenSection(items=[]){
+ if(!Array.isArray(items)||!items.length)return '';
  const cards=items.map(item=>'<a class="ua-topten-card '+item.className+'" href="'+item.href+'"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w='+item.width+'&q=85" alt="'+item.alt+'" '+(item.priority?'fetchpriority="high"':'loading="lazy"')+'><span class="ua-topten-copy"><strong>'+item.title+'</strong><em>⌖ '+item.location+'</em><small>'+item.category+'</small></span></a>').join('');
  return '<section class="ua-home-trends ua-home-topten" aria-label="Top 10 Trending"><div class="ua-home-section-heading"><div><span class="ua-eyebrow">EXPLORE PLUITS</span><h2>Top 10 Trending</h2></div><a href="#/places?region=bali&amp;sort=trending">Lihat semua <b>↗</b></a></div><div class="ua-topten-grid ua-topten-track" id="ua-home-topten-grid">'+cards+'</div></section>';
 }
-export {TOP_TEN_DEMO_ITEMS};
