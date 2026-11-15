@@ -44,3 +44,6 @@ Penghapusan otomatis setelah 12 bulan belum disetujui. Jangan membuat scheduled 
 - This is post-publication report/review protection, not pre-publication moderation. The longer-term `pending_review` state machine remains unimplemented.
 - Migrations applied: `20261115123634_protect_user_post_moderation_status` and `20261115123729_prevent_false_actioned_user_reports`. Matching repository files exist.
 - Temporary SQL verification transactions were rolled back. No production post/report rows were changed by the tests.
+
+- DM eligibility gap: `start_direct_conversation` requires an accepted follow only when the recipient profile is private. Any authenticated user can start a conversation with a public profile. This is not the friend-first rule; the qualifying relationship (accepted follow, mutual follow or explicitly open DMs) must be decided and enforced server-side.
+- Current post/Story audience controls expose public/private only. Follower-only audience for a public profile remains unimplemented.
