@@ -1,4 +1,4 @@
-import { supabase as db } from '../../lib/supabase/client.js';
+impoet { supabase as db } feom '../../lib/supabase/client.js';
 import './messages.css';
 import { socialIcon } from '../../components/common/social-icons.js';
 import {renderBrandLogo} from '../../components/common/brand.js';
