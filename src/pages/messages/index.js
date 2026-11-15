@@ -48,6 +48,17 @@ function isSelfChat(conversationId) {
 function selfChatReadReceipt(conversationId) {
   return isSelfChat(conversationId)?{delivered_at:new Date().toISOString(),read_at:new Date().toISOString()}:null;
 }
+function updateConversationPreview(row) {
+  if(!row?.conversation_id)return;
+  const thread=document.querySelector('#pl-msg-conversations [data-open-chat="'+CSS.escape(String(row.conversation_id))+'"]');
+  if(!thread)return;
+  const preview=thread.querySelector('.pl-msg-thread-copy p');
+  const time=thread.querySelector('.pl-msg-thread-head time');
+  if(preview)preview.textContent=row.deleted_at?'Pesan ini dihapus':row.message_type==='voice'?'Pesan suara':row.message_type==='image'?'Foto':row.message_type==='file'?'Dokumen':row.body||'Lampiran';
+  if(time)time.textContent=formatTime(row.created_at||new Date().toISOString());
+  const index=conversationCache.findIndex(item=>item.id===row.conversation_id);
+  if(index>0){const [item]=conversationCache.splice(index,1);item.last=row;item.updated_at=row.created_at||new Date().toISOString();conversationCache.unshift(item);}
+}
 function appendMessageToOpenChat(chat,row,{pending=false}={}) {
   const stream=chat?.querySelector('.pl-msg-stream');
   if(!stream||!row)return;
@@ -56,6 +67,7 @@ function appendMessageToOpenChat(chat,row,{pending=false}={}) {
   const receipt=!pending&&row.sender_id===currentUser?.id?selfChatReadReceipt(row.conversation_id):null;
   stream.insertAdjacentHTML('beforeend',messageMarkup(row,pending,receipt));
   stream.scrollTop=stream.scrollHeight;
+  updateConversationPreview(row);
 }
 async function hydrateVoicePlayers(container) {
   const players=[...container.querySelectorAll('audio[data-voice-path]')];
@@ -149,7 +161,7 @@ function bindAttachmentComposer(chat,conversationId) {
       }catch(error){failed=true;if(status)status.textContent='Lampiran gagal dikirim. Coba lagi.';break;}
     }
     if(send)send.disabled=false;
-    if(!failed){clearPreview();if(status)status.textContent='';await hydrateMessageMedia(chat);await loadConversations();}
+    if(!failed){clearPreview();if(status)status.textContent='';await hydrateMessageMedia(chat);}
   },true);
   chat.addEventListener('click',event=>{if(!event.target.closest('[data-attachment-menu], [data-attachment-trigger]'))closeMenu();});
 }
@@ -190,7 +202,6 @@ function bindVoiceRecorder(chat, conversationId) {
       appendMessageToOpenChat(chat,saved.data);
       if(status)status.textContent='';
       await hydrateVoicePlayers(chat);
-      await loadConversations();
     }catch(error){if(status)status.textContent='Gagal mengirim pesan suara: '+(error?.message||'Coba lagi.');}
     finally{setIdle();}
   };
@@ -843,7 +854,7 @@ async function openConversation(id) {
     if(!navigator.onLine) {
       const queue=readQueue(); queue.push(item);
       if(!writeQueue(queue)){alert('Penyimpanan offline di perangkat tidak tersedia. Pesan belum disimpan.');button.disabled=false;return;}
-      form.reset();if(textarea){delete textarea.dataset.replyTo;textarea.placeholder='Ketik pesan';textarea.style.height='auto';} appendMessageToOpenChat(chat,item,{pending:true}); await loadConversations(); updateNetworkStatus(); return;
+      form.reset();if(textarea){delete textarea.dataset.replyTo;textarea.placeholder='Ketik pesan';textarea.style.height='auto';} appendMessageToOpenChat(chat,item,{pending:true}); updateNetworkStatus(); return;
     }
     const {created_at,...messagePayload}=item;
     const {data:saved,error}=await db.from('user_messages').upsert(messagePayload,{onConflict:'sender_id,client_message_id',ignoreDuplicates:true}).select('*').single();
@@ -855,10 +866,9 @@ async function openConversation(id) {
       } else {alert(error.message);button.disabled=false;return;}
     } else appendMessageToOpenChat(chat,saved||{...item,id:item.client_message_id});
     form.reset();if(textarea){delete textarea.dataset.replyTo;textarea.placeholder='Ketik pesan';textarea.style.height='auto';}
-    await loadConversations();button.disabled=false;
+    button.disabled=false;
   };
   const stream=chat.querySelector('.pl-msg-stream'); stream.scrollTop=stream.scrollHeight;
-  await loadConversations();
 }
 async function flushOutbox() {
   if(sendingQueue||!currentUser||!navigator.onLine)return;
