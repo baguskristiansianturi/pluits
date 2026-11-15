@@ -57,7 +57,7 @@ function updateConversationPreview(row) {
   if(!thread)return;
   const preview=thread.querySelector('.pl-msg-thread-copy p');
   const time=thread.querySelector('.pl-msg-thread-head time');
-  if(preview)preview.textContent=row.deleted_at?'Pesan ini dihapus':row.message_type==='voice'?'Pesan suara':row.message_type==='image'?'Foto':row.message_type==='file'?'Dokumen':row.body||'Lampiran';
+  if(preview)preview.textContent=row.deleted_at?'Pesan ini dihapus':row.message_type==='voice'?'♫ Pesan suara':row.message_type==='image'?'▧ Foto':row.message_type==='video'?'▶ Video':row.message_type==='file'?'▤ Dokumen':row.body||'Lampiran';
   if(time)time.textContent=formatTime(row.created_at||new Date().toISOString());
   const index=conversationCache.findIndex(item=>item.id===row.conversation_id);
   if(index>0){const [item]=conversationCache.splice(index,1);item.last=row;item.updated_at=row.created_at||new Date().toISOString();conversationCache.unshift(item);}
@@ -92,11 +92,16 @@ async function hydrateVoicePlayers(container) {
 }
 async function hydrateMessageMedia(container) {
   const images=[...container.querySelectorAll('[data-image-path]')];
+  const videos=[...container.querySelectorAll('[data-video-path]')];
   const files=[...container.querySelectorAll('[data-file-path]')];
   await Promise.all([...images.map(async node=>{
     const {data,error}=await db.storage.from('pluits-message-media').createSignedUrl(node.dataset.imagePath,1800);
     if(error||!data?.signedUrl){node.alt='Foto tidak dapat dimuat';node.closest('.pl-msg-image-wrap')?.classList.add('is-error');return;}
     node.src=data.signedUrl;const link=node.closest('[data-image-link]');if(link)link.href=data.signedUrl;
+  }),...videos.map(async node=>{
+    const {data,error}=await db.storage.from('pluits-message-media').createSignedUrl(node.dataset.videoPath,1800);
+    if(error||!data?.signedUrl){node.replaceWith(Object.assign(document.createElement('small'),{textContent:'Video tidak dapat dimuat'}));return;}
+    node.src=data.signedUrl;
   }),...files.map(async node=>{
     const {data,error}=await db.storage.from('pluits-message-media').createSignedUrl(node.dataset.filePath,1800);
     if(error||!data?.signedUrl){node.textContent='File tidak dapat dimuat';return;}
@@ -122,7 +127,9 @@ function bindAttachmentComposer(chat,conversationId) {
     preview.hidden=!selected.length;
     preview.innerHTML=selected.map((item,index)=>item.image
       ? '<div class="pl-msg-attachment-thumb"><img src="'+item.url+'" alt="'+esc(item.file.name)+'"><button type="button" data-remove-attachment="'+index+'" aria-label="Hapus gambar">×</button></div>'
-      : '<div class="pl-msg-attachment-file"><span aria-hidden="true">▤</span><span>'+esc(item.file.name)+'</span><button type="button" data-remove-attachment="'+index+'" aria-label="Hapus file">×</button></div>'
+      : item.video
+        ? '<div class="pl-msg-attachment-thumb is-video"><video src="'+item.url+'" muted playsinline></video><span>VIDEO</span><button type="button" data-remove-attachment="'+index+'" aria-label="Hapus video">×</button></div>'
+        : '<div class="pl-msg-attachment-file"><span aria-hidden="true">▤</span><span>'+esc(item.file.name)+'</span><button type="button" data-remove-attachment="'+index+'" aria-label="Hapus file">×</button></div>'
     ).join('');
     preview.querySelectorAll('[data-remove-attachment]').forEach(button=>button.onclick=()=>{
       const index=Number(button.dataset.removeAttachment),item=selected[index];
@@ -134,13 +141,15 @@ function bindAttachmentComposer(chat,conversationId) {
     const files=[...input.files||[]];input.value='';
     for(const file of files){
       const image=file.type.startsWith('image/');
+      const video=file.type.startsWith('video/');
       const allowedImages=['image/jpeg','image/png','image/webp','image/gif'];
+      const allowedVideos=['video/mp4','video/webm','video/quicktime'];
       const allowedFiles=['application/pdf','text/plain','application/zip','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation'];
-      if(!(allowedImages.includes(file.type)||allowedFiles.includes(file.type))){if(status)status.textContent='Format file tidak didukung.';continue;}
-      if(isImage&&!image){if(status)status.textContent='Pilih gambar untuk lampiran gambar.';continue;}
+      if(!(allowedImages.includes(file.type)||allowedVideos.includes(file.type)||allowedFiles.includes(file.type))){if(status)status.textContent='Format file tidak didukung.';continue;}
+      if(isImage&&!image&&!video){if(status)status.textContent='Pilih gambar atau video untuk lampiran media.';continue;}
       if(file.size>20*1024*1024){if(status)status.textContent='Ukuran file maksimal 20 MB.';continue;}
       if(selected.length>=10){if(status)status.textContent='Maksimal 10 lampiran sekaligus.';break;}
-      selected.push({file,image,url:image?URL.createObjectURL(file):null});
+      selected.push({file,image,video,url:(image||video)?URL.createObjectURL(file):null});
     }
     renderPreview();
   };
@@ -158,7 +167,7 @@ function bindAttachmentComposer(chat,conversationId) {
       try{
         const uploaded=await db.storage.from('pluits-message-media').upload(path,file,{contentType:file.type,upsert:false});
         if(uploaded.error)throw uploaded.error;
-        const saved=await db.from('user_messages').insert({conversation_id:conversationId,sender_id:currentUser.id,body:'',message_type:item.image?'image':'file',media_path:path,media_mime_type:file.type,media_name:file.name,client_message_id:crypto.randomUUID()}).select('*').single();
+        const saved=await db.from('user_messages').insert({conversation_id:conversationId,sender_id:currentUser.id,body:'',message_type:item.image?'image':item.video?'video':'file',media_path:path,media_mime_type:file.type,media_name:file.name,client_message_id:crypto.randomUUID()}).select('*').single();
         if(saved.error){await db.storage.from('pluits-message-media').remove([path]);throw saved.error;}
         appendMessageToOpenChat(chat,saved.data);
       }catch(error){failed=true;if(status)status.textContent='Lampiran gagal dikirim. Coba lagi.';break;}
@@ -713,8 +722,12 @@ async function loadConversations() {
   if(profiles.error){list.textContent=profiles.error.message;return;}
   const pmap=new Map((profiles.data||[]).map(person=>[person.id,person]));
   const recentIds=(msgRows.data||[]).map(message=>message.id).filter(Boolean);
-  const hiddenPreview=recentIds.length?await db.from('user_message_hidden').select('message_id').eq('user_id',currentUser.id).in('message_id',recentIds):{data:[],error:null};
+  const [hiddenPreview,previewReceipts]=recentIds.length?await Promise.all([
+    db.from('user_message_hidden').select('message_id').eq('user_id',currentUser.id).in('message_id',recentIds),
+    db.from('user_message_receipts').select('message_id,delivered_at,read_at,played_at').in('message_id',recentIds)
+  ]):[{data:[],error:null},{data:[],error:null}];
   const hiddenPreviewIds=new Set((hiddenPreview.data||[]).map(row=>row.message_id));
+  const receiptByMessage=new Map((previewReceipts.data||[]).map(row=>[row.message_id,row]));
   const latest=new Map(); for(const message of msgRows.data||[]) if(!hiddenPreviewIds.has(message.id)&&!latest.has(message.conversation_id))latest.set(message.conversation_id,message);
   conversationCache=(convs.data||[]).map(conversation=>{
     const other=(memberRows.data||[]).find(row=>row.conversation_id===conversation.id&&row.user_id!==currentUser.id);
@@ -725,7 +738,9 @@ async function loadConversations() {
       : new Set((unreadRows.data||[]).map(row=>row.conversation_id)).has(conversation.id);
     const isSelfConversation=conversation.direct_key==='self:'+currentUser.id;
      const otherProfile=isSelfConversation?{...currentProfile,display_name:'Pesan untuk diri sendiri',is_self:true}:pmap.get(other?.user_id)||{display_name:'Akun Pluits',username:'akun'};
-     return {...conversation,other:otherProfile,last,unread};
+     let lastReceipt=last?.sender_id===currentUser.id?receiptByMessage.get(last.id)||null:null;
+     if(isSelfConversation&&last?.sender_id===currentUser.id){const readAt=lastReceipt?.read_at||new Date().toISOString();lastReceipt={...lastReceipt,delivered_at:lastReceipt?.delivered_at||readAt,read_at:readAt};}
+     return {...conversation,other:otherProfile,last,unread,lastReceipt};
   });
   updateInboxUnreadBadge(conversationCache.filter(item=>item.unread).length);
   try { localStorage.setItem(threadsKey(),JSON.stringify(conversationCache.map(item=>({id:item.id,updated_at:item.updated_at,other:item.other,unread:item.unread})))); } catch {}
@@ -733,7 +748,10 @@ async function loadConversations() {
   list.innerHTML=visibleConversations.length?visibleConversations.map(conversation=>{
     const pending=queueFor(conversation.id).length;
     const avatar=contactAvatar(conversation.other).replace('class="pl-msg-avatar"','class="pl-msg-avatar" data-thread-avatar="'+esc(conversation.other.id||'')+'"');
-    return '<button class="pl-msg-thread '+(currentConversation===conversation.id?'active':'')+(conversation.unread?' is-unread':'')+'" data-open-chat="'+conversation.id+'">'+avatar+'<span class="pl-msg-thread-copy"><span class="pl-msg-thread-head"><b>'+esc(conversation.other.display_name||conversation.other.username)+'</b><time>'+formatTime(conversation.last?.created_at||conversation.updated_at)+'</time></span><small>@'+esc(conversation.other.username)+'</small><p>'+esc(conversation.last?.deleted_at?'Pesan ini dihapus':conversation.last?.message_type==='voice'?'Pesan suara':conversation.last?.message_type==='image'?'Foto':conversation.last?.message_type==='file'?'Dokumen':conversation.last?.body||'Belum ada pesan')+(pending?' · '+pending+' menunggu':'')+'</p></span>'+(conversation.unread?'<i class="pl-msg-unread-badge" aria-label="Belum dibaca"></i>':'')+'</button>';
+    const last=conversation.last;
+    const previewLabel=last?.deleted_at?'Pesan ini dihapus':last?.message_type==='voice'?'♫ Pesan suara':last?.message_type==='image'?'▧ Foto':last?.message_type==='video'?'▶ Video':last?.message_type==='file'?'▤ Dokumen':last?.body||'Belum ada pesan';
+    const lastStatus=last?.sender_id===currentUser.id?renderMessageStatus({receipt:conversation.lastReceipt}):'';
+    return '<button class="pl-msg-thread '+(currentConversation===conversation.id?'active':'')+(conversation.unread?' is-unread':'')+'" data-open-chat="'+conversation.id+'">'+avatar+'<span class="pl-msg-thread-copy"><span class="pl-msg-thread-head"><b>'+esc(conversation.other.display_name||conversation.other.username)+'</b><span class="pl-msg-thread-time"><time>'+formatTime(last?.created_at||conversation.updated_at)+'</time>'+lastStatus+'</span></span><small>@'+esc(conversation.other.username)+'</small><p>'+esc(previewLabel)+(pending?' · '+pending+' menunggu':'')+'</p></span>'+(conversation.unread?'<i class="pl-msg-unread-badge" aria-label="Belum dibaca"></i>':'')+'</button>';
   }).join(''):emptyStateMarkup({variant:'message',title:activeInboxTab==='unread'?'Tidak ada pesan belum dibaca':'Belum ada percakapan',description:activeInboxTab==='unread'?'Semua percakapan sudah dibaca.':'Pilih kontak atau cari nama pengguna untuk memulai percakapan.'});
   list.querySelectorAll('[data-open-chat]').forEach(button=>button.onclick=()=>openConversation(button.dataset.openChat));
   list.hidden=false;
@@ -849,7 +867,7 @@ async function openConversation(id) {
   chat.innerHTML='<header class="pl-msg-chat-head"><span class="pl-msg-chat-avatar" data-chat-avatar>'+contactAvatar(thread?.other||{display_name:'P'})+'</span><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+' · <span id="pl-msg-chat-presence">'+(thread?.other?.is_self||thread?.other?.id===currentUser?.id?'Online':thread?.other?.id&&onlineUserIds.has(thread.other.id)?'Online':'Offline')+'</span></small></div>'+(thread?.other?.is_self?'':'<details class="pl-msg-contact-menu" data-contact-menu><summary aria-label="Opsi kontak"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></summary><div><button type="button" data-contact-action="report" data-user-id="'+esc(thread?.other?.id||'')+'">Laporkan akun</button><button type="button" data-contact-action="block" data-user-id="'+esc(thread?.other?.id||'')+'">Blokir akun</button></div></details>')+'<button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Inbox">‹</button></header>'+
     '<div class="pl-msg-stream">'+(visibleMessages.length?visibleMessages.map(message=>messageMarkup(message,false,receiptByMessage.get(message.id),Boolean(thread?.other?.id&&onlineUserIds.has(thread.other.id)))).join('') : emptyStateMarkup({variant:'message',title:'Belum ada pesan',description:'Kirim pesan pertama untuk memulai percakapan.'}))+queued.map(row=>messageMarkup(row,true)).join('')+'</div>'+
     '<div class="pl-msg-selection-bar" data-selection-bar hidden><span data-selection-count>0 dipilih</span><button type="button" data-selection-delete-me>Hapus untuk saya</button><button type="button" data-selection-delete-everyone disabled>Hapus untuk semua</button><button type="button" data-selection-cancel>Batal</button></div>'+
-    '<div class="pl-msg-attachment-preview" data-attachment-preview hidden></div><form id="pl-msg-compose"><input id="pl-msg-image-input" type="file" hidden multiple accept="image/jpeg,image/png,image/webp,image/gif"><input id="pl-msg-file-input" type="file" hidden multiple accept="application/pdf,text/plain,application/zip,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"><div class="pl-msg-attach-menu" data-attachment-menu hidden><button type="button" data-pick-image><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 20"/></svg>Gambar</button><button type="button" data-pick-file><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v6h5M10 14h6m-6 4h6"/></svg>File</button></div><div class="pl-msg-input-bar"><button type="button" class="pl-msg-attach" data-attachment-trigger aria-label="Tambah lampiran" aria-expanded="false" title="Tambah lampiran"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><textarea name="body" rows="1" maxlength="5000" placeholder="Ketik pesan"></textarea><button type="button" class="pl-msg-voice" data-voice-record aria-label="Rekam pesan suara" title="Pesan suara"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8"/></svg></button><button type="submit" class="pl-msg-send" aria-label="Kirim pesan" title="Kirim"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12 16-8-6 16-3-6-7-2Z"/><path d="m11 14 9-10"/></svg></button></div></form>'+
+    '<div class="pl-msg-attachment-preview" data-attachment-preview hidden></div><form id="pl-msg-compose"><input id="pl-msg-image-input" type="file" hidden multiple accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime"><input id="pl-msg-file-input" type="file" hidden multiple accept="application/pdf,text/plain,application/zip,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"><div class="pl-msg-attach-menu" data-attachment-menu hidden><button type="button" data-pick-image><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 20"/></svg>Gambar</button><button type="button" data-pick-file><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v6h5M10 14h6m-6 4h6"/></svg>File</button></div><div class="pl-msg-input-bar"><button type="button" class="pl-msg-attach" data-attachment-trigger aria-label="Tambah lampiran" aria-expanded="false" title="Tambah lampiran"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><textarea name="body" rows="1" maxlength="5000" placeholder="Ketik pesan"></textarea><button type="button" class="pl-msg-voice" data-voice-record aria-label="Rekam pesan suara" title="Pesan suara"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8"/></svg></button><button type="submit" class="pl-msg-send" aria-label="Kirim pesan" title="Kirim"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12 16-8-6 16-3-6-7-2Z"/><path d="m11 14 9-10"/></svg></button></div></form>'+
     '<dialog class="pl-msg-forward-dialog" id="pl-msg-forward-dialog"><h3>Teruskan pesan</h3><label>Pilih percakapan<select>'+conversationCache.map(item=>'<option value="'+esc(item.id)+'">'+esc(item.other.display_name||item.other.username)+'</option>').join('')+'</select></label><div><button type="button" data-forward-cancel>Batal</button><button type="button" data-forward-send>Kirim</button></div></dialog>'+
     '<p class="pl-msg-chat-status" role="status">'+(queued.length?queued.length+' pesan menunggu koneksi.':'')+'</p>';
   chat.querySelector('[data-chat-back]')?.addEventListener('click',()=>document.querySelector('#pl-msg-layout')?.classList.remove('is-chat-open'));
@@ -919,7 +937,7 @@ async function flushOutbox() {
       else if(saved&&currentConversation===targetConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')){
         appendMessageToOpenChat(document.querySelector('#pl-msg-chat'),saved);
         if(saved.message_type==='voice')void hydrateVoicePlayers(document.querySelector('#pl-msg-chat'));
-        if(saved.message_type==='image'||saved.message_type==='file')void hydrateMessageMedia(document.querySelector('#pl-msg-chat'));
+        if(['image','video','file'].includes(saved.message_type))void hydrateMessageMedia(document.querySelector('#pl-msg-chat'));
       }
     }
     writeQueue(remaining);
