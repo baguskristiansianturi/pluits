@@ -6,7 +6,7 @@ import {CIRCLE_DEMO_PEOPLE,renderPeopleRecommendations} from '../../src/features
 import {readFile} from 'node:fs/promises';
 
 test('canonical destinations keep home, inbox and profile on separate routes',()=>{
- assert.equal(ROUTES.home,'#/circle');
+ assert.equal(ROUTES.home,'#/account/explore');
  assert.equal(ROUTES.inbox,'#/inbox');
  assert.equal(ROUTES.profile,'#/account/profile');
  assert.notEqual(ROUTES.home,ROUTES.profile);
@@ -15,7 +15,7 @@ test('canonical destinations keep home, inbox and profile on separate routes',()
 
 test('signed-in social bottom navigation points to the intended pages',()=>{
  const html=renderSocialMobileNav({active:'home',user:{id:'u1'}});
- assert.match(html,/href="#\/circle"[^>]*aria-label="Circle"/);
+ assert.match(html,/href="#\/account\/explore"[^>]*aria-label="Circle"/);
  assert.match(html,/href="#\/inbox"[^>]*aria-label="Pesan"/);
  assert.match(html,/href="#\/account\/profile"[^>]*aria-label="Profil"/);
 });
