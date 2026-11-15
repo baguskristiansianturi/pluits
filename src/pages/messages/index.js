@@ -59,6 +59,12 @@ function updateConversationPreview(row) {
   const time=thread.querySelector('.pl-msg-thread-head time');
   if(preview)preview.textContent=row.deleted_at?'Pesan ini dihapus':row.message_type==='voice'?'♫ Pesan suara':row.message_type==='image'?'▧ Foto':row.message_type==='video'?'▶ Video':row.message_type==='file'?'▤ Dokumen':row.body||'Lampiran';
   if(time)time.textContent=formatTime(row.created_at||new Date().toISOString());
+  const timeWrap=thread.querySelector('.pl-msg-thread-time');
+  if(timeWrap&&row.sender_id===currentUser?.id){
+    const receipt=selfChatReadReceipt(row.conversation_id)||null;
+    timeWrap.querySelector('.pl-msg-status')?.remove();
+    timeWrap.insertAdjacentHTML('beforeend',renderMessageStatus({receipt}));
+  }
   const index=conversationCache.findIndex(item=>item.id===row.conversation_id);
   if(index>0){const [item]=conversationCache.splice(index,1);item.last=row;item.updated_at=row.created_at||new Date().toISOString();conversationCache.unshift(item);}
 }
@@ -604,12 +610,16 @@ export async function bindMessagesPage() {
       const article=messageId?document.querySelector('#pl-msg-chat [data-message-id="'+CSS.escape(String(messageId))+'"]'):null;
       const status=article?.querySelector('.pl-msg-status');
       if(status&&article.classList.contains('mine')) status.outerHTML=renderMessageStatus({receipt:isSelfChat(article.dataset.conversationId)?selfChatReadReceipt(article.dataset.conversationId,payload.new):payload.new,voice:article.dataset.messageType==='voice'});
+      const thread=messageId?conversationCache.find(item=>item.last?.id===messageId):null;
+      if(thread){thread.lastReceipt=payload.new;const node=document.querySelector('#pl-msg-conversations [data-open-chat="'+CSS.escape(String(thread.id))+'"] .pl-msg-thread-time');if(node){node.querySelector('.pl-msg-status')?.remove();node.insertAdjacentHTML('beforeend',renderMessageStatus({receipt:payload.new}));}}
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_message_receipts'},payload=>{
       const messageId=payload.new?.message_id;
       const article=messageId?document.querySelector('#pl-msg-chat [data-message-id="'+CSS.escape(String(messageId))+'"]'):null;
       const status=article?.querySelector('.pl-msg-status');
       if(status&&article.classList.contains('mine')) status.outerHTML=renderMessageStatus({receipt:payload.new,voice:article.dataset.messageType==='voice'});
+      const thread=messageId?conversationCache.find(item=>item.last?.id===messageId):null;
+      if(thread){thread.lastReceipt=payload.new;const node=document.querySelector('#pl-msg-conversations [data-open-chat="'+CSS.escape(String(thread.id))+'"] .pl-msg-thread-time');if(node){node.querySelector('.pl-msg-status')?.remove();node.insertAdjacentHTML('beforeend',renderMessageStatus({receipt:payload.new}));}}
     })
     .on('postgres_changes',{event:'*',schema:'public',table:'user_message_hidden'},payload=>{
       if(payload.new?.user_id===currentUser.id&&payload.eventType==='INSERT'&&payload.new?.message_id&&currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')){
