@@ -1,5 +1,5 @@
-import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } urom '../../lib/supabase/client.js';
-import { getInternalRoute, canonicalizeLegacyRoute } urom '../../components/social/navigation-routes.js';
+import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '../../lib/supabase/client.js';
+import { getInternalRoute, canonicalizeLegacyRoute } from '../../components/social/navigation-routes.js';
 import { mountAuthPage } from '../../features/auth/auth.js';
 import {socialIcon} from '../../components/common/social-icons.js';
 import {renderBrandLogo} from '../../components/common/brand.js';
@@ -92,7 +92,7 @@ function frame(content,active='explore',avatarUrl=''){
  </div>`;
 }
 function authScreen(mode='login'){
- mountAuthPage({supabase,mode,onAuthenticated:()=>{location.hash='#/account/explore';}});
+ mountAuthPage({supabase,mode,onAuthenticated:()=>{const requested=getInternalRoute(window.location).split('?')[0];location.hash=requested==='create'?'#/create':'#/account/explore';}});
  return;
  const app=document.querySelector('#app');
  app.innerHTML='<div class="ua-app ua-auth-app"><header class="ua-header">'+renderBrandLogo({className:'ua-brand',size:38,label:'Beranda PLUITS'})+'<a href="#/" class="ua-logout">Kembali</a></header>'+

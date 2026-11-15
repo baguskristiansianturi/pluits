@@ -1,5 +1,5 @@
-import   socialIcon } from '../common/social-icons.js';
-import   renderBrandLogo } from '../common/brand.js';
+import { socialIcon } from '../common/social-icons.js';
+import { renderBrandLogo } from '../common/brand.js';
 import { ROUTES, getRoute } from './navigation-routes.js';
 
 export function renderSocialHeader({ active = 'explore', profileView = false, showEditProfile = profileView, user, profile, userAvatar = '', notificationCount = 0, publicHome = false } = {}) {
@@ -66,7 +66,7 @@ export function renderSocialMobileNav({ active = 'home', profileView = false, us
   const items = [
     { key: 'home', href: publicHome ? ROUTES.publicHome : ROUTES.home, label: publicHome ? 'Beranda' : 'Circle', icon: 'users' },
     { key: 'discover', href: ROUTES.discover, label: 'Jelajah', icon: 'compass' },
-    { key: 'create', href: getRoute('create', Boolean(user)), label: 'Buat', icon: 'plus' },
+    { key: 'create', href: ROUTES.create, label: 'Buat', icon: 'plus' },
     isInbox ? { key: 'activity', href: getRoute('activity', Boolean(user)), label: 'Notifikasi', icon: 'bell' } : { key: 'messages', href: publicHome ? '#/help' : ROUTES.inbox, label: 'Pesan', icon: 'message' },
     { key: 'profile', href: publicHome ? ROUTES.login : profileHref, label: 'Profil', icon: 'user', avatar: publicHome ? '' : userAvatar }
   ];

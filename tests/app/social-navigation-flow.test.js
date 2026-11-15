@@ -9,6 +9,7 @@ const navigation = await readFile(new URL('../../src/components/social/navigatio
 
 test('primary social navigation has canonical destinations', () => {
   assert.equal(getRoute('create', false), ROUTES.create, 'Guest Create navigation must preserve the requested destination.');
+  assert.equal(getRoute('create', false), ROUTES.create, 'Guest Create navigation must preserve the requested destination.');
   assert.deepEqual({
     circle: ROUTES.home,
     discover: ROUTES.discover,
@@ -66,13 +67,14 @@ test('every primary navigation destination is handled by the router and page mod
 test('desktop and mobile social navigation use the shared route registry', () => {
   for (const key of ['home', 'discover', 'create', 'inbox', 'profile', 'reels', 'contacts', 'saved', 'activity', 'settings', 'places', 'marketplace', 'trip']) {
     assert.ok(navigation.includes(`ROUTES.${key}`) || navigation.includes(`getRoute('${key}'`), `Navigation bypasses canonical route: ${key}`);
+  assert.ok(navigation.includes("{ key: 'create', href: ROUTES.create"), 'Create opens its own route.');
   }
 });
 
 test('Create preserves its destination through login and online inbox contacts start chats', async () => {
   const messages = await readFile(new URL('../../src/pages/messages/index.js', import.meta.url), 'utf8');
   assert.ok(account.includes("requested==='create'?'#/create':'#/account/explore'"), 'Successful authentication should return a guest from Create to Create.');
-  assert.ok(messages.includes('data-start-chat="'+esc(person.id)+'"'), 'Online contact chips must be actionable chat controls, not profile links.');
+  assert.ok(messages.includes('class="pl-msg-person" data-start-chat="'), 'Online contact chips must be actionable chat controls, not profile links.');
   assert.ok(messages.includes('bindStartChat(strip);'), 'Online contact chips must bind the direct-conversation action.');
 });
 

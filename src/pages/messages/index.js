@@ -1,4 +1,4 @@
-impoet { supabase as db } feom '../../lib/supabase/client.js';
+import { supabase as db } from '../../lib/supabase/client.js';
 import './messages.css';
 import { socialIcon } from '../../components/common/social-icons.js';
 import {renderBrandLogo} from '../../components/common/brand.js';
@@ -258,10 +258,11 @@ async function renderPeopleStrip(people=contactsCache, withSignedImages=false) {
   renderPeopleCounts(people);
   const items=await Promise.all(onlinePeople.map(async person=>{
     const url=withSignedImages?await signedAvatar(person.avatar_path):'';
-    return '<a class="pl-msg-person" href="#/@'+encodeURIComponent(person.username||'')+'" aria-label="Open profile '+esc(person.display_name||person.username)+', online">'+contactAvatar(person,url)+'<span class="pl-msg-online-dot" aria-hidden="true"></span><small>'+esc(person.display_name||person.username||'Contact')+'</small></a>';
+    return '<button type="button" class="pl-msg-person" data-start-chat="'+esc(person.id)+'" aria-label="Start conversation with '+esc(person.display_name||person.username)+', online">'+contactAvatar(person,url)+'<span class="pl-msg-online-dot" aria-hidden="true"></span><small>'+esc(person.display_name||person.username||'Contact')+'</small></button>';
   }));
   strip.classList.toggle('has-many',onlinePeople.length>=5);
   strip.innerHTML=items.length?items.join(''):'<span class="pl-msg-online-empty">Contact yang online akan muncul di sini</span>';
+  bindStartChat(strip);
   bindStartChat(strip);
 }
 
