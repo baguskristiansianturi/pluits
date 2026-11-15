@@ -90,3 +90,14 @@ test('mobile image messages are content-sized and never force a full-width portr
   assert.match(finalRule,/object-fit:contain!important/);
   assert.doesNotMatch(finalRule,/\.pl-msg-bubble\.has-image \.pl-msg-image-wrap img\{[^}]*width:100%/s);
 });
+
+
+test('self-chat receipt state is rendered as read immediately', () => {
+  const markup = renderMessageMarkup({
+    id:'self-message',conversation_id:'self-conversation',sender_id:'u1',body:'Catatan pribadi',
+    created_at:new Date().toISOString()
+  }, {currentUserId:'u1',receipt:{delivered_at:new Date().toISOString(),read_at:new Date().toISOString()}});
+  assert.match(markup,/data-conversation-id="self-conversation"/);
+  assert.match(markup,/aria-label="Dibaca"/);
+  assert.match(markup,/is-read/);
+});
