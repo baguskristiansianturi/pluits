@@ -46,7 +46,7 @@ export function canonicalizeLegacyRoute(value = '') {
   let path = SITE_BASE;
   const fixed = {
     '': '', circle: 'circle/', home: 'circle/', feed: 'circle/', explore: 'circle/',
-    search: 'discover/', discover: 'discover/', inbox: 'inbox/', message: 'inbox/', messages: 'inbox/',
+    search: 'discover/', discover: 'discover/', explore: 'circle/', contacts: 'followers/', contact: 'followers/', inbox: 'inbox/', message: 'inbox/', messages: 'inbox/',
     login: 'login/', register: 'register/', profile: 'profile/', places: 'places/',
     marketplace: 'marketplace/', trip: 'trips/', trips: 'trips/', reels: 'reels/',
     followers: 'followers/', following: 'following/', saved: 'saved/', notifications: 'notifications/',
@@ -95,7 +95,7 @@ export function getInternalRoute(locationLike = window.location) {
   const [encodedA,b,c] = parts;
   const a = decodePathSegment(encodedA || '');
   const reverse = {
-    circle:'circle', discover:'search', create:'create', inbox:'inbox',
+    circle:'circle', explore:'circle', discover:'search', contacts:'account/followers', contact:'account/followers', create:'create', inbox:'inbox',
     notifications:'account/activity', profile:'profile', login:'login', register:'register',
     followers:'account/followers', following:'account/following', 'follow-requests':'account/requests',
     saved:'account/saved', places:'places', marketplace:'marketplace', trips:'trip', professional:'account/professional', 'professional-create':'account/professional-create',
