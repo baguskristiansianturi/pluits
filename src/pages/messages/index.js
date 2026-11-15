@@ -456,10 +456,11 @@ async function loadConversations() {
   const ids=(members||[]).map(row=>row.conversation_id);
   if(navigator.onLine&&ids.length) await Promise.all(ids.map(conversationId=>db.rpc('mark_conversation_delivered',{p_conversation_id:conversationId})));
   if(!ids.length){conversationCache=[];list.innerHTML=emptyStateMarkup({variant:'message',title:activeInboxTab==='unread'?'Tidak ada pesan belum dibaca':'Belum ada percakapan',description:activeInboxTab==='unread'?'Semua percakapan sudah dibaca.':'Pilih kontak atau cari nama pengguna untuk memulai percakapan.'});return;}
-  const [convs,memberRows,msgRows]=await Promise.all([
+  const [convs,memberRows,msgRows,unreadRows]=await Promise.all([
     db.from('user_conversations').select('id,title,updated_at').in('id',ids).order('updated_at',{ascending:false}),
     db.from('user_conversation_members').select('conversation_id,user_id,last_read_at').in('conversation_id',ids),
-    db.from('user_messages').select('id,conversation_id,body,sender_id,created_at,message_type,deleted_at').in('conversation_id',ids).order('created_at',{ascending:false}).limit(200)
+    db.from('user_messages').select('id,conversation_id,body,sender_id,created_at,message_type,deleted_at').in('conversation_id',ids).order('created_at',{ascending:false}).limit(200),
+    db.rpc('get_unread_conversation_ids')
   ]);
   if(!['primary','unread'].includes(activeInboxTab))return;
   if(convs.error||memberRows.error||msgRows.error){
@@ -480,7 +481,9 @@ async function loadConversations() {
     const other=(memberRows.data||[]).find(row=>row.conversation_id===conversation.id&&row.user_id!==currentUser.id);
     const self=(memberRows.data||[]).find(row=>row.conversation_id===conversation.id&&row.user_id===currentUser.id);
     const last=latest.get(conversation.id);
-    const unread=(msgRows.data||[]).some(message=>message.conversation_id===conversation.id&&!message.deleted_at&&!hiddenPreviewIds.has(message.id)&&message.sender_id!==currentUser.id&&(!self?.last_read_at||new Date(message.created_at)>new Date(self.last_read_at)));
+    const unread=unreadRows.error
+      ? (msgRows.data||[]).some(message=>message.conversation_id===conversation.id&&!message.deleted_at&&!hiddenPreviewIds.has(message.id)&&message.sender_id!==currentUser.id&&(!self?.last_read_at||new Date(message.created_at)>new Date(self.last_read_at)))
+      : new Set((unreadRows.data||[]).map(row=>row.conversation_id)).has(conversation.id);
     return {...conversation,other:pmap.get(other?.user_id)||{display_name:'Akun Pluits',username:'akun'},last,unread};
   });
   try { localStorage.setItem(threadsKey(),JSON.stringify(conversationCache.map(item=>({id:item.id,updated_at:item.updated_at,other:item.other,unread:item.unread})))); } catch {}
