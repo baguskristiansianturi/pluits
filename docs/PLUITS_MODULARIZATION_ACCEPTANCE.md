@@ -58,8 +58,10 @@ These findings are starting points, not a complete audit. Re-verify against the 
 Exit: every source area has an owner, consumer map, risk rating, and proposed safe extraction sequence. No guessed dependencies.
 
 ### Phase 1 — Guardrails
-- Add or strengthen automated module-boundary checks.
+- Add or strengthen automated module-boundary checks (`scripts/verify-module-boundaries.mjs`).
+- Add CI enforcement for scoped component/feature CSS (`scripts/verify-style-boundaries.mjs`); legacy page/global styles remain outside this initial guard until their selectors are inventoried and safely migrated.
 - Add checks for forbidden cross-feature imports and unapproved global CSS selectors.
+- Require the per-change owner/consumer/protected-surface record in `docs/pluits/CHANGE-SCOPE-SAFETY-CHECKLIST.md`.
 - Define stable shared component, layout, icon, and asset contracts.
 - Add regression fixtures for critical routes and responsive breakpoints.
 
