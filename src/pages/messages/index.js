@@ -101,107 +101,103 @@ function bindAttachmentComposer(chat,conversationId) {
 function bindVoiceRecorder(chat, conversationId) {
   const button=chat.querySelector('[data-voice-record]');
   const status=chat.querySelector('.pl-msg-chat-status');
-  const form=chat.querySelector('#pl-msg-compose');
-  if(!button||!form)return;
-  const panel=document.createElement('div');
-  panel.className='pl-msg-voice-draft';
-  panel.hidden=true;
-  form.parentElement.insertBefore(panel,form);
-  if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==='undefined') {
+  if(!button)return;
+  if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==='undefined'){
     button.disabled=true;button.title='Perekaman suara tidak didukung browser ini';return;
   }
-  let recorder=null,stream=null,chunks=[],startedAt=0,pausedMs=0,pauseStartedAt=0,limitTimer=null,clockTimer=null,cancelled=false,previewUrl='';
+  let recorder=null,stream=null,chunks=[],startedAt=0,limitTimer=null,clockTimer=null;
+  let starting=false,releasedWhileStarting=false,cancelled=false,pointerId=null;
   const stopTracks=()=>{stream?.getTracks().forEach(track=>track.stop());stream=null;};
-  const resetPanel=()=>{
+  const setIdle=()=>{
     clearTimeout(limitTimer);clearInterval(clockTimer);stopTracks();
-    if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl='';}
-    panel.hidden=true;panel.innerHTML='';
-    button.disabled=false;button.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8"/></svg>';button.classList.remove('is-recording');
+    button.disabled=false;button.classList.remove('is-recording');
+    button.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8"/></svg>';
+    recorder=null;starting=false;pointerId=null;
   };
-  const elapsed=()=>Math.max(0,Date.now()-startedAt-pausedMs-(pauseStartedAt?Date.now()-pauseStartedAt:0));
-  const showPreview=blob=>{
-    previewUrl=URL.createObjectURL(blob);
-    const seconds=Math.min(180,Math.max(1,Math.round(elapsed()/1000)));
-    panel.hidden=false;
-    panel.innerHTML='<div class="pl-msg-voice-preview"><div><b>Pratinjau pesan suara</b><small>'+formatDuration(seconds)+' · '+Math.ceil(blob.size/1024)+' KB</small></div><audio controls preload="metadata"></audio><div class="pl-msg-voice-preview-actions"><button type="button" data-voice-discard>Hapus</button><button type="button" data-voice-send>Kirim suara</button></div></div>';
-    const audio=panel.querySelector('audio');audio.src=previewUrl;
-    panel.querySelector('[data-voice-discard]').onclick=()=>resetPanel();
-    panel.querySelector('[data-voice-send]').onclick=async()=>{
-      const send=panel.querySelector('[data-voice-send]');send.disabled=true;send.textContent='Mengirim…';
-      const mime=String(blob.type||'audio/webm').split(';')[0].toLowerCase();
-      const ext=({'audio/webm':'webm','audio/mp4':'m4a','audio/ogg':'ogg','audio/mpeg':'mp3','audio/wav':'wav','audio/3gpp':'3gp'})[mime];
-      if(!ext){send.disabled=false;send.textContent='Kirim suara';if(status)status.textContent='Format audio browser ini belum didukung.';return;}
-      if(blob.size>10*1024*1024){send.disabled=false;send.textContent='Kirim suara';if(status)status.textContent='Pesan suara melebihi batas 10 MB.';return;}
-      const path=conversationId+'/'+currentUser.id+'/'+crypto.randomUUID()+'.'+ext;
-      if(status)status.textContent='Mengunggah pesan suara…';
+  const uploadVoice=async(blob,duration)=>{
+    if(!navigator.onLine){if(status)status.textContent='Koneksi terputus. Pesan suara belum dapat dikirim.';setIdle();return;}
+    const mime=String(blob.type||'audio/webm').split(';')[0].toLowerCase();
+    const ext=({'audio/webm':'webm','audio/mp4':'m4a','audio/ogg':'ogg','audio/mpeg':'mp3','audio/wav':'wav','audio/3gpp':'3gp'})[mime];
+    if(!ext){if(status)status.textContent='Format audio perangkat ini belum didukung.';setIdle();return;}
+    if(blob.size>10*1024*1024){if(status)status.textContent='Pesan suara melebihi batas 10 MB.';setIdle();return;}
+    button.disabled=true;
+    if(status)status.textContent='Mengirim pesan suara…';
+    const path=conversationId+'/'+currentUser.id+'/'+crypto.randomUUID()+'.'+ext;
+    try{
       const uploaded=await db.storage.from('pluits-message-media').upload(path,blob,{contentType:mime,upsert:false});
-      if(uploaded.error){send.disabled=false;send.textContent='Kirim suara';if(status)status.textContent='Upload gagal: '+uploaded.error.message;return;}
+      if(uploaded.error)throw uploaded.error;
       const saved=await db.from('user_messages').insert({
         conversation_id:conversationId,sender_id:currentUser.id,body:'',
-        message_type:'voice',media_path:path,media_duration_seconds:seconds,
+        message_type:'voice',media_path:path,media_duration_seconds:duration,
         media_mime_type:mime,client_message_id:crypto.randomUUID()
       });
-      if(saved.error){
-        await db.storage.from('pluits-message-media').remove([path]);
-        send.disabled=false;send.textContent='Kirim suara';if(status)status.textContent='Pesan suara gagal dikirim: '+saved.error.message;return;
-      }
-      resetPanel();
+      if(saved.error){await db.storage.from('pluits-message-media').remove([path]);throw saved.error;}
       if(status)status.textContent='Pesan suara terkirim.';
       await openConversation(conversationId);await loadConversations();
-    };
+    }catch(error){if(status)status.textContent='Gagal mengirim pesan suara: '+(error?.message||'Coba lagi.');}
+    finally{setIdle();}
   };
-  button.onclick=async()=>{
-    if(recorder?.state==='recording'||recorder?.state==='paused')return;
-    if(!navigator.onLine){if(status)status.textContent='Pesan suara memerlukan koneksi internet.';return;}
+  const stopRecording=()=>{
+    if(recorder&&recorder.state!=='inactive')recorder.stop();
+  };
+  const beginRecording=async()=>{
+    if(starting||recorder)return;
+    if(!navigator.onLine){if(status)status.textContent='Pesan suara membutuhkan koneksi internet.';return;}
+    starting=true;releasedWhileStarting=false;cancelled=false;
+    button.classList.add('is-recording');
+    if(status)status.textContent='Meminta izin mikrofon…';
     try{
       stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
       const preferred=['audio/webm;codecs=opus','audio/mp4','audio/ogg;codecs=opus','audio/webm'];
       const mimeType=preferred.find(type=>MediaRecorder.isTypeSupported(type));
       recorder=new MediaRecorder(stream,mimeType?{mimeType}:undefined);
-      chunks=[];cancelled=false;startedAt=Date.now();pausedMs=0;pauseStartedAt=0;
+      chunks=[];startedAt=Date.now();
       recorder.ondataavailable=event=>{if(event.data?.size)chunks.push(event.data);};
-      recorder.onerror=()=>{if(status)status.textContent='Perekaman gagal. Periksa izin mikrofon.';resetPanel();};
+      recorder.onerror=()=>{if(status)status.textContent='Perekaman gagal. Periksa izin mikrofon.';setIdle();};
       recorder.onstop=()=>{
-        clearTimeout(limitTimer);clearInterval(clockTimer);stopTracks();
-        button.classList.remove('is-recording');button.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8"/></svg>';
-        const blob=new Blob(chunks,{type:recorder.mimeType||'audio/webm'});
-        if(cancelled){resetPanel();if(status)status.textContent='Rekaman dibatalkan.';return;}
-        const duration=Math.round(elapsed()/1000);
-        if(duration<1||!blob.size){resetPanel();if(status)status.textContent='Rekaman terlalu singkat.';return;}
-        if(blob.size>10*1024*1024){resetPanel();if(status)status.textContent='Rekaman melebihi batas 10 MB.';return;}
-        showPreview(blob);
-        if(status)status.textContent='Dengarkan dahulu, lalu kirim atau hapus rekaman.';
+        const duration=Math.min(180,Math.max(0,Math.round((Date.now()-startedAt)/1000)));
+        const blob=new Blob(chunks,{type:recorder?.mimeType||mimeType||'audio/webm'});
+        stopTracks();clearInterval(clockTimer);clearTimeout(limitTimer);
+        if(cancelled){setIdle();if(status)status.textContent='Rekaman dibatalkan.';return;}
+        if(duration<1||!blob.size){setIdle();if(status)status.textContent='Tahan tombol sedikit lebih lama untuk merekam.';return;}
+        void uploadVoice(blob,duration);
       };
-      recorder.start(250);
-      button.textContent='● Merekam';button.classList.add('is-recording');
-      panel.hidden=false;
-      panel.innerHTML='<div class="pl-msg-recording"><span class="pl-msg-recording-dot"></span><b data-record-clock>0:00</b><button type="button" data-voice-pause>Jeda</button><button type="button" data-voice-finish>Selesai</button><button type="button" data-voice-cancel>Batal</button></div>';
-      const clock=panel.querySelector('[data-record-clock]');
-      clockTimer=setInterval(()=>{
-        const seconds=Math.floor(elapsed()/1000);
-        if(clock)clock.textContent=formatDuration(seconds);
-        if(seconds>=180&&recorder?.state!=='inactive')recorder.stop();
-      },250);
-      panel.querySelector('[data-voice-pause]').onclick=event=>{
-        if(recorder.state==='recording'&&typeof recorder.pause==='function'){
-          recorder.pause();pauseStartedAt=Date.now();event.currentTarget.textContent='Lanjutkan';
-          if(status)status.textContent='Rekaman dijeda.';
-        }else if(recorder.state==='paused'&&typeof recorder.resume==='function'){
-          pausedMs+=Date.now()-pauseStartedAt;pauseStartedAt=0;recorder.resume();
-          event.currentTarget.textContent='Jeda';if(status)status.textContent='Merekam…';
-        }
-      };
-      panel.querySelector('[data-voice-finish]').onclick=()=>{if(recorder.state!=='inactive')recorder.stop();};
-      panel.querySelector('[data-voice-cancel]').onclick=()=>{cancelled=true;if(recorder.state!=='inactive')recorder.stop();else resetPanel();};
-
-      if(status)status.textContent='Sedang merekam. Maksimal 3 menit.';
+      recorder.start(200);starting=false;
+      if(status)status.textContent='Lepaskan tombol untuk langsung mengirim.';
+      let seconds=0;
+      clockTimer=setInterval(()=>{seconds=Math.floor((Date.now()-startedAt)/1000);button.setAttribute('aria-label','Merekam '+seconds+' detik. Lepaskan untuk mengirim.');if(seconds>=180)stopRecording();},500);
+      limitTimer=setTimeout(stopRecording,180000);
+      if(releasedWhileStarting)stopRecording();
     }catch(error){
-      stopTracks();button.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8"/></svg>';button.classList.remove('is-recording');
-      if(status)status.textContent='Mikrofon tidak tersedia. Izinkan akses mikrofon di browser.';
+      setIdle();
+      if(status)status.textContent='Mikrofon tidak dapat diakses. Izinkan akses mikrofon di browser.';
     }
   };
+  const pressStart=event=>{
+    if(event.button!==undefined&&event.button!==0)return;
+    event.preventDefault();
+    if(button.disabled||starting||recorder)return;
+    pointerId=event.pointerId;
+    try{button.setPointerCapture?.(pointerId);}catch{}
+    void beginRecording();
+  };
+  const pressEnd=event=>{
+    if(pointerId!==null&&event.pointerId!==undefined&&event.pointerId!==pointerId)return;
+    if(starting){releasedWhileStarting=true;return;}
+    stopRecording();
+  };
+  button.addEventListener('pointerdown',pressStart);
+  button.addEventListener('pointerup',pressEnd);
+  button.addEventListener('pointercancel',()=>{cancelled=true;stopRecording();});
+  button.addEventListener('lostpointercapture',()=>{if(recorder?.state==='recording')stopRecording();});
+  button.addEventListener('contextmenu',event=>event.preventDefault());
+  button.addEventListener('keydown',event=>{
+    if((event.key===' '||event.key==='Enter')&&!event.repeat){event.preventDefault();void beginRecording();}
+  });
+  button.addEventListener('keyup',event=>{
+    if(event.key===' '||event.key==='Enter'){event.preventDefault();if(starting)releasedWhileStarting=true;else stopRecording();}
+  });
 }
-
 function emptyStateMarkup({variant='message',title,description,action=''}) {
   const art = variant==='login'
     ? '<circle cx="60" cy="48" r="19" fill="#dce9f4"/><path d="M28 104c3-20 15-30 32-30s29 10 32 30" fill="#c8d9e9"/><rect x="76" y="14" width="34" height="25" rx="8" fill="#fff" stroke="#c5d6e5"/><path d="M84 23h18M84 29h12" stroke="#8ca8c2" stroke-width="2" stroke-linecap="round"/>'
