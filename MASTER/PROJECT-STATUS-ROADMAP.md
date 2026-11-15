@@ -1324,3 +1324,17 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - **Status:** DATABASE MIGRATIONS APPLIED / FRONTEND IMPLEMENTED / AUTOMATED TESTED / PRODUCTION DEPLOYED / ANDROID UAT NOT TESTED / FOUNDER ACCEPTANCE PENDING.
 - **Remaining:** crawler-readable Open Graph metadata, comment reporting/moderation UI, comment/reply notification preferences, institutional News & Media identities, and exhaustive two-account privacy UAT remain future work.
 - **Next:** open PR, inspect full CI output and fix any failures; merge only after CI success; verify main push workflow and live Pages URL; then founder tests template switch/persistence, block order, comments/replies, delete permissions, and public/private isolation on Android.
+
+
+## CP-083 — Jelajah search-first visual discovery grid (15 November 2026)
+
+- **PR:** #29 — https://github.com/baguskristiansianturi/pluits/pull/29
+- **Branch:** `fix/explore-discovery-grid-mobile`.
+- **Canonical route:** Jelajah `#/search`, owned by `src/pages/search/discovery.js`; Circle `#/account/explore` is a separate workspace and is intentionally unchanged.
+- **Founder-approved scope:** one compact search bar at the top, one horizontal carousel of available content categories, then the media grid. No editorial intro, extra sort bar, or long captions above the grid.
+- **Frontend IMPLEMENTED IN BRANCH:** Jelajah uses a three-column mobile media grid with portrait 3:4 cards, 2–3 px gutters, compact 21–22 px creator avatars and username, a restrained eye affordance, and SVG video/multi-media marks.
+- **Video behavior IMPLEMENTED IN BRANCH:** muted, looping, inline previews play only when at least 55% visible; off-screen and background playback pauses; navigation cleanup disconnects the observer; reduced-motion preference disables autoplay. The viewer does not invent view counts.
+- **Circle isolation:** `src/pages/account/index.js` has been restored to the main-branch version. Circle Story, recommendation and feed behavior remain under their existing owner and contracts.
+- **Backend/database:** no schema, migration, ranking, or production-data changes.
+- **Validation:** an initial CI run (#2005) caught an incorrect first implementation that touched Circle; that implementation was reverted and the change was moved to the canonical Jelajah route. The latest head is awaiting its fresh CI run. Pages NOT DEPLOYED; Android real-device UAT NOT TESTED; founder acceptance PENDING.
+- **Next:** verify the latest PR CI and Vite build; after success, merge/release and verify Pages. Then test 360/390 px screens, category carousel, search, video autoplay/pause, and navigation to post/Reel detail on Android.
