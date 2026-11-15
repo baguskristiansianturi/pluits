@@ -199,8 +199,10 @@ test('profile keeps the three-dot settings menu visible on the profile card on m
 
 test('Circle feed controls expose all, latest, random and category filtering',async()=>{
  const account=await readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
+ const filters=await readFile(new URL('../../src/features/discovery/explore-filters.js',import.meta.url),'utf8');
  assert.ok(account.includes("['all','Semua']")&&account.includes("['latest','Terbaru']")&&account.includes("['random','Acak']")&&account.includes('data-explore-category'));
- assert.ok(account.includes("exploreCategory=String(event.currentTarget.value||'all')"));
+ assert.ok(filters.includes("setCategory(String(event.currentTarget.value||'all'))"));
+ assert.ok(account.includes("setCategory:value=>{exploreCategory=value;}"));
 });
 
 test('Circle header exposes desktop Circle and Jelajah links while retaining mobile bottom navigation',async()=>{
