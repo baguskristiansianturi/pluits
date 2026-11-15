@@ -92,6 +92,7 @@ Penghapusan tidak dapat menarik kembali konten yang sudah dilihat, disalin, dire
 | `user_message_hidden` | Pesan yang disembunyikan untuk satu pengguna |
 
 ### RPC inti
+- `get_unread_conversation_ids` (filter unread yang akurat dari database)
 - `mark_conversation_delivered`
 - `mark_conversation_read`
 - `mark_message_played`
