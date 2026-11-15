@@ -158,7 +158,7 @@ assert.ok(existsSync('supabase/migrations/20261108140017_pluits_account_language
 assert.ok(existsSync('supabase/migrations/20261108140823_pluits_system_announcements.sql'));
 const moderator = read('src/pages/admin/moderation.js');
 assert.match(moderator, /pluits_system_announcements/, 'Moderators must be able to publish Pluits system announcements.');
-assert.match(account, /pluits_system_announcement_reads/, 'Users must be able to read and mark system announcements.');
+assert.match(notificationFeature, /pluits_system_announcement_reads/, 'Users must be able to read and mark system announcements.');
 
 
 const postActions = read('src/pages/account/index.js');
