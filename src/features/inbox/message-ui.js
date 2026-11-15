@@ -13,7 +13,7 @@ export function formatMessageDuration(value) {
 
 export function renderMessageStatus({ pending = false, receipt = null, voice = false } = {}) {
   if (pending) return '<span class="pl-msg-status is-pending" aria-label="Menunggu dikirim" title="Menunggu dikirim">◷</span>';
-  if (receipt?.read_at) return '<span class="pl-msg-status is-read" aria-label="Dibaca" title="Dibaca">✓✓</span>' + (voice && receipt?.played_at ? '<span class="pl-msg-played" aria-label="Pesan suara diputar" title="Pesan suara diputar">●</span>' : '');
+  if (receipt?.read_at) return '<span class="pl-msg-status is-read" aria-label="Dibaca" title="Dibaca">✓✓</span>' + (voice && receipt?.played_at ? '<span class="pl-msg-played" aria-label="Pesan suara diputar" title="Pesan suara diputar">🎙</span>' : '');
   if (receipt?.delivered_at) return '<span class="pl-msg-status is-delivered" aria-label="Terkirim ke perangkat" title="Terkirim ke perangkat">✓✓</span>';
   return '<span class="pl-msg-status is-sent" aria-label="Terkirim ke server" title="Terkirim ke server">✓</span>';
 }
