@@ -519,3 +519,54 @@ Ini adalah visi produk jangka panjang, bukan izin untuk memperluas scope impleme
 ### 17.9 Batas keputusan
 
 Semua alur verifikasi, eligibility blog/toko/layanan, persyaratan rekening, model multi-store, workspace, staff roles, approval, audit log, integrasi desain, dan desktop workspace masih PROPOSED. Belum ada keputusan harga, tier benefit matrix, legal/KYC policy, schema, RLS, API, atau persetujuan implementasi.
+
+
+## 18. Membership sebagai pendapatan awal dan keterkaitan dengan commerce — tambahan diskusi founder
+
+### 18.1 Keanggotaan sebagai sumber pendapatan awal
+
+Founder mengemukakan hipotesis bahwa PLUITS dapat mulai memperoleh pendapatan dari membership sebelum ekosistem toko, restoran, layanan, dan transaksi lain berkembang penuh. Pendapatan membership berpotensi menjadi modal awal untuk membangun dan mengembangkan layanan PLUITS berikutnya.
+
+Ini menempatkan membership bukan hanya sebagai fitur sosial, tetapi juga sebagai salah satu kemungkinan fondasi model pendapatan awal. Namun, kelayakan komersialnya belum terbukti: manfaat setiap tier, kesediaan membayar, biaya operasional, tingkat konversi, retensi, dan kecukupan pendapatan harus diuji sebelum proyeksi finansial dibuat.
+
+### 18.2 Tiga jalur nilai yang saling terhubung
+
+Gagasan founder mengarah pada ekosistem yang menghubungkan:
+1. **Membership dan pengalaman sosial:** pengguna bergabung untuk bersosialisasi, membangun koneksi, memilih lingkungan digital, dan memperoleh fitur/benefit sesuai keanggotaan.
+2. **Commerce dan katalog:** toko, produk, restoran, tempat, serta berbagai penawaran yang dapat ditemukan dan dijelajahi pengguna.
+3. **Layanan dan aktivitas profesional:** penyedia jasa, profesional, bisnis lokal, serta layanan lain yang dapat ditemukan, dipahami, dihubungi, atau dipesan melalui PLUITS.
+
+Ketiganya saling melengkapi, tetapi tidak boleh dipaksa menjadi satu jenis feed atau satu perjalanan pengguna. Pengguna yang datang untuk bersosialisasi tidak harus berjualan; pemilik bisnis yang datang untuk mengembangkan usahanya tetap dapat menggunakan fitur sosial; pembeli dapat menjelajahi penawaran tanpa diwajibkan berlangganan premium.
+
+### 18.3 Dua kebutuhan pengguna yang berbeda
+
+Founder membedakan motivasi orang yang masuk ke PLUITS. Sebagian datang terutama untuk kebutuhan sosial: berbagi cerita, melihat konten, dan berinteraksi. Sebagian lain telah memiliki bisnis, profesi, atau aktivitas ekonomi di dunia nyata dan mencari platform yang dapat mendukung kebutuhan tersebut secara lebih profesional.
+
+PLUITS perlu melayani keduanya tanpa menganggap pengguna sosial sebagai pengguna yang kurang bernilai, atau menganggap pemilik bisnis otomatis lebih penting. Perbedaan utamanya adalah kebutuhan dan konteks penggunaan, bukan martabat manusia.
+
+### 18.4 Label membership sebagai sinyal komitmen berbayar
+
+Founder mengusulkan agar label tier yang terlihat dapat menjadi sinyal bahwa pemilik akun memilih dan membayar tingkat membership tertentu. Contoh harga Rp1.900.000 per bulan disebut sebagai ilustrasi dalam diskusi, bukan harga final, penawaran resmi, atau keputusan tarif.
+
+Hipotesis yang ingin diuji: bagi sebagian pengguna profesional atau pemilik bisnis, label membership yang jelas dapat menjadi bentuk diferensiasi dan sinyal komitmen terhadap pengalaman/layanan PLUITS, sehingga jumlah follower bukan satu-satunya penanda identitas digital.
+
+Batas wajib:
+- Label hanya menyatakan jenis dan status membership yang benar-benar aktif.
+- Label bukan verifikasi identitas, bukti kekayaan, kredibilitas, reputasi, integritas, kesuksesan, atau jaminan perilaku.
+- Jangan merendahkan akun gratis atau menjadikan harga sebagai ukuran nilai manusia.
+- Pengguna tetap dapat memperoleh pengakuan sosial dari interaksi lintas tier; membership tidak menggantikan kualitas hubungan dan kontribusi.
+- Transparansi harga, pembatalan, masa aktif, manfaat, dan konsekuensi downgrade harus jelas.
+
+### 18.5 Pertanyaan validasi bisnis
+
+1. Apakah calon pengguna benar-benar bersedia membayar untuk benefit sosial, kurasi lingkungan, identitas membership, dan workspace?
+2. Manfaat konkret apa yang cukup bernilai untuk setiap tier, khususnya bagi profesional dan pemilik bisnis?
+3. Apakah harga ilustratif Rp1.900.000/bulan sesuai dengan nilai yang diterima, atau hanya contoh positioning?
+4. Bagaimana menjaga agar pengguna Regular tetap dapat menjelajahi konten, toko, restoran, dan layanan publik?
+5. Bagaimana membership, transaksi commerce, komisi layanan, dan promosi berbayar dibedakan sebagai sumber pendapatan?
+6. Berapa biaya pelayanan, moderasi, pembayaran, dukungan pelanggan, dan infrastruktur untuk setiap tingkat membership?
+7. Apakah membership dapat menjadi modal awal tanpa menciptakan ketergantungan pada janji eksklusivitas atau status sosial?
+
+### 18.6 Batas keputusan
+
+Pendapatan membership sebagai sumber awal, keterkaitan dengan toko/restoran/layanan, label membership sebagai sinyal komitmen, dan harga Rp1.900.000/bulan tetap HIPOTESIS/PROPOSAL diskusi. Belum ada harga, proyeksi pendapatan, paket benefit, strategi pemasaran, komisi, atau model transaksi yang disetujui. Tidak ada perubahan implementasi maupun roadmap aktif.
