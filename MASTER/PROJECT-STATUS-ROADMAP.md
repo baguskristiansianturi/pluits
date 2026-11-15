@@ -1429,3 +1429,67 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - Status: IMPLEMENTED and DEPLOYED. Code commit 7827bba9e33d9880802e5b6320b17fe7dda21615; verification commit c3176e14cda54345d01c38791597d38c7e70a427. Workflow #43712194123 / job #132806212955 SUCCESS after retry: 143/143 Node tests passed, Vite build and output verification passed, Pages artifact uploaded, and GitHub Pages deployment reported success.
 - CI correction: the first run identified a missing test import for canonicalizeLegacyRoute; the test import was added and the full suite then passed. Two Pages artifact-metadata attempts failed transiently; the third deployment attempt reported success.
 - Browser/device UAT remains NOT TESTED.
+
+
+---
+
+## CP-091 — Live Social integrity and production release hardening (15 November 2026)
+
+**Status:** IMPLEMENTED · DEPLOYED · AUTOMATED TESTED · FOUNDER UAT PENDING
+
+- Removed synthetic people recommendations, Story cards, local product samples and fabricated Top 10 fallback content from active Circle.
+- Removed the local showcase product fallback from Marketplace product detail. Empty/error states now remain honest when no published backend listing exists.
+- Top 10 Trending renders only from eligible live directory activity and is omitted when no real ranking rows exist.
+- Pinned the browser Supabase SDK dependency to `@supabase/supabase-js@2.119.0`. It remains a CDN runtime dependency and is not bundled locally.
+- Added regression tests for real-only social content, live-only trending, published Marketplace products, store permission isolation and pinned browser SDK dependencies.
+- **Database migration applied:** `20261115122348_enforce_marketplace_order_payment_read_permissions`. Marketplace order reads now require buyer ownership or explicit `orders.manage` / `payments.manage`; payment metadata reads require buyer ownership or `payments.manage`. This closes the previous membership-only read path for store staff without those permissions.
+- Matching SQL is committed at `supabase/migrations/20261115122348_enforce_marketplace_order_payment_read_permissions.sql`.
+- No user account, post, message, media or transaction data was deleted or rewritten.
+- **Deployment evidence:** commit `8f4245bcf5ff158ade4e04dbeafbd44e61c925cb`; GitHub Actions run `43713663249` (#2176) SUCCESS; 148/148 automated tests passed; Vite build, output verification, Pages artifact upload and deployment succeeded.
+- **Not tested:** Android real-media UAT, two-account authorization/Realtime, DM reconnect/outbox exactly-once, notification recipient/deep-link, MFA/SMS, accessibility and measured performance.
+- **Founder acceptance:** PENDING.
+
+### Rollback plan for the Marketplace read-policy migration
+
+The migration is additive and does not alter rows or table structure. If an emergency rollback is explicitly approved, restore the previous participant-read policy logic:
+- `marketplace_orders_participant_read`: buyer OR active store membership.
+- `marketplace_payments_participant_read`: buyer OR active membership in the order's store.
+
+This rollback reopens access to customer/order/payment metadata for every active store member, including roles without the relevant permission. It must not be used as a routine fix; investigate the permission helper or policy first. No rollback was executed.
+
+## CP-092 — Current launch-readiness and migration-parity audit (15 November 2026)
+
+**Status:** AUDITED · PARTIALLY BLOCKED
+
+### Verified live baseline
+- Supabase: ACTIVE_HEALTHY; PostgreSQL 17.11.0.018; ap-southeast-1.
+- Public base tables: 69/69 have RLS enabled.
+- Public views: 3/3 use `security_invoker=true`.
+- Storage buckets: 3/3 private.
+- Live migration history: 106 entries.
+- Security Advisor: 22 authenticated-callable SECURITY DEFINER warnings; leaked-password protection disabled.
+- Performance Advisor: 2 auth RLS init-plan warnings, 2 multiple-permissive-policy warnings, 1 unindexed FK INFO, 87 unused-index INFO; Health Advisor: 0 lints.
+- Edge Functions deployed: 0.
+
+### Migration parity blocker
+- Repository migration files: 99.
+- Live migration entries: 106.
+- Exact version/name matches: 56.
+- Same name with timestamp mismatch: 20.
+- Live names without exact repository filename: 30.
+- Repository filenames without a matching live migration name: 23.
+- The newest migration CP-091 has an exact file/history match.
+- **Do not run Supabase CLI migration push/replay/reset or bulk repair** until all 106 definitions are reconciled with `supabase_migrations.schema_migrations.statements`. Preserve the live database and existing migration files.
+
+### Production data review
+- Five public/published posts exist under one profile; some captions are empty or appear test-like. Owner review is required before launch. No account or post was changed.
+- One Story is expired/private.
+- One store and one product are draft; store is unverified and online sales are disabled.
+- Marketplace orders, payment records and Trip service requests are currently zero.
+- One public blog post is published.
+- Privacy Policy, Terms and Community Guidelines remain internal drafts / legal review required.
+
+### Release decision
+- **Deploy readiness:** PASS for the exact frontend commit above.
+- **Social First Release launch readiness:** NOT YET ACCEPTED. Android and two-account UAT, public-content review, Auth security setting and legal publication gate remain open.
+- **Marketplace / Trip / wallet real-money readiness:** BLOCKED / OUT OF CURRENT P0 SCOPE.
