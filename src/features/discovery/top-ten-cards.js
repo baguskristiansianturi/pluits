@@ -21,7 +21,7 @@ export async function loadTopTenTrending(db){
  const {data:links,error:linkError}=await db.from('user_post_directory_entities').select('entity_id,post_id,created_at').in('entity_id',ids).gte('created_at',since).order('created_at',{ascending:false}).limit(1000);
  if(linkError)throw linkError;
  const postIds=[...new Set((links||[]).map(link=>link.post_id).filter(Boolean))];
- const {data:published,error:postError}=postIds.length?await supabase.from('user_posts').select('id').in('id',postIds).eq('visibility','public').eq('moderation_status','published'):{data:[],error:null};
+ const {data:published,error:postError}=postIds.length?await db.from('user_posts').select('id').in('id',postIds).eq('visibility','public').eq('moderation_status','published'):{data:[],error:null};
  if(postError)throw postError;
  const visiblePosts=new Set((published||[]).map(post=>post.id)),counts=new Map();
  (links||[]).forEach(link=>{if(visiblePosts.has(link.post_id))counts.set(link.entity_id,(counts.get(link.entity_id)||0)+1);});
