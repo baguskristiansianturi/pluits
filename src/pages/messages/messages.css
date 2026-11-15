@@ -1161,3 +1161,14 @@
 #pl-msg-compose .pl-msg-voice{touch-action:none;user-select:none;-webkit-user-select:none}
 #pl-msg-compose .pl-msg-voice.is-recording{background:#b83232!important;color:#fff!important;box-shadow:0 0 0 5px #b8323220}
 .pl-msg-voice-draft,.pl-msg-recording,.pl-msg-voice-preview{display:none!important}
+
+/* Inbox message actions are revealed only by long-press/context menu. */
+.pl-msg-actions-menu[hidden]{display:none!important}
+.pl-msg-actions-menu{position:absolute;right:8px;top:calc(100% + 5px);z-index:40;min-width:172px;padding:5px;border:1px solid #e3e8ed;border-radius:12px;background:#fff;box-shadow:0 10px 28px #172b4520}
+.pl-msg-bubble{position:relative}
+.pl-msg-live-wave{display:flex;align-items:center;justify-content:center;gap:2px;width:72px;height:26px}
+.pl-msg-live-wave i{display:block;width:3px;height:7px;border-radius:4px;background:currentColor;animation:pl-msg-wave .72s ease-in-out infinite alternate;animation-delay:var(--wave-delay,0s)}
+@keyframes pl-msg-wave{from{transform:scaleY(.45)}to{transform:scaleY(2.8)}}
+.pl-msg-recording-time{font-size:11px;font-variant-numeric:tabular-nums;color:inherit}
+.pl-msg-voice.is-recording{display:flex!important;align-items:center;justify-content:center;gap:5px;min-width:116px!important;width:auto!important;padding:0 10px!important}
+.pl-msg-chat-status:empty{display:none!important}
