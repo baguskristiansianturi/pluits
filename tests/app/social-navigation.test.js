@@ -8,23 +8,23 @@ import {LOCAL_PRODUCT_SHOWCASE,renderLocalProductCard} from '../../src/features/
 import {TOP_TEN_DEMO_ITEMS} from '../../src/features/discovery/top-ten-cards.js';
 
 test('canonical destinations keep home, inbox and profile on separate routes',()=>{
- assert.equal(ROUTES.home,'#/account/explore');
- assert.equal(ROUTES.inbox,'#/inbox');
- assert.equal(ROUTES.profile,'#/account/profile');
+ assert.equal(ROUTES.home,'/pluits/circle/');
+ assert.equal(ROUTES.inbox,'/pluits/inbox/');
+ assert.equal(ROUTES.profile,'/pluits/profile/');
  assert.notEqual(ROUTES.home,ROUTES.profile);
  assert.notEqual(ROUTES.inbox,ROUTES.profile);
 });
 
 test('signed-in social bottom navigation points to the intended pages',()=>{
  const html=renderSocialMobileNav({active:'home',user:{id:'u1'}});
- assert.match(html,/href="#\/account\/explore"[^>]*aria-label="Circle"/);
- assert.match(html,/href="#\/inbox"[^>]*aria-label="Pesan"/);
- assert.match(html,/href="#\/account\/profile"[^>]*aria-label="Profil"/);
+ assert.match(html,/href="\/pluits\/circle\/"[^>]*aria-label="Circle"/);
+ assert.match(html,/href="\/pluits\/inbox\/"[^>]*aria-label="Pesan"/);
+ assert.match(html,/href="\/pluits\/profile\/"[^>]*aria-label="Profil"/);
 });
 
 test('guest profile navigation opens Login instead of a private profile',()=>{
  const html=renderSocialMobileNav({active:'discover',user:null});
- assert.ok(html.includes('href="#/account/login"') && html.includes('aria-label="Profil"'),'Guest Profile must link to Login.');
+ assert.ok(html.includes('href="/pluits/login/"') && html.includes('aria-label="Profil"'),'Guest Profile must link to Login.');
  assert.ok(!html.includes('href="#/account/profile"'),'Guest navigation must not link to a private profile.');
  const circle=renderSocialMobileNav({active:'home',user:null});
  assert.ok(circle.includes('href="#/account/explore"') && circle.includes('aria-label="Circle"'),'Circle must retain its own Explore destination even before login; the page controller handles authentication.');
@@ -34,14 +34,14 @@ test('guest profile navigation opens Login instead of a private profile',()=>{
  
 test('Inbox replaces its fourth slot with notifications but keeps profile separate',()=>{
  const html=renderSocialMobileNav({active:'messages',user:{id:'u1'}});
- assert.match(html,/href="#\/account\/activity"[^>]*aria-label="Notifikasi"/);
- assert.match(html,/href="#\/account\/profile"[^>]*aria-label="Profil"/);
+ assert.match(html,/href="\/pluits\/notifications\/"[^>]*aria-label="Notifikasi"/);
+ assert.match(html,/href="\/pluits\/profile\/"[^>]*aria-label="Profil"/);
  assert.doesNotMatch(html,/aria-label="Messages"/);
 });
 
 test('shared header does not render a second profile avatar target',()=>{
  const html=renderSocialHeader({active:'profile',profileView:true,user:{id:'u1'}});
- assert.match(html,/href="#\/account\/profile"/);
+ assert.match(html,/href="\/pluits\/profile\/"/);
  assert.doesNotMatch(html,/class="ua-header-profile"/);
 });
 
@@ -60,8 +60,8 @@ test('guest root stays public while signed-in root opens the canonical Explore w
   assert.match(home,/if\(actualViewer&&!guestMode\)/,'A signed-in visitor at the root must be sent to the authenticated workspace.');
   assert.match(home,/location\.hash='#\/account\/explore'/,'Signed-in root must use the canonical Explore route.');
  assert.ok(account.includes('id="ua-story-form"') && account.includes("from('user_stories')"), "Story creation must remain available outside the Explore feed.");
- assert.ok(routes.includes("activity: '#/account/activity'"));
- assert.ok(routes.includes("create: '#/account/create'"));
+ assert.ok(routes.includes("activity: SITE_BASE + 'notifications/'"));
+ assert.ok(routes.includes("create: SITE_BASE + 'create/'"));
 });
 test('profile hero has isolated responsive layouts for desktop, mobile and narrow phones',async()=>{
  const css=await (await import('node:fs/promises')).readFile(new URL('../../src/features/profile/profile-hero.css',import.meta.url),'utf8');
