@@ -18,7 +18,7 @@ const placeUrl = slug => '#/place/' + encodeURIComponent(slug);
 
 export function homeNearbySection() {
   return `<section class="pl-nearby-home" aria-label="Tempat terdekat">
-    <div class="pl-nearby-heading"><h2>Di sekitar Anda</h2><a href="#/places">Lihat semua <b>↗</b></a></div>
+    <div class="pl-nearby-heading"><h2>Di sekitar Anda</h2><a id="pl-home-nearby-all" href="#/places?from=nearby">Lihat semua <b>↗</b></a></div>
     <nav class="pl-nearby-topic-carousel" id="pl-home-nearby-topics" aria-label="Kategori di sekitar Anda"><a href="#/places">Semua</a></nav>
     <div class="pl-home-map-results" id="pl-home-nearby-results"><span class="pl-directory-loading">Mencari tempat di sekitar Anda…</span></div>
   </section>`;
@@ -263,8 +263,15 @@ export async function bindDirectoryPage() {
     const row=state.rows.find(item=>placeUrl(item.slug)===link.getAttribute('href'));if(row)logActivity('click',row.id);
   });
   await loadDiscoveryPreferences();
-  const region=new URLSearchParams((location.hash.split('?')[1]||'')).get('region');
-  if(region==='bali'){
+  const params=new URLSearchParams((location.hash.split('?')[1]||''));
+  const region=params.get('region');
+  const nearbyContext=window.__pluitsNearbyContext;
+  if(params.get('from')==='nearby'&&nearbyContext&&Number.isFinite(nearbyContext.latitude)&&Number.isFinite(nearbyContext.longitude)){
+    state.area='';state.lat=nearbyContext.latitude;state.lon=nearbyContext.longitude;state.radius=5000;
+    const areaLabel=document.querySelector('#pl-directory-area-label');if(areaLabel)areaLabel.textContent='Lokasi Anda';
+    const areaSelect=document.querySelector('#pl-directory-area');if(areaSelect)areaSelect.value='current';
+    const radiusSelect=document.querySelector('#pl-directory-radius');if(radiusSelect)radiusSelect.value='5000';
+  }else if(region==='bali'){
     state.area='bali';state.lat=AREAS.bali.lat;state.lon=AREAS.bali.lon;state.radius=100000;
     const areaLabel=document.querySelector('#pl-directory-area-label');if(areaLabel)areaLabel.textContent='Bali';
     const areaSelect=document.querySelector('#pl-directory-area');if(areaSelect)areaSelect.value='bali';
@@ -279,7 +286,8 @@ export function bindHomeNearby({personalize=true,location=null}={}) {
   const requestId=++homeNearbyRequest,routeHash=window.location.hash;
   const isCurrent=()=>requestId===homeNearbyRequest&&resultTarget.isConnected&&window.location.hash===routeHash;
   state.radius=5000;state.category='';state.query='';
-  if(location&&Number.isFinite(location.latitude)&&Number.isFinite(location.longitude)){state.lat=location.latitude;state.lon=location.longitude;state.area='';}
+  if(location&&Number.isFinite(location.latitude)&&Number.isFinite(location.longitude)){state.lat=location.latitude;state.lon=location.longitude;state.area='';window.__pluitsNearbyContext={latitude:location.latitude,longitude:location.longitude};}
+  else if(Number.isFinite(state.lat)&&Number.isFinite(state.lon)){window.__pluitsNearbyContext={latitude:state.lat,longitude:state.lon};}
   const prepare=location?Promise.resolve(true):personalize?loadDiscoveryPreferences():Promise.resolve(false);
   prepare.then(hasSavedArea=>{
     if(!isCurrent())return null;
