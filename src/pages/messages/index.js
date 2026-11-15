@@ -218,6 +218,20 @@ function contactAvatar(person, imageUrl='') {
   const avatar=imageUrl?'<img src="'+esc(imageUrl)+'" alt="" loading="lazy">':'<span>'+esc(name.slice(0,1).toUpperCase())+'</span>';
   return '<span class="pl-msg-avatar">'+avatar+'</span>';
 }
+async function hydrateThreadAvatars(container,conversations=[]) {
+  await Promise.all(conversations.map(async conversation=>{
+    const node=container.querySelector('[data-thread-avatar="'+conversation.other.id+'"]');
+    if(!node)return;
+    const url=await signedAvatar(conversation.other.avatar_path);
+    if(url&&node.isConnected)node.innerHTML='<img src="'+esc(url)+'" alt="" loading="lazy">';
+  }));
+}
+async function hydrateChatAvatar(container,person) {
+  const node=container.querySelector('[data-chat-avatar]');
+  if(!node||!person)return;
+  const url=await signedAvatar(person.avatar_path);
+  if(url&&node.isConnected)node.innerHTML=contactAvatar(person,url);
+}
 async function signedAvatar(path) {
   if(!path||!navigator.onLine)return '';
   const {data,error}=await db.storage.from('pluits-user-media').createSignedUrl(path,1800);
@@ -490,7 +504,8 @@ async function loadConversations() {
   const visibleConversations=activeInboxTab==='unread'?conversationCache.filter(item=>item.unread):conversationCache;
   list.innerHTML=visibleConversations.length?visibleConversations.map(conversation=>{
     const pending=queueFor(conversation.id).length;
-    return '<button class="pl-msg-thread '+(currentConversation===conversation.id?'active':'')+(conversation.unread?' is-unread':'')+'" data-open-chat="'+conversation.id+'"><span class="pl-msg-thread-head"><b>'+esc(conversation.other.display_name||conversation.other.username)+'</b>'+(conversation.unread?'<i aria-label="Unread message"></i>':'')+'</span><small>@'+esc(conversation.other.username)+'</small><p>'+esc(conversation.last?.deleted_at?'Pesan ini dihapus':conversation.last?.message_type==='voice'?'🎙 Pesan suara':conversation.last?.body||'Belum ada pesan')+(pending?' · '+pending+' menunggu':'')+'</p></button>';
+    const avatar=contactAvatar(conversation.other).replace('class="pl-msg-avatar"','class="pl-msg-avatar" data-thread-avatar="'+esc(conversation.other.id||'')+'"');
+    return '<button class="pl-msg-thread '+(currentConversation===conversation.id?'active':'')+(conversation.unread?' is-unread':'')+'" data-open-chat="'+conversation.id+'">'+avatar+'<span class="pl-msg-thread-copy"><span class="pl-msg-thread-head"><b>'+esc(conversation.other.display_name||conversation.other.username)+'</b><time>'+formatMessageTime(conversation.last?.created_at||conversation.updated_at)+'</time></span><small>@'+esc(conversation.other.username)+'</small><p>'+esc(conversation.last?.deleted_at?'Pesan ini dihapus':conversation.last?.message_type==='voice'?'🎙 Pesan suara':conversation.last?.body||'Belum ada pesan')+(pending?' · '+pending+' menunggu':'')+'</p></span>'+(conversation.unread?'<i class="pl-msg-unread-badge" aria-label="Belum dibaca"></i>':'')+'</button>';
   }).join(''):emptyStateMarkup({variant:'message',title:activeInboxTab==='unread'?'Tidak ada pesan belum dibaca':'Belum ada percakapan',description:activeInboxTab==='unread'?'Semua percakapan sudah dibaca.':'Pilih kontak atau cari nama pengguna untuk memulai percakapan.'});
   list.querySelectorAll('[data-open-chat]').forEach(button=>button.onclick=()=>openConversation(button.dataset.openChat));
   list.hidden=false;
@@ -564,7 +579,7 @@ async function openConversation(id) {
   const visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id));
   if((messages.error||members.error)&&navigator.onLine){chat.textContent=(messages.error||members.error).message;return;}
   const queued=queueFor(id);
-  chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Pesan">‹</button><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+' · <span id="pl-msg-chat-presence">'+(thread?.other?.id&&onlineUserIds.has(thread.other.id)?'Online':'Tidak online')+'</span></small></div></header>'+
+  chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Pesan">‹</button><span class="pl-msg-chat-avatar" data-chat-avatar>'+contactAvatar(thread?.other||{display_name:'P'})+'</span><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+' · <span id="pl-msg-chat-presence">'+(thread?.other?.id&&onlineUserIds.has(thread.other.id)?'Online':'Tidak online')+'</span></small></div></header>'+
     '<div class="pl-msg-stream">'+(visibleMessages.length?visibleMessages.map(message=>messageMarkup(message,false,receiptByMessage.get(message.id))).join('') : emptyStateMarkup({variant:'message',title:'Belum ada pesan',description:'Kirim pesan pertama untuk memulai percakapan.'}))+queued.map(row=>messageMarkup(row,true)).join('')+'</div>'+
     '<form id="pl-msg-compose"><textarea name="body" rows="2" maxlength="5000" placeholder="Tulis pesan…" required></textarea><button type="button" class="pl-msg-voice" data-voice-record aria-label="Record a voice message">🎙 Voice</button><button type="submit">Kirim</button></form>'+
     '<p class="pl-msg-chat-status" role="status">'+(queued.length?queued.length+' messages waiting for connection.':'Pesan tersinkron dengan server. Voice message maksimal 3 menit.')+'</p>';
@@ -579,6 +594,7 @@ async function openConversation(id) {
       await db.rpc('mark_conversation_read',{p_conversation_id:id});
     }
   }
+  hydrateChatAvatar(chat,thread?.other);
   bindMessageActions(chat,id);
   bindVoiceRecorder(chat,id);
   const form=chat.querySelector('#pl-msg-compose');
