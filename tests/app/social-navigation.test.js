@@ -4,6 +4,8 @@ import {renderSocialHeader,renderSocialMobileNav} from '../../src/components/soc
 import {ROUTES} from '../../src/components/social/navigation-routes.js';
 import {CIRCLE_DEMO_PEOPLE,renderPeopleRecommendations} from '../../src/features/discovery/people-recommendations.js';
 import {readFile} from 'node:fs/promises';
+import {LOCAL_PRODUCT_SHOWCASE,renderLocalProductCard} from '../../src/features/marketplace/local-product-showcase.js';
+import {TOP_TEN_DEMO_ITEMS} from '../../src/features/discovery/top-ten-cards.js';
 
 test('canonical destinations keep home, inbox and profile on separate routes',()=>{
  assert.equal(ROUTES.home,'#/account/explore');
@@ -154,7 +156,7 @@ test('signed-in home leads with Bali experiences, search, wishlist and the perso
  assert.ok(account.includes('trendSection+homeNearbySection()+peopleSection+storiesSection+filterNav')&&!account.includes('circleHeading'),'Circle must retain the requested section order while omitting the redundant intro banner.');
  assert.ok((account.match(/homeNearbySection\(\)/g)||[]).length===1,'The nearby section must appear once, above Circle content, not be duplicated after the feed.');
  assert.ok(account.includes('homeNearbySection')&&account.includes('bindHomeNearby'),'Home must use live nearby results.');
- assert.ok(account.includes('Temukan Lebih Banyak')&&account.includes('Temukan Produk Lokal')&&account.includes('Kumpulan')&&account.includes('Layanan PLUITS'),'Home must continue from the 30-post feed into discovery, local products, service collections and PLUITS service filters.');
+ assert.ok(account.includes('Temukan Lebih Banyak')&&account.includes('Produk Lokal')&&account.includes('Kumpulan')&&account.includes('Layanan PLUITS'),'Home must continue from the 30-post feed into discovery, local products, service collections and PLUITS service filters.');
  assert.ok(account.includes('peopleSection+storiesSection+filterNav+homeHeading'),'People recommendations must appear before Story, and the feed navbar must appear immediately after Story.');
  const circleCss=await readFile(new URL('../../src/pages/account/circle-experience.css',import.meta.url),'utf8');
  const peopleCss=await readFile(new URL('../../src/features/discovery/people-recommendations.css',import.meta.url),'utf8');
@@ -224,4 +226,48 @@ test('Circle uses demo content only below ten registered profiles and keeps sect
  assert.match(account,/CIRCLE_DEMO_PEOPLE\.slice\(0,Math\.max\(0,10-renderedStoryCount\)\)/);
  assert.match(account,/data-demo-story='true'/);
  assert.ok(css.includes('.ua-social-home .ua-circle-stories,.ua-social-home .ua-people-recommendations{margin:0 0 20px;padding:17px 0 10px;border:0;border-radius:0;background:transparent'));
+});
+
+
+test('Circle home provides ten realistic Bali local-product cards using marketplace card structure',async()=>{
+ assert.equal(LOCAL_PRODUCT_SHOWCASE.length,10);
+ const cards=LOCAL_PRODUCT_SHOWCASE.map(item=>renderLocalProductCard(item,{demo:true}));
+ assert.equal(cards.length,10);
+ assert.ok(cards.every(card=>card.includes('class="pl-market-product ua-home-market-product"')));
+ assert.ok(cards.every(card=>card.includes('href="#/market-product/showcase-')));
+ assert.ok(cards.every(card=>!/\bDEMO\b/i.test(card)));
+ const home=await readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
+ assert.ok(home.includes('public_marketplace_products')&&home.includes('renderLocalProductCard'));
+ assert.ok(home.indexOf('"+maybeLike+discoverMore')>home.indexOf('"+feedMarkup'), 'Local products must follow the Circle post feed.');
+});
+
+test('Top 10 trending sample spans Bali destinations and venue categories, not marketplace products',()=>{
+ assert.equal(TOP_TEN_DEMO_ITEMS.length,10);
+ assert.ok(TOP_TEN_DEMO_ITEMS.some(item=>item.location==='Lovina'));
+ assert.ok(TOP_TEN_DEMO_ITEMS.some(item=>item.location==='Ubud'));
+ assert.ok(TOP_TEN_DEMO_ITEMS.some(item=>item.location==='Sanur'));
+ assert.ok(!TOP_TEN_DEMO_ITEMS.some(item=>item.category==='Produk'));
+});
+
+
+test('Bali Top 10 uses a Bali-wide directory query and recent public-post signals',async()=>{
+ const source=await readFile(new URL('../../src/features/discovery/top-ten-cards.js',import.meta.url),'utf8');
+ const directory=await readFile(new URL('../../src/pages/directory/index.js',import.meta.url),'utf8');
+ assert.ok(source.includes('p_radius_m:100000')&&source.includes('user_post_directory_entities')&&source.includes("gte('created_at',since)"));
+ assert.ok(directory.includes("region==='bali'")&&directory.includes("state.radius=100000")&&directory.includes('value="bali"'));
+});
+
+test('Showcase product detail returns to the Marketplace and does not enable sample checkout',async()=>{
+ const source=await readFile(new URL('../../src/pages/marketplace/index.js',import.meta.url),'utf8');
+ assert.ok(source.includes('getLocalProductDemo(id)'));
+ assert.ok(source.includes('href="#/marketplace" class="pl-trip-back">← Kembali ke Marketplace'));
+ assert.ok(source.includes('Produk ini belum tersedia untuk pemesanan.'));
+});
+
+
+test('Nearby See All preserves the same device location and five-kilometre radius',async()=>{
+ const source=await readFile(new URL('../../src/pages/directory/index.js',import.meta.url),'utf8');
+ assert.ok(source.includes('href="#/places?from=nearby"'));
+ assert.ok(source.includes('window.__pluitsNearbyContext={latitude:location.latitude,longitude:location.longitude}'));
+ assert.ok(source.includes("params.get('from')==='nearby'")&&source.includes('state.radius=5000'));
 });
