@@ -56,7 +56,7 @@ const uploadMediaFile=createMediaUploader({supabase,bucket:BUCKET,supabaseUrl:SU
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmtDate=v=>new Date(v).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
 const initials=v=>String(v||'P').trim().slice(0,1).toUpperCase();
-let user=null,profile=null,profileImageFrame={...DEFAULT_PROFILE_IMAGE_FRAME},profileReels=[],addresses=[],noticeTimer=null,leafletMap=null,leafletMarker=null,exploreFilter='all',exploreCategory='all',exploreContentType='all',reelsFilter='recommended',activityNotificationChannel=null,unreadNotificationCount=0,currentComposeDraft=null,accountContext={active:'personal',professional:null,stores:[],prefs:{}};
+let user=null,profile=null,profilePosts=[],profileImageFrame={...DEFAULT_PROFILE_IMAGE_FRAME},profileReels=[],addresses=[],noticeTimer=null,leafletMap=null,leafletMarker=null,exploreFilter='all',exploreCategory='all',exploreContentType='all',reelsFilter='recommended',activityNotificationChannel=null,unreadNotificationCount=0,currentComposeDraft=null,accountContext={active:'personal',professional:null,stores:[],prefs:{}};
 function currentAccountView(){
  const path=getInternalRoute(window.location).split('?')[0];
  if(path==='circle'||path==='account/explore')return {section:'explore',parameter:''};
@@ -220,6 +220,7 @@ function profileMenuMarkup(){
 async function profilePage(preview=false,editMode=false){
  return renderProfilePage({
   preview,editMode,profile,user,supabaseClient:supabase,signed,hydratePosts,
+  onProfilePosts:value=>{profilePosts=value;},
   onProfileReels:value=>{profileReels=value;},
   imageFrame:profileImageFrame,imageFrameCss:profileImageFrameCss,
   escapeHtml:esc,avatar,profileMenuMarkup,postGrid
