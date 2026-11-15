@@ -289,3 +289,57 @@ Persyaratan keselamatan yang harus diteliti sebelum desain/implementasi:
 ### 14.6 Batas keputusan
 
 Penambahan ini memperluas IDEA-010 sebagai konsep PROPOSED. Belum ada persetujuan untuk implementasi, perubahan schema/RLS, pengumpulan lokasi, visitor tracking, dating, atau perubahan roadmap. Semua modul memerlukan discovery, threat model, privacy review, dan acceptance criteria tersendiri sebelum dibangun.
+
+
+## 15. Ruang publik, pilihan lingkungan, dan sinyal keanggotaan — tambahan diskusi founder
+
+### 15.1 Ruang publik tetap dapat dijelajahi
+
+Gagasan founder memperjelas bahwa level keanggotaan tidak dimaksudkan untuk menutup akses eksplorasi publik bagi pengguna Regular. Pengguna yang belum berlangganan atau belum memverifikasi akun tetap dapat menjelajahi ruang publik PLUITS, termasuk feed publik, toko, restoran, restoran mewah, resort, dan berbagai jenis tempat atau layanan yang tersedia secara publik.
+
+Dengan demikian, **menjelajahi ruang publik** harus dibedakan dari **memasuki ruang interaksi yang memiliki aturan keanggotaan tertentu**. Pengguna tidak harus menjadi Gold atau Platinum hanya untuk mengetahui, melihat, atau menemukan keberadaan suatu tempat maupun konten publik. Batas yang sah tetap mengikuti pengaturan pemilik, hukum, keselamatan, dan aturan akses konten.
+
+### 15.2 Analogi warung, restoran, dan resort
+
+Analogi founder menggambarkan pilihan lingkungan berkumpul:
+- Warung: lingkungan yang sederhana dan terjangkau, tempat banyak orang dapat berkumpul.
+- Restoran: lingkungan dengan pengalaman, layanan, dan karakter yang berbeda.
+- Restoran di dalam resort: lingkungan dengan pengalaman dan tata kelola akses yang lebih khusus.
+
+Analogi ini menjelaskan perbedaan pengalaman, sumber daya, aturan, dan kenyamanan lingkungan—bukan kasta manusia. Kemampuan ekonomi seseorang dapat memengaruhi tempat yang biasa ia pilih, tetapi tidak menentukan martabat, karakter, atau kualitas pribadinya. Orang dengan kemampuan ekonomi tinggi pun dapat menyukai warung; orang dari latar belakang apa pun dapat memilih lingkungan sosial yang paling sesuai baginya.
+
+Bahasa UI dan komunikasi PLUITS perlu menghindari penyebutan pengguna sebagai kelas rendah/tinggi atau mengasosiasikan tier dengan nilai manusia. Lebih baik menjelaskan tier sebagai pilihan membership dan pengalaman/fitur lingkungan.
+
+### 15.3 Label tier dan sinyal komitmen
+
+Founder mengusulkan agar level membership dapat terlihat di ruang sosial publik, sehingga pengguna lain memahami jenis keanggotaan yang dipilih seseorang. Langganan berbayar dipandang sebagai sinyal bahwa pengguna bersedia berkomitmen membayar untuk keanggotaan dan fitur tertentu, yang mungkin membantu membentuk ekspektasi keseriusan dalam interaksi.
+
+Namun, pembayaran hanya membuktikan status langganan yang aktif—bukan identitas asli, integritas, reputasi, niat baik, atau jaminan keamanan. Pengguna berbayar tetap dapat melakukan penyalahgunaan; pengguna gratis/tidak terverifikasi juga tidak boleh diasumsikan bermasalah. Karena itu:
+- Label harus secara jelas berarti **membership**, bukan verified, trusted, safe, atau kredensial pribadi.
+- Verifikasi identitas, reputasi/perilaku, moderasi, dan status membership harus menjadi konsep yang terpisah.
+- Jangan memberi pengguna premium kekebalan dari report, block, moderasi, atau penegakan aturan.
+- Jangan menyimpulkan bahwa pembayaran akan menghilangkan perilaku buruk; hipotesis bahwa hambatan berlangganan mengurangi sebagian penyalahgunaan perlu diuji dengan data dan riset.
+- Pertimbangkan risiko eksklusi, tekanan sosial, penyamaran status, serta kesalahpahaman pengguna terhadap label yang terlihat.
+
+### 15.4 Regular sebagai titik masuk
+
+Arah pengalaman awal yang diusulkan:
+- Pengguna baru memulai dari Regular.
+- Akun Regular dapat belum diverifikasi dan tetap dapat menjelajahi konten/tempat publik sesuai aturan yang berlaku.
+- Pengguna dapat memilih upgrade ke tier berbayar, misalnya Silver (nama dan posisinya belum final), jika menginginkan fitur atau lingkungan tambahan.
+- Belum ada keputusan bahwa verifikasi harus menjadi syarat untuk menjelajahi ruang publik atau bahwa pembayaran menggantikan verifikasi.
+
+### 15.5 Kualitas lingkungan bukan semata-mata harga membership
+
+Founder mengangkat kebutuhan sebagian pengguna untuk menghindari interaksi yang dirasa mengganggu atau tidak nyaman. Ini perlu diterjemahkan ke mekanisme produk yang konkret: kontrol siapa yang dapat menghubungi, komentar dan permintaan koneksi; block/mute/report; moderasi; reputasi perilaku yang adil; anti-spam; serta pengaturan audience dan discovery.
+
+PLUITS tidak boleh menyimpulkan bahwa orang dari lingkungan ekonomi tertentu adalah sumber gangguan. Yang perlu dikelola adalah perilaku dan risiko yang teramati, bukan latar belakang sosial atau kemampuan membayar. Membership dapat menjadi satu pembeda fitur/lingkungan, tetapi bukan pengganti sistem keselamatan.
+
+### 15.6 Pertanyaan terbuka tambahan
+
+1. Apakah semua label membership ditampilkan secara publik secara default, atau pengguna dapat menyembunyikannya?
+2. Apakah Regular dan Silver merupakan dua level berbeda atau dua istilah untuk tahap yang sama? Penamaan belum diputuskan.
+3. Apa tepatnya yang dibatasi oleh membership: fitur, ruang interaksi, kemampuan mengatur audiens, atau akses ke komunitas tertentu?
+4. Bagaimana menjelaskan bahwa ruang publik dapat dijelajahi semua orang, sementara interaksi tertentu dapat memiliki aturan tersendiri?
+5. Bagaimana mengukur apakah membership mengurangi spam/penyalahgunaan tanpa menghambat pengguna baru yang baik?
+6. Mekanisme apa yang melindungi pengguna dari perilaku buruk tanpa mengklasifikasikan orang berdasarkan kelas ekonomi?
