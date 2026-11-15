@@ -40,7 +40,26 @@ Hak bersifat **kumulatif**: setiap level memperoleh seluruh hak level di bawahny
 - Pengelolaan daftar akun yang diblokir sendiri merupakan fungsi dasar seluruh level.
 - People You May Know tersedia untuk semua level.
 
-## 3. Pemetaan fitur sosial
+## 3. Aturan komentar
+
+### 3.1 Hak dasar berkomentar
+
+- Semua level membership — Regular, Silver, Gold, Platinum, dan Golden PLUITS Priority — memiliki hak dasar untuk berkomentar. Hak komentar bukan benefit eksklusif akun premium.
+- **Syarat wajib:** akun harus sudah terverifikasi untuk dapat mengirim komentar. Akun yang belum terverifikasi tidak dapat mengirim komentar, meskipun membership-nya berbayar.
+- Status verifikasi adalah atribut terpisah dari membership. Akun Regular yang sudah terverifikasi boleh berkomentar; akun Golden PLUITS Priority yang belum terverifikasi tetap tidak boleh berkomentar.
+- Pada postingan dan Reels, keputusan apakah komentar dibuka atau ditutup berada pada pemilik konten melalui pengaturan konten/komentar.
+- Pada blog, komentar dapat dikirim jika blog atau artikel tersebut menyediakan dan mengaktifkan fitur komentar sesuai pengaturan penerbit/pemilik blog.
+- Jika pemilik konten menonaktifkan komentar, tidak ada level akun yang dapat mengomentari konten tersebut.
+- Hak berkomentar tetap tunduk pada izin audiens, block, pembatasan akun, dan aturan keselamatan yang berlaku. Membership tidak boleh melewati pembatasan tersebut.
+
+### 3.2 Prinsip pengalaman pengguna
+
+- Pengaturan komentar oleh pemilik konten menentukan apakah suatu konten menerima komentar; status verifikasi menentukan apakah calon pemberi komentar memenuhi syarat untuk mengirimkannya.
+- Jika akun belum terverifikasi mencoba berkomentar, tampilkan penjelasan yang jelas bahwa verifikasi akun diperlukan. Jangan menyamarkan syarat ini sebagai masalah membership.
+- Rekomendasi: pengguna tetap dapat membaca komentar yang memang boleh dilihatnya meskipun ia belum terverifikasi; verifikasi menjadi syarat untuk mengirim komentar, bukan untuk membaca komentar publik. Ini adalah rekomendasi produk untuk dikonfirmasi.
+- Rekomendasi: sediakan pengaturan komentar yang mudah dipahami bagi pembuat konten, termasuk pilihan mengaktifkan atau menonaktifkan komentar. Detail pilihan tambahan (misalnya siapa yang boleh berkomentar) dibahas terpisah dan tidak diasumsikan sudah final.
+
+## 4. Pemetaan fitur sosial
 
 | Fitur | Mulai tersedia | Level yang memperoleh |
 |---|---|---|
@@ -52,7 +71,7 @@ Hak bersifat **kumulatif**: setiap level memperoleh seluruh hak level di bawahny
 | Advanced Visitor Activity — rincian aktivitas pengunjung | Golden PLUITS Priority | Golden PLUITS Priority |
 | Incognito Browsing — menyamarkan identitas saat mengunjungi profil | Golden PLUITS Priority | Golden PLUITS Priority |
 
-## 4. Definisi kemampuan
+## 5. Definisi kemampuan
 
 ### 4.1 People You May Know
 Fitur rekomendasi akun yang mungkin dikenal pengguna. Tersedia untuk semua level.
@@ -84,17 +103,17 @@ Data harus menggambarkan event yang benar-benar dapat diukur. Durasi halaman ter
 ### 4.7 Incognito Browsing — Golden PLUITS Priority
 Golden PLUITS Priority dapat mengaktifkan mode samaran saat mengunjungi profil. Identitas kunjungan tidak ditampilkan kepada pemilik profil, termasuk pemilik akun Platinum atau Golden PLUITS Priority lainnya. Mode samaran tidak membuka konten privat, tidak melewati block, dan tidak mengubah izin akses konten.
 
-## 5. Aturan kumulatif
+## 6. Aturan kumulatif
 
 - Gold memperoleh seluruh hak Regular dan Silver, ditambah fitur yang mulai di Gold.
 - Platinum memperoleh seluruh hak Regular, Silver, dan Gold, ditambah fitur yang mulai di Platinum.
 - Golden PLUITS Priority memperoleh seluruh hak Regular, Silver, Gold, dan Platinum, ditambah fitur eksklusif Golden Priority.
 
-## 6. Batas ruang lingkup
+## 7. Batas ruang lingkup
 
 Dokumen ini hanya memetakan penggunaan sosial. Aturan khusus layanan pelanggan prioritas untuk urusan toko/usaha, modul bisnis, operasional layanan, transaksi, pembayaran, penarikan dana, dan batas penggunaan sumber daya akan dicatat terpisah dalam aturan Business Account.
 
-## 7. Hal yang masih perlu diputuskan
+## 8. Hal yang masih perlu diputuskan
 
 1. Kriteria dan tampilan Nearby / Close Connections Homepage.
 2. Kriteria relasi, opt-in, dan batas lokasi untuk Crossed Paths.
@@ -102,8 +121,10 @@ Dokumen ini hanya memetakan penggunaan sosial. Aturan khusus layanan pelanggan p
 4. Pilihan privasi pengunjung untuk Profile Visitor Tracking selain Incognito Golden Priority.
 5. Detail event, retensi, kontrol pengguna, dan batas teknis Advanced Visitor Activity.
 6. Apakah dan bagaimana Block Transparency memberi tahu pengguna yang diblokir tanpa membuka celah pelecehan atau penghindaran block.
+7. Apakah pembuat konten hanya membutuhkan toggle komentar aktif/nonaktif atau juga kontrol audiens komentar yang lebih rinci.
+8. Konfirmasi rekomendasi bahwa akun yang belum terverifikasi tetap boleh membaca komentar publik, tetapi tidak boleh mengirim komentar.
 
-## 8. Status implementasi
+## 9. Status implementasi
 
 - Dokumen ini adalah catatan konsep untuk menjaga kesinambungan diskusi dan menjadi bahan pemetaan produk, halaman, UX/UI, serta kebutuhan sistem.
 - Belum merupakan permission matrix final atau spesifikasi teknis.
