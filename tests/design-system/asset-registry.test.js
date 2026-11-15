@@ -42,7 +42,7 @@ test('all literal social icon references resolve to registered SVG artwork', asy
   const settingsEnd = account.indexOf('const rows=groups.map', settingsStart);
   assert.ok(settingsStart >= 0 && settingsEnd > settingsStart, 'Account settings icon declarations must remain discoverable.');
   const settingsBlock = account.slice(settingsStart, settingsEnd);
-  for (const match of settingsBlock.matchAll(/\\['([a-z][a-z0-9-]*)','[^']+'/g)) {
+  for (const match of settingsBlock.matchAll(/\['([a-z][a-z0-9-]*)','[^']+'/g)) {
     if (!SOCIAL_ICON_NAMES.includes(match[1])) missing.add(match[1] + ' (account settings)');
   }
   assert.deepEqual([...missing], [], 'Every literal and account-settings social icon reference must have a registered SVG path.');
