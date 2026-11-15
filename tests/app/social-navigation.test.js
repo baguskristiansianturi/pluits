@@ -20,6 +20,12 @@ test('signed-in social bottom navigation points to the intended pages',()=>{
  assert.match(html,/href="#\/account\/profile"[^>]*aria-label="Profil"/);
 });
 
+test('guest profile navigation opens Login instead of a private profile',()=>{
+ const html=renderSocialMobileNav({active:'discover',user:null});
+ assert.match(html,/href="#\\/account\\/login"[^>]*aria-label="Profil"/);
+ assert.doesNotMatch(html,/href="#\\/account\\/profile"/);
+});
+ 
 test('Inbox replaces its fourth slot with notifications but keeps profile separate',()=>{
  const html=renderSocialMobileNav({active:'messages',user:{id:'u1'}});
  assert.match(html,/href="#\/account\/activity"[^>]*aria-label="Notifikasi"/);
