@@ -28,6 +28,8 @@ test('guest profile navigation opens Login instead of a private profile',()=>{
  assert.ok(!html.includes('href="#/account/profile"'),'Guest navigation must not link to a private profile.');
  const circle=renderSocialMobileNav({active:'home',user:null});
  assert.ok(circle.includes('href="#/account/explore"') && circle.includes('aria-label="Circle"'),'Circle must retain its own Explore destination even before login; the page controller handles authentication.');
+ const inbox=renderSocialMobileNav({active:'discover',user:null});
+ assert.ok(inbox.includes('href="#/inbox"') && inbox.includes('aria-label="Pesan"'),'Inbox must retain its own Inbox destination even before login; the Inbox page handles authentication.');
 });
  
 test('Inbox replaces its fourth slot with notifications but keeps profile separate',()=>{
