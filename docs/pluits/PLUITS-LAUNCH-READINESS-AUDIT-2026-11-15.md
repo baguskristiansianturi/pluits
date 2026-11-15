@@ -116,6 +116,8 @@ The draft store/product are not eligible for the public catalog under the curren
 - **Friend-first DM mismatch:** current RPC allows any signed-in user to start a conversation with a public profile; only private profiles require an accepted follow. This does not match the documented friend-first rule. Define the qualifying relationship (accepted follow, mutual follow, or explicitly open DMs) and enforce it server-side.
 - **Audience granularity:** post/Story controls currently expose public/private; follower-only audience for public profiles is not implemented.
 - Verify global unread notification badge, notification routing/deep links and announcement recipient targeting.
+- Marketplace and Trip are still shown as active navigation links although the live store/product are draft and there are no Trip requests. Before Social First Release, mark these destinations clearly as Segera/Coming Soon or remove them from primary launch navigation.
+- Add an append-only audit trail for moderator actions and system-announcement publish/archive events; current report rows store reviewer metadata, but no general moderation/announcement audit log was found.
 - Verify SMS provider for phone OTP and TOTP enrollment/verification; otherwise label unavailable.
 - Complete English translation before claiming a fully bilingual experience.
 - Define and staff human moderation/appeal operations. No AI moderation pipeline is currently evidenced as active; user-account suspension/enforcement and appeal workflow are not implemented.
