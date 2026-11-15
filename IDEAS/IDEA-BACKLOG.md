@@ -1237,3 +1237,11 @@ Implementation boundary:
 - **Hipotesis:** hambatan berlangganan mungkin mengurangi sebagian perilaku main-main, tetapi belum terbukti dan tidak boleh menjadi satu-satunya safeguard. Kualitas lingkungan harus dijaga dengan kontrol interaksi, block/report, anti-spam, moderasi, dan perlindungan yang berlaku adil bagi semua tier.
 - **Alur awal yang diusulkan:** pengguna baru memulai dari Regular; dapat belum terverifikasi dan tetap menjelajahi ruang publik; upgrade ke Silver/Gold/Platinum merupakan pilihan. Hubungan Regular vs Silver dan nama/urutan tier masih belum final.
 - **Batas keputusan:** tetap PROPOSED. Tidak ada perubahan model bisnis, harga, aturan verifikasi, access matrix, schema, RLS, atau implementasi yang disetujui.
+
+- **Tambahan founder — validasi sosial lintas tier:** pengguna Gold/Platinum dapat menginginkan like, komentar, dan share dari semua lapisan pengguna, termasuk Regular/Silver. Membership tidak otomatis membatasi siapa yang boleh memberi apresiasi; interaksi mengikuti izin pemilik konten.
+- **Distribusi harus terpisah dari interaksi:** bedakan feed distribution, recommendation eligibility, view/audience access, dan interaction permissions. Contoh: postingan dapat direkomendasikan hanya kepada Gold/Platinum, tetapi tetap dapat dilihat dan disukai oleh Silver jika pemilik mengizinkan.
+- **Kontrol feed lebih rinci:** pengguna dapat mengecualikan suatu tier dari feed, atau tetap melihat postingan tier itu hanya dari akun yang diikuti. Ini preferensi feed viewer, bukan larangan akses universal.
+- **Pilihan distribusi pemilik:** eksplorasi followers/friends-only, rekomendasi same-tier, distribusi ke tier terpilih, dan distribusi publik lintas tier.
+- **Pengecualian relasi lintas tier:** pemilik dapat memberi akses khusus kepada teman/sahabat tertentu dari tier lain walaupun audiens umum postingan dibatasi. Pengecualian harus eksplisit dan tidak otomatis diwariskan ke orang lain.
+- **Batas kredibilitas:** status langganan menunjukkan membership, bukan bukti kebenaran klaim, kesuksesan, integritas, atau kualitas seseorang. Validasi sosial dan kredibilitas faktual perlu dibedakan.
+- **Batas keputusan:** seluruh gagasan tetap PROPOSED; tidak mengubah access matrix, ranking, schema/RLS, atau implementasi.
