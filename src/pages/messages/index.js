@@ -591,14 +591,12 @@ export async function bindMessagesPage() {
       const article=messageId?document.querySelector('#pl-msg-chat [data-message-id="'+CSS.escape(String(messageId))+'"]'):null;
       const status=article?.querySelector('.pl-msg-status');
       if(status&&article.classList.contains('mine')) status.outerHTML=renderMessageStatus({receipt:payload.new,voice:article.dataset.messageType==='voice'});
-      if(!article) void loadConversations();
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_message_receipts'},payload=>{
       const messageId=payload.new?.message_id;
       const article=messageId?document.querySelector('#pl-msg-chat [data-message-id="'+CSS.escape(String(messageId))+'"]'):null;
       const status=article?.querySelector('.pl-msg-status');
       if(status&&article.classList.contains('mine')) status.outerHTML=renderMessageStatus({receipt:payload.new,voice:article.dataset.messageType==='voice'});
-      if(!article) void loadConversations();
     })
     .on('postgres_changes',{event:'*',schema:'public',table:'user_message_hidden'},payload=>{
       if(payload.new?.user_id===currentUser.id&&payload.eventType==='INSERT'&&payload.new?.message_id&&currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')){
