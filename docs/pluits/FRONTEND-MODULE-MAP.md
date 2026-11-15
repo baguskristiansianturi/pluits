@@ -51,6 +51,10 @@ Current concrete extractions:
 
 Important: this is an incremental migration. Account, Marketplace, Trip, Seller Center and Inbox controllers still contain substantial page-level composition/behavior. A folder existing does not mean that page is fully modular. Follow the audit's migration order and do not mass-move files.
 
+## Account legacy CSS extraction — 15 November 2026
+
+`src/pages/account/user-account.css` is now a thin ordered aggregator for eight files under `src/pages/account/styles/`. This is a byte-preserving mechanical split only; semantic selector ownership and migration into feature-level styles remain pending. See `src/pages/account/styles/README.md`.
+
 ## Public homepage composition — 12 November 2026
 
 `src/features/public-home/layout.js` is the page-owned composition layer. `src/pages/home/index.js` owns route/auth/data behavior only. See `src/features/public-home/README.md` and `docs/pluits/PAGE-COMPONENT-OWNERSHIP-AUDIT-2026-11-12.md` for the component ownership table. Public navbar/search behavior must not leak into Marketplace, Trip, Directory or signed-in social workspaces.

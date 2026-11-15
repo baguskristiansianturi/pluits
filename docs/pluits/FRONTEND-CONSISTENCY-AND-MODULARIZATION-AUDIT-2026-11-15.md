@@ -51,3 +51,11 @@ Page order and visual composition can differ. Geometry, type scale, component st
 9. **QA:** viewport smoke tests and real Android visual/performance test.
 
 A phase is complete only when the owner map is updated, consumers are tested, CSS selectors are scoped, the build and tests pass, and route-specific mobile/tablet/desktop evidence exists. Do not mark all pages normalized until each route family has migrated and been checked.
+
+
+## 15 November 2026 — Account CSS mechanical split
+
+- `user-account.css` is now an import-only aggregator for eight ordered slices under `src/pages/account/styles/`.
+- The split was generated at top-level section boundaries and verified by concatenating the slices back to the exact original CSS text before commit.
+- No selector, declaration, token, media query, value or rule order was intentionally changed.
+- This reduces the single-file editing surface but does **not** complete semantic CSS ownership. The next phase must map selectors and migrate feature-specific rules into their canonical owners with regression coverage.
