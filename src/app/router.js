@@ -1,4 +1,5 @@
 import {updateSEO} from '../pages/seo.js';
+import {getInternalRoute} from '../components/social/navigation-routes.js';
 
 let routeVersion=0;
 
@@ -29,7 +30,7 @@ export async function route(homeFn){
    defer(async()=>{const {mountUserAccount}=await import('../pages/account/index.js');await mountUserAccount('auth','reset');},version,()=>route(homeFn));
    return;
   }
-  const raw=(location.hash||'#/').replace(/^#\/?/,'');
+  const raw=getInternalRoute(location);
   const [path,q='']=raw.split('?');
   const s=path.split('/').filter(Boolean),r=s[0],v=s[1],p=new URLSearchParams(q);
   let h;
