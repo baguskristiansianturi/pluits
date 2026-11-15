@@ -396,6 +396,20 @@ export async function bindMessagesPage() {
     }).subscribe();
   await flushOutbox();
 }
+function bindTextComposer(form) {
+  const textarea=form?.querySelector('textarea');
+  if(!textarea)return;
+  textarea.addEventListener('keydown',event=>{
+    if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){
+      event.preventDefault();
+      form.requestSubmit();
+    }
+  });
+  textarea.addEventListener('input',()=>{
+    textarea.style.height='auto';
+    textarea.style.height=Math.min(textarea.scrollHeight,120)+'px';
+  });
+}
 function onOnline() { updateNetworkStatus(); flushOutbox(); }
 async function openDraftConversation(recipientId) {
   currentConversation='draft:'+recipientId;
@@ -410,7 +424,9 @@ async function openDraftConversation(recipientId) {
     '<form id="pl-msg-compose"><textarea name="body" rows="2" maxlength="5000" placeholder="Tulis pesan…" required></textarea><button type="submit">Save message</button></form>'+
     '<p class="pl-msg-chat-status" role="status">'+queued.length+' messages waiting for connection. Drafts are saved only on this device.</p>';
   chat.querySelector('[data-chat-back]')?.addEventListener('click',()=>document.querySelector('#pl-msg-layout')?.classList.remove('is-chat-open'));
-  chat.querySelector('#pl-msg-compose').onsubmit=async event=>{
+  const draftForm=chat.querySelector('#pl-msg-compose');
+  bindTextComposer(draftForm);
+  draftForm.onsubmit=async event=>{
     event.preventDefault();const form=event.currentTarget,body=String(new FormData(form).get('body')||'').trim();if(!body)return;
     if(navigator.onLine){
       const {data:id,error}=await db.rpc('start_direct_conversation',{p_other_user_id:recipientId});
@@ -520,7 +536,7 @@ async function openConversation(id) {
   const visibleMessages=(messages.data||[]).filter(message=>!hiddenIds.has(message.id));
   if((messages.error||members.error)&&navigator.onLine){chat.textContent=(messages.error||members.error).message;return;}
   const queued=queueFor(id);
-  chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Pesan">‹</button><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+'</small></div><span>'+ (navigator.onLine?'Online':'Offline · pesan akan diantrekan')+'</span></header>'+
+  chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Pesan">‹</button><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+' · <span id="pl-msg-chat-presence">'+(thread?.other?.id&&onlineUserIds.has(thread.other.id)?'Online':'Tidak online')+'</span></small></div></header>'+
     '<div class="pl-msg-stream">'+(visibleMessages.length?visibleMessages.map(message=>messageMarkup(message,false,receiptByMessage.get(message.id))).join('') : emptyStateMarkup({variant:'message',title:'Belum ada pesan',description:'Kirim pesan pertama untuk memulai percakapan.'}))+queued.map(row=>messageMarkup(row,true)).join('')+'</div>'+
     '<form id="pl-msg-compose"><textarea name="body" rows="2" maxlength="5000" placeholder="Tulis pesan…" required></textarea><button type="button" class="pl-msg-voice" data-voice-record aria-label="Record a voice message">🎙 Voice</button><button type="submit">Kirim</button></form>'+
     '<p class="pl-msg-chat-status" role="status">'+(queued.length?queued.length+' messages waiting for connection.':'Pesan tersinkron dengan server. Voice message maksimal 3 menit.')+'</p>';
@@ -538,6 +554,7 @@ async function openConversation(id) {
   bindMessageActions(chat,id);
   bindVoiceRecorder(chat,id);
   const form=chat.querySelector('#pl-msg-compose');
+  bindTextComposer(form);
   form.onsubmit=async event=>{
     event.preventDefault();
     const body=String(new FormData(form).get('body')||'').trim(); if(!body)return;
