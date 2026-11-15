@@ -11,13 +11,23 @@ test('every registered icon resolves to a local, sized, decorative SVG', () => {
   assert.ok(registeredNames.length > 40);
   for (const name of registeredNames) {
     const markup = renderIcon(name);
-    assert.match(markup, /^<svg\\b/, name + ' must render an SVG');
-    assert.match(markup, /\\bwidth="20"/, name + ' must have a default width');
-    assert.match(markup, /\\bheight="20"/, name + ' must have a default height');
-    assert.match(markup, /\\baria-hidden="true"/, name + ' must be decorative');
-    assert.match(markup, /\\bfocusable="false"/, name + ' must not enter keyboard focus');
+    assert.match(markup, /^<svg\b/, name + ' must render an SVG');
+    assert.match(markup, /\bwidth="20"/, name + ' must have a default width');
+    assert.match(markup, /\bheight="20"/, name + ' must have a default height');
+    assert.match(markup, /\baria-hidden="true"/, name + ' must be decorative');
+    assert.match(markup, /\bfocusable="false"/, name + ' must not enter keyboard focus');
     assert.match(markup, /viewBox="0 0 24 24"/, name + ' must use the standard viewBox');
   }
+});
+
+test('legacy icon markup receives styling, dimensions and accessibility attributes', () => {
+  const markup = renderIcon('search', { size: 32, className: 'toolbar-icon active' });
+  assert.match(markup, /^<svg\b/);
+  assert.match(markup, /class="pl-icon toolbar-icon active"/);
+  assert.match(markup, /\bwidth="32"/);
+  assert.match(markup, /\bheight="32"/);
+  assert.match(markup, /\baria-hidden="true"/);
+  assert.match(markup, /\bfocusable="false"/);
 });
 
 test('icon facade clamps requested sizes and preserves caller classes safely', () => {
