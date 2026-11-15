@@ -43,10 +43,13 @@ function messageMarkup(row, pending = false, receipt = null, recipientOnline = f
   return renderMessageMarkup(row, { currentUserId: currentUser?.id, pending, receipt, recipientOnline });
 }
 function isSelfChat(conversationId) {
-  return conversationCache.some(item=>item.id===conversationId&&item.other?.is_self===true);
+  const thread=conversationCache.find(item=>item.id===conversationId);
+  return Boolean(thread&&(thread.direct_key==='self:'+currentUser?.id||thread.other?.is_self===true||thread.other?.id===currentUser?.id));
 }
-function selfChatReadReceipt(conversationId) {
-  return isSelfChat(conversationId)?{delivered_at:new Date().toISOString(),read_at:new Date().toISOString()}:null;
+function selfChatReadReceipt(conversationId, existing={}) {
+  if(!isSelfChat(conversationId))return existing||null;
+  const readAt=existing?.read_at||new Date().toISOString();
+  return {...existing,delivered_at:existing?.delivered_at||readAt,read_at:readAt};
 }
 function updateConversationPreview(row) {
   if(!row?.conversation_id)return;
@@ -477,6 +480,7 @@ export async function bindMessagesPage() {
   const {data:{user},error:authError}=await db.auth.getUser();
   if(authError) { app.querySelector('#pl-msg-chat').textContent=authError.message; return; }
   currentUser=user;
+  bindChatViewport(app);
   if(!user) { const layout=app.querySelector('#pl-msg-layout'); layout.classList.add('is-auth-empty'); layout.innerHTML=emptyStateMarkup({variant:'login',title:'Masuk untuk mulai berkirim pesan',description:'Hubungkan diri dengan teman dan komunitas Anda melalui percakapan pribadi.',action:'<a class="pl-msg-empty-action" href="#/account/login">Masuk ke PLUITS</a>'}); app.querySelector('.pl-msg-people')?.setAttribute('hidden',''); return; }
   if(realtimeChannel) { await db.removeChannel(realtimeChannel); realtimeChannel=null; }
   onlineUserIds=new Set();contactsCache=[];
@@ -590,7 +594,7 @@ export async function bindMessagesPage() {
       const messageId=payload.new?.message_id;
       const article=messageId?document.querySelector('#pl-msg-chat [data-message-id="'+CSS.escape(String(messageId))+'"]'):null;
       const status=article?.querySelector('.pl-msg-status');
-      if(status&&article.classList.contains('mine')) status.outerHTML=renderMessageStatus({receipt:payload.new,voice:article.dataset.messageType==='voice'});
+      if(status&&article.classList.contains('mine')) status.outerHTML=renderMessageStatus({receipt:isSelfChat(article.dataset.conversationId)?selfChatReadReceipt(article.dataset.conversationId,payload.new):payload.new,voice:article.dataset.messageType==='voice'});
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_message_receipts'},payload=>{
       const messageId=payload.new?.message_id;
@@ -607,6 +611,29 @@ export async function bindMessagesPage() {
       if(payload.new?.conversation_id!==currentConversation||!document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) void loadConversations();
     }).subscribe();
   await flushOutbox();
+}
+function bindChatViewport(app) {
+  if(app.dataset.chatViewportBound==='true')return;
+  app.dataset.chatViewportBound='true';
+  const viewport=window.visualViewport;
+  const sync=()=>{
+    const chat=app.querySelector('#pl-msg-chat');
+    const layout=app.querySelector('#pl-msg-layout');
+    if(!chat||!layout?.classList.contains('is-chat-open')){app.classList.remove('pl-msg-keyboard-open');return;}
+    const vv=window.visualViewport;
+    const height=vv?.height||window.innerHeight;
+    const top=Math.max(0,chat.getBoundingClientRect().top-(vv?.offsetTop||0));
+    app.style.setProperty('--pl-msg-viewport-height',height+'px');
+    app.style.setProperty('--pl-msg-chat-top',top+'px');
+    const focused=chat.querySelector('#pl-msg-compose textarea')===document.activeElement;
+    app.classList.toggle('pl-msg-keyboard-open',Boolean(focused&&height<window.innerHeight-120));
+  };
+  app.addEventListener('focusin',event=>{if(event.target.matches('#pl-msg-compose textarea')){sync();requestAnimationFrame(()=>{sync();const stream=app.querySelector('.pl-msg-stream');if(stream)stream.scrollTop=stream.scrollHeight;});}});
+  app.addEventListener('focusout',event=>{if(event.target.matches('#pl-msg-compose textarea'))setTimeout(sync,120);});
+  window.addEventListener('resize',sync,{passive:true});
+  viewport?.addEventListener('resize',sync,{passive:true});
+  viewport?.addEventListener('scroll',sync,{passive:true});
+  sync();
 }
 function bindTextComposer(form) {
   const textarea=form?.querySelector('textarea');
@@ -804,8 +831,9 @@ async function openConversation(id) {
   if(isSelfConversation){
     const readAt=new Date().toISOString();
     for(const message of messages.data||[]){
-      if(message.sender_id===currentUser.id&&!receiptByMessage.has(message.id)){
-        receiptByMessage.set(message.id,{message_id:message.id,user_id:currentUser.id,delivered_at:readAt,read_at:readAt});
+      if(message.sender_id===currentUser.id){
+        const existing=receiptByMessage.get(message.id)||{};
+        receiptByMessage.set(message.id,{...existing,message_id:message.id,user_id:currentUser.id,delivered_at:existing.delivered_at||readAt,read_at:existing.read_at||readAt});
       }
     }
   }
@@ -818,7 +846,7 @@ async function openConversation(id) {
   const queued=queueFor(id);
   const preferences=getInboxPreferences();
   chat.dataset.theme=preferences.theme;chat.dataset.fontSize=preferences.fontSize;chat.dataset.wallpaper=String(preferences.wallpaper||'none').startsWith('data:image/')?'custom':preferences.wallpaper||'none';if(String(preferences.wallpaper||'').startsWith('data:image/'))chat.style.setProperty('--pl-msg-wallpaper-image','url("'+preferences.wallpaper+'")');else chat.style.removeProperty('--pl-msg-wallpaper-image');
-  chat.innerHTML='<header class="pl-msg-chat-head"><button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Inbox">‹</button><span class="pl-msg-chat-avatar" data-chat-avatar>'+contactAvatar(thread?.other||{display_name:'P'})+'</span><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+' · <span id="pl-msg-chat-presence">'+(thread?.other?.is_self?'Catatan pribadi':thread?.other?.id&&onlineUserIds.has(thread.other.id)?'Online':'Tidak online')+'</span></small></div>'+(thread?.other?.is_self?'':'<details class="pl-msg-contact-menu" data-contact-menu><summary aria-label="Opsi kontak"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></summary><div><button type="button" data-contact-action="report" data-user-id="'+esc(thread?.other?.id||'')+'">Laporkan akun</button><button type="button" data-contact-action="block" data-user-id="'+esc(thread?.other?.id||'')+'">Blokir akun</button></div></details>')+'</header>'+
+  chat.innerHTML='<header class="pl-msg-chat-head"><span class="pl-msg-chat-avatar" data-chat-avatar>'+contactAvatar(thread?.other||{display_name:'P'})+'</span><div><b>'+esc(thread?.other.display_name||thread?.other.username||'Conversation')+'</b><small>@'+esc(thread?.other.username||'')+' · <span id="pl-msg-chat-presence">'+(thread?.other?.is_self||thread?.other?.id===currentUser?.id?'Online':thread?.other?.id&&onlineUserIds.has(thread.other.id)?'Online':'Offline')+'</span></small></div>'+(thread?.other?.is_self?'':'<details class="pl-msg-contact-menu" data-contact-menu><summary aria-label="Opsi kontak"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></summary><div><button type="button" data-contact-action="report" data-user-id="'+esc(thread?.other?.id||'')+'">Laporkan akun</button><button type="button" data-contact-action="block" data-user-id="'+esc(thread?.other?.id||'')+'">Blokir akun</button></div></details>')+'<button type="button" class="pl-msg-back" data-chat-back aria-label="Kembali ke Inbox">‹</button></header>'+
     '<div class="pl-msg-stream">'+(visibleMessages.length?visibleMessages.map(message=>messageMarkup(message,false,receiptByMessage.get(message.id),Boolean(thread?.other?.id&&onlineUserIds.has(thread.other.id)))).join('') : emptyStateMarkup({variant:'message',title:'Belum ada pesan',description:'Kirim pesan pertama untuk memulai percakapan.'}))+queued.map(row=>messageMarkup(row,true)).join('')+'</div>'+
     '<div class="pl-msg-selection-bar" data-selection-bar hidden><span data-selection-count>0 dipilih</span><button type="button" data-selection-delete-me>Hapus untuk saya</button><button type="button" data-selection-delete-everyone disabled>Hapus untuk semua</button><button type="button" data-selection-cancel>Batal</button></div>'+
     '<div class="pl-msg-attachment-preview" data-attachment-preview hidden></div><form id="pl-msg-compose"><input id="pl-msg-image-input" type="file" hidden multiple accept="image/jpeg,image/png,image/webp,image/gif"><input id="pl-msg-file-input" type="file" hidden multiple accept="application/pdf,text/plain,application/zip,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"><div class="pl-msg-attach-menu" data-attachment-menu hidden><button type="button" data-pick-image><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 20"/></svg>Gambar</button><button type="button" data-pick-file><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v6h5M10 14h6m-6 4h6"/></svg>File</button></div><div class="pl-msg-input-bar"><button type="button" class="pl-msg-attach" data-attachment-trigger aria-label="Tambah lampiran" aria-expanded="false" title="Tambah lampiran"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><textarea name="body" rows="1" maxlength="5000" placeholder="Ketik pesan"></textarea><button type="button" class="pl-msg-voice" data-voice-record aria-label="Rekam pesan suara" title="Pesan suara"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8"/></svg></button><button type="submit" class="pl-msg-send" aria-label="Kirim pesan" title="Kirim"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12 16-8-6 16-3-6-7-2Z"/><path d="m11 14 9-10"/></svg></button></div></form>'+
