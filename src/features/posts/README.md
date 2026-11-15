@@ -19,3 +19,9 @@
 
 ## Boundaries
 Feed/page controllers own ordering, hydration, authorization and event handling. The card renderer owns shared markup and visual contract. Public guest-home feed is still rendered by `pages/home` and remains a separate migration target; do not claim it uses the canonical card until migrated and tested.
+
+
+## Media layout behavior
+- `post-media-layout.js` owns the page-independent DOM behavior for gallery counters and responsive media-frame normalization.
+- Feed media uses the existing 4:5 presentation; post detail preserves bounded source proportions.
+- The Account page mounts these helpers but does not own their implementation.

@@ -301,10 +301,11 @@ assert.ok(profileCss.includes('grid-template-columns: 78px minmax(0, 1fr) !impor
 assert.ok(profileCss.includes('min-height: 0 !important'), 'Mobile profile hero must not reserve unnecessary vertical space.');
 
 const postDetailSource = read('src/pages/account/index.js');
+const postMediaLayout = read('src/features/posts/post-media-layout.js');
 assert.ok(postDetailSource.includes('class="ua-post-detail-page"'), 'Post detail must have a responsive detail layout wrapper.');
 assert.ok(postDetailSource.includes('class="ua-post-detail-stream"'), 'Post detail must have a dedicated content stream.');
-assert.ok(postDetailSource.includes('.ua-post-detail-page .ua-media img'), 'Media normalizer must include opened post detail images.');
-assert.ok(postDetailSource.includes('const ratio=isDetail(el)?boundedRatio(w,h):4/5'), 'Feed media frames must use a consistent 4:5 ratio while detail preserves source proportions.');
+assert.ok(postMediaLayout.includes('.ua-post-detail-page .ua-media img'), 'Media normalizer must include opened post detail images.');
+assert.ok(postMediaLayout.includes('const ratio=isDetail(el)?boundedRatio(w,h):4/5'), 'Feed media frames must use a consistent 4:5 ratio while detail preserves source proportions.');
 const postLayoutCss = accountCss;
 assert.ok(postLayoutCss.includes('aspect-ratio: 4 / 5'), 'Feed media must use a consistent responsive frame.');
 assert.ok(postLayoutCss.includes('.ua-post-detail-page .ua-media img'), 'Post detail images must have responsive sizing rules.');

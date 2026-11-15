@@ -28,6 +28,7 @@ Read before editing. Existing owners remain during incremental migration; target
 - Blog Studio: `pages/blog-studio/*` owns the current editor/dashboard/public reader; media transport is delegated to `features/media/storage-upload.js`, media validation to `features/media/media-types.js`, and public media authorization remains owned by blog RLS/Storage policies.
 - Reels: `features/reels/*`; dedicated markup and scoped styling.
 - Circle Top Ten carousel interaction: `features/discovery/top-ten-slider.js`; owns mobile autoplay, pause/resume, document visibility handling and cleanup. The Account page remains the data/composition owner.
+- Post media layout: `features/posts/post-media-layout.js` owns gallery counters and feed/detail media-frame normalization; Account only mounts the helpers.
 - Post cards and actions: `features/posts/index.js` is the public API; canonical card markup/styles live in `post-card.js` and `post-card.css`. Signed-in Explore/Circle and Profile consume the same card. Public guest-home feed remains a separate migration target.
 
 ## Boundaries
