@@ -887,11 +887,16 @@ async function flushOutbox() {
       }
       const {created_at,recipient_user_id,...messagePayload}=item;
       messagePayload.conversation_id=targetConversation;
-      const {error}=await db.from('user_messages').upsert(messagePayload,{onConflict:'sender_id,client_message_id',ignoreDuplicates:true});
+      const {data:saved,error}=await db.from('user_messages').upsert(messagePayload,{onConflict:'sender_id,client_message_id',ignoreDuplicates:true}).select('*').maybeSingle();
       if(error) remaining.push({...item,conversation_id:targetConversation});
+      else if(saved&&currentConversation===targetConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')){
+        appendMessageToOpenChat(document.querySelector('#pl-msg-chat'),saved);
+        if(saved.message_type==='voice')void hydrateVoicePlayers(document.querySelector('#pl-msg-chat'));
+        if(saved.message_type==='image'||saved.message_type==='file')void hydrateMessageMedia(document.querySelector('#pl-msg-chat'));
+      }
     }
     writeQueue(remaining);
-    if(currentConversation) await openConversation(currentConversation);
+    if(String(currentConversation||'').startsWith('draft:')&&remaining.length===0) await openConversation(currentConversation);
     await loadConversations();
   } finally { sendingQueue=false; }
 }
