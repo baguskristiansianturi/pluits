@@ -449,13 +449,13 @@ async function loadConversations() {
   const {data:members,error}=await db.from('user_conversation_members').select('conversation_id,last_read_at').eq('user_id',currentUser.id);
   if(!['primary','unread'].includes(activeInboxTab))return;
   if(error){
-    try { const cached=JSON.parse(localStorage.getItem(threadsKey())||'[]'); conversationCache=cached; list.innerHTML=cached.length?cached.map(item=>'<button class="pl-msg-thread" data-open-chat="'+item.id+'"><b>'+esc(item.other.display_name||item.other.username)+'</b><small>@'+esc(item.other.username)+'</small><p>History available when online</p></button>').join(''):'<div class="pl-msg-empty">No offline inbox cache. Connect to the internet to load conversations.</div>'; list.querySelectorAll('[data-open-chat]').forEach(button=>button.onclick=()=>openConversation(button.dataset.openChat)); }
+    try { const cached=JSON.parse(localStorage.getItem(threadsKey())||'[]'); conversationCache=cached; const visible=activeInboxTab==='unread'?cached.filter(item=>item.unread):cached; list.innerHTML=visible.length?visible.map(item=>'<button class="pl-msg-thread '+(item.unread?'is-unread':'')+'" data-open-chat="'+item.id+'"><b>'+esc(item.other.display_name||item.other.username)+'</b><small>@'+esc(item.other.username)+'</small><p>History available when online</p></button>').join(''):emptyStateMarkup({variant:'message',title:activeInboxTab==='unread'?'Tidak ada pesan belum dibaca':'Inbox offline belum tersedia',description:activeInboxTab==='unread'?'Semua percakapan sudah dibaca.':'Hubungkan internet untuk memuat daftar percakapan.'}); list.querySelectorAll('[data-open-chat]').forEach(button=>button.onclick=()=>openConversation(button.dataset.openChat)); }
     catch { list.textContent='Kotak masuk offline tidak tersedia.'; }
     return;
   }
   const ids=(members||[]).map(row=>row.conversation_id);
   if(navigator.onLine&&ids.length) await Promise.all(ids.map(conversationId=>db.rpc('mark_conversation_delivered',{p_conversation_id:conversationId})));
-  if(!ids.length){list.innerHTML=emptyStateMarkup({variant:'message',title:'Belum ada percakapan',description:'Pilih kontak atau cari nama pengguna untuk memulai percakapan.'});conversationCache=[];return;}
+  if(!ids.length){conversationCache=[];list.innerHTML=emptyStateMarkup({variant:'message',title:activeInboxTab==='unread'?'Tidak ada pesan belum dibaca':'Belum ada percakapan',description:activeInboxTab==='unread'?'Semua percakapan sudah dibaca.':'Pilih kontak atau cari nama pengguna untuk memulai percakapan.'});return;}
   const [convs,memberRows,msgRows]=await Promise.all([
     db.from('user_conversations').select('id,title,updated_at').in('id',ids).order('updated_at',{ascending:false}),
     db.from('user_conversation_members').select('conversation_id,user_id,last_read_at').in('conversation_id',ids),
@@ -463,7 +463,7 @@ async function loadConversations() {
   ]);
   if(!['primary','unread'].includes(activeInboxTab))return;
   if(convs.error||memberRows.error||msgRows.error){
-    try { const cached=JSON.parse(localStorage.getItem(threadsKey())||'[]'); conversationCache=cached; list.innerHTML=cached.length?cached.map(item=>'<button class="pl-msg-thread" data-open-chat="'+item.id+'"><b>'+esc(item.other.display_name||item.other.username)+'</b><small>@'+esc(item.other.username)+'</small><p>History available when online</p></button>').join(''):'<div class="pl-msg-empty">No offline inbox cache. Connect to the internet to load conversations.</div>'; list.querySelectorAll('[data-open-chat]').forEach(button=>button.onclick=()=>openConversation(button.dataset.openChat)); }
+    try { const cached=JSON.parse(localStorage.getItem(threadsKey())||'[]'); conversationCache=cached; const visible=activeInboxTab==='unread'?cached.filter(item=>item.unread):cached; list.innerHTML=visible.length?visible.map(item=>'<button class="pl-msg-thread '+(item.unread?'is-unread':'')+'" data-open-chat="'+item.id+'"><b>'+esc(item.other.display_name||item.other.username)+'</b><small>@'+esc(item.other.username)+'</small><p>History available when online</p></button>').join(''):emptyStateMarkup({variant:'message',title:activeInboxTab==='unread'?'Tidak ada pesan belum dibaca':'Inbox offline belum tersedia',description:activeInboxTab==='unread'?'Semua percakapan sudah dibaca.':'Hubungkan internet untuk memuat daftar percakapan.'}); list.querySelectorAll('[data-open-chat]').forEach(button=>button.onclick=()=>openConversation(button.dataset.openChat)); }
     catch { list.textContent='Offline inbox is not available.'; }
     return;
   }
