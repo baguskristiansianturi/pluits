@@ -493,6 +493,14 @@ async function loadConversations() {
   list.hidden=false;
 }
 async function bindMessageActions(chat,conversationId) {
+  chat.querySelectorAll('.pl-msg-bubble[data-message-id]').forEach(article=>{
+    article.addEventListener('contextmenu',event=>{
+      const menu=article.querySelector('.pl-msg-actions');
+      if(!menu)return;
+      event.preventDefault();
+      menu.open=true;
+    });
+  });
   chat.querySelectorAll('[data-message-action]').forEach(button=>button.onclick=async()=>{
     const article=button.closest('[data-message-id]');
     const messageId=article?.dataset.messageId;
