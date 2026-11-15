@@ -2270,7 +2270,7 @@
 /* PLUITS home: visual experience-first header and discovery */
 .ua-home-header{display:flex;align-items:center;gap:14px;min-height:68px}
 .ua-home-header .ua-brand{display:flex;flex:none}
-.ua-home-searchbar{display:flex;align-items:center;gap:10px;min-width:0;flex:1;height:42px;padding:0 14px;border:1px solid #e7eceb;border-radius:13px;background:#f7f9f9;color:#849092;text-decoration:none;font-size:12px}
+.ua-home-searchbar{display:flex;align-items:center;gap:10px;min-width:0;flex:1;height:40px;padding:0 14px;border:1px solid #e7eceb;border-radius:13px;background:#f7f9f9;color:#849092;text-decoration:none;font-size:12px}
 .ua-home-searchbar svg{flex:none;color:#536b6b}.ua-home-searchbar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ua-home-wishlist{display:grid;place-items:center;flex:none;width:40px;height:40px;border:1px solid #e7eceb;border-radius:12px;color:#253b3b;background:#fff;text-decoration:none}
 .ua-home-discovery{padding:0 0 16px;margin:0 0 16px;border-bottom:1px solid #edf0ef}
