@@ -19,6 +19,12 @@ Update the relevant source document when a decision changes. This log summarizes
 | Profile membership distinction | Only limited visual identity details such as membership icon/badge and possibly a small background treatment distinguish the level. | [Profile Identity](profile-identity.md) |
 | Functional differences | Membership differences belong in account permissions, capabilities, and settings—not in different profile layouts. | [Profile Identity](profile-identity.md), [Social Account Rules](social-account-rules.md) |
 | Documentation approach | Account concepts, rules, and eventual technical basis are maintained together in the central `account/` folder and revised as discussion evolves. | [README](README.md) |
+| Comment eligibility | All membership levels may comment when the content permits it, but the commenting account must be verified. Membership and verification are independent. | [Social Account Rules](social-account-rules.md) |
+
+## Recommendations awaiting confirmation
+
+- Let unverified users read comments they are otherwise allowed to see, while requiring verification only to submit a comment.
+- Give content owners a clear comment on/off control; consider more granular audience controls only after the basic behavior is agreed.
 
 ## Open decisions
 
