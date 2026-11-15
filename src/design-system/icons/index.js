@@ -17,14 +17,14 @@ export function renderIcon(name, { size = 20, className = '' } = {}) {
   const legacyMarkup = legacyGeneralIcons[name] || appIcons[name];
   if (!legacyMarkup) return '';
   const classes = ['pl-icon', className].filter(Boolean).join(' ').replace(/["<>]/g, '');
-  return legacyMarkup.replace(/<svg\\b([^>]*)>/, (opening, rawAttributes) => {
+  return legacyMarkup.replace(/<svg\b([^>]*)>/, (opening, rawAttributes) => {
     const attributes = rawAttributes || '';
     const additions = [];
-    if (!/\\bclass\\s*=/.test(attributes)) additions.push('class="' + classes + '"');
-    if (!/\\bwidth\\s*=/.test(attributes)) additions.push('width="' + safeSize + '"');
-    if (!/\\bheight\\s*=/.test(attributes)) additions.push('height="' + safeSize + '"');
-    if (!/\\baria-hidden\\s*=/.test(attributes)) additions.push('aria-hidden="true"');
-    if (!/\\bfocusable\\s*=/.test(attributes)) additions.push('focusable="false"');
+    if (!/\bclass\s*=/.test(attributes)) additions.push('class="' + classes + '"');
+    if (!/\bwidth\s*=/.test(attributes)) additions.push('width="' + safeSize + '"');
+    if (!/\bheight\s*=/.test(attributes)) additions.push('height="' + safeSize + '"');
+    if (!/\baria-hidden\s*=/.test(attributes)) additions.push('aria-hidden="true"');
+    if (!/\bfocusable\s*=/.test(attributes)) additions.push('focusable="false"');
     return '<svg' + attributes + (additions.length ? ' ' + additions.join(' ') : '') + '>';
   });
 }
