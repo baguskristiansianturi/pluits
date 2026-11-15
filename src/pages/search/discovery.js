@@ -1,5 +1,6 @@
 import { supabase as db } from '../../lib/supabase/client.js';
 import { renderSocialMobileNav } from '../../components/social/navigation.js';
+import {renderDiscoveryHeader,bindDiscoveryHeader} from '../../components/social/discovery-header.js';
 import '../../styles/social-navigation.css';
 import './discovery.css';
 
@@ -19,10 +20,7 @@ const dateLabel=value=>{const date=new Date(value);return Number.isFinite(date.g
 
 export function discoverySearch(q=''){
  return `<div class="ds-page">
-  <header class="ds-top">
-   <h1 class="ds-sr-only">Jelajah PLUITS</h1>
-   <form id="ds-form" class="ds-search" role="search" aria-label="Cari di Jelajah"><span class="ds-search-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></span><input id="ds-query" name="q" type="search" autocomplete="off" value="${esc(q)}" placeholder="Cari konten, orang, atau topik…" aria-label="Cari konten, orang, atau topik"><button type="submit" aria-label="Cari"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></form>
-  </header>
+  ${renderDiscoveryHeader({query:q})}
   <main class="ds-main plds-container">
    <nav class="ds-chips" id="ds-chips" aria-label="Kategori konten"><button type="button" data-cat="all" class="selected">Semua</button></nav>
    <section class="ds-feed-wrap"><div class="ds-feed" id="ds-feed" aria-label="Konten publik"></div><div class="ds-loading" id="ds-loading" role="status">Memuat konten publik…</div></section>
@@ -89,37 +87,49 @@ async function feed(){
   });
   if(version!==requestVersion)return;
   const cards=hydrated.map(post=>{
-   const media=post.media[0],owner=post.owner,name=esc(owner.display_name||'Pengguna PLUITS'),username=esc(owner.username||'pengguna');
-   const avatar=post.avatarUrl?'<img src="'+esc(post.avatarUrl)+'" alt="" loading="lazy">':'<b>'+esc(initials(owner.display_name))+'</b>';
-   const mediaMarkup=media?(media.media_type==='video'?'<video class="ds-tile-video" data-discovery-video src="'+esc(media.url)+'" muted playsinline loop preload="none" aria-label="Pratinjau video dari @'+username+'"></video><span class="ds-tile-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 6 10 6-10 6z"></path></svg></span>':'<img src="'+esc(media.url)+'" loading="lazy" decoding="async" alt="Konten dari @'+username+'">'+(post.media.length>1?'<span class="ds-tile-stack" aria-label="Beberapa media"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"></rect><path d="M3 8V3h5M16 3h5v5M21 16v5h-5M8 21H3v-5"></path></svg></span>':'')):'<span class="ds-text-tile">'+esc((post.caption||'PLUITS').slice(0,110))+'</span>';
+   const media=post.media[0],owner=post.owner,name=esc(owner.display_name||'Pengguna PLUITS');
+
+   const mediaMarkup=media?(media.media_type==='video'?'<video class="ds-tile-video" data-discovery-video src="'+esc(media.url)+'" muted playsinline loop preload="metadata" aria-label="Pratinjau video"></video><span class="ds-tile-video-mark" aria-label="Video"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m10 9 5 3-5 3z"></path></svg></span>':'<img src="'+esc(media.url)+'" loading="lazy" decoding="async" alt="Foto publik">'+(post.media.length>1?'<span class="ds-tile-stack" aria-label="Beberapa media"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"></rect><path d="M3 8V3h5M16 3h5v5M21 16v5h-5M8 21H3v-5"></path></svg></span>':'')):'<span class="ds-text-tile">'+esc((post.caption||'PLUITS').slice(0,110))+'</span>';
    const target=post.content_kind==='reel'?'#/account/reels/'+encodeURIComponent(post.id):'#/account/post/'+encodeURIComponent(post.id);
-   return '<article class="ds-grid-tile'+(media?.media_type==='video'?' is-video':'')+(post.content_kind==='reel'?' is-reel':'')+'"><a class="ds-tile-link" href="'+target+'" aria-label="'+(post.content_kind==='reel'?'Tonton Reel':'Buka postingan')+' dari '+name+'"><div class="ds-tile-media">'+mediaMarkup+'</div><div class="ds-tile-overlay"><span class="ds-tile-author">'+avatar+'</span><span class="ds-tile-username">@'+username+'</span></div><span class="ds-tile-view" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg></span></a></article>';
+   return '<article class="ds-grid-tile'+(media?.media_type==='video'?' is-video':'')+(post.content_kind==='reel'?' is-reel':'')+'"><a class="ds-tile-link" href="'+target+'" aria-label="'+(post.content_kind==='reel'?'Tonton Reel':'Buka postingan')+'"><div class="ds-tile-media">'+mediaMarkup+'</div><span class="ds-tile-view" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg></span></a></article>';
   }).join('');
   stopDiscoveryVideoPreviews();
   el.innerHTML=cards||'';
   const tileVideos=[...el.querySelectorAll('[data-discovery-video]')];
   if(tileVideos.length&&!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches){
-   let activeVideo=null;
+   let activeVideo=null,visibleCandidates=[];
+   const pauseActive=()=>{if(activeVideo){activeVideo.pause();activeVideo=null;}};
    const activate=video=>{
-    if(document.hidden)return;
+    if(document.hidden||video.readyState<2)return;
     if(activeVideo&&activeVideo!==video)activeVideo.pause();
     activeVideo=video;video.muted=true;video.loop=true;video.playsInline=true;
-    const attempt=video.play();if(attempt?.catch)attempt.catch(()=>{});
+    const attempt=video.play();if(attempt?.catch)attempt.catch(()=>{if(activeVideo===video)activeVideo=null;});
    };
-   videoVisibilityHandler=()=>{
-    if(document.hidden){tileVideos.forEach(video=>video.pause());activeVideo=null;}
-   };
+   tileVideos.forEach((video,index)=>{
+    video.muted=true;video.loop=true;video.playsInline=true;
+    video.addEventListener('loadeddata',()=>{if(video!==activeVideo)video.pause();},{once:true});
+    video.addEventListener('error',()=>{video.classList.add('is-preview-unavailable');if(video===activeVideo)pauseActive();},{once:true});
+   });
+   videoVisibilityHandler=()=>{if(document.hidden){tileVideos.forEach(video=>video.pause());pauseActive();}};
    document.addEventListener('visibilitychange',videoVisibilityHandler);
    videoRouteHandler=()=>stopDiscoveryVideoPreviews();
    window.addEventListener('hashchange',videoRouteHandler,{once:true});
    if('IntersectionObserver'in window){
-    videoObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
-     const video=entry.target;
-     if(entry.isIntersecting&&entry.intersectionRatio>=.55)activate(video);
-     else if(video===activeVideo){video.pause();activeVideo=null;}
-    }),{threshold:[0,.2,.55,.8],rootMargin:'100px 0px'});
+    videoObserver=new IntersectionObserver(entries=>{
+     entries.forEach(entry=>{
+      const video=entry.target;
+      if(entry.isIntersecting&&entry.intersectionRatio>=.65){
+       visibleCandidates=visibleCandidates.filter(item=>item!==video);visibleCandidates.push(video);
+      }else{
+       visibleCandidates=visibleCandidates.filter(item=>item!==video);
+       if(video===activeVideo){video.pause();activeVideo=null;}
+      }
+     });
+     const next=visibleCandidates.at(-1);
+     if(next&&next!==activeVideo)activate(next);
+    },{threshold:[0,.25,.65,.85],rootMargin:'60px 0px'});
     tileVideos.forEach(video=>videoObserver.observe(video));
-   }else activate(tileVideos[0]);
+   }else if(tileVideos[0])activate(tileVideos[0]);
   }
   if(status)status.textContent=cards?'':'Belum ada konten publik yang cocok. Coba kategori atau kata kunci lain.';
  }catch(error){
@@ -129,7 +139,8 @@ async function feed(){
 }
 
 export function bindDiscoverySearch(){
- document.querySelector('#ds-form')?.addEventListener('submit',event=>{event.preventDefault();feed();});
+ bindDiscoveryHeader();
+ document.querySelector('[data-discovery-header-search]')?.addEventListener('submit',event=>{event.preventDefault();feed();});
  document.querySelector('#ds-chips')?.addEventListener('click',event=>{
   const button=event.target.closest('[data-cat]');if(!button)return;
   activeCategory=button.dataset.cat;
