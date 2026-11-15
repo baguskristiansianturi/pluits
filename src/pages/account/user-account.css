@@ -2899,3 +2899,16 @@
  .ua-social-app .ua-clean-composer .ua-clean-preview{grid-template-columns:repeat(2,minmax(0,1fr))}
  .ua-social-app .ua-clean-composer .ua-compose-actions .ua-text-action{padding:0 10px}
 }
+
+/* Homepage local products reuse the marketplace product-card surface. */
+.ua-social-home .ua-home-market-product-row{align-items:stretch}
+.ua-social-home .ua-home-market-product{flex:0 0 190px;width:190px;min-width:0;scroll-snap-align:start}
+.ua-social-home .ua-home-market-product-art{display:block;position:relative;aspect-ratio:1.25;width:100%;height:auto;overflow:hidden;text-decoration:none}
+.ua-social-home .ua-home-market-product-art img{display:block;width:100%;height:100%;object-fit:cover}
+.ua-social-home .ua-home-market-product .pl-market-product-body{min-width:0;padding:11px;gap:6px}
+.ua-social-home .ua-home-market-product h3{min-height:38px;font-size:12px;line-height:1.4}
+.ua-social-home .ua-home-market-product-link{color:inherit;text-decoration:none}
+.ua-social-home .ua-home-market-product-body strong{font-size:14px}
+.ua-social-home .ua-home-market-product-body>span{font-size:10px;color:#758196}
+@media(min-width:761px){.ua-social-home .ua-home-market-product{flex-basis:205px;width:205px}}
+@media(max-width:760px){.ua-social-home .ua-home-market-product{flex-basis:174px;width:174px}}
