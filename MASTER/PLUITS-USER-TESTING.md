@@ -213,8 +213,9 @@ Check the same core flows at viewport widths 320, 360, 390, 430, 768, 1024, and 
 ## Status implementasi dan pengujian — 15 November 2026
 
 - **IMPLEMENTED:** fondasi post/feed, profile visibility, follow/private follow, comments/replies, Inbox/DM, offline outbox, notifications, report/block, account settings, Stories/Reels dasar, dan public username routes.
-- **DEPLOYED:** GitHub Pages commit `8f4245bcf5ff158ade4e04dbeafbd44e61c925cb`; workflow run `43713663249` (#2176) berhasil. Automated tests 148/148 lulus; production build, output verification, artifact upload, dan Pages deploy berhasil.
+- **DEPLOYED:** GitHub Pages commit `61d632b544541a901485cc6f54e85b2558d5a0f3`; workflow run `43714307219` (#2188) berhasil. Automated tests 150/150 lulus; production build, PWA asset output verification, artifact upload, dan Pages deploy berhasil.
 - **NOT TESTED:** real Android photo/video upload and playback; two-account RLS and Realtime; private profile/media isolation; DM reconnect/outbox exactly-once behavior; notifications recipient/deep-link behavior; TOTP/SMS provider flows; full responsive/accessibility/performance matrix.
+- **PWA install smoke test (NOT TESTED):** buka URL HTTPS di Chrome Android, periksa menu Install app / Add to Home screen, pasang ikon, buka dari launcher, dan pastikan tampil standalone serta semua route tetap memakai scope `/pluits/`. Manifest menyediakan ikon PNG 192px/512px dan Apple touch icon 180px. Offline app-shell belum tersedia; jangan menganggap aplikasi bekerja offline selain outbox DM lokal.
 - **ACCEPTANCE PENDING:** founder belum melakukan dan merekam UAT pada perangkat nyata.
 - **Data review required:** database saat ini memiliki lima postingan publik berstatus published dari satu profil; sebagian caption kosong atau tampak seperti input uji. Jangan hapus atau mengubah akun/postingan tanpa konfirmasi pemilik data. Review apakah konten tersebut memang layak tetap publik sebelum launch.
 - **Integrity:** synthetic people, Story, local-product, dan Top 10 fallback sudah dihapus dari jalur aktif Circle. Ketika data asli belum tersedia, UI menampilkan empty state atau menyembunyikan section.
