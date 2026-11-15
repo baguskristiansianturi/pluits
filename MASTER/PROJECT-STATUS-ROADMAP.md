@@ -1426,4 +1426,5 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - Fix: map the legacy account/professional URL to /professional/ and route it back to the existing account/professional controller section. Keep the existing professional-create route separate.
 - Regression coverage: assert the path mapping, Account controller section, and actual account-context navigation source.
 - Commit mode: direct main commit; no PR. CI/Pages verification pending.
+- Verification trigger: follow-up roadmap contents commit dispatches the standard push workflow for the CP-090 route change.
 - Browser/device UAT remains NOT TESTED.
