@@ -14,7 +14,7 @@ const accountCssSlices = [
   '07-top-ten-and-content-shelves.css',
   '08-nearby-and-feed-overrides.css',
 ];
-const accountCss = accountCssSlices.map(name => read('src/pages/account/styles/' + name)).join('\\n');
+const accountCss = accountCssSlices.map(name => read('src/pages/account/styles/' + name)).join(String.fromCharCode(10));
 const retiredFiles = [
   'src/app/page-factory.js',
   'src/app/services.js',
