@@ -19,7 +19,7 @@ test('canonical destinations keep home, inbox and profile on separate routes',()
 test('signed-in social bottom navigation points to the intended pages',()=>{
  const html=renderSocialMobileNav({active:'home',user:{id:'u1'}});
  assert.match(html,/href="\/pluits\/circle\/"[^>]*aria-label="Circle"/);
- assert.match(html,/href="\/pluits\/inbox\/"[^>]*aria-label="Pesan"/);
+ assert.match(html,/href="\/pluits\/inbox\/"[^>]*aria-label="Inbox"/);
  assert.match(html,/href="\/pluits\/profile\/"[^>]*aria-label="Profil"/);
 });
 
@@ -30,12 +30,12 @@ test('guest profile navigation opens Login instead of a private profile',()=>{
  const circle=renderSocialMobileNav({active:'home',user:null});
  assert.ok(circle.includes('href="/pluits/circle/"') && circle.includes('aria-label="Circle"'),'Circle must retain its own Explore destination even before login; the page controller handles authentication.');
  const inbox=renderSocialMobileNav({active:'discover',user:null});
- assert.ok(inbox.includes('href="/pluits/inbox/"') && inbox.includes('aria-label="Pesan"'),'Inbox must retain its own Inbox destination even before login; the Inbox page handles authentication.');
+ assert.ok(inbox.includes('href="/pluits/inbox/"') && inbox.includes('aria-label="Inbox"'),'Inbox must retain its own Inbox destination even before login; the Inbox page handles authentication.');
 });
  
 test('Inbox keeps its fourth navigation slot linked to the canonical Inbox route',()=>{
  const html=renderSocialMobileNav({active:'messages',user:{id:'u1'}});
- assert.ok(html.includes('href="/pluits/inbox/"') && html.includes('aria-label="Pesan"'), 'Inbox must link to its canonical URL.');
+ assert.ok(html.includes('href="/pluits/inbox/"') && html.includes('aria-label="Inbox"'), 'Inbox must link to its canonical URL.');
  assert.ok(html.includes('class="active pl-mobile-inbox"'), 'Inbox must remain active while its page is open.');
  assert.ok(html.includes('href="/pluits/profile/"') && html.includes('aria-label="Profil"'), 'Profile must remain available.');
  assert.ok(!html.includes('href="/pluits/notifications/"'), 'Inbox must not replace its own destination with notifications.');
