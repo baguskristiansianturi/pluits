@@ -60,11 +60,14 @@ export function canonicalizeLegacyRoute(value = '') {
       saved:'saved/', reels:'reels/', settings:'settings/', auth:'login/', login:'login/',
       register:'register/', blog:'blog-studio/', wallet:'wallet/', addresses:'addresses/', reel:'reels/create/', story:'stories/create/', preview:'profile/preview/', drafts:'create/drafts/', 'professional-create':'professional-create/'
     };
-    path += accountMap[b] || (b ? b + '/' : '');
-    if (b === 'profile' && c === 'edit') path = SITE_BASE + 'profile/edit/';
-    else if (b === 'profile' && c) path += encodeURIComponent(c) + '/';
-    else if (b === 'post' && c) path = SITE_BASE + 'posts/' + encodeURIComponent(c) + '/';
-  } else if (a === 'account' && b === 'user' && c) path = SITE_BASE + '@' + encodeURIComponent(decodePathSegment(c)) + '/';
+    if (b === 'user' && c) path = SITE_BASE + '@' + encodeURIComponent(decodePathSegment(c)) + '/';
+    else {
+      path += accountMap[b] || (b ? b + '/' : '');
+      if (b === 'profile' && c === 'edit') path = SITE_BASE + 'profile/edit/';
+      else if (b === 'profile' && c) path += encodeURIComponent(c) + '/';
+      else if (b === 'post' && c) path = SITE_BASE + 'posts/' + encodeURIComponent(c) + '/';
+    }
+  }
   else if (a === 'inbox' && b === 'settings') path += 'inbox/settings/';
   else if (a === 'market-cart' || a === 'cart') path += 'marketplace/cart/';
   else if (a === 'market-checkout' || a === 'checkout') path += 'marketplace/checkout/';
