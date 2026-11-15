@@ -146,11 +146,12 @@ assert.match(inboxMobileNav, /<small>Profil<\/small>/, 'Profile must remain avai
 assert.doesNotMatch(publicMobileNav, /href="\/pluits\/inbox\/"|href="\/pluits\/notifications\/"/, 'Public navigation must route private destinations through login.');
 assert.equal((publicMobileNav.match(/<a class=/g) || []).length, 5, 'Public mobile navigation must keep the same five-slot structure.');
 const account = read('src/pages/account/index.js');
+const notificationFeature = read('src/features/notifications/list/index.js');
 assert.match(account, /unreadNotificationCount/, 'Social navigation must receive unread notification count.');
 assert.match(account, /refreshUnreadBadge/, 'Realtime social events must refresh the unread badge.');
 assert.match(account, /countUnreadActivity/, 'Unread badge must include system announcements as well as social notifications.');
 for (const type of ['new_message', 'unfollow', 'system_update']) {
-  assert.ok(account.includes(type), `Activity center missing notification type: ${type}`);
+  assert.ok(notificationFeature.includes(type), `Activity center missing notification type: ${type}`);
 }
 assert.ok(existsSync('supabase/migrations/20261108135647_pluits_social_realtime_offline_message_queue.sql'));
 assert.ok(existsSync('supabase/migrations/20261108140017_pluits_account_language_preference.sql'));
