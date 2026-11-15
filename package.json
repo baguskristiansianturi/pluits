@@ -7,9 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "npm run verify:production && npm run verify:module-boundaries && node --test",
+    "test": "npm run verify:production && npm run verify:module-boundaries && npm run verify:style-boundaries && node --test",
     "verify:production": "node scripts/verify-production-surface.mjs",
-    "verify:module-boundaries": "node scripts/verify-module-boundaries.mjs"
+    "verify:module-boundaries": "node scripts/verify-module-boundaries.mjs",
+    "verify:style-boundaries": "node scripts/verify-style-boundaries.mjs"
   },
   "devDependencies": {
     "vite": "^8.3.0"

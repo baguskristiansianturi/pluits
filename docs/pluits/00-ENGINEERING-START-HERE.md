@@ -33,7 +33,8 @@ Dokumen ini adalah pintu masuk untuk memahami susunan teknis PLUITS. Tidak perlu
 - `src/platform/`: target adapter browser/native; belum ada implementasi native.
 - `supabase/migrations/`: perubahan struktur database, policy dan fungsi SQL.
 - `tests/`: pengujian otomatis.
-- `scripts/verify-module-boundaries.mjs`: pemeriksaan otomatis arah dependensi modul, dijalankan melalui `npm test`.
+- `scripts/verify-module-boundaries.mjs`: pemeriksaan otomatis arah dependensi JavaScript, dijalankan melalui `npm test`.
+- `scripts/verify-style-boundaries.mjs`: pemeriksaan namespace CSS untuk komponen dan fitur, dijalankan melalui `npm test`.
 
 ## Status penting
 
