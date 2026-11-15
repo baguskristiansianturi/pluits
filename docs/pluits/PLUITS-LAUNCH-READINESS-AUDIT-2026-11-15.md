@@ -36,9 +36,9 @@ That is not the same as launch acceptance. The release still lacks founder Andro
 - No user account, post, message, media, order or payment row was deleted or rewritten. SQL verification tests used temporary rows/tables inside transactions and rolled them back.
 
 ### Deployment evidence
-- Verified commit: `61d632b544541a901485cc6f54e85b2558d5a0f3`.
-- GitHub Actions run: `43714307219` (#2188), SUCCESS.
-- Automated tests: **150 passed, 0 failed**.
+- Verified commit: `6d53909ef799a278023dd7ef63c1b6d460ca7ccf`.
+- GitHub Actions run: `43714961593` (#2208), SUCCESS.
+- Automated tests: **154 passed, 0 failed**.
 - Vite production build: SUCCESS.
 - Build-output verification: SUCCESS, including PWA manifest and raster icon assets.
 - Pages artifact upload and GitHub Pages deployment: SUCCESS.
@@ -102,7 +102,7 @@ The draft store/product are not eligible for the public catalog under the curren
 ## 5. Launch blockers and release gates
 
 ### P0 — must close before Social First Release public launch
-0. **Moderation policy decision:** new posts currently publish immediately (database default `published`); the implemented report queue is post-publication. The Business Model Master describes pre-publication moderation. Decide whether pre-publication review is a hard launch requirement; if yes, implement and UAT a pending-review queue before public launch.
+**Moderation policy decision:** new posts currently publish immediately (database default `published`); the implemented report queue is post-publication. The Business Model Master describes pre-publication moderation. Decide whether pre-publication review is a hard launch requirement; if yes, implement and UAT a pending-review queue before public launch.
 1. **Founder Android UAT:** real photo/video selection, upload, progress, playback, refresh persistence, failure/retry and media cleanup.
 2. **Two-account tests:** public/private profile, posts and media; follow/private follow; block/report; comments; DM membership; notification recipient scope; RLS negative tests.
 3. **DM reconnect:** realtime delivery, offline outbox, reconnect and exactly-once behavior.
@@ -112,6 +112,8 @@ The draft store/product are not eligible for the public catalog under the curren
 7. **Founder acceptance:** record device/browser, test steps, expected/actual result and explicit ACCEPTED status.
 
 ### P1 — close or clearly label before broader promotion
+- **Friend-first DM mismatch:** current RPC allows any signed-in user to start a conversation with a public profile; only private profiles require an accepted follow. This does not match the documented friend-first rule. Define the qualifying relationship (accepted follow, mutual follow, or explicitly open DMs) and enforce it server-side.
+- **Audience granularity:** post/Story controls currently expose public/private; follower-only audience for public profiles is not implemented.
 - Verify global unread notification badge, notification routing/deep links and announcement recipient targeting.
 - Verify SMS provider for phone OTP and TOTP enrollment/verification; otherwise label unavailable.
 - Complete English translation before claiming a fully bilingual experience.
