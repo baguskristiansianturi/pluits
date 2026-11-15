@@ -156,7 +156,7 @@ test('signed-in home leads with Bali experiences, search, wishlist and the perso
  assert.ok(account.includes('trendSection+homeNearbySection()+peopleSection+storiesSection+filterNav')&&!account.includes('circleHeading'),'Circle must retain the requested section order while omitting the redundant intro banner.');
  assert.ok((account.match(/homeNearbySection\(\)/g)||[]).length===1,'The nearby section must appear once, above Circle content, not be duplicated after the feed.');
  assert.ok(account.includes('homeNearbySection')&&account.includes('bindHomeNearby'),'Home must use live nearby results.');
- assert.ok(account.includes('Temukan Lebih Banyak')&&account.includes('Temukan Produk Lokal')&&account.includes('Kumpulan')&&account.includes('Layanan PLUITS'),'Home must continue from the 30-post feed into discovery, local products, service collections and PLUITS service filters.');
+ assert.ok(account.includes('Temukan Lebih Banyak')&&account.includes('Produk Lokal')&&account.includes('Kumpulan')&&account.includes('Layanan PLUITS'),'Home must continue from the 30-post feed into discovery, local products, service collections and PLUITS service filters.');
  assert.ok(account.includes('peopleSection+storiesSection+filterNav+homeHeading'),'People recommendations must appear before Story, and the feed navbar must appear immediately after Story.');
  const circleCss=await readFile(new URL('../../src/pages/account/circle-experience.css',import.meta.url),'utf8');
  const peopleCss=await readFile(new URL('../../src/features/discovery/people-recommendations.css',import.meta.url),'utf8');
