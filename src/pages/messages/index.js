@@ -262,6 +262,7 @@ async function renderPeopleStrip(people=contactsCache, withSignedImages=false) {
   }));
   strip.classList.toggle('has-many',onlinePeople.length>=5);
   strip.innerHTML=items.length?items.join(''):'<span class="pl-msg-online-empty">Contact yang online akan muncul di sini</span>';
+  bindStartChat(strip);
 }
 
 function renderContactList(box,people,withSignedImages=false) {
