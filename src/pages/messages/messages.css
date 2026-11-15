@@ -1332,3 +1332,10 @@
     max-width:min(78%,520px)!important;
   }
 }
+
+/* WhatsApp-style long-press selection and recipient presence receipts. */
+.pl-msg-selection-bar button[data-selection-delete-everyone]:disabled{opacity:.38;cursor:not-allowed}
+.pl-msg-bubble.is-selected{outline:2px solid #3286c8!important;outline-offset:2px;background-color:#eaf4fc!important}
+.pl-msg-status.is-delivered{color:#8b98a6!important}
+.pl-msg-status.is-read{color:#2587d5!important}
+.pl-msg-bubble{ -webkit-touch-callout:none; }
