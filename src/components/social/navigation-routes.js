@@ -46,7 +46,7 @@ export function canonicalizeLegacyRoute(value = '') {
   let path = SITE_BASE;
   const fixed = {
     '': '', circle: 'circle/', home: 'circle/', feed: 'circle/', explore: 'circle/',
-    search: 'discover/', discover: 'discover/', explore: 'circle/', contacts: 'followers/', contact: 'followers/', inbox: 'inbox/', message: 'inbox/', messages: 'inbox/',
+    search: 'discover/', discover: 'discover/', contacts: 'followers/', contact: 'followers/', inbox: 'inbox/', message: 'inbox/', messages: 'inbox/',
     login: 'login/', register: 'register/', profile: 'profile/', places: 'places/',
     marketplace: 'marketplace/', trip: 'trips/', trips: 'trips/', reels: 'reels/',
     followers: 'followers/', following: 'following/', saved: 'saved/', notifications: 'notifications/',
