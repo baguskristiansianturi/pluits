@@ -28,12 +28,14 @@ For every agreed account capability, record:
 
 ## Technical notes: comment permission
 
-The comment submission path must enforce two independent gates on the server:
+The comment submission path must enforce the content permission and account eligibility checks on the server:
 
 1. **Content gate:** comments are enabled for the target blog/article, post, or Reel, and the requesting user is allowed to view/interact with that content under its audience and block rules.
 2. **Account gate:** the account has a verified status and is otherwise permitted to interact (for example, it is not suspended or restricted from commenting).
 
-Membership tier alone must not grant or deny the basic comment capability. A verified Regular account is eligible on the same basis as a verified premium account. An unverified premium account must be rejected. The frontend may show or hide the composer and explain the verification requirement, but the backend must be authoritative and reject direct API attempts that fail either gate.
+Membership tier alone must not grant or deny the basic comment capability. A verified Regular account is eligible on the same basis as any verified premium member. Verification is also a prerequisite for purchasing/activating paid membership, so the normal product flow must not allow an unverified account to acquire premium status. Do not design the ordinary user journey around an unverified premium member. The frontend may show or hide the composer and explain the verification requirement, but the backend must be authoritative and reject direct API attempts that fail either check.
+
+The paid-membership purchase/activation flow must separately enforce verified-account eligibility before proceeding. If verification status can later be revoked, suspended, or become invalid, the resulting membership and feature behavior must be explicitly specified rather than assumed.
 
 The final design must define consistent behavior for comments disabled by the content owner, blog-level comment availability, blocked relationships, restricted accounts, and verification status changes. Avoid leaking private content or comment permissions through API responses.
 
