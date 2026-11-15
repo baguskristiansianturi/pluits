@@ -1,14 +1,25 @@
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const initials=v=>String(v||'P').trim().slice(0,1).toUpperCase();
 const rupiah=v=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(Number(v||0));
+function isMissingOptionalTable(error,table){
+ if(!error)return false;
+ const code=String(error.code||'');
+ const message=String(error.message||'').toLowerCase();
+ return code==='42P01'||code==='PGRST205'||(message.includes(table.toLowerCase())&&(message.includes('does not exist')||message.includes('could not find the table')||message.includes('schema cache')));
+}
 export async function loadAccountContext(db,user){
- const [pref,professional,owned,members]=await Promise.all([
+ const [prefResult,professionalResult,owned,members]=await Promise.all([
   db.from('account_context_preferences').select('*').eq('user_id',user.id).maybeSingle(),
   db.from('professional_profiles').select('*').eq('user_id',user.id).maybeSingle(),
   db.from('stores').select('id,name,username,store_status,verification_status,owner_user_id').eq('owner_user_id',user.id),
   db.from('store_members').select('store_id,member_status').eq('user_id',user.id).eq('member_status','active')
  ]);
- if(pref.error)throw pref.error;if(professional.error)throw professional.error;
+ // These context tables are optional during staged rollout. Their absence must
+ // never prevent the core personal account, Circle, Inbox, or Profile from loading.
+ if(prefResult.error&&!isMissingOptionalTable(prefResult.error,'account_context_preferences'))throw prefResult.error;
+ if(professionalResult.error&&!isMissingOptionalTable(professionalResult.error,'professional_profiles'))throw professionalResult.error;
+ const pref={data:prefResult.error?null:prefResult.data};
+ const professional={data:professionalResult.error?null:professionalResult.data};
  let stores=owned.data||[];
  const ids=(members.data||[]).map(x=>x.store_id).filter(id=>!stores.some(s=>s.id===id));
  if(ids.length){const r=await db.from('stores').select('id,name,username,store_status,verification_status,owner_user_id').in('id',ids);if(!r.error)stores=stores.concat(r.data||[]);}
