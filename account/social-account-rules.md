@@ -45,8 +45,9 @@ Hak bersifat **kumulatif**: setiap level memperoleh seluruh hak level di bawahny
 ### 3.1 Hak dasar berkomentar
 
 - Semua level membership — Regular, Silver, Gold, Platinum, dan Golden PLUITS Priority — memiliki hak dasar untuk berkomentar. Hak komentar bukan benefit eksklusif akun premium.
-- **Syarat wajib:** akun harus sudah terverifikasi untuk dapat mengirim komentar. Akun yang belum terverifikasi tidak dapat mengirim komentar, meskipun membership-nya berbayar.
-- Status verifikasi adalah atribut terpisah dari membership. Akun Regular yang sudah terverifikasi boleh berkomentar; akun Golden PLUITS Priority yang belum terverifikasi tetap tidak boleh berkomentar.
+- **Syarat wajib:** akun harus sudah terverifikasi untuk dapat mengirim komentar. Akun yang belum terverifikasi tidak dapat mengirim komentar.
+- Verifikasi juga menjadi prasyarat untuk membeli/mengaktifkan membership berbayar. Karena itu, akun premium yang belum terverifikasi bukan kondisi normal yang seharusnya muncul dalam alur membership PLUITS. Jangan membuat skenario produk seolah-olah pengguna dapat membeli premium sebelum verifikasi.
+- Akun Regular yang sudah terverifikasi boleh berkomentar. Semua level premium yang aktif juga telah melewati prasyarat verifikasi tersebut.
 - Pada postingan dan Reels, keputusan apakah komentar dibuka atau ditutup berada pada pemilik konten melalui pengaturan konten/komentar.
 - Pada blog, komentar dapat dikirim jika blog atau artikel tersebut menyediakan dan mengaktifkan fitur komentar sesuai pengaturan penerbit/pemilik blog.
 - Jika pemilik konten menonaktifkan komentar, tidak ada level akun yang dapat mengomentari konten tersebut.
@@ -55,7 +56,8 @@ Hak bersifat **kumulatif**: setiap level memperoleh seluruh hak level di bawahny
 ### 3.2 Prinsip pengalaman pengguna
 
 - Pengaturan komentar oleh pemilik konten menentukan apakah suatu konten menerima komentar; status verifikasi menentukan apakah calon pemberi komentar memenuhi syarat untuk mengirimkannya.
-- Jika akun belum terverifikasi mencoba berkomentar, tampilkan penjelasan yang jelas bahwa verifikasi akun diperlukan. Jangan menyamarkan syarat ini sebagai masalah membership.
+- Jika akun Regular belum terverifikasi mencoba berkomentar, tampilkan penjelasan yang jelas bahwa verifikasi akun diperlukan. Jangan menyamarkan syarat ini sebagai masalah membership.
+- Alur pembelian/aktivasi membership berbayar harus memeriksa bahwa akun telah terverifikasi sebelum transaksi/aktivasi dilanjutkan.
 - Rekomendasi: pengguna tetap dapat membaca komentar yang memang boleh dilihatnya meskipun ia belum terverifikasi; verifikasi menjadi syarat untuk mengirim komentar, bukan untuk membaca komentar publik. Ini adalah rekomendasi produk untuk dikonfirmasi.
 - Rekomendasi: sediakan pengaturan komentar yang mudah dipahami bagi pembuat konten, termasuk pilihan mengaktifkan atau menonaktifkan komentar. Detail pilihan tambahan (misalnya siapa yang boleh berkomentar) dibahas terpisah dan tidak diasumsikan sudah final.
 
@@ -123,6 +125,7 @@ Dokumen ini hanya memetakan penggunaan sosial. Aturan khusus layanan pelanggan p
 6. Apakah dan bagaimana Block Transparency memberi tahu pengguna yang diblokir tanpa membuka celah pelecehan atau penghindaran block.
 7. Apakah pembuat konten hanya membutuhkan toggle komentar aktif/nonaktif atau juga kontrol audiens komentar yang lebih rinci.
 8. Konfirmasi rekomendasi bahwa akun yang belum terverifikasi tetap boleh membaca komentar publik, tetapi tidak boleh mengirim komentar.
+9. Detail alur verifikasi sebagai prasyarat pembelian dan aktivasi membership berbayar, termasuk status verifikasi yang berubah setelah membership aktif.
 
 ## 9. Status implementasi
 
