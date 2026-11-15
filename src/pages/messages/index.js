@@ -207,7 +207,7 @@ export function messagesPage() {
         <section class="pl-msg-chat" id="pl-msg-chat">${emptyStateMarkup({variant:'message',title:'Pesan Anda dimulai di sini',description:'Pilih percakapan di sebelah kiri atau cari seseorang untuk mulai mengirim pesan.'})}</section>
       </div>
       <p class="pl-msg-offline-note">If your connection drops, outgoing messages are saved on this device and retried when you are back online. A message is not sent until the server confirms it.</p>
-      ${renderSocialMobileNav({active:'messages',user:{id:'inbox'},navClass:'pl-msg-mobile-nav pl-social-mobile-nav'})}
+      ${renderSocialMobileNav({active:'messages',user:{id:'inbox'},navClass:'pl-msg-mobile-nav'})}
     </section>
   </main>`;
 }
