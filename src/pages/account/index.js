@@ -6,6 +6,7 @@ import {renderPostActions,renderPostCard} from '../../features/posts/index.js';
 import '../../features/posts/post-card.css';
 import '../../features/posts/comments.css';
 import {renderTopTenSection,loadTopTenTrending} from '../../features/discovery/top-ten-cards.js';
+import {bindTopTenSlider} from '../../features/discovery/top-ten-slider.js';
 import {rankPeopleRecommendations,renderPeopleRecommendations,CIRCLE_DEMO_PEOPLE} from '../../features/discovery/people-recommendations.js';
 import '../../features/discovery/people-recommendations.css';
 import '../../features/posts/post-actions.css';
@@ -39,7 +40,7 @@ const uploadMediaFile=createMediaUploader({supabase,bucket:BUCKET,supabaseUrl:SU
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmtDate=v=>new Date(v).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
 const initials=v=>String(v||'P').trim().slice(0,1).toUpperCase();
-let trendSliderTimer=null,trendSliderVisibilityHandler=null,user=null,profile=null,profileImageFrame={...DEFAULT_PROFILE_IMAGE_FRAME},profileReels=[],addresses=[],noticeTimer=null,leafletMap=null,leafletMarker=null,exploreFilter='all',exploreCategory='all',exploreContentType='all',reelsFilter='recommended',activityNotificationChannel=null,unreadNotificationCount=0,currentComposeDraft=null,profileMenuBound=false,accountContext={active:'personal',professional:null,stores:[],prefs:{}};
+let user=null,profile=null,profileImageFrame={...DEFAULT_PROFILE_IMAGE_FRAME},profileReels=[],addresses=[],noticeTimer=null,leafletMap=null,leafletMarker=null,exploreFilter='all',exploreCategory='all',exploreContentType='all',reelsFilter='recommended',activityNotificationChannel=null,unreadNotificationCount=0,currentComposeDraft=null,profileMenuBound=false,accountContext={active:'personal',professional:null,stores:[],prefs:{}};
 
 function notify(message,type='success'){
  const el=document.querySelector('#ua-toast');if(!el)return;
@@ -958,7 +959,7 @@ async function mountAccount(section='profile',parameter=''){
   normalizeFeedMediaFrames(document);bindPostGalleries();
   if(section==='post'){const focusId=parameter||location.hash.split('/')[3]||'';requestAnimationFrame(()=>document.getElementById('ua-post-focus-'+focusId)?.scrollIntoView({block:'start',behavior:'auto'}));}
   bindProfileTabs();bindNotificationActions();if(section==='drafts')bindDrafts();
-  bindProfile();bindCompose();bindStoryCompose();bindStories();bindExploreFilters();bindPeopleRecommendationActions();bindToptenSlider();bindAddresses();bindWallet();bindPostActions();bindFollowActions();
+  bindProfile();bindCompose();bindStoryCompose();bindStories();bindExploreFilters();bindPeopleRecommendationActions();bindTopTenSlider();bindAddresses();bindWallet();bindPostActions();bindFollowActions();
   if(section==='blocked')bindBlockedAccounts();if(section==='hidden-content')bindHiddenContent();if(section==='reels'){bindReelsPlayback();if(parameter)requestAnimationFrame(()=>{const target=[...document.querySelectorAll('[data-reel-post-id]')].find(el=>el.dataset.reelPostId===parameter);target?.scrollIntoView({block:'start'});});}if(section==='addresses')initMap();
  }catch(err){
   if(!isCurrent())return;
@@ -1384,83 +1385,6 @@ function bindFollowActions(){
   notify(incoming ? "Pengikut dihapus." : "Anda berhenti mengikuti akun ini.");
   await mountAccount(incoming ? "followers" : "following");
  }));
-}
-function bindToptenSlider(){
- if(trendSliderVisibilityHandler){document.removeEventListener('visibilitychange',trendSliderVisibilityHandler);trendSliderVisibilityHandler=null;}
- if(trendSliderTimer){clearTimeout(trendSliderTimer);trendSliderTimer=null;}
- const track=document.querySelector('#ua-home-topten-grid');
- if(!track||!window.matchMedia('(max-width:760px)').matches)return;
- const cards=[...track.querySelectorAll('.ua-topten-card')];if(cards.length<2)return;
- let interacting=false,autoScrolling=false,animationFrame=null,resumeTimer=null,settleTimer=null;
- const nearestIndex=()=>cards.reduce((best,card,i)=>{
-  const distance=Math.abs(card.getBoundingClientRect().left-track.getBoundingClientRect().left);
-  const bestDistance=Math.abs(cards[best].getBoundingClientRect().left-track.getBoundingClientRect().left);
-  return distance<bestDistance?i:best;
- },0);
- const stopAuto=()=>{
-  if(trendSliderTimer){clearTimeout(trendSliderTimer);trendSliderTimer=null;}
-  if(resumeTimer){clearTimeout(resumeTimer);resumeTimer=null;}
- };
- const stopAnimation=()=>{
-  if(animationFrame!==null){cancelAnimationFrame(animationFrame);animationFrame=null;}
-  autoScrolling=false;
- };
- const scheduleAuto=(delay=4200)=>{
-  stopAuto();
-  if(interacting||document.hidden)return;
-  trendSliderTimer=setTimeout(()=>{
-   trendSliderTimer=null;
-   if(interacting||document.hidden)return;
-   const current=nearestIndex(),next=(current+1)%cards.length;
-   const from=track.scrollLeft;
-   const target=cards[next].offsetLeft-track.offsetLeft;
-   const distance=target-from;
-   if(Math.abs(distance)<2){scheduleAuto(4200);return;}
-   autoScrolling=true;
-   const duration=950,started=performance.now();
-   const animate=now=>{
-    if(!autoScrolling||interacting){animationFrame=null;return;}
-    const progress=Math.min(1,(now-started)/duration);
-    const eased=1-Math.pow(1-progress,5);
-    track.scrollLeft=from+distance*eased;
-    if(progress<1){animationFrame=requestAnimationFrame(animate);return;}
-    animationFrame=null;autoScrolling=false;scheduleAuto(4200);
-   };
-   animationFrame=requestAnimationFrame(animate);
-  },delay);
- };
- const beginInteraction=()=>{
-  interacting=true;stopAuto();stopAnimation();
-  if(settleTimer){clearTimeout(settleTimer);settleTimer=null;}
- };
- const endInteraction=()=>{
-  interacting=false;
-  scheduleAuto(3600);
- };
- const onScroll=()=>{
-  if(autoScrolling||interacting)return;
-  stopAuto();
-  if(settleTimer)clearTimeout(settleTimer);
-  settleTimer=setTimeout(()=>{
-   settleTimer=null;
-   if(!interacting)scheduleAuto(3600);
-  },220);
- };
- track.addEventListener('pointerdown',beginInteraction,{passive:true});
- track.addEventListener('pointerup',endInteraction,{passive:true});
- track.addEventListener('pointercancel',endInteraction,{passive:true});
- track.addEventListener('touchcancel',endInteraction,{passive:true});
- track.addEventListener('scroll',onScroll,{passive:true});
- track.addEventListener('mouseenter',beginInteraction);
- track.addEventListener('mouseleave',endInteraction);
- track.addEventListener('focusin',beginInteraction);
- track.addEventListener('focusout',endInteraction);
- trendSliderVisibilityHandler=()=>{
-  if(document.hidden){stopAuto();stopAnimation();return;}
-  if(!interacting)scheduleAuto(1200);
- };
- document.addEventListener('visibilitychange',trendSliderVisibilityHandler);
- scheduleAuto(4200);
 }
 function bindExploreFilters(){
  document.querySelectorAll('[data-content-type]').forEach(button=>button.addEventListener('click',async()=>{const next=button.dataset.contentType;if(!['all','reel','live','blog'].includes(next)||next===exploreContentType)return;exploreContentType=next;await mountAccount('explore');}));
