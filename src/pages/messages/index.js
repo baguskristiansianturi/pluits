@@ -819,7 +819,7 @@ async function openConversation(id) {
     db.from('user_messages').select('id,sender_id,body,created_at,deleted_at,message_type,media_path,media_duration_seconds,media_mime_type,media_name,reply_to_id').eq('conversation_id',id).order('created_at',{ascending:true}).limit(150),
     db.from('user_conversation_members').select('user_id,last_read_at').eq('conversation_id',id)
   ]);
-  const isSelfConversation=thread?.other?.is_self===true;
+  const isSelfConversation=isSelfChat(id);
   if(navigator.onLine&&isSelfConversation) await db.rpc('mark_conversation_read',{p_conversation_id:id});
   const messageIds=(messages.data||[]).map(message=>message.id);
   const [receipts,hidden,stars]=messageIds.length?await Promise.all([
