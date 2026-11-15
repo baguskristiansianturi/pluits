@@ -11,6 +11,7 @@ Inbox mengikuti pola interaksi aplikasi pesan modern seperti WhatsApp, dengan id
 
 ### Daftar percakapan
 - Satu daftar percakapan yang diurutkan berdasarkan aktivitas terbaru.
+- Filter Semua dan Belum dibaca; pesan yang disembunyikan atau dihapus tidak dihitung sebagai unread.
 - Pencarian akun untuk memulai percakapan baru.
 - Preview pesan terakhir dan penanda pesan belum dibaca.
 - Tombol percakapan baru membuka pencarian.
