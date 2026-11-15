@@ -128,8 +128,8 @@ assert.match(accountSettings, /visibility/, 'Account privacy setting must persis
 const navigation = read('src/components/social/navigation.js');
 assert.match(navigation, /ROUTES\.inbox|ROUTES\.activity/, 'Social navigation must consume the canonical route registry.');
 assert.match(navigation, /ROUTES\.inbox/, 'Inbox destinations must resolve through the canonical route registry.');
-assert.match(navigation, /label: 'Pesan'/, 'Mobile bottom navigation must label the messaging destination Pesan.');
-assert.match(navigation, /key: 'messages',[^\n]*href: publicHome \? '#\/help' : ROUTES\.inbox, label: 'Pesan'/, 'Inbox navigation must remain available and link to the canonical Inbox route, including while Inbox is open.');
+assert.match(navigation, /label: 'Inbox'/, 'Mobile bottom navigation must label the messaging destination Inbox.');
+assert.match(navigation, /key: 'messages',[^\n]*href: publicHome \? '#\/help' : ROUTES\.inbox, label: 'Inbox'/, 'Inbox navigation must remain available and link to the canonical Inbox route, including while Inbox is open.');
 assert.match(navigation, /label: 'Profil'/, 'Profile must remain the fifth mobile destination.');
 assert.match(navigation, /pl-create-orb/, 'The center Create action must have a dedicated visual treatment.');
 assert.doesNotMatch(navigation, /label: 'Reels'/, 'Reels must be created from the central Create action, not consume a navigation slot.');
@@ -416,5 +416,5 @@ const mobileNavigationSource = read('src/components/social/navigation.js');
 assert.match(mobileNavigationSource, /key: 'home',[\s\S]*label: publicHome \? 'Beranda' : 'Circle'/, 'Circle must be the first mobile navigation destination.');
 assert.match(mobileNavigationSource, /key: 'discover',[\s\S]*label: 'Jelajah'/, 'Jelajah must be the second mobile navigation destination.');
 assert.match(mobileNavigationSource, /key: 'create',[\s\S]*label: 'Buat'/, 'Create must remain the third mobile navigation destination.');
-assert.match(mobileNavigationSource, /key: 'messages',[\s\S]*label: 'Pesan'/, 'Messages must remain the fourth mobile navigation destination.');
+assert.match(mobileNavigationSource, /key: 'messages',[\s\S]*label: 'Inbox'/, 'Messages must remain the fourth mobile navigation destination.');
 assert.match(mobileNavigationSource, /key: 'profile',[\s\S]*label: 'Profil'/, 'Profile must remain the fifth mobile navigation destination.');
