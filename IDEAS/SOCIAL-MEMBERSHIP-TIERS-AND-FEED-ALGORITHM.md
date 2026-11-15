@@ -343,3 +343,76 @@ PLUITS tidak boleh menyimpulkan bahwa orang dari lingkungan ekonomi tertentu ada
 4. Bagaimana menjelaskan bahwa ruang publik dapat dijelajahi semua orang, sementara interaksi tertentu dapat memiliki aturan tersendiri?
 5. Bagaimana mengukur apakah membership mengurangi spam/penyalahgunaan tanpa menghambat pengguna baru yang baik?
 6. Mekanisme apa yang melindungi pengguna dari perilaku buruk tanpa mengklasifikasikan orang berdasarkan kelas ekonomi?
+
+
+## 16. Validasi sosial lintas level dan kendali distribusi postingan — tambahan diskusi founder
+
+### 16.1 Validasi sosial tidak harus berasal dari tier yang sama
+
+Founder menekankan bahwa pengguna premium tetap dapat menginginkan apresiasi dari seluruh masyarakat. Like, komentar, share, dan bentuk respons sosial lain dapat memiliki nilai personal, menjadi tanda bahwa pencapaian diketahui orang lain, atau membantu membangun kepercayaan terhadap seorang kreator/public figure.
+
+Karena itu, membership tier tidak boleh otomatis membatasi siapa yang boleh menyukai atau mengomentari postingan. Pengguna Regular/Silver dapat berinteraksi dengan konten Gold/Platinum apabila pemilik konten mengizinkan dan permission interaksi terkait terpenuhi.
+
+Membership berbayar juga tidak boleh diperlakukan sebagai bukti bahwa klaim kesuksesan seseorang benar. Status langganan hanya menunjukkan status membership; kredibilitas klaim tetap memerlukan konteks, rekam jejak, bukti yang relevan, dan penilaian pengguna.
+
+### 16.2 Pisahkan empat pengaturan distribusi dan akses
+
+Konsep berkembang dari dua sumbu awal menjadi pengaturan yang lebih terperinci. Untuk setiap postingan atau ruang konten, pertimbangkan pengaturan yang terpisah:
+
+1. **Feed distribution:** kelompok level mana yang dapat menerima postingan dalam feed mereka.
+2. **Recommendation eligibility:** kelompok level mana yang boleh menerima rekomendasi postingan di luar relasi follow/pertemanan.
+3. **View access / audience:** siapa yang boleh membuka dan melihat konten, termasuk melalui profil, pencarian, atau tautan langsung sesuai aturan konten.
+4. **Interaction permissions:** siapa yang boleh like, comment, share, save, atau melakukan tindakan lain.
+
+Pengaturan tersebut tidak boleh digabung menjadi satu tombol “visibility”. Contohnya, pemilik dapat mengizinkan pengguna Silver melihat dan menyukai postingan, tetapi tidak memasukkan postingan itu ke rekomendasi umum untuk seluruh pengguna Silver.
+
+### 16.3 Contoh pilihan distribusi yang sedang dieksplorasi
+
+- **Followers/friends only:** postingan tampil di feed relasi yang memenuhi syarat; tidak otomatis direkomendasikan ke orang di luar relasi tersebut.
+- **Same-tier recommendation:** postingan dapat direkomendasikan kepada pengguna dengan tier yang sama, jika mereka juga memenuhi aturan akses dan relevansi.
+- **Selected tiers:** pemilik memilih tier tertentu yang dapat menerima distribusi feed atau rekomendasi.
+- **Broad public distribution:** postingan dapat menjangkau lintas tier, termasuk Regular/Silver, untuk memperoleh apresiasi dan interaksi yang lebih luas.
+- **Restricted audience with exceptions:** postingan dibatasi untuk tier tertentu, tetapi pemilik dapat memberikan akses khusus kepada teman/sahabat tertentu dari tier lain.
+
+Contoh ini adalah pilihan konseptual, bukan daftar setting final. Sistem harus menjelaskan perbedaan distribusi, rekomendasi, dan izin membuka konten dengan bahasa yang mudah dipahami.
+
+### 16.4 Pengecualian untuk teman atau sahabat lintas tier
+
+Pemilik Gold/Platinum mungkin membatasi konten tertentu hanya untuk Gold/Platinum, tetapi tetap ingin beberapa teman dekat dari Regular/Silver dapat melihatnya.
+
+Karena itu, rancangan perlu mempertimbangkan explicit audience exceptions atau daftar orang yang diizinkan secara khusus. Pengecualian ini:
+- Diberikan secara sadar oleh pemilik konten.
+- Tidak otomatis berlaku untuk semua orang dalam tier yang sama dengan orang yang diberi akses.
+- Tidak melewati block, status akun, safety restrictions, atau aturan hukum.
+- Tidak otomatis memberi hak untuk membagikan ulang atau melakukan tindakan lain; setiap permission tetap diperiksa terpisah.
+- Harus tetap berlaku konsisten pada feed, profil, pencarian, notifikasi, API, cache, dan media storage agar konten tidak bocor.
+
+### 16.5 Contoh skenario lintas level
+
+**Skenario A — Public figure ingin apresiasi luas**  
+Seorang public figure Gold/Platinum membuka postingan pencapaiannya untuk semua tier dan mengizinkan like/comment/share lintas level. Konten dapat memperoleh respons dari masyarakat luas, sesuai aturan distribusi yang dipilih.
+
+**Skenario B — Pengguna premium ingin feed lebih terkurasi**  
+Ia memilih agar feed pribadinya tidak menampilkan postingan dari Silver, atau hanya menampilkan postingan Silver dari akun yang ia ikuti. Ini adalah preferensi feed miliknya; bukan larangan bagi pengguna Silver untuk melihat atau menyukai postingannya yang memang dibuka untuk mereka.
+
+**Skenario C — Postingan untuk relasi dan rekomendasi tier yang sama**  
+Pemilik memilih postingan hanya tampil di feed teman/follower yang memenuhi syarat, dan rekomendasi di luar relasi hanya ditujukan kepada tier yang sama. Pengaturan ini tidak otomatis mengubah izin interaksi dari audiens lain yang memang sudah diizinkan membuka postingan.
+
+**Skenario D — Teman dekat lintas tier**  
+Pemilik Platinum membatasi audiens umum pada Platinum, tetapi memberi akses kepada dua teman Silver yang dipilihnya. Hanya akun yang secara eksplisit diberi izin yang mendapat pengecualian.
+
+**Skenario E — Ingin dilihat oleh tier tertentu, tetapi tetap menerima apresiasi luas**  
+Pemilik mengatur distribusi rekomendasi hanya kepada Gold/Platinum, tetapi mengizinkan semua tier yang dapat membuka postingan untuk memberi like atau komentar. Ini menegaskan bahwa distribusi dan interaksi merupakan dua keputusan yang berbeda.
+
+### 16.6 Pertanyaan desain tambahan
+
+1. Apakah pengaturan feed distribution dan recommendation eligibility tersedia per postingan, per jenis konten, atau sebagai default profil dengan override per postingan?
+2. Apakah pemilik dapat memilih followers-only untuk feed tetapi tetap mengaktifkan rekomendasi kepada tier tertentu?
+3. Bagaimana orang yang tidak masuk target distribusi dapat menemukan konten publik melalui pencarian atau tautan langsung?
+4. Apakah like/comment/share lintas tier dapat diatur terpisah satu per satu?
+5. Bagaimana pemilik memberi, meninjau, dan mencabut akses khusus untuk teman lintas tier?
+6. Bagaimana mencegah jumlah like atau komentar dari tier tertentu diperlakukan sebagai bukti otomatis atas kebenaran klaim atau kualitas seseorang?
+
+### 16.7 Batas keputusan
+
+Semua pengaturan distribusi lintas tier, interaksi lintas tier, rekomendasi same-tier, dan pengecualian teman masih PROPOSED. Belum ada permission matrix final, desain UI, schema, RLS, ranking contract, atau persetujuan implementasi.
