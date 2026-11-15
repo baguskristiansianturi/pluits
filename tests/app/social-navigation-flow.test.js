@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { ROUTES, canonicalizeLegacyRoute, getInternalRoute } from '../../src/components/social/navigation-routes.js';
+import { ROUTES, canonicalizeLegacyRoute, getInternalRoute, getRoute } from '../../src/components/social/navigation-routes.js';
 
 const router = await readFile(new URL('../../src/app/router.js', import.meta.url), 'utf8');
 const account = await readFile(new URL('../../src/pages/account/index.js', import.meta.url), 'utf8');
