@@ -25,7 +25,7 @@ export function renderSocialHeader({ active = 'explore', profileView = false, sh
     return `
       <header class="ua-header pl-social-header ua-home-header">
         ${renderBrandLogo({href:ROUTES.home,className:'ua-brand',size:40,label:'Circle PLUITS'})}
-        <nav class="ua-home-desktop-nav" aria-label="Navigasi utama"><a class="active" href="${ROUTES.home}">Circle</a><a href="${ROUTES.reels}">Reels</a><a href="${ROUTES.discover}">Jelajah</a><a href="${ROUTES.inbox}">Pesan</a></nav>
+        <nav class="ua-home-desktop-nav" aria-label="Navigasi utama"><a class="active" href="${ROUTES.home}">Circle</a><a href="${ROUTES.reels}">Reels</a><a href="${ROUTES.discover}">Jelajah</a><a href="${ROUTES.inbox}">Inbox</a></nav>
         <a class="ua-home-searchbar" href="#/search" aria-label="Cari di PLUITS">${socialIcon('search',{size:17})}<span id="ua-home-search-prompt" data-location-text>Memeriksa lokasi…</span></a>
         <a class="ua-home-wishlist" href="${ROUTES.saved}" aria-label="Tersimpan" title="Tersimpan">${socialIcon('bookmark',{size:21})}</a>
         <a class="ua-home-profile" href="${user?ROUTES.profile:ROUTES.login}" aria-label="${user?'Profil':'Masuk'}" title="${user?'Profil':'Masuk ke PLUITS'}">${userAvatar||socialIcon('user',{size:19})}</a>
@@ -42,7 +42,7 @@ export function renderSocialHeader({ active = 'explore', profileView = false, sh
         <a href="${ROUTES.marketplace}">Marketplace</a>
         <a href="${ROUTES.trip}">Trip</a>
         <a class="${active === 'reels' ? 'active' : ''}" href="${ROUTES.reels}">Reels</a>
-        <a href='${ROUTES.inbox}'>${socialIcon('message', { size: 17 })}<span>Pesan</span></a>
+        <a href='${ROUTES.inbox}'>${socialIcon('message', { size: 17 })}<span>Inbox</span></a>
         <a href='${ROUTES.contacts}' aria-label='Kontak'>${socialIcon('users', { size: 17 })}<span>Kontak</span></a>
         <a href='${ROUTES.saved}' aria-label='Tersimpan'>${socialIcon('bookmark', { size: 17 })}<span>Tersimpan</span></a>
         <a class="${active === 'activity' ? 'active' : ''} pl-nav-activity" href="${ROUTES.activity}" aria-label="Aktivitas">${socialIcon('bell', { size: 17 })}<span>Aktivitas</span>${notificationCount ? '<i class="pl-nav-unread">'+(notificationCount>99?'99+':notificationCount)+'</i>' : ''}</a>
@@ -66,7 +66,7 @@ export function renderSocialMobileNav({ active = 'home', profileView = false, us
     { key: 'home', href: publicHome ? ROUTES.publicHome : ROUTES.home, label: publicHome ? 'Beranda' : 'Circle', icon: 'users' },
     { key: 'discover', href: ROUTES.discover, label: 'Jelajah', icon: 'compass' },
     { key: 'create', href: ROUTES.create, label: 'Buat', icon: 'plus' },
-    { key: 'messages', href: publicHome ? '#/help' : ROUTES.inbox, label: 'Pesan', icon: 'message' },
+    { key: 'messages', href: publicHome ? '#/help' : ROUTES.inbox, label: 'Inbox', icon: 'message' },
     { key: 'profile', href: publicHome ? ROUTES.login : profileHref, label: 'Profil', icon: 'user', avatar: publicHome ? '' : userAvatar }
   ];
   return `<nav class="${navClass}" aria-label="Navigasi utama Pluits">${items.map(item => {
