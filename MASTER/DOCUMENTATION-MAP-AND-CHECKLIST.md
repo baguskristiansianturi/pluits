@@ -92,6 +92,9 @@ Aturan tambahan:
 - Help Center route #/help harus menampilkan status ketersediaan yang jujur dan tidak menjanjikan kontrol backend yang belum tersedia.
 
 
+
+| docs/pluits/PLUITS-LAUNCH-READINESS-AUDIT-2026-11-15.md | Current production launch gate, Supabase/RLS snapshot, migration parity, data review and UAT blockers | Audit 15 Nov 2026; Social First Release not yet accepted |
+
 ## Circle & Jelajah (12 November 2026)
 | Dokumen | Fungsi | Status |
 |---|---|---|
