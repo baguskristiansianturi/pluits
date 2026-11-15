@@ -1405,3 +1405,13 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - Commit mode: direct commit to main as requested; no pull request.
 - Status: IMPLEMENTED; CI, Pages deployment and live browser/Android verification pending at commit time. This is a source-backed route correction, not a claim that every visible button or authenticated journey has passed runtime UAT.
 - Remaining audit: continue checking the rest of the route families and all interactive controls; validate signed-in flows with founder-controlled accounts and real Android browser interaction before marking ACCEPTED.
+
+
+## CP-089 — Path-based route state and post-action flow integrity (15 November 2026)
+
+- Audit scope: traced the readable URL migration through Directory, Inbox, Seller Center, Account post actions and the central router. Checked remaining location.hash reads in these route owners.
+- Confirmed defects: Directory category/nearby query state and place-save slug lookup still read hash-only values; Inbox deep-linked conversation selection read query parameters from hash; Seller registration mode read hash despite the current pathname router; Account post edit/delete/save/tag refresh logic inferred the active page from legacy hash strings and could incorrectly return to Profile after a mutation.
+- Fix: consume location.search with legacy-hash fallback for query state; compare the full current address for stale nearby requests; pass the place slug from router to the place binder; read Seller route mode from pathname plus hash; derive Account's active view from the canonical internal route and preserve that view after post mutations; share canonical post URLs.
+- Regression coverage: add tests/app/path-based-route-state.test.js for route query mapping, Directory place slug binding, Inbox/Seller URL state and Account post-action preservation.
+- Commit mode: direct commit to main; no pull request.
+- Status: IMPLEMENTED; CI and Pages deployment pending. Authenticated browser, two-account and Android UAT remain NOT TESTED.

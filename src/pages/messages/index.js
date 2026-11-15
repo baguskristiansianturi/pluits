@@ -274,7 +274,8 @@ export async function bindMessagesPage() {
       }
     });
   bindInboxTabs(app);
-  const requestedConversation=new URLSearchParams((location.hash.split('?')[1]||'')).get('conversation');
+  const routeQuery=location.search || (location.hash.includes('?') ? location.hash.slice(location.hash.indexOf('?')+1) : '');
+  const requestedConversation=new URLSearchParams(routeQuery).get('conversation');
   if(requestedConversation&&conversationCache.some(item=>item.id===requestedConversation)) await openConversation(requestedConversation);
   const search=app.querySelector('#pl-msg-search');
   search.onsubmit=async event=>{

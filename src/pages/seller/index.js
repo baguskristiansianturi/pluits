@@ -17,6 +17,7 @@ function shell(content,user=null){
  </main>`;
 }
 function notice(msg,type='info'){const el=document.querySelector('#pluits-notice');if(el){el.textContent=msg;el.className='pluits-notice '+type;}}
+const currentSellerRoute=()=>((location.pathname||'')+' '+(location.hash||'')).toLowerCase();
 function authView(mode='login'){
  const signup=mode==='register';
  document.querySelector('#app').innerHTML=shell(`
@@ -47,7 +48,7 @@ function authView(mode='login'){
 }
 async function renderSeller(preferredStoreId=null){
  const {data:{session}}=await supabase.auth.getSession();
- if(!session){authView(location.hash.includes('register')?'register':'login');return;}
+ if(!session){authView(currentSellerRoute().includes('register')?'register':'login');return;}
  const {data:stores,error}=await supabase.from('stores').select('id,name,username,business_type,store_status,verification_status,online_sales_enabled,legal_name,email,full_address,public_city,public_area,phone,description,store_logo_path,store_banner_path,created_at').order('created_at',{ascending:true});
  if(error){document.querySelector('#app').innerHTML=shell('<div class="pluits-panel"><h2>Dashboard belum dapat dimuat</h2><p>'+esc(error.message)+'</p></div>',session.user);return;}
  if(!stores?.length){storeOnboarding(session.user);return;}
@@ -238,7 +239,7 @@ async function bindPanel(user,stores){
  document.querySelectorAll('[data-order-next]').forEach(btn=>btn.addEventListener('click',()=>runAction(btn,()=>supabase.rpc('update_marketplace_fulfillment',{p_order_id:btn.dataset.orderNext,p_next_status:btn.dataset.next,p_note:''}),'Status pesanan berhasil diperbarui.')));
 }
 export async function sellerPage(){
- const path=location.hash.toLowerCase();
+ const path=currentSellerRoute();
  const {data:{session}}=await supabase.auth.getSession();
  if(!session){authView(path.includes('register')?'register':'login');return;}
  await renderSeller();

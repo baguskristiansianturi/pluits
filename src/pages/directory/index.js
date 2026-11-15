@@ -15,6 +15,7 @@ let homeNearbyRequest=0;
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const distance = value => value < 1000 ? Math.round(value) + ' m' : (value / 1000).toFixed(1).replace('.', ',') + ' km';
 const placeUrl = slug => '#/place/' + encodeURIComponent(slug);
+const routeSearchParams = () => new URLSearchParams(location.search || (location.hash.includes('?') ? location.hash.slice(location.hash.indexOf('?') + 1) : ''));
 
 export function homeNearbySection() {
   return `<section class="pl-nearby-home" aria-label="Tempat terdekat">
@@ -237,7 +238,7 @@ async function bindInterestSettings(){
 }
 export async function bindDirectoryPage() {
   const area=document.querySelector('#pl-directory-area');if(!area)return;
-  try {await loadCategories();const params=new URLSearchParams((location.hash.split('?')[1]||''));const requested=params.get('category')||'';state.category=state.categories.some(x=>x.slug===requested)?requested:'';document.querySelector('#pl-directory-categories').innerHTML=categoryChips();}
+  try {await loadCategories();const params=routeSearchParams();const requested=params.get('category')||'';state.category=state.categories.some(x=>x.slug===requested)?requested:'';document.querySelector('#pl-directory-categories').innerHTML=categoryChips();}
   catch(error){console.error('Pluits directory categories',error);}
   area.addEventListener('change',event=>setArea(event.target.value));
   document.querySelector('#pl-use-location')?.addEventListener('click',requestLocation);
@@ -263,7 +264,7 @@ export async function bindDirectoryPage() {
     const row=state.rows.find(item=>placeUrl(item.slug)===link.getAttribute('href'));if(row)logActivity('click',row.id);
   });
   await loadDiscoveryPreferences();
-  const params=new URLSearchParams((location.hash.split('?')[1]||''));
+  const params=routeSearchParams();
   const region=params.get('region');
   const nearbyContext=window.__pluitsNearbyContext;
   if(params.get('from')==='nearby'&&nearbyContext&&Number.isFinite(nearbyContext.latitude)&&Number.isFinite(nearbyContext.longitude)){
@@ -283,8 +284,8 @@ export async function bindDirectoryPage() {
 }
 export function bindHomeNearby({personalize=true,location=null}={}) {
   const resultTarget=document.querySelector('#pl-home-nearby-results');if(!resultTarget)return;
-  const requestId=++homeNearbyRequest,routeHash=window.location.hash;
-  const isCurrent=()=>requestId===homeNearbyRequest&&resultTarget.isConnected&&window.location.hash===routeHash;
+  const requestId=++homeNearbyRequest,routeAddress=window.location.pathname+window.location.search+window.location.hash;
+  const isCurrent=()=>requestId===homeNearbyRequest&&resultTarget.isConnected&&(window.location.pathname+window.location.search+window.location.hash)===routeAddress;
   state.radius=5000;state.category='';state.query='';
   if(location&&Number.isFinite(location.latitude)&&Number.isFinite(location.longitude)){state.lat=location.latitude;state.lon=location.longitude;state.area='';window.__pluitsNearbyContext={latitude:location.latitude,longitude:location.longitude};}
   else if(Number.isFinite(state.lat)&&Number.isFinite(state.lon)){window.__pluitsNearbyContext={latitude:state.lat,longitude:state.lon};}
@@ -348,11 +349,12 @@ export async function claimPage(slug) {
   if(entity.verification_status==='verified'||entity.verification_status==='pending')return '<div class="pl-directory-page"><main class="pl-directory-main pl-claim-page"><a href="'+placeUrl(slug)+'">← '+esc(entity.name)+'</a><h1>'+(entity.verification_status==='verified'?'Tempat sudah terverifikasi':'Klaim sedang ditinjau')+'</h1><p>Permohonan pengelolaan baru tidak dapat dibuat pada status ini. Hubungi dukungan Pluits jika Anda memiliki informasi tambahan.</p></main></div>';
   return `<div class="pl-directory-page"><main class="pl-directory-main pl-claim-page"><a href="${placeUrl(slug)}">← ${esc(entity.name)}</a><span class="pl-directory-eyebrow">PENGELOLA TEMPAT</span><h1>Klaim tempat ini</h1><p>Ajukan permintaan sebagai pemilik atau pengelola yang berwenang. Akses tidak aktif sebelum bukti ditinjau dan disetujui.</p><form id="pl-claim-form" data-entity="${entity.id}"><label>Peran<select name="applicant_role" required><option value="owner">Pemilik</option><option value="authorized_manager">Pengelola resmi</option><option value="staff">Staf yang diberi wewenang</option><option value="representative">Perwakilan organisasi</option></select></label><label>Jelaskan kewenangan dan bukti Anda<textarea name="evidence_note" minlength="20" maxlength="3000" required placeholder="Contoh: jabatan, hubungan dengan tempat, dan jenis bukti yang dapat diverifikasi."></textarea></label><button class="pl-directory-primary" type="submit">Kirim permohonan</button><p id="pl-claim-status" role="status"></p></form></main></div>`;
 }
-export function bindPlacePage() {
+export function bindPlacePage(slug='') {
+  const routeParts=location.pathname.split('/').filter(Boolean);
+  const placeSlug=slug||decodeURIComponent(routeParts[routeParts.length-1]==='claim'?routeParts[routeParts.length-2]||'':routeParts[routeParts.length-1]||'');
   document.querySelector('#pl-save-place')?.addEventListener('click',async()=>{
     const {data}=await supabase.auth.getUser();if(!data?.user){location.hash='#/account/login';return;}
-    const slug=decodeURIComponent(location.hash.split('/')[2]||'');
-    const {data:entity}=await supabase.from('directory_entities').select('id').eq('slug',slug).maybeSingle();if(!entity)return;
+    const {data:entity}=await supabase.from('directory_entities').select('id').eq('slug',placeSlug).maybeSingle();if(!entity)return;
     const {error}=await supabase.from('user_saved_items').upsert({user_id:data.user.id,target_type:'entity',target_id:entity.id},{onConflict:'user_id,target_type,target_id'});
     const button=document.querySelector('#pl-save-place');if(button)button.textContent=error?'Tidak dapat menyimpan':'✓ Tersimpan';
     if(!error)logActivity('save',entity.id);

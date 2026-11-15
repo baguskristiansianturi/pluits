@@ -1,4 +1,5 @@
 import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '../../lib/supabase/client.js';
+import { getInternalRoute, canonicalizeLegacyRoute } from '../../components/social/navigation-routes.js';
 import { mountAuthPage } from '../../features/auth/auth.js';
 import {socialIcon} from '../../components/common/social-icons.js';
 import {renderBrandLogo} from '../../components/common/brand.js';
@@ -56,6 +57,21 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const fmtDate=v=>new Date(v).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
 const initials=v=>String(v||'P').trim().slice(0,1).toUpperCase();
 let user=null,profile=null,profileImageFrame={...DEFAULT_PROFILE_IMAGE_FRAME},profileReels=[],addresses=[],noticeTimer=null,leafletMap=null,leafletMarker=null,exploreFilter='all',exploreCategory='all',exploreContentType='all',reelsFilter='recommended',activityNotificationChannel=null,unreadNotificationCount=0,currentComposeDraft=null,accountContext={active:'personal',professional:null,stores:[],prefs:{}};
+function currentAccountView(){
+ const path=getInternalRoute(window.location).split('?')[0];
+ if(path==='circle'||path==='account/explore')return {section:'explore',parameter:''};
+ if(path==='account/reels'||path==='reels')return {section:'reels',parameter:''};
+ if(path.startsWith('account/post/'))return {section:'post',parameter:path.split('/')[2]||''};
+ if(path==='profile/edit')return {section:'profile',parameter:'edit'};
+ if(path.startsWith('@'))return {section:'user',parameter:path.slice(1)};
+ return {section:'profile',parameter:''};
+}
+function refreshCurrentAccount({postId='',deleted=false}={}){
+ const current=currentAccountView();
+ if(deleted)return mountAccount(current.section==='explore'?'explore':'profile');
+ if(postId&&current.section==='post')current.parameter=postId;
+ return mountAccount(current.section,current.parameter);
+}
 
 function notify(message,type='success'){
  const el=document.querySelector('#ua-toast');if(!el)return;
@@ -657,14 +673,14 @@ async function mountAccount(section='profile',parameter=''){
  if(['circle','home','feed'].includes(section))section='explore';
  // Legacy message destinations must always open Inbox, never the personal Profile fallback.
  if(['message','messages','inbox'].includes(section)){location.hash='#/inbox';return;}
- const mountSequence=++accountMountSequence,routeVersion=window.__pluitsRouteVersion||0,requestedHash=location.hash;
- const isCurrent=()=>mountSequence===accountMountSequence&&routeVersion===(window.__pluitsRouteVersion||0)&&requestedHash===location.hash;
+ const mountSequence=++accountMountSequence,routeVersion=window.__pluitsRouteVersion||0,requestedAddress=location.pathname+location.search+location.hash;
+ const isCurrent=()=>mountSequence===accountMountSequence&&routeVersion===(window.__pluitsRouteVersion||0)&&requestedAddress===(location.pathname+location.search+location.hash);
  if(section!=='activity'&&activityNotificationChannel){supabase.removeChannel(activityNotificationChannel);activityNotificationChannel=null;}
  try{
   const {data:{session}}=await supabase.auth.getSession();if(!isCurrent())return;
   user=session?.user||null;
   if(!user&&(section==='user'||section==='post')){
-   const page=section==='user'?await publicProfilePage(parameter):await postDetailPage(parameter||location.hash.split('/')[3]||'');if(!isCurrent())return;
+   const page=section==='user'?await publicProfilePage(parameter):await postDetailPage(parameter||currentAccountView().parameter||'');if(!isCurrent())return;
    document.querySelector('#app').innerHTML=frame(page,section==='post'?'post':'explore');if(section==='post')bindDiscoveryHeader();bindProfileTabs();return;
   }
   if(['auth','register','login'].includes(section)){authScreen(section==='auth'?parameter:section);return;}
@@ -673,7 +689,7 @@ async function mountAccount(section='profile',parameter=''){
   accountContext=await loadAccountContext(supabase,user);if(!isCurrent())return;
   unreadNotificationCount=await countUnreadActivity();if(!isCurrent())return;
   if(section==='profile')updateSEO({title:profile.display_name+' (@'+profile.username+') — Pluits',description:(profile.bio||'Profil komunitas '+profile.display_name+' di Pluits.').slice(0,160),path:'#/@'+encodeURIComponent(profile.username)});
-  const page=section==='explore'?await feedPage():section==='activity'?await notificationPage():section==='reels'?await reelsPage(parameter):section==='create'?await createPage():section==='upgrade'?upgradePage():section==='story'?await storyComposePage():section==='live'?livePage():section==='saved'?await savedPage():section==='reel'?await composePage('', 'reel'):section==='compose'?await composePage(parameter):section==='drafts'?await draftsPage():section==='addresses'?await addressPage():section==='wallet'?await walletPage():section==='post'?await postDetailPage(parameter||location.hash.split('/')[3]||''):section==='user'?await publicProfilePage(parameter):section==='followers'?await followListPage('followers'):section==='following'?await followListPage('following'):section==='requests'?await followListPage('followers'):section==='preview'?await profilePage(true):section==='profile'?await profilePage(false,parameter==='edit'):section==='professional'?professionalPage(accountContext,profile):section==='professional-create'?professionalFormPage(accountContext,profile):section==='settings'?settingsHubPage():section==='security'?await accountSecurityPage(supabase,user):section==='blocked'?await blockedAccountsPage():section==='hidden-content'?await hiddenContentPage():section==='content-settings'?await accountSettingsPage(supabase,user):'<section class="ua-panel ua-error"><h1>Halaman akun tidak ditemukan</h1><p>Tujuan akun "'+esc(section)+'" belum tersedia.</p><a class="ua-outline" href="#/account/explore">Kembali ke Circle</a></section>';
+  const page=section==='explore'?await feedPage():section==='activity'?await notificationPage():section==='reels'?await reelsPage(parameter):section==='create'?await createPage():section==='upgrade'?upgradePage():section==='story'?await storyComposePage():section==='live'?livePage():section==='saved'?await savedPage():section==='reel'?await composePage('', 'reel'):section==='compose'?await composePage(parameter):section==='drafts'?await draftsPage():section==='addresses'?await addressPage():section==='wallet'?await walletPage():section==='post'?await postDetailPage(parameter||currentAccountView().parameter||''):section==='user'?await publicProfilePage(parameter):section==='followers'?await followListPage('followers'):section==='following'?await followListPage('following'):section==='requests'?await followListPage('followers'):section==='preview'?await profilePage(true):section==='profile'?await profilePage(false,parameter==='edit'):section==='professional'?professionalPage(accountContext,profile):section==='professional-create'?professionalFormPage(accountContext,profile):section==='settings'?settingsHubPage():section==='security'?await accountSecurityPage(supabase,user):section==='blocked'?await blockedAccountsPage():section==='hidden-content'?await hiddenContentPage():section==='content-settings'?await accountSettingsPage(supabase,user):'<section class="ua-panel ua-error"><h1>Halaman akun tidak ditemukan</h1><p>Tujuan akun "'+esc(section)+'" belum tersedia.</p><a class="ua-outline" href="#/account/explore">Kembali ke Circle</a></section>';
   if(!isCurrent())return;
   const headerAvatar=await signed(profile.avatar_path);if(!isCurrent())return;
   const app=document.querySelector('#app');if(!app)return;
@@ -689,7 +705,7 @@ async function mountAccount(section='profile',parameter=''){
   document.querySelector('#ua-edit-profile-link')?.addEventListener('click',e=>{e.preventDefault();document.querySelector('#edit-profile')?.scrollIntoView({behavior:'smooth',block:'start'});});
   document.querySelector('#ua-menu-logout')?.addEventListener('click',async()=>{await supabase.auth.signOut();user=null;profile=null;location.hash='/';});
   normalizeFeedMediaFrames(document);bindPostGalleries();
-  if(section==='post'){const focusId=parameter||location.hash.split('/')[3]||'';requestAnimationFrame(()=>document.getElementById('ua-post-focus-'+focusId)?.scrollIntoView({block:'start',behavior:'auto'}));}
+  if(section==='post'){const focusId=parameter||currentAccountView().parameter||'';requestAnimationFrame(()=>document.getElementById('ua-post-focus-'+focusId)?.scrollIntoView({block:'start',behavior:'auto'}));}
   bindProfileTabs();bindNotificationActions();if(section==='drafts')bindDrafts();
   bindProfile();bindCompose();bindStoryCompose();bindStories();bindExploreFilters({getContentType:()=>exploreContentType,setContentType:value=>{exploreContentType=value;},getFilter:()=>exploreFilter,setFilter:value=>{exploreFilter=value;},setCategory:value=>{exploreCategory=value;},rerender:()=>mountAccount('explore')});bindPeopleRecommendationActions();bindTopTenSlider();bindAddresses();bindWallet();bindPostActions();bindFollowActions();
   if(section==='blocked')bindBlockedAccounts();if(section==='hidden-content')bindHiddenContent();if(section==='reels'){bindReelsPlayback();if(parameter)requestAnimationFrame(()=>{const target=[...document.querySelectorAll('[data-reel-post-id]')].find(el=>el.dataset.reelPostId===parameter);target?.scrollIntoView({block:'start'});});}if(section==='addresses')initMap();
@@ -731,7 +747,7 @@ function bindImageUpload(inputId,column,label){
  bindProfileImageUpload({
   inputId,column,label,documentRef:document,supabaseClient:supabase,bucket:BUCKET,userId:user?.id,
   notify,onProfileUpdated:data=>{profile=data;},
-  refreshProfile:()=>mountAccount('profile',location.hash.includes('/edit')?'edit':'')
+  refreshProfile:()=>mountAccount('profile',currentAccountView().parameter==='edit'?'edit':'')
  });
 }
 
@@ -1069,7 +1085,7 @@ function bindPostActions(){
       if(added.length){const ins=await supabase.from('post_media').insert(added);if(ins.error)throw ins.error;}
       const update=await supabase.from('user_posts').update({caption,tags:hashtags,visibility}).eq('id',id).eq('user_id',user.id);if(update.error)throw update.error;
       if(added.length&&!media.length){const parent=await supabase.from('user_posts').update({media_path:added[0].media_path,media_type:added.length===1?added[0].media_type:'mixed'}).eq('id',id).eq('user_id',user.id);if(parent.error)throw parent.error;}
-      notify('Postingan berhasil diperbarui.');await mountAccount(location.hash.includes('/account/explore')?'explore':location.hash.includes('/account/post/')?'post':'profile',id);
+      notify('Postingan berhasil diperbarui.');await refreshCurrentAccount({postId:id});
      }catch(err){
       if(added.length){await supabase.from('post_media').delete().in('media_path',added.map(x=>x.media_path));await supabase.storage.from(BUCKET).remove(added.map(x=>x.media_path));}
       notify(err.message||'Perubahan gagal disimpan.','error');btn.disabled=false;btn.textContent='Coba lagi';
@@ -1107,7 +1123,7 @@ function bindPostActions(){
     const paths=[...new Set([postRes.data.media_path,...(mediaRes.data||[]).map(x=>x.media_path)].filter(Boolean))];
     const del=await supabase.from('user_posts').delete().eq('id',id).eq('user_id',user.id);if(del.error)throw del.error;
     if(paths.length){const rm=await supabase.storage.from(BUCKET).remove(paths);if(rm.error)notify('Postingan terhapus, tetapi sebagian file media perlu dibersihkan: '+rm.error.message,'error');}
-    notify('Postingan berhasil dihapus.');await mountAccount(location.hash.includes('/account/explore')?'explore':'profile');
+    notify('Postingan berhasil dihapus.');await refreshCurrentAccount({deleted:true});
    }catch(err){notify(err.message||'Postingan gagal dihapus.','error');if(button)button.disabled=false;}
   });
 
@@ -1120,10 +1136,10 @@ function bindPostActions(){
   card.querySelector('[data-action="save"]')?.addEventListener('click',async()=>{
    const p=await supabase.from('post_saves').select('post_id').eq('post_id',id).eq('user_id',user.id).maybeSingle();
    const result=p.data?await supabase.from('post_saves').delete().eq('post_id',id).eq('user_id',user.id):await supabase.from('post_saves').insert({post_id:id,user_id:user.id});
-   if(result.error)notify(result.error.message,'error');else{notify(p.data?'Tanda disimpan dibatalkan.':'Postingan disimpan.');await mountAccount(location.hash.includes('/account/reels')?'reels':location.hash.includes('/explore')?'explore':location.hash.split('/')[2]==='post'?'post':'profile');}
+   if(result.error)notify(result.error.message,'error');else{notify(p.data?'Tanda disimpan dibatalkan.':'Postingan disimpan.');await refreshCurrentAccount({postId:id});}
   });
   card.querySelectorAll('[data-action="share"]').forEach(button=>button.addEventListener('click',async()=>{
-   const url=location.origin+location.pathname+'#/account/post/'+id;
+   const url=location.origin+canonicalizeLegacyRoute('#/account/post/'+id);
    try{if(navigator.share)await navigator.share({title:'Postingan Pluits',url});else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url);notify('Tautan disalin.');}else{prompt('Salin tautan postingan ini:',url);}}catch{}
   }));
   card.querySelector('[data-action="tag"]')?.addEventListener('click',async()=>{
@@ -1133,7 +1149,7 @@ function bindPostActions(){
    if(lookupError||!target){notify(lookupError?.message||'Username tidak ditemukan.','error');return;}
    const {error}=await supabase.from('post_tags').insert({post_id:id,tagged_user_id:target.id,tagged_by:user.id});
    if(error)notify(error.code==='23505'?'Akun tersebut sudah ditandai.':error.message,'error');
-   else{notify('@'+target.username+' berhasil ditandai.');await mountAccount(location.hash.includes('/explore')?'explore':location.hash.split('/')[2]==='post'?'post':'profile');}
+   else{notify('@'+target.username+' berhasil ditandai.');await refreshCurrentAccount({postId:id});}
   });
   card.querySelector('[data-action="comments"]')?.addEventListener('click',async()=>{
    const box=card.querySelector('.ua-comments');box.hidden=!box.hidden;if(!box.hidden)await loadComments(id,box);
