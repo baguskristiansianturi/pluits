@@ -327,7 +327,7 @@ export async function bindMessagesPage() {
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'user_messages'},payload=>{
       const conversationId=payload.new?.conversation_id;
       if(conversationId&&payload.new?.sender_id!==currentUser.id) db.rpc('mark_conversation_delivered',{p_conversation_id:conversationId});
-      if(conversationId===currentConversation) openConversation(currentConversation);
+      if(conversationId===currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
       else loadConversations();
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_messages'},payload=>{
@@ -335,10 +335,12 @@ export async function bindMessagesPage() {
       else loadConversations();
     })
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'user_message_receipts'},payload=>{
-      if(currentConversation) openConversation(currentConversation);
+      if(currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
+      else loadConversations();
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_message_receipts'},payload=>{
-      if(currentConversation) openConversation(currentConversation);
+      if(currentConversation&&document.querySelector('#pl-msg-layout')?.classList.contains('is-chat-open')) openConversation(currentConversation);
+      else loadConversations();
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_conversation_members'},payload=>{
       if(payload.new?.conversation_id===currentConversation) openConversation(currentConversation);
@@ -385,11 +387,12 @@ async function loadConversations() {
     return;
   }
   const ids=(members||[]).map(row=>row.conversation_id);
+  if(navigator.onLine&&ids.length) await Promise.all(ids.map(conversationId=>db.rpc('mark_conversation_delivered',{p_conversation_id:conversationId})));
   if(!ids.length){list.innerHTML=emptyStateMarkup({variant:'message',title:'Belum ada percakapan',description:'Pilih kontak atau cari nama pengguna untuk memulai percakapan.'});conversationCache=[];return;}
   const [convs,memberRows,msgRows]=await Promise.all([
     db.from('user_conversations').select('id,title,updated_at').in('id',ids).order('updated_at',{ascending:false}),
     db.from('user_conversation_members').select('conversation_id,user_id,last_read_at').in('conversation_id',ids),
-    db.from('user_messages').select('conversation_id,body,sender_id,created_at,message_type').in('conversation_id',ids).order('created_at',{ascending:false}).limit(200)
+    db.from('user_messages').select('conversation_id,body,sender_id,created_at,message_type,deleted_at').in('conversation_id',ids).order('created_at',{ascending:false}).limit(200)
   ]);
   if(activeInboxTab!=='primary')return;
   if(convs.error||memberRows.error||msgRows.error){
@@ -402,7 +405,10 @@ async function loadConversations() {
   if(activeInboxTab!=='primary')return;
   if(profiles.error){list.textContent=profiles.error.message;return;}
   const pmap=new Map((profiles.data||[]).map(person=>[person.id,person]));
-  const latest=new Map(); for(const message of msgRows.data||[]) if(!latest.has(message.conversation_id))latest.set(message.conversation_id,message);
+  const recentIds=(msgRows.data||[]).map(message=>message.id).filter(Boolean);
+  const hiddenPreview=recentIds.length?await db.from('user_message_hidden').select('message_id').eq('user_id',currentUser.id).in('message_id',recentIds):{data:[],error:null};
+  const hiddenPreviewIds=new Set((hiddenPreview.data||[]).map(row=>row.message_id));
+  const latest=new Map(); for(const message of msgRows.data||[]) if(!hiddenPreviewIds.has(message.id)&&!latest.has(message.conversation_id))latest.set(message.conversation_id,message);
   conversationCache=(convs.data||[]).map(conversation=>{
     const other=(memberRows.data||[]).find(row=>row.conversation_id===conversation.id&&row.user_id!==currentUser.id);
     const self=(memberRows.data||[]).find(row=>row.conversation_id===conversation.id&&row.user_id===currentUser.id);
@@ -413,7 +419,7 @@ async function loadConversations() {
   try { localStorage.setItem(threadsKey(),JSON.stringify(conversationCache.map(item=>({id:item.id,updated_at:item.updated_at,other:item.other})))); } catch {}
   list.innerHTML=conversationCache.length?conversationCache.map(conversation=>{
     const pending=queueFor(conversation.id).length;
-    return '<button class="pl-msg-thread '+(currentConversation===conversation.id?'active':'')+(conversation.unread?' is-unread':'')+'" data-open-chat="'+conversation.id+'"><span class="pl-msg-thread-head"><b>'+esc(conversation.other.display_name||conversation.other.username)+'</b>'+(conversation.unread?'<i aria-label="Unread message"></i>':'')+'</span><small>@'+esc(conversation.other.username)+'</small><p>'+esc(conversation.last?.message_type==='voice'?'🎙 Voice message':conversation.last?.body||'Belum ada pesan')+(pending?' · '+pending+' menunggu':'')+'</p></button>';
+    return '<button class="pl-msg-thread '+(currentConversation===conversation.id?'active':'')+(conversation.unread?' is-unread':'')+'" data-open-chat="'+conversation.id+'"><span class="pl-msg-thread-head"><b>'+esc(conversation.other.display_name||conversation.other.username)+'</b>'+(conversation.unread?'<i aria-label="Unread message"></i>':'')+'</span><small>@'+esc(conversation.other.username)+'</small><p>'+esc(conversation.last?.deleted_at?'Pesan ini dihapus':conversation.last?.message_type==='voice'?'🎙 Pesan suara':conversation.last?.body||'Belum ada pesan')+(pending?' · '+pending+' menunggu':'')+'</p></button>';
   }).join(''):emptyStateMarkup({variant:'message',title:'Belum ada percakapan',description:'Pilih kontak atau cari nama pengguna untuk memulai percakapan.'});
   list.querySelectorAll('[data-open-chat]').forEach(button=>button.onclick=()=>openConversation(button.dataset.openChat));
   list.hidden=false;
