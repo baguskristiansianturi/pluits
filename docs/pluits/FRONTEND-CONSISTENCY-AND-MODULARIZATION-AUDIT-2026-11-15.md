@@ -67,3 +67,10 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - Extended the automated CSS boundary checker to include `src/pages/`.
 - Three exact Inbox viewport selectors are allowlisted because they lock `html`, `body` and `#app` only while `.pl-msg` is mounted. The exception is documented next to the CSS block and in the engineering contract.
 - The legacy global files `src/style.css`, `src/styles/*` and top-level `styles/home-layout.css` are still not covered by the page/component guard. Their selector-to-owner audit and staged migration remain outstanding.
+
+
+## 15 November 2026 — Profile tab controller extraction
+
+- Extracted Profile Posts/Reels/Trips/Blog tab interaction into `src/features/profile/profile-tabs.js`; the Account page now supplies data/rendering dependencies through a small adapter.
+- Added stale-response protection so a slow Blog request cannot overwrite a tab the user has already switched away from.
+- Added a focused architecture regression test. This is a bounded controller extraction; it does not claim the remaining Account controller is decomposed.

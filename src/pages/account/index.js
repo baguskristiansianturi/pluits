@@ -5,6 +5,7 @@ import {renderBrandLogo} from '../../components/common/brand.js';
 import {renderPostActions,renderPostCard} from '../../features/posts/index.js';
 import {bindPostGalleries,normalizeFeedMediaFrames} from '../../features/posts/post-media-layout.js';
 import {bindSocialHeaderMenu} from '../../components/social/header-menu.js';
+import {bindProfileTabs as bindAccountProfileTabs} from '../../features/profile/profile-tabs.js';
 import {bindExploreFilters} from '../../features/discovery/explore-filters.js';
 import '../../features/posts/post-card.css';
 import '../../features/posts/comments.css';
@@ -278,24 +279,8 @@ async function profilePage(preview=false,editMode=false){
 function bindProfileMenu(){bindSocialHeaderMenu();}
 
 function bindProfileTabs(){
- const nav=document.querySelector('.ua-profile-tabs'),panel=document.querySelector('#ua-profile-tab-content');
- if(!nav||!panel)return;
- const postsMarkup=postGrid(ownPosts.filter(p=>p.content_kind!=='reel'));
- const reelsMarkup='<div class="ua-section-title"><strong>Reels</strong><a class="ua-outline" href="#/account/reel">＋ Buat Reel</a></div>'+(profileReels.length?postGrid(profileReels):'<div class="ua-empty"><strong>Belum ada Reels</strong><p>Video tunggal berdurasi hingga 60 detik akan muncul di sini.</p><a class="ua-primary ua-inline" href="#/account/reel">Unggah video</a></div>');
- const views={
-  posts:postsMarkup,
-  reels:reelsMarkup,
-  trip:'<div class="ua-profile-tab-empty"><span>⌖</span><strong>Perjalanan Anda</strong><p>Trip yang Anda buat, ikuti, atau bagikan akan tampil di sini.</p><a class="ua-outline" href="#/trip">Jelajahi Trip</a></div>'
- };
- nav.addEventListener('click',async e=>{
-  const button=e.target.closest('[data-profile-tab]');if(!button)return;
-  const tab=button.dataset.profileTab;if(!['posts','reels','trip','blog'].includes(tab))return;
-  nav.querySelectorAll('[data-profile-tab]').forEach(b=>{const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active));});
-  panel.dataset.activeTab=tab;
-  if(tab!=='blog'){panel.innerHTML=views[tab];return;}
-  panel.innerHTML='<div class="ua-profile-tab-empty" role="status">Memuat Blog…</div>';
-  try{panel.innerHTML=await profileBlogMarkup();}
-  catch(error){panel.innerHTML='<div class="ua-profile-tab-empty"><strong>Blog belum dapat dimuat</strong><p>'+esc(error.message||'Periksa koneksi lalu coba lagi.')+'</p></div>';}
+ bindAccountProfileTabs({
+  ownPosts,profileReels,postGrid,loadBlog:profileBlogMarkup,escapeHtml:esc
  });
 }
 async function profileBlogMarkup(){
