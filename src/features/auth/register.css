@@ -861,3 +861,63 @@
     padding-top:5px;
   }
 }
+
+
+/* Login final spacing: keep the copyright close to the form without a tall blank tail. */
+.pl-auth-mode-login.pl-register-page{
+  min-height:100svh;
+  padding-bottom:max(3px,env(safe-area-inset-bottom));
+}
+.pl-auth-mode-login .pl-register-main{
+  flex:0 0 auto;
+  margin:clamp(14px,2.5vh,24px) auto 0;
+  padding:0 0 clamp(12px,1.8vh,18px);
+}
+.pl-auth-mode-login .pl-register-footer{
+  flex:none;
+  margin:0 auto;
+  padding:5px 0 0;
+  line-height:1.25;
+}
+.pl-auth-mode-login .pl-register-footer .pl-register-copyright{
+  margin:0;
+}
+.pl-auth-mode-login .pl-auth-invite{display:none!important}
+.pl-auth-mode-login .pl-auth-tabs a{
+  display:flex;
+  min-height:40px;
+  align-items:center;
+  justify-content:center;
+  line-height:1.2;
+  cursor:pointer;
+}
+.pl-auth-mode-login .pl-auth-tabs a:focus-visible{
+  outline:2px solid rgba(32,184,174,.35);
+  outline-offset:2px;
+}
+.pl-auth-mode-login .pl-auth-provider-icon{
+  width:20px;
+  height:20px;
+  flex:0 0 20px;
+  display:block;
+}
+.pl-auth-mode-login .pl-auth-facebook,
+.pl-auth-mode-login .pl-auth-linkedin,
+.pl-auth-mode-login .pl-auth-twitter{
+  background:transparent;
+}
+@media(max-width:760px){
+  .pl-auth-mode-login .pl-register-main{
+    margin:14px auto 0;
+    padding:0 0 10px;
+  }
+  .pl-auth-mode-login .pl-register-footer{
+    padding:4px 0 0;
+  }
+}
+@media(max-height:720px) and (max-width:760px){
+  .pl-auth-mode-login .pl-register-main{
+    margin:8px auto 0;
+    padding-bottom:8px;
+  }
+}
