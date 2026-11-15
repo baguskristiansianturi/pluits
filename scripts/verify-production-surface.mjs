@@ -367,7 +367,7 @@ assert.match(discoveryFeature, /slice\(0,budget\)/, 'Autoplay concurrency must b
 assert.match(discoveryFeature, /preload='metadata'/, 'Video metadata must load only after a tile enters the viewport.');
 assert.match(discoveryFeature, /capturePoster/, 'Decoded video frames should be captured as static posters where allowed.');
 assert.match(discoveryFeature, /is-preview-unavailable/, 'Failed video decoding must preserve a visible fallback tile.');
-assert.match(discoveryFeature, /loading=\"\'+loading\+\"/, 'Photo loading priority must be controlled by tile position.');
+assert.match(discoveryFeature, /const loading=index<9/, 'Initial photo rows must be loaded eagerly while later tiles remain lazy.');
 assert.match(discoveryStyles, /\.ds-chips button\{[^}]*border:0!important/, 'Mobile category controls must not show pill borders.');
 assert.match(discoveryStyles, /font-size:8\.5px/, 'Mobile category labels must use compact typography.');
 assert.match(discoveryStyles, /\.ds-tile-video-mark svg\{width:12px/, 'Video mark must be smaller on the discovery grid.');
