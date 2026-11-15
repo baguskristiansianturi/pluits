@@ -1,5 +1,5 @@
 # PLUITS — SOCIAL CONTENT TRUST TECHNICAL SPEC
-**Tanggal:** 10 November 2026 · **Status:** SPECIFICATION / NO PRODUCTION MIGRATION AUTHORIZED
+**Tanggal:** 10 November 2026 · **Status:** SPECIFICATION / CURRENT RUNTIME DELTA APPENDED 15 NOVEMBER 2026; FUTURE DDL STILL REQUIRES APPROVAL
 
 ## 1. Batas
 Dokumen ini menyiapkan kontrak backend untuk Trust & Safety. Tidak mengizinkan migration, perubahan RLS/Storage, RPC production, atau automation. Frontend Social Media tetap prioritas; backend diimplementasikan setelah journey dan acceptance criteria diuji.
@@ -35,3 +35,12 @@ RLS melindungi report evidence, identity documents, private media, messages, dan
 
 ## 9. Account inactivity
 Penghapusan otomatis setelah 12 bulan belum disetujui. Jangan membuat scheduled deletion job. Jika kelak disetujui, definisikan inactivity, warning, recovery, business accounts, transaction/audit retention, legal holds, export, dan deletion scope.
+
+
+## 10. Current runtime delta — 15 November 2026
+- `content_reports` supports post, user, comment and entity targets. Moderator decisions for post/comment/entity targets are implemented in `review_content_report`.
+- A user-target report cannot be marked `actioned` until an account-level suspension/enforcement and appeal workflow exists. The RPC rejects the false-success transition; the admin UI explains the limitation.
+- User posts still publish immediately by default. A private trigger function protects `moderation_status` from owner-side changes after creation; only app_metadata admin/moderator or service_role can change moderation state.
+- This is post-publication report/review protection, not pre-publication moderation. The longer-term `pending_review` state machine remains unimplemented.
+- Migrations applied: `20261115123634_protect_user_post_moderation_status` and `20261115123729_prevent_false_actioned_user_reports`. Matching repository files exist.
+- Temporary SQL verification transactions were rolled back. No production post/report rows were changed by the tests.
