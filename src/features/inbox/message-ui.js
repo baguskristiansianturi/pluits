@@ -11,9 +11,9 @@ export function formatMessageDuration(value) {
   return Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
 }
 
-export function renderMessageStatus({ pending = false, receipt = null } = {}) {
+export function renderMessageStatus({ pending = false, receipt = null, voice = false } = {}) {
   if (pending) return '<span class="pl-msg-status is-pending" aria-label="Menunggu dikirim" title="Menunggu dikirim">◷</span>';
-  if (receipt?.read_at) return '<span class="pl-msg-status is-read" aria-label="Dibaca" title="Dibaca">✓✓</span>';
+  if (receipt?.read_at) return '<span class="pl-msg-status is-read" aria-label="Dibaca" title="Dibaca">✓✓</span>' + (voice && receipt?.played_at ? '<span class="pl-msg-played" aria-label="Pesan suara diputar" title="Pesan suara diputar">●</span>' : '');
   if (receipt?.delivered_at) return '<span class="pl-msg-status is-delivered" aria-label="Terkirim ke perangkat" title="Terkirim ke perangkat">✓✓</span>';
   return '<span class="pl-msg-status is-sent" aria-label="Terkirim ke server" title="Terkirim ke server">✓</span>';
 }
@@ -34,7 +34,7 @@ export function renderMessageMarkup(row, { currentUserId, pending = false, recei
       (canDeleteForEveryone ? '<button type="button" data-message-action="delete-everyone">Hapus untuk semua</button>' : '') +
       '</div></details>'
     : '';
-  const status = mine ? renderMessageStatus({ pending, receipt }) : '';
+  const status = mine ? renderMessageStatus({ pending, receipt, voice }) : '';
   return '<article class="pl-msg-bubble ' + (mine ? 'mine' : 'theirs') + (pending ? ' is-pending' : '') + (deleted ? ' is-deleted' : '') + '" data-message-id="' + esc(row.id || '') + '" data-message-body="' + esc(row.body || '') + '">' +
     content + actions +
     '<footer class="pl-msg-meta"><time datetime="' + esc(row.created_at || '') + '">' + formatMessageTime(row.created_at) + '</time>' + status + '</footer></article>';
