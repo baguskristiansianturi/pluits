@@ -23,7 +23,7 @@ let networkListenersBound = false;
 let activeInboxTab = 'primary';
 
 const queueKey = () => 'pluits:dm:outbox:v1:' + currentUser.id;
-const contactsKey = () => 'pluits:dm:contacts:v1:' + currentUser.id;
+const contactsKey = () => 'pluits:dm:contacts:v2:' + currentUser.id;
 const threadsKey = () => 'pluits:dm:threads:v1:' + currentUser.id;
 function readQueue() {
   try { const rows = JSON.parse(localStorage.getItem(queueKey()) || '[]'); return Array.isArray(rows) ? rows : []; }
