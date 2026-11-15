@@ -42,6 +42,14 @@ function formatDuration(value) { return formatMessageDuration(value); }
 function messageMarkup(row, pending = false, receipt = null, recipientOnline = false) {
   return renderMessageMarkup(row, { currentUserId: currentUser?.id, pending, receipt, recipientOnline });
 }
+function appendMessageToOpenChat(chat,row,{pending=false}={}) {
+  const stream=chat?.querySelector('.pl-msg-stream');
+  if(!stream||!row)return;
+  if(row.id&&stream.querySelector('[data-message-id="'+CSS.escape(String(row.id))+'"]'))return;
+  stream.querySelector('.pl-msg-empty-state,.pl-msg-empty')?.remove();
+  stream.insertAdjacentHTML('beforeend',messageMarkup(row,pending));
+  stream.scrollTop=stream.scrollHeight;
+}
 async function hydrateVoicePlayers(container) {
   const players=[...container.querySelectorAll('audio[data-voice-path]')];
   await Promise.all(players.map(async player=>{
@@ -169,10 +177,12 @@ function bindVoiceRecorder(chat, conversationId) {
         conversation_id:conversationId,sender_id:currentUser.id,body:'',
         message_type:'voice',media_path:path,media_duration_seconds:duration,
         media_mime_type:mime,client_message_id:crypto.randomUUID()
-      });
+      }).select('*').single();
       if(saved.error){await db.storage.from('pluits-message-media').remove([path]);throw saved.error;}
-      if(status)status.textContent='Pesan suara terkirim.';
-      await openConversation(conversationId);await loadConversations();
+      appendMessageToOpenChat(chat,saved.data);
+      if(status)status.textContent='';
+      await hydrateVoicePlayers(chat);
+      await loadConversations();
     }catch(error){if(status)status.textContent='Gagal mengirim pesan suara: '+(error?.message||'Coba lagi.');}
     finally{setIdle();}
   };
@@ -786,6 +796,8 @@ async function openConversation(id) {
   bindVoiceRecorder(chat,id);
   bindAttachmentComposer(chat,id);
   const form=chat.querySelector('#pl-msg-compose');
+  // Always suppress native navigation; message submission is handled in-app.
+  form.addEventListener('submit',event=>event.preventDefault(),true);
   bindTextComposer(form);
   form.onsubmit=async event=>{
     event.preventDefault();
@@ -796,17 +808,19 @@ async function openConversation(id) {
     if(!navigator.onLine) {
       const queue=readQueue(); queue.push(item);
       if(!writeQueue(queue)){alert('Penyimpanan offline di perangkat tidak tersedia. Pesan belum disimpan.');button.disabled=false;return;}
-      form.reset();if(textarea){delete textarea.dataset.replyTo;textarea.placeholder='Ketik pesan';} await openConversation(id); await loadConversations(); updateNetworkStatus(); return;
+      form.reset();if(textarea){delete textarea.dataset.replyTo;textarea.placeholder='Ketik pesan';textarea.style.height='auto';} appendMessageToOpenChat(chat,item,{pending:true}); await loadConversations(); updateNetworkStatus(); return;
     }
     const {created_at,...messagePayload}=item;
-    const {error}=await db.from('user_messages').upsert(messagePayload,{onConflict:'sender_id,client_message_id',ignoreDuplicates:true});
+    const {data:saved,error}=await db.from('user_messages').upsert(messagePayload,{onConflict:'sender_id,client_message_id',ignoreDuplicates:true}).select('*').single();
     if(error) {
       if(!navigator.onLine) {
         const queue=readQueue();queue.push(item);
         if(!writeQueue(queue)){alert('Pesan gagal dikirim dan tidak dapat disimpan offline: '+error.message);button.disabled=false;return;}
+        appendMessageToOpenChat(chat,item,{pending:true});
       } else {alert(error.message);button.disabled=false;return;}
-    }
-    form.reset(); await openConversation(id); await loadConversations();
+    } else appendMessageToOpenChat(chat,saved||{...item,id:item.client_message_id});
+    form.reset();if(textarea){delete textarea.dataset.replyTo;textarea.placeholder='Ketik pesan';textarea.style.height='auto';}
+    await loadConversations();button.disabled=false;
   };
   const stream=chat.querySelector('.pl-msg-stream'); stream.scrollTop=stream.scrollHeight;
   await loadConversations();
