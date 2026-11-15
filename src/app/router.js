@@ -97,7 +97,8 @@ export async function route(homeFn){
   else if(r==='inbox'&&v==='settings'){
    const mod=await import('../pages/messages/settings.js');h=mod.messageSettingsPage();defer(()=>mod.bindMessageSettingsPage(),version,()=>route(homeFn));
   }
-  else if(r==='message'||r==='messages'||r==='inbox'){
+  else if(r==='messages'){location.hash='#/inbox';return;}
+  else if(r==='inbox'){
    const mod=await import('../pages/messages/index.js');h=mod.messagesPage();defer(()=>mod.bindMessagesPage(),version,()=>route(homeFn));
   }
   else if(r==='admin'&&v==='moderation'){

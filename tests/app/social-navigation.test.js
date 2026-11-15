@@ -73,11 +73,11 @@ test('profile hero has isolated responsive layouts for desktop, mobile and narro
 
 test('Circle, Profile and Messages resolve directly to their own page controllers',async()=>{
  const router=await (await import('node:fs/promises')).readFile(new URL('../../src/app/router.js',import.meta.url),'utf8');
+ const account=await (await import('node:fs/promises')).readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
  assert.ok(router.includes("else if(r==='circle')") && router.includes("mountUserAccount('explore')"),'Circle must mount the Circle feed directly.');
  assert.ok(router.includes("else if(r==='profile')") && router.includes("mountUserAccount('profile',v||'')"),'Profile must mount the personal profile directly.');
- assert.ok(router.includes("r==='messages'||r==='inbox'") && router.includes("messagesPage()"),'Messages and Inbox must mount the Inbox controller directly.');
- const directInbox=router.match(/else if\(r==='message'\|\|r==='messages'\|\|r==='inbox'\)\{([\s\S]*?)\n  else if\(r==='admin'/)?.[1]||'';
- assert.ok(directInbox.includes('messagesPage()')&&!directInbox.includes("location.hash='#/inbox';return;"),'The direct Inbox route must mount without redirecting.');
+ assert.ok(router.includes("else if(r==='messages'){location.hash='#/inbox';return;}") && router.includes("else if(r==='inbox')") && router.includes("messagesPage()"),'Legacy Messages must normalize to canonical Inbox, which mounts the Inbox controller.');
+ assert.ok(account.includes("if(!user){if(section==='profile'){location.hash='#/account/login';return;}authScreen('login');return;}"),'A guest opening Profile directly must be redirected to the canonical Login URL.');
 });
 
 
