@@ -3,10 +3,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {renderSocialHeader,renderSocialMobileNav} from '../../src/components/social/navigation.js';
 import {ROUTES} from '../../src/components/social/navigation-routes.js';
-import {CIRCLE_DEMO_PEOPLE,renderPeopleRecommendations} from '../../src/features/discovery/people-recommendations.js';
+import {renderPeopleRecommendations} from '../../src/features/discovery/people-recommendations.js';
 import {readFile} from 'node:fs/promises';
-import {LOCAL_PRODUCT_SHOWCASE,renderLocalProductCard} from '../../src/features/marketplace/local-product-showcase.js';
-import {TOP_TEN_DEMO_ITEMS} from '../../src/features/discovery/top-ten-cards.js';
+
+import {loadTopTenTrending,renderTopTenSection} from '../../src/features/discovery/top-ten-cards.js';
 
 test('canonical destinations keep home, inbox and profile on separate routes',()=>{
  assert.equal(ROUTES.home,'/pluits/circle/');
@@ -151,7 +151,7 @@ test('signed-in home leads with Bali experiences, search, wishlist and the perso
  assert.ok(account.includes('ua-home-topic-carousel')&&account.includes('ua-home-compose-prompt')&&!account.includes('REKOMENDASI PERSONAL')&&!account.includes('Atur minat')&&!account.includes('Pilih minat'),'Untukmu must show automatic recommendation cards without setup instructions or extra explanatory copy.');
  assert.ok(account.includes('trendSection+homeNearbySection()+peopleSection+storiesSection+filterNav+homeHeading')&&!account.includes('circleHeading')&&!account.includes('RUANG PERSONAL PLUITS'),'Circle order must be Top 10, nearby, people recommendations, Story, feed navbar, then real post cards.');
 
- assert.ok(topTen.includes("title:'Beef Slab'")&&topTen.includes("href:'#/places?category=restaurant'"),'Tapping a trending food item must open its matching directory category.');
+ assert.ok(topTen.includes("href:'#/place/'+encodeURIComponent(row.slug)")&&topTen.includes('categoryLabels[slug]'),'Trending cards must link to real directory entities and derive their category from backend records.');
  const directorySource=await readFile(new URL('../../src/pages/directory/index.js',import.meta.url),'utf8');
  assert.ok(directorySource.includes('params.get(\'category\')')&&directorySource.includes('state.categories.some(x=>x.slug===requested)'),'Directory must activate the category selected by a trending card.');
  assert.ok(!account.includes('"+discoverySection+'),'Home feed must not reference the removed category-card section.');
@@ -171,7 +171,7 @@ test('signed-in home leads with Bali experiences, search, wishlist and the perso
  assert.ok(peopleCss.includes('scroll-snap-type:x mandatory')&&peopleCss.includes('-webkit-overflow-scrolling:touch'),'People Recommendations remains the reference carousel interaction.');
  assert.ok(circleCss.includes('Canonical Circle Story + feed navigation layout')&&circleCss.includes('width:100%!important')&&circleCss.includes('calc((100% - 4px)/3)')&&circleCss.includes('ua-content-tabs>button.is-active:after'),'Story must align to the content gutter with a responsive three-up mobile rail, and feed tabs must use the canonical active indicator.');
  assert.ok(account.includes('.slice(0,30)'),'The signed-in home must cap rendered post hydration at 30 items.');
- assert.ok(topTen.includes('⌖ ')&&topTen.includes('ua-topten-copy')&&topTen.includes('TOP_TEN_DEMO_ITEMS'),'Top 10 cards must be an isolated, explicitly demo-only image presentation module.');
+ assert.ok(topTen.includes('ua-topten-copy')&&topTen.includes('loadTopTenTrending')&&!topTen.includes('TOP_TEN_DEMO_ITEMS'),'Top 10 cards must render only live directory activity.');
  const nearbySource=await readFile(new URL('../../src/pages/directory/index.js',import.meta.url),'utf8');
  const nearbyCards=await readFile(new URL('../../src/features/discovery/nearby-card.js',import.meta.url),'utf8');
  assert.ok(nearbySource.includes('Di sekitar Anda')&&nearbySource.includes('radius=5000')&&nearbySource.includes('user_post_directory_entities')&&nearbySource.includes('presentSlugs')&&nearbySource.includes('nearbyCategories'),'Nearby categories must be derived from published entities actually returned inside the radius.');
@@ -219,43 +219,33 @@ test('Circle category filtering normalizes tags with spaces to the same slug as 
  assert.ok(account.includes("const slug=String(raw||'').toLowerCase().replace(/^#/,'').trim().replace(/\\s+/g,'-')"));
 });
 
-test('Circle UI demo provides ten sample profiles without persisting fake accounts',()=>{
- assert.equal(CIRCLE_DEMO_PEOPLE.length,10);
- const html=renderPeopleRecommendations({demoPeople:CIRCLE_DEMO_PEOPLE.slice(0,8)});
- assert.equal((html.match(/class="ua-people-card ua-people-card-demo"/g)||[]).length,8);
- assert.doesNotMatch(html,/DEMO UI|DEMO/);
- assert.match(html,/data-people-demo-follow/);
- assert.doesNotMatch(html,/data-people-follow=/);
+test('Circle recommendations render only real profiles and an honest empty state',()=>{
+ const empty=renderPeopleRecommendations({people:[]});
+ assert.match(empty,/ua-people-empty/);
+ assert.doesNotMatch(empty,/ua-people-card-demo|data-people-demo-follow/);
+ const real=renderPeopleRecommendations({people:[{id:'real-user-1',display_name:'Akun Asli',visibility:'public'}]});
+ assert.match(real,/data-people-follow="real-user-1"/);
+ assert.doesNotMatch(real,/ua-people-card-demo|data-people-demo-follow/);
 });
 
-test('Circle uses demo content only below ten registered profiles and keeps section surfaces transparent',async()=>{
+test('Circle page never renders synthetic people, Stories or products',async()=>{
  const account=await readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
+ const people=await readFile(new URL('../../src/features/discovery/people-recommendations.js',import.meta.url),'utf8');
+ assert.doesNotMatch(account,/data-demo-story|showCircleDemo|demoStoryCards|LOCAL_PRODUCT_SHOWCASE|sampleCards|demoCount/);
+ assert.doesNotMatch(people,/demoCards|demoPeople|randomuser\.me/);
+ assert.match(account,/Belum ada produk lokal tersedia di area ini/);
+ assert.match(account,/Produk lokal belum dapat dimuat saat ini/);
  const css=await readFile(new URL('../../src/pages/account/circle-experience.css',import.meta.url),'utf8');
- assert.match(account,/registeredProfileCount<10/);
- assert.match(account,/CIRCLE_DEMO_PEOPLE\.slice\(0,Math\.max\(0,10-renderedStoryCount\)\)/);
- assert.match(account,/data-demo-story='true'/);
  assert.ok(css.includes('.ua-social-home .ua-circle-stories,.ua-social-home .ua-people-recommendations{margin:0 0 20px;padding:17px 0 10px;border:0;border-radius:0;background:transparent'));
 });
 
-
-test('Circle home provides ten realistic Bali local-product cards using marketplace card structure',async()=>{
- assert.equal(LOCAL_PRODUCT_SHOWCASE.length,10);
- const cards=LOCAL_PRODUCT_SHOWCASE.map(item=>renderLocalProductCard(item,{demo:true}));
- assert.equal(cards.length,10);
- assert.ok(cards.every(card=>card.includes('class="pl-market-product ua-home-market-product"')));
- assert.ok(cards.every(card=>card.includes('href="#/market-product/showcase-')));
- assert.ok(cards.every(card=>!/\bDEMO\b/i.test(card)));
- const home=await readFile(new URL('../../src/pages/account/index.js',import.meta.url),'utf8');
- assert.ok(home.includes('public_marketplace_products')&&home.includes('renderLocalProductCard'));
- assert.ok(home.indexOf('"+maybeLike+discoverMore')>home.indexOf('"+feedMarkup'), 'Local products must follow the Circle post feed.');
-});
-
-test('Top 10 trending sample spans Bali destinations and venue categories, not marketplace products',()=>{
- assert.equal(TOP_TEN_DEMO_ITEMS.length,10);
- assert.ok(TOP_TEN_DEMO_ITEMS.some(item=>item.location==='Lovina'));
- assert.ok(TOP_TEN_DEMO_ITEMS.some(item=>item.location==='Ubud'));
- assert.ok(TOP_TEN_DEMO_ITEMS.some(item=>item.location==='Sanur'));
- assert.ok(!TOP_TEN_DEMO_ITEMS.some(item=>item.category==='Produk'));
+test('Top 10 trending uses live directory activity and has no fabricated fallback',async()=>{
+ const source=await readFile(new URL('../../src/features/discovery/top-ten-cards.js',import.meta.url),'utf8');
+ assert.match(source,/directory_nearby/);
+ assert.match(source,/user_post_directory_entities/);
+ assert.doesNotMatch(source,/Babi Guling Bu Coco|Beef Slab/);
+ assert.deepEqual(await loadTopTenTrending(),[]);
+ assert.equal(renderTopTenSection([]),'');
 });
 
 
@@ -266,11 +256,11 @@ test('Bali Top 10 uses a Bali-wide directory query and recent public-post signal
  assert.ok(directory.includes("region==='bali'")&&directory.includes("state.radius=100000")&&directory.includes('value="bali"'));
 });
 
-test('Showcase product detail returns to the Marketplace and does not enable sample checkout',async()=>{
+test('Marketplace product detail resolves only published backend products',async()=>{
  const source=await readFile(new URL('../../src/pages/marketplace/index.js',import.meta.url),'utf8');
- assert.ok(source.includes('getLocalProductDemo(id)'));
- assert.ok(source.includes('href="#/marketplace" class="pl-trip-back">← Kembali ke Marketplace'));
- assert.ok(source.includes('Produk ini belum tersedia untuk pemesanan.'));
+ assert.doesNotMatch(source,/getLocalProductDemo|LOCAL_PRODUCT_SHOWCASE/);
+ assert.ok(source.includes("from('public_marketplace_products')"));
+ assert.ok(source.includes('Produk tidak tersedia atau sudah tidak dipublikasikan.'));
 });
 
 
