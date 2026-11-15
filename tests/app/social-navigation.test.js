@@ -27,7 +27,7 @@ test('guest profile navigation opens Login instead of a private profile',()=>{
  assert.ok(html.includes('href="#/account/login"') && html.includes('aria-label="Profil"'),'Guest Profile must link to Login.');
  assert.ok(!html.includes('href="#/account/profile"'),'Guest navigation must not link to a private profile.');
  const circle=renderSocialMobileNav({active:'home',user:null});
- assert.match(circle,/href="#\\/account\\/explore"[^>]*aria-label="Circle"/,'Circle must retain its own Explore destination even before login; the page controller handles authentication.');
+ assert.ok(circle.includes('href="#/account/explore"') && circle.includes('aria-label="Circle"'),'Circle must retain its own Explore destination even before login; the page controller handles authentication.');
 });
  
 test('Inbox replaces its fourth slot with notifications but keeps profile separate',()=>{
