@@ -16,6 +16,8 @@ test('message markup escapes content and only exposes delete-for-everyone to sen
   assert.doesNotMatch(own, /<script>/);
   assert.match(own, /data-message-action="delete-everyone"/);
   assert.doesNotMatch(other, /data-message-action="delete-everyone"/);
+  const oldMessage = renderMessageMarkup({ ...row, created_at: new Date(Date.now() - 49 * 60 * 60 * 1000).toISOString() }, { currentUserId: 'u1' });
+  assert.doesNotMatch(oldMessage, /data-message-action="delete-everyone"/);
 });
 
 test('voice duration is formatted as minutes and seconds', () => {
