@@ -4,6 +4,17 @@ import { renderSocialHeader, renderSocialMobileNav } from '../src/components/soc
 import { getMediaMime, getMediaExtension, validateMediaFile } from '../src/features/media/media-types.js';
 
 const read = (path) => readFileSync(path, 'utf8');
+const accountCssSlices = [
+  '01-account-shell-and-settings.css',
+  '02-profile-and-social-controls.css',
+  '03-feed-and-media-layout.css',
+  '04-profile-and-post-overrides.css',
+  '05-creation-studio.css',
+  '06-circle-home-discovery.css',
+  '07-top-ten-and-content-shelves.css',
+  '08-nearby-and-feed-overrides.css',
+];
+const accountCss = accountCssSlices.map(name => read('src/pages/account/styles/' + name)).join('\\n');
 const retiredFiles = [
   'src/app/page-factory.js',
   'src/app/services.js',
@@ -221,7 +232,7 @@ assert.ok(socialHome.includes("uploadMediaFile(file,path,mime,()=>{})"), 'Story 
 assert.ok(socialHome.includes('let selectedFiles=[]') && socialHome.includes('data-remove-media'), 'Composer must preserve selected files and allow removing individual media.');
 assert.ok(socialHome.includes('name="visibility"') && socialHome.includes('class="ua-post-options"'), 'Post audience settings must be available inline in the compact composer.');
 assert.ok(/class="[^"]*ua-compose-workspace/.test(socialHome) && !socialHome.includes('name="tagged_users"'), 'Composer must keep publishing focused on media, caption, and audience without unnecessary tagging fields.');
-const accountComposerCss = read('src/pages/account/user-account.css');
+const accountComposerCss = accountCss;
 assert.ok(accountComposerCss.includes('.ua-compose-header') && accountComposerCss.includes('.ua-clean-composer .ua-compose-actions') && accountComposerCss.includes('env(safe-area-inset-bottom)'), 'Composer must provide responsive mobile layout and safe-area-aware publish actions.');
 assert.ok(socialHome.includes("files.length!==1||!getMediaMime(files[0]).startsWith('video/')"), 'Reel must require exactly one video file using the shared media-type module.');
 assert.ok(socialHome.includes('const mediaRecord={media_path:path') && socialHome.includes("storage.from(BUCKET).remove(uploaded.map(media=>media.media_path))"), 'Failed video validation must clean up uploaded objects.');
@@ -229,7 +240,7 @@ const composerCss = read('src/styles/social-navigation.css');
 assert.ok(composerCss.includes('.ua-clean-composer') && composerCss.includes('.ua-clean-media-item'), 'Composer must use the clean mobile media-picker and preview styles.');
 
 
-const accountMobileCss = read('src/pages/account/user-account.css');
+const accountMobileCss = accountCss;
 for (const selector of ['.ua-social-home .ua-stories-block', '.ua-social-home .ua-story-strip', '.ua-social-home .ua-post-head', '.ua-social-app .pl-social-mobile-nav']) {
   assert.ok(accountMobileCss.includes(selector), 'Mobile social layout missing responsive selector: ' + selector);
 }
