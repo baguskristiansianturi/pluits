@@ -353,3 +353,22 @@ assert.ok(homeFeedSource.includes(".eq('moderation_status','published').order('c
 assert.ok(homeFeedSource.includes("from('user_stories')") && homeFeedSource.includes(".eq('visibility','public')") && homeFeedSource.includes('followedSet.has(story.user_id)'), 'Circle must render active public stories only from followed accounts.');
 assert.ok(accountSource.includes("from('user_posts').select('*').eq('content_kind','reel')") && accountSource.includes("section==='reels'?await reelsPage(parameter)"), 'Reels discovery must query explicit Reel publications and support deep links.');
 assert.ok(accountSource.includes(".eq('content_kind','post').eq('visibility','public')"), 'Circle feed must exclude dedicated Reel publications.');
+
+
+const discoveryPage = read('src/pages/search/discovery.js');
+const discoveryFeature = read('src/features/discovery/explore-grid/index.js');
+const discoveryStyles = read('src/pages/search/discovery.css');
+assert.match(discoveryPage, /renderDiscoveryMediaTile/);
+assert.match(discoveryPage, /mountDiscoveryMediaPreviews/);
+assert.doesNotMatch(discoveryPage, /new IntersectionObserver/, 'Discovery route controller must not own media preview lifecycle.');
+assert.match(discoveryFeature, /navigator\.deviceMemory/, 'Video preview concurrency must consider device memory when available.');
+assert.match(discoveryFeature, /connection\?\.saveData/, 'Video preview concurrency must honor Save-Data.');
+assert.match(discoveryFeature, /slice\(0,budget\)/, 'Autoplay concurrency must be bounded by device capability.');
+assert.match(discoveryFeature, /preload='metadata'/, 'Video metadata must load only after a tile enters the viewport.');
+assert.match(discoveryFeature, /capturePoster/, 'Decoded video frames should be captured as static posters where allowed.');
+assert.match(discoveryFeature, /is-preview-unavailable/, 'Failed video decoding must preserve a visible fallback tile.');
+assert.match(discoveryFeature, /loading=\"\'+loading\+\"/, 'Photo loading priority must be controlled by tile position.');
+assert.match(discoveryStyles, /\.ds-chips button\{[^}]*border:0!important/, 'Mobile category controls must not show pill borders.');
+assert.match(discoveryStyles, /font-size:8\.5px/, 'Mobile category labels must use compact typography.');
+assert.match(discoveryStyles, /\.ds-tile-video-mark svg\{width:12px/, 'Video mark must be smaller on the discovery grid.');
+assert.match(discoveryStyles, /\.ds-video-poster-placeholder/, 'Video tiles must retain a neutral fallback while the first frame loads.');
