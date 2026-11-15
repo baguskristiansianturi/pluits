@@ -5,10 +5,7 @@ import {renderBrandLogo} from '../../components/common/brand.js';
 import {renderPostActions,renderPostCard} from '../../features/posts/index.js';
 import '../../features/posts/post-card.css';
 import '../../features/posts/comments.css';
-import {renderTopTenSection} from '../../features/discovery/top-ten-cards.js';
 import {renderExploreGrid,bindExploreGridPlayback} from '../../features/discovery/explore-grid.js';
-import {rankPeopleRecommendations,renderPeopleRecommendations,CIRCLE_DEMO_PEOPLE} from '../../features/discovery/people-recommendations.js';
-import '../../features/discovery/people-recommendations.css';
 import '../../features/posts/post-actions.css';
 import {renderSocialHeader,renderSocialMobileNav} from '../../components/social/navigation.js';
 import {updateSEO} from '../seo.js';
@@ -30,7 +27,6 @@ import {getMediaMime,getMediaExtension,validateMediaFile,getVideoDuration} from 
 import {createMediaUploader} from '../../features/media/storage-upload.js';
 import {createSignedUrlMap} from '../../services/storage/signed-urls.js';
 import {DEFAULT_PROFILE_IMAGE_FRAME,normalizeProfileImageFrame,profileImageFrameCss,readProfileImageFrame} from '../../features/profile/image-framing.js';
-import {homeNearbySection,bindHomeNearby} from '../directory/index.js';
 
 
 const BUCKET='pluits-user-media';
