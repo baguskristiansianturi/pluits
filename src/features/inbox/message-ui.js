@@ -28,7 +28,7 @@ export function renderMessageMarkup(row, { currentUserId, pending = false, recei
     : voice
       ? '<div class="pl-msg-voice-player"><audio controls preload="none" data-voice-path="' + esc(row.media_path) + '" data-message-id="' + esc(row.id || '') + '"></audio><span>Pesan suara · ' + formatMessageDuration(row.media_duration_seconds) + '</span><button type="button" class="pl-msg-voice-speed" data-voice-speed aria-label="Kecepatan pemutaran">1×</button></div>'
       : type === 'image' && row.media_path
-        ? '<a class="pl-msg-image-wrap" data-image-link href="#" target="_blank" rel="noopener" aria-label="Buka foto ukuran penuh"><img data-image-path="' + esc(row.media_path) + '" alt="Foto yang dikirim" loading="lazy"></a>' + (row.body ? '<div class="pl-msg-text">' + esc(row.body) + '</div>' : '')
+        ? '<a class="pl-msg-image-wrap" data-image-link href="#" target="_blank" rel="noopener" aria-label="Buka foto ukuran penuh"><img data-image-path="' + esc(row.media_path) + '" alt="' + esc(row.media_name || 'Foto yang dikirim') + '" loading="lazy" decoding="async"></a>' + (row.body ? '<div class="pl-msg-text">' + esc(row.body) + '</div>' : '')
         : type === 'file' && row.media_path
           ? '<a class="pl-msg-file" data-file-path="' + esc(row.media_path) + '" href="#" target="_blank" rel="noopener"><span class="pl-msg-file-icon" aria-hidden="true">PDF</span><span><b>' + esc(row.media_name || 'Dokumen') + '</b><small>' + esc(row.media_mime_type || 'File') + '</small></span><span aria-hidden="true">↓</span></a>' + (row.body ? '<div class="pl-msg-text">' + esc(row.body) + '</div>' : '')
           : '<div class="pl-msg-text">' + esc(row.body) + '</div>';
