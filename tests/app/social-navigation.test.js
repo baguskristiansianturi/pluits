@@ -248,3 +248,18 @@ test('Top 10 trending sample spans Bali destinations and venue categories, not m
  assert.ok(TOP_TEN_DEMO_ITEMS.some(item=>item.location==='Sanur'));
  assert.ok(!TOP_TEN_DEMO_ITEMS.some(item=>item.category==='Produk'));
 });
+
+
+test('Bali Top 10 uses a Bali-wide directory query and recent public-post signals',async()=>{
+ const source=await readFile(new URL('../../src/features/discovery/top-ten-cards.js',import.meta.url),'utf8');
+ const directory=await readFile(new URL('../../src/pages/directory/index.js',import.meta.url),'utf8');
+ assert.ok(source.includes('p_radius_m:100000')&&source.includes('user_post_directory_entities')&&source.includes("gte('created_at',since)"));
+ assert.ok(directory.includes("region==='bali'")&&directory.includes("state.radius=100000")&&directory.includes('value="bali"'));
+});
+
+test('Showcase product detail returns to the Marketplace and does not enable sample checkout',async()=>{
+ const source=await readFile(new URL('../../src/pages/marketplace/index.js',import.meta.url),'utf8');
+ assert.ok(source.includes('getLocalProductDemo(id)'));
+ assert.ok(source.includes('href="#/marketplace" class="pl-trip-back">← Kembali ke Marketplace'));
+ assert.ok(source.includes('Produk ini belum tersedia untuk pemesanan.'));
+});
