@@ -23,6 +23,7 @@ That is not the same as launch acceptance. The release still lacks founder Andro
 - Removed the hardcoded Top 10 Trending fallback. Top 10 now renders only from eligible live directory activity and is omitted when there are no real ranking rows.
 - Added regression coverage for real-only Circle content, live-only Top 10, published Marketplace product detail, permission isolation and SDK pinning.
 - Pinned the browser Supabase SDK to `@supabase/supabase-js@2.119.0`. It is still loaded from esm.sh at runtime, not bundled into the application.
+- Added real 192px/512px PNG PWA icons and a 180px PNG Apple touch icon; SVG remains as vector fallback. Manifest/build checks pass, but actual Add to Home Screen installation is still NOT TESTED. No offline app-shell is claimed.
 
 ### Database authorization
 - Applied migration `20261115122348_enforce_marketplace_order_payment_read_permissions`.
@@ -33,11 +34,11 @@ That is not the same as launch acceptance. The release still lacks founder Andro
 - No user account, post, message, media, order or payment row was deleted or rewritten.
 
 ### Deployment evidence
-- Verified commit: `8f4245bcf5ff158ade4e04dbeafbd44e61c925cb`.
-- GitHub Actions run: `43713663249` (#2176), SUCCESS.
-- Automated tests: **148 passed, 0 failed**.
+- Verified commit: `61d632b544541a901485cc6f54e85b2558d5a0f3`.
+- GitHub Actions run: `43714307219` (#2188), SUCCESS.
+- Automated tests: **150 passed, 0 failed**.
 - Vite production build: SUCCESS.
-- Build-output verification: SUCCESS.
+- Build-output verification: SUCCESS, including PWA manifest and raster icon assets.
 - Pages artifact upload and GitHub Pages deployment: SUCCESS.
 - Android UAT and founder acceptance: NOT TESTED / PENDING.
 
