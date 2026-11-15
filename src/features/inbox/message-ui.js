@@ -25,7 +25,7 @@ export function renderMessageMarkup(row, { currentUserId, pending = false, recei
   const content = deleted
     ? '<span class="pl-msg-deleted">Pesan ini dihapus</span>'
     : voice
-      ? '<div class="pl-msg-voice-player"><audio controls preload="none" data-voice-path="' + esc(row.media_path) + '"></audio><span>Pesan suara · ' + formatMessageDuration(row.media_duration_seconds) + '</span><button type="button" class="pl-msg-voice-speed" data-voice-speed aria-label="Kecepatan pemutaran">1×</button></div>'
+      ? '<div class="pl-msg-voice-player"><audio controls preload="none" data-voice-path="' + esc(row.media_path) + '" data-message-id="' + esc(row.id || '') + '"></audio><span>Pesan suara · ' + formatMessageDuration(row.media_duration_seconds) + '</span><button type="button" class="pl-msg-voice-speed" data-voice-speed aria-label="Kecepatan pemutaran">1×</button></div>'
       : '<div class="pl-msg-text">' + esc(row.body) + '</div>';
   const sentAt = new Date(row.created_at).getTime();
   const canDeleteForEveryone = mine && Number.isFinite(sentAt) && Date.now() >= sentAt && Date.now() - sentAt <= 48 * 60 * 60 * 1000;
