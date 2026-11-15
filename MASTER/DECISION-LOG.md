@@ -189,3 +189,17 @@ Salin untuk keputusan berikutnya:
 - **Batas:** keputusan ini adalah perubahan presentation dan efisiensi pemuatan frontend. Tidak mengubah ranking, model bisnis, schema Supabase, atau aturan privasi/eligibility konten.
 - **Status implementasi:** PR #29 merged ke main pada commit `8cc383a7b86b4aba2ce8fcc40634241a3aa303a2`. CI #2012 SUCCESS dan Pages deployment #2013 SUCCESS. Circle `src/pages/account/index.js` tidak berubah. Android UAT dan founder acceptance masih pending.
 - **Refinement lanjutan:** PR #30 merged pada commit `398025b865b43fcd7e1e08e9514cfc2c0b6f34b0`; CI #2024 SUCCESS dan Pages deployment #2025 SUCCESS. Shared Jelajah search/notification header juga dipakai pada detail Post; kategori memakai grey translucent; tile tidak menampilkan nama/avatar; ikon video dan mata diperkecil; autoplay dibatasi pada subset video yang terlihat dan dimuat secara lazy. Android UAT dan founder acceptance masih pending.
+
+
+## D-012 — Jelajah adaptive media loading and modular preview lifecycle
+- **Tanggal keputusan:** 15 November 2026
+- **Status:** DECIDED
+- **Founder direction:** mobile category text is smaller and borderless; video mark is reduced; photo/video tiles must avoid blank white states; autoplay should use available device capacity while protecting low-memory phones.
+- **Keputusan implementasi:**
+  1. Jelajah category controls use compact typography, no visible border, a restrained selected state, and remain comfortably tappable.
+  2. Photos prioritize the first visible rows and progressively lazy-load later tiles; a neutral placeholder remains until image decoding completes.
+  3. Videos request metadata only near the viewport, expose a first decoded frame/poster when possible, and keep a neutral fallback surface if decode or autoplay fails.
+  4. Concurrent playback is adaptive to Save-Data, device memory, and CPU concurrency when browser APIs expose them. Low-capability devices receive a single active preview; medium devices receive two; capable desktop devices may receive four. Browser autoplay restrictions remain authoritative.
+  5. Media markup and preview lifecycle belong to `src/features/discovery/explore-grid/`; the route controller owns feed data and filtering. No media behavior is shared with Circle, Story or Reels.
+- **Batas:** no forced transcoding or source-quality downgrade is performed in the browser. Playback concurrency is reduced before image/video source quality is changed; original media remains available when opened.
+- **Dokumen implementasi:** `src/features/discovery/explore-grid/README.md`, checkpoint CP-085.

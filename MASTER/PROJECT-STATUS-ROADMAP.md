@@ -1354,3 +1354,17 @@ Mulai 8 November 2026, dokumen ini adalah satu-satunya roadmap implementasi, che
 - **Scope:** no Supabase schema or production data changes; Circle/Story/Reels remain untouched.
 - **Validation:** all 98 tests and Vite build passed on intermediate head #2021 after fixing the shared icon import; final selective-autoplay head #2023 is running. Production deployment NOT YET RELEASED; Android UAT NOT TESTED.
 - **Next:** verify final CI, merge PR, verify Pages deployment, then inspect the header and tile behavior on 360–390 px Android screens.
+
+
+## CP-085 — Jelajah compact categories and adaptive media rendering (15 November 2026)
+
+- **Branch:** `fix/explore-adaptive-media-mobile`.
+- **Founder direction:** category labels on mobile must be substantially smaller and more elegant, without visible pill borders; video icon smaller; photos and videos should render a visible frame rather than leaving blank white tiles; autoplay should use as much device capability as practical without overloading low-memory phones.
+- **Category carousel:** text reduced to 8–8.5 px on narrow mobile widths, 29–30 px minimum control height, no chip border, restrained teal selection surface. Horizontal scroll remains.
+- **Media fallback:** photo tiles show a neutral fallback surface until image decode succeeds; first three photos receive high fetch priority and first nine load eagerly, while later photos remain lazy. Video tiles show a non-white fallback surface until the first decoded frame is available; decoded frames are captured as bounded-size posters when browser CORS/canvas rules allow.
+- **Adaptive autoplay:** visible video tiles are ranked by viewport visibility and may play concurrently within a device budget. Save-Data / low-memory / low-core devices are limited to one active video; medium devices to two; capable desktop devices up to four. All visible videos can still load a static first frame; only active playback is budgeted. Reduced-motion, background, offscreen and route cleanup are respected.
+- **Modularization:** media markup and preview lifecycle moved into `src/features/discovery/explore-grid/index.js`; `src/features/discovery/explore-grid/README.md` defines its public API, responsibilities, performance contract and change boundaries. `src/pages/search/discovery.js` remains responsible for data fetching, category filtering, ranking and route composition.
+- **Isolation:** changes are scoped to Jelajah feature files and `.ds-*` CSS. No Circle, Story, Reels, Post detail, shared header, Supabase schema, storage policy or production data changes.
+- **Regression coverage:** production-surface checks verify module ownership, device-aware concurrency, Save-Data, lazy video metadata, poster capture, fallback surfaces, photo priority and borderless category styles.
+- **Status:** IMPLEMENTED IN FEATURE BRANCH / CI PENDING / NOT DEPLOYED / ANDROID UAT NOT TESTED.
+- **Next:** run complete PR CI, fix any regression, merge only after CI success, verify Pages deployment, then check actual video decode and memory behavior on 2 GB Android plus a higher-capability device.
