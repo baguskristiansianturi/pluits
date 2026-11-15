@@ -6,6 +6,7 @@ import { readFile } from 'node:fs/promises';
 test('Profile content tabs expose Feed, Reels, Trip and Blog with consistent SVG icons', async () => {
   const source = await readFile(new URL('../../src/pages/account/index.js', import.meta.url), 'utf8');
   const profilePage = await readFile(new URL('../../src/features/profile/profile-page.js', import.meta.url), 'utf8');
+  const publicProfilePage = await readFile(new URL('../../src/features/profile/public-profile-page.js', import.meta.url), 'utf8');
   const blogFeature = await readFile(new URL('../../src/features/profile/profile-blog-tab.js', import.meta.url), 'utf8');
   const css = readAccountCss();
   for (const tab of ['posts', 'reels', 'trip', 'blog']) assert.match(profilePage, new RegExp('data-profile-tab="' + tab + '"'));
@@ -14,6 +15,7 @@ test('Profile content tabs expose Feed, Reels, Trip and Blog with consistent SVG
   assert.match(source, /renderProfileBlogTab\(/);
   assert.match(blogFeature, /blog_public_routes/);
   assert.match(profilePage, /data-profile-username=/);
+  assert.match(publicProfilePage, /data-profile-username=/);
   assert.match(source, /bindProfileTabs\(\);return;/);
   assert.match(blogFeature, /Kunjungi Blog/);
   assert.doesNotMatch(source, /data-profile-tab="tagged"/);

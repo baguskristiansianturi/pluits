@@ -11,6 +11,7 @@ import {bindProfileImageUpload} from '../../features/profile/image-upload.js';
 import {bindProfileEditor} from '../../features/profile/profile-editor.js';
 import {renderProfileBlogTab} from '../../features/profile/profile-blog-tab.js';
 import {renderProfilePage} from '../../features/profile/profile-page.js';
+import {renderPublicProfilePage} from '../../features/profile/public-profile-page.js';
 import {bindExploreFilters} from '../../features/discovery/explore-filters.js';
 import '../../features/posts/post-card.css';
 import '../../features/posts/comments.css';
@@ -546,51 +547,12 @@ async function initMap(){
  }catch{el.innerHTML='<p class="ua-muted">Peta tidak dapat dimuat. Anda tetap dapat memasukkan koordinat secara manual atau memakai lokasi perangkat.</p>';}
 }
 async function publicProfilePage(username){
- const {data,error}=await supabase.rpc('get_user_profile_directory',{p_username:username});
- if(error)throw error;
- const target=Array.isArray(data)?data[0]:data;
- if(!target)throw new Error('Profil tidak ditemukan atau tidak tersedia.');
- const isOwner=!!user&&target.id===user.id;
- if(isOwner){history.replaceState(null,'',location.pathname+location.search+'#/account/profile');return profilePage(false);}
- updateSEO({title:target.display_name+' (@'+target.username+') — Pluits',description:(target.bio||'Lihat foto, video, dan aktivitas '+target.display_name+' di Pluits.').slice(0,160),path:'#/@'+encodeURIComponent(target.username)});
- let relation=null;
- if(user&&!isOwner){
-  const {data:r,error:re}=await supabase.from('user_follows').select('follower_id,following_id,status').eq('follower_id',user.id).eq('following_id',target.id).maybeSingle();
-  if(re)throw re;relation=r;
- }
- const {data:countsData,error:countsError}=await supabase.rpc('get_user_follow_counts',{p_user_id:target.id});
- if(countsError)throw countsError;
- const counts=Array.isArray(countsData)?countsData[0]:(countsData||{});
- const [avatarUrl,coverUrl]=await Promise.all([signed(target.avatar_path),signed(target.cover_path)]);
- let posts=[];
- if(target.visibility==='public'||isOwner||relation?.status==='accepted'){
-  const {data:rows,error:pe}=await supabase.from('user_posts').select('*').eq('user_id',target.id).eq('visibility','public').eq('moderation_status','published').order('created_at',{ascending:false}).limit(60);
-  if(pe)throw pe;posts=await hydratePosts(rows||[]);
- }
- const canSeeCounts=target.visibility==='public'||isOwner||relation?.status==='accepted';
- const reels=posts.filter(p=>p.media?.length===1&&p.media[0].media_type==='video'&&Number(p.media[0].duration_ms||0)>0&&Number(p.media[0].duration_ms||0)<=60000);
- profileReels=reels;
- const followLabel=isOwner?'Edit profil':relation?.status==='accepted'?'Mengikuti':relation?.status==='pending'?'Permintaan terkirim':target.visibility==='private'?'Minta mengikuti':'Ikuti';
- const action=isOwner?'<a class="ua-primary ua-inline" href="#/account/profile">Edit profil</a>':user?`<button type="button" class="ua-primary ua-inline" data-follow-target="${target.id}" data-follow-state="${relation?.status||''}" data-follow-username="${esc(target.username)}" ${relation?.status==='pending'&&relation.follower_id!==user.id?'disabled':''}>${followLabel}</button>`:'<a class="ua-primary ua-inline" href="#/account/login">Masuk untuk mengikuti</a>';
- const postsMarkup=target.visibility==='private'&&!isOwner&&relation?.status!=='accepted'?'<div class="ua-empty"><strong>Akun ini privat</strong><p>Ajukan permintaan mengikuti untuk melihat postingan akun ini.</p></div>':posts.length?postGrid(posts):'<div class="ua-empty"><strong>Belum ada postingan</strong><p>Postingan publik akan tampil di sini.</p></div>';
- return `<section class="ua-profile-card ua-public-profile">
-   ${profileMenuMarkup()}
-  <div class="ua-cover" ${coverUrl?`style="background-image:url('${coverUrl}')"`:''}><span>PLUITS PROFILE</span></div>
-  <div class="ua-profile-content"><div class="ua-profile-avatar">${avatar(avatarUrl,target.display_name,'large')}</div>
-   <div class="ua-profile-identity"><div class="ua-profile-name-row"><div><h2>${esc(target.display_name)}</h2><div class="ua-username">@${esc(target.username)}</div></div></div>
-    <p>${esc(target.bio||'')}</p><div class="ua-location">${target.public_city&&target.public_province?'⌖ '+esc(target.public_city)+', '+esc(target.public_province):''}</div>
-    <div class="ua-profile-stats"><span><strong>${canSeeCounts?posts.length:'—'}</strong><span>Postingan</span></span><span><strong>${canSeeCounts?(counts.followers_count??0):'—'}</strong><span>Pengikut</span></span><span><strong>${canSeeCounts?(counts.following_count??0):'—'}</strong><span>Mengikuti</span></span></div>
-    ${action}
-   </div>
-  </div>
- </section>
- <nav class="ua-profile-tabs" role="tablist" aria-label="Konten profil" data-profile-username="${esc(target.username)}" data-profile-owner-id="${target.id}">
-  <button class="active" type="button" role="tab" aria-selected="true" data-profile-tab="posts" title="Feed"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Feed</span></button>
-  <button type="button" role="tab" aria-selected="false" data-profile-tab="reels" title="Reels"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m10 8 6 4-6 4z"/></svg><span>Reels</span></button>
-  <button type="button" role="tab" aria-selected="false" data-profile-tab="trip" title="Trip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Trip</span></button>
-  <button type="button" role="tab" aria-selected="false" data-profile-tab="blog" title="Blog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 1 4 17.5z"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H20M8 7h8M8 10h8"/></svg><span>Blog</span></button>
- </nav>
- <section id="ua-profile-tab-content" class="ua-profile-tab-content" role="tabpanel">${postsMarkup}</section>`;
+ return renderPublicProfilePage({
+  username,user,supabaseClient:supabase,signed,hydratePosts,
+  setProfileReels:value=>{profileReels=value;},
+  postGrid,profileMenuMarkup,avatar,escapeHtml:esc,updateSEO,
+  renderOwnProfile:()=>profilePage(false)
+ });
 }
 async function notificationPage(){
  const {data,error}=await supabase.from('user_notifications').select('id,actor_user_id,notification_type,entity_type,entity_id,message,created_at,read_at').order('created_at',{ascending:false}).limit(60);

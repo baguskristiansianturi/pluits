@@ -118,3 +118,10 @@ A phase is complete only when the owner map is updated, consumers are tested, CS
 - Account now provides the active profile/session, signed-URL helper, post hydration, avatar/frame renderers and shared menu/post renderers through explicit dependencies.
 - Reels eligibility is returned through an explicit callback to preserve the existing Account state contract.
 - Updated route-surface and Profile tab tests to validate the feature owner rather than the legacy Account controller.
+
+
+## 15 November 2026 — Public Profile renderer extraction
+
+- Moved public-profile lookup, relationship state, visibility-gated post reads, follow counts, Reels eligibility and public Profile markup to `src/features/profile/public-profile-page.js`.
+- Account remains the route/session adapter and injects the current user, Supabase client, signed media/post hydration helpers and owner-profile fallback.
+- Preserved the existing private-profile visibility condition and accepted-follower access path; the feature test checks both personal and public Profile tab markup.

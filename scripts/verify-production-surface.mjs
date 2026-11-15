@@ -276,8 +276,9 @@ const profileSource = read('src/pages/account/index.js');
 const profileTabsSource = read('src/features/profile/profile-tabs.js');
 const profileEditorSource = read('src/features/profile/profile-editor.js');
 const profilePageSource = read('src/features/profile/profile-page.js');
+const publicProfilePageSource = read('src/features/profile/public-profile-page.js');
 for (const tab of ['posts', 'reels', 'trip', 'blog']) {
-  assert.ok(profilePageSource.includes('data-profile-tab="' + tab + '"'), 'Profile must expose the ' + tab + ' tab.');
+  assert.ok(profilePageSource.includes('data-profile-tab="' + tab + '"') && publicProfilePageSource.includes('data-profile-tab="' + tab + '"'), 'Personal and public Profile must expose the ' + tab + ' tab.');
 }
 assert.ok(profileTabsSource.includes('trip:\'<div class="ua-profile-tab-empty"'), 'Trip tab must render its own profile panel.');
 assert.ok(profilePageSource.includes('<span>Feed</span>'), 'Profile posts tab must be clearly labelled Feed.');
