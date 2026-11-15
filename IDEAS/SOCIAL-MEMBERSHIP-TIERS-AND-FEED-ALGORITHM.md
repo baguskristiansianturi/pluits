@@ -208,3 +208,84 @@ Seorang artis memilih akun dasar dan membuka konten untuk publik. Status publikn
 - **Production change:** NONE AUTHORIZED.
 
 Dokumen ini akan berkembang melalui diskusi founder. Bagian yang belum matang boleh dipindahkan, dihapus, atau ditulis ulang pada versi berikutnya; histori perubahan dan keputusan yang sudah disetujui tetap dipertahankan melalui mekanisme repository.
+
+
+## 14. Membership feature differentiation — tambahan diskusi founder
+
+Selain kendali lingkungan sosial, setiap level sedang dieksplorasi untuk memiliki kemampuan produk yang berbeda. Ini adalah sumbu kedua dan tidak boleh dicampur dengan audience visibility/feed preference.
+
+### 14.1 Matriks fitur awal (PROPOSED)
+
+| Kemampuan | Regular / Silver | Gold | Platinum |
+|---|---|---|---|
+| Feed sosial dan discovery publik dasar | Ya | Ya | Ya |
+| Membaca blog dan menjelajahi toko/katalog | Ya | Ya | Ya |
+| Preferensi lingkungan sosial | Dasar | Lebih luas | Lebih luas |
+| Riwayat pengunjung profil | Belum diusulkan | Diusulkan | Diusulkan |
+| People Nearby | Belum diusulkan | Belum diusulkan | Diusulkan |
+| Global People Discovery | Belum diusulkan | Belum diusulkan | Diusulkan |
+| Social matching | Belum diusulkan | Belum diusulkan | Diusulkan |
+| Dating dan mutual matching | Belum diusulkan | Belum diusulkan | Diusulkan |
+
+Tabel ini hanya menangkap contoh awal founder. Ia tidak menyatakan bahwa fitur telah tersedia atau bahwa semua fitur premium sudah final. Level di atas Platinum dan nama final Regular/Silver/Gold/Platinum masih terbuka.
+
+### 14.2 Gold — Profile Visitor History
+
+Gagasan: pemilik profil Gold dapat melihat daftar akun yang mengunjungi profilnya, serupa pola fitur profile-view history pada platform sosial lain.
+
+Batas produk yang perlu dirancang:
+- Definisikan kunjungan profil sebagai event terpisah dari view foto, post, story, atau konten lain. Jangan menyimpulkan semua aktivitas konten dari satu kunjungan.
+- Jelaskan kepada pengguna sebelum fitur aktif bahwa kunjungan profil dapat terlihat oleh pemilik profil.
+- Tentukan apakah visitor dapat memilih opt-out/anonymous mode, dan bagaimana pilihan itu memengaruhi visibilitasnya. Jangan menjadikan fitur sebagai pelacakan tersembunyi.
+- Tentukan retensi riwayat, kontrol hapus, pagination, dan batas waktu.
+- Hindari membuka data perilaku yang tidak relevan atau sensitif kepada pemilik profil.
+- Pastikan akses ke visitor history hanya bagi pemilik yang berhak dan tidak bocor lewat API, cache, notifikasi, atau analytics.
+
+### 14.3 Platinum — People Discovery
+
+Gagasan: Platinum mendapat modul penemuan orang yang dapat digunakan untuk menemukan koneksi sosial di sekitar area atau secara global.
+
+**People Nearby**
+- Discovery berdasarkan area perkiraan, bukan koordinat presisi atau alamat real-time.
+- Hanya aktif jika pengguna memilih ikut serta.
+- Pengguna dapat pause/hide, mengatur visibilitas, dan memblokir akun.
+- Jangan tampilkan jarak presisi yang memungkinkan triangulasi lokasi.
+- Pertimbangkan risiko stalking, keselamatan, usia, dan penyalahgunaan lokasi.
+
+**Global People Discovery**
+- Menemukan orang lintas kota/negara berdasarkan preferensi yang dinyatakan pengguna, seperti bahasa, minat, lokasi umum, dan tujuan koneksi.
+- Berikan kontrol untuk tidak direkomendasikan atau membatasi siapa yang dapat menemukan profil.
+- Ranking harus relevan dan aman; jangan menjual atau mengekspos atribut sensitif.
+
+### 14.4 Platinum — Social Matching dan Dating
+
+Gagasan: Platinum dapat memilih tujuan koneksi yang berbeda:
+- Pertemanan/sosial.
+- Minat dan komunitas.
+- Relasi profesional (perlu evaluasi apakah modul terpisah).
+- Dating.
+
+Social matching tidak otomatis berarti dating. Mode dating harus opt-in secara eksplisit, mempunyai profil/preferensi terpisah jika diperlukan, dan memakai mutual consent sebelum membuka percakapan atau mengungkap informasi lebih lanjut.
+
+Persyaratan keselamatan yang harus diteliti sebelum desain/implementasi:
+- Dating hanya untuk pengguna dewasa (18+), dengan age assurance yang proporsional.
+- Jangan mengungkap lokasi presisi; People Nearby menggunakan area perkiraan dan kontrol visibilitas.
+- Block, report, unmatch, mute, dan safety guidance harus mudah ditemukan.
+- Batasi spam, harassment, impersonation, romance scams, dan pengumpulan data.
+- Jangan menganggap level Platinum sebagai verifikasi identitas atau jaminan keamanan.
+- Tetapkan aturan foto/profil, consent, moderasi, retensi data, dan mekanisme banding.
+
+### 14.5 Pertanyaan terbuka fitur
+
+1. Apakah Profile Visitor History menampilkan semua kunjungan atau hanya pengguna yang mengaktifkan visibilitas kunjungan?
+2. Apakah pengguna Gold dapat menyembunyikan kunjungannya ketika membuka profil orang lain?
+3. Apakah People Nearby dan Global People Discovery berada dalam satu modul People atau dua tab terpisah?
+4. Apakah Social Matching dan Dating merupakan dua mode di satu produk atau produk/ruang terpisah?
+5. Apakah fitur discovery hanya untuk Platinum atau ada versi terbatas pada Gold?
+6. Bagaimana interaksi dari discovery mengikuti audience eligibility dan feed preference?
+7. Apa manfaat fitur lain untuk setiap tier, dan apakah ada level di atas Platinum?
+8. Apakah label Gold/Platinum terlihat di profil, dan apakah ia hanya label membership, bukan verifikasi?
+
+### 14.6 Batas keputusan
+
+Penambahan ini memperluas IDEA-010 sebagai konsep PROPOSED. Belum ada persetujuan untuk implementasi, perubahan schema/RLS, pengumpulan lokasi, visitor tracking, dating, atau perubahan roadmap. Semua modul memerlukan discovery, threat model, privacy review, dan acceptance criteria tersendiri sebelum dibangun.
