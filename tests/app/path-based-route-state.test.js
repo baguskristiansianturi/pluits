@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { getInternalRoute } from '../../src/components/social/navigation-routes.js';
+import { getInternalRoute, canonicalizeLegacyRoute } from '../../src/components/social/navigation-routes.js';
 
 const address = (pathname, search = '') => ({ pathname, search, hash: '' });
 
