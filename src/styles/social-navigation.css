@@ -476,11 +476,11 @@
 /* Keep the canonical image mark in a fixed, unclipped box in the signed-in header. */
 .ua-social-app .pl-social-header > .pluits-brand-mark.ua-brand {
   display: inline-flex !important;
-  width: 40px !important;
-  height: 40px !important;
-  min-width: 40px !important;
-  min-height: 40px !important;
-  flex: 0 0 40px !important;
+  width: var(--pl-logo-mark-size, 40px) !important;
+  height: var(--pl-logo-mark-size, 40px) !important;
+  min-width: var(--pl-logo-mark-size, 40px) !important;
+  min-height: var(--pl-logo-mark-size, 40px) !important;
+  flex: 0 0 var(--pl-logo-mark-size, 40px) !important;
   flex-grow: 0 !important;
   flex-shrink: 0 !important;
   overflow: visible !important;
@@ -502,11 +502,11 @@
 }
 @media (max-width: 760px) {
   .ua-social-app .pl-social-header > .pluits-brand-mark.ua-brand {
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    min-height: 40px !important;
-    flex: 0 0 40px !important;
+    width: var(--pl-logo-mark-size, 40px) !important;
+    height: var(--pl-logo-mark-size, 40px) !important;
+    min-width: var(--pl-logo-mark-size, 40px) !important;
+    min-height: var(--pl-logo-mark-size, 40px) !important;
+    flex: 0 0 var(--pl-logo-mark-size, 40px) !important;
   }
 }
 
@@ -629,5 +629,5 @@
 @media(max-width:760px){.ua-social-app .ua-home-desktop-nav{display:none!important}}
 
 /* Shared compact header geometry: align Circle search and brand mark with Jelajah. */
-.ua-social-app .ua-home-searchbar{height:40px;min-height:40px}
-.ua-social-app .ua-home-header .pluits-brand-mark.ua-brand{--brand-size:40px}
+.ua-social-app .ua-home-searchbar{height:var(--pl-logo-mark-size, 40px);min-height:var(--pl-logo-mark-size, 40px)}
+.ua-social-app .ua-home-header .pluits-brand-mark.ua-brand{--brand-size:var(--pl-logo-mark-size, 40px)}
