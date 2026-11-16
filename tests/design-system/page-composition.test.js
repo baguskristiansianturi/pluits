@@ -23,10 +23,10 @@ test('search bar variants have explicit owners and shared geometry tokens', () =
   assert.equal(getSearchBar('not-a-search-bar'),null);
 });
 
-test('logo variants are semantic and separately sized', () => {
+test('logo variants are semantic and share canonical mark geometry', () => {
   assert.equal(logoRegistry['logo-mark'].variant,'symbol-only');
   assert.equal(logoRegistry['logo-lockup'].variant,'symbol-and-wordmark');
-  assert.notEqual(logoRegistry['logo-mark'].sizeToken,logoRegistry['logo-lockup'].sizeToken);
+  assert.equal(logoRegistry['logo-mark'].sizeToken,logoRegistry['logo-lockup'].sizeToken);
   assert.equal(getLogoAsset('missing'),null);
 });
 
