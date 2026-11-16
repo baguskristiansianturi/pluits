@@ -24,7 +24,7 @@ test('Public home loads blog articles into the single community content stream',
 
 test('Community blog articles are grouped by category and limit author repetition',async()=>{
  const feed=await readFile(new URL('../../src/features/public-home/blog-feed.js',import.meta.url),'utf8');
- assert.match(feed,/localeCompare\(String\(cats\.get\(a\.category_id\)/);
+ assert.match(feed,/sort\(\(a,b\)=>String\(cats\.get\(a\.category_id\)/);
  assert.match(feed,/if\(n>=3\)return false/);
  assert.match(feed,/Artikel dari blog komunitas/);
 });
