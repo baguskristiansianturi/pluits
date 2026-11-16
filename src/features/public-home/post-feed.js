@@ -1,8 +1,8 @@
-import {renderPostCard} from '../posts/post-card.js';
-import {renderPostActions} from '../posts/post-actions.js';
-import {loadPostComments} from '../posts/comments.js';
-import {bindPostLikeInteractions} from '../posts/like-interactions.js';
-import {bindPostGalleries,normalizeFeedMediaFrames} from '../posts/post-media-layout.js';
+import {renderPostCard} from '../posts/index.js';
+import {renderPostActions} from '../posts/index.js';
+import {loadPostComments} from '../posts/index.js';
+import {bindPostLikeInteractions} from '../posts/index.js';
+import {bindPostGalleries,normalizeFeedMediaFrames} from '../posts/index.js';
 import {socialIcon} from '../../components/common/social-icons.js';
 import {createSignedUrlMap} from '../../services/storage/signed-urls.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
