@@ -31,7 +31,7 @@ export async function bindPublicPostFeed({target,db,viewer}={}){
   if(owner.visibility==='private')return '';
   const gallery=grouped.get(post.id)||[],source=gallery.length?gallery:(post.media_path?[{media_path:post.media_path,media_type:post.media_type,position:0}]:[]);
   const media=source.map(item=>({...item,url:urls.get(item.media_path)||''})).filter(item=>item.url);
-  return renderPostCard({...post,owner,media,avatarUrl:urls.get(owner.avatar_path)||'',likes:likeRows.filter(x=>x.post_id===post.id).length,liked:!!viewer&&likeRows.some(x=>x.post_id===post.id&&x.user_id===viewer.id),comments:commentRows.filter(x=>x.post_id===post.id).length,saved:savedIds.has(post.id),storyItems:[]},{user:viewer,avatar,socialIcon,renderActions:renderPostActions,esc});
+  return renderPostCard({...post,owner,media,avatarUrl:urls.get(owner.avatar_path)||'',likes:likeRows.filter(x=>x.post_id===post.id).length,liked:!!viewer&&likeRows.some(x=>x.post_id===post.id&&x.user_id===viewer.id),comments:commentRows.filter(x=>x.post_id===post.id).length,saved:savedIds.has(post.id),storyItems:[]},{user:viewer,avatar,socialIcon,renderActions:options=>renderPostActions({...options,guestActions:true}),esc});
  }).filter(Boolean);
  target.innerHTML=cards.length?'<div class="ua-profile-post-feed pl-public-post-feed">'+cards.join('')+'</div>':'<div class="pl-feed-empty"><h3>Belum ada postingan publik</h3><p>Konten publik komunitas PLUITS akan muncul di sini.</p></div>';
  target.querySelectorAll('.ua-post-card').forEach(card=>{
@@ -46,9 +46,18 @@ export async function bindPublicPostFeed({target,db,viewer}={}){
    try{if(navigator.share)await navigator.share({title:'Postingan PLUITS',url});else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url);notify('Tautan disalin.');}else location.hash='/account/post/'+postId;}catch{}
   });
   card.querySelector('[data-action="save"]')?.addEventListener('click',async event=>{
-   const button=event.currentTarget;if(!viewer){location.hash='#/account/auth?mode=login';return;}if(button.disabled)return;button.disabled=true;
-   try{const saved=button.classList.contains('is-saved');const result=saved?await db.from('post_saves').delete().eq('post_id',postId).eq('user_id',viewer.id):await db.from('post_saves').insert({post_id:postId,user_id:viewer.id});if(result.error)throw result.error;button.classList.toggle('is-saved',!saved);notify(saved?'Postingan dihapus dari koleksi.':'Postingan disimpan.');}
-   catch(error){notify(error.message||'Postingan belum berhasil disimpan.');}finally{button.disabled=false;}
+   const button=event.currentTarget;if(button.disabled)return;button.disabled=true;
+   try{
+    const saved=button.classList.contains('is-saved');
+    if(!viewer){
+     let ids=[];try{ids=JSON.parse(localStorage.getItem('pluits-guest-wishlist')||'[]');if(!Array.isArray(ids))ids=[];}catch{}
+     const next=saved?ids.filter(id=>String(id)!==String(postId)):[...ids.filter(id=>String(id)!==String(postId)),postId];
+     localStorage.setItem('pluits-guest-wishlist',JSON.stringify(next));
+    }else{
+     const result=saved?await db.from('post_saves').delete().eq('post_id',postId).eq('user_id',viewer.id):await db.from('post_saves').insert({post_id:postId,user_id:viewer.id});if(result.error)throw result.error;
+    }
+    button.classList.toggle('is-saved',!saved);notify(saved?'Postingan dihapus dari koleksi.':'Postingan disimpan.');
+   }catch(error){notify(error.message||'Postingan belum berhasil disimpan.');}finally{button.disabled=false;}
   });
   card.querySelector('[data-post-menu]')?.addEventListener('click',event=>{const menu=card.querySelector('.ua-post-menu');if(!menu)return;menu.hidden=!menu.hidden;event.currentTarget.setAttribute('aria-expanded',String(!menu.hidden));});
   card.querySelector('[data-action="report"]')?.addEventListener('click',async()=>{
