@@ -1,12 +1,12 @@
 /* One canonical image asset for every PLUITS brand placement. */
 .pluits-brand-mark {
   display: inline-flex !important;
-  --brand-size: 40px;
-  width: 40px !important;
-  height: 40px !important;
-  min-width: 40px;
-  min-height: 40px;
-  flex: 0 0 40px;
+  --brand-size: var(--pl-logo-mark-size, 40px);
+  width: var(--pl-logo-mark-size, 40px) !important;
+  height: var(--pl-logo-mark-size, 40px) !important;
+  min-width: var(--pl-logo-mark-size, 40px);
+  min-height: var(--pl-logo-mark-size, 40px);
+  flex: 0 0 var(--pl-logo-mark-size, 40px);
   align-items: center;
   justify-content: center;
   padding: 0 !important;
@@ -48,12 +48,12 @@
 @media (max-width: 760px) {
   .ua-social-app .pluits-brand-mark.ua-brand,
   .ua-social-app .pluits-brand-mark.pl-social-brand {
-    --brand-size: 40px;
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    min-height: 40px !important;
-    flex: 0 0 40px !important;
+    --brand-size: var(--pl-logo-mark-size, 40px);
+    width: var(--pl-logo-mark-size, 40px) !important;
+    height: var(--pl-logo-mark-size, 40px) !important;
+    min-width: var(--pl-logo-mark-size, 40px) !important;
+    min-height: var(--pl-logo-mark-size, 40px) !important;
+    flex: 0 0 var(--pl-logo-mark-size, 40px) !important;
     display: inline-flex !important;
     align-self: center;
     overflow: visible !important;
@@ -79,9 +79,9 @@
 /* Optional shared PLUITS wordmark; icon-only placements keep their current geometry. */
 .pluits-brand-wordmark {
   display: inline-block;
-  margin-left: 8px;
+  margin-left: var(--pl-logo-wordmark-gap, 8px);
   color: #263d43;
-  font-size: 15px;
+  font-size: var(--pl-logo-wordmark-size, 15px);
   font-weight: 850;
   letter-spacing: .105em;
   line-height: 1;
