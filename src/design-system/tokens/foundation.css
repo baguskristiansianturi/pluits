@@ -27,6 +27,11 @@
   --pl-space-10: 40px;
   --pl-space-12: 48px;
 
+  /* Canonical PLUITS logo geometry; every page uses this same mark size. */
+  --pl-logo-mark-size: 40px;
+  --pl-logo-wordmark-gap: 8px;
+  --pl-logo-wordmark-size: 15px;
+
   /* Icon artwork size; touch target is deliberately larger */
   --pl-icon-xs: 16px;
   --pl-icon-sm: 18px;
