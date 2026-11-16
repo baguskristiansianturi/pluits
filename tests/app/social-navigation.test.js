@@ -88,9 +88,9 @@ test('Circle and Jelajah use the same compact search and brand geometry',async()
  const shared=await (await import('node:fs/promises')).readFile(new URL('../../src/styles/social-navigation.css',import.meta.url),'utf8');
  const discovery=await (await import('node:fs/promises')).readFile(new URL('../../src/components/social/discovery-header.css',import.meta.url),'utf8');
  assert.ok(nav.includes("size:40,label:'Circle PLUITS'"));
- assert.ok(shared.includes('.ua-social-app .ua-home-searchbar{height:40px;min-height:40px}'));
+ assert.ok(shared.includes('.ua-social-app .ua-home-searchbar{height:var(--pl-logo-mark-size, 40px);min-height:var(--pl-logo-mark-size, 40px)}'));
  assert.ok(discovery.includes('height:40px;flex:1'));
- assert.ok(brand.includes('--brand-size: 40px;'),'Mobile PLUITS logo must match the 40px search control height.');
+ assert.ok(brand.includes('--brand-size: var(--pl-logo-mark-size, 40px);') && brand.includes('width: var(--pl-logo-mark-size, 40px) !important;'),'Mobile PLUITS logo must use the shared 40px canonical design token.');
 });
 
 test('Inbox imports the shared mobile navigation renderer at runtime',async()=>{
