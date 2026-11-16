@@ -84,7 +84,7 @@ test('public home adopts shared container and a viewport-wide community feed reg
 test('public community feed region is outside the constrained stories section', () => {
   const html = renderPublicStories(id => '/images/'+id);
   assert.match(html, /<\/section><section class="pl-public-feed-region/);
-  assert.match(html, /aria-label="Postingan publik komunitas"/);
+  assert.match(html, /aria-label="Konten komunitas publik"/);
 });
 
 test('editorial route registry includes article deep links handled by the router', () => {
