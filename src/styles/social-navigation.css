@@ -476,11 +476,11 @@
 /* Keep the canonical image mark in a fixed, unclipped box in the signed-in header. */
 .ua-social-app .pl-social-header > .pluits-brand-mark.ua-brand {
   display: inline-flex !important;
-  width: 38px !important;
-  height: 38px !important;
-  min-width: 38px !important;
-  min-height: 38px !important;
-  flex: 0 0 38px !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  flex: 0 0 40px !important;
   flex-grow: 0 !important;
   flex-shrink: 0 !important;
   overflow: visible !important;
@@ -502,11 +502,11 @@
 }
 @media (max-width: 760px) {
   .ua-social-app .pl-social-header > .pluits-brand-mark.ua-brand {
-    width: 30px !important;
-    height: 30px !important;
-    min-width: 30px !important;
-    min-height: 30px !important;
-    flex: 0 0 30px !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    flex: 0 0 40px !important;
   }
 }
 
