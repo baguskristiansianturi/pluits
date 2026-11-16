@@ -1,11 +1,12 @@
 /* One canonical image asset for every PLUITS brand placement. */
 .pluits-brand-mark {
   display: inline-flex !important;
-  width: var(--brand-size, 42px) !important;
-  height: var(--brand-size, 42px) !important;
-  min-width: var(--brand-size, 42px);
-  min-height: var(--brand-size, 42px);
-  flex: 0 0 var(--brand-size, 42px);
+  --brand-size: 40px;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px;
+  min-height: 40px;
+  flex: 0 0 40px;
   align-items: center;
   justify-content: center;
   padding: 0 !important;
@@ -78,7 +79,7 @@
 /* Optional shared PLUITS wordmark; icon-only placements keep their current geometry. */
 .pluits-brand-wordmark {
   display: inline-block;
-  margin-left: 9px;
+  margin-left: 8px;
   color: #263d43;
   font-size: 15px;
   font-weight: 850;
