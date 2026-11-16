@@ -11,3 +11,8 @@
 .ds-header-notification .pl-icon{width:19px;height:19px}
 .ds-header-badge{position:absolute;top:-4px;right:-4px;display:grid;min-width:16px;height:16px;padding:0 4px;place-items:center;border:2px solid #fff;border-radius:99px;background:#159d98;color:#fff;font-size:8px;font-style:normal;font-weight:750}
 @media(max-width:420px){.ds-top{min-height:51px;padding:6px 9px;gap:7px}.ds-search{height:38px;min-height:38px;padding-inline:8px;gap:7px}.ds-search-label{font-size:9px;padding-right:7px}.ds-search input{font-size:10.5px}.ds-header-notification{width:37px;height:37px;flex-basis:37px}}
+
+
+/* Canonical search control height: match the 40px Circle/Jelajah control on every viewport. */
+.ds-search{height:40px!important;min-height:40px!important;box-sizing:border-box}
+@media(max-width:420px){.ds-search{height:40px!important;min-height:40px!important}}
