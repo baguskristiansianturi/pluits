@@ -7,8 +7,8 @@ const paths = {
 function icon(name) {
   return '<svg class="pl-post-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + paths[name] + '</svg>';
 }
-export function renderPostActions({ user, liked = false, saved = false } = {}) {
-  if (!user) return '<div class="ua-post-actions pl-post-actions"><a class="ua-login-action" href="#/account/login">Masuk untuk berinteraksi</a></div>';
+export function renderPostActions({ user, liked = false, saved = false, guestActions = false } = {}) {
+  if (!user && !guestActions) return '<div class="ua-post-actions pl-post-actions"><a class="ua-login-action" href="#/account/login">Masuk untuk berinteraksi</a></div>';
   return '<div class="ua-post-actions pl-post-actions">' +
     '<button type="button" data-action="like" class="' + (liked ? 'is-liked' : '') + '" aria-label="Suka" title="Suka">' + icon('like') + '</button>' +
     '<button type="button" data-action="comments" aria-label="Komentar" title="Komentar">' + icon('comment') + '</button>' +
