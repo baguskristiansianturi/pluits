@@ -1,0 +1,16 @@
+Feature ID,Feature,Design status,Development status,Test status,Audit status,Priority,Notes
+RC-CORE-001,Restaurant discovery and profile,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P1,Customer-facing discovery
+RC-MENU-001,Menu catalog and item configuration,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P0,Variants modifiers availability and price snapshots
+RC-RES-001,Reservation and table availability,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P0,Time-varying policies and reservation snapshots
+RC-VISIT-001,Visit and table check-in,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P0,Visit lifecycle independent from payment
+RC-ORDER-001,Cart and order engine,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P0,Idempotency atomic order and cancellation race
+RC-KIT-001,Kitchen and barista operations,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P0,Station routing and item-level progress
+RC-SVC-001,Guest assistance calls,CONFIRMED_BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P0,LIVE Visit only; server enforcement
+RC-MGR-001,Call Manager escalation,CONFIRMED_BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P0,Distinct management escalation flow
+RC-STAFF-001,Staff attendance and service assignment,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P0,Manual attendance and auditable handover
+RC-BILL-001,Billing and fiscal calculation,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P0,Configurable tax and service charge
+RC-PAY-001,Payment and refund,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P0,Provider integration and audit
+RC-CASH-001,Cashier terminal and reconciliation,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P1,Multiple terminals and cashier identity
+RC-REV-001,Review and customer support,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P1,Verified transaction and privacy
+RC-OPS-001,Daily opening closing and reporting,BASELINE,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P1,Operational reporting and close workflow
+RC-PLUITS-001,PLUITS platform integration,PLANNED,NOT_STARTED,NOT_TESTED,NOT_AUDITED,P0,Only after isolated module passes release gates
