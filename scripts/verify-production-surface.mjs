@@ -144,6 +144,7 @@ const signedInHeader = renderSocialHeader({ active: 'explore', user: { id: 'test
 const signedInMobileNav = renderSocialMobileNav({ active: 'explore', user: { id: 'test-user' }, profile: {}, userAvatar: '<span>U</span>', notificationCount: 3 });
 const publicMobileNav = renderSocialMobileNav({ active: 'home', publicHome: true });
 assert.match(signedInHeader, /href="\/pluits\/profile\/"/, 'Header avatar must open the signed-in profile.');
+assert.match(signedInHeader, /href="\/pluits\/"/, 'The PLUITS logo must always open the global homepage, not Circle.');
 assert.match(signedInMobileNav, /href="\/pluits\/inbox\/"/, 'Rendered signed-in mobile navigation must expose Inbox.');
 assert.match(signedInMobileNav, /<small>Profil<\/small>/, 'Profile must be the fifth bottom-navigation destination.');
 assert.equal((signedInMobileNav.match(/<a class=/g) || []).length, 5, 'Signed-in mobile navigation must contain exactly five destinations.');
@@ -193,8 +194,9 @@ const publicHome = read('src/pages/home/index.js');
 assert.doesNotMatch(publicHome, /await mountUserAccount\('explore'\)/, 'Public homepage must not be replaced by the signed-in profile feed.');
 assert.doesNotMatch(publicHome, /history\.replaceState/, 'Public homepage must never silently redirect signed-in visitors into an account page.');
 assert.match(publicHome, /stillOnRequestedHome/, 'A delayed auth response must not replace a page after navigation away from the public home.');
-assert.match(publicHome, /if\(actualViewer&&!guestMode\)/, 'Signed-in visitors must leave the guest landing page for the canonical Explore workspace.');
-assert.match(publicHome, /location\.hash='#\/account\/explore'/, 'Signed-in homepage routing must use the canonical Explore route.');
+assert.doesNotMatch(publicHome, /if\(actualViewer&&!guestMode\)/, 'Signed-in visitors must remain on the global public homepage.');
+assert.match(publicHome, /const accountActions=document\.querySelector\('\.pl-public-navbar-actions'\)/, 'Signed-in visitors must receive account-aware actions on the global homepage.');
+assert.match(publicHome, /if\(viewer&&accountActions\)accountActions\.innerHTML=/, 'Signed-in global homepage actions must link to Circle and Profile.');
 const mainEntry = read('src/main.js');
 assert.match(mainEntry, /let renderSequence = 0/, 'Application route rendering must use a monotonic render sequence.');
 assert.ok(mainEntry.includes('await route()'), 'Homepage hydration must wait for the active route render.');
@@ -342,7 +344,7 @@ assert.match(postLayoutCss, /pluits-heart-core 1\.18s/, 'Main heart animation mu
 
 
 assert.ok(read('src/main.js').includes("history.replaceState(null, '', SITE_BASE)"), 'Legacy home aliases must normalize to the canonical public home URL.');
-assert.ok(read('src/pages/home/index.js').includes("location.hash='#/account/explore'"), 'Authenticated users must enter the canonical signed-in Explore workspace from the root URL.');
+assert.ok(read('src/pages/home/index.js').includes("if(viewer&&accountActions)accountActions.innerHTML='<a href=\"#/circle\">Circle</a><a class=\"pl-social-signup\" href=\"#/profile\">Profil</a>'"), 'Signed-in users must remain on the global homepage with clear Circle and Profile destinations.');
 
 assert.ok(read('src/pages/account/index.js').includes('sorted.map(post=>postCard(post)).join(\'\')'),'The home feed must use the defined post-card renderer, not the Reel-only renderer.');
 assert.ok(read('src/pages/account/index.js').includes('sorted.map(post=>renderReelCard(post,{user,avatar,socialIcon,esc}))'),'Reels must use the dedicated Reel card renderer.');
