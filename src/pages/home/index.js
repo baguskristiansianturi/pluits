@@ -1,5 +1,6 @@
 import '../../../styles/home-layout.css';
 import {bindPublicPostFeed} from '../../features/public-home/post-feed.js';
+import {bindPublicBlogFeed} from '../../features/public-home/blog-feed.js';
 import {bindPublicNavbar} from '../../features/public-home/navbar.js';
 import {homeNearbySection,bindHomeNearby} from '../directory/index.js';
 import {createSignedUrlMap} from '../../services/storage/signed-urls.js';
@@ -29,6 +30,11 @@ export async function bindHome(){
   if(viewer&&accountActions)accountActions.innerHTML='<a href="#/circle">Circle</a><a class="pl-social-signup" href="#/profile">Profil</a>';
   bindHomeNearby({personalize:false});
 
-  await bindPublicPostFeed({target,db,viewer});
+  const blogTarget=document.querySelector('#pl-public-blog-feed');
+  if(blogTarget&&stillOnRequestedHome()){
+   try{await bindPublicBlogFeed({target:blogTarget,db});}
+   catch(blogError){console.error('PLUITS public blog feed:',blogError);blogTarget.innerHTML='<div class="pl-feed-empty"><p>Artikel blog belum dapat dimuat saat ini.</p></div>';}
+  }
+  if(stillOnRequestedHome())await bindPublicPostFeed({target,db,viewer});
  }catch(err){target.innerHTML='<div class="pl-feed-empty"><h3>Feed belum dapat dimuat</h3><p>Silakan muat ulang halaman beberapa saat lagi.</p><a href="#/account/explore">Buka Explore setelah masuk</a></div>';}
 }
