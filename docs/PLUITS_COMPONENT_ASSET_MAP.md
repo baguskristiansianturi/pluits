@@ -181,3 +181,14 @@ The next implementation slices should be small and independently testable:
 3. Extract Marketplace product search separately, preserving its own behavior and appearance.
 4. Extract or formalize Discovery search separately.
 5. Move only files with complete import and test coverage; update imports atomically and run `npm test` + `npm run build` after each slice.
+
+
+## Canonical PLUITS logo component — 16 November 2026
+
+- **Artwork source:** `public/assets/brand/pluits-logo.svg`, registered as `brand.pluits.logo` in `src/design-system/assets/registry.js` and `logo-mark` in `src/design-system/assets/logo-registry.js`.
+- **Runtime asset URL:** `/pluits/assets/brand/pluits-logo.svg` (GitHub Pages project base path).
+- **Shared renderer:** `src/components/common/brand.js` exports `renderBrandLogo()` and `BRAND_LOGO_SRC`. It reads the source from the logo registry; it does not redraw the logo or accept a page-specific size.
+- **Global size token:** `--pl-logo-mark-size: 40px` in `src/design-system/tokens/foundation.css`. The shared brand stylesheet consumes this token.
+- **Wordmark:** optional text rendered by the same component, with spacing and typography from `--pl-logo-wordmark-gap` and `--pl-logo-wordmark-size`.
+- **New-page rule:** import and call `renderBrandLogo()`; do not write a separate logo image path, inline SVG, text approximation, or page-specific logo dimensions. The component supplies the canonical asset and size.
+- **Responsive rule:** page layout may control available surrounding space and alignment, but must not shrink or enlarge the canonical mark.
