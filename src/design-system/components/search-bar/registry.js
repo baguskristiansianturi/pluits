@@ -1,6 +1,6 @@
 /* Search bar variants share geometry; owners configure behavior and content. */
 const shared = Object.freeze({
-  height:'var(--pl-search-height, 44px)',
+  height:'var(--pl-search-height, 40px)',
   iconSize:'var(--pl-icon-md, 20px)',
   radius:'var(--pl-radius-lg, 16px)',
   textSize:'var(--pl-text-body, 15px)',
