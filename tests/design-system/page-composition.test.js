@@ -17,7 +17,7 @@ test('search bar variants have explicit owners and shared geometry tokens', () =
   for (const [id, item] of Object.entries(searchBarRegistry)) {
     assert.equal(item.id,id);
     assert.ok(item.owner);
-    assert.equal(item.height,'var(--pl-search-height, 44px)');
+    assert.equal(item.height,'var(--pl-search-height, 40px)');
     assert.equal(item.iconSize,'var(--pl-icon-md, 20px)');
   }
   assert.equal(getSearchBar('not-a-search-bar'),null);
