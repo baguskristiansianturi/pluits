@@ -2373,8 +2373,9 @@ svg {
     --container: 100%;
   }
 
+  /* Fixed navigation reserves space inside its own page shell, not on every route. */
   body {
-    padding-bottom: 64px;
+    padding-bottom: 0;
   }
 
   .header-inner,
