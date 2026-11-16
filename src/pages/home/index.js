@@ -22,11 +22,10 @@ export async function bindHome(){
   const {data:{user:actualViewer}}=await db.auth.getUser();
   if(!stillOnRequestedHome())return;
   const viewer=actualViewer;
-  if(actualViewer&&!guestMode){
-   // The root URL is the guest landing page; signed-in visitors continue to the canonical Explore workspace.
-   if(stillOnRequestedHome())location.hash='#/account/explore';
-   return;
-  }
+  // The global homepage is public and remains available to signed-in users.
+  // Keep the active session so public posts can show personalized actions.
+  const accountActions=document.querySelector('.pl-public-navbar-actions');
+  if(viewer&&accountActions)accountActions.innerHTML='<a href="#/circle">Circle</a><a class="pl-social-signup" href="#/profile">Profil</a>';
   bindHomeNearby({personalize:false});
 
   const {data:rows,error}=await db.from('user_posts').select('id,user_id,caption,media_path,media_type,tags,created_at,profile_context,professional_profile_id,business_store_id').eq('visibility','public').eq('moderation_status','published').order('created_at',{ascending:false}).limit(30);
