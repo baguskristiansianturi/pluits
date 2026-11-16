@@ -24,7 +24,7 @@
   --ui-icon-size: 20px;
   --ui-icon-size-nav: 22px;
   --ui-touch-target: 44px;
-  --ui-search-height: 46px;
+  --ui-search-height: 40px;
   --ui-public-header-height: 60px;
   --ui-public-header-height-wide: 68px;
   --ui-font-label: 0.75rem;
@@ -5818,3 +5818,11 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.45;-web
  .pl-msg-mobile-nav small{font-size:9px}
  .pl-msg-offline-note{margin-bottom:6px}
 }
+
+
+/* PLUITS global search geometry: all search fields use Jelajah/Circle's 40px height. */
+.header-search,.hero-search,.large-search{height:40px!important;min-height:40px!important;box-sizing:border-box}
+.hero-search button{height:32px!important;max-height:32px!important}
+.large-search svg{margin:0 12px!important}
+.large-search input{height:100%;min-height:0}
+.brand-mark{width:40px;height:40px;flex:0 0 40px}
