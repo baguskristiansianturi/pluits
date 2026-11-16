@@ -18,7 +18,7 @@ export async function bindHome(){
  const routeVersion=window.__pluitsRouteVersion||0;
  const stillOnRequestedHome=()=>((location.hash||'#/')===requestHash)&&((window.__pluitsRouteVersion||0)===routeVersion);
  bindPublicNavbar();
- const target=document.querySelector('#pl-public-feed');if(!target||!stillOnRequestedHome())return;
+ const target=document.querySelector('#pl-public-feed');if(!stillOnRequestedHome())return;
  let viewer=null;
  try{
   const {data:{user:actualViewer}}=await db.auth.getUser();
@@ -37,7 +37,7 @@ export async function bindHome(){
   console.error('PLUITS community social content:',postError);
  }
  try{
-  if(stillOnRequestedHome())await bindPublicBlogFeed({target,db});
+  if(stillOnRequestedHome())await bindPublicBlogFeed({target:document.querySelector('.pl-public-story-feature'),db});
  }catch(blogError){
   console.error('PLUITS community blog content:',blogError);
  }
