@@ -24,7 +24,7 @@ export function renderSocialHeader({ active = 'explore', profileView = false, sh
   if (active === 'explore') {
     return `
       <header class="ua-header pl-social-header ua-home-header">
-        ${renderBrandLogo({href:ROUTES.home,className:'ua-brand',size:40,label:'Circle PLUITS'})}
+        ${renderBrandLogo({href:ROUTES.publicHome,className:'ua-brand',label:'Beranda PLUITS'})}
         <nav class="ua-home-desktop-nav" aria-label="Navigasi utama"><a class="active" href="${ROUTES.home}">Circle</a><a href="${ROUTES.reels}">Reels</a><a href="${ROUTES.discover}">Jelajah</a><a href="${ROUTES.inbox}">Inbox</a></nav>
         <a class="ua-home-searchbar" href="#/search" aria-label="Cari di PLUITS">${socialIcon('search',{size:17})}<span id="ua-home-search-prompt" data-location-text>Memeriksa lokasi…</span></a>
         <a class="ua-home-wishlist" href="${ROUTES.saved}" aria-label="Tersimpan" title="Tersimpan">${socialIcon('bookmark',{size:21})}</a>
@@ -34,7 +34,7 @@ export function renderSocialHeader({ active = 'explore', profileView = false, sh
 
   return `
     <header class="ua-header pl-social-header">
-      ${renderBrandLogo({href:ROUTES.home,className:'ua-brand',label:'Beranda PLUITS'})}
+      ${renderBrandLogo({href:ROUTES.publicHome,className:'ua-brand',label:'Beranda PLUITS'})}
       <nav aria-label="Navigasi Pluits">
         <a class="${active === 'explore' ? 'active' : ''}" href="${ROUTES.home}">Circle</a>
         <a href="${ROUTES.discover}">Jelajah</a>
