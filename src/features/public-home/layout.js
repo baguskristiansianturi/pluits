@@ -2,6 +2,11 @@ import {renderSocialMobileNav} from '../../components/social/navigation.js';
 import {renderPublicNavbar} from './navbar.js';
 import './navbar.css';
 import './public-home.css';
+import '../../styles/social-components.css';
+import '../../pages/account/circle-experience.css';
+import '../../features/posts/post-card.css';
+import '../../features/posts/post-actions.css';
+import '../../features/posts/comments.css';
 import {renderPublicHero} from './hero.js';
 import {renderPublicDiscovery} from './discovery.js';
 import {renderPublicNearby} from './nearby.js';
@@ -13,7 +18,7 @@ import {renderAppDownload} from '../app-download/index.js';
 
 /** Public visitor homepage composition only. Data/auth remain in pages/home. */
 export function renderPublicHomeLayout({image,nearbyContent}) {
- return `<div class="pl-social-home pl-public-home ua-social-app">
+ return `<div class="pl-social-home ua-social-home pl-public-home ua-social-app">
   ${renderPublicNavbar()}
   <main class="pl-public-shell plds-container">
    ${renderPublicHero(image)}
