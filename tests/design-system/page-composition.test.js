@@ -73,7 +73,9 @@ import { renderPublicStories } from '../../src/features/public-home/stories.js';
 test('public home adopts shared container and a viewport-wide community feed region', () => {
   const source = readFileSync(new URL('../../src/features/public-home/layout.js', import.meta.url), 'utf8');
   const html = renderPublicStories(id => '/images/'+id);
+  assert.match(source, /class="plds-page plds-page--full-bleed pl-social-home pl-public-home ua-social-app"/);
   assert.match(source, /class="pl-public-shell plds-container"/);
+  assert.doesNotMatch(source, /ua-social-home/);
   assert.match(html, /class="pl-public-feed-region plds-section--full-bleed"/);
   assert.match(html, /id="pl-public-feed"/);
   assert.ok(html.indexOf('pl-public-feed-region') > html.indexOf('pl-public-story-feature'));
