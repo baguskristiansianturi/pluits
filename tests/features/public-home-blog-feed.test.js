@@ -9,7 +9,7 @@ test('Public home loads blog articles into the single community content stream',
   readFile(new URL('../../src/features/public-home/blog-feed.js',import.meta.url),'utf8'),
   readFile(new URL('../../src/features/public-home/blog-feed.css',import.meta.url),'utf8')
  ]);
- assert.match(home,/bindPublicBlogFeed/);
+ assert.match(home,/bindPublicBlogFeed/);\n assert.match(home,/catch\(postError\)/);\n assert.match(home,/catch\(authError\)/);
  assert.doesNotMatch(stories,/pl-public-blog-feed/);
  assert.match(stories,/aria-label="Konten komunitas publik"/);
  assert.match(feed,/blog_public_routes/);
@@ -17,12 +17,12 @@ test('Public home loads blog articles into the single community content stream',
  assert.match(feed,/\.eq\('visibility','public'\)/);
  assert.match(feed,/blog_categories/);
  assert.match(feed,/pl-public-blog-author-chip/);
- assert.match(feed,/pl-public-post-feed/);
+ assert.match(feed,/pl-public-post-feed/);\n assert.match(feed,/stream\.prepend\(fragment\)/);
  assert.match(css,/pl-public-blog-author-chip/);
  assert.match(css,/pl-public-blog-stream-label/);
 });
 
-test('Community blog articles are grouped by category and limit author repetition',async()=>{
+test('Community blog articles stay in the unified feed and limit author repetition',async()=>{
  const feed=await readFile(new URL('../../src/features/public-home/blog-feed.js',import.meta.url),'utf8');
  assert.match(feed,/sort\(\(a,b\)=>String\(cats\.get\(a\.category_id\)/);
  assert.match(feed,/if\(n>=3\)return false/);
