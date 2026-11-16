@@ -34,6 +34,7 @@ test('app download spacing and tablet layout stay responsive without excess mobi
  assert.ok(css.includes('.pl-public-home{padding-bottom:0!important}'), 'Root padding must not duplicate the content clearance.');
  const layout=await readFile(new URL('../../styles/home-layout.css',import.meta.url),'utf8');
  assert.ok(layout.includes('.pl-public-home .pl-public-shell{padding:8px 0 12px}'), 'The public homepage must end with a compact 12px content gap, not a second navigation-sized blank area.');
+ assert.ok(layout.includes('.pl-public-home{min-height:0!important}'), 'The mobile guest homepage must not stretch short content to the full viewport and create a large blank gap.');
  assert.ok(layout.includes('.pl-public-home .pl-public-shell{padding-bottom:12px}'), 'Narrow phones must retain the same compact end spacing.');
  assert.ok(css.includes('.pl-public-home .pl-app-download{padding-bottom:0}'), 'The app download section must not add a second navigation-sized blank area; the public shell owns that clearance.');
 });
