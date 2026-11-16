@@ -155,7 +155,7 @@
 
 /* PLUITS public discovery homepage */
 .pl-public-home{background:#fff;color:#17252b;min-height:100vh}
-.pl-public-home .pl-public-shell{width:min(var(--pl-layout-content-max,1200px),calc(100% - 2 * var(--pl-layout-mobile-gutter,20px)));margin:0 auto;padding:34px 0 76px}
+.pl-public-home .pl-public-shell{width:100%;max-width:var(--pl-layout-content-max,1200px);margin:0 auto;padding:34px 0 76px}
 .pl-public-home .pl-public-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center;padding:24px 0 48px}
 .pl-public-eyebrow{display:block;color:#168f87;font-size:10px;font-weight:800;letter-spacing:.14em;margin-bottom:10px}
 .pl-public-hero-copy h1{font-size:clamp(34px,5vw,58px);line-height:1.04;letter-spacing:-.045em;max-width:590px;margin:0 0 16px;color:#14262d}
@@ -235,7 +235,7 @@
 .pl-public-home>.pl-social-header .pl-social-header-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 14px;border-radius:10px;color:#33474d!important;font-size:12px;font-weight:750;text-decoration:none}
 .pl-public-home>.pl-social-header .pl-social-header-actions .pl-social-signup{background:#168f87!important;color:#fff!important}
 .pl-public-home .pl-social-mobile-nav{display:none}
-.pl-public-home .pl-icon{display:block;width:22px;height:22px;min-width:22px;min-height:22px;stroke-width:1.9}
+.pl-public-home .pl-icon{display:block;width:var(--pl-icon-nav,22px);height:var(--pl-icon-nav,22px);min-width:var(--pl-icon-nav,22px);min-height:var(--pl-icon-nav,22px);stroke-width:1.9}
 .pl-public-home .pl-geo-map{position:absolute;inset:0;width:100%;height:100%;background:#e5edef}
 .pl-public-home .pl-map-stage{position:relative;isolation:isolate;overflow:hidden;border:1px solid #dce8e8;border-radius:20px;background:#e8eff0}
 .pl-public-home .pl-home-map-stage{height:340px;box-shadow:0 12px 34px rgba(20,48,54,.09)}
