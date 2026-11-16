@@ -335,6 +335,8 @@
  outline-offset:3px;
 }
 @media(max-width:760px){
+ /* The guest page has a fixed bottom nav; do not stretch short content to viewport height. */
+ .pl-public-home{min-height:0!important}
  .pl-public-home .pl-public-shell{padding:8px 0 12px}
  .pl-public-home .pl-public-hero{gap:14px;padding:8px 0 22px}
  .pl-public-home .pl-public-hero-visual>img{height:230px}
