@@ -16,7 +16,7 @@ import {renderAppDownload} from '../app-download/index.js';
 
 /** Public visitor homepage composition only. Data/auth remain in pages/home. */
 export function renderPublicHomeLayout({image,nearbyContent}) {
- return `<div class="pl-social-home ua-social-home pl-public-home ua-social-app">
+ return `<div class="plds-page plds-page--full-bleed pl-social-home pl-public-home ua-social-app">
   ${renderPublicNavbar()}
   <main class="pl-public-shell plds-container">
    ${renderPublicHero(image)}
