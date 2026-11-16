@@ -87,7 +87,8 @@ test('Circle and Jelajah use the same compact search and brand geometry',async()
  const brand=await (await import('node:fs/promises')).readFile(new URL('../../src/styles/brand.css',import.meta.url),'utf8');
  const shared=await (await import('node:fs/promises')).readFile(new URL('../../src/styles/social-navigation.css',import.meta.url),'utf8');
  const discovery=await (await import('node:fs/promises')).readFile(new URL('../../src/components/social/discovery-header.css',import.meta.url),'utf8');
- assert.ok(nav.includes("size:40,label:'Circle PLUITS'"));
+ assert.ok(nav.includes("href:ROUTES.publicHome,className:'ua-brand',label:'Beranda PLUITS'"));
+ assert.ok(nav.includes('${ROUTES.home}">Circle</a>'), 'Circle navigation must remain a separate destination from the global logo.');
  assert.ok(shared.includes('.ua-social-app .ua-home-searchbar{height:var(--pl-logo-mark-size, 40px);min-height:var(--pl-logo-mark-size, 40px)}'));
  assert.ok(discovery.includes('height:40px;flex:1'));
  assert.ok(brand.includes('--brand-size: var(--pl-logo-mark-size, 40px);') && brand.includes('width: var(--pl-logo-mark-size, 40px) !important;'),'Mobile PLUITS logo must use the shared 40px canonical design token.');
