@@ -30,11 +30,10 @@ export async function bindHome(){
   if(viewer&&accountActions)accountActions.innerHTML='<a href="#/circle">Circle</a><a class="pl-social-signup" href="#/profile">Profil</a>';
   bindHomeNearby({personalize:false});
 
-  const blogTarget=document.querySelector('#pl-public-blog-feed');
-  if(blogTarget&&stillOnRequestedHome()){
-   try{await bindPublicBlogFeed({target:blogTarget,db});}
-   catch(blogError){console.error('PLUITS public blog feed:',blogError);blogTarget.innerHTML='<div class="pl-feed-empty"><p>Artikel blog belum dapat dimuat saat ini.</p></div>';}
-  }
   if(stillOnRequestedHome())await bindPublicPostFeed({target,db,viewer});
+  if(stillOnRequestedHome()){
+   try{await bindPublicBlogFeed({target,db});}
+   catch(blogError){console.error('PLUITS community blog content:',blogError);}
+  }
  }catch(err){target.innerHTML='<div class="pl-feed-empty"><h3>Feed belum dapat dimuat</h3><p>Silakan muat ulang halaman beberapa saat lagi.</p><a href="#/account/explore">Buka Explore setelah masuk</a></div>';}
 }
