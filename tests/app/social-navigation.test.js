@@ -124,7 +124,8 @@ test('public home loads the real navigation layer and exposes visible mobile ico
  assert.ok(navbar.includes("data-public-action=\"wishlist\"")&&navbar.includes("data-public-action=\"cart\""),'Wishlist and cart must be actionable controls.');
  assert.ok(navbar.includes("location.hash='#/account/login'"),'Opening wishlist or cart as a guest must request login.');
  assert.ok(navbarCss.includes('.pl-public-home>.pl-public-navbar')&&navbarCss.includes('border:0'),'Guest navbar must use one clean surface without borders.');
- assert.ok(home.includes("localStorage.setItem('pluits-guest-wishlist'"),'Guest post saves must persist locally without requiring login.');
+ const publicPostFeed=await readFile(new URL('../../src/features/public-home/post-feed.js',import.meta.url),'utf8');
+ assert.ok(publicPostFeed.includes("localStorage.setItem('pluits-guest-wishlist'"),'Guest post saves must persist locally without requiring login.');
  assert.ok(css.includes('.pl-public-home .pl-public-hero-visual{order:-1}'),'Mobile public home must lead with imagery rather than a wall of text.');
 });
 test('GeoDirectory is map-first with a touch-enabled globe and clickable real place pins',async()=>{
