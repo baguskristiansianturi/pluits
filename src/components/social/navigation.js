@@ -6,7 +6,7 @@ export function renderSocialHeader({ active = 'explore', profileView = false, sh
   if (publicHome) {
     return `
       <header class="pl-social-header">
-        ${renderBrandLogo({className:'pl-social-brand',size:40,label:'Beranda PLUITS'})}
+        ${renderBrandLogo({className:'pl-social-brand',label:'Beranda PLUITS'})}
         <nav aria-label="Navigasi Pluits">
           <a class="${active === 'home' ? 'selected' : ''}" href="#/">Beranda</a>
           <a href="${ROUTES.places}">Tempat</a>
@@ -34,7 +34,7 @@ export function renderSocialHeader({ active = 'explore', profileView = false, sh
 
   return `
     <header class="ua-header pl-social-header">
-      ${renderBrandLogo({href:ROUTES.home,className:'ua-brand',size:38,label:'Beranda PLUITS'})}
+      ${renderBrandLogo({href:ROUTES.home,className:'ua-brand',label:'Beranda PLUITS'})}
       <nav aria-label="Navigasi Pluits">
         <a class="${active === 'explore' ? 'active' : ''}" href="${ROUTES.home}">Circle</a>
         <a href="${ROUTES.discover}">Jelajah</a>
