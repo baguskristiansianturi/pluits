@@ -158,8 +158,8 @@ test('legacy public-user links and professional profile editing resolve to real 
   assert.ok(account.includes("section==='professional-create'?professionalFormPage"));
   const accountContext = await readFile(new URL('../../src/pages/account/account-context.js', import.meta.url), 'utf8');
   assert.ok(accountContext.includes('href="#/account/professional-create"'));
-  const home = await readFile(new URL('../../src/pages/home/index.js', import.meta.url), 'utf8');
-  assert.ok(home.includes('#/account/user/'), 'Public profile cards must use the covered legacy alias.');
+  const sharedCard = await readFile(new URL('../../src/features/posts/post-card.js', import.meta.url), 'utf8');
+  assert.ok(sharedCard.includes("const profileHref='#/@'+encodeURIComponent(post.owner?.username||'')"), 'Shared public profile cards must use the canonical @username route alias.');
 });
 
 test('profile page returns hydrated own posts to the profile tab controller', async () => {
