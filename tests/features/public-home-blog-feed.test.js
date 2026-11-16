@@ -2,32 +2,30 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 
-test('Public home loads blog articles into the single community content stream',async()=>{
+test('Community blog content fills the existing Konten Komunitas feature card',async()=>{
  const [home,stories,feed,css]=await Promise.all([
   readFile(new URL('../../src/pages/home/index.js',import.meta.url),'utf8'),
   readFile(new URL('../../src/features/public-home/stories.js',import.meta.url),'utf8'),
   readFile(new URL('../../src/features/public-home/blog-feed.js',import.meta.url),'utf8'),
-  readFile(new URL('../../src/features/public-home/blog-feed.css',import.meta.url),'utf8')
+  readFile(new URL('../../styles/home-layout.css',import.meta.url),'utf8')
  ]);
- assert.match(home,/bindPublicBlogFeed/);
- assert.match(home,/catch\(postError\)/);
- assert.match(home,/catch\(authError\)/);
- assert.doesNotMatch(stories,/pl-public-blog-feed/);
- assert.match(stories,/aria-label="Konten komunitas publik"/);
+ assert.match(stories,/pl-public-story-feature/);
+ assert.match(stories,/KONTEN KOMUNITAS/);
+ assert.match(stories,/pl-public-feed/);
+ assert.match(home,/target:document\.querySelector\('\.pl-public-story-feature'\)/);
  assert.match(feed,/blog_public_routes/);
  assert.match(feed,/\.eq\('status','published'\)/);
  assert.match(feed,/\.eq\('visibility','public'\)/);
- assert.match(feed,/blog_categories/);
- assert.match(feed,/pl-public-blog-author-chip/);
- assert.match(feed,/pl-public-post-feed/);
- assert.match(feed,/stream\.prepend\(fragment\)/);
- assert.match(css,/pl-public-blog-author-chip/);
- assert.match(css,/pl-public-blog-stream-label/);
+ assert.match(feed,/pl-public-story-feature/);
+ assert.match(feed,/Baca artikel/);
+ assert.doesNotMatch(feed,/pl-public-post-feed|pl-public-blog-stream-label|append\(|prepend\(/);
+ assert.match(css,/\.pl-public-story-feature/);
 });
 
-test('Community blog articles stay in the unified feed and limit author repetition',async()=>{
+test('Public blog feature selects a public article and respects private author visibility',async()=>{
  const feed=await readFile(new URL('../../src/features/public-home/blog-feed.js',import.meta.url),'utf8');
- assert.match(feed,/sort\(\(a,b\)=>String\(cats\.get\(a\.category_id\)/);
- assert.match(feed,/if\(n>=3\)return false/);
- assert.match(feed,/Artikel dari blog komunitas/);
+ assert.match(feed,/visibility!=='private'/);
+ assert.match(feed,/eligible\[0\]/);
+ assert.match(feed,/blog_categories/);
+ assert.match(feed,/createSignedUrlMap/);
 });
