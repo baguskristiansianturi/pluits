@@ -11,6 +11,6 @@ test('Post comment threads and reply interactions are owned by the Posts feature
  assert.match(feature,/from\('post_comment_likes'\)/);
  assert.match(feature,/data-comment-reply/);
  assert.match(feature,/Math\.min\(depth\+1,3\)/);
- assert.ok(account.includes("import {loadPostComments} from '../../features/posts/comments.js'"));
+ assert.ok(account.includes("import {renderPostActions,renderPostCard,loadPostComments,bindPostLikeInteractions,bindPostGalleries,normalizeFeedMediaFrames} from '../../features/posts/index.js'"));
  assert.ok(account.includes('return loadPostComments({'));
 });
