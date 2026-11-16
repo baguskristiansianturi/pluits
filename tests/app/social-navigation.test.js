@@ -58,8 +58,8 @@ test('guest root stays public while signed-in root opens the canonical Explore w
  assert.ok(layout.includes("renderSocialMobileNav({active:'home',publicHome:true})"));
  assert.ok(home.includes('stillOnRequestedHome'),'A delayed public-home auth response must not overwrite a route the visitor opened afterward.');
  assert.ok(home.includes('requestHash')&&home.includes('routeVersion'),'Public-home auth routing must be bound to the original route generation.');
-  assert.match(home,/if\(actualViewer&&!guestMode\)/,'A signed-in visitor at the root must be sent to the authenticated workspace.');
-  assert.match(home,/location\.hash='#\/account\/explore'/,'Signed-in root must use the canonical Explore route.');
+  assert.doesNotMatch(home,/if\(actualViewer&&!guestMode\)/,'A signed-in visitor at the root must remain on the global homepage.');
+  assert.match(home,/if\(viewer&&accountActions\)accountActions\.innerHTML=/,'Signed-in global homepage must provide direct Circle and Profile navigation.');
  assert.ok(account.includes('id="ua-story-form"') && account.includes("from('user_stories')"), "Story creation must remain available outside the Explore feed.");
  assert.ok(routes.includes("activity: SITE_BASE + 'notifications/'"));
  assert.ok(routes.includes("create: SITE_BASE + 'create/'"));
