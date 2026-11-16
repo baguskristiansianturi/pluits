@@ -10,6 +10,6 @@ test('Post like and media double-tap behavior is owned by the Posts feature',asy
  assert.match(feature,/pointerup/);
  assert.match(feature,/lastTap&&now-lastTap<330/);
  assert.match(feature,/ua-double-tap-heart/);
- assert.ok(account.includes("import {bindPostLikeInteractions} from '../../features/posts/like-interactions.js'"));
+ assert.ok(account.includes("import {renderPostActions,renderPostCard,loadPostComments,bindPostLikeInteractions,bindPostGalleries,normalizeFeedMediaFrames} from '../../features/posts/index.js'"));
  assert.ok(account.includes('bindPostLikeInteractions({'));
 });
