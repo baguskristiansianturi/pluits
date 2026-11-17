@@ -38,3 +38,21 @@ test('signed-in users are sent to workspace from guest auth screens', () => {
   assert.equal(resolveAuthenticatedRoute('login', true), 'workspace');
   assert.equal(resolveAuthenticatedRoute('forgot', true), 'workspace');
 });
+
+test('shared navbar-to-content gap is 25px and enforced by the shell on every page', async () => {
+  const [tokens, shellCss, ...pages] = await Promise.all([
+    readFile(new URL('../src/design-system/tokens.css', import.meta.url), 'utf8'),
+    readFile(new URL('../src/design-system/page-shell.css', import.meta.url), 'utf8'),
+    readFile(new URL('../src/features/home/home-page.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/features/auth/auth-page.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/features/legal/policy-page.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/features/workspace/workspace-page.js', import.meta.url), 'utf8')
+  ]);
+  assert.match(tokens, /--pl-shell-header-content-gap:\\s*25px/);
+  assert.match(tokens, /--pl-shell-header-content-gap-mobile:\\s*25px/);
+  assert.match(shellCss, /\\.pl-page-shell > \\.pl-page-main\\s*\\{[\\s\\S]*?padding-block-start:\\s*var\\(--pl-shell-header-content-gap\\)/);
+  for (const page of pages) {
+    assert.match(page, /<main class="pl-page-main [^"]+"/);
+    assert.match(page, /<div class="pl-page-shell/);
+  }
+});
