@@ -959,7 +959,7 @@ Pengguna menegaskan bahwa pembangunan dilakukan bertahap, dan setiap tahap harus
 1. **Fondasi dan struktur modular baru** — menyiapkan susunan frontend serta standar modularisasi yang telah dibahas.
 2. **Formulir/halaman Pendaftaran** — menjadi halaman pertama yang dibangun dan diuji. Pengujian tidak hanya menilai tampilan UI, tetapi juga kecocokan ukuran dan komponen, perilaku, validasi, fungsi alur, serta integrasi dan kualitas backend yang mendukungnya.
 3. **Beranda (Global Home)** — dikerjakan setelah tahap Pendaftaran dinilai baik.
-4. **Profil/area tingkat akun berikutnya** — pengguna menyebut bagian ini dengan ucapan transkripsi “ID-nya”. Mengacu pada urutan yang sebelumnya dibahas, kemungkinan yang dimaksud adalah Profil Utama, tetapi istilah ini perlu dikonfirmasi sebelum spesifikasi final dibuat.
+4. **Profil Utama** — tahap ini merujuk pada Profil Utama PLUITS sebagaimana urutan yang telah dibahas sebelumnya. Penyebutan “ID” pada transkripsi voice note sebelumnya adalah kesalahan transkripsi, bukan istilah atau nama bagian yang dimaksud pengguna.
 5. **Social Media** — dikembangkan setelah tahap-tahap sebelumnya. Fitur dan pengalaman Social Media perlu diselesaikan serta diuji sebagai satu bagian penting sebelum aplikasi dinilai cukup siap untuk membuka akses kepada pengguna lain.
 
 - Setiap tahap perlu melalui pemeriksaan UI/UX, responsivitas, fungsi, integrasi backend, dan pengujian terkait.
