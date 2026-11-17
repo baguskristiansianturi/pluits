@@ -59,7 +59,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
   root.innerHTML =
     '<div class="pl-page-shell auth-page">' +
       renderPageHeader({ note: 'EKOSISTEM DIGITAL TERINTEGRASI', label: 'PLUITS — halaman masuk' }) +
-      '<main class="auth-main">' +
+      '<main class="pl-page-main auth-main">' +
         '<aside class="auth-intro-panel">' +
           '<span class="auth-eyebrow">SATU IDENTITAS · SATU EKOSISTEM</span>' +
           '<h1>Terhubung dalam satu ekosistem digital.</h1>' +
