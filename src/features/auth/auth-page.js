@@ -40,13 +40,13 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
   } else {
     fields =
       '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>' +
-      passwordField({ id: 'auth-password', label: 'Password', autocomplete: 'current-password', placeholder: 'Masukkan kata sandi', help: '' });
+      passwordField({ id: 'auth-password', label: 'Kata sandi', autocomplete: 'current-password', placeholder: 'Masukkan kata sandi', help: '' });
   }
 
   const switcher = isForgot || isReset ? '' :
     '<nav class="auth-tabs" aria-label="Jenis akses"><a href="#/login" class="' + (!isRegister ? 'is-active' : '') + '"' + (!isRegister ? ' aria-current="page"' : '') + '>Masuk</a><a href="#/register" class="' + (isRegister ? 'is-active' : '') + '"' + (isRegister ? ' aria-current="page"' : '') + '>Daftar</a></nav>';
 
-  const submitText = isRegister ? 'Buat akun' : isForgot ? 'Kirim tautan pemulihan' : isReset ? 'Simpan password baru' : 'Masuk';
+  const submitText = isRegister ? 'Buat akun' : isForgot ? 'Kirim tautan pemulihan' : isReset ? 'Simpan kata sandi baru' : 'Masuk';
   const footLink = isRegister
     ? 'Sudah punya akun? <a href="#/login">Masuk</a>'
     : isForgot || isReset
@@ -60,11 +60,11 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
           '<img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt="" width="34" height="34">' +
           '<span>PLUITS</span>' +
         '</a>' +
-        '<span class="auth-header-note">RUANG KERJA PENGEMBANGAN</span>' +
+        '<span class="auth-header-note">EKOSISTEM DIGITAL TERINTEGRASI</span>' +
       '</header>' +
       '<main class="auth-main">' +
         '<aside class="auth-intro-panel">' +
-          '<span class="auth-eyebrow">SATU AKUN · BANYAK KEMUNGKINAN</span>' +
+          '<span class="auth-eyebrow">SATU IDENTITAS · SATU EKOSISTEM</span>' +
           '<h1>Terhubung dalam satu ekosistem digital.</h1>' +
           '<p>PLUITS menghubungkan orang, komunitas, tempat, usaha, dan layanan melalui satu pengalaman digital yang terintegrasi.</p>' +
           '<ul class="auth-benefits">' +
@@ -103,7 +103,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
           '<p class="auth-security-note">' + renderIcon('lock') + '<span>Jaga kerahasiaan kata sandi dan jangan bagikan tautan pemulihan akun kepada siapa pun.</span></p>' +
         '</section>' +
       '</main>' +
-      '<footer class="auth-footer"><span>© 2026 PLUITS. Seluruh hak cipta dilindungi.</span><span>PLUITS · Ekosistem Digital</span></footer>' +
+      '<footer class="auth-footer"><span>© 2026 PLUITS. Hak cipta dilindungi.</span><span>PLUITS · Ekosistem Digital</span></footer>' +
     '</div>';
 
   const form = root.querySelector('[data-auth-form]');
@@ -133,7 +133,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
       const reveal = input.type === 'password';
       input.type = reveal ? 'text' : 'password';
       button.innerHTML = renderIcon(reveal ? 'eyeOff' : 'eye');
-      button.setAttribute('aria-label', reveal ? 'Sembunyikan password' : 'Tampilkan password');
+      button.setAttribute('aria-label', reveal ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
       button.setAttribute('aria-pressed', String(reveal));
     });
   });
@@ -187,7 +187,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
       } else if (isReset) {
         await authService.updatePassword(values.get('password'));
         showStatus(status, 'Kata sandi berhasil diperbarui. Silakan masuk kembali.', 'success');
-        submit.textContent = 'Password diperbarui';
+        submit.textContent = 'Kata sandi diperbarui';
       } else {
         const nextSession = await authService.signIn({
           email: values.get('email'),
