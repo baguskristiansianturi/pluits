@@ -13,7 +13,7 @@ Status: **DESIGN BASELINE + EXISTING IMPLEMENTATION FOOTPRINT**. Store adalah mo
 
 ## Dokumentasi kanonis
 
-- [Product Design Store](../../../../02-PRODUCT-DESIGN/02-MARKETPLACE/01-MERCHANT-OPERATIONS/01-STORE/README.md)
-- [Application Modularization Store](../../../../03-APPLICATION-MODULARIZATION/02-MARKETPLACE/01-MERCHANT-OPERATIONS/01-STORE/README.md)
+- [Product Design Store](../../../02-PRODUCT-DESIGN/02-MARKETPLACE/01-MERCHANT-OPERATIONS/01-STORE/README.md)
+- [Application Modularization Store](../../../03-APPLICATION-MODULARIZATION/02-MARKETPLACE/01-MERCHANT-OPERATIONS/01-STORE/README.md)
 
 Catatan: source dan migrasi Store sudah memiliki jejak implementasi di repository. Status setiap fitur tetap harus dibuktikan melalui audit kode, backend, keamanan, dan UAT; dokumen ini tidak menyatakan Store production-ready.

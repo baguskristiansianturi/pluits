@@ -4,14 +4,14 @@ Status: **IN-DESIGN**. Marketplace adalah model bisnis kedua dalam ekosistem PLU
 
 Marketplace bukan sistem operasional semua merchant. Ia menghubungkan pengalaman pelanggan dengan modul vertikal yang masing-masing tetap memiliki domain operasional sendiri.
 
-## Merchant Operations
+## Merchant verticals
 
-Folder ini menampung modul merchant yang terhubung ke Marketplace:
+Folder Marketplace langsung menampilkan dua modul merchant yang sudah memiliki baseline:
 
-1. [Store](01-MERCHANT-OPERATIONS/01-STORE/README.md) — operasional toko/merchant produk, katalog, varian, persediaan, pesanan, dan Seller Center.
-2. [Restaurant & Café](01-MERCHANT-OPERATIONS/02-RESTAURANT-CAFE/README.md) — operasional restoran/kafe, reservasi, kunjungan dine-in, menu, pesanan, kitchen, layanan, dan kasir.
+1. [01 — Store](01-STORE/README.md) — operasional toko/merchant produk, katalog, varian, persediaan, pesanan, dan Seller Center.
+2. [02 — Restaurant & Café](02-RESTAURANT-CAFE/README.md) — operasional restoran/kafe, reservasi, kunjungan dine-in, menu, pesanan, kitchen, layanan, dan kasir.
 
-Kedua modul tersebut adalah vertikal merchant di dalam cakupan Marketplace, bukan model ekosistem yang berdiri sejajar dengan Marketplace.
+Keduanya adalah vertikal merchant di dalam cakupan Marketplace, bukan model ekosistem yang berdiri sejajar dengan Marketplace.
 
 ## Batas tanggung jawab
 

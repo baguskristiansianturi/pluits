@@ -14,7 +14,7 @@ Status: **DESIGN BASELINE — NOT IMPLEMENTED**. Restaurant & Café adalah modul
 
 ## Dokumentasi kanonis
 
-- [Product Design Restaurant & Café](../../../../02-PRODUCT-DESIGN/02-MARKETPLACE/01-MERCHANT-OPERATIONS/02-RESTAURANT-CAFE/README.md)
-- [Application Modularization Restaurant & Café](../../../../03-APPLICATION-MODULARIZATION/02-MARKETPLACE/01-MERCHANT-OPERATIONS/02-RESTAURANT-CAFE/README.md)
+- [Product Design Restaurant & Café](../../../02-PRODUCT-DESIGN/02-MARKETPLACE/01-MERCHANT-OPERATIONS/02-RESTAURANT-CAFE/README.md)
+- [Application Modularization Restaurant & Café](../../../03-APPLICATION-MODULARIZATION/02-MARKETPLACE/01-MERCHANT-OPERATIONS/02-RESTAURANT-CAFE/README.md)
 
 Rancangan ini belum menjadi implementasi aplikasi dan tidak mengubah halaman PLUITS yang sedang berjalan.

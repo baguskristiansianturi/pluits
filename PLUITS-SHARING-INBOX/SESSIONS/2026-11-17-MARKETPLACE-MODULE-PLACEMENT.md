@@ -4,14 +4,14 @@ Status: **SORTED / ACCEPTED**
 
 ## Catatan sharing
 
-Pengguna mengoreksi hasil cleanup repository: ketika folder Marketplace dibuka, modul Store dan Restaurant & Café yang sudah pernah dibuat harus terlihat dan ditempatkan di bawah Marketplace. Folder model ekosistem lain boleh tetap kosong/dasar karena memang belum dirancang atau dibuat.
+Pengguna mengoreksi hasil cleanup repository: ketika folder Marketplace dibuka, modul Store dan Restaurant & Café yang sudah pernah dibuat harus terlihat langsung sebagai folder di bawah Marketplace. Folder model ekosistem lain boleh tetap kosong/dasar karena memang belum dirancang atau dibuat.
 
 Masalah yang ditemukan: dokumen Store dan Restaurant & Café masih tertinggal di `PLUITS-SHARING-INBOX/LEGACY-TO-SORT/`, sedangkan folder kanonis Marketplace hanya memiliki README placeholder.
 
 ## Keputusan
 
 - Marketplace menjadi induk/index untuk merchant vertical yang terhubung dengannya.
-- Store dan Restaurant & Café harus terlihat langsung di bawah `01-ECOSYSTEM-MODELS/02-MARKETPLACE/01-MERCHANT-OPERATIONS/`.
+- Folder Marketplace menampilkan Store dan Restaurant & Café secara langsung.
 - Detail product design ditempatkan di `02-PRODUCT-DESIGN/02-MARKETPLACE/01-MERCHANT-OPERATIONS/`.
 - Detail technical architecture, project, testing, dan audit ditempatkan di `03-APPLICATION-MODULARIZATION/02-MARKETPLACE/01-MERCHANT-OPERATIONS/`.
 - Marketplace customer-facing design dan technical blueprint tetap dipisahkan dari merchant operations.
