@@ -51,3 +51,12 @@ Use `03-APPLICATION-MODULARIZATION/` for code ownership, module boundaries, arch
 | Layout registry | `src/design-system/layouts.js` | `LAY-GLOBAL-HOME-001` | `PAGE-GLOBAL-HOME-PUBLIC` |
 | Route/auth state | `src/app/routes.js`, `src/config/paths.js`, `src/app/create-app.js` | `home` route and session redirect | Guest home; signed-in workspace fallback |
 | Regression coverage | `tests/routes.test.js` | Route and brand-link assertions | Route/navigation regression |
+
+
+## Shared page-shell content spacing — 25px
+
+| Specification | Runtime source | Token/selector | Consumers |
+|---|---|---|---|
+| `01-DESIGN-TOKENS/README.md` — Shared page-shell vertical spacing | `src/design-system/tokens.css` | `--pl-shell-header-content-gap`, `--pl-shell-header-content-gap-mobile` = `25px` | Every page using the shared shell |
+| Same | `src/design-system/page-shell.css` | `.pl-page-shell > .pl-page-main` | Public home, auth, legal/policy, authenticated workspace |
+| Route/page ownership | `src/features/home/home-page.js`, `src/features/auth/auth-page.js`, `src/features/legal/policy-page.js`, `src/features/workspace/workspace-page.js` | Direct `.pl-page-main` child under `.pl-page-shell` | `#/home`, auth routes, legal routes, `#/workspace` |
