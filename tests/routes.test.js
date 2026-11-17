@@ -29,14 +29,14 @@ test('workspace is guarded by a session', () => {
   assert.equal(resolveAuthenticatedRoute('workspace', false), 'login');
   assert.equal(resolveAuthenticatedRoute('workspace', true), 'workspace');
 });
-test('guest home remains public and authenticated home returns to current internal workspace', () => {
+test('the same global home route renders for guests and active users without redirecting away', () => {
   assert.equal(resolveAuthenticatedRoute('home', false), 'home');
-  assert.equal(resolveAuthenticatedRoute('home', true), 'workspace');
+  assert.equal(resolveAuthenticatedRoute('home', true), 'home');
 });
 test('signed-in users are sent to workspace from guest auth screens', () => {
-  assert.equal(resolveAuthenticatedRoute('register', true), 'workspace');
-  assert.equal(resolveAuthenticatedRoute('login', true), 'workspace');
-  assert.equal(resolveAuthenticatedRoute('forgot', true), 'workspace');
+  assert.equal(resolveAuthenticatedRoute('register', true), 'home');
+  assert.equal(resolveAuthenticatedRoute('login', true), 'home');
+  assert.equal(resolveAuthenticatedRoute('forgot', true), 'home');
 });
 
 test('navbar-to-content spacing has one global design-system rule', async () => {
