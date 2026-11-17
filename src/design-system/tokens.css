@@ -31,7 +31,7 @@
   --pl-shell-header-height: 82px;
   --pl-shell-header-height-mobile: 68px;
   /* One responsive-invariant navbar-to-content spacing rule for every shared page. */
-  --pl-shell-header-content-gap: 25px;
+  --pl-shell-header-content-gap: 50px;
   --pl-shell-content-footer-gap: 38px;
   --pl-shell-content-footer-gap-mobile: 28px;
   --pl-shell-footer-min-height: 58px;
