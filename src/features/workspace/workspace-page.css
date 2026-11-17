@@ -3,17 +3,6 @@
   background: var(--pl-color-canvas);
 }
 
-.workspace-header {
-  display: flex;
-  min-height: 76px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 0 max(var(--pl-page-gutter), calc((100vw - var(--pl-container-wide)) / 2));
-  border-bottom: 1px solid var(--pl-color-border);
-  background: #fff;
-}
-
 .workspace-header-right,
 .workspace-user {
   display: flex;
@@ -390,11 +379,6 @@
 }
 
 @media (max-width: 767px) {
-  .workspace-header {
-    min-height: 66px;
-    padding-inline: var(--pl-page-gutter);
-  }
-
   .workspace-header-right {
     gap: 10px;
   }
