@@ -29,13 +29,13 @@ export function mountWorkspacePage({ root, user, onSignOut }) {
   ).join('');
 
   root.innerHTML =
-    '<div class="workspace-page">' +
+    '<div class="pl-page-shell workspace-page">' +
       renderPageHeader({
         label: 'PLUITS ruang kerja',
         variant: 'workspace',
         rightContent: '<div class="workspace-header-right"><span class="workspace-label">RUANG KERJA</span><div class="workspace-user"><span class="workspace-avatar">' + initial + '</span><span class="workspace-user-name">' + name + '</span></div><button class="workspace-signout" type="button" data-sign-out>' + renderIcon('logout') + '<span>Keluar</span></button></div>'
       }) +
-      '<main class="workspace-main">' +
+      '<main class="pl-page-main workspace-main">' +
         '<section class="workspace-welcome">' +
           '<div><span class="workspace-eyebrow">WORKSPACE · INTERNAL</span><h1>Selamat datang, ' + name + '.</h1><p>Ini adalah ruang kerja awal untuk membangun PLUITS bersama, tahap demi tahap.</p><span class="workspace-account">' + email + '</span></div>' +
           '<div class="workspace-welcome-mark"><img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt="" width="104" height="104"></div>' +
