@@ -2,7 +2,7 @@
 
 Status: **FOUNDATION SETUP — standards and values are not yet fully approved.**
 
-This folder is the cross-platform source of design and interface rules for every PLUITS page and ecosystem. It defines the approved materials, measurements, reusable components, layout patterns, interaction patterns, and the procedures required to design, implement, review, and change an interface.
+This folder is the cross-platform source of design and interface rules for every PLUITS page and ecosystem. It defines the approved materials, measurements, reusable components, layout patterns, interaction patterns, UI technologies, and the procedures required to design, implement, review, and change an interface.
 
 It is deliberately a separate top-level workstream inside `PLUITS-MASTER-MODEL-APP/`. It is not owned by Social Media, Marketplace, or another individual ecosystem.
 
@@ -21,6 +21,7 @@ A page must not independently invent global measurements, typography, colors, lo
 - The approved icon catalogue.
 - Shared UI components and their variants/states.
 - Reusable layout and interaction patterns.
+- UI implementation technologies and tooling decisions.
 - Design/development SOP, quality checks, and change control.
 - The mapping between these standards and their implementation in the runtime codebase.
 
@@ -39,30 +40,33 @@ A page must not independently invent global measurements, typography, colors, lo
 ├── 08-INTERACTION-PATTERNS/
 ├── 09-DESIGN-AND-DEVELOPMENT-SOP/
 ├── 10-QUALITY-AND-CHANGE-CONTROL/
-└── 11-IMPLEMENTATION-MAPPING/
+├── 11-IMPLEMENTATION-MAPPING/
+└── 12-TECHNOLOGY-AND-TOOLING/
 ```
 
 Each numbered folder owns one specific area. Its README defines the scope and the material that belongs there.
 
 ## Where rules belong
 
-- Platform-wide visual and interface rules belong here, with the governing policy in `00-FOUNDATION-GOVERNANCE.md`.
+- Platform-wide visual, interface, and UI-tooling rules belong here, with the governing policy in `00-FOUNDATION-GOVERNANCE.md`.
 - Page purpose, user needs, page inventory, content hierarchy, and page-specific UX decisions belong in `02-PRODUCT-DESIGN/`.
-- Technical module boundaries, source-code ownership, API/data contracts, security, testing infrastructure, deployment, and rollback belong in `03-APPLICATION-MODULARIZATION/`.
+- Overall technical architecture, module boundaries, source-code ownership, API/data contracts, backend/database architecture, security, deployment, and rollback belong in `03-APPLICATION-MODULARIZATION/`.
 - Actual production implementation belongs in the runtime source folders, not in this documentation folder.
+
+The technology register here covers only technologies used to create, render, and validate the user interface. It does not replace the platform-wide technical architecture.
 
 The other areas must link to this foundation rather than copy its global rules.
 
 ## Approval status
 
-The directory and governance workflow are established first. Specific values, fonts, icon selections, component specifications, and responsive breakpoints remain **proposed / pending audit** until they are reviewed and explicitly approved. Illustrations or examples are not automatically approved standards.
+The directory and governance workflow are established first. Specific values, fonts, icon selections, component specifications, responsive breakpoints, and proposed technology changes remain **proposed / pending audit** until they are reviewed and explicitly approved. Existing runtime choices are recorded as observations, not automatically declared final standards.
 
 ## Required workflow
 
 1. Read the governance document.
-2. Read the relevant foundation standards.
+2. Read the relevant foundation standards and technology decision register.
 3. Read the target page's Product Design specification.
 4. Check existing runtime implementation and module boundaries.
-5. Reuse approved assets, tokens, components, and patterns.
-6. Report missing resources or conflicting requirements before inventing replacements.
+5. Reuse approved assets, tokens, components, patterns, and tools.
+6. Report missing resources or conflicting requirements before inventing replacements or adding dependencies.
 7. Implement, test all relevant viewports, perform impact analysis, and document the result.
