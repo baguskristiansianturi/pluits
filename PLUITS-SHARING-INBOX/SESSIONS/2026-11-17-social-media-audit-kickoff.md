@@ -711,6 +711,173 @@ Dokumentasi harus dapat digunakan sebagai panduan operasional oleh staf develope
 - Cara menjaga SOP tetap sinkron dengan implementasi ketika struktur kode berkembang.
 
 
+
+### Penegasan lanjutan — urutan fondasi desain dan perpustakaan layout PLUITS
+
+Pengguna menetapkan urutan kerja utama ketika merancang atau membangun halaman, fitur, dan layanan PLUITS. Pengguna juga meminta perpustakaan layout yang berisi banyak pola komposisi siap pakai dan dapat dipanggil kembali dengan nama atau ID tertentu.
+
+#### 1. Urutan standar sebelum membuat halaman/fitur
+
+Urutan prioritas yang disampaikan pengguna:
+
+1. **Ukuran dan dimensi terlebih dahulu**
+   - Ukuran dasar dan skala; lebar, tinggi, batas minimum/maksimum.
+   - Rasio media dan ukuran gambar/video.
+   - Spacing, padding, gap, ukuran elemen, grid, container, breakpoint, dan aturan responsif.
+   - Ukuran untuk perangkat/viewport yang relevan.
+2. **Ikon**
+   - Inventaris ikon resmi, nama/ID, kategori, ukuran, posisi, alignment, dan varian.
+   - Sumber aset SVG lokal/Icon Registry serta aturan pemetaan ikon pada fitur.
+3. **Warna**
+   - Palet dan design tokens; warna teks, latar, border, ikon, status, dan interaksi.
+   - Kontras, konteks penggunaan, tema, dan varian yang didukung.
+4. **Perilaku**
+   - Aksi/interaksi, trigger, hasil, navigasi, feedback, validasi, animasi, dan aksesibilitas.
+   - State normal, aktif, nonaktif, focus/hover bila relevan, loading, error, empty, success, dan disabled.
+   - Perilaku responsif serta input sentuh/keyboard sesuai konteks.
+5. **Layout**
+   - Komposisi halaman dan penempatan bagian.
+   - Pola susunan komponen dan struktur area halaman.
+   - Pemilihan pola dari perpustakaan layout yang sudah disiapkan.
+   - Variasi layout sesuai jenis halaman dan kebutuhan ekosistem.
+
+Urutan prioritas desain yang diminta pengguna adalah **ukuran/dimensi → ikon → warna → perilaku → layout**. Detail penerapan dapat disesuaikan dengan jenis artefak, tetapi standar fondasi yang relevan tidak boleh diabaikan. Layout harus menggunakan ukuran, aset, warna, dan perilaku yang sudah memiliki aturan; bukan membuat nilai acak sendiri di tiap halaman.
+
+#### 2. Ukuran dan dimensi menjadi fondasi pertama
+
+- Sebelum merancang detail visual halaman, tetapkan sistem ukuran yang konsisten.
+- Sistem ukuran meliputi skala komponen, rasio media, spacing, container, grid, breakpoint, dan responsivitas, bukan hanya lebar/tinggi halaman.
+- Ukuran dibedakan menurut konteks: perangkat/viewport, tipe media, jenis komponen, dan jenis halaman.
+- Nilai resmi memiliki ID/nama token atau referensi, dokumentasi penggunaan, dan pemilik.
+- Jika ukuran berasal dari token bersama, halaman/komponen wajib menggunakan token tersebut, bukan membuat nilai tandingan sembarangan.
+- Ukuran khusus hanya dibuat sebagai varian terdokumentasi dengan alasan, cakupan, dan dampak jelas.
+- Angka final belum ditetapkan; seluruh ukuran perlu diinventarisasi, dianalisis, lalu ditetapkan dalam rulebook dan fondasi UI.
+
+#### 3. Inventaris ikon sebagai perpustakaan resmi
+
+- PLUITS memerlukan katalog ikon lengkap dan terorganisasi untuk seluruh ekosistem.
+- Setiap ikon memiliki identitas/nama, kategori, sumber aset, ukuran/varian, makna, konteks penggunaan, dan status.
+- Ikon resmi dikelola sebagai aset lokal/registry PLUITS; hindari salinan aset yang tidak terlacak.
+- Katalog mencakup ikon umum lintas platform serta ikon khusus per ekosistem/fitur.
+- Halaman/komponen merujuk pada ikon katalog, sehingga perintah seperti mengubah ikon Love pada Post dapat dilacak ke sumber yang benar.
+- Inventaris final ikon belum disusun; kebutuhan ikon diturunkan dari inventaris halaman dan komponen.
+
+#### 4. Sistem warna sebagai fondasi yang terkontrol
+
+- Warna disusun dalam palet/token resmi, bukan ditetapkan berbeda-beda oleh tiap halaman.
+- Dokumentasi menyebut peran warna (text, surface, border, primary action, status, feedback) dan konteks penggunaannya.
+- Variasi warna per tema/ekosistem memiliki batas jelas agar identitas PLUITS konsisten tanpa memaksakan semua layanan memiliki tampilan identik.
+- Perubahan token warna bersama memerlukan pemeriksaan seluruh consumer.
+- Nilai warna dan tema final masih perlu ditentukan.
+
+#### 5. Perilaku komponen dan halaman
+
+- Perilaku harus menjadi aturan eksplisit, bukan interpretasi masing-masing developer.
+- Dokumentasikan trigger, aksi, hasil, transisi state, validasi, feedback, error handling, loading, empty state, akses, dan batas penggunaan.
+- Interaksi dengan tanggung jawab sama dapat memakai pola/kontrak bersama.
+- Perilaku khusus ekosistem tetap dimiliki dan didokumentasikan dalam domainnya.
+- Perubahan perilaku harus dilacak ke aturan dan implementasi pemilik serta menjalani uji fungsional/regresi yang relevan.
+
+#### 6. Perpustakaan Layout PLUITS
+
+Pengguna secara eksplisit meminta perpustakaan layout dengan banyak pilihan pola dan gaya komposisi. Tujuannya agar saat membuat halaman, pengguna dapat memerintahkan assistant/developer menggunakan layout tertentu berdasarkan nama atau ID, misalnya **“gunakan Layout ABCD.”**
+
+Perpustakaan ini harus:
+- Menyediakan layout reusable dengan jenis dan gaya komposisi beragam.
+- Memiliki katalog yang dapat dicari berdasarkan ID, nama, kategori, tujuan, dan konteks.
+- Memiliki preview/contoh visual agar pengguna dan developer memahami komposisinya.
+- Menjelaskan struktur area/slot dan jenis komponen yang boleh ditempatkan di setiap area.
+- Menjelaskan ukuran/container/grid/spacing, breakpoint, dan perilaku responsif.
+- Menjelaskan kecocokan penggunaan, kondisi yang tidak sesuai, dan keterbatasannya.
+- Menjelaskan variasi resmi serta bagian yang boleh/tidak boleh disesuaikan.
+- Memiliki dokumentasi implementasi, styling, consumer, Change Map, dan test.
+- Menyediakan pola lintas platform dan pola khusus ekosistem bila kebutuhan memang berbeda.
+- Memungkinkan layout digunakan kembali tanpa menyalin struktur dan CSS secara bebas.
+
+#### 7. Kategori awal perpustakaan layout untuk diaudit
+
+Kategori berikut merupakan usulan pengelompokan awal, bukan daftar layout final atau keputusan bahwa semua contoh wajib dibuat:
+- **Application Shell:** kerangka aplikasi, header, navigasi bawah, sidebar, area konten.
+- **Social Feed:** feed, kartu Post, Story, Reels, profil sosial, discovery.
+- **Directory/Discovery:** daftar entitas, peta + daftar, nearby, kategori, hasil pencarian.
+- **Marketplace:** katalog/grid/list produk, detail produk, keranjang, checkout.
+- **Merchant Operations:** dashboard operasional, menu/produk, pesanan, meja, manajemen merchant.
+- **Content/Editorial:** artikel, detail konten, galeri, halaman informasi.
+- **Forms & Account:** login, registrasi, pemulihan akun, pengaturan, form bertahap.
+- **Dashboard & Management:** ringkasan, tabel data, detail record, filter, panel administrasi.
+- **Booking & Journey:** pencarian, jadwal/paket, pemesanan, pembayaran, tiket/voucher, riwayat.
+- **Communication:** inbox, daftar/detail percakapan, notifikasi, pusat pesan.
+- **Wallet & Transaction:** saldo, aktivitas, detail transaksi, alur pembayaran.
+
+Kategori dapat ditambah atau dipecah berdasarkan kebutuhan seluruh ekosistem PLUITS.
+
+#### 8. Identitas dan dokumentasi setiap Layout
+
+Setiap layout memiliki katalog/lembar spesifikasi yang sekurang-kurangnya memuat:
+- Layout ID unik dan stabil (contoh ilustratif: `LAY-SOC-FEED-001` atau alias `ABCD`);
+- nama, kategori, versi, status, dan pemilik;
+- tujuan, deskripsi, preview, dan contoh halaman;
+- struktur area/slot dan urutan komposisi;
+- ukuran/container/grid/spacing/breakpoint;
+- aturan ikon, warna, dan perilaku yang digunakan;
+- komponen yang boleh ditempatkan pada tiap slot;
+- aturan responsif dan variasi resmi;
+- batas penggunaan dan larangan perubahan;
+- lokasi implementasi dan CSS aktual setelah dibuat;
+- consumer/dependensi, Change Map, dan test visual/fungsional/regresi;
+- riwayat perubahan dan kompatibilitas versi.
+
+Nama ABCD hanya contoh alias. Sistem penamaan/ID final perlu dirancang agar tidak bentrok dan mudah dipahami tim.
+
+#### 9. Pemisahan fondasi, komponen, layout, dan halaman
+
+- **Design Foundation** menyimpan standar ukuran, token, ikon, warna, dan aturan dasar lintas ekosistem.
+- **Component Library** menyimpan komponen reusable dengan fungsi dan kontrak jelas.
+- **Layout Library** menyimpan pola komposisi yang merangkai komponen ke struktur halaman.
+- **Page/Feature Specification** menjelaskan halaman/fitur, memilih layout yang sesuai, dan menentukan konten serta komponen yang ditempatkan.
+- Halaman tidak boleh menduplikasi layout/komponen yang tersedia tanpa alasan dan persetujuan terdokumentasi.
+- Layout khusus ekosistem boleh disimpan di domain ekosistem; standar dan layout bersama berada di Platform UI Foundation. Keduanya saling merujuk dengan jelas.
+
+#### 10. Alur penggunaan perpustakaan saat menerima perintah
+
+Contoh: **“Buat halaman profil menggunakan Layout ABCD.”**
+
+1. Cari Layout ID/alias ABCD pada katalog.
+2. Periksa preview, versi, status, tujuan, dan kecocokannya.
+3. Baca spesifikasi ukuran, grid, breakpoint, slot, dan batas penggunaan.
+4. Ambil komponen resmi untuk slot terkait.
+5. Gunakan token ukuran, ikon, dan warna yang telah ditetapkan.
+6. Terapkan perilaku sesuai spesifikasi halaman/fitur.
+7. Hubungkan halaman dengan layout tanpa menggandakan atau mengubah sumber layout secara langsung.
+8. Periksa penyesuaian lokal yang diperbolehkan.
+9. Jalankan test responsif, visual, fungsional, dan regresi sesuai Change Map.
+10. Catat Layout ID dan versi yang digunakan pada spesifikasi halaman.
+
+Jika layout yang diminta belum ada atau tidak cocok, developer tidak boleh diam-diam mengubah layout lain hingga kehilangan identitasnya. Ajukan layout baru atau varian resmi, dokumentasikan alasan, dan ikuti proses review.
+
+#### Keputusan eksplisit dari klarifikasi ini
+
+- Urutan fondasi desain adalah ukuran/dimensi → ikon → warna → perilaku → layout.
+- PLUITS harus menyiapkan sistem ukuran/dimensi resmi sebelum membuat halaman dan komponen secara luas.
+- PLUITS harus memiliki katalog/perpustakaan ikon resmi yang dapat ditelusuri.
+- PLUITS harus memiliki sistem warna/token terkontrol.
+- Perilaku komponen dan halaman harus memiliki aturan eksplisit.
+- PLUITS harus memiliki perpustakaan layout dengan banyak jenis dan gaya komposisi yang dapat dipanggil melalui nama/ID, misalnya “gunakan Layout ABCD”.
+- Layout, komponen, fondasi desain, dan spesifikasi halaman adalah tanggung jawab berbeda yang saling merujuk.
+- Aturan dan Change Map berlaku untuk layout juga: sumber, styling, batas perubahan, consumer, dampak, dan test harus diketahui.
+
+#### Hal yang masih perlu dirancang
+
+- Skala ukuran/dimensi final, rasio media, spacing scale, grid, container, dan breakpoint.
+- Daftar ikon lengkap serta sistem ID/kategori/varian.
+- Palet warna, semantic tokens, tema, dan aturan kontras.
+- Format spesifikasi perilaku dan state.
+- Kategori, sistem penamaan/ID, versi, dan katalog visual Layout Library.
+- Jumlah layout awal per ekosistem dan prioritas pembuatannya.
+- Mekanisme preview/interaktif untuk meninjau layout sebelum digunakan.
+- Lokasi folder implementasi final untuk layout dan hubungan dokumentasinya dengan gudang UI.
+
+
 ## Status akhir
 
 RAW
