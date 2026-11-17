@@ -78,7 +78,7 @@ export function mountWorkspacePage({ root, user, onSignOut }) {
       const notice = document.createElement('p');
       notice.className = 'workspace-signout-error';
       notice.textContent = 'Belum berhasil keluar. Periksa koneksi lalu coba lagi.';
-      root.querySelector('.workspace-header')?.after(notice);
+      root.querySelector('.pl-page-header--workspace')?.after(notice);
     }
   });
 }
