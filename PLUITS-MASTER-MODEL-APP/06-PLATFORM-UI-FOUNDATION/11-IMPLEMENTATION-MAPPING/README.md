@@ -57,7 +57,7 @@ Use `03-APPLICATION-MODULARIZATION/` for code ownership, module boundaries, arch
 
 | Owner | Single source of truth | Application rule |
 |---|---|---|
-| Design token | `src/design-system/tokens.css` — `--pl-shell-header-content-gap: 25px` | One value at every viewport; no page-specific or mobile duplicate token |
+| Design token | `src/design-system/tokens.css` — `--pl-shell-header-content-gap: 50px` | One value at every viewport; no page-specific or mobile duplicate token |
 | Shared shell | `src/design-system/page-shell.css` — `.pl-page-shell > .pl-page-main` | Every page body placed in the shared shell inherits the spacing automatically |
 | Regression test | `tests/routes.test.js` | Confirms there is exactly one token and the shared shell consumes it |
 
