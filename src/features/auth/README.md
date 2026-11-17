@@ -1,13 +1,29 @@
-# PLUITS central authentication
+# Account Access Feature
 
-All guest authentication entry points use the single feature at `#/account/auth?mode=...`.
+Owner: features/auth  
+Status: bootstrap implementation; visual and interaction values are provisional.
 
-- `mode=login`: email/password sign-in.
-- `mode=register`: display name, email, password, terms consent, and email confirmation.
-- `mode=forgot`: request a Supabase password-recovery email.
-- `mode=reset`: set a new password after the recovery callback.
-- Legacy `#/login`, `#/register`, `#/account/login`, and `#/account/register` routes remain compatible and render the same central screen.
-- The approved registration visual system remains owned by `register.css`; auth modes share its responsive shell and card.
-- Password recovery redirects to the app root with `?auth=reset`; the router recognizes Supabase recovery callbacks and opens the reset form.
-- Public email delivery still requires custom SMTP in Supabase. Do not claim production email delivery until SMTP is configured and tested.
-- SMS verification remains out of the initial signup flow until a provider is configured and tested.
+## Responsibilities
+
+- Registration form and field-level validation.
+- Email/password login.
+- Signup confirmation pending state and resend action.
+- Password recovery and password reset screens.
+- Friendly error and loading feedback.
+- Navigation links between guest auth routes.
+
+## Backend contract
+
+The feature calls the injected Auth service only. It does not access Supabase directly and does not insert profile or wallet rows.
+
+Signup currently sends full_name metadata and redirects to the canonical PLUITS base URL. Database triggers create the related profile and wallet records.
+
+## Open before public signup
+
+- Confirm final Terms of Service and Privacy Policy.
+- Design a durable legal-consent record; the current checkbox is only a client-side gate.
+- Verify Supabase SMTP, email templates, Site URL, and allowed redirects.
+- Review leaked-password protection in Supabase Auth.
+
+
+Signup is disabled by default. It can only be enabled explicitly at build time with VITE_PUBLIC_SIGNUP_ENABLED=true after email, legal, and durable consent requirements are approved.

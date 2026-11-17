@@ -1,0 +1,44 @@
+:root {
+  /* PROVISIONAL: registration/workspace bootstrap tokens, pending product-owner review. */
+  --pl-unit: 4px;
+  --pl-space-1: 4px;
+  --pl-space-2: 8px;
+  --pl-space-3: 12px;
+  --pl-space-4: 16px;
+  --pl-space-5: 20px;
+  --pl-space-6: 24px;
+  --pl-space-8: 32px;
+  --pl-space-10: 40px;
+  --pl-space-12: 48px;
+  --pl-space-16: 64px;
+
+  --pl-container-wide: 1180px;
+  --pl-container-auth: 1120px;
+  --pl-form-width: 460px;
+  --pl-page-gutter: 24px;
+  --pl-breakpoint-tablet: 760px;
+  --pl-breakpoint-desktop: 1040px;
+
+  --pl-color-brand: #08ad9e;
+  --pl-color-brand-bright: #18c8b5;
+  --pl-color-brand-soft: #e7f8f5;
+  --pl-color-ink: #172b45;
+  --pl-color-text: #243746;
+  --pl-color-muted: #6d7d87;
+  --pl-color-canvas: #f4f8f7;
+  --pl-color-surface: #ffffff;
+  --pl-color-border: #dce7e4;
+  --pl-color-border-strong: #c6d7d2;
+  --pl-color-danger: #b42318;
+  --pl-color-success: #16745d;
+
+  --pl-radius-sm: 8px;
+  --pl-radius-md: 14px;
+  --pl-radius-lg: 20px;
+  --pl-radius-xl: 28px;
+  --pl-radius-pill: 999px;
+  --pl-shadow-card: 0 18px 50px rgba(23, 43, 69, 0.08);
+  --pl-shadow-float: 0 10px 30px rgba(23, 43, 69, 0.12);
+
+  --pl-font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}

@@ -39,3 +39,39 @@ Sharing session → capture raw notes in one session file → sort into topics �
 - For code changes, run the required tests and production build; verify the workflow and deployment result.
 - For documentation-only changes, confirm no application source, build configuration, or runtime assets changed. Do not claim deployment was required unless a deployment actually ran.
 - Report exact commit SHA, workflow status, deployment status, tests/build result, and UAT state.
+
+
+## Explicit product-owner directive — frontend replacement (17 November 2026)
+
+The product owner explicitly authorized a clean replacement of the old frontend runtime. This is a scoped exception to the earlier default preference for incremental migration.
+
+- Remove the old frontend runtime source, page/component/CSS implementations, legacy frontend tests, and obsolete frontend-only verification scripts when replacing this runtime.
+- Build the new frontend in clear, isolated modules with one shared UI foundation. Do not merge old page/component/CSS implementations into the new runtime.
+- Preserve all Master Model documentation, Sharing Inbox records, Supabase migrations, backend contracts, database schema, Auth users, profiles, wallet records, media, messages, and all existing user data.
+- Frontend cleanup is not permission to reset, truncate, recreate, or otherwise modify production data or backend security.
+- Do not change Supabase Auth configuration, SMTP, password policy, RLS, triggers, functions, or migrations without a separate explicit scope and impact plan.
+- Preserve tests that verify backend security, database migrations, repository governance, deployment behavior, and PWA assets. Replace only tests that are coupled to deleted frontend implementations.
+- The first authenticated destination is an internal development workspace for discussion and review. It is not the final Global Home or public Social Media experience, and it does not claim to provide an in-app chat system.
+- Build sequence: Registration → Global Home → Primary Profile → Social Media. Each stage requires user review and acceptance before moving on.
+
+## Frontend V2 module ownership
+
+- app/ owns bootstrap, routing, auth guards, and lifecycle.
+- features/ owns user-facing feature behavior and page-scoped UI.
+- services/ owns business/service logic and data access orchestration; it must not render HTML or access page DOM.
+- lib/ owns low-level SDK clients and adapters.
+- design-system/ owns tokens, icon registry, and layout/interaction patterns.
+- styles/ owns only truly global resets and base styles.
+- Feature styles must be scoped to their feature root.
+- Services must not import features, pages, components, or design-system UI.
+- Features must not import app/page internals or sibling feature internals.
+- A shared token/component change requires consumer impact analysis.
+
+## Registration and release gates
+
+- Existing-account login must use the same PLUITS Supabase project and existing Auth storage identity.
+- Signup must use Supabase Auth and must not duplicate profile or wallet rows created by database triggers.
+- Public signup remains disabled until SMTP/email delivery, allowed redirect URLs, final legal documents, and durable consent recording are verified.
+- The current legal pages and design tokens are drafts; do not describe them as approved.
+- Keep the site noindex during internal testing.
+- Do not claim real-account login, email delivery, browser UAT, or deployment success until the relevant evidence has been checked.

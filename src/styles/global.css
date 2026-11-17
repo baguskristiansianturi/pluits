@@ -1,0 +1,124 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--pl-color-canvas);
+  color: var(--pl-color-text);
+  font-family: var(--pl-font-sans);
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--pl-color-canvas);
+  color: var(--pl-color-text);
+  font-family: var(--pl-font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: var(--pl-color-brand);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--pl-color-ink);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid rgba(8, 173, 158, 0.28);
+  outline-offset: 3px;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.pluits-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--pl-color-ink);
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+}
+
+.pluits-brand img {
+  display: block;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.ui-icon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.ui-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.app-loading,
+.app-error {
+  display: grid;
+  min-height: 100vh;
+  place-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.app-error button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--pl-radius-pill);
+  background: var(--pl-color-brand);
+  color: #fff;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .pluits-brand {
+    font-size: 17px;
+  }
+}
