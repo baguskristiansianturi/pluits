@@ -1,4 +1,5 @@
 import { assetUrl, PUBLIC_SIGNUP_ENABLED } from '../../config/runtime.js';
+import { routeHref } from '../../config/paths.js';
 import { renderIcon } from '../../design-system/icons.js';
 
 function passwordField({ id, label, autocomplete, placeholder, help, minLength = 0 }) {
@@ -32,7 +33,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
       '<div class="auth-field"><label for="auth-name">Nama tampilan</label><input id="auth-name" name="full_name" type="text" autocomplete="name" minlength="2" maxlength="80" placeholder="Nama yang akan ditampilkan" required></div>' +
       '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>' +
       passwordField({ id: 'auth-password', label: 'Kata sandi', autocomplete: 'new-password', minLength: 8, placeholder: 'Minimal 8 karakter', help: 'Gunakan kata sandi yang kuat dan berbeda dari akun lain.' }) +
-      '<label class="auth-consent"><input name="terms" type="checkbox" required><span>Saya menyetujui <a href="#/terms">Ketentuan Layanan</a> dan telah membaca <a href="#/privacy">Kebijakan Privasi</a>.</span></label>';
+      '<label class="auth-consent"><input name="terms" type="checkbox" required><span>Saya menyetujui <a href="' + routeHref('terms') + '">Ketentuan Layanan</a> dan telah membaca <a href="' + routeHref('privacy') + '">Kebijakan Privasi</a>.</span></label>';
   } else if (isForgot) {
     fields = '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>';
   } else if (isReset) {
@@ -44,19 +45,19 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
   }
 
   const switcher = isForgot || isReset ? '' :
-    '<nav class="auth-tabs" aria-label="Jenis akses"><a href="#/login" class="' + (!isRegister ? 'is-active' : '') + '"' + (!isRegister ? ' aria-current="page"' : '') + '>Masuk</a><a href="#/register" class="' + (isRegister ? 'is-active' : '') + '"' + (isRegister ? ' aria-current="page"' : '') + '>Daftar</a></nav>';
+    '<nav class="auth-tabs" aria-label="Jenis akses"><a href="' + routeHref('login') + '" class="' + (!isRegister ? 'is-active' : '') + '"' + (!isRegister ? ' aria-current="page"' : '') + '>Masuk</a><a href="' + routeHref('register') + '" class="' + (isRegister ? 'is-active' : '') + '"' + (isRegister ? ' aria-current="page"' : '') + '>Daftar</a></nav>';
 
   const submitText = isRegister ? 'Buat akun' : isForgot ? 'Kirim tautan pemulihan' : isReset ? 'Simpan kata sandi baru' : 'Masuk';
   const footLink = isRegister
-    ? 'Sudah punya akun? <a href="#/login">Masuk</a>'
+    ? 'Sudah punya akun? <a href="' + routeHref('login') + '">Masuk</a>'
     : isForgot || isReset
-      ? '<a href="#/login">Kembali ke Masuk</a>'
-      : 'Belum punya akun? <a href="#/register">Daftar</a>';
+      ? '<a href="' + routeHref('login') + '">Kembali ke Masuk</a>'
+      : 'Belum punya akun? <a href="' + routeHref('register') + '">Daftar</a>';
 
   root.innerHTML =
     '<div class="auth-page">' +
       '<header class="auth-header">' +
-        '<a class="pluits-brand" href="#/login" aria-label="PLUITS — halaman masuk">' +
+        '<a class="pluits-brand" href="' + routeHref('login') + '" aria-label="PLUITS — halaman masuk">' +
           '<img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt="" width="34" height="34">' +
           '<span>PLUITS</span>' +
         '</a>' +
@@ -96,7 +97,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
             '<ol><li>Buka email konfirmasi dari PLUITS.</li><li>Pilih tautan konfirmasi di dalam email.</li><li>Setelah konfirmasi selesai, kembali ke PLUITS untuk masuk.</li></ol>' +
             '<p class="auth-status" data-resend-status role="status" aria-live="polite"></p>' +
             '<button class="auth-secondary" type="button" data-resend>Kirim ulang email konfirmasi</button>' +
-            '<a class="auth-text-link" href="#/login">Kembali ke Masuk</a>' +
+            '<a class="auth-text-link" href="' + routeHref('login') + '">Kembali ke Masuk</a>' +
           '</section>' +
           (isReset ? '<p class="auth-recovery-note">' + (hasRecoverySession ? 'Sesi pemulihan terdeteksi.' : 'Buka halaman ini melalui tautan pemulihan yang dikirim ke email akun.') + '</p>' : '') +
           '<p class="auth-switch-copy">' + footLink + '</p>' +
