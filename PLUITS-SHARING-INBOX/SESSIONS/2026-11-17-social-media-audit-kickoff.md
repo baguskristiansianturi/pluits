@@ -573,6 +573,144 @@ Urutan ini merupakan rencana persiapan yang diturunkan dari arahan pengguna; bel
 - Kapan dan dengan kriteria apa frontend lama dinonaktifkan/dihapus setelah versi baru diterima?
 
 
+
+### Penegasan universal — aturan perubahan, peta lokasi kode, dampak, dan SOP untuk seluruh PLUITS
+
+Pengguna menegaskan bahwa aturan rinci tidak boleh berhenti pada spesifikasi desain atau daftar komponen. Setiap aturan dan komponen harus dilengkapi petunjuk perubahan yang dapat diikuti oleh assistant maupun staf developer PLUITS pada masa mendatang.
+
+Tujuannya adalah agar setiap perintah perubahan dapat ditelusuri ke lokasi yang benar, dilakukan pada bagian yang memang bertanggung jawab, dan tidak menyebabkan kerusakan pada halaman, komponen, atau layanan lain.
+
+#### 1. Aturan harus memiliki petunjuk perubahan yang dapat ditelusuri
+
+Setiap aturan, elemen UI, komponen, dan perilaku fitur perlu menjelaskan:
+- Apa nama elemen/fitur dan apa tanggung jawabnya.
+- Di halaman, alur, dan modul mana elemen tersebut digunakan.
+- Di mana sumber standar/resmi untuk elemen tersebut disimpan.
+- Di mana implementasi komponen berada dalam repository ketika implementasi sudah dibuat.
+- Di mana CSS/styling yang mengatur tampilan elemen tersebut berada.
+- Apakah ukuran/warna/jarak berasal dari design token bersama atau aturan lokal komponen.
+- Bagian lain apa yang bergantung pada komponen, token, aset, atau perilaku tersebut.
+- File, folder, selector, token, registry, atau kontrak mana yang boleh diubah untuk jenis perubahan tertentu.
+- Bagian mana yang tidak boleh diubah secara langsung karena dimiliki oleh komponen atau modul lain.
+- Apa dampak yang mungkin terjadi jika perubahan dilakukan, termasuk halaman dan fitur lain yang dapat ikut terpengaruh.
+- Pengujian dan pemeriksaan apa yang wajib dijalankan setelah perubahan.
+- Bagaimana memastikan hasil perubahan sesuai aturan dan tidak menyebabkan regresi.
+
+Lokasi file aktual tidak boleh ditebak atau dibuat-buat dalam dokumentasi. Setelah struktur implementasi baru ditentukan, setiap petunjuk harus menunjuk ke path, simbol, token, atau registry yang benar dan diperiksa kembali ketika kode berubah.
+
+#### 2. Contoh alur perintah perubahan yang diharapkan
+
+Contoh perintah pemilik produk: **“Tolong ubah ikon Love pada Post.”**
+
+Developer harus dapat menelusuri urutannya:
+1. Identifikasi bahwa ikon tersebut adalah bagian dari komponen aksi/interaksi pada kartu Post Social Media.
+2. Buka aturan Post dan spesifikasi komponen aksi Post untuk memahami fungsi, ukuran, posisi, keadaan normal/aktif, dan perilakunya.
+3. Ikuti referensi ke komponen implementasi dan sumber ikon resmi PLUITS yang benar.
+4. Periksa apakah ikon memakai aset SVG lokal atau pemetaan dalam Icon Registry; jangan mengganti aset pada halaman lain secara sembarangan.
+5. Periksa semua penggunaan komponen/ikon tersebut dan tentukan apakah perubahan hanya berlaku pada Post atau merupakan perubahan ikon bersama.
+6. Ubah sumber yang memang menjadi pemilik ikon/komponen; jangan menimpa CSS global atau komponen yang tidak terkait.
+7. Jalankan pemeriksaan visual dan fungsional pada Post, termasuk kondisi belum disukai/sudah disukai serta ukuran layar yang relevan.
+8. Periksa halaman lain yang menggunakan sumber bersama tersebut sebelum menyatakan perubahan selesai.
+
+Contoh kedua: **“Tolong ubah ukuran tombol.”**
+- Tentukan tombol dan konteks penggunaannya terlebih dahulu.
+- Jika ukuran berasal dari token/komponen tombol bersama, perubahan dilakukan melalui sumber standar tersebut dan dampak terhadap seluruh pengguna komponen diperiksa.
+- Jika ukuran memang merupakan variasi lokal yang disetujui, perubahan dilakukan pada styling komponen pemiliknya.
+- Jangan membuat override CSS baru di halaman secara spontan apabila aturan mengharuskan penggunaan token atau variasi resmi.
+- Uji semua varian dan halaman terdampak sebelum perubahan diterima.
+
+Contoh ini menggambarkan sistem penelusuran perubahan yang diminta; path dan nama file implementasi final baru dapat dicatat setelah struktur frontend baru dirancang dan dibangun.
+
+#### 3. Setiap komponen memerlukan Change Map / peta perubahan
+
+Peta perubahan perlu menjadi bagian dari dokumentasi komponen/aturan. Sekurang-kurangnya memuat:
+- **Component identity:** nama, ID/rujukan, domain pemilik, dan versi.
+- **Product/design rule:** aturan yang mengendalikan tampilan dan perilaku.
+- **Implementation location:** path file, ekspor komponen, registry, atau simbol sumber.
+- **Style ownership:** lokasi CSS/module stylesheet, token, dan aturan styling yang berlaku.
+- **Asset ownership:** lokasi ikon, gambar, font, atau aset lokal terkait.
+- **Consumers/dependencies:** halaman, fitur, komponen, dan layanan lain yang menggunakan sumber tersebut.
+- **Allowed changes:** jenis perubahan yang boleh dilakukan dan tempat perubahan yang benar.
+- **Protected boundaries:** bagian yang tidak boleh disentuh oleh perubahan ini.
+- **Impact assessment:** kemungkinan dampak lokal dan lintas modul.
+- **Required checks:** test fungsi, visual, responsif, aksesibilitas, dan pemeriksaan regresi yang relevan.
+- **Change history:** alasan, tanggal, versi, perubahan yang dilakukan, pemeriksa, dan hasil validasi.
+
+Peta perubahan harus tetap diperbarui ketika komponen dipindahkan, diganti, dipecah, digabungkan, atau ketika dependensinya berubah. Dokumentasi yang menunjuk ke lokasi lama harus diperbaiki agar tidak menyesatkan staf.
+
+#### 4. Aturan kepemilikan dan batas perubahan
+
+- Setiap komponen, aturan, aset, token, dan layanan harus mempunyai satu sumber resmi yang jelas (*single source of truth*) dan domain pemilik.
+- Komponen bersama dimiliki oleh Platform UI Foundation atau layanan bersama sesuai tanggung jawabnya; komponen khusus tetap dimiliki oleh ekosistem/fitur terkait.
+- Halaman menggunakan komponen melalui kontrak yang ditentukan, bukan mengubah isi internal komponen milik domain lain.
+- Perubahan pada token atau komponen bersama wajib mengidentifikasi seluruh pengguna/consumer dan menilai dampak sebelum dilakukan.
+- Perubahan lokal tidak boleh diam-diam mengubah standar global.
+- Perubahan pada komponen global tidak boleh dilakukan hanya untuk memenuhi kebutuhan satu halaman jika kebutuhan itu seharusnya berupa variasi lokal yang terkontrol.
+- Jika satu perubahan membutuhkan modifikasi lintas domain, dokumentasikan dependensi dan koordinasikan seluruh pemilik bagian yang terdampak.
+- Tidak boleh ada aturan “jangan diubah” tanpa alasan dan jalur perubahan resmi. Jika bagian dilindungi, dokumentasikan siapa/apa yang berwenang mengubahnya, kapan pengecualian dapat diberikan, dan pemeriksaan yang diperlukan.
+
+#### 5. SOP penerimaan setiap perintah perubahan
+
+Setiap perintah perubahan dari pemilik produk atau staf harus mengikuti alur yang konsisten:
+1. Catat permintaan dan identifikasi hasil yang diinginkan.
+2. Temukan aturan, halaman, komponen, dan sumber implementasi yang menjadi pemiliknya.
+3. Periksa dependensi dan semua pengguna komponen/sumber yang akan diubah.
+4. Baca batas perubahan, larangan, serta persyaratan kompatibilitas.
+5. Susun penilaian dampak dan daftar file/area yang akan disentuh.
+6. Lakukan perubahan sekecil dan sespesifik mungkin pada sumber yang benar.
+7. Jalankan test dan audit sesuai Change Map.
+8. Periksa area lain yang berpotensi terdampak; jangan hanya memeriksa halaman yang diminta.
+9. Catat hasil, file/simbol yang berubah, test, risiko, dan keputusan penerimaan.
+10. Perbarui dokumentasi, peta perubahan, dan riwayat jika perubahan mengubah aturan atau struktur.
+
+Jika lokasi pemilik, kontrak, atau dampak belum jelas, staf wajib melakukan audit/menanyakan klarifikasi sebelum mengubah kode. Dilarang menebak lokasi CSS atau menambahkan override global hanya agar perubahan tampak cepat selesai.
+
+#### 6. Berlaku untuk seluruh layanan dan bagian PLUITS
+
+Pengguna menegaskan bahwa ketentuan ini tidak hanya berlaku untuk Social Media atau komponen UI. Aturan perubahan dan petunjuk penelusuran harus diterapkan pada seluruh layanan, seluruh ekosistem, serta seluruh bagian PLUITS.
+
+Cakupan yang dimaksud termasuk, tetapi tidak terbatas pada:
+- Global Home, Social Media, Circle, Feed, Post, Story, Reel, profil, komentar, interaksi, dan Inbox/messenger jika ditetapkan;
+- Marketplace beserta Store dan Restaurant & Café;
+- Tickets & Accommodation;
+- Geo/Local & Global Guide Directory;
+- Logistics & Transportation;
+- Digital Wallet;
+- shared platform services, akun, membership, role/permission, notifikasi, dan layanan bersama;
+- frontend, backend, database, API, integrasi eksternal, aset, konfigurasi, infrastruktur, pengujian, deployment, dan dokumentasi.
+
+Untuk perubahan backend/database/API, peta perubahan juga harus menjelaskan tabel atau entitas yang terlibat, relasi, kontrak, kebijakan akses, consumer, migrasi/rollback, dan risiko terhadap data. Untuk perubahan infrastruktur/deployment, dokumentasikan layanan yang terdampak, konfigurasi, dependensi, prosedur validasi, serta pemulihan.
+
+#### 7. Standar kerja untuk staf developer PLUITS
+
+Dokumentasi harus dapat digunakan sebagai panduan operasional oleh staf developer baru maupun tim yang sudah bekerja:
+- Developer tidak perlu menebak folder atau file yang benar.
+- Developer dapat membaca aturan, mengikuti referensi lokasi, memahami batas perubahan, dan mengetahui dampak sebelum menyentuh kode.
+- Developer mengetahui bagian yang boleh diubah, bagian yang harus dilindungi, dan siapa/apa pemiliknya.
+- Developer dapat mengetahui test apa yang wajib dilakukan dan apa bukti bahwa perubahan aman.
+- Developer tidak menganggap satu file CSS atau komponen boleh diubah bebas hanya karena perubahan visual diminta.
+- Standar yang sama berlaku meskipun pekerjaan dilakukan oleh staf berbeda, assistant, atau tim pengembang pada masa mendatang.
+
+#### Keputusan eksplisit dari klarifikasi ini
+
+- Setiap aturan harus memiliki petunjuk penelusuran perubahan yang menjelaskan lokasi sumber, styling/CSS, aset, dependensi, batas perubahan, dan dampak.
+- Setiap komponen/aturan perlu memiliki Change Map yang menghubungkan dokumentasi produk/desain dengan lokasi implementasi aktual.
+- Setiap perintah perubahan harus diawali dengan identifikasi sumber pemilik dan pemeriksaan dampak, bukan langsung mengedit file yang terlihat berkaitan.
+- Perubahan harus dibatasi pada sumber yang benar, diikuti test dan pemeriksaan regresi, serta pembaruan dokumentasi jika diperlukan.
+- Aturan perubahan rinci ini berlaku untuk seluruh layanan dan bagian PLUITS, bukan hanya Social Media.
+- Dokumentasi harus menjadi pedoman kerja yang dapat diikuti staf developer PLUITS pada masa mendatang.
+
+#### Hal yang masih perlu dirancang
+
+- Format baku Change Map dan apakah diletakkan di setiap komponen, di katalog pusat, atau keduanya dengan satu sumber resmi.
+- Sistem identitas/ID untuk halaman, komponen, token, aset, API, tabel, dan layanan agar saling dapat dirujuk.
+- Cara otomatis memeriksa apakah referensi path, simbol, consumer, dan dependensi dalam dokumentasi masih valid setelah perubahan kode.
+- Mekanisme ownership/review untuk perubahan lintas ekosistem dan komponen bersama.
+- Matriks dampak serta level risiko perubahan (lokal, shared, lintas modul, data/API, dan infrastruktur).
+- Standar bukti pengujian dan persetujuan sebelum perubahan dapat dirilis.
+- Cara menjaga SOP tetap sinkron dengan implementasi ketika struktur kode berkembang.
+
+
 ## Status akhir
 
 RAW
