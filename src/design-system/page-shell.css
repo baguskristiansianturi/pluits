@@ -37,14 +37,17 @@
  .pl-footer-bottom { align-items:flex-start; flex-direction:column; justify-content:center; padding-block:12px; }
 }
 
-/* One vertical rhythm contract for every page body between shared chrome. */
-.pl-page-main {
+/* One enforced vertical rhythm contract for every direct page body in the shared shell.
+   The shell-qualified selector prevents feature-level layout classes from overriding this gap. */
+.pl-page-shell > .pl-page-main {
   flex: 1 0 auto;
   min-width: 0;
-  padding-block: var(--pl-shell-header-content-gap) var(--pl-shell-content-footer-gap);
+  padding-block-start: var(--pl-shell-header-content-gap);
+  padding-block-end: var(--pl-shell-content-footer-gap);
 }
 @media (max-width: 767px) {
-  .pl-page-main {
-    padding-block: var(--pl-shell-header-content-gap-mobile) var(--pl-shell-content-footer-gap-mobile);
+  .pl-page-shell > .pl-page-main {
+    padding-block-start: var(--pl-shell-header-content-gap-mobile);
+    padding-block-end: var(--pl-shell-content-footer-gap-mobile);
   }
 }
