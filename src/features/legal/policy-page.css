@@ -1,12 +1,11 @@
 .policy-page {
-  width: min(calc(100% - (2 * var(--pl-page-gutter))), 720px);
-  min-height: 100vh;
-  margin: 0 auto;
-  padding: 36px 0;
+  width: min(100%, 720px);
+  flex: 1 0 auto;
+  margin: 26px auto 38px;
 }
 
 .policy-card {
-  margin-top: 54px;
+  margin-top: 0;
   padding: clamp(26px, 5vw, 48px);
   border: 1px solid var(--pl-color-border);
   border-radius: var(--pl-radius-xl);
