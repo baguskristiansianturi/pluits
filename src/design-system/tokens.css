@@ -15,9 +15,11 @@
   --pl-container-wide: 1180px;
   --pl-container-auth: 1120px;
   --pl-form-width: 460px;
+  /* Shared responsive contract: desktop >=1024px, tablet 768-1023px, mobile <=767px. */
   --pl-page-gutter: 24px;
-  --pl-breakpoint-tablet: 760px;
-  --pl-breakpoint-desktop: 1040px;
+  --pl-breakpoint-mobile: 480px;
+  --pl-breakpoint-tablet: 768px;
+  --pl-breakpoint-desktop: 1024px;
 
   --pl-color-brand: #08ad9e;
   --pl-color-brand-bright: #18c8b5;

@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  padding: 0 max(24px, calc((100vw - var(--pl-container-wide)) / 2));
+  padding: 0 max(var(--pl-page-gutter), calc((100vw - var(--pl-container-wide)) / 2));
   border-bottom: 1px solid var(--pl-color-border);
   background: #fff;
 }
@@ -73,7 +73,7 @@
 }
 
 .workspace-main {
-  width: min(calc(100% - 48px), var(--pl-container-wide));
+  width: min(calc(100% - (2 * var(--pl-page-gutter))), var(--pl-container-wide));
   margin: 0 auto;
   padding: 42px 0 34px;
 }
@@ -379,16 +379,20 @@
   text-align: right;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1023px) {
   .stage-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .workspace-lower-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 767px) {
   .workspace-header {
     min-height: 66px;
-    padding: 0 18px;
+    padding-inline: var(--pl-page-gutter);
   }
 
   .workspace-header-right {
@@ -401,23 +405,23 @@
   }
 
   .workspace-signout {
-    min-height: 38px;
-    padding: 0 11px;
+    min-height: 40px;
+    padding-inline: 11px;
   }
 
   .workspace-main {
-    width: min(calc(100% - 32px), var(--pl-container-wide));
+    width: min(calc(100% - (2 * var(--pl-page-gutter))), var(--pl-container-wide));
     padding-top: 20px;
   }
 
   .workspace-welcome {
     min-height: 190px;
-    padding: 25px 23px;
+    padding: 25px 22px;
     border-radius: 22px;
   }
 
   .workspace-welcome h1 {
-    font-size: 31px;
+    font-size: clamp(27px, 6vw, 31px);
   }
 
   .workspace-welcome p {
@@ -443,8 +447,8 @@
   }
 
   .stage-card {
-    min-height: 190px;
-    padding: 15px;
+    min-height: 180px;
+    padding: 16px;
   }
 
   .stage-card h3 {
@@ -478,7 +482,7 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 479px) {
   .workspace-welcome-mark {
     display: none;
   }
@@ -493,5 +497,15 @@
 
   .stage-card h3 {
     margin-top: 14px;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .workspace-ai-note {
+    gap: 16px;
   }
 }
