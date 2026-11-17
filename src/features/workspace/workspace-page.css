@@ -392,11 +392,6 @@
     padding-inline: 11px;
   }
 
-  .workspace-main {
-    width: min(calc(100% - (2 * var(--pl-page-gutter))), var(--pl-container-wide));
-    padding-top: 20px;
-  }
-
   .workspace-welcome {
     min-height: 190px;
     padding: 25px 22px;
