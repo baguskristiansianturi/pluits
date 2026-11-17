@@ -1141,3 +1141,17 @@ Implementasi baru harus sekaligus menjadi pengujian bahwa AI/developer mengikuti
 - Backend security/migration tests yang tidak bergantung pada frontend lama dipertahankan atau ditulis ulang; test UI lama yang hanya memeriksa halaman yang dihapus tidak dibawa ke runtime baru.
 - Pull Request #43 telah menjalankan pipeline PR pada commit cfb00e20217f979cc97dbb4b26dfe94e8b4b5556 dengan hasil sukses untuk install, npm test, Vite build, verifikasi output, dan upload Pages artifact. Deploy dilewati karena PR tidak mengubah main.
 - Status akun nyata, email delivery, dan browser UAT masih menunggu pengujian pengguna setelah deploy.
+
+
+### Bukti deployment frontend V2 — 17 November 2026
+
+- Pull Request: #43 — merged.
+- Runtime commit: 5d71a7f4e972b736fdffab248b5f3bd26a0d731e.
+- GitHub Actions run: 44111581603 — completed successfully.
+- Steps verified: dependency installation, architecture/backend contract tests, Vite production build, output verification, Pages artifact upload, and GitHub Pages deployment.
+- Runtime source tree now contains 23 files under src/; legacy page/component runtime paths are absent.
+- No files under supabase/ were changed; all 113 existing migration files remain in the repository.
+- Post-deploy read-only database count: 3 Auth users and 3 public.profiles rows, unchanged from the pre-deploy count.
+- Public signup remains disabled by default. Existing-account login is available.
+- Deployment pipeline succeeded. The web inspection tool could not render the Pages URL in this session, so visual rendering and real-account login still require the user's mobile UAT.
+- Current status: DEPLOYED; real-account login and responsive browser UAT are NOT TESTED; stage acceptance remains pending user review.
