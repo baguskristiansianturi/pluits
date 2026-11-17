@@ -1,5 +1,6 @@
 import { assetUrl } from '../../config/runtime.js';
-import { routeHref } from '../../config/paths.js';
+import '../../design-system/page-shell.css';
+import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
 import { LAYOUT_REGISTRY } from '../../design-system/layouts.js';
 import './workspace-page.css';
@@ -29,10 +30,11 @@ export function mountWorkspacePage({ root, user, onSignOut }) {
 
   root.innerHTML =
     '<div class="workspace-page">' +
-      '<header class="workspace-header">' +
-        '<a class="pluits-brand" href="' + routeHref('login') + '" aria-label="PLUITS ruang kerja"><img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt="" width="34" height="34"><span>PLUITS</span></a>' +
-        '<div class="workspace-header-right"><span class="workspace-label">RUANG KERJA</span><div class="workspace-user"><span class="workspace-avatar">' + initial + '</span><span class="workspace-user-name">' + name + '</span></div><button class="workspace-signout" type="button" data-sign-out>' + renderIcon('logout') + '<span>Keluar</span></button></div>' +
-      '</header>' +
+      renderPageHeader({
+        label: 'PLUITS ruang kerja',
+        variant: 'workspace',
+        rightContent: '<div class="workspace-header-right"><span class="workspace-label">RUANG KERJA</span><div class="workspace-user"><span class="workspace-avatar">' + initial + '</span><span class="workspace-user-name">' + name + '</span></div><button class="workspace-signout" type="button" data-sign-out>' + renderIcon('logout') + '<span>Keluar</span></button></div>'
+      }) +
       '<main class="workspace-main">' +
         '<section class="workspace-welcome">' +
           '<div><span class="workspace-eyebrow">WORKSPACE · INTERNAL</span><h1>Selamat datang, ' + name + '.</h1><p>Ini adalah ruang kerja awal untuk membangun PLUITS bersama, tahap demi tahap.</p><span class="workspace-account">' + email + '</span></div>' +
