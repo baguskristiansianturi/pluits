@@ -1,5 +1,5 @@
 .policy-page {
-  width: min(calc(100% - 36px), 720px);
+  width: min(calc(100% - (2 * var(--pl-page-gutter))), 720px);
   min-height: 100vh;
   margin: 0 auto;
   padding: 36px 0;
