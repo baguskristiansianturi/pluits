@@ -27,3 +27,8 @@ Owns the approved PLUITS brand files and their usage specifications.
 - A contextual size or variant must be explicitly documented and approved.
 - Keep logo proportions and clear space intact.
 - If a required variant is missing, submit candidates or a production request for approval.
+
+
+## Registered lockup specification
+
+See [LOGO-02 — Symbol + Wordmark](./LOGO-02-SYMBOL-WORDMARK.md) for the complete asset, sizing, spacing, typography, usage, impact, and change procedure. The current adjustment changes only the symbol-to-wordmark gap to 4 CSS px; symbol size, wordmark typography, and color remain unchanged.

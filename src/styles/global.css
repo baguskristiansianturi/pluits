@@ -68,7 +68,7 @@ button:disabled {
 .pluits-brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--pl-brand-lockup-gap);
   color: var(--pl-color-ink);
   font-size: 19px;
   font-weight: 800;

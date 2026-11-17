@@ -42,3 +42,8 @@ The page vertical rhythm is owned by `tokens.css` and applied by `page-shell.css
 - Reading, standard, and workspace maximum widths: shared container tokens.
 
 Every page with shared chrome uses `.pl-page-shell`; every page body uses `.pl-page-main`. The main region owns both vertical gaps and expands to keep the footer at the bottom on short pages. Feature CSS may set its inner content width and composition, but MUST NOT add page-level top/bottom margins or padding that duplicate shell spacing. Page-specific section spacing is a separate content-layout concern, not shell geometry.
+
+
+## Brand lockup contract — LOGO-02
+
+The symbol-plus-wordmark lockup uses the canonical symbol asset and the existing PLUITS wordmark text treatment. Its horizontal separation is controlled by `--pl-brand-lockup-gap` in `tokens.css`, currently **4 CSS px**. The symbol remains 34 × 34 CSS px. Wordmark font size, weight, letter spacing, and color are unchanged; the existing mobile font-size rule is also preserved. Do not introduce page-local gaps or adjust typography to compensate for this spacing.

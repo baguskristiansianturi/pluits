@@ -35,6 +35,7 @@ A page-specific design may choose a different composition when its purpose requi
 10. All implementation must meet the professional engineering bar defined in 12-TECHNOLOGY-AND-TOOLING/README.md: maintainable module boundaries, explicit/typed or validated contracts, secure backend authorization, automated tests, accessibility, responsive verification, dependency governance, and documented deployment evidence.
 11. Prefer mature, widely adopted, actively maintained technologies appropriate to PLUITS. Do not choose a technology merely because it is popular; record its engineering purpose, trade-offs, maintenance and security implications.
 12. Do not perform a big-bang rewrite of working pages. Framework and language adoption must be incremental, scoped, tested, and reversible.
+13. Every new or changed deliverable must create or update its own canonical documentation in the same work item: assign/retain an ID, record purpose, specification, variants/states, source assets/tokens, implementation mapping, consumers/dependencies, usage guidance, change impact, change procedure, and validation status. Update the relevant registry/index so future developers and AI can discover it without searching unrelated page source. Documentation is not a later optional task.
 
 ## 4. Rule precedence when requirements conflict
 
