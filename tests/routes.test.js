@@ -50,3 +50,20 @@ test('navbar-to-content spacing has one global design-system rule', async () => 
   assert.ok(shellCss.includes('padding-block-start: var(--pl-shell-header-content-gap);'));
   assert.ok(!shellCss.includes('--pl-shell-header-content-gap-mobile'));
 });
+
+test('home renderer chooses public or authenticated Global Home from the active session', async () => {
+  const source = await readFile(new URL('../src/app/create-app.js', import.meta.url), 'utf8');
+  assert.match(source, /if \(session\) mountAuthenticatedHomePage/);
+  assert.match(source, /else mountHomePage/);
+  assert.match(source, /navigate\('home'\)/);
+});
+test('authenticated Global Home uses the canonical brand destination and keeps Circle separate', async () => {
+  const [home, shell] = await Promise.all([
+    readFile(new URL('../src/features/home/authenticated-home.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/design-system/page-shell.js', import.meta.url), 'utf8')
+  ]);
+  assert.match(home, /brandHref:routeHref\('home'\)/);
+  assert.match(home, /GLOBAL HOME/);
+  assert.match(home, /Circle/);
+  assert.match(shell, /routeHref\('home'\)/);
+});
