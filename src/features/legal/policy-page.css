@@ -1,13 +1,6 @@
 .policy-page {
   width: min(100%, 720px);
-  flex: 1 0 auto;
-  margin: var(--pl-page-content-top) auto var(--pl-page-content-bottom);
-}
-
-@media (max-width: 767px) {
-  .policy-page {
-    margin: var(--pl-page-content-top-mobile) auto var(--pl-page-content-bottom-mobile);
-  }
+  margin-inline: auto;
 }
 
 .policy-card {
