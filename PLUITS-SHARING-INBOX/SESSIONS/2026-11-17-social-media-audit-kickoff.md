@@ -995,3 +995,92 @@ Pengguna menegaskan bahwa pembangunan dilakukan bertahap, dan setiap tahap harus
 - Kapan tepatnya aplikasi dianggap cukup siap untuk membuka akses pengguna lain.
 - Apakah lingkungan pengujian online akan menggunakan backend/database terpisah, data sintetis, atau mekanisme lain; bagaimana aksesnya dilindungi.
 - Bagaimana alur versi, misalnya versi produksi saat ini dan versi 2 yang diuji pada lingkungan online sebelum dirilis.
+
+
+### Audit teknis awal — kickoff pembangunan ulang frontend dan Pendaftaran Akun
+
+**Waktu audit:** 17 November 2026  
+**Status:** temuan audit awal; belum menjadi persetujuan perubahan database atau konfigurasi produksi.
+
+#### 1. Arah kerja yang baru dikonfirmasi
+
+- Pengguna mengonfirmasi bahwa pekerjaan yang dimulai adalah pembangunan ulang **frontend PLUITS**, bukan pembuatan cron job.
+- Tahap pertama adalah Pendaftaran Akun.
+- Pembangunan frontend baru diarahkan menggunakan struktur modular baru; frontend lama tidak dipakai sebagai fondasi implementasi baru.
+- Pembersihan/penggantian frontend tidak memberi izin untuk menghapus database, akun, profil, media, atau data PLUITS yang sudah ada.
+- Urutan tahap tetap: Pendaftaran → Beranda Global Home → Profil Utama → Social Media.
+- Setiap tahap perlu diuji pada UI/UX, responsivitas, perilaku, fungsi, dan integrasi backend sebelum lanjut.
+
+#### 2. Kondisi repository dan deployment yang diperiksa
+
+- Repository: `baguskristiansianturi/pluits`; branch utama: `main`; repository berstatus public.
+- Branch kerja baru `rebuild/frontend-v2` dibuat dari `main` untuk memisahkan pekerjaan pembangunan ulang dari branch produksi.
+- Commit dasar branch kerja saat dibuat: `6da502fa0cbf889e86839d80c1b9f10943e59c57`.
+- Belum ada perubahan source code atau deployment pada saat catatan ini dibuat.
+- Workflow `.github/workflows/deploy.yml` menjalankan validasi, test, dan build pada Pull Request, lalu mengunggah artifact; workflow hanya melakukan deployment GitHub Pages pada push ke `main`.
+- Workflow saat ini belum menyediakan URL browser-preview tersendiri untuk Pull Request.
+- Runtime lama menggunakan Vite 8 dan JavaScript, dengan struktur `src/` yang telah berisi banyak fitur lama, beberapa lapisan styling, dan modul akun/social yang saling terhubung. File `src/style.css` berukuran sekitar 286 KB.
+- Controller akun saat ini mengimpor `mountAuthPage` dari `src/features/auth/auth.js`. File `src/features/auth/register.js` juga berisi implementasi pendaftaran terpisah; pemakaian/ketergantungannya harus ditelusuri sebelum file lama dihapus.
+- Karena frontend akan dibangun ulang, source lama tidak boleh dihapus satu per satu tanpa pemeriksaan route, import, aset, test, workflow, dan kontrak backend. Penggantian dilakukan sebagai satu perpindahan yang terencana.
+
+#### 3. Kondisi Supabase production yang diperiksa secara read-only
+
+- Project Supabase `pluits`, ref `ytndswhqxayqpftszwfh`, berstatus `ACTIVE_HEALTHY`, region Singapore (`ap-southeast-1`), PostgreSQL 17.
+- Live migration history menunjukkan 120 migration yang telah diterapkan.
+- Database memiliki 72 tabel pada schema `public`; seluruh 72 tabel yang diperiksa memiliki Row Level Security (RLS) aktif.
+- Query agregat Auth menemukan **3 akun**, terdiri dari **2 akun dengan email terkonfirmasi dan 1 akun belum terkonfirmasi**.
+- Tabel `public.profiles` memiliki 3 baris dan `public.user_profiles` memiliki 3 baris. Kedua tabel adalah bagian dari struktur data aktif; jangan menganggap salah satunya aman dihapus tanpa audit relasi dan consumer.
+- Terdapat tiga trigger pada `auth.users`:
+  1. `on_auth_user_created_pluits` membuat baris `public.profiles` melalui fungsi private.
+  2. `on_auth_user_created_user_profile` membuat baris `public.user_profiles` melalui fungsi private.
+  3. `on_auth_user_created_wallet` membuat akun wallet awal melalui fungsi trigger.
+- Konsekuensi untuk frontend baru: pendaftaran harus menggunakan Supabase Auth dan metadata yang sesuai; frontend tidak boleh membuat ulang baris profil atau wallet secara manual setelah signup karena trigger database sudah menanganinya.
+- Seluruh pemeriksaan di atas bersifat baca-saja. Tidak ada akun, profil, tabel, migration, trigger, atau data yang diubah.
+
+#### 4. Kontrak Pendaftaran Akun yang terlihat pada implementasi sekarang
+
+Implementasi aktif saat ini menggunakan:
+- Nama tampilan (`full_name`).
+- Alamat email.
+- Password.
+- Persetujuan Ketentuan Layanan dan Kebijakan Privasi.
+- Konfirmasi email setelah signup, termasuk opsi mengirim ulang email.
+- `supabase.auth.signUp` dengan `full_name` pada user metadata dan redirect ke base URL aplikasi.
+- Password minimum saat ini 8 karakter.
+- Pembuatan profil dilakukan oleh trigger database, bukan oleh komponen frontend.
+
+Kontrak ini dicatat sebagai baseline implementasi yang sudah ada, bukan keputusan bahwa seluruh field, copy, visual, dan aturan pendaftaran versi baru telah final. Perubahan field atau verifikasi harus diperiksa terhadap konfigurasi Auth dan kebutuhan akun sebelum diimplementasikan.
+
+#### 5. Temuan keamanan dan kesiapan email
+
+- Supabase Security Advisor saat audit menampilkan peringatan bahwa **Leaked Password Protection belum aktif**. Ini perlu ditinjau sebagai bagian dari kesiapan keamanan pendaftaran.
+- Dokumentasi backend repository menyatakan bahwa pengiriman email publik memerlukan custom SMTP. Status konfigurasi SMTP live belum dapat diverifikasi melalui pemeriksaan ini; pengiriman email nyata harus diuji sebelum pendaftaran umum dinyatakan siap.
+- Security Advisor juga menampilkan temuan pada fungsi `SECURITY DEFINER` yang dapat dipanggil role authenticated. Temuan tersebut mencakup berbagai layanan platform dan harus diaudit per fungsi; tidak boleh diperbaiki secara massal sebagai bagian dari pekerjaan UI pendaftaran.
+- Tidak ada perubahan konfigurasi Auth, SMTP, password policy, function privilege, RLS, atau database yang dilakukan.
+
+#### 6. Status fondasi UI sebelum halaman dibangun
+
+- Struktur dokumentasi Platform UI Foundation sudah tersedia.
+- README UI Foundation menyatakan nilai standar belum sepenuhnya disetujui.
+- Governance menyebut exact sizing, spacing, breakpoints, typography, color, icon, dan component specifications masih menunggu audit/persetujuan.
+- Karena itu, halaman Pendaftaran baru perlu menggunakan nilai yang ditetapkan secara eksplisit untuk tahap ini dan menandainya sebagai draft/prototype sampai ditinjau dan disetujui pemilik produk.
+- Urutan fondasi desain yang sudah disampaikan pengguna tetap: ukuran/dimensi → ikon → warna → perilaku → layout.
+- Halaman Pendaftaran menjadi kasus pertama untuk menguji fondasi, bukan alasan untuk membuat token global tanpa dokumentasi atau persetujuan.
+
+#### Keputusan/arah eksplisit
+
+- Pembangunan ulang frontend dimulai dari Pendaftaran Akun.
+- Pekerjaan frontend baru dikerjakan pada branch `rebuild/frontend-v2`, terpisah dari `main`.
+- Semua akun dan data Supabase yang ada harus dipertahankan; audit menemukan 3 akun Auth, sehingga ketiganya diperlakukan sebagai data yang harus dilindungi.
+- Database production tidak di-reset dan tidak dirombak sebagai bagian dari penggantian frontend.
+- Integrasi signup harus menghormati trigger Auth yang telah membuat profil dan wallet.
+- Tidak ada perubahan kode aplikasi, schema, migration, konfigurasi Auth, SMTP, workflow, atau deployment pada tahap audit awal ini.
+
+#### Hal yang masih perlu dipastikan sebelum penerimaan Pendaftaran
+
+- Apakah field awal versi baru tetap nama tampilan, email, password, dan persetujuan legal, dengan verifikasi email sebagai langkah berikutnya.
+- Apakah nomor telepon diperlukan saat pendaftaran atau cukup dilengkapi setelah akun dibuat.
+- Copy, aturan password, dan pengalaman verifikasi email yang akan menjadi standar final.
+- Konfigurasi email provider/SMTP dan URL redirect Auth yang benar-benar aktif.
+- Cara melakukan browser UI test dari perangkat pengguna dan kapan perubahan pertama dipromosikan ke GitHub Pages.
+- Kriteria penerimaan UI, fungsi, keamanan, dan integrasi backend untuk menyatakan tahap Pendaftaran selesai.
