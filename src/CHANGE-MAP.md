@@ -1,7 +1,7 @@
 # Frontend V2 — Change Map
 
 Status: IMPLEMENTED IN MAIN / PROVISIONAL PRODUCT FOUNDATION  
-Scope: Account access, public Global Home and internal development workspace.
+Scope: Account access, guest and authenticated Global Home, and internal development workspace.
 
 ## Source-of-truth and ownership
 | Domain | Canonical path | Owner | Consumers |
@@ -10,10 +10,11 @@ Scope: Account access, public Global Home and internal development workspace.
 | Route names and session redirects | src/app/routes.js | app | App and route tests |
 | Runtime URLs and release flags | src/config/runtime.js | config | App, features and Auth service |
 | Design tokens | src/design-system/tokens.css | design-system | All feature screens |
-| Icon registry | src/design-system/icons.js | design-system | Auth and Workspace |
+| Icon registry | src/design-system/icons.js | design-system | Auth, Global Home and Workspace |
 | Layout registry | src/design-system/layouts.js | design-system | Feature page specifications |
-| Shared brand/header/footer | src/design-system/page-shell.js and page-shell.css | design-system | Home, Auth, Legal and Workspace |
-| Public Global Home | src/features/home/home-page.js and home-page.css | features/home | Guest route |
+| Shared brand/header/footer | src/design-system/page-shell.js and page-shell.css | design-system | Guest Home, Authenticated Home, Auth, Legal and Workspace |
+| Public Global Home | src/features/home/home-page.js and home-page.css | features/home | Guest `#/home` |
+| Authenticated Global Home | src/features/home/authenticated-home.js and authenticated-home.css | features/home | Signed-in `#/home` |
 | Auth UI | src/features/auth/auth-page.js and auth-page.css | features/auth | App router |
 | Legal draft screens | src/features/legal/policy-page.js and policy-page.css | features/legal | App router |
 | Internal workspace | src/features/workspace/workspace-page.js and workspace-page.css | features/workspace | Authenticated route |
@@ -25,7 +26,7 @@ Scope: Account access, public Global Home and internal development workspace.
 
 ## Runtime route map
 - Empty URL/hash or `#/home` → public homepage for guests.
-- Authenticated `#/home` → current internal development workspace until authenticated Global Home is implemented.
+- Authenticated `#/home` → personalized authenticated Global Home; the same route selects the view from the active session.
 - Unknown route → safe registration route.
 - `#/register` → registration information screen; submit disabled by default.
 - `#/login` → existing-account login.
@@ -35,7 +36,7 @@ Scope: Account access, public Global Home and internal development workspace.
 - `#/terms` and `#/privacy` → draft policy status screens.
 
 ## Shared brand navigation
-`renderBrand()` defaults to `#/home`. Guest clicks open public Global Home. Authenticated clicks resolve through the auth-aware guard to the current internal workspace. Any change affects all shared-header consumers and requires route regression coverage.
+`renderBrand()` defaults to `#/home`. Guest clicks open public Global Home. Authenticated clicks open the authenticated Global Home on the same `#/home` route. Any change affects all shared-header consumers and requires route regression coverage.
 
 ## Backend contracts and protected surfaces
 The existing Supabase Auth, SDK version pin, browser publishable key, database triggers, profiles, wallets, user data, RLS, migrations, SMTP and production Auth configuration are unchanged by this homepage increment.
@@ -48,6 +49,6 @@ Run `npm test`, `npm run build`, verify workflow/deployment, and perform manual 
 
 ## Current limitations
 - Signup remains disabled unless explicitly enabled after readiness review.
-- Authenticated Global Home is not implemented; signed-in users still reach internal workspace.
+- Authenticated Global Home is implemented as the platform entry point; Circle/social personal space and the main profile remain separate future product areas.
 - Legal content and durable consent persistence are not finalized.
 - UI values remain provisional, not approved platform-wide standards.

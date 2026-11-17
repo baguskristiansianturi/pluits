@@ -29,14 +29,14 @@ test('workspace is guarded by a session', () => {
   assert.equal(resolveAuthenticatedRoute('workspace', false), 'login');
   assert.equal(resolveAuthenticatedRoute('workspace', true), 'workspace');
 });
-test('guest home remains public and authenticated home returns to current internal workspace', () => {
+test('the same global home route renders for guests and active users without redirecting away', () => {
   assert.equal(resolveAuthenticatedRoute('home', false), 'home');
-  assert.equal(resolveAuthenticatedRoute('home', true), 'workspace');
+  assert.equal(resolveAuthenticatedRoute('home', true), 'home');
 });
-test('signed-in users are sent to workspace from guest auth screens', () => {
-  assert.equal(resolveAuthenticatedRoute('register', true), 'workspace');
-  assert.equal(resolveAuthenticatedRoute('login', true), 'workspace');
-  assert.equal(resolveAuthenticatedRoute('forgot', true), 'workspace');
+test('signed-in users are sent to Global Home from guest auth screens', () => {
+  assert.equal(resolveAuthenticatedRoute('register', true), 'home');
+  assert.equal(resolveAuthenticatedRoute('login', true), 'home');
+  assert.equal(resolveAuthenticatedRoute('forgot', true), 'home');
 });
 
 test('navbar-to-content spacing has one global design-system rule', async () => {
@@ -49,4 +49,21 @@ test('navbar-to-content spacing has one global design-system rule', async () => 
   assert.ok(shellCss.includes('.pl-page-shell > .pl-page-main'));
   assert.ok(shellCss.includes('padding-block-start: var(--pl-shell-header-content-gap);'));
   assert.ok(!shellCss.includes('--pl-shell-header-content-gap-mobile'));
+});
+
+test('home renderer chooses public or authenticated Global Home from the active session', async () => {
+  const source = await readFile(new URL('../src/app/create-app.js', import.meta.url), 'utf8');
+  assert.match(source, /if \(session\) mountAuthenticatedHomePage/);
+  assert.match(source, /else mountHomePage/);
+  assert.match(source, /navigate\('home'\)/);
+});
+test('authenticated Global Home uses the canonical brand destination and keeps Circle separate', async () => {
+  const [home, shell] = await Promise.all([
+    readFile(new URL('../src/features/home/authenticated-home.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/design-system/page-shell.js', import.meta.url), 'utf8')
+  ]);
+  assert.match(home, /brandHref:routeHref\('home'\)/);
+  assert.match(home, /GLOBAL HOME/);
+  assert.match(home, /Circle/);
+  assert.match(shell, /routeHref\('home'\)/);
 });
