@@ -1,4 +1,4 @@
-import { assetUrl } from '../../config/runtime.js';
+import { assetUrl, PUBLIC_SIGNUP_ENABLED } from '../../config/runtime.js';
 import { renderIcon } from '../../design-system/icons.js';
 
 function passwordField({ id, label, autocomplete, placeholder, help }) {
@@ -119,6 +119,12 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
     target.className = 'auth-status is-' + type;
   };
 
+  if (isRegister && !PUBLIC_SIGNUP_ENABLED) {
+    submit.disabled = true;
+    submit.textContent = 'Pendaftaran belum dibuka';
+    showStatus(status, 'Pendaftaran akun baru ditahan sampai SMTP, dokumen legal, dan pencatatan persetujuan selesai. Gunakan Masuk untuk akun yang sudah ada.', 'info');
+  }
+
   root.querySelectorAll('[data-toggle-password]').forEach((button) => {
     button.addEventListener('click', () => {
       const input = button.parentElement?.querySelector('input');
@@ -148,6 +154,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
 
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (isRegister && !PUBLIC_SIGNUP_ENABLED) return;
     if (!form.reportValidity()) return;
 
     const values = new FormData(form);

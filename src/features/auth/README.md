@@ -24,3 +24,6 @@ Signup currently sends full_name metadata and redirects to the canonical PLUITS 
 - Design a durable legal-consent record; the current checkbox is only a client-side gate.
 - Verify Supabase SMTP, email templates, Site URL, and allowed redirects.
 - Review leaked-password protection in Supabase Auth.
+
+
+Signup is disabled by default. It can only be enabled explicitly at build time with VITE_PUBLIC_SIGNUP_ENABLED=true after email, legal, and durable consent requirements are approved.

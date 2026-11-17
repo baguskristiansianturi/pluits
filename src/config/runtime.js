@@ -8,3 +8,5 @@ export function assetUrl(path) {
 }
 
 export const PASSWORD_RESET_URL = new URL('?auth=reset', APP_BASE_URL).toString();
+
+export const PUBLIC_SIGNUP_ENABLED = import.meta.env.VITE_PUBLIC_SIGNUP_ENABLED === 'true';
