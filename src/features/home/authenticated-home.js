@@ -1,4 +1,5 @@
 import { routeHref } from '../../config/paths.js';
+import { assetUrl } from '../../config/runtime.js';
 import '../../design-system/page-shell.css';
 import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
@@ -37,7 +38,7 @@ export function mountAuthenticatedHomePage({ root, user, onSignOut }) {
           '<h1 id="global-home-title">Selamat datang, ' + name + '.</h1>' +
           '<p>Ini adalah titik awal Anda menjelajahi PLUITS. Dari sini, berbagai bagian ekosistem akan terhubung dalam satu pengalaman.</p>' +
           '<a class="global-home-account-link" href="#ruang-ekosistem">Jelajahi ekosistem <span aria-hidden="true">→</span></a></div>' +
-          '<div class="global-home-mark" aria-hidden="true"><span>p</span><small>ONE IDENTITY</small></div>' +
+          '<div class="global-home-mark" aria-hidden="true"><img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt=""><small>ONE IDENTITY</small></div>' +
         '</section>' +
         '<section class="global-home-section" id="ruang-ekosistem" aria-labelledby="global-home-spaces-title">' +
           '<div class="global-home-section-heading"><div><span class="global-home-eyebrow">SATU AKUN · BERAGAM RUANG</span><h2 id="global-home-spaces-title">Jelajahi PLUITS</h2></div><p>Global Home menghubungkan pengalaman lintas ekosistem. Setiap ruang akan tersedia mengikuti tahap kesiapan layanannya.</p></div>' +
