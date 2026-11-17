@@ -30,7 +30,7 @@ Dokumen ini dipindahkan dari root repository ke blueprint modularisasi Store aga
 - Performance advisor reported unindexed foreign keys and multiple permissive SELECT policies on stores. Verify current advisor findings before changing indexes or policies.
 
 ## UAT readiness update — 9 November 2026
-The historical [Social & Store UAT Readiness Audit](../../../../../../PLUITS-SHARING-INBOX/LEGACY-TO-SORT/PLUITS-CORE-REFERENCES/SOCIAL-AND-STORE-UAT-READINESS-AUDIT-2026-11-09.md) contains the source findings. Treat it as historical evidence, not current live status.
+The historical [Social & Store UAT Readiness Audit](../../../../../PLUITS-SHARING-INBOX/LEGACY-TO-SORT/PLUITS-CORE-REFERENCES/SOCIAL-AND-STORE-UAT-READINESS-AUDIT-2026-11-09.md) contains the source findings. Treat it as historical evidence, not current live status.
 
 Historical blockers included:
 - Store onboarding business-type mismatch.
