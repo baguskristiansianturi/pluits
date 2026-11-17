@@ -1,4 +1,4 @@
-/* Shared geometry for the four public account/legal pages. Feature layouts own only their inner composition. */
+/* Canonical reusable chrome: brand, navigation, page header, and footer. Feature CSS must not redefine these contracts. */
 .pl-page-shell {
   --pl-page-content-top: 26px;
   --pl-page-content-bottom: 38px;
@@ -10,54 +10,32 @@
   padding-inline: var(--pl-page-gutter);
   background: var(--pl-color-canvas);
 }
-
-.pl-page-header,
-.pl-page-footer {
-  width: min(100%, var(--pl-container-wide));
-  margin-inline: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.pl-page-header,.pl-page-footer { width: min(100%, var(--pl-container-wide)); margin-inline: auto; }
+.pl-page-header { min-height: 82px; flex: 0 0 auto; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.pl-page-header-note { max-width:46%; color:var(--pl-color-muted); font-size:11px; font-weight:700; letter-spacing:.12em; text-align:right; line-height:1.4; }
+.pl-navbar { display:flex; align-items:center; justify-content:center; gap:24px; min-width:0; }
+.pl-navbar-link { display:inline-flex; min-height:44px; align-items:center; color:var(--pl-color-muted); font-size:13px; font-weight:650; text-decoration:none; white-space:nowrap; }
+.pl-navbar-link:hover,.pl-navbar-link.is-active { color:var(--pl-color-ink); }
+.pl-page-footer { flex:0 0 auto; border-top:1px solid rgba(198,215,210,.65); color:var(--pl-color-muted); font-size:11px; }
+.pl-footer-groups { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:28px; padding:30px 0; }
+.pl-footer-group h2 { margin:0 0 12px; color:var(--pl-color-ink); font-size:12px; font-weight:750; }
+.pl-footer-group ul { display:grid; gap:9px; margin:0; padding:0; list-style:none; }
+.pl-footer-group a,.pl-footer-legal a { color:var(--pl-color-muted); font-size:11px; text-decoration:none; }
+.pl-footer-group a:hover,.pl-footer-legal a:hover { color:var(--pl-color-ink); }
+.pl-footer-bottom { min-height:58px; display:flex; align-items:center; justify-content:space-between; gap:16px; border-top:1px solid rgba(198,215,210,.45); font-size:11px; font-weight:650; }
+.pl-footer-legal { display:flex; flex-wrap:wrap; gap:18px; }
+@media(max-width:767px) {
+ .pl-page-header { min-height:68px; gap:12px; }
+ .pl-page-header-note { max-width:46%; font-size:9px; }
+ .pl-navbar { gap:12px; }
+ .pl-navbar-link { font-size:11px; }
+ .pl-footer-groups { grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px 16px; padding:24px 0; }
+ .pl-footer-bottom { min-height:50px; gap:12px; font-size:9px; }
+ .pl-footer-legal { gap:12px; }
 }
-
-.pl-page-header {
-  min-height: 82px;
-  flex: 0 0 auto;
-}
-
-.pl-page-header-note {
-  max-width: 46%;
-  color: var(--pl-color-muted);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-align: right;
-  line-height: 1.4;
-}
-
-.pl-page-footer {
-  min-height: 58px;
-  flex: 0 0 auto;
-  border-top: 1px solid rgba(198, 215, 210, 0.65);
-  color: var(--pl-color-muted);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-}
-
-@media (max-width: 767px) {
-  .pl-page-shell { padding-inline: var(--pl-page-gutter); }
-  .pl-page-header { min-height: 68px; }
-  .pl-page-header-note { max-width: 46%; font-size: 9px; }
-  .pl-page-footer { min-height: 50px; gap: 12px; font-size: 9px; }
-}
-
-@media (max-width: 479px) {
-  .pl-page-header-note { max-width: 42%; font-size: 8px; }
-  .pl-page-footer {
-    align-items: flex-start;
-    flex-direction: column;
-    justify-content: center;
-    padding-block: 12px;
-  }
+@media(max-width:479px) {
+ .pl-page-header-note { max-width:42%; font-size:8px; }
+ .pl-navbar { gap:8px; }
+ .pl-navbar-link { font-size:10px; }
+ .pl-footer-bottom { align-items:flex-start; flex-direction:column; justify-content:center; padding-block:12px; }
 }
