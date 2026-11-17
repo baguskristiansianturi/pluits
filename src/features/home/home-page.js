@@ -5,6 +5,14 @@ import { renderPageHeader, renderPageFooter } from '../../design-system/page-she
 import { renderIcon } from '../../design-system/icons.js';
 import './home-page.css';
 
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
+const spaces = [
+  { number:'01', title:'Social & Community', description:'Ruang untuk terhubung, mengikuti komunitas, dan berbagi pengalaman.', status:'Disiapkan bertahap' },
+  { number:'02', title:'Local Discovery', description:'Jelajahi orang, tempat, komunitas, dan usaha di sekitar Anda.', status:'Disiapkan bertahap' },
+  { number:'03', title:'Marketplace', description:'Temukan produk dan layanan dari penyedia di dalam ekosistem.', status:'Disiapkan bertahap' },
+  { number:'04', title:'Everyday Services', description:'Akses berbagai layanan yang mendukung kebutuhan sehari-hari.', status:'Disiapkan bertahap' }
+];
+
 const ecosystem = [
   { number:'01', title:'Social & Community', description:'Berbagi cerita, foto, tulisan, dan membangun koneksi dengan orang-orang serta komunitas.', tags:['Cerita','Tulisan','Komunitas'] },
   { number:'02', title:'Local Discovery', description:'Menemukan tempat, usaha, komunitas, dan berbagai hal menarik di sekitar kita.', tags:['Tempat','Usaha lokal','Direktori'] },
