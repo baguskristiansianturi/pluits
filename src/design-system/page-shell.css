@@ -1,9 +1,5 @@
 /* Canonical reusable chrome: brand, navigation, page header, and footer. Feature CSS must not redefine these contracts. */
 .pl-page-shell {
-  --pl-page-content-top: 26px;
-  --pl-page-content-bottom: 38px;
-  --pl-page-content-top-mobile: 12px;
-  --pl-page-content-bottom-mobile: 28px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -11,7 +7,7 @@
   background: var(--pl-color-canvas);
 }
 .pl-page-header,.pl-page-footer { width: min(100%, var(--pl-container-wide)); margin-inline: auto; }
-.pl-page-header { min-height: 82px; flex: 0 0 auto; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.pl-page-header { min-height: var(--pl-shell-header-height); flex: 0 0 auto; display:flex; align-items:center; justify-content:space-between; gap:20px; }
 .pl-page-header-note { max-width:46%; color:var(--pl-color-muted); font-size:11px; font-weight:700; letter-spacing:.12em; text-align:right; line-height:1.4; }
 .pl-navbar { display:flex; align-items:center; justify-content:center; gap:24px; min-width:0; }
 .pl-navbar-link { display:inline-flex; min-height:44px; align-items:center; color:var(--pl-color-muted); font-size:13px; font-weight:650; text-decoration:none; white-space:nowrap; }
@@ -22,15 +18,15 @@
 .pl-footer-group ul { display:grid; gap:9px; margin:0; padding:0; list-style:none; }
 .pl-footer-group a,.pl-footer-legal a { color:var(--pl-color-muted); font-size:11px; text-decoration:none; }
 .pl-footer-group a:hover,.pl-footer-legal a:hover { color:var(--pl-color-ink); }
-.pl-footer-bottom { min-height:58px; display:flex; align-items:center; justify-content:space-between; gap:16px; border-top:1px solid rgba(198,215,210,.45); font-size:11px; font-weight:650; }
+.pl-footer-bottom { min-height:var(--pl-shell-footer-min-height); display:flex; align-items:center; justify-content:space-between; gap:16px; border-top:1px solid rgba(198,215,210,.45); font-size:11px; font-weight:650; }
 .pl-footer-legal { display:flex; flex-wrap:wrap; gap:18px; }
 @media(max-width:767px) {
- .pl-page-header { min-height:68px; gap:12px; }
+ .pl-page-header { min-height:var(--pl-shell-header-height-mobile); gap:12px; }
  .pl-page-header-note { max-width:46%; font-size:9px; }
  .pl-navbar { gap:12px; }
  .pl-navbar-link { font-size:11px; }
  .pl-footer-groups { grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px 16px; padding:24px 0; }
- .pl-footer-bottom { min-height:50px; gap:12px; font-size:9px; }
+ .pl-footer-bottom { min-height:var(--pl-shell-footer-min-height-mobile); gap:12px; font-size:9px; }
  .pl-footer-legal { gap:12px; }
 }
 @media(max-width:479px) {
@@ -38,4 +34,16 @@
  .pl-navbar { gap:8px; }
  .pl-navbar-link { font-size:10px; }
  .pl-footer-bottom { align-items:flex-start; flex-direction:column; justify-content:center; padding-block:12px; }
+}
+
+/* One vertical rhythm contract for every page body between shared chrome. */
+.pl-page-main {
+  flex: 1 0 auto;
+  min-width: 0;
+  padding-block: var(--pl-shell-header-content-gap) var(--pl-shell-content-footer-gap);
+}
+@media (max-width: 767px) {
+  .pl-page-main {
+    padding-block: var(--pl-shell-header-content-gap-mobile) var(--pl-shell-content-footer-gap-mobile);
+  }
 }
