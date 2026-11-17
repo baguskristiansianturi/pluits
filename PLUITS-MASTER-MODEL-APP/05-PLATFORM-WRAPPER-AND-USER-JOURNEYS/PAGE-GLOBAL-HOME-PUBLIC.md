@@ -50,8 +50,8 @@ Introduce PLUITS to a first-time visitor before registration. Visitors understan
 - Existing workspace protection, login, recovery, legal routes and signup release gate remain unchanged.
 
 ## Runtime ownership and dependencies
-- Public composition/styles: `src/features/home/home-page.js`, `home-page.css`.
-- Authenticated composition/styles: `src/features/home/authenticated-home.js`, `authenticated-home.css`.
+- Both public and authenticated compositions are states of the single `src/features/home/home-page.js` entry point and `src/features/home/home-page.css` stylesheet.
+- `mountHomePage({ root, user, onSignOut })` receives the current session user; it selects the appropriate state without a second homepage module.
 - Route registry: `src/config/paths.js`.
 - Route/session redirect: `src/app/routes.js`.
 - Rendering lifecycle: `src/app/create-app.js`.
