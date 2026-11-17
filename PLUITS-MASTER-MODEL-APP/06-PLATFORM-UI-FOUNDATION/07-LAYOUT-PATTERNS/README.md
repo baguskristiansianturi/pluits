@@ -18,3 +18,8 @@ Owns reusable page-composition patterns. A layout pattern defines structure, not
 - Different pages may use different patterns; they must still use the same foundation tokens, container rules, and shared components.
 - A new pattern must be justified as reusable, reviewed for responsive behavior, and registered before it becomes a standard.
 - Do not force every page into one universal composition.
+
+
+## LAY-GLOBAL-HOME-001 — Public Global Home
+
+A public editorial ecosystem layout with a split hero, ecosystem overview, identity explanation, mobile availability notice, closing CTA and shared footer. It uses the shared page shell and existing tokens; current visual values remain provisional. See `05-PLATFORM-WRAPPER-AND-USER-JOURNEYS/PAGE-GLOBAL-HOME-PUBLIC.md`.

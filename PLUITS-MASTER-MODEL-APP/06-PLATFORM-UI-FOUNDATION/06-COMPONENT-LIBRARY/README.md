@@ -28,3 +28,8 @@ Record purpose, anatomy, variants, size tokens, states, responsive behavior, acc
 The shared page header is the canonical navbar/header boundary. It always renders a soft bottom divider through the shared page-shell stylesheet. The divider is mandatory and automatic for every `renderPageHeader()` consumer; page authors must not add or remove it locally.
 
 See [NAV-001-SHARED-NAVBAR.md](./NAV-001-SHARED-NAVBAR.md) for tokens, implementation, consumer impact, responsive behavior, and change procedure.
+
+
+## Shared Brand Link
+
+`renderBrand()` in `src/design-system/page-shell.js` is the canonical brand link. Its default destination is `#/home`; app authentication guards resolve the destination according to the current session. Feature pages must not create a duplicate logo/brand link or hard-code a different default.

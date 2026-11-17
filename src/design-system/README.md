@@ -58,3 +58,8 @@ Every header/navigation rendered through `renderPageHeader()` receives a soft bo
 - The footer top divider consumes the same tokens so both boundaries stay visually consistent.
 - Do not add local borders to individual pages or individual navbar instances.
 - Pages must use the shared header renderer; a custom header requires an explicitly documented and approved exception.
+
+
+## Global brand destination
+
+The shared `renderBrand()` renderer defaults to the canonical `#/home` route. Guest navigation opens public Global Home; authenticated navigation is resolved by the app route guard to the current internal workspace until authenticated Global Home is implemented. Do not hard-code a different brand destination in individual feature headers without a documented exception.

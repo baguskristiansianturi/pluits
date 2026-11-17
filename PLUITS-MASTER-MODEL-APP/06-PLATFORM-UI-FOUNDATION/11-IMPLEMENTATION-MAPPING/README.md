@@ -40,3 +40,14 @@ Use `03-APPLICATION-MODULARIZATION/` for code ownership, module boundaries, arch
 |---|---|---|---|
 | `06-COMPONENT-LIBRARY/NAV-001-SHARED-NAVBAR.md` | `src/design-system/page-shell.css` | `.pl-page-header` | All pages using `renderPageHeader()` inherit the bottom divider |
 | `01-DESIGN-TOKENS/README.md` | `src/design-system/tokens.css` | `--pl-shell-divider-width`, `--pl-shell-divider-color` | Header bottom and footer top share the same values |
+
+
+## LAY-GLOBAL-HOME-001 — Public Global Home
+
+| Specification | Runtime source | API/token | Consumer |
+|---|---|---|---|
+| `05-PLATFORM-WRAPPER-AND-USER-JOURNEYS/PAGE-GLOBAL-HOME-PUBLIC.md` | `src/features/home/home-page.js`, `home-page.css` | `mountHomePage()`, `.home-*` | Guest `#/home` |
+| Shared shell | `src/design-system/page-shell.js`, `page-shell.css` | `renderPageHeader()`, `renderPageFooter()`, `renderBrand()` | Home, auth, legal, workspace |
+| Layout registry | `src/design-system/layouts.js` | `LAY-GLOBAL-HOME-001` | `PAGE-GLOBAL-HOME-PUBLIC` |
+| Route/auth state | `src/app/routes.js`, `src/config/paths.js`, `src/app/create-app.js` | `home` route and session redirect | Guest home; signed-in workspace fallback |
+| Regression coverage | `tests/routes.test.js` | Route and brand-link assertions | Route/navigation regression |
