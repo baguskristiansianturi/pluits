@@ -275,6 +275,58 @@ Contoh saat pengguna berada di Kuta:
 **Koreksi atas pertanyaan terbuka sebelumnya:** cakupan Top 10 pada konteks Bali telah diperjelas sebagai satu zona Bali, bukan radius di sekitar pengguna. Hal yang masih terbuka adalah bagaimana zona wilayah ditetapkan untuk daerah lain dan apakah radius Terdekat selalu 5 km atau dapat berubah sesuai kebutuhan/kategori.
 
 
+### Klarifikasi — radius Terdekat yang melebar adaptif dan kontribusi GeoDirectory
+
+Pengguna memperjelas bahwa radius contoh 5 km bukan batas pencarian yang kaku. Sistem Terdekat perlu memperluas cakupan secara bertahap apabila hasil di radius awal belum memadai.
+
+#### 1. Perluasan radius pencarian
+
+- Pencarian Terdekat dimulai dari radius awal; 5 km adalah contoh radius awal yang disampaikan pengguna.
+- Jika di radius awal belum ditemukan tempat/entitas yang relevan, radius pencarian diperluas secara bertahap.
+- Perluasan tetap berlanjut apabila radius berikutnya, misalnya 10 km, juga belum menghasilkan tempat/entitas yang memadai.
+- Perluasan memiliki batas maksimum pada wilayah/zona geografis pengguna. Dalam contoh yang dibahas, jika pengguna berada di Kuta, pencarian dapat melebar ke seluruh Bali sebagai batas akhirnya.
+- Sistem tidak otomatis melanjutkan pencarian ke luar Bali ketika batas zona Bali sudah tercapai.
+- Jika sampai seluruh zona Bali tidak ditemukan entitas yang menarik/relevan, atau belum ada lokasi yang ditambahkan ke GeoDirectory, hasil pencarian berhenti pada batas zona tersebut. Maknanya: belum tersedia lokasi yang cocok/menarik dalam direktori di zona itu, bukan alasan untuk mencari ke zona lain.
+
+Contoh alur yang disampaikan:
+1. Pengguna berada di Kuta; pencarian dimulai dari radius contoh 5 km.
+2. Jika belum ada hasil yang memadai, radius diperluas, misalnya menjadi 10 km.
+3. Jika masih belum ada hasil, radius terus diperluas secara bertahap.
+4. Perluasan berlanjut sampai cakupan maksimum satu Bali.
+5. Jika seluruh Bali tetap tidak memiliki hasil yang relevan/tersedia, pencarian berhenti dan tidak menyeberang ke luar Bali.
+
+Angka radius awal, besaran setiap kenaikan, definisi hasil yang dianggap cukup/memadai, dan aturan teknis batas zona belum ditetapkan. Bali merupakan contoh wilayah yang dijelaskan, bukan keputusan bahwa semua wilayah lain harus memakai batas yang sama.
+
+#### 2. Kontribusi pengguna terhadap GeoDirectory
+
+Pengguna membocorkan arah bahwa GeoDirectory nantinya dapat berkembang melalui kontribusi akun pengguna:
+- Setiap akun dapat berkontribusi menambahkan tempat/lokasi ke GeoDirectory.
+- Akun lain dapat berkontribusi memperbaiki informasi tempat apabila ada data yang salah atau kurang tepat.
+- Dengan demikian, data direktori tidak hanya bergantung pada input internal PLUITS; pengguna juga menjadi sumber kontribusi dan koreksi.
+
+Detail formulir penambahan, jenis data yang wajib disertakan, moderasi, verifikasi, reputasi kontributor, persetujuan koreksi, dan penanganan konflik data belum dibahas.
+
+#### 3. Klaim kepemilikan/pengelolaan tempat
+
+- Pengguna menjelaskan bahwa untuk setiap tempat akan ada pihak/orang yang paling berhak mengklaim tempat tersebut.
+- Konsep klaim tempat mengambil referensi dari TripAdvisor.
+- Proses dan aturan klaim belum dibuat dan belum diputuskan.
+- Kriteria pihak yang berhak, bukti yang diperlukan, proses verifikasi, perselisihan klaim, serta hak yang diperoleh setelah klaim masih menjadi pekerjaan perancangan berikutnya.
+
+Catatan penting: kemampuan pengguna untuk menambahkan atau mengoreksi data direktori berbeda dari hak untuk mengklaim tempat. Kontribusi data tidak otomatis berarti akun tersebut adalah pemilik atau pihak yang berhak mengelola tempat.
+
+#### Hal yang masih terbuka
+
+- Berapa radius awal dan berapa besar kenaikan radius pada setiap tahap?
+- Apa kriteria bahwa hasil pada suatu radius sudah cukup, atau pencarian harus diperluas?
+- Bagaimana batas zona maksimum ditetapkan untuk setiap wilayah selain contoh Bali?
+- Bagaimana pengalaman pengguna ketika pencarian telah mencapai batas wilayah tetapi tidak ada hasil yang relevan?
+- Apakah pengguna dapat mengatur radius sendiri, atau sistem sepenuhnya mengelolanya?
+- Bagaimana kontribusi penambahan tempat, koreksi data, moderasi, dan verifikasi dijalankan?
+- Bagaimana menentukan pihak yang paling berhak mengklaim suatu tempat?
+- Apa persyaratan, bukti, proses pemeriksaan, dan mekanisme sengketa klaim tempat?
+
+
 ## Status akhir
 
 RAW
