@@ -12,6 +12,9 @@
   --pl-space-12: 48px;
   --pl-space-16: 64px;
 
+  /* Brand dimensions: one global source of truth for every shared template. */
+  --pl-brand-logo-size: 34px;
+
   --pl-container-wide: 1180px;
   --pl-container-auth: 1120px;
   --pl-form-width: 460px;

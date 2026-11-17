@@ -77,8 +77,8 @@ button:disabled {
 
 .pluits-brand img {
   display: block;
-  width: 34px;
-  height: 34px;
+  width: var(--pl-brand-logo-size);
+  height: var(--pl-brand-logo-size);
   object-fit: contain;
 }
 

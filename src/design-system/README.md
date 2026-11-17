@@ -27,7 +27,12 @@ The canonical chrome API is `src/design-system/page-shell.js`, styled only by `p
 Menu contents are configuration, not separate page-specific markup. Do not copy header/navbar/footer HTML or redefine their dimensions in feature styles. A page may omit navigation or footer when its experience does not require them, but when present it must use these shared renderers. Feature-specific slots may provide content/actions; they must not replace shared geometry. Keep the logo source canonical and shared.
 
 
-## Canonical page geometry (single source of truth)
+## Canonical brand sizing and page geometry (single source of truth)
+
+- The rendered PLUITS logo symbol is globally **34 × 34 CSS px**.
+- `--pl-brand-logo-size` in `tokens.css` is the only editable size value.
+- `global.css` applies that token to every logo rendered by `renderBrand()`; do not pass per-page pixel sizes or hard-code dimensions in HTML.
+- Desktop, tablet, and mobile use the same logo size. A different size requires an explicitly registered and approved brand variant.
 
 The page vertical rhythm is owned by `tokens.css` and applied by `page-shell.css`, never by feature-page margins:
 - Header height: `--pl-shell-header-height` / mobile counterpart.

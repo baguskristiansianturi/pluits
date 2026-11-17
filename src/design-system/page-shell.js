@@ -7,9 +7,9 @@ const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => 
 
 const resolveHref = (href, route) => href || (route ? routeHref(route) : routeHref('login'));
 
-export function renderBrand({ href, label = 'PLUITS', logoSize = 34 } = {}) {
+export function renderBrand({ href, label = 'PLUITS' } = {}) {
   return '<a class="pluits-brand" href="' + escapeHtml(resolveHref(href)) + '" aria-label="' + escapeHtml(label) + '">' +
-    '<img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt="" width="' + Number(logoSize) + '" height="' + Number(logoSize) + '">' +
+    '<img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt="">' +
     '<span>PLUITS</span>' +
   '</a>';
 }
@@ -28,7 +28,6 @@ export function renderPageHeader({
   note = 'EKOSISTEM DIGITAL TERINTEGRASI',
   label = 'PLUITS',
   brandHref,
-  logoSize = 34,
   items = [],
   active = '',
   navLabel = 'Navigasi utama',
@@ -36,7 +35,7 @@ export function renderPageHeader({
   variant = ''
 } = {}) {
   return '<header class="pl-page-header' + (variant ? ' pl-page-header--' + escapeHtml(variant) : '') + '">' +
-    renderBrand({ href: brandHref, label, logoSize }) +
+    renderBrand({ href: brandHref, label }) +
     (items.length ? renderNavbar({ items, active, ariaLabel: navLabel }) : '') +
     (rightContent || '<span class="pl-page-header-note">' + escapeHtml(note) + '</span>') +
   '</header>';
