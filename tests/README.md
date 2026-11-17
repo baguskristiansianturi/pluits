@@ -20,3 +20,5 @@ Additional retained backend and repository contract tests:
 - backend/auth-trigger-boundaries.test.js
 
 Legacy frontend-only tests were removed with the legacy runtime. Database security/migration tests and repository governance checks are retained.
+
+CI acceptance includes both new frontend tests and retained backend/security migration contracts; a passing build alone is not sufficient for user acceptance.
