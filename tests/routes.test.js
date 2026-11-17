@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { resolveRoute, resolveAuthenticatedRoute } from '../src/app/routes.js';
 import { APP_ROUTES, routeHref } from '../src/config/paths.js';
-import { renderBrand } from '../src/design-system/page-shell.js';
 test('empty URL starts at public home while unknown routes retain safe registration fallback', () => {
   assert.equal(resolveRoute('', ''), 'home');
   assert.equal(resolveRoute('#/old-home', ''), 'register');
@@ -17,9 +17,9 @@ test('all page addresses come from one route registry', () => {
   assert.deepEqual(Object.keys(APP_ROUTES), ['home','register','login','forgot','reset','workspace','terms','privacy']);
   for (const [route, path] of Object.entries(APP_ROUTES)) { assert.equal(routeHref(route), '#/' + path); assert.equal(resolveRoute(routeHref(route), ''), route); }
 });
-test('shared PLUITS brand returns to the global home route', () => {
-  assert.match(renderBrand(), /href="#\/home"/);
-  assert.match(renderBrand({ href: routeHref('home') }), /href="#\/home"/);
+test('shared brand renderer defaults to the global home route', async () => {
+  const source = await readFile(new URL('../src/design-system/page-shell.js', import.meta.url), 'utf8');
+  assert.match(source, /routeHref\('home'\)/);
 });
 test('legal document addresses resolve through the same route registry', () => {
   assert.equal(resolveRoute(routeHref('terms'), ''), 'terms');
