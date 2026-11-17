@@ -1,97 +1,151 @@
 # 12 — Technology and Tooling
 
-Status: **AUDIT COMPLETE — recommendations are PROPOSED, not yet approved for implementation.**
+Status: **CURRENT STACK AUDITED — PROFESSIONAL TARGET STACK PROPOSED.**
 
-## 1. Purpose and boundary
+## 1. Purpose and engineering bar
 
-This register evaluates technologies needed to design, build, render, and validate the PLUITS user interface.
+PLUITS must be engineered to the standard expected of a professional senior web-development team: maintainable architecture, explicit module boundaries, typed contracts, secure data access, predictable dependency management, automated quality gates, accessibility, responsive behavior, performance budgets, and regression evidence.
 
-It does not replace `03-APPLICATION-MODULARIZATION/`, which owns the overall application architecture, backend, database, security, API contracts, hosting strategy, and deployment architecture.
+The objective is not to collect fashionable packages. Every technology must solve a real engineering need, fit the platform architecture, be maintained, and be testable.
 
-The goal is to extend the existing working application safely—not to replace its stack simply to adopt a fashionable framework.
+This register evaluates technologies used to design, build, render, and validate the PLUITS user interface. It does not replace 03-APPLICATION-MODULARIZATION, which owns the overall application architecture, backend, database, security, API contracts, hosting strategy, and deployment architecture.
 
-## 2. Runtime audit — what exists today
+## 2. Current runtime audit — as-is
 
-The following points were checked against the current `main` branch:
+The following points were checked against the current main branch:
 
 | Area | Current evidence |
 |---|---|
-| Frontend language | JavaScript ES modules; runtime source is organized into app, components, features, pages, services, and design-system folders. |
-| Build tool | Vite `^8.3.0`; the project is configured for the `/pluits/` GitHub Pages base path. |
-| CSS | Native CSS files imported through the Vite entry point. No Tailwind, Bootstrap, Sass, or CSS-in-JS dependency is declared. |
-| Design tokens | CSS custom properties in `src/design-system/tokens/foundation.css`; legacy global values also remain in `src/style.css`. |
-| Layout | Native CSS Grid/Flexbox and namespaced, opt-in `plds-*` layout primitives. |
-| Icons | Repository-owned inline SVG registries exposed through `src/design-system/icons/index.js`; no icon font or icon CDN is used by the facade. |
+| Frontend language | JavaScript ES modules; source is organized into app, components, features, pages, services, and design-system folders. |
+| Build tool | Vite ^8.3.0; configured for the /pluits/ GitHub Pages base path. |
+| CSS | Native CSS imported through the Vite entry point. No Tailwind, Bootstrap, Sass, or CSS-in-JS dependency is declared. |
+| Design tokens | CSS custom properties in src/design-system/tokens/foundation.css; legacy global values remain in src/style.css. |
+| Layout | Native CSS Grid/Flexbox and namespaced, opt-in plds-* layout primitives. |
+| Icons | Repository-owned inline SVG registries exposed through src/design-system/icons/index.js. |
 | Typography | System UI font stack; no bundled local font files were found in the asset registry. |
-| Backend client | Supabase JS `2.119.0` is imported from `esm.sh` in `src/lib/supabase/client.js`; it is not currently declared as an npm dependency. |
+| Backend client | Supabase JS 2.119.0 imported from esm.sh; not currently declared as an npm dependency. |
 | PWA | Web app manifest and service worker are present. |
-| Tests | Node's built-in `node:test` runner plus custom production, module-boundary, style-boundary, and design-system checks. |
-| Browser automation | Playwright is not currently declared as a dependency or configured in the workflow. |
-| CI and hosting | GitHub Actions uses Node 22, `npm ci`, `npm test`, `vite build`, and deploys the static build to GitHub Pages. |
+| Tests | Node node:test plus custom production, module-boundary, style-boundary, and design-system checks. |
+| Browser automation | Playwright is not currently declared or configured in the workflow. |
+| CI and hosting | GitHub Actions uses Node 22, npm ci, npm test, vite build, and deploys static output to GitHub Pages. |
 
-This is an as-is audit. Existing values in source code are not automatically approved as the future global standard.
+This is the current state, not the final professional target. Existing implementation choices must not be misrepresented as already upgraded.
 
-## 3. Recommended UI technology direction
+## 3. Recommended professional target stack
 
-| Area | Recommendation | Status | Reason |
-|---|---|---|---|
-| Frontend foundation | Keep HTML + JavaScript ES modules + Vite 8 | **RECOMMENDED — continue** | Already deployed, modular, and compatible with the current static hosting model. |
-| UI framework | Do not migrate to React, Vue, or Svelte now | **DEFER** | A framework migration would touch routing, page rendering, components, and tests across a live app. No current evidence proves that the migration is necessary. Re-evaluate only if measured complexity justifies it. |
-| Styling | Keep native CSS | **RECOMMENDED — continue** | Existing page styles and opt-in design-system primitives are already CSS-based. Avoid introducing a second styling system during foundation consolidation. |
-| Design tokens | Keep CSS custom properties as the runtime token format | **RECOMMENDED — consolidate** | Values can be defined once and consumed by many components. Separate semantic tokens from legacy aliases and page-specific exceptions. |
-| Layout | Use CSS Grid, Flexbox, fluid sizing, media queries, and container queries where component context requires them | **RECOMMENDED** | Native browser layout tools cover the current responsive needs without a CSS framework. |
-| Shared components | Build framework-agnostic, reusable components with explicit variants and states | **RECOMMENDED — gradual** | Fits the existing JavaScript module architecture and avoids duplicating component logic. |
-| Icons | Continue the local inline SVG registry | **RECOMMENDED — consolidate** | No runtime icon CDN/font request; artwork can be versioned and tested in the repository. Resolve duplicate/legacy names through an audited registry, not a blind replacement. |
-| Fonts | Keep the system UI stack until a font is reviewed and approved | **RECOMMENDED — continue** | Avoids remote font requests and unapproved font licensing or visual changes. A future selected font should be locally bundled where licensing permits. |
-| Supabase JS | Move the current pinned SDK import from the external `esm.sh` URL into a pinned npm dependency and lockfile | **RECOMMENDED — pending scoped change** | Makes dependency installation reproducible through `npm ci` and brings the SDK into the Vite build graph. Preserve the single shared client and verify auth/realtime/storage behavior after migration. |
-| Unit and architecture tests | Keep Node `node:test` and the existing verification scripts | **RECOMMENDED — continue** | Already integrated into the CI gate and useful for pure logic, registries, contracts, and structural checks. |
-| Browser and responsive tests | Introduce Playwright in a later, isolated test-only change | **RECOMMENDED — phase 2** | Needed to verify rendered behavior, navigation, touch interactions, and selected viewport sizes in real browser engines. It is not a replacement for the existing Node tests. |
-| PWA | Keep the existing manifest and service-worker approach | **RECOMMENDED — continue** | The app already has an installable web-app foundation. Do not add a native wrapper unless a required device capability cannot be met by the web platform. |
-| Component workbench | Reassess Storybook only after the shared component library is stable | **DEFER** | A workbench has maintenance value when there are enough stable, independently reusable components; it is not a prerequisite for creating the foundation. |
-| Type system | Keep JavaScript for the current migration; use JSDoc for important contracts before considering TypeScript | **DEFER** | A whole-repository conversion would expand scope and is not required to centralize visual rules. |
+The following is the recommended target for new and progressively migrated application modules. It is intentionally compatible with the existing Vite/static deployment path.
 
-## 4. Technologies not recommended for immediate adoption
+| Layer | Target technology | Why it belongs |
+|---|---|---|
+| UI framework | **React** | Mature component model for complex, interactive, multi-module application interfaces and shared UI composition. |
+| Main language | **TypeScript with strict checking** | Catches invalid data shapes and interface mismatches earlier; makes module contracts and refactoring safer. |
+| Build and dev server | **Vite 8** | Already used by PLUITS; fast development and static production builds compatible with current GitHub Pages hosting. |
+| Routing | **React Router** when React modules are introduced | Explicit route nesting, layouts, route parameters, and navigation boundaries. Existing routing remains until a scoped migration is ready. |
+| Styling | **CSS Modules + shared CSS custom properties** | Component-level style isolation while preserving one platform-wide token system. |
+| Layout | **CSS Grid, Flexbox, fluid sizing, media queries, selective container queries** | Native responsive layout without forcing every page into a framework's layout conventions. |
+| Remote/server state | **TanStack Query**, where server-state caching and synchronization are needed | Standardizes loading, cache invalidation, retries, and asynchronous server data lifecycle. |
+| Local shared UI state | **Zustand only when cross-component state warrants it** | Lightweight shared client state; local state remains local. Avoid introducing a global store for every input. |
+| Forms | **React Hook Form + Zod** for complex forms | Efficient form state and explicit runtime validation schemas. |
+| Backend client | **Supabase JS installed as a pinned npm dependency** | Reproducible builds, lockfile governance, and consistent SDK usage. |
+| Data contracts | **Generated Supabase TypeScript database types + validated boundary schemas** | Reduces hand-written database shape drift; validate untrusted input at application boundaries. |
+| Unit/component tests | **Vitest + React Testing Library** for React modules | Fast tests for logic and user-observable component behavior. |
+| Existing architecture tests | **Keep Node node:test checks** | Retain current production-surface, module-boundary, and repository-specific checks. |
+| End-to-end/browser tests | **Playwright** | Verify critical user journeys, viewport behavior, keyboard access, touch interaction, and real browser rendering. |
+| Code quality | **ESLint + Prettier + TypeScript typecheck** | Consistent code style, static analysis, and a repeatable quality gate. |
+| CI/CD | **GitHub Actions** | Run install, lint, typecheck, tests, production build, and deployment gates on every relevant change. |
+| Installable web app | **Keep the existing PWA manifest and service worker** | Preserve the current installable web application direction. |
 
-- **React / Vue / Svelte:** no framework migration during the UI Foundation setup.
-- **Tailwind / Bootstrap / another global CSS framework:** would add a competing styling vocabulary while the existing CSS and tokens are being reconciled.
-- **Remote icon fonts or icon CDNs:** conflict with the repository-owned SVG catalogue and create another runtime dependency.
-- **Unreviewed remote fonts:** keep the system stack until a font is selected, licensed, and approved.
-- **Storybook:** defer until the shared component catalogue is sufficiently stable.
-- **Capacitor or another native wrapper:** keep the PWA path unless a concrete native-only requirement appears.
+### Framework and styling decisions
 
-These are deferrals, not permanent bans. Any future proposal must include the problem it solves, alternatives, migration impact, performance cost, license, maintenance burden, and rollback path.
+- **React + TypeScript is the recommended target** for complex new UI modules and future module-level migrations. It is not currently installed in the audited runtime.
+- **Vite remains the build system.** There is no current reason to replace it with Next.js while the deployed application is a static Vite app on GitHub Pages.
+- **CSS Modules plus shared design tokens** are the preferred styling direction. Do not introduce Tailwind or Bootstrap alongside the foundation unless a documented comparison proves a concrete benefit.
+- **Next.js / server rendering** may be reconsidered if public-page SEO, server-side rendering, or server runtime requirements justify moving beyond static hosting. That decision belongs to platform architecture and hosting review, not a casual UI dependency addition.
 
-## 5. Current gaps that must be audited before standards are locked
+## 4. Adoption and migration policy
 
-1. **Responsive values are not yet one approved system.** Runtime styles contain multiple media-query thresholds, including 340, 360, 420, and 760 pixels. Treat these as existing implementation evidence, not approved breakpoints.
-2. **Container widths vary by page.** The foundation has shared width tokens, while page styles still contain narrower and wider local values. Inventory consumers before consolidating them.
-3. **Legacy and foundation styling coexist.** `src/style.css` still defines legacy global palette and geometry values alongside the newer structural tokens. Reconcile aliases and ownership before changing the cascade.
-4. **Icon registries overlap.** General, application, social, and legacy icon maps contain overlapping semantic names. Review their actual visual output before merging or replacing artwork.
-5. **Supabase SDK is loaded externally.** The SDK version is pinned in the URL, but the package is absent from `package.json` and `package-lock.json`. A local npm dependency is the recommended next technical improvement, but it should be a separate tested change.
-6. **Existing tests are mostly code/structure tests.** They do not replace browser-level viewport, keyboard, touch, and visual regression testing.
+This target stack is not permission for a big-bang rewrite.
 
-## 6. Proposed implementation sequence
+1. Preserve all currently working pages, routes, authentication, PWA behavior, and deployed surfaces.
+2. Complete the source/module boundary and route-consumer audit before selecting a migration boundary.
+3. Add TypeScript and quality tooling in a way that can coexist with the current JavaScript modules.
+4. Introduce React only in a bounded module or route with explicit ownership and integration contracts.
+5. Do not maintain two competing implementations of the same page or shared component after a migration is accepted.
+6. Migrate module-by-module only when tests and rollback boundaries exist.
+7. Keep the existing Vite build and GitHub Pages deployment working throughout the transition.
+8. Add each dependency with a pinned, reviewed version and committed lockfile update.
+9. Run the full existing test suite plus new tests for the migrated module before deployment.
 
-1. Record the current route, component, CSS, token, and asset consumers without changing rendered pages.
-2. Approve the responsive and token model using actual page comparisons and viewport tests.
-3. Approve typography, brand assets, icon meanings, and shared component specifications.
-4. Migrate the Supabase SDK import to the npm dependency graph in a separate change; run the complete test/build/deploy pipeline and verify authentication and realtime behavior.
-5. Add Playwright as a separate test-only change, beginning with critical routes and a small agreed viewport matrix.
-6. Expand the shared component library gradually, with impact analysis for every global change.
+## 5. Technologies not recommended for immediate adoption
 
-## 7. Decision and change record
+- **A full Next.js migration:** defer until SSR/server runtime and hosting requirements are proven.
+- **Tailwind / Bootstrap:** do not add a second global styling vocabulary while CSS tokens and component ownership are being consolidated.
+- **Remote icon fonts or icon CDNs:** keep the repository-owned SVG registry.
+- **Unreviewed remote fonts:** retain the system font stack until a font is selected, licensed, and approved.
+- **Storybook:** reassess once the shared component library has enough stable components to justify a separate workbench.
+- **Capacitor or another native wrapper:** keep the PWA path unless a concrete native-only capability is required.
+- **A global state library everywhere:** use local state first; introduce shared state only for a proven cross-module need.
 
-Every technology must have an owner, reason, status, source/version, license, runtime/bundle implications, affected modules, test plan, and rollback or removal plan.
+Deferral is not a permanent ban. A proposal must explain the problem, alternatives, migration impact, performance and bundle cost, license, maintenance burden, and rollback path.
 
-Do not install a new package or change the current framework solely because it appears in this proposal. Product-owner approval and a scoped implementation plan are required first.
+## 6. Current gaps to resolve
 
-## 8. Official references
+1. **Responsive values are not one approved system.** Runtime styles contain thresholds such as 340, 360, 420, and 760 pixels. These are observations, not approved breakpoints.
+2. **Container widths vary by page.** Inventory consumers before consolidation.
+3. **Legacy and foundation styling coexist.** Reconcile src/style.css with design-system token ownership before changing the cascade.
+4. **Icon registries overlap.** Review actual visual output before merging or replacing icons.
+5. **Supabase SDK is loaded externally.** Move it to a pinned npm dependency in a separate tested change.
+6. **Browser-level regression is missing.** Current structural tests do not replace viewport, keyboard, touch, and end-to-end browser tests.
+7. **Type safety is not yet enforced across the app.** Establish an incremental TypeScript adoption plan before migrating complex modules.
 
-- [Vite 8 — production build and static hosting](https://v8.vite.dev/guide/build)
-- [Vite 8 release announcement](https://vite.dev/blog/announcing-vite8)
-- [Supabase JavaScript — installation](https://supabase.com/docs/reference/javascript/installing)
-- [Supabase JavaScript — client initialization](https://supabase.com/docs/reference/javascript/initializing)
-- [Node.js test runner](https://nodejs.org/api/test.html)
-- [Playwright — browser and device emulation](https://playwright.dev/docs/emulation)
-- [MDN — CSS custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascading_variables/Using_custom_properties)
-- [MDN — CSS media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Media_queries)
+## 7. Proposed implementation sequence
+
+1. Audit routes, module ownership, component consumers, CSS, tokens, and asset dependencies.
+2. Approve the platform responsive/token/typography/icon foundation.
+3. Add professional code-quality gates: ESLint, Prettier, and TypeScript typecheck, without changing rendered behavior.
+4. Move Supabase JS into the pinned npm dependency graph; verify auth, realtime, and storage.
+5. Introduce TypeScript incrementally, beginning with isolated contracts and new modules.
+6. Pilot React + TypeScript in one bounded module after its product design and integration contract are approved.
+7. Add Vitest and React Testing Library for new React modules; retain existing Node tests.
+8. Add Playwright for critical user journeys and agreed responsive viewports.
+9. Expand the architecture only after the pilot proves the migration safe and maintainable.
+
+## 8. Professional engineering acceptance gate
+
+A production change is not complete because the page merely renders. The change must satisfy the relevant gates:
+
+- Clear module ownership and no unintended cross-module coupling.
+- Typed or explicitly validated data contracts at module and API boundaries.
+- Authentication and authorization enforced by backend policy, not UI visibility alone.
+- No secrets committed to frontend code or repository.
+- Accessible semantic markup, keyboard operation, and visible focus states.
+- Responsive behavior verified on agreed viewport sizes and real browser engines.
+- Loading, empty, error, success, and permission-denied states handled.
+- Tests cover changed behavior and critical regressions.
+- No unexplained console errors, broken routes, or failing production build.
+- Performance and bundle impact reviewed for new dependencies.
+- Documentation, decision register, and runtime implementation mapping updated.
+- Deployment status and commit SHA recorded.
+
+## 9. Decision and change record
+
+Every technology must have an owner, reason, status, source/version, license, runtime/bundle implications, affected modules, test plan, and rollback/removal plan.
+
+The professional engineering bar is mandatory. Exact framework adoption and migration boundaries must still be recorded and approved before runtime changes are made.
+
+## 10. Official references
+
+- [React documentation](https://react.dev/learn)
+- [TypeScript handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+- [Vite 8 production build](https://v8.vite.dev/guide/build)
+- [React Router documentation](https://reactrouter.com/start/library/installation)
+- [TanStack Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview)
+- [Zustand documentation](https://zustand.docs.pmnd.rs/getting-started/introduction)
+- [React Hook Form documentation](https://react-hook-form.com/get-started)
+- [Zod documentation](https://zod.dev/)
+- [Supabase JavaScript installation](https://supabase.com/docs/reference/javascript/installing)
+- [Vitest documentation](https://vitest.dev/guide/)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+- [Playwright documentation](https://playwright.dev/docs/intro)
+- [ESLint documentation](https://eslint.org/docs/latest/)
+- [Prettier documentation](https://prettier.io/docs/)

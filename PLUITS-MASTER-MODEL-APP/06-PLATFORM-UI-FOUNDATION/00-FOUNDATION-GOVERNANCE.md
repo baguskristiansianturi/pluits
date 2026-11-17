@@ -32,6 +32,9 @@ A page-specific design may choose a different composition when its purpose requi
 7. Do not change a global token or shared component only to solve one page's local problem without impact analysis.
 8. Keep documentation and runtime implementation aligned. The approved specification and the production implementation must have a traceable mapping.
 9. Never claim a value, asset, component, tool, or technology is approved when it is only an example, proposal, or pending decision.
+10. All implementation must meet the professional engineering bar defined in 12-TECHNOLOGY-AND-TOOLING/README.md: maintainable module boundaries, explicit/typed or validated contracts, secure backend authorization, automated tests, accessibility, responsive verification, dependency governance, and documented deployment evidence.
+11. Prefer mature, widely adopted, actively maintained technologies appropriate to PLUITS. Do not choose a technology merely because it is popular; record its engineering purpose, trade-offs, maintenance and security implications.
+12. Do not perform a big-bang rewrite of working pages. Framework and language adoption must be incremental, scoped, tested, and reversible.
 
 ## 4. Rule precedence when requirements conflict
 
@@ -86,7 +89,7 @@ Global changes must be reviewed as global changes, not disguised as local page e
 
 ## 8. No premature locking of values
 
-This setup does not approve exact breakpoints, container widths, spacing values, typography, icon sets, logo variants, component dimensions, or a framework migration.
+This setup does not approve exact breakpoints, container widths, spacing values, typography, icon sets, logo variants, component dimensions, or an immediate framework migration.
 
 Those values and changes must be established through an audit of the current application, design requirements, and viewport testing, then reviewed and approved. Until then, examples and provisional values must be labelled clearly.
 
