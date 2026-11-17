@@ -878,6 +878,62 @@ Jika layout yang diminta belum ada atau tidak cocok, developer tidak boleh diam-
 - Lokasi folder implementasi final untuk layout dan hubungan dokumentasinya dengan gudang UI.
 
 
+
+### Penegasan lanjutan — urutan proyek pengujian awal fondasi PLUITS
+
+Pengguna menetapkan urutan halaman/area yang akan dibuat pertama kali setelah fondasi desain dan perpustakaan UI disiapkan. Halaman-halaman ini menjadi proyek awal untuk menguji apakah fondasi yang dibangun benar-benar dapat digunakan sebelum pengembangan Social Media diperluas.
+
+#### Urutan pengembangan/pengujian awal
+
+1. **Halaman Pendaftaran**
+   - Dibuat pertama karena pengguna menilai alur pendaftaran sebagai halaman yang paling kompleks untuk pengujian awal.
+   - Menjadi pengujian terhadap fondasi ukuran/dimensi, komponen form, ikon, warna, perilaku, layout, dan responsivitas.
+   - Kebutuhan yang perlu diaudit dalam spesifikasi halaman antara lain alur input, validasi, state, feedback, verifikasi akun, keamanan, serta kondisi berhasil/gagal.
+   - Daftar field, metode pendaftaran, langkah verifikasi, dan aturan keamanan final belum ditetapkan melalui klarifikasi ini.
+
+2. **Beranda (Global Home)**
+   - Dibangun setelah halaman pendaftaran.
+   - Menguji application shell, navigasi, komposisi halaman utama, dan penyajian konteks platform lintas ekosistem.
+   - Dalam konteks pembahasan sebelumnya, Beranda dibedakan dari Circle yang merupakan ruang personal pengguna setelah login.
+   - Detail konten, section, dan perilaku final Beranda tetap mengikuti audit/spesifikasi tersendiri.
+
+3. **Profil Utama**
+   - Dibangun setelah Beranda.
+   - Pengguna menegaskan bahwa yang dimaksud adalah **Profil Utama PLUITS**, bukan profil Social Media.
+   - Profil Utama merupakan halaman/area tingkat platform atau akun PLUITS; batas informasi, pengaturan, identitas akun, dan fungsinya perlu dirinci tersendiri.
+   - Jangan menyamakan atau menggabungkan spesifikasi Profil Utama dengan profil sosial pengguna.
+
+4. **Social Media**
+   - Dikembangkan setelah tiga area awal di atas.
+   - Mencakup pengalaman sosial seperti Circle, Feed, Post, Story, Reels, dan profil sosial, sesuai inventaris halaman serta audit kebutuhan Social Media.
+   - Profil sosial tetap merupakan halaman berbeda dari Profil Utama.
+
+#### Tujuan pengujian bertahap
+
+- Menguji fondasi UI menggunakan kasus nyata dengan kompleksitas yang meningkat.
+- Menemukan kekurangan pada sistem ukuran, komponen, ikon, warna, perilaku, layout, dan Change Map sebelum banyak halaman bergantung padanya.
+- Memastikan halaman dapat dibangun dengan menggunakan katalog dan layout yang sudah disiapkan, bukan melalui CSS/komponen ad hoc.
+- Memvalidasi bahwa perubahan satu komponen tidak merusak halaman lain.
+- Menjadi dasar evaluasi sebelum pola dan fondasi tersebut dipakai lebih luas di seluruh ekosistem PLUITS.
+
+#### Keputusan eksplisit dari klarifikasi ini
+
+- Setelah fondasi UI dan perpustakaan disiapkan, urutan proyek pengujian awal adalah: **Pendaftaran → Beranda → Profil Utama → Social Media**.
+- Halaman Pendaftaran menjadi halaman pertama karena dianggap paling kompleks dan menjadi pengujian awal yang penting.
+- Beranda dibuat setelah Pendaftaran.
+- Profil Utama dibuat setelah Beranda dan harus dibedakan dari profil Social Media.
+- Social Media dikembangkan setelah ketiga area awal tersebut.
+- Urutan ini merupakan urutan awal pembuatan/pengujian, bukan pernyataan bahwa seluruh detail fitur dan desainnya sudah final.
+
+#### Hal yang masih perlu dirancang
+
+- Inventaris lengkap alur pendaftaran dan semua state/variasi verifikasinya.
+- Batas tanggung jawab Beranda Global Home, Circle, dan application shell.
+- Definisi, isi, pengaturan, dan alur Profil Utama.
+- Relasi antara Profil Utama, identitas akun, membership, roles/permissions, dan profil sosial.
+- Kriteria penerimaan serta test plan untuk setiap tahap sebelum lanjut ke tahap berikutnya.
+
+
 ## Status akhir
 
 RAW
