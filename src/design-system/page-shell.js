@@ -20,7 +20,7 @@ export function renderPageHeader({ note = 'EKOSISTEM DIGITAL TERINTEGRASI', labe
     renderBrand({ href: brandHref, label }) + (items.length ? renderNavbar({ items, active, ariaLabel: navLabel }) : '') +
     (rightContent || '<span class="pl-page-header-note">' + escapeHtml(note) + '</span>') + '</header>';
 }
-export function renderPageFooter({ copyright = '© 2026 PLUITS. Hak cipta dilindungi.', attribution = 'PLUITS · Ekosistem Digital', groups = [], legalLinks = [] } = {}) {
+export function renderPageFooter({ copyright = '© 2026 PLUITS. All rights reserved.', attribution = 'One connected digital ecosystem.', groups = [], legalLinks = [] } = {}) {
   const groupMarkup = groups.map((group) => '<section class="pl-footer-group"><h2>' + escapeHtml(group.title) + '</h2><ul>' +
     (group.items || []).map((item) => '<li><a href="' + escapeHtml(resolveHref(item.href, item.route)) + '">' + escapeHtml(item.label) + '</a></li>').join('') +
     '</ul></section>').join('');

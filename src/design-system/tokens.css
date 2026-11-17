@@ -30,8 +30,8 @@
   /* Canonical page geometry: all page types consume these shared contracts. */
   --pl-shell-header-height: 82px;
   --pl-shell-header-height-mobile: 68px;
-  --pl-shell-header-content-gap: 26px;
-  --pl-shell-header-content-gap-mobile: 12px;
+  --pl-shell-header-content-gap: 20px;
+  --pl-shell-header-content-gap-mobile: 20px;
   --pl-shell-content-footer-gap: 38px;
   --pl-shell-content-footer-gap-mobile: 28px;
   --pl-shell-footer-min-height: 58px;

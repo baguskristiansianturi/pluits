@@ -46,7 +46,7 @@ export function mountHomePage({ root }) {
           '<div class="home-mobile-device" aria-hidden="true"><div class="home-device-frame"><div class="home-device-speaker"></div><div class="home-device-screen"><img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt=""><strong>PLUITS</strong><span>Everything connected.</span><div class="home-device-pills"><i></i><i></i><i></i></div><div class="home-device-card"></div><div class="home-device-card home-device-card--short"></div></div></div></div></section>' +
         '<section class="home-final-cta"><span class="home-section-kicker">MULAI DARI SINI</span><h2>Ada banyak hal yang bisa dimulai dari satu tempat.</h2><p>Kenali PLUITS dan bersiap menjadi bagian dari ekosistem yang terus berkembang.</p><a class="home-button home-button--light" href="' + routeHref('register') + '">Lihat halaman pendaftaran <span aria-hidden="true">→</span></a><small>Pendaftaran akun baru saat ini belum dibuka untuk umum.</small></section>' +
       '</main>' +
-      renderPageFooter({ copyright:'© 2026 PLUITS. Hak cipta dilindungi.', attribution:'One connected digital ecosystem.',
+      renderPageFooter({ copyright:'© 2026 PLUITS. All rights reserved.', attribution:'One connected digital ecosystem.',
         groups:[{title:'Jelajahi',items:[{label:'Tentang PLUITS',href:'#tentang'},{label:'Ekosistem',href:'#ekosistem'},{label:'Aplikasi Android',href:'#mobile-title'}]},
           {title:'Akun',items:[{label:'Masuk',route:'login'},{label:'Pendaftaran',route:'register'}]},
           {title:'Informasi',items:[{label:'Ketentuan Layanan',route:'terms'},{label:'Kebijakan Privasi',route:'privacy'}]}] }) +
