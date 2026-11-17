@@ -327,6 +327,94 @@ Catatan penting: kemampuan pengguna untuk menambahkan atau mengoreksi data direk
 - Apa persyaratan, bukti, proses pemeriksaan, dan mekanisme sengketa klaim tempat?
 
 
+
+
+### Arahan lanjutan — fondasi awal pembangunan Social Media, teknologi, ikon, versi, dan preview
+
+Pengguna menyampaikan bahwa hasil pemahaman Social Media sampai tahap ini dianggap cukup sebagai fondasi dasar awal untuk mulai menyusun dan membangun pengalaman Social Media secara bertahap. Fondasi ini bukan berarti seluruh detail fitur sudah final; detail kebutuhan tetap dapat diperjelas dan ditambahkan per bagian selama pengembangan.
+
+#### 1. Dari fondasi produk menjadi halaman dan perjalanan pengguna
+
+- Hasil pemahaman konsep Social Media harus diterjemahkan menjadi inventaris halaman dan alur pengguna yang saling terhubung.
+- Perjalanan dimulai dari akses akun, termasuk halaman pendaftaran, login, lupa email/informasi akun, pemulihan akses/password, dan proses terkait sampai akun berhasil digunakan.
+- Setelah masuk, perjalanan mencakup pengalaman Circle/Global Home dan fitur sosial.
+- Alur pembuatan konten harus mencakup proses lengkap sampai berhasil dipublikasikan, termasuk membuat Post, Reel, dan Story.
+- Daftar halaman tidak hanya berupa nama halaman. Setiap halaman perlu dijelaskan tujuan, akses masuk/keluar, aksi, navigasi, validasi, kondisi loading/kosong/gagal/berhasil, dan hubungan dengan halaman lain.
+- Contoh halaman di atas merupakan titik awal yang disebut pengguna; inventaris lengkap harus diturunkan dari kebutuhan dan alur Social Media yang sudah dibahas serta hasil audit lanjutan.
+
+#### 2. Penurunan dan pencatatan teknologi
+
+- Setelah kebutuhan produk, halaman, alur, data, integrasi, keamanan, dan kebutuhan operasional dipahami, tim perlu menentukan teknologi yang sesuai untuk membangun tiap bagian.
+- Hasil keputusan teknologi harus dimasukkan satu per satu ke dokumentasi teknis/frontend/backend yang tepat di Master Model, bukan hanya tersimpan dalam percakapan.
+- Teknologi dipilih berdasarkan kebutuhan nyata setiap fitur; jangan menganggap semua fitur harus memakai teknologi yang sama atau memilih teknologi hanya karena populer.
+- Kandidat teknologi, keputusan final, alasan, konsekuensi, dan status penerapan harus dibedakan dan dicatat agar teknologi yang baru dipertimbangkan tidak disalahartikan sebagai teknologi yang sudah dipakai.
+- Perubahan teknologi tidak boleh otomatis mengharuskan penulisan ulang seluruh aplikasi yang sudah berjalan; dampak dan migrasi harus diaudit.
+
+#### 3. Ikon dan aset antarmuka harus tersedia secara lokal
+
+- Pengguna menginginkan ikon-ikon PLUITS tersedia di dalam repository/aplikasi agar tidak perlu mengambil atau merender ikon dari website luar ketika aplikasi berjalan.
+- Tujuannya menjaga aplikasi lebih ringan, mengurangi ketergantungan jaringan pihak ketiga, dan mencegah ikon hilang jika layanan eksternal bermasalah.
+- Sebelum menambahkan ikon, inventaris ikon yang sudah tersedia harus diperiksa agar tidak membuat duplikasi.
+- Ikon yang belum tersedia perlu disiapkan sebagai aset lokal (misalnya SVG), didaftarkan pada sistem ikon resmi PLUITS, dan dipetakan ke komponen/halaman yang menggunakannya.
+- Pemilihan makna dan bentuk ikon harus mengikuti review/approval pemilik produk serta aturan Icon Library yang sudah ada.
+- Catatan audit repository saat sesi ini: runtime sudah memiliki src/design-system/icons/index.js sebagai facade dan registry ikon umum, sosial, serta aplikasi; renderer memakai inline SVG lokal dan dokumentasinya melarang hotlink SVG atau remote icon font untuk UI produksi.
+- Catatan runtime di atas adalah kondisi yang ditemukan saat audit, bukan bukti bahwa seluruh ikon yang dibutuhkan Social Media sudah tersedia atau disetujui.
+
+#### 4. Pembangunan bertahap dan pengelolaan versi aplikasi
+
+- Aplikasi PLUITS yang saat ini sudah online dan dapat menerima pendaftaran harus tetap berjalan selama pekerjaan versi berikutnya berlangsung.
+- Pekerjaan audit dan pembangunan fitur baru dilakukan secara bertahap, tidak dengan mengganti aplikasi produksi sekaligus.
+- Pengguna memberi contoh penamaan hasil bertahap sebagai versi 2, versi 3, dan seterusnya.
+- Setiap tahap/versi menambahkan kemampuan yang sudah direncanakan dan ditempatkan pada bagian modul yang tepat.
+- Hasil pengembangan baru hanya dipindahkan/digabungkan ke aplikasi utama setelah selesai diuji dan dinyatakan siap.
+- Versi yang sedang dikembangkan harus terpisah dari versi produksi sehingga pekerjaan baru tidak merusak pengalaman pengguna yang sudah ada.
+- Skema penamaan versi, ukuran setiap rilis, aturan kompatibilitas, dan kebijakan rollback masih perlu dirancang.
+
+#### 5. Tempat pengujian/preview yang dapat dibuka melalui browser
+
+- Pengguna membutuhkan tempat pengujian yang dapat dibuka melalui sebuah link di browser, termasuk dari ponsel, untuk melihat dan mencoba tampilan serta alur fitur yang sedang dikembangkan.
+- Preview harus memungkinkan pemeriksaan tampilan halaman dan interaksi sebelum hasilnya dipindahkan ke aplikasi utama.
+- Preview/pengujian harus dipisahkan dari situs produksi yang sudah online.
+- Pengujian tidak boleh menggunakan atau merusak data nyata pengguna produksi. Kebutuhan isolasi data/backend, akun uji, dan media uji harus dirancang.
+- Akses preview perlu mempertimbangkan privasi dan tidak boleh mengekspos proyek atau data pengujian privat secara tidak sengaja.
+- Status setiap tahap perlu dibedakan: sedang dikembangkan, build berhasil, tersedia untuk preview, sudah diuji, diterima, siap dirilis, dan sudah dirilis.
+- Link preview harus menunjuk ke build/versi/commit yang jelas agar hasil pengujian dapat ditelusuri.
+
+#### 6. Temuan audit terhadap pipeline repository saat ini
+
+Pemeriksaan dilakukan terhadap file workflow deploy di branch main:
+
+- Push ke branch main menjalankan proses build dan deployment ke GitHub Pages.
+- Pull request menuju main menjalankan validasi, test, build, dan mengunggah artifact.
+- Pull request tidak melakukan deployment ke GitHub Pages.
+- Dengan demikian, repository saat ini sudah memisahkan validasi PR dari deployment produksi, tetapi belum menyediakan link preview browser otomatis untuk setiap PR.
+- Situs GitHub Pages yang sekarang tetap menjadi deployment produksi; jangan menggunakan deployment Pages yang sama untuk preview apabila hal itu berisiko mengganti situs produksi.
+- Mekanisme hosting preview terpisah, akses terbatas, dan hubungan dengan workflow CI/CD masih perlu dirancang sebelum implementasi.
+
+#### 7. Prinsip alur kerja yang disampaikan
+
+1. Pertahankan aplikasi produksi yang sekarang tetap online.
+2. Gunakan fondasi Social Media untuk menyusun inventaris halaman dan end-to-end user journeys.
+3. Turunkan kebutuhan frontend, backend, data, teknologi, aset, dan ikon per fitur.
+4. Tempatkan setiap hasil pada dokumentasi/modul yang tepat di dalam Master Model.
+5. Kerjakan perubahan pada jalur pengembangan terpisah dari produksi.
+6. Bangun dan sediakan preview yang bisa dibuka melalui browser untuk pemeriksaan pengguna.
+7. Jalankan test dan audit; catat hasil serta kekurangan.
+8. Setelah diterima, rilis secara bertahap ke aplikasi utama dengan versi dan bukti deployment yang jelas.
+
+#### Hal yang masih terbuka
+
+- Apakah preview harus dilindungi login/password atau mekanisme akses terbatas lain?
+- Hosting preview mana yang cocok, aman, mudah dibuka lewat ponsel, dan tidak mengganggu GitHub Pages produksi?
+- Apakah preview awal menggunakan data tiruan, backend uji terpisah, atau kombinasi keduanya?
+- Bagaimana format penamaan versi (misalnya versi besar/kecil atau milestone rilis)?
+- Apakah satu preview selalu mewakili satu Pull Request/fitur atau satu milestone gabungan?
+- Kriteria penerimaan/UAT apa yang harus dipenuhi sebelum fitur masuk produksi?
+- Bagaimana strategi migrasi dari implementasi yang sekarang ke peningkatan Social Media tanpa merusak halaman, autentikasi, data, dan modul yang sudah ada?
+
+Catatan status: arahan ini dicatat sebagai kebutuhan dan arah kerja yang disampaikan pengguna. Belum ada perubahan kode, perubahan workflow, penyediaan hosting preview, atau pemindahan catatan RAW ke Master Model yang dilakukan melalui sesi ini.
+
+
 ## Status akhir
 
 RAW
