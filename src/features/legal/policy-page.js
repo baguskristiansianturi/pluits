@@ -1,6 +1,5 @@
-import { assetUrl } from '../../config/runtime.js';
-import { routeHref } from '../../config/paths.js';
 import './policy-page.css';
+import '../../design-system/page-shell.css';
 import { renderPageHeader, renderPageFooter } from '../../design-system/page-shell.js';
 
 export function mountPolicyPage({ root, type }) {
