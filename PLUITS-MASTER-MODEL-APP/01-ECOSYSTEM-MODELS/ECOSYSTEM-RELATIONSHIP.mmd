@@ -1,0 +1,10 @@
+flowchart TB
+  P[PLUITS Platform] --> SM[01 Social Media]
+  P --> MP[02 Marketplace]
+  P --> TA[03 Tickets & Accommodation]
+  P --> GD[04 Geo Directory]
+  P --> LT[05 Logistics, Courier & Transportation]
+  P --> DW[06 Digital Wallet]
+  MP --> ST[Store merchant operations]
+  MP --> RC[Restaurant & Cafe operations]
+  CORE[Shared account, membership, identity and platform services] -. shared services .-> P

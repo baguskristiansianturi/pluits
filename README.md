@@ -1,36 +1,17 @@
-# Pluits
+# PLUITS
 
-Pluits is a mobile-first connected platform for Social Media, Local Marketplace, Trip/Travel, and GeoDirectory.
+PLUITS is a connected multi-application platform. Its product models, design blueprints, and application modularization documentation are maintained in one canonical workspace.
 
-- **Business model and product rules:** [MASTER/BUSINESS-MODEL-MASTER.md](MASTER/BUSINESS-MODEL-MASTER.md)
-- **AI start guide:** [MASTER/AI-START-HERE.md](MASTER/AI-START-HERE.md)
-- **AI governance and change control:** [MASTER/PLUITS-AI-GOVERNANCE.md](MASTER/PLUITS-AI-GOVERNANCE.md)
-- **Ideas not yet approved:** [IDEAS/IDEA-BACKLOG.md](IDEAS/IDEA-BACKLOG.md)
-- **Implementation status and delivery roadmap:** [MASTER/PROJECT-STATUS-ROADMAP.md](MASTER/PROJECT-STATUS-ROADMAP.md)
-- **Documentation map:** [MASTER/DOCUMENTATION-MAP-AND-CHECKLIST.md](MASTER/DOCUMENTATION-MAP-AND-CHECKLIST.md)
+## Start here
+- **[PLUITS Master Model App](PLUITS-MASTER-MODEL-APP/README.md)** — master architecture, six ecosystem models, product design, modularization, shared services and platform wrapper.
+- [Master foundation](PLUITS-MASTER-MODEL-APP/00-MASTER-FOUNDATION/README.md)
+- [Ecosystem models](PLUITS-MASTER-MODEL-APP/01-ECOSYSTEM-MODELS/README.md)
+- [Product design](PLUITS-MASTER-MODEL-APP/02-PRODUCT-DESIGN/README.md)
+- [Application modularization](PLUITS-MASTER-MODEL-APP/03-APPLICATION-MODULARIZATION/README.md)
 
-## Important for AI and contributors
-
-Before analysing, designing, or changing Pluits, read the complete Business Model Master first. Then read AI Governance, Project Status & Roadmap, and the technical documents relevant to the task. Do not treat the historical archive or Idea Backlog as approved product requirements.
-
-## Business and investor package
-- [Investor proposal](docs/pluits/PLUITS-INVESTOR-PROPOSAL.md)
-- [Business, product & technology blueprint](docs/pluits/PLUITS-BUSINESS-AND-PRODUCT-BLUEPRINT.md)
-- [Repository/backend audit and roadmap](docs/pluits/PLUITS-TECHNOLOGY-ROADMAP-AND-AUDIT-2026-11-09.md)
-- [Visual diagrams and mobile mockup](docs/pluits/visuals/)
-- [Investor package reading guide](docs/pluits/INVESTOR-PACKAGE-README.md)
-
-## Product spaces
-
-1. Social Media — community, profiles, posts, media, and interactions.
-2. Local Marketplace — local businesses, products/services, seller workspace, orders, and fulfilment.
-3. Trip / Travel — itinerary and service-request foundation; a request is not a confirmed booking.
-4. GeoDirectory — canonical places, providers, organizations, and activities.
+## Working rule
+Read the Master Model App before designing or changing a product. Distinguish approved requirements from proposals and historical notes. Do not infer production readiness from the existence of a page, component, or database table.
 
 ## Repository and application
-
 - Repository: https://github.com/baguskristiansianturi/pluits
 - GitHub Pages: https://baguskristiansianturi.github.io/pluits/
-- Supabase project: ytndswhqxayqpftszwfh
-
-Implementation status must be read from the current roadmap and verified CI/UAT evidence. The presence of a page or database table does not mean a feature is production-ready.

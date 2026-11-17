@@ -1,0 +1,16 @@
+flowchart TB
+  U[PLUITS User] --> H[PLUITS Main Homepage / App Shell]
+  H --> A[App Launcher & Global Navigation]
+  A --> S[Social Media]
+  A --> M[Marketplace]
+  A --> T[Tickets & Accommodation]
+  A --> G[Geo Directory]
+  A --> L[Logistics & Transportation]
+  A --> W[Digital Wallet]
+  H --> I[One PLUITS Identity & Membership]
+  I -. access and identity .-> S
+  I -. access and identity .-> M
+  I -. access and identity .-> T
+  I -. access and identity .-> G
+  I -. access and identity .-> L
+  I -. access and identity .-> W
