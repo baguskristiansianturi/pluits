@@ -4,8 +4,9 @@ export const LAYOUT_REGISTRY = Object.freeze([
     name: 'Shared Account and Legal Page Shell',
     status: 'IMPLEMENTED',
     owner: 'platform-ui-foundation',
-    purpose: 'Shared brand header, page frame, responsive geometry, and footer for login, registration, terms, and privacy pages',
-    slots: ['brand-header', 'page-content', 'optional-footer']
+    purpose: 'Reusable brand, configurable navigation, responsive page header, and configurable footer across PLUITS experience shells',
+    slots: ['brand', 'optional-navigation', 'header-actions', 'page-content', 'optional-footer'],
+    exports: ['renderBrand', 'renderNavbar', 'renderPageHeader', 'renderPageFooter']
   },
   {
     id: 'LAY-AUTH-SPLIT-001',
