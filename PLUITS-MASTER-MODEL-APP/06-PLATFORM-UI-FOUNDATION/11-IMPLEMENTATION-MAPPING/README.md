@@ -53,10 +53,12 @@ Use `03-APPLICATION-MODULARIZATION/` for code ownership, module boundaries, arch
 | Regression coverage | `tests/routes.test.js` | Route and brand-link assertions | Route/navigation regression |
 
 
-## Shared page-shell content spacing — 25px
+## Shared navbar-to-content spacing — one global rule
 
-| Specification | Runtime source | Token/selector | Consumers |
-|---|---|---|---|
-| `01-DESIGN-TOKENS/README.md` — Shared page-shell vertical spacing | `src/design-system/tokens.css` | `--pl-shell-header-content-gap`, `--pl-shell-header-content-gap-mobile` = `25px` | Every page using the shared shell |
-| Same | `src/design-system/page-shell.css` | `.pl-page-shell > .pl-page-main` | Public home, auth, legal/policy, authenticated workspace |
-| Route/page ownership | `src/features/home/home-page.js`, `src/features/auth/auth-page.js`, `src/features/legal/policy-page.js`, `src/features/workspace/workspace-page.js` | Direct `.pl-page-main` child under `.pl-page-shell` | `#/home`, auth routes, legal routes, `#/workspace` |
+| Owner | Single source of truth | Application rule |
+|---|---|---|
+| Design token | `src/design-system/tokens.css` — `--pl-shell-header-content-gap: 25px` | One value at every viewport; no page-specific or mobile duplicate token |
+| Shared shell | `src/design-system/page-shell.css` — `.pl-page-shell > .pl-page-main` | Every page body placed in the shared shell inherits the spacing automatically |
+| Regression test | `tests/routes.test.js` | Confirms there is exactly one token and the shared shell consumes it |
+
+Feature pages must not define or override navbar-to-content spacing. New pages use the shared page-shell contract rather than adding their own gap.

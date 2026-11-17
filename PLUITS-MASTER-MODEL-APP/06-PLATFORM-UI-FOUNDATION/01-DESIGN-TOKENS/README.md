@@ -36,7 +36,8 @@ No final palette, spacing scale, radius scale, or shadow scale is declared by th
 
 The distance from the bottom edge of the shared navbar/header to the start of page content is **25px on desktop, tablet, and mobile**. This is one global shell rule, not a page-specific value.
 
-- Desktop/tablet/mobile token: `--pl-shell-header-content-gap` / `--pl-shell-header-content-gap-mobile` (both resolve to `25px`).
+- One token for every viewport: `--pl-shell-header-content-gap: 25px`.
+- There is no separate mobile/tablet spacing token; the global gap does not change at breakpoints.
 - Runtime owner: `src/design-system/tokens.css`.
 - Enforcement: `src/design-system/page-shell.css`, using `.pl-page-shell > .pl-page-main` so page-specific layout classes cannot silently override the shared top gap.
 - All pages using the shared shell must place their main content as a direct `.pl-page-main` child of `.pl-page-shell`.

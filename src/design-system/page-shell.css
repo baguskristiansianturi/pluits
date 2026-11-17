@@ -37,8 +37,8 @@
  .pl-footer-bottom { align-items:flex-start; flex-direction:column; justify-content:center; padding-block:12px; }
 }
 
-/* One enforced vertical rhythm contract for every direct page body in the shared shell.
-   The shell-qualified selector prevents feature-level layout classes from overriding this gap. */
+/* The single global spacing rule: every page body inside the shared shell inherits it.
+   Feature page classes cannot override the shell-qualified selector. */
 .pl-page-shell > .pl-page-main {
   flex: 1 0 auto;
   min-width: 0;
@@ -47,7 +47,6 @@
 }
 @media (max-width: 767px) {
   .pl-page-shell > .pl-page-main {
-    padding-block-start: var(--pl-shell-header-content-gap-mobile);
     padding-block-end: var(--pl-shell-content-footer-gap-mobile);
   }
 }
