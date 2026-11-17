@@ -17,6 +17,19 @@
   --pl-form-width: 460px;
   /* Shared responsive contract: desktop >=1024px, tablet 768-1023px, mobile <=767px. */
   --pl-page-gutter: 24px;
+
+  /* Canonical page geometry: all page types consume these shared contracts. */
+  --pl-shell-header-height: 82px;
+  --pl-shell-header-height-mobile: 68px;
+  --pl-shell-header-content-gap: 26px;
+  --pl-shell-header-content-gap-mobile: 12px;
+  --pl-shell-content-footer-gap: 38px;
+  --pl-shell-content-footer-gap-mobile: 28px;
+  --pl-shell-footer-min-height: 58px;
+  --pl-shell-footer-min-height-mobile: 50px;
+  --pl-shell-content-max: 1180px;
+  --pl-reading-content-max: 720px;
+  --pl-workspace-content-max: 1440px;
   --pl-breakpoint-mobile: 480px;
   --pl-breakpoint-tablet: 768px;
   --pl-breakpoint-desktop: 1024px;
