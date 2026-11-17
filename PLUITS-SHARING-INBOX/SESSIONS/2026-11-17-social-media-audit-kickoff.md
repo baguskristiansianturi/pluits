@@ -258,6 +258,23 @@ Karena itu, istilah Circle tidak boleh ditafsirkan hanya sebagai daftar teman at
 - Apakah kartu produk Marketplace di bagian bawah Circle selalu mengikuti lokasi, minat, atau kombinasi keduanya?
 
 
+
+### Klarifikasi — zona Top 10 Trending vs radius Terdekat
+
+Pengguna memperjelas bahwa Top 10 Trending dan bagian Terdekat menggunakan dua cakupan geografis yang berbeda:
+
+- **Top 10 Trending menggunakan zona wilayah yang lebih luas.** Contoh yang diberikan: ketika konteks pengguna berada di Bali, zona Top 10 adalah seluruh Bali. Konten yang sedang tren dapat berasal dari bagian Bali mana pun, misalnya Lovina, walaupun pengguna sedang berada di Kuta. Tujuannya menunjukkan apa yang sedang tren di wilayah Bali secara keseluruhan, bukan hanya yang dekat dengan posisi pengguna.
+- **Terdekat di Sekitar Anda menggunakan radius dari posisi pengguna saat ini.** Tujuannya menampilkan tempat, toko, restoran, layanan, atau entitas lain yang cukup dekat dan realistis untuk dikunjungi langsung. Pengguna memberi contoh radius 5 kilometer.
+- Angka 5 kilometer dicatat sebagai contoh radius yang disampaikan pengguna, belum sebagai keputusan final atau batas yang sudah dikunci.
+- Dengan demikian, Top 10 Trending menjawab pertanyaan "apa yang sedang tren di zona/wilayah saya?", sedangkan Terdekat menjawab "apa yang ada di sekitar posisi saya dan dapat saya kunjungi?"
+
+Contoh saat pengguna berada di Kuta:
+- Top 10 Trending dapat menampilkan tempat/produk yang sedang tren di seluruh Bali, termasuk Lovina.
+- Terdekat menampilkan entitas dalam radius contoh 5 km dari posisi pengguna di Kuta.
+
+**Koreksi atas pertanyaan terbuka sebelumnya:** cakupan Top 10 pada konteks Bali telah diperjelas sebagai satu zona Bali, bukan radius di sekitar pengguna. Hal yang masih terbuka adalah bagaimana zona wilayah ditetapkan untuk daerah lain dan apakah radius Terdekat selalu 5 km atau dapat berubah sesuai kebutuhan/kategori.
+
+
 ## Status akhir
 
 RAW
