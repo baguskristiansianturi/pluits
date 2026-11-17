@@ -1,6 +1,7 @@
 import { resolveAuthenticatedRoute, resolveRoute } from './routes.js';
 import { routeHref } from '../config/paths.js';
 import { mountHomePage } from '../features/home/home-page.js';
+import { mountAuthenticatedHomePage } from '../features/home/authenticated-home.js';
 import { mountAuthPage } from '../features/auth/auth-page.js';
 import { mountWorkspacePage } from '../features/workspace/workspace-page.js';
 import { mountPolicyPage } from '../features/legal/policy-page.js';
@@ -17,13 +18,17 @@ export function createApp({ root, authService }) {
     const requestedRoute = resolveRoute(window.location.hash, window.location.search);
     const route = resolveAuthenticatedRoute(requestedRoute, Boolean(session));
     if (route !== requestedRoute) { navigate(route); return; }
-    if (route === 'home') { mountHomePage({ root }); return; }
+    if (route === 'home') {
+      if (session) mountAuthenticatedHomePage({ root, user: session.user, onSignOut: () => authService.signOut() });
+      else mountHomePage({ root });
+      return;
+    }
     if (route === 'workspace') {
       mountWorkspacePage({ root, user: session.user, onSignOut: () => authService.signOut() });
       return;
     }
     if (route === 'terms' || route === 'privacy') { mountPolicyPage({ root, type: route }); return; }
-    mountAuthPage({ root, mode: route, authService, hasRecoverySession: Boolean(session), onAuthenticated(nextSession) { session = nextSession; navigate('workspace'); } });
+    mountAuthPage({ root, mode: route, authService, hasRecoverySession: Boolean(session), onAuthenticated(nextSession) { session = nextSession; navigate('home'); } });
   }
   const unsubscribe = authService.subscribe((event, nextSession) => {
     session = nextSession;
