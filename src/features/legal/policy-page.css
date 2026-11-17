@@ -1,5 +1,5 @@
 .policy-page {
-  width: min(100%, 720px);
+  width: min(100%, var(--pl-reading-content-max));
   margin-inline: auto;
 }
 
