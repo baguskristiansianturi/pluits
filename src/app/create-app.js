@@ -1,4 +1,5 @@
 import { resolveAuthenticatedRoute, resolveRoute } from './routes.js';
+import { routeHref } from '../config/paths.js';
 import { mountAuthPage } from '../features/auth/auth-page.js';
 import { mountWorkspacePage } from '../features/workspace/workspace-page.js';
 import { mountPolicyPage } from '../features/legal/policy-page.js';
@@ -8,7 +9,7 @@ export function createApp({ root, authService }) {
   let ready = false;
 
   const navigate = (route) => {
-    const next = '#/' + route;
+    const next = routeHref(route);
     if (window.location.hash === next) {
       render();
       return;
