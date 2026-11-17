@@ -9,8 +9,7 @@
 
 .auth-main {
   width: min(100%, var(--pl-container-auth));
-  flex: 1;
-  margin: var(--pl-page-content-top) auto var(--pl-page-content-bottom);
+  margin-inline: auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(360px, var(--pl-form-width));
   align-items: stretch;
