@@ -5,6 +5,7 @@ const sourceRoot = 'src';
 const packageJson = JSON.parse(await readFile('package.json', 'utf8'));
 const indexHtml = await readFile('index.html', 'utf8');
 const workflow = await readFile('.github/workflows/deploy.yml', 'utf8');
+const serviceWorker = await readFile('public/sw.js', 'utf8');
 
 async function walk(directory) {
   const output = [];
@@ -25,7 +26,7 @@ if (/service[_-]?role\s*[:=]\s*['"]|sb_secret_[A-Za-z0-9]+/i.test(runtime)) {
 if (!runtime.includes('@supabase/supabase-js@2.119.0')) {
   throw new Error('The Supabase browser SDK must remain version-pinned.');
 }
-if (!indexHtml.includes('/src/main.js')) {
+if (!indexHtml.includes('noindex,nofollow') || !indexHtml.includes('/src/main.js')) {
   throw new Error('index.html must load the new frontend entry point.');
 }
 if (!packageJson.scripts?.test?.includes('verify:architecture')) {
@@ -36,6 +37,20 @@ if (!workflow.includes('npm test') || !workflow.includes('npm run build')) {
 }
 if (runtimeFiles.some((path) => /pages\/account|components\/social|style\.css/.test(path))) {
   throw new Error('Legacy frontend runtime paths remain in the new source tree.');
+}
+
+
+if (!runtime.includes("VITE_PUBLIC_SIGNUP_ENABLED === 'true'")) {
+  throw new Error('Public signup must remain disabled unless explicitly enabled after readiness review.');
+}
+if (!runtime.includes('Pendaftaran belum dibuka')) {
+  throw new Error('The registration screen must communicate the public signup release gate.');
+}
+if (!serviceWorker.includes('caches.keys()') || !serviceWorker.includes('caches.delete(key)')) {
+  throw new Error('Service worker must remove legacy PLUITS shell caches on activation.');
+}
+if (/cache\\.addAll|cache\\.put|respondWith/.test(serviceWorker)) {
+  throw new Error('The bootstrap service worker must not persist stale app-shell responses.');
 }
 
 console.log('Production surface checks passed (' + runtimeFiles.length + ' runtime files).');
