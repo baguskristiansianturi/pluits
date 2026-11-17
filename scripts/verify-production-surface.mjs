@@ -181,11 +181,10 @@ assert.match(postLikeFeature, /pointerup/, 'Photo posts must support responsive 
 assert.match(postLikeFeature, /toggleLike\(image\.closest/, 'Double-tap must toggle like state on the exact photo that was tapped.');
 
 for (const path of [
-  'MASTER/DECISION-LOG.md',
-  'SOP/README.md',
-  'SOP/PRODUCT-CHANGE-CONTROL.md',
-  'SOP/ENGINEERING-DELIVERY.md',
-  'SOP/RELEASE-UAT.md',
+  'PLUITS-MASTER-MODEL-APP/00-MASTER-FOUNDATION/DECISION-LOG.md',
+  'PLUITS-MASTER-MODEL-APP/03-APPLICATION-MODULARIZATION/00-MODULE-BOUNDARY-AND-CHANGE-CONTROL.md',
+  'PLUITS-SHARING-INBOX/README.md',
+  'AGENTS.md',
 ]) {
   assert.ok(existsSync(path), 'Required project governance document missing: ' + path);
 }
