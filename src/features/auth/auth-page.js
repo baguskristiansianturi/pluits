@@ -1,6 +1,7 @@
 import { assetUrl, PUBLIC_SIGNUP_ENABLED } from '../../config/runtime.js';
 import { routeHref } from '../../config/paths.js';
 import { renderIcon } from '../../design-system/icons.js';
+import { renderPageHeader, renderPageFooter } from '../../design-system/page-shell.js';
 
 function passwordField({ id, label, autocomplete, placeholder, help, minLength = 0 }) {
   const minLengthAttribute = minLength ? ' minlength="' + minLength + '"' : '';
@@ -55,14 +56,8 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
       : 'Belum punya akun? <a href="' + routeHref('register') + '">Daftar</a>';
 
   root.innerHTML =
-    '<div class="auth-page">' +
-      '<header class="auth-header">' +
-        '<a class="pluits-brand" href="' + routeHref('login') + '" aria-label="PLUITS — halaman masuk">' +
-          '<img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt="" width="34" height="34">' +
-          '<span>PLUITS</span>' +
-        '</a>' +
-        '<span class="auth-header-note">EKOSISTEM DIGITAL TERINTEGRASI</span>' +
-      '</header>' +
+    '<div class="pl-page-shell auth-page">' +
+      renderPageHeader({ note: 'EKOSISTEM DIGITAL TERINTEGRASI', label: 'PLUITS — halaman masuk' }) +
       '<main class="auth-main">' +
         '<aside class="auth-intro-panel">' +
           '<span class="auth-eyebrow">SATU IDENTITAS · SATU EKOSISTEM</span>' +
@@ -104,7 +99,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
           '<p class="auth-security-note">' + renderIcon('lock') + '<span>Jaga kerahasiaan kata sandi dan jangan bagikan tautan pemulihan akun kepada siapa pun.</span></p>' +
         '</section>' +
       '</main>' +
-      '<footer class="auth-footer"><span>© 2026 PLUITS. Hak cipta dilindungi.</span><span>PLUITS · Ekosistem Digital</span></footer>' +
+      renderPageFooter() +
     '</div>';
 
   const form = root.querySelector('[data-auth-form]');
