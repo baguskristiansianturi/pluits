@@ -1,6 +1,7 @@
 import { assetUrl, PUBLIC_SIGNUP_ENABLED } from '../../config/runtime.js';
 import { routeHref } from '../../config/paths.js';
 import { renderIcon } from '../../design-system/icons.js';
+import '../../design-system/page-shell.css';
 import { renderPageHeader, renderPageFooter } from '../../design-system/page-shell.js';
 
 function passwordField({ id, label, autocomplete, placeholder, help, minLength = 0 }) {
