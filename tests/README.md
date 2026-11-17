@@ -7,6 +7,8 @@
 
 Browser/device UAT is still required after deployment. Automated Node tests do not prove that Supabase SMTP, Auth redirect configuration, or real-account login works on a phone.
 
+Architecture/change-map.test.js validates the canonical frontend Change Map and its required sections.
+
 Additional retained backend and repository contract tests:
 - app/marketplace-read-permissions.test.js
 - app/post-moderation-guard.test.js
