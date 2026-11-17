@@ -25,3 +25,15 @@ The canonical chrome API is `src/design-system/page-shell.js`, styled only by `p
 - `renderPageFooter({ groups, legalLinks, copyright, attribution })`: shared footer composition; each experience supplies its own menu groups and legal links.
 
 Menu contents are configuration, not separate page-specific markup. Do not copy header/navbar/footer HTML or redefine their dimensions in feature styles. A page may omit navigation or footer when its experience does not require them, but when present it must use these shared renderers. Feature-specific slots may provide content/actions; they must not replace shared geometry. Keep the logo source canonical and shared.
+
+
+## Canonical page geometry (single source of truth)
+
+The page vertical rhythm is owned by `tokens.css` and applied by `page-shell.css`, never by feature-page margins:
+- Header height: `--pl-shell-header-height` / mobile counterpart.
+- Header-to-content distance: `--pl-shell-header-content-gap` / mobile counterpart.
+- Content-to-footer distance: `--pl-shell-content-footer-gap` / mobile counterpart.
+- Footer minimum height: shared desktop/mobile tokens.
+- Reading, standard, and workspace maximum widths: shared container tokens.
+
+Every page with shared chrome uses `.pl-page-shell`; every page body uses `.pl-page-main`. The main region owns both vertical gaps and expands to keep the footer at the bottom on short pages. Feature CSS may set its inner content width and composition, but MUST NOT add page-level top/bottom margins or padding that duplicate shell spacing. Page-specific section spacing is a separate content-layout concern, not shell geometry.
