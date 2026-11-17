@@ -459,6 +459,120 @@ Pengguna menegaskan bahwa pekerjaan versi baru bukan sekadar menambahkan fitur S
 Catatan: poin arsitektur di atas merupakan arah teknis yang perlu dianalisis dan dirinci sebelum diputuskan implementasinya. Belum ada kode atau struktur runtime yang diubah pada sesi ini.
 
 
+
+### Penegasan arah — flowchart dan frontend generasi baru, database tetap dipakai
+
+Pengguna menegaskan bahwa pekerjaan berikutnya adalah menyusun flowchart dan struktur aplikasi yang baru dari awal. Tujuannya bukan memperbaiki, menambal, atau menggabungkan struktur frontend lama dengan struktur baru.
+
+#### 1. Pemisahan frontend lama dan frontend baru
+
+- PLUITS generasi baru akan memiliki flowchart, inventaris halaman, susunan navigasi, struktur komponen, dan arsitektur frontend yang dirancang kembali dari awal.
+- Struktur frontend lama tidak dijadikan fondasi yang harus dipertahankan dan tidak akan dicampur ke dalam struktur frontend baru.
+- Website lama tetap berjalan selama proses pembangunan dan pengujian versi baru.
+- Setelah versi baru selesai, diuji, dan diterima, frontend/struktur lama akan digantikan dan tidak digabungkan ke dalam struktur baru.
+- Pembangunan baru harus dimulai dari kebutuhan produk dan alur yang sudah diaudit, bukan menyalin susunan halaman lama secara otomatis.
+
+#### 2. Database yang sudah ada tetap dipertahankan
+
+- Pengguna secara eksplisit meminta agar versi baru tetap menggunakan database PLUITS yang sama.
+- Alasan yang disampaikan: sudah ada satu akun pengguna yang mendaftar pada sistem saat ini dan data akun tersebut harus tetap dapat digunakan.
+- Karena itu, rancangan frontend baru harus memperhitungkan kompatibilitas dengan database yang sudah ada dan mempertahankan akun/data terdaftar tersebut.
+- Penggunaan database yang sama tidak berarti frontend lama harus dipertahankan atau digabungkan.
+- Skema database, autentikasi, kontrak API, struktur tabel, kebijakan akses, dan kebutuhan adaptasi/migrasi harus diaudit sebelum koneksi frontend baru dibuat. Jangan menghapus, mereset, atau merusak data yang sudah ada.
+- Belum diputuskan apakah seluruh layanan backend saat ini akan digunakan tanpa perubahan; yang sudah dinyatakan secara eksplisit untuk dipertahankan adalah database yang sama.
+
+#### 3. Flowchart baru dan inventaris halaman sebagai dasar pembangunan
+
+Sebelum halaman dibuat, perlu disusun alur baru yang menggambarkan:
+- pintu masuk pengguna dan alur akun;
+- navigasi Global Home, Circle, dan area utama Social Media;
+- hubungan antarhalaman dan perpindahan antarfitur;
+- proses pengguna dari awal sampai selesai untuk setiap aktivitas;
+- kondisi normal maupun kondisi khusus seperti loading, kosong, gagal, validasi, berhasil, akses ditolak, dan pemulihan;
+- titik integrasi dengan database serta layanan PLUITS lain jika memang diperlukan.
+
+Inventaris halaman disusun berdasarkan kebutuhan dan perjalanan pengguna, bukan hanya menyalin halaman yang ada saat ini. Setiap halaman/flow kemudian ditempatkan pada dokumentasi dan folder yang memang menjadi tanggung jawabnya.
+
+#### 4. Empat jalur kerja dokumentasi Social Media
+
+Empat jalur kerja sementara yang telah digunakan untuk menata pekerjaan model tetap menjadi acuan awal:
+1. `01-DESIGN` — aturan produk, pengalaman pengguna, spesifikasi visual, susunan halaman, komposisi layar, komponen dari sisi desain, dan user flow.
+2. `02-DEVELOPMENT` — spesifikasi implementasi, arsitektur frontend/backend, kontrak komponen dan data, integrasi, keamanan teknis, serta pengujian teknis.
+3. `03-PROJECT` — ruang lingkup, tahapan, prioritas, dependensi, milestone, versi, status pekerjaan, dan rencana rilis.
+4. `04-CHECKLIST-AUDIT` — checklist kelengkapan, validasi hasil, uji fungsi, uji responsivitas, pemeriksaan visual/regression, dan kriteria penerimaan.
+
+Nama dan pembagian jalur masih dapat dikembangkan apabila audit menunjukkan kebutuhan pemisahan tambahan. Tidak perlu memaksakan seluruh jalur memiliki susunan subfolder yang identik. Yang wajib dijaga adalah setiap dokumen memiliki satu tempat utama yang jelas, tidak diduplikasi atau dicampur ke folder yang tidak sesuai tanggung jawabnya.
+
+#### 5. Aturan produk Social Media perlu dirinci menjadi rulebook yang lebih lengkap
+
+Pengguna menjelaskan bahwa aturan Social Media dapat dan perlu ditambah sesuai kebutuhan. Contoh yang diberikan adalah aturan pengalaman seperti Instagram, termasuk ukuran/rasio media Post dan bagian-bagian yang harus ada pada sebuah Post.
+
+Arah pencatatannya:
+- Buat aturan produk/desain khusus untuk setiap jenis pengalaman dan konten Social Media, bukan hanya satu aturan umum untuk seluruh fitur.
+- Untuk Post, audit dan tentukan format media, rasio/dimensi yang didukung, area media, informasi pemilik konten, caption, waktu, menu tindakan, Like, komentar, share, dan komponen lain yang memang dibutuhkan.
+- Buat aturan terpisah untuk Story, Reel, profil, feed, komentar, interaksi, composer/pembuatan konten, dan pengalaman sosial lain sesuai hasil inventaris fitur.
+- Catat perilaku dan komposisi layar untuk berbagai kondisi, bukan hanya tampilan ideal.
+- Ukuran, rasio, jumlah media, batas karakter, dan aturan numerik lainnya harus ditentukan melalui spesifikasi dan keputusan produk; contoh pengguna tentang ukuran Post merupakan kebutuhan untuk membuat aturan rinci, bukan angka final yang sudah ditetapkan.
+- Aturan pengalaman inti boleh merujuk pada pola interaksi Instagram yang diminta pengguna, dengan identitas visual dan aset PLUITS sendiri serta tanpa mengambil aset berhak cipta/proprietary secara tidak sah.
+
+#### 6. Menurunkan kebutuhan komponen dari aturan dan halaman
+
+- Setelah rulebook dan inventaris halaman disusun, identifikasi komponen yang dibutuhkan setiap layar dan alur.
+- Setiap komponen harus memiliki nama, tujuan, tanggung jawab, properti/masukan, keluaran/aksi, kondisi tampilan, aturan responsif, dan batas penggunaannya.
+- Bedakan komponen fondasi yang dipakai lintas ekosistem PLUITS dari komponen khusus Social Media.
+- Komponen umum (misalnya tombol, field, dialog, avatar dasar, sistem spacing, dan pola layout umum) ditempatkan dalam gudang/fondasi UI bersama jika memang dapat digunakan lintas modul.
+- Komponen yang hanya memiliki makna atau perilaku khusus Social Media ditempatkan pada pustaka/ruang komponen Social Media, tetapi tetap mengikuti standar fondasi UI bersama.
+- Halaman dibangun dengan merangkai komponen yang sudah ditentukan dan didokumentasikan, bukan membuat versi tombol, kartu, jarak, atau pola yang berbeda-beda tanpa aturan.
+- Perubahan komponen bersama harus melalui pemeriksaan dampak karena dapat digunakan oleh banyak halaman dan ekosistem.
+
+#### 7. Makna dan tata kelola “gudang” UI
+
+Analogi gudang yang dijelaskan pengguna mengarah pada tempat penyimpanan terpusat dan teratur untuk material yang dapat dipakai kembali, seperti standar visual, ikon, aset, pola layout, komponen, dan dokumentasinya.
+
+- Gudang/fondasi UI lintas PLUITS berada pada tanggung jawab `06-PLATFORM-UI-FOUNDATION/` dalam Master Model.
+- Gudang tersebut menjadi sumber standar bersama, bukan tempat mencampur seluruh halaman dan logika fitur.
+- Materi yang disimpan dapat mencakup design tokens, ukuran dan spacing, tipografi, warna, breakpoint, aturan responsif, logo/brand assets, ikon SVG lokal, komponen umum, pola layout, pola interaksi, dokumentasi penggunaan, dan aturan perubahan/kualitas.
+- Komponen khusus Social Media tetap dikelompokkan dalam domain Social Media; komponen khusus Marketplace tetap dalam domain Marketplace, dan seterusnya. Komponen tersebut boleh menggunakan standar dan komponen dasar dari gudang bersama.
+- Setiap aset/komponen perlu memiliki identitas, kategori, dokumentasi, status (misalnya draft/review/approved/deprecated), serta aturan penggunaan agar tidak ada duplikasi atau versi yang tidak jelas.
+- Tidak mengambil ikon atau aset eksternal secara otomatis; inventaris dan sumber aset harus dikelola sesuai aturan PLUITS.
+- Gudang ini berbeda dari Sharing Inbox: Sharing Inbox menampung catatan mentah dan bahan diskusi, sedangkan gudang UI menyimpan standar/aset/komponen yang telah ditata untuk digunakan. Materi Sharing Inbox belum otomatis menjadi aset atau aturan resmi gudang.
+
+#### 8. Urutan persiapan yang diturunkan dari arahan ini
+
+1. Audit database dan sistem akun yang sudah ada agar akun terdaftar tetap aman dan dapat digunakan.
+2. Susun ulang peta ekosistem, ruang lingkup Social Media, flowchart, dan perjalanan pengguna.
+3. Buat inventaris halaman lengkap dan tempatkan setiap spesifikasi pada jalur dokumentasi yang sesuai.
+4. Susun rulebook Social Media per jenis halaman, konten, dan interaksi.
+5. Turunkan inventaris komponen dari rulebook dan halaman.
+6. Audit gudang UI yang ada; tentukan standar/aset/komponen yang dapat dipakai, diperbaiki, ditambah, atau perlu dibangun ulang.
+7. Dokumentasikan komponen bersama di Platform UI Foundation dan komponen khusus di domain masing-masing.
+8. Audit kontrak database/backend dan kebutuhan frontend baru sebelum memilih atau mengunci teknologi.
+9. Susun rencana versi, lingkungan pengembangan/preview terpisah, pengujian, penerimaan, dan penggantian frontend lama.
+10. Implementasikan setelah struktur dan kebutuhan cukup jelas serta telah ditinjau sesuai proses persetujuan.
+
+Urutan ini merupakan rencana persiapan yang diturunkan dari arahan pengguna; belum merupakan persetujuan untuk langsung mengubah kode, database, workflow, atau deployment.
+
+#### Keputusan eksplisit dari klarifikasi ini
+
+- Flowchart dan struktur frontend PLUITS generasi baru dibuat dari awal.
+- Frontend lama tidak ditambal dan tidak dicampur dengan struktur baru; setelah versi baru diterima, frontend lama akan digantikan.
+- Database yang sama tetap digunakan agar akun pengguna yang sudah terdaftar tetap dipertahankan.
+- Inventaris halaman, aturan Social Media, dan komponen harus disusun serta ditempatkan pada jalur/folder yang sesuai.
+- Empat jalur kerja sementara tetap menjadi acuan: Design, Development, Project, dan Checklist-Audit; pembagian dapat ditambah bila diperlukan.
+- Gudang UI adalah tempat teratur untuk standar/aset/komponen reusable, terpisah dari Sharing Inbox dan tidak menjadi tempat mencampur logika seluruh modul.
+
+#### Hal yang masih terbuka
+
+- Bagaimana struktur flowchart baru dan urutan halaman lengkap Social Media setelah seluruh perjalanan pengguna dipetakan?
+- Apakah autentikasi dan API yang sekarang dapat dipakai langsung oleh frontend baru, atau memerlukan penyesuaian?
+- Apa kondisi dan struktur database saat ini, termasuk bagaimana akun terdaftar dipertahankan tanpa perubahan data yang merusak?
+- Apa ukuran/rasio/dimensi final untuk Post, Story, Reel, avatar, dan media lainnya?
+- Apa batas jumlah foto/video, durasi, ukuran file, batas karakter caption, dan aturan validasi tiap format?
+- Bagaimana struktur folder aktual untuk pustaka komponen umum dan komponen khusus Social Media agar tidak tumpang tindih?
+- Bagaimana proses review dan persetujuan sebelum komponen/aturan masuk status approved di gudang UI?
+- Kapan dan dengan kriteria apa frontend lama dinonaktifkan/dihapus setelah versi baru diterima?
+
+
 ## Status akhir
 
 RAW
