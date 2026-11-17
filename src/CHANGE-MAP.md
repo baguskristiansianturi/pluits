@@ -12,9 +12,8 @@ Scope: Account access, guest and authenticated Global Home, and internal develop
 | Design tokens | src/design-system/tokens.css | design-system | All feature screens |
 | Icon registry | src/design-system/icons.js | design-system | Auth, Global Home and Workspace |
 | Layout registry | src/design-system/layouts.js | design-system | Feature page specifications |
-| Shared brand/header/footer | src/design-system/page-shell.js and page-shell.css | design-system | Guest Home, Authenticated Home, Auth, Legal and Workspace |
-| Public Global Home | src/features/home/home-page.js and home-page.css | features/home | Guest `#/home` |
-| Authenticated Global Home | src/features/home/authenticated-home.js and authenticated-home.css | features/home | Signed-in `#/home` |
+| Shared brand/header/footer | src/design-system/page-shell.js and page-shell.css | design-system | Global Home, Auth, Legal and Workspace |
+| Session-aware Global Home | src/features/home/home-page.js and home-page.css | features/home | Guest and signed-in `#/home`; one renderer and one feature stylesheet |
 | Auth UI | src/features/auth/auth-page.js and auth-page.css | features/auth | App router |
 | Legal draft screens | src/features/legal/policy-page.js and policy-page.css | features/legal | App router |
 | Internal workspace | src/features/workspace/workspace-page.js and workspace-page.css | features/workspace | Authenticated route |

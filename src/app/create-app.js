@@ -1,7 +1,6 @@
 import { resolveAuthenticatedRoute, resolveRoute } from './routes.js';
 import { routeHref } from '../config/paths.js';
 import { mountHomePage } from '../features/home/home-page.js';
-import { mountAuthenticatedHomePage } from '../features/home/authenticated-home.js';
 import { mountAuthPage } from '../features/auth/auth-page.js';
 import { mountWorkspacePage } from '../features/workspace/workspace-page.js';
 import { mountPolicyPage } from '../features/legal/policy-page.js';
@@ -19,8 +18,7 @@ export function createApp({ root, authService }) {
     const route = resolveAuthenticatedRoute(requestedRoute, Boolean(session));
     if (route !== requestedRoute) { navigate(route); return; }
     if (route === 'home') {
-      if (session) mountAuthenticatedHomePage({ root, user: session.user, onSignOut: () => authService.signOut() });
-      else mountHomePage({ root });
+      mountHomePage({ root, user: session?.user || null, onSignOut: () => authService.signOut() });
       return;
     }
     if (route === 'workspace') {

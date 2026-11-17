@@ -1,7 +1,7 @@
 # PAGE-GLOBAL-HOME-AUTHENTICATED — Authenticated Global Home
 
 Status: IMPLEMENTED — provisional composition; founder visual UAT pending.  
-Page ID: `PAGE-GLOBAL-HOME-AUTHENTICATED` · Layout: `LAY-GLOBAL-HOME-AUTH-001` · Owner: Platform Wrapper & User Journeys  
+Page ID: `PAGE-GLOBAL-HOME-AUTHENTICATED` · Layout: `LAY-GLOBAL-HOME-001` · Owner: Platform Wrapper & User Journeys  
 Route: `#/home`, selected when an active Supabase session exists.
 
 ## Purpose
@@ -32,8 +32,9 @@ Global Home is not Circle and is not the Social Media personal space. It is also
 - Sign-out changes the active session; the auth-state listener then renders the public homepage.
 
 ## Runtime ownership
-- Composition: `src/features/home/authenticated-home.js`.
-- Scoped styles: `src/features/home/authenticated-home.css`.
+- Composition: authenticated state inside `src/features/home/home-page.js`.
+- Scoped styles: authenticated state inside `src/features/home/home-page.css`.
+- One shared entry point: `mountHomePage({ root, user, onSignOut })`; session presence selects content.
 - Session-based selection: `src/app/create-app.js`.
 - Route policy: `src/app/routes.js`.
 - Shared brand: `src/design-system/page-shell.js`.
@@ -44,9 +45,9 @@ Global Home is not Circle and is not the Social Media personal space. It is also
 ## Responsive and shared design rules
 - Consume the existing shared page shell, brand asset, tokens, typography, and icon registry.
 - The shared shell exclusively owns navbar-to-content spacing, page gutters, and vertical rhythm.
-- Desktop uses a four-column ecosystem overview; tablet uses two columns; mobile stacks to one column.
+- Desktop uses a four-column ecosystem overview; tablet uses two columns; mobile stacks to one column. Shared page shell geometry remains identical to the public state.
 - No new global spacing, color, typography, or breakpoint tokens are introduced.
-- Feature styles remain scoped under `.authenticated-home-page` and `.global-home-*`.
+- Feature styles remain scoped under `.home-page--authenticated` and `.global-home-*`, in the same stylesheet as the public state.
 
 ## Validation
 Run `npm test` and `npm run build`; verify guest and authenticated sessions on `#/home`, sign-in, sign-out, brand navigation from every shared shell, and desktop/tablet/mobile layouts. Visual UAT remains pending until inspected on real devices.
