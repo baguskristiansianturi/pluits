@@ -47,3 +47,14 @@ Every page with shared chrome uses `.pl-page-shell`; every page body uses `.pl-p
 ## Brand lockup contract — LOGO-02
 
 The symbol-plus-wordmark lockup uses the canonical symbol asset and the existing PLUITS wordmark text treatment. Its horizontal separation is controlled by `--pl-brand-lockup-gap` in `tokens.css`, currently **4 CSS px**. The symbol remains 34 × 34 CSS px. Wordmark font size, weight, letter spacing, and color are unchanged; the existing mobile font-size rule is also preserved. Do not introduce page-local gaps or adjust typography to compensate for this spacing.
+
+
+## Shared navbar/header divider — NAV-001
+
+Every header/navigation rendered through `renderPageHeader()` receives a soft bottom divider automatically. The divider is part of the shared chrome, not page content and not an optional page-level decoration.
+
+- Runtime: `src/design-system/page-shell.css`, selector `.pl-page-header`.
+- Tokens: `--pl-shell-divider-width` and `--pl-shell-divider-color` in `src/design-system/tokens.css`.
+- The footer top divider consumes the same tokens so both boundaries stay visually consistent.
+- Do not add local borders to individual pages or individual navbar instances.
+- Pages must use the shared header renderer; a custom header requires an explicitly documented and approved exception.

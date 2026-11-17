@@ -17,6 +17,10 @@
   /* LOGO-02 symbol-to-wordmark spacing; keep the lockup visually unified. */
   --pl-brand-lockup-gap: 4px;
 
+  /* Shared soft divider between global header/navigation and page content. */
+  --pl-shell-divider-color: rgba(198, 215, 210, 0.65);
+  --pl-shell-divider-width: 1px;
+
   --pl-container-wide: 1180px;
   --pl-container-auth: 1120px;
   --pl-form-width: 460px;

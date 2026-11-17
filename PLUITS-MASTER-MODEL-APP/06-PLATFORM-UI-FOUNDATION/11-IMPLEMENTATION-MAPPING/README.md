@@ -32,3 +32,11 @@ The mapping is intentionally not populated with guessed source paths. It must be
 ## Relationship to Application Modularization
 
 Use `03-APPLICATION-MODULARIZATION/` for code ownership, module boundaries, architecture, contracts, security, technical tests, deployment, and rollback. This register points from the approved UI standard to the correct runtime implementation; it does not replace technical architecture documentation.
+
+
+## NAV-001 — Shared navbar/header divider
+
+| Specification | Runtime source | Token/API | Consumer rule |
+|---|---|---|---|
+| `06-COMPONENT-LIBRARY/NAV-001-SHARED-NAVBAR.md` | `src/design-system/page-shell.css` | `.pl-page-header` | All pages using `renderPageHeader()` inherit the bottom divider |
+| `01-DESIGN-TOKENS/README.md` | `src/design-system/tokens.css` | `--pl-shell-divider-width`, `--pl-shell-divider-color` | Header bottom and footer top share the same values |

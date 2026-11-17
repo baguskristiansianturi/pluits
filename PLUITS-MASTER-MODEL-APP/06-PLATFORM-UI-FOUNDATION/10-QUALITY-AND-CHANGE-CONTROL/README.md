@@ -33,3 +33,8 @@ Before merge/deployment, record:
 ## Release rule
 
 Do not mark a UI change complete when a required viewport, shared consumer, or critical state remains untested. Record limitations transparently and do not claim a successful deployment without workflow evidence.
+
+
+## Shared header divider regression check
+
+When changing the shared divider tokens or page-header chrome, verify all consumers of `renderPageHeader()` at desktop, tablet, and mobile widths. Confirm that the line remains subtle, spans the shared header container, does not alter the header's defined height, and does not introduce duplicate borders in page-level CSS. Check the footer top boundary remains visually matched.
