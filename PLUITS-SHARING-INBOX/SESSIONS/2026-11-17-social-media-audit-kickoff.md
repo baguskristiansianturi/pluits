@@ -169,6 +169,95 @@ Untuk audit pengalaman Instagram berikutnya, perlu dibedakan:
 Belum ada keputusan untuk menghapus, memindahkan, mempertahankan, atau mengubah posisi bagian mana pun. Pembahasan visual dan perilaku detail tetap dilanjutkan bersama pengguna.
 
 
+
+### Sharing lanjutan — alasan konsep Circle dan pengalaman Global vs Circle
+
+Pengguna menjelaskan bahwa Circle sengaja dirancang sebagai pengalaman campuran Social Media dan penemuan kebutuhan di sekitar pengguna. PLUITS memiliki direktori, Marketplace/toko, layanan, dan jenis entitas lain. Menurut arah yang dijelaskan, semua itu tidak seharusnya hanya dipisahkan menjadi kategori-kategori terisolasi; sebagian kontennya perlu hadir secara alami di antara pengalaman sosial pada Circle.
+
+#### 1. Dua konteks pengalaman: Global Home dan Circle
+
+**Global Home**
+- Ketika pengguna membuka homepage PLUITS, sebelum masuk ke Circle personalnya, pengguna melihat pengalaman dalam cakupan global/platform.
+- Untuk tahap ekspansi saat ini, cakupan global yang dimaksud masih Indonesia karena PLUITS belum berekspansi ke negara lain.
+- Bagian trending pada cakupan ini mengambil tren dalam wilayah luas, bukan hanya dari lokasi terdekat pengguna.
+- Pengguna menyebut contoh cakupan Indonesia dan contoh tren Bali untuk menjelaskan perbedaan cakupan luas dengan area lokal.
+
+**Circle**
+- Circle adalah pengalaman pengguna yang sudah login dan terhubung dengan jaringan pertemanannya, sekaligus pengalaman lokal berdasarkan lokasi pengguna saat itu.
+- Circle bukan hanya feed dari teman. Di dalamnya juga ada penemuan tempat, toko, produk, dan layanan yang relevan dengan area pengguna.
+- Pengguna dapat tetap memiliki teman yang berada di kota lain atau negara lain. Perpindahan lokasi pengguna tidak mengubah jaringan pertemanannya.
+- Lokasi pengguna memengaruhi konten lokal yang ditampilkan. Contoh: saat pengguna berada di Kuta, rekomendasi lokal mengikuti Kuta; ketika berpindah ke Ubud, bagian lokal berubah mengikuti Ubud.
+- Tombol/logo PLUITS yang berada di berbagai halaman berfungsi mengembalikan pengguna ke Global Home.
+- Item navigasi Circle berfungsi mengembalikan pengguna ke Circle personalnya.
+
+#### 2. Cakupan tren luas dan rekomendasi terdekat adalah dua hal berbeda
+
+- **Top 10 Trending** pada Circle dimaksudkan sebagai tren dalam cakupan geografis yang lebih luas daripada lingkungan terdekat pengguna. Contoh yang diberikan: tren di Bali dapat berasal dari Lovina dan wilayah Bali lainnya meskipun pengguna sedang berada di Kuta.
+- **Terdekat di sekitar pengguna** menggunakan lokasi pengguna untuk menampilkan entitas direktori yang berada di sekitar area aktual pengguna. Contoh saat berada di Kuta: klub, mal, restoran, tempat wisata, toko, dan entitas lokal lainnya.
+- Dengan demikian, Top 10 Trending bukan daftar tempat yang paling dekat dengan pengguna. Bagian terdekat bukan pula daftar tren seluruh wilayah.
+- Cakupan administratif atau radius yang persis untuk kedua bagian tersebut belum ditetapkan.
+
+#### 3. Penggunaan lokasi perangkat
+
+- PLUITS menggunakan lokasi perangkat untuk menyesuaikan pengalaman eksplorasi lokal di dalam aplikasi.
+- Pengguna diberi pilihan apakah ingin mengaktifkan izin deteksi lokasi.
+- Pengguna yang ingin menggunakan pengalaman berbasis lokasi perlu memberikan izin pendeteksian lokasi pada perangkat.
+- Jika izin lokasi tidak diaktifkan, perilaku alternatif/fallback yang akan ditampilkan belum dijelaskan dan masih perlu dibahas.
+- Tidak ada keputusan mengenai interval pembaruan lokasi, akurasi yang disimpan, retensi, atau mekanisme teknis pendeteksian.
+
+#### 4. Direktori dan Marketplace sebagai bagian dari pengalaman lokal
+
+- Direktori PLUITS menjadi sumber entitas yang dapat ditampilkan dalam tren dan rekomendasi lokal.
+- Entitas lokal dapat berupa tempat wisata, klub, mal, restoran, toko, dan jenis tempat/layanan lain yang tersedia di direktori.
+- Marketplace tetap dapat digunakan untuk pemesanan online, tetapi keberadaan fisik penjual/toko diprioritaskan dalam konsep yang dijelaskan.
+- Alasan prioritas toko fisik: entitas toko dapat memiliki lokasi yang tercatat di direktori, direkomendasikan kepada pengguna di sekitarnya, dan dikunjungi langsung oleh pengguna. Pengguna tidak harus selalu bertransaksi online.
+- Pengalaman Marketplace juga mengikuti area pengguna sebagai cakupan awal. Contoh: pengguna di Bali melihat Marketplace dengan konteks Bali.
+- Pengguna dapat mengubah pengaturan cakupan menjadi global jika ingin melihat Marketplace secara global.
+- Detail bagaimana lokasi toko diverifikasi, bagaimana toko tanpa lokasi fisik diperlakukan, serta bagaimana pilihan area/global bekerja belum ditentukan.
+
+#### 5. Susunan konten Circle yang dijelaskan pengguna
+
+Urutan gambaran yang disampaikan:
+1. Top 10 Trending dari direktori pada cakupan wilayah yang lebih luas, bukan hanya area terdekat.
+2. Rekomendasi tempat/entitas terdekat dari lokasi pengguna, yang dapat mencakup tempat wisata, klub, mal, restoran, toko, dan entitas direktori lainnya.
+3. Story dari akun-akun yang sudah menjadi teman pengguna.
+4. Orang yang Mungkin Anda Kenal.
+5. Feed Post yang terutama berasal dari teman, dengan sisipan rekomendasi algoritmik berdasarkan minat pengguna. Konten rekomendasi dapat berasal dari institusi, berita, olahraga, atau kategori lain.
+6. Kartu-kartu produk Marketplace yang relevan dengan lokasi pengguna.
+
+Urutan tersebut dicatat sebagai gambaran yang sedang dibagikan pengguna, bukan desain final. Rincian, variasi, dan posisi akhir tiap bagian masih terbuka untuk audit lanjutan.
+
+#### 6. Rekomendasi orang dan feed
+
+- Rekomendasi Orang yang Mungkin Anda Kenal dapat mempertimbangkan nomor telepon/kontak, orang yang sering dilihat, kesamaan, atau sinyal lain.
+- Pengguna meminta agar sistem nantinya menganalisis kebutuhan ini dan menentukan teknologi yang tepat setelah kebutuhan dan sinyalnya dipahami.
+- Feed terutama menampilkan postingan dari teman pengguna.
+- Sesekali feed juga menyisipkan postingan rekomendasi berdasarkan minat pengguna, yang bisa berasal dari institusi, berita, olahraga, dan jenis konten lainnya.
+- Sumber sinyal, batas penggunaan data kontak/perilaku, ranking, kontrol rekomendasi, frekuensi sisipan, dan mekanisme personalisasi belum diputuskan.
+- Teknologi untuk rekomendasi tidak dipilih dalam sesi ini; kebutuhan harus dianalisis terlebih dahulu.
+
+#### 7. Makna Circle yang perlu dipertahankan dalam audit
+
+Circle memiliki dua makna yang saling berjalan:
+- **Social circle:** jaringan pertemanan pengguna, yang tetap sama meskipun teman berada di lokasi geografis yang berbeda.
+- **Location-aware circle experience:** penemuan tren, tempat, toko, produk, dan layanan yang disesuaikan dengan lokasi pengguna saat itu.
+
+Karena itu, istilah Circle tidak boleh ditafsirkan hanya sebagai daftar teman atau feed yang seluruh isinya berasal dari teman. Ia merupakan pengalaman utama yang menggabungkan jejaring sosial dan penemuan lokal PLUITS.
+
+#### Pertanyaan terbuka yang muncul dari sharing ini
+
+- Apakah Global Home menampilkan trending nasional Indonesia secara keseluruhan, atau ada cakupan/region yang dapat dipilih?
+- Apakah Top 10 Trending di Circle selalu mengikuti region besar tempat pengguna berada (misalnya Bali), dan bagaimana region itu ditentukan?
+- Apa batas antara cakupan tren luas, area lokal, dan "terdekat": provinsi/kota/kabupaten/kecamatan/radius?
+- Apa yang ditampilkan ketika izin lokasi ditolak atau lokasi tidak tersedia? Apakah pengguna dapat memilih area secara manual?
+- Apakah perubahan lokasi langsung memperbarui rekomendasi lokal, dan bagaimana mencegah perubahan lokasi yang terlalu sering atau tidak akurat?
+- Bagaimana penjual Marketplace yang tidak memiliki toko fisik diperlakukan dalam direktori dan rekomendasi lokal?
+- Bagaimana pengguna mengubah cakupan Marketplace dari area saat ini ke global dan kembali lagi?
+- Bagaimana kontak telepon, pola melihat profil, kesamaan, dan sinyal lain digunakan secara transparan serta dengan kontrol privasi yang memadai?
+- Bagaimana feed menyeimbangkan postingan teman dengan konten rekomendasi institusi, berita, olahraga, dan minat lainnya?
+- Apakah kartu produk Marketplace di bagian bawah Circle selalu mengikuti lokasi, minat, atau kombinasi keduanya?
+
+
 ## Status akhir
 
 RAW
