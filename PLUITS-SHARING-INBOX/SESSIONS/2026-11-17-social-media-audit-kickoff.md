@@ -965,7 +965,7 @@ Pengguna menegaskan bahwa pembangunan dilakukan bertahap, dan setiap tahap harus
 - Setiap tahap perlu melalui pemeriksaan UI/UX, responsivitas, fungsi, integrasi backend, dan pengujian terkait.
 - Tahap berikutnya tidak dimulai hanya karena halaman sebelumnya sudah terlihat selesai; fungsi dan integrasinya juga harus dinilai baik.
 - Kriteria penerimaan rinci, daftar test, dan batas “selesai” setiap tahap masih perlu dirancang.
-- Urutan ini memperbarui dan memperjelas rencana pengujian awal sebelumnya: Pendaftaran → Beranda → Profil Utama (menunggu konfirmasi istilah pada ucapan terbaru) → Social Media.
+- Urutan ini memperbarui dan memperjelas rencana pengujian awal sebelumnya: Pendaftaran → Beranda → Profil Utama → Social Media.
 
 #### 3. Lingkungan pengujian online disiapkan pada tahap yang lebih matang
 
@@ -989,7 +989,7 @@ Pengguna menegaskan bahwa pembangunan dilakukan bertahap, dan setiap tahap harus
 #### Hal yang masih perlu dipastikan
 
 - Jumlah akun/pengguna aktif yang tepat dan akun mana yang wajib dipertahankan.
-- Apakah istilah “ID-nya” pada urutan terbaru memang merujuk ke Profil Utama.
+- Rincian cakupan, isi, fungsi, dan alur Profil Utama yang perlu diaudit sebelum dibuat.
 - Apakah penggantian frontend lama dilakukan langsung pada branch/URL produksi setelah fondasi siap, atau ada tahap cutover tertentu.
 - Bagaimana menjaga akun dan data lama tetap kompatibel dengan frontend, autentikasi, API, dan skema baru.
 - Kapan tepatnya aplikasi dianggap cukup siap untuk membuka akses pengguna lain.
