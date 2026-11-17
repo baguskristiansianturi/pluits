@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { resolveRoute, resolveAuthenticatedRoute } from '../src/app/routes.js';
+import { APP_ROUTES, routeHref } from '../src/config/paths.js';
 
 test('unknown and empty paths start at registration', () => {
   assert.equal(resolveRoute('', ''), 'register');
@@ -12,6 +13,19 @@ test('auth routes and password recovery callback resolve correctly', () => {
   assert.equal(resolveRoute('#/forgot', ''), 'forgot');
   assert.equal(resolveRoute('#/register', ''), 'register');
   assert.equal(resolveRoute('#/workspace', '?auth=reset'), 'reset');
+});
+
+test('all public and authenticated page addresses come from one route registry', () => {
+  assert.deepEqual(Object.keys(APP_ROUTES), ['register', 'login', 'forgot', 'reset', 'workspace', 'terms', 'privacy']);
+  for (const [route, path] of Object.entries(APP_ROUTES)) {
+    assert.equal(routeHref(route), '#/' + path);
+    assert.equal(resolveRoute(routeHref(route), ''), route);
+  }
+});
+
+test('legal document addresses resolve through the same route registry', () => {
+  assert.equal(resolveRoute(routeHref('terms'), ''), 'terms');
+  assert.equal(resolveRoute(routeHref('privacy'), ''), 'privacy');
 });
 
 test('workspace is guarded by a session', () => {
