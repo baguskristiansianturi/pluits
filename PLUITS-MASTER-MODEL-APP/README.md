@@ -1,20 +1,21 @@
 # PLUITS MASTER MODEL APP
 
-Dokumen induk untuk merancang seluruh ekosistem PLUITS. Folder ini adalah sumber acuan konseptual dan perancangan, bukan source code aplikasi.
+Pusat dokumentasi resmi untuk merancang dan memodularisasi seluruh ekosistem PLUITS. Folder ini bukan tempat source code runtime.
 
-## Struktur
-- `00-MASTER-FOUNDATION/` — visi, arsitektur platform, akun, membership, keputusan inti dan referensi PLUITS.
-- `01-ECOSYSTEM-MODELS/` — enam model sesuai urutan rancangan induk.
-- `02-PRODUCT-DESIGN/` — desain produk, UI/UX, halaman, komponen, visual dan alur masing-masing aplikasi.
-- `03-APPLICATION-MODULARIZATION/` — rancangan frontend, backend, database, API, keamanan dan testing per aplikasi.
+## Struktur kerja
+- `00-MASTER-FOUNDATION/` — fondasi platform, identitas, akun, membership, dan keputusan lintas aplikasi.
+- `01-ECOSYSTEM-MODELS/` — enam model sesuai urutan master.
+- `02-PRODUCT-DESIGN/` — kebutuhan pengguna, halaman, alur, UI/UX, wireframe, visual, dan komponen setiap aplikasi.
+- `03-APPLICATION-MODULARIZATION/` — batas modul dan blueprint frontend, backend, database, API, keamanan, serta testing.
 - `04-SHARED-PLATFORM-SERVICES/` — layanan lintas aplikasi.
-- `05-PLATFORM-WRAPPER-AND-USER-JOURNEYS/` — homepage utama PLUITS sebagai pembungkus ekosistem dan perjalanan lintas aplikasi.
-- `06-GOVERNANCE-AND-SOP/` — SOP dan tata kelola.
-- `07-IDEA-BACKLOG/` — ide yang belum menjadi keputusan.
+- `05-PLATFORM-WRAPPER-AND-USER-JOURNEYS/` — homepage utama PLUITS, app launcher, navigasi global, dan perjalanan lintas aplikasi.
 
-## Prinsip
-1. Master Model menjelaskan apa dan mengapa model bisnis/layanan ada.
-2. Product Design menjelaskan pengalaman dan bentuk produk.
-3. Modularization menjelaskan bagaimana produk dibangun secara teknis.
-4. Store dan Restaurant & Café adalah sistem operasional merchant yang terhubung dengan Marketplace, bukan Marketplace itu sendiri.
-5. Setiap keputusan dicatat dan diberi status: PROPOSED, IN-DESIGN, APPROVED, IMPLEMENTED.
+## Alur kerja wajib
+1. Semua hasil diskusi masuk terlebih dahulu ke `PLUITS-SHARING-INBOX/` di root repository.
+2. Catatan sharing ditinjau dan disortir; ide mentah tidak otomatis menjadi requirement.
+3. Keputusan yang disetujui dipindahkan ke model bisnis, Product Design, atau Application Modularization yang sesuai.
+4. Implementasi dilakukan pada source module yang memiliki tanggung jawab atas fitur tersebut.
+5. Perubahan lintas modul hanya dilakukan bila memang diperlukan, setelah audit dependensi dan dampak.
+
+## Batas model
+Marketplace adalah wadah discovery dan transaksi pelanggan. Store serta Restaurant & Café adalah sistem operasional merchant yang terhubung ke Marketplace; bukan Marketplace itu sendiri.

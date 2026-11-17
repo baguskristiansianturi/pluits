@@ -1,12 +1,12 @@
 # PLUITS Master Model App — Start Here
 
-Folder ini adalah pusat dokumentasi perancangan PLUITS. Mulai dari README induk, lalu baca Master Foundation dan model aplikasi yang sedang dikerjakan.
+Gunakan folder ini sebagai pusat dokumentasi rancangan. Source code aplikasi yang sedang berjalan tetap berada di `src/`, `public/`, `styles/`, `supabase/`, dan konfigurasi/build repository.
 
-## Cara menggunakan dokumentasi
-1. **Master Foundation** — aturan dan arsitektur yang berlaku lintas aplikasi.
-2. **Ecosystem Models** — gambaran model bisnis/layanan dan batas tanggung jawabnya.
-3. **Product Design** — kebutuhan pengguna, halaman, alur, UI/UX, gambar, wireframe dan komponen visual.
-4. **Application Modularization** — rancangan pemecahan frontend/backend/database/API dan kontrak integrasi.
-5. **Platform Wrapper** — homepage utama PLUITS yang menjadi pintu masuk dan penghubung aplikasi.
+Urutan membaca:
+1. Master Foundation.
+2. Model ekosistem yang sedang dibahas.
+3. Product Design untuk pengalaman pengguna dan tampilan.
+4. Application Modularization untuk batas teknis dan integrasi.
+5. Platform Wrapper untuk homepage utama PLUITS dan navigasi lintas aplikasi.
 
-Dokumen lama dipindahkan apa adanya untuk menjaga riwayat. Folder `00-LEGACY-DOCUMENTATION` dan `PLUITS-CORE-REFERENCES` akan diaudit dan dipetakan ke lokasi final tanpa menghilangkan informasi.
+Semua diskusi baru dimulai di `PLUITS-SHARING-INBOX/`. Setelah disortir dan disetujui, hasilnya dipindahkan ke lokasi dokumentasi yang tepat. Jangan mengimplementasikan catatan mentah.

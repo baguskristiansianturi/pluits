@@ -1,17 +1,15 @@
 # PLUITS
 
-PLUITS is a connected multi-application platform. Its product models, design blueprints, and application modularization documentation are maintained in one canonical workspace.
+PLUITS is a live multi-application platform. The deployed application code remains in the repository's runtime folders; product planning and technical blueprints are maintained separately.
 
-## Start here
-- **[PLUITS Master Model App](PLUITS-MASTER-MODEL-APP/README.md)** — master architecture, six ecosystem models, product design, modularization, shared services and platform wrapper.
-- [Master foundation](PLUITS-MASTER-MODEL-APP/00-MASTER-FOUNDATION/README.md)
-- [Ecosystem models](PLUITS-MASTER-MODEL-APP/01-ECOSYSTEM-MODELS/README.md)
-- [Product design](PLUITS-MASTER-MODEL-APP/02-PRODUCT-DESIGN/README.md)
-- [Application modularization](PLUITS-MASTER-MODEL-APP/03-APPLICATION-MODULARIZATION/README.md)
+## Main working areas
+- [PLUITS Master Model App](PLUITS-MASTER-MODEL-APP/README.md) — ecosystem models, product design, application modularization, shared services and the main PLUITS wrapper.
+- [PLUITS Sharing Inbox](PLUITS-SHARING-INBOX/README.md) — raw notes and outcomes from each discussion session, waiting for review and sorting.
+- [Application source](src/) — current application implementation.
+- [Supabase](supabase/) — database migrations, functions, tests and backend configuration.
+- [Automated tests](tests/) and [engineering scripts](scripts/).
 
-## Working rule
-Read the Master Model App before designing or changing a product. Distinguish approved requirements from proposals and historical notes. Do not infer production readiness from the existence of a page, component, or database table.
+## Working principle
+A discussion note is not an approved requirement. Sort and review it in the Sharing Inbox first, then move approved decisions into the relevant model, product design, or modularization folder. Implement only after the relevant scope and acceptance criteria are clear.
 
-## Repository and application
-- Repository: https://github.com/baguskristiansianturi/pluits
-- GitHub Pages: https://baguskristiansianturi.github.io/pluits/
+Protect the live application: changes must stay within the owning module, shared dependencies require a consumer audit, and unrelated routes, components, styles, database objects and user data must remain untouched.
