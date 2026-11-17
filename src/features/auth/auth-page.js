@@ -17,30 +17,30 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
   const isRegister = mode === 'register';
   const isForgot = mode === 'forgot';
   const isReset = mode === 'reset';
-  const title = isRegister ? 'Buat akun PLUITS' : isForgot ? 'Pulihkan akun' : isReset ? 'Atur password baru' : 'Selamat datang kembali';
+  const title = isRegister ? 'Buat akun PLUITS' : isForgot ? 'Pulihkan akses akun' : isReset ? 'Buat kata sandi baru' : 'Masuk ke PLUITS';
   const intro = isRegister
-    ? 'Mulai dengan informasi dasar. Detail profil dapat dilengkapi setelah akun aktif.'
+    ? 'Buat identitas PLUITS Anda untuk mulai terhubung dengan ekosistem kami.'
     : isForgot
-      ? 'Masukkan email akun untuk menerima tautan pemulihan.'
+      ? 'Masukkan alamat email yang terhubung dengan akun Anda. Kami akan mengirimkan petunjuk pemulihan.'
       : isReset
-        ? 'Buat password baru untuk melanjutkan akses akun.'
-        : 'Masuk untuk melanjutkan ke ruang kerja PLUITS.';
+        ? 'Gunakan kata sandi baru untuk mengamankan kembali akun Anda.'
+        : 'Masuk untuk melanjutkan ke ruang kerja PLUITS dan layanan yang terhubung dengan akun Anda.';
 
   let fields = '';
   if (isRegister) {
     fields =
-      '<div class="auth-field"><label for="auth-name">Nama tampilan</label><input id="auth-name" name="full_name" type="text" autocomplete="name" minlength="2" maxlength="80" placeholder="Nama yang ingin ditampilkan" required></div>' +
+      '<div class="auth-field"><label for="auth-name">Nama tampilan</label><input id="auth-name" name="full_name" type="text" autocomplete="name" minlength="2" maxlength="80" placeholder="Nama yang akan ditampilkan" required></div>' +
       '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>' +
-      passwordField({ id: 'auth-password', label: 'Password', autocomplete: 'new-password', minLength: 8, placeholder: 'Minimal 8 karakter', help: 'Gunakan password yang unik dan tidak dipakai di akun penting lainnya.' }) +
+      passwordField({ id: 'auth-password', label: 'Kata sandi', autocomplete: 'new-password', minLength: 8, placeholder: 'Minimal 8 karakter', help: 'Gunakan kata sandi yang kuat dan berbeda dari akun lain.' }) +
       '<label class="auth-consent"><input name="terms" type="checkbox" required><span>Saya menyetujui <a href="#/terms">Ketentuan Layanan</a> dan telah membaca <a href="#/privacy">Kebijakan Privasi</a>.</span></label>';
   } else if (isForgot) {
     fields = '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>';
   } else if (isReset) {
-    fields = passwordField({ id: 'auth-password', label: 'Password baru', autocomplete: 'new-password', minLength: 8, placeholder: 'Minimal 8 karakter', help: 'Pilih password baru yang tidak pernah digunakan sebelumnya.' });
+    fields = passwordField({ id: 'auth-password', label: 'Kata sandi baru', autocomplete: 'new-password', minLength: 8, placeholder: 'Minimal 8 karakter', help: 'Pilih kata sandi baru yang belum pernah digunakan pada akun ini.' });
   } else {
     fields =
       '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>' +
-      passwordField({ id: 'auth-password', label: 'Password', autocomplete: 'current-password', placeholder: 'Password akun', help: '' });
+      passwordField({ id: 'auth-password', label: 'Password', autocomplete: 'current-password', placeholder: 'Masukkan kata sandi', help: '' });
   }
 
   const switcher = isForgot || isReset ? '' :
@@ -56,7 +56,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
   root.innerHTML =
     '<div class="auth-page">' +
       '<header class="auth-header">' +
-        '<a class="pluits-brand" href="#/register" aria-label="PLUITS">' +
+        '<a class="pluits-brand" href="#/login" aria-label="PLUITS — halaman masuk">' +
           '<img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt="" width="34" height="34">' +
           '<span>PLUITS</span>' +
         '</a>' +
@@ -65,23 +65,23 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
       '<main class="auth-main">' +
         '<aside class="auth-intro-panel">' +
           '<span class="auth-eyebrow">SATU AKUN · BANYAK KEMUNGKINAN</span>' +
-          '<h1>Bangun pengalaman digital yang saling terhubung.</h1>' +
-          '<p>PLUITS menyatukan komunitas, tempat, usaha, layanan, dan perjalanan dalam satu ekosistem.</p>' +
+          '<h1>Terhubung dalam satu ekosistem digital.</h1>' +
+          '<p>PLUITS menghubungkan orang, komunitas, tempat, usaha, dan layanan melalui satu pengalaman digital yang terintegrasi.</p>' +
           '<ul class="auth-benefits">' +
-            '<li>' + renderIcon('check') + '<span>Satu akun untuk seluruh ekosistem PLUITS</span></li>' +
-            '<li>' + renderIcon('check') + '<span>Identitas dan pengaturan akun terpusat</span></li>' +
-            '<li>' + renderIcon('check') + '<span>Pengembangan dilakukan bertahap dan teruji</span></li>' +
+            '<li>' + renderIcon('check') + '<span>Satu identitas untuk mengakses ekosistem PLUITS</span></li>' +
+            '<li>' + renderIcon('check') + '<span>Pengelolaan identitas dan akses akun dalam satu tempat</span></li>' +
+            '<li>' + renderIcon('check') + '<span>Pengalaman yang dirancang untuk terus berkembang</span></li>' +
           '</ul>' +
           '<div class="auth-intro-foot"><span class="auth-orbit" aria-hidden="true"></span><span>PLUITS · CONNECTED EXPERIENCES</span></div>' +
         '</aside>' +
         '<section class="auth-card" aria-labelledby="auth-title">' +
           '<div class="auth-card-heading">' +
-            '<span class="auth-step-label">' + (isRegister ? 'MULAI DI SINI' : isForgot ? 'BANTUAN AKUN' : isReset ? 'KEAMANAN AKUN' : 'AKUN PLUITS') + '</span>' +
+            '<span class="auth-step-label">' + (isRegister ? 'REGISTRASI AKUN' : isForgot ? 'PEMULIHAN AKUN' : isReset ? 'KEAMANAN AKUN' : 'AKSES AKUN') + '</span>' +
             '<h2 id="auth-title">' + title + '</h2>' +
             '<p>' + intro + '</p>' +
           '</div>' +
           switcher +
-          (isRegister ? '<div class="auth-preview-notice">Tahap pengujian awal. Pendaftaran publik belum dibuka sampai konfigurasi email dan dokumen kebijakan selesai diverifikasi.</div>' : '') +
+          (isRegister ? '<div class="auth-preview-notice">Pendaftaran akun baru belum tersedia. Untuk saat ini, akses PLUITS hanya dapat digunakan oleh akun yang telah terdaftar.</div>' : '') +
           '<form class="auth-form" data-auth-form>' +
             fields +
             '<p class="auth-status" data-auth-status role="status" aria-live="polite"></p>' +
@@ -90,20 +90,20 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
           '<section class="auth-pending" data-auth-pending hidden aria-live="polite">' +
             '<div class="auth-pending-icon">' + renderIcon('mail') + '</div>' +
             '<span class="auth-step-label">SATU LANGKAH LAGI</span>' +
-            '<h3>Periksa email kamu</h3>' +
-            '<p>Permintaan konfirmasi akun telah diterima untuk:</p>' +
+            '<h3>Periksa kotak masuk email Anda</h3>' +
+            '<p>Tautan konfirmasi akun telah diminta untuk alamat email berikut:</p>' +
             '<strong data-pending-email></strong>' +
-            '<ol><li>Buka email konfirmasi dari Supabase/PLUITS.</li><li>Tekan tautan konfirmasi.</li><li>Kamu akan kembali ke PLUITS untuk melanjutkan.</li></ol>' +
+            '<ol><li>Buka email konfirmasi dari PLUITS.</li><li>Pilih tautan konfirmasi di dalam email.</li><li>Setelah konfirmasi selesai, kembali ke PLUITS untuk masuk.</li></ol>' +
             '<p class="auth-status" data-resend-status role="status" aria-live="polite"></p>' +
-            '<button class="auth-secondary" type="button" data-resend>Permintaan kirim ulang email</button>' +
+            '<button class="auth-secondary" type="button" data-resend>Kirim ulang email konfirmasi</button>' +
             '<a class="auth-text-link" href="#/login">Kembali ke Masuk</a>' +
           '</section>' +
           (isReset ? '<p class="auth-recovery-note">' + (hasRecoverySession ? 'Sesi pemulihan terdeteksi.' : 'Buka halaman ini melalui tautan pemulihan yang dikirim ke email akun.') + '</p>' : '') +
           '<p class="auth-switch-copy">' + footLink + '</p>' +
-          '<p class="auth-security-note">' + renderIcon('lock') + '<span>Autentikasi ditangani oleh Supabase. Data akun lama tetap menggunakan database yang sama.</span></p>' +
+          '<p class="auth-security-note">' + renderIcon('lock') + '<span>Jaga kerahasiaan kata sandi dan jangan bagikan tautan pemulihan akun kepada siapa pun.</span></p>' +
         '</section>' +
       '</main>' +
-      '<footer class="auth-footer"><span>© 2026 PLUITS</span><span>Fondasi baru · Tahap 01</span></footer>' +
+      '<footer class="auth-footer"><span>© 2026 PLUITS. Seluruh hak cipta dilindungi.</span><span>PLUITS · Ekosistem Digital</span></footer>' +
     '</div>';
 
   const form = root.querySelector('[data-auth-form]');
@@ -123,7 +123,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
   if (isRegister && !PUBLIC_SIGNUP_ENABLED) {
     submit.disabled = true;
     submit.textContent = 'Pendaftaran belum dibuka';
-    showStatus(status, 'Pendaftaran akun baru ditahan sampai SMTP, dokumen legal, dan pencatatan persetujuan selesai. Gunakan Masuk untuk akun yang sudah ada.', 'info');
+    showStatus(status, 'Pendaftaran akun baru belum tersedia. Silakan masuk menggunakan akun PLUITS yang telah terdaftar.', 'info');
   }
 
   root.querySelectorAll('[data-toggle-password]').forEach((button) => {
@@ -144,7 +144,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
     resend.textContent = 'Meminta pengiriman…';
     try {
       await authService.resendConfirmation(pendingEmail);
-      showStatus(resendStatus, 'Permintaan diterima. Email belum tentu langsung masuk; periksa Inbox dan Spam.', 'success');
+      showStatus(resendStatus, 'Permintaan pengiriman ulang diterima. Periksa kotak masuk dan folder spam.', 'success');
       resend.textContent = 'Permintaan terkirim';
     } catch (error) {
       showStatus(resendStatus, authService.getErrorMessage?.(error) || 'Email belum dapat dikirim. Coba lagi nanti.');
@@ -160,7 +160,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
 
     const values = new FormData(form);
     submit.disabled = true;
-    submit.textContent = 'Memproses…';
+    submit.textContent = 'Sedang memproses…';
     showStatus(status, '', 'info');
 
     try {
@@ -182,11 +182,11 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
         showStatus(status, 'Permintaan pendaftaran diterima.', 'success');
       } else if (isForgot) {
         await authService.requestPasswordReset(values.get('email'));
-        showStatus(status, 'Jika alamat tersebut terdaftar, tautan pemulihan akan dikirim. Periksa Inbox dan Spam.', 'success');
+        showStatus(status, 'Jika alamat email tersebut terdaftar, petunjuk pemulihan akan dikirim. Periksa kotak masuk dan folder spam.', 'success');
         submit.textContent = 'Permintaan terkirim';
       } else if (isReset) {
         await authService.updatePassword(values.get('password'));
-        showStatus(status, 'Password berhasil diperbarui. Silakan masuk kembali.', 'success');
+        showStatus(status, 'Kata sandi berhasil diperbarui. Silakan masuk kembali.', 'success');
         submit.textContent = 'Password diperbarui';
       } else {
         const nextSession = await authService.signIn({
