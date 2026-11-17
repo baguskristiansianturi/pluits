@@ -1084,3 +1084,50 @@ Kontrak ini dicatat sebagai baseline implementasi yang sudah ada, bukan keputusa
 - Konfigurasi email provider/SMTP dan URL redirect Auth yang benar-benar aktif.
 - Cara melakukan browser UI test dari perangkat pengguna dan kapan perubahan pertama dipromosikan ke GitHub Pages.
 - Kriteria penerimaan UI, fungsi, keamanan, dan integrasi backend untuk menyatakan tahap Pendaftaran selesai.
+
+
+### Instruksi eksplisit pemilik produk — penggantian frontend dan ruang kerja setelah login
+
+**Waktu:** 17 November 2026  
+**Status:** RAW — instruksi eksplisit untuk implementasi awal; belum menjadi persetujuan final atas seluruh desain produk.
+
+#### Arahan yang dikonfirmasi
+
+- Pengguna meminta frontend lama dibersihkan sepenuhnya dan diganti dengan frontend baru yang dibangun dari fondasi modular yang rapi.
+- Penggantian mencakup runtime frontend lama, komponen, halaman, stylesheet, test frontend lama, dan pemeriksaan teknis yang hanya relevan untuk implementasi lama.
+- Dokumentasi Master Model, Sharing Inbox, Supabase project, schema, migration, Auth users, profiles, wallet records, media, messages, dan seluruh data yang sudah ada wajib dipertahankan.
+- Pengguna meminta perubahan baru langsung dipersiapkan untuk deploy setelah test dan validasi berhasil.
+- Setelah frontend baru terpasang, pengguna akan login menggunakan akun PLUITS yang sudah terdaftar. Tidak perlu membuat ulang akun.
+- Setelah login, halaman pertama adalah **Ruang Kerja Pengembangan PLUITS** sebagai tempat melihat tahapan pembangunan dan cara kerja bersama.
+- Ruang kerja ini merupakan halaman sementara untuk memulai pembahasan. Ia bukan Global Home, bukan Profil Utama, dan belum merupakan fitur kolaborasi/chat internal.
+- Pembahasan kebutuhan tetap dilakukan melalui percakapan kerja. Hasilnya dicatat ke Sharing Inbox sebagai bahan mentah; setelah ditinjau dan disetujui, barulah disortir ke Master Model yang sesuai.
+- Tahapan tetap: Pendaftaran Akun → Global Home → Profil Utama → Social Media. Setiap tahap harus diuji dan diterima sebelum pindah ke tahap berikutnya.
+
+#### Pengujian kepatuhan alur kerja AI
+
+Implementasi baru harus sekaligus menjadi pengujian bahwa AI/developer mengikuti aturan repository:
+- membaca AGENTS.md dan dokumen Master Model yang relevan;
+- memeriksa struktur/path aktual sebelum mengubah file;
+- mengidentifikasi pemilik modul dan batas dependensi;
+- tidak mengarang path, kontrak backend, atau status fitur;
+- tidak mengubah modul yang tidak diminta;
+- menjalankan architecture checks, unit tests, dan production build;
+- memverifikasi workflow, commit, dan status deployment;
+- mencatat bukti perubahan dan pekerjaan UAT yang masih tersisa.
+
+#### Batas keamanan dan kesiapan
+
+- Frontend baru tetap memakai Supabase project PLUITS yang sama agar akun lama dapat login.
+- Signup harus memakai Supabase Auth dan menghormati trigger database yang telah membuat profile serta wallet. Frontend tidak boleh membuat record duplikat.
+- Browser hanya boleh memakai publishable key; service-role/secret key tidak boleh masuk ke bundle.
+- Database, Auth configuration, SMTP, RLS, triggers, functions, migrations, dan data production tidak diubah dalam pekerjaan penggantian frontend.
+- Pendaftaran publik belum boleh dinyatakan siap sebelum SMTP, redirect email, dokumen legal, dan pencatatan consent ditinjau. Halaman dapat disiapkan untuk pengujian, sementara login akun lama menjadi jalur uji utama.
+- Situs tetap noindex selama tahap internal ini.
+
+#### Status implementasi yang direncanakan
+
+- Branch kerja: rebuild/frontend-v2, setelah diselaraskan ke commit terbaru main.
+- Scope runtime: halaman Pendaftaran, Login, pemulihan password, dan Ruang Kerja internal setelah autentikasi.
+- UI dimensions, icon registry, colors, behavior, dan layouts dimasukkan sebagai provisional bootstrap values, bukan standar final.
+- Tidak ada perubahan database atau data pengguna.
+- Setelah pull request lolos CI, perubahan dapat dipromosikan ke main agar GitHub Pages deploy versi frontend baru.

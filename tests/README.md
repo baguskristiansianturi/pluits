@@ -1,13 +1,8 @@
-# PLUITS Automated Tests
+# Frontend V2 Tests
 
-- `architecture/`: folder ownership and dependency direction.
-- `app/`: bootstrap, routes, navigation and deployment.
-- `features/`: feature behavior.
-- `services/`: data/service adapters.
-- `contracts/`: frontend/service/backend contracts.
-- `integration/`: cross-feature/service flows.
-- `routes/`: canonical routes, aliases and route loading.
-- `e2e/`: full browser journeys when a browser runner is configured.
-- `visual/`: responsive and visual regression when a screenshot runner is configured.
+- auth-service.test.js: Auth service contract and validation.
+- routes.test.js: Route resolution and session guard behavior.
+- verify-architecture.mjs: module ownership and dependency direction.
+- verify-production-surface.mjs: browser-secret and deployment-gate checks.
 
-A README-only test folder is a planned suite, not a passing test. Tests must not mutate production data.
+Browser/device UAT is still required after deployment. Automated Node tests do not prove that Supabase SMTP, Auth redirect configuration, or real-account login works on a phone.

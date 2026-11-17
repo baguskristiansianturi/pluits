@@ -1,9 +1,0 @@
-/* Ordered legacy slices. Keep this import order until selector-level migration is verified. */
-@import url('./styles/01-account-shell-and-settings.css');
-@import url('./styles/02-profile-and-social-controls.css');
-@import url('./styles/03-feed-and-media-layout.css');
-@import url('./styles/04-profile-and-post-overrides.css');
-@import url('./styles/05-creation-studio.css');
-@import url('./styles/06-circle-home-discovery.css');
-@import url('./styles/07-top-ten-and-content-shelves.css');
-@import url('./styles/08-nearby-and-feed-overrides.css');

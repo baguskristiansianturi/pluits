@@ -1,7 +1,17 @@
-# Authentication Services
+# Auth Service
 
-**Status:** target service boundary; current runtime behavior remains in the application and page controllers.
+Owner: services/auth  
+Status: active bootstrap service.
 
-Owns reusable auth/session operations and account identity lookup. UI forms and route presentation stay in `src/pages/` and `src/features/auth/`. Supabase Auth remains configured through `src/lib/supabase/client.js`.
+The service is injected with the single Supabase client and owns:
+- get current session and subscribe to Auth state changes;
+- register with display name metadata and canonical email redirect;
+- resend signup confirmation;
+- email/password sign-in;
+- password reset request and password update;
+- sign-out;
+- input validation and user-facing error mapping.
 
-Extract one operation at a time and preserve redirect, email-confirmation, session-refresh and protected-route behavior with tests.
+It must not render HTML, access the DOM, or decide user permissions from user_metadata.
+
+The current database already has Auth-user triggers for profile and wallet creation. Do not duplicate those inserts in the frontend.

@@ -1,12 +1,11 @@
-# PLUITS Design System
+# Provisional UI Foundation
 
-The design system is the shared foundation for tokens, layout primitives, typography, motion and icon assets.
+The first frontend screen establishes a small, reviewable foundation in the exact working order requested for PLUITS:
 
-- `tokens/foundation.css`: viewport, safe-area, spacing, geometry and type-size tokens.
-- `layouts/foundation.css`: opt-in page/container/section/layout primitives.
-- `icons/index.js`: canonical local SVG rendering facade.
-- `icons/registry.js` and `icons/social-registry.js`: repository-owned SVG artwork.
-- `typography/`: typography roles and font loading policy (migration in progress).
-- `motion/`: motion and reduced-motion policy (migration in progress).
+1. Dimensions — spacing, page gutters, containers, form width, breakpoints, radii, and responsive targets in tokens.css.
+2. Icons — local inline SVG registry in icons.js; no unreviewed external icon dependency.
+3. Colors — semantic tokens derived from the existing PLUITS teal brand mark and neutral ink/surface roles.
+4. Behavior — validation, loading, error, password visibility, confirmation-pending, keyboard focus, and auth-state transitions.
+5. Layouts — LAY-AUTH-SPLIT-001 and LAY-WORKSPACE-BOARD-001 in layouts.js.
 
-Do not place feature-specific business logic or page-specific visual overrides here. New UI must reuse the foundation and register any new shared component or asset.
+All token values, icon IDs, and layouts are marked PROVISIONAL until reviewed and approved. The feature screens consume these tokens and scoped styles; they must not create competing global scales.

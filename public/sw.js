@@ -1,6 +1,6 @@
-// PLUITS intentionally uses network-first delivery without a persistent app-shell cache.
-// On activation, remove caches created by older releases so obsolete screens cannot reappear.
-const CACHE_PREFIX = 'pluits-shell-';
+// PLUITS V2 uses network-first document delivery and does not cache app pages.
+// Remove only caches owned by earlier PLUITS shell releases.
+const OWNED_CACHE_PREFIXES = ['pluits-shell-', 'pluits-v2-'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(self.skipWaiting());
@@ -10,10 +10,12 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
       .then((keys) => Promise.all(
-        keys.filter((key) => key.startsWith(CACHE_PREFIX)).map((key) => caches.delete(key))
+        keys
+          .filter((key) => OWNED_CACHE_PREFIXES.some((prefix) => key.startsWith(prefix)))
+          .map((key) => caches.delete(key))
       ))
       .then(() => self.clients.claim())
   );
 });
 
-// Do not intercept requests: HTML and hashed Vite assets always come from the current deployment.
+// Intentionally no fetch handler: HTML and Vite assets are loaded from the current deployment.

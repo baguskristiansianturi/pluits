@@ -1,103 +1,32 @@
-import { supabase as presenceDb } from './lib/supabase/client.js';
-import { startGlobalPresence } from './services/realtime/presence/index.js';
-import { canonicalizeLegacyRoute, getInternalRoute, SITE_BASE } from './components/social/navigation-routes.js';
+import './design-system/tokens.css';
+import './styles/global.css';
+import './features/auth/auth-page.css';
+import './features/workspace/workspace-page.css';
+import './features/legal/policy-page.css';
 
-void startGlobalPresence(presenceDb);
+import { supabase } from './lib/supabase/client.js';
+import { createAuthService } from './services/auth/auth-service.js';
+import { createApp } from './app/create-app.js';
+import { APP_BASE_URL } from './config/runtime.js';
 
-import './design-system/tokens/foundation.css';
-import './design-system/layouts/foundation.css';
-import './style.css';
-import './styles/brand.css';
-import './styles/page-transitions.css';
-import './styles/social-navigation.css';
-import './pages/account/circle-story-layout.css';
-import { route } from './app/router.js';
+const authService = createAuthService(supabase, { appUrl: APP_BASE_URL });
+const root = document.querySelector('#app');
 
-// Recover once from stale/missing Vite chunks after a deployment.
-// The browser may still hold HTML that references a hashed module from an older release.
-const PRELOAD_RECOVERY_KEY = 'pluits:preload-recovery-at';
-window.addEventListener('vite:preloadError', event => {
-  event.preventDefault();
-  try {
-    const lastAttempt = Number(sessionStorage.getItem(PRELOAD_RECOVERY_KEY) || 0);
-    if (Date.now() - lastAttempt < 20000) {
-      console.error('PLUITS module is still unavailable after recovery reload:', event.payload);
-      return;
-    }
-    sessionStorage.setItem(PRELOAD_RECOVERY_KEY, String(Date.now()));
-    window.location.reload();
-  } catch (error) {
-    console.error('PLUITS could not recover a stale module automatically:', error, event.payload);
-  }
-});
-
-let renderSequence = 0;
-const currentAddress = () => location.pathname + location.search + location.hash;
-
-async function render() {
-  const sequence = ++renderSequence;
-  // Convert bookmarked hash URLs to their readable page addresses once.
-  if (location.hash.startsWith('#/')) {
-    const clean = canonicalizeLegacyRoute(location.hash.slice(1));
-    history.replaceState(null, '', clean);
-  }
-  const internal = getInternalRoute(location);
-  const path = internal.split('?')[0].replace(/\/$/, '');
-  if (['home', 'feed', 'beranda', 'guest'].includes(path)) {
-    history.replaceState(null, '', SITE_BASE);
-  }
-  const finalAddress = currentAddress();
-  await route();
-  if (sequence !== renderSequence || currentAddress() !== finalAddress) return;
-  if ((!path || path === 'guest') && document.querySelector('#pl-public-feed')) {
-    const {bindHome}=await import('./pages/home/index.js');
-    await bindHome();
-  }
+if (!root) {
+  throw new Error('PLUITS app root (#app) is missing.');
 }
 
-// Existing in-app links are upgraded centrally, so older page modules remain
-// compatible while the visible browser address always uses canonical paths.
-function normalizeInternalLinks(root = document) {
-  root.querySelectorAll?.('a[href^="#/"]').forEach(anchor => {
-    anchor.setAttribute('href', canonicalizeLegacyRoute(anchor.getAttribute('href').slice(1)));
-  });
-}
-const routeLinkObserver = new MutationObserver(records => {
-  for (const record of records) for (const node of record.addedNodes) {
-    if (node.nodeType === 1) {
-      if (node.matches?.('a[href^="#/"]')) node.setAttribute('href', canonicalizeLegacyRoute(node.getAttribute('href').slice(1)));
-      normalizeInternalLinks(node);
-    }
-  }
-});
-routeLinkObserver.observe(document.querySelector('#app') || document.body, {childList:true,subtree:true});
-normalizeInternalLinks();
-
-document.addEventListener('click', event => {
-  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  const anchor = event.target.closest?.('a[href^="#/"],a[href^="/pluits/"]');
-  if (!anchor || anchor.target === '_blank' || anchor.hasAttribute('download')) return;
-  event.preventDefault();
-  const href = anchor.getAttribute('href');
-  const destination = href.startsWith('#/') ? canonicalizeLegacyRoute(href.slice(1)) : href;
-  if (destination !== currentAddress()) history.pushState(null, '', destination);
-  render();
-});
-
-window.addEventListener('popstate', render);
-window.addEventListener('hashchange', render);
-render();
+createApp({ root, authService });
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`, {
+      await navigator.serviceWorker.register(import.meta.env.BASE_URL + 'sw.js', {
         scope: import.meta.env.BASE_URL,
         updateViaCache: 'none'
       });
-      await registration.update();
     } catch (error) {
-      console.error('Pluits service worker update failed:', error);
+      console.error('PLUITS service worker registration failed.', error);
     }
   });
 }

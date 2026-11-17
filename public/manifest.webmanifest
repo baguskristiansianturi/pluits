@@ -1,15 +1,15 @@
 {
   "id": "/pluits/",
-  "name": "Pluits",
-  "short_name": "Pluits",
-  "description": "Pluits — berbagi pengalaman, komunitas, usaha lokal, marketplace, dan perjalanan.",
+  "name": "PLUITS",
+  "short_name": "PLUITS",
+  "description": "PLUITS — ruang kerja pengembangan ekosistem yang saling terhubung.",
   "lang": "id-ID",
   "start_url": "/pluits/",
   "scope": "/pluits/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#ffffff",
-  "theme_color": "#172b45",
+  "background_color": "#f4f8f7",
+  "theme_color": "#08ad9e",
   "icons": [
     {
       "src": "/pluits/assets/brand/pluits-icon-192.png",
