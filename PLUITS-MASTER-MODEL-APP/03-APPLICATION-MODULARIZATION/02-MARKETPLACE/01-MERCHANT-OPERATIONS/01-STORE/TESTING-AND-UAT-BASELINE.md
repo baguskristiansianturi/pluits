@@ -1,8 +1,15 @@
 # Store Seller Testing & UAT Baseline
 
-Dokumen ini dipindahkan dari root repository ke blueprint modularisasi Store agar catatan pengujian operasional berada di bawah modul pemiliknya. Informasi di bawah adalah catatan historis per 9 November 2026; selalu verifikasi status aktual terhadap kode, database, dan audit terbaru sebelum melakukan UAT.
+Dokumen ini mencatat alur pengujian historis Store. Informasi awal berasal dari 9 November 2026; selalu verifikasi status aktual terhadap kode, database, dan audit terbaru sebelum melakukan UAT.
+
+## Canonical Store documentation
+
+- [Store technical architecture](ARCHITECTURE-BASELINE.md)
+- [Store audit findings](04-CHECKLIST-AUDIT/AUDIT-FINDINGS.md)
+- [Store lifecycle and URL specification](../../../../02-PRODUCT-DESIGN/02-MARKETPLACE/01-MERCHANT-OPERATIONS/01-STORE/SELLER-CENTER-STORE-LIFECYCLE-AND-URL-SPEC-2026-11-09.md)
 
 ## Current test flow
+
 1. Open seller center route `#/seller/register`.
 2. Create a personal account with an email and password (minimum 8 characters).
 3. If email confirmation is enabled in Supabase Auth, confirm the email from the inbox and then sign in.
@@ -10,6 +17,7 @@ Dokumen ini dipindahkan dari root repository ke blueprint modularisasi Store aga
 5. Use the owner dashboard to create categories, products, variants, price, stock, upload product images, define delivery areas, and edit basic store settings.
 
 ## Database reference
+
 - Supabase project: `pluits` (project ref `ytndswhqxayqpftszwfh`), Singapore.
 - Migration: `202611070002_pluits_seller_workspace`.
 - Tables: profiles, operating_regions, stores, store_members, store_settings, store_operating_hours, store_delivery_zones, product_categories, products, product_variants, product_images, inventory_movements, store_audit_logs.
@@ -17,6 +25,7 @@ Dokumen ini dipindahkan dari root repository ke blueprint modularisasi Store aga
 - Image path convention: `<store_uuid>/<product_uuid>/<generated_filename>`.
 
 ## Historical testing scope / limitations
+
 - This is a founder-led early testing workspace, not production-ready commerce.
 - Seller onboarding was recorded as Bali-only at backend level. Founder decision D-005 requires support for individuals, UMKM, family/home businesses, cooperatives and companies; historical UI/CHECK constraint/create_store RPC notes may no longer reflect current code. Verify before testing.
 - Store creation uses the authenticated `create_store` RPC; the database creates the owner membership and default settings atomically.
@@ -26,11 +35,13 @@ Dokumen ini dipindahkan dari root repository ke blueprint modularisasi Store aga
 - Supabase Auth email confirmation settings may require inbox confirmation before the first sign-in.
 
 ## Historical advisor findings
+
 - Security advisor flagged authenticated `SECURITY DEFINER` function `public.create_store`. Revisit RPC design before production and verify current safeguards.
 - Performance advisor reported unindexed foreign keys and multiple permissive SELECT policies on stores. Verify current advisor findings before changing indexes or policies.
 
 ## UAT readiness update — 9 November 2026
-The historical [Social & Store UAT Readiness Audit](../../../../../PLUITS-SHARING-INBOX/LEGACY-TO-SORT/PLUITS-CORE-REFERENCES/SOCIAL-AND-STORE-UAT-READINESS-AUDIT-2026-11-09.md) contains the source findings. Treat it as historical evidence, not current live status.
+
+The cross-cutting [Social & Store UAT Readiness Audit](../../../../../PLUITS-SHARING-INBOX/LEGACY-TO-SORT/PLUITS-CORE-REFERENCES/SOCIAL-AND-STORE-UAT-READINESS-AUDIT-2026-11-09.md) contains historical findings. Treat it as evidence from that date, not current live status.
 
 Historical blockers included:
 - Store onboarding business-type mismatch.
@@ -40,11 +51,13 @@ Historical blockers included:
 - Multi-store selection and Android UAT were incomplete.
 
 ## Historical frontend patch — 9 November 2026
+
 - Commit `e1a9d558bf9e3e6906e3b4837dfb9e8b6621b97c`; GitHub Actions run #1043 was recorded SUCCESS.
 - The patch connected existing Auth identity to Seller Center, added multi-store selection behavior, loaded additional profile fields, connected verification submission and product/order action paths, and made online-sales status read-only pending a dedicated activation RPC.
 - Workflow success did not prove Android interaction, actual store creation, upload, or two-account authorization UAT.
 
 ## Store model decision D-005 — 9 November 2026
+
 Store registration was intended to separate operational business type from legal form, with legal form optional unless relevant. A real operational location and accountable owner are required; private/home address details should not be exposed publicly.
 
 Historical URL behavior:

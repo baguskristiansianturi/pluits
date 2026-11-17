@@ -1,3 +1,17 @@
 # Marketplace — Product Design
 
-Desain sisi pelanggan untuk discovery lintas merchant, kategori, pencarian, profil merchant publik, katalog, cart, checkout, pembayaran, status dan riwayat pesanan. Dashboard operasional merchant bukan bagian dari UI pelanggan Marketplace; lihat folder Merchant Operations.
+Desain pengalaman pelanggan Marketplace: homepage discovery lintas merchant, kategori, pencarian/filter, listing dan profil publik merchant, katalog publik, detail produk/menu, cart, checkout, pembayaran, status pesanan, riwayat, serta state loading/empty/error/unavailable.
+
+Marketplace harus menampilkan **Store** dan **Restaurant & Café** sebagai dua vertikal merchant yang berbeda. Desain operasional pemilik/staf tidak dicampur ke halaman pelanggan Marketplace; masing-masing berada di folder Merchant Operations.
+
+## Merchant Operations — Product Design
+
+- [Store](01-MERCHANT-OPERATIONS/01-STORE/README.md)
+- [Restaurant & Café](01-MERCHANT-OPERATIONS/02-RESTAURANT-CAFE/README.md)
+
+## Batas desain
+
+- Homepage Marketplace adalah discovery layer, bukan Seller Center atau dashboard restoran.
+- Profil publik, katalog, ketersediaan, dan status transaksi mengikuti kontrak modul merchant.
+- Alur checkout pelanggan tidak mengambil alih pengelolaan stok toko atau operasi restoran/kitchen.
+- Setiap modul memiliki sitemap, page inventory, flows, states, dan acceptance criteria sendiri.
