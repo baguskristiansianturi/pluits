@@ -462,7 +462,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin: var(--pl-page-content-top-mobile) auto var(--pl-page-content-bottom-mobile);
+    margin-inline: auto;
   }
 
   .auth-intro-panel {
