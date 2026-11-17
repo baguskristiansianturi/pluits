@@ -1,7 +1,6 @@
 import './design-system/tokens.css';
 import './styles/global.css';
 import './features/home/home-page.css';
-import './features/home/authenticated-home.css';
 import './features/auth/auth-page.css';
 import './features/workspace/workspace-page.css';
 import './features/legal/policy-page.css';
