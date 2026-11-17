@@ -42,11 +42,17 @@ Introduce PLUITS to a first-time visitor before registration. Visitors understan
 ## Navigation and authentication
 - Shared `renderBrand()` defaults to `#/home`.
 - Guest `#/home` renders this page.
-- Authenticated `#/home` redirects to the existing internal workspace until authenticated Global Home is designed and accepted. The workspace is not renamed or represented as the final Global Home.
+- Guest `#/home` renders this public page.
+- Authenticated `#/home` renders `PAGE-GLOBAL-HOME-AUTHENTICATED` at the same route; the session selects the experience, not a different logo or route.
+- Shared `renderBrand()` always targets `#/home`, so the brand returns to the correct home state from every shared-header page.
+- Login success and authenticated visits to guest-only Auth screens return to `#/home`.
+- The authenticated Global Home is the platform entry point and cross-ecosystem overview. It is not Circle or the Social Media personal space.
+- The internal development workspace remains a separate protected route and must not be presented as the user's Global Home.
 - Existing workspace protection, login, recovery, legal routes and signup release gate remain unchanged.
 
 ## Runtime ownership and dependencies
-- Composition/styles: `src/features/home/home-page.js`, `home-page.css`.
+- Public composition/styles: `src/features/home/home-page.js`, `home-page.css`.
+- Authenticated composition/styles: `src/features/home/authenticated-home.js`, `authenticated-home.css`.
 - Route registry: `src/config/paths.js`.
 - Route/session redirect: `src/app/routes.js`.
 - Rendering lifecycle: `src/app/create-app.js`.
@@ -59,7 +65,7 @@ Introduce PLUITS to a first-time visitor before registration. Visitors understan
 ## Change impact and procedure
 Copy/section edits affect this feature and this specification. Root route or auth redirect changes affect app routing and must preserve Auth recovery/workspace behavior. Default brand destination affects every `renderBrand()` consumer: auth, legal, workspace and public home. Shared shell/token changes require a separate consumer audit.
 
-For each change, read this specification, UI Foundation governance and responsive/layout guidance; inspect route, auth, shell, tokens and assets; update docs/registries/tests in the same work item; run `npm test` and `npm run build`; verify guest/authenticated routes, desktop/tablet/mobile, anchors and brand links. Keep noindex until explicitly authorized.
+For each change, read this specification, UI Foundation governance and responsive/layout guidance; inspect route, auth, shell, tokens and assets; update docs/registries/tests in the same work item; run `npm test` and `npm run build`; verify guest/authenticated rendering on the same route, desktop/tablet/mobile, anchors and brand links. Keep noindex until explicitly authorized.
 
 ## Validation
 Implementation complete in source. Automated tests, build and deployment await current CI. Android/desktop visual UAT and founder acceptance are pending.
