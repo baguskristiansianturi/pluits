@@ -33,7 +33,7 @@ test('the same global home route renders for guests and active users without red
   assert.equal(resolveAuthenticatedRoute('home', false), 'home');
   assert.equal(resolveAuthenticatedRoute('home', true), 'home');
 });
-test('signed-in users are sent to workspace from guest auth screens', () => {
+test('signed-in users are sent to Global Home from guest auth screens', () => {
   assert.equal(resolveAuthenticatedRoute('register', true), 'home');
   assert.equal(resolveAuthenticatedRoute('login', true), 'home');
   assert.equal(resolveAuthenticatedRoute('forgot', true), 'home');
