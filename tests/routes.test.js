@@ -48,9 +48,10 @@ test('shared navbar-to-content gap is 25px and enforced by the shell on every pa
     readFile(new URL('../src/features/legal/policy-page.js', import.meta.url), 'utf8'),
     readFile(new URL('../src/features/workspace/workspace-page.js', import.meta.url), 'utf8')
   ]);
-  assert.match(tokens, /--pl-shell-header-content-gap:\\s*25px/);
-  assert.match(tokens, /--pl-shell-header-content-gap-mobile:\\s*25px/);
-  assert.match(shellCss, /\\.pl-page-shell > \\.pl-page-main\\s*\\{[\\s\\S]*?padding-block-start:\\s*var\\(--pl-shell-header-content-gap\\)/);
+  assert.ok(tokens.includes('--pl-shell-header-content-gap: 25px;'));
+  assert.ok(tokens.includes('--pl-shell-header-content-gap-mobile: 25px;'));
+  assert.ok(shellCss.includes('.pl-page-shell > .pl-page-main'));
+  assert.ok(shellCss.includes('padding-block-start: var(--pl-shell-header-content-gap);'));
   for (const page of pages) {
     assert.match(page, /<main class="pl-page-main [^"]+"/);
     assert.match(page, /<div class="pl-page-shell/);
