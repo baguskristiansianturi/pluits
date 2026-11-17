@@ -62,9 +62,8 @@
 }
 
 .workspace-main {
-  width: min(calc(100% - (2 * var(--pl-page-gutter))), var(--pl-container-wide));
-  margin: 0 auto;
-  padding: 42px 0 34px;
+  width: min(100%, var(--pl-workspace-content-max));
+  margin-inline: auto;
 }
 
 .workspace-welcome {
