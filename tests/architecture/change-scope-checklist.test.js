@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(fileURLToPath(new URL('../..', import.meta.url)));
 
 test('change-scope safety checklist is present and defines required ownership and verification gates', () => {
-  const file = resolve(root, 'docs/pluits/CHANGE-SCOPE-SAFETY-CHECKLIST.md');
+  const file = resolve(root, 'PLUITS-MASTER-MODEL-APP/03-APPLICATION-MODULARIZATION/CHANGE-SCOPE-SAFETY-CHECKLIST.md');
   assert.equal(existsSync(file), true);
   const content = readFileSync(file, 'utf8');
   for (const phrase of [

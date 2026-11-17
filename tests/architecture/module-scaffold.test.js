@@ -38,7 +38,7 @@ const modules = [
   'supabase/tests/rpc/README.md','supabase/tests/storage/README.md',
   'tests/README.md','tests/architecture/README.md','tests/contracts/README.md',
   'tests/integration/README.md','tests/routes/README.md','tests/e2e/README.md',
-  'tests/visual/README.md','docs/pluits/BACKEND-MODULE-MAP.md'
+  'tests/visual/README.md','PLUITS-MASTER-MODEL-APP/03-APPLICATION-MODULARIZATION/BACKEND-MODULE-MAP.md'
 ];
 
 test('agreed PLUITS module roadmap folders are tracked', () => {
