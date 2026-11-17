@@ -49,7 +49,7 @@ if (!runtime.includes('Pendaftaran belum dibuka')) {
 if (!serviceWorker.includes('caches.keys()') || !serviceWorker.includes('caches.delete(key)')) {
   throw new Error('Service worker must remove legacy PLUITS shell caches on activation.');
 }
-if (/cache\\.addAll|cache\\.put|respondWith/.test(serviceWorker)) {
+if (/cache\.addAll|cache\.put|respondWith/.test(serviceWorker)) {
   throw new Error('The bootstrap service worker must not persist stale app-shell responses.');
 }
 

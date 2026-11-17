@@ -1,11 +1,12 @@
 import { assetUrl, PUBLIC_SIGNUP_ENABLED } from '../../config/runtime.js';
 import { renderIcon } from '../../design-system/icons.js';
 
-function passwordField({ id, label, autocomplete, placeholder, help }) {
+function passwordField({ id, label, autocomplete, placeholder, help, minLength = 0 }) {
+  const minLengthAttribute = minLength ? ' minlength="' + minLength + '"' : '';
   return '<div class="auth-field">' +
     '<label for="' + id + '">' + label + '</label>' +
     '<div class="auth-password-wrap">' +
-    '<input id="' + id + '" name="password" type="password" autocomplete="' + autocomplete + '" minlength="8" placeholder="' + placeholder + '" required>' +
+    '<input id="' + id + '" name="password" type="password" autocomplete="' + autocomplete + '"' + minLengthAttribute + ' placeholder="' + placeholder + '" required>' +
     '<button class="auth-password-toggle" type="button" data-toggle-password aria-label="Tampilkan password" aria-pressed="false">' + renderIcon('eye') + '</button>' +
     '</div>' +
     (help ? '<small class="auth-field-help">' + help + '</small>' : '') +
@@ -30,12 +31,12 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
     fields =
       '<div class="auth-field"><label for="auth-name">Nama tampilan</label><input id="auth-name" name="full_name" type="text" autocomplete="name" minlength="2" maxlength="80" placeholder="Nama yang ingin ditampilkan" required></div>' +
       '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>' +
-      passwordField({ id: 'auth-password', label: 'Password', autocomplete: 'new-password', placeholder: 'Minimal 8 karakter', help: 'Gunakan password yang unik dan tidak dipakai di akun penting lainnya.' }) +
+      passwordField({ id: 'auth-password', label: 'Password', autocomplete: 'new-password', minLength: 8, placeholder: 'Minimal 8 karakter', help: 'Gunakan password yang unik dan tidak dipakai di akun penting lainnya.' }) +
       '<label class="auth-consent"><input name="terms" type="checkbox" required><span>Saya menyetujui <a href="#/terms">Ketentuan Layanan</a> dan telah membaca <a href="#/privacy">Kebijakan Privasi</a>.</span></label>';
   } else if (isForgot) {
     fields = '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>';
   } else if (isReset) {
-    fields = passwordField({ id: 'auth-password', label: 'Password baru', autocomplete: 'new-password', placeholder: 'Minimal 8 karakter', help: 'Pilih password baru yang tidak pernah digunakan sebelumnya.' });
+    fields = passwordField({ id: 'auth-password', label: 'Password baru', autocomplete: 'new-password', minLength: 8, placeholder: 'Minimal 8 karakter', help: 'Pilih password baru yang tidak pernah digunakan sebelumnya.' });
   } else {
     fields =
       '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>' +
