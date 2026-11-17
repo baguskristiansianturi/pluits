@@ -415,6 +415,50 @@ Pemeriksaan dilakukan terhadap file workflow deploy di branch main:
 Catatan status: arahan ini dicatat sebagai kebutuhan dan arah kerja yang disampaikan pengguna. Belum ada perubahan kode, perubahan workflow, penyediaan hosting preview, atau pemindahan catatan RAW ke Master Model yang dilakukan melalui sesi ini.
 
 
+
+
+### Klarifikasi lanjutan — pembangunan ulang fondasi frontend PLUITS
+
+Pengguna menegaskan bahwa pekerjaan versi baru bukan sekadar menambahkan fitur Social Media ke struktur website yang sekarang. Fondasi website/frontend generasi baru juga harus disiapkan dan ditata ulang dari awal agar seluruh halaman dan modul dibangun di atas struktur yang konsisten.
+
+#### Masalah pada aplikasi saat ini
+
+- Struktur internal website yang sudah online dinilai masih acak-acakan dan belum cukup stabil.
+- Ukuran elemen, layout, dan tampilan antarbagiannya belum konsisten.
+- Perubahan kecil pada satu bagian sering menyebabkan bagian atau desain lain ikut rusak.
+- Pengguna tidak ingin pola kerja seperti ini diteruskan ke versi berikutnya.
+
+#### Arah yang diminta untuk versi baru
+
+- Siapkan fondasi frontend PLUITS yang terstruktur sebelum membangun halaman dan fitur satu per satu.
+- Bangun ulang struktur tampilan dan komponen di atas fondasi tersebut, bukan terus menambal struktur lama yang tidak stabil.
+- Standarkan sistem ukuran, spacing, layout, tipografi, warna, breakpoint/responsivitas, komponen, ikon, dan aturan styling agar konsisten di seluruh aplikasi.
+- Komponen dan modul perlu memiliki batas tanggung jawab yang jelas. Perubahan pada satu komponen/fitur sebisa mungkin tidak memengaruhi tampilan modul lain.
+- Hindari ketergantungan CSS global yang tidak terkendali; gunakan pola styling dan kontrak komponen yang menjaga isolasi.
+- Sediakan standar penggunaan komponen bersama agar halaman tidak membuat ulang elemen yang seharusnya konsisten.
+- Siapkan pengujian untuk mencegah regresi tampilan dan fungsi ketika ada penambahan atau perubahan fitur.
+- Fondasi harus mendukung pembangunan bertahap, sehingga fitur baru dapat ditambahkan tanpa merombak atau merusak desain yang sudah stabil.
+
+#### Hubungan dengan aplikasi produksi dan versi baru
+
+- Website PLUITS yang sekarang sudah online tetap dipertahankan dan tidak boleh terganggu selama pembangunan ulang.
+- Fondasi frontend baru dikembangkan di jalur/lingkungan terpisah, lalu halaman dan modul baru dibangun di atasnya.
+- Peralihan dari aplikasi saat ini ke versi baru dilakukan bertahap setelah hasil pengembangan diuji dan diterima.
+- Keputusan tentang apakah backend, autentikasi, database, dan data yang sudah ada akan dipertahankan, diadaptasi, atau dimigrasikan harus diaudit terpisah; permintaan pembangunan ulang fondasi frontend tidak otomatis berarti seluruh backend/data harus dibuang atau dibuat ulang.
+
+#### Prinsip arsitektur yang perlu diwujudkan
+
+1. Satu sumber standar desain untuk token dan aturan visual lintas halaman.
+2. Komponen dasar yang reusable dan konsisten, dengan API/kontrak yang jelas.
+3. Batas CSS dan state yang terisolasi agar perubahan lokal tidak menimbulkan efek samping global.
+4. Layout responsif yang mempunyai aturan ukuran dan breakpoint yang konsisten.
+5. Modul/fitur yang dapat dikembangkan dan diuji secara independen.
+6. Pengujian fungsional dan visual/regression untuk area yang terdampak perubahan.
+7. Dokumentasi fondasi UI dan implementasi harus saling terhubung sehingga pengembang mengetahui standar yang wajib diikuti.
+
+Catatan: poin arsitektur di atas merupakan arah teknis yang perlu dianalisis dan dirinci sebelum diputuskan implementasinya. Belum ada kode atau struktur runtime yang diubah pada sesi ini.
+
+
 ## Status akhir
 
 RAW
