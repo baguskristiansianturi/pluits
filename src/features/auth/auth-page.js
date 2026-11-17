@@ -7,7 +7,7 @@ function passwordField({ id, label, autocomplete, placeholder, help, minLength =
     '<label for="' + id + '">' + label + '</label>' +
     '<div class="auth-password-wrap">' +
     '<input id="' + id + '" name="password" type="password" autocomplete="' + autocomplete + '"' + minLengthAttribute + ' placeholder="' + placeholder + '" required>' +
-    '<button class="auth-password-toggle" type="button" data-toggle-password aria-label="Tampilkan password" aria-pressed="false">' + renderIcon('eye') + '</button>' +
+    '<button class="auth-password-toggle" type="button" data-toggle-password aria-label="Tampilkan kata sandi" aria-pressed="false">' + renderIcon('eye') + '</button>' +
     '</div>' +
     (help ? '<small class="auth-field-help">' + help + '</small>' : '') +
     '</div>';
