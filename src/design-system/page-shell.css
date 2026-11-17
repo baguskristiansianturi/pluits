@@ -1,5 +1,9 @@
 /* Shared geometry for the four public account/legal pages. Feature layouts own only their inner composition. */
 .pl-page-shell {
+  --pl-page-content-top: 26px;
+  --pl-page-content-bottom: 38px;
+  --pl-page-content-top-mobile: 12px;
+  --pl-page-content-bottom-mobile: 28px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
