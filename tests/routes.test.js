@@ -45,7 +45,7 @@ test('navbar-to-content spacing has one global design-system rule', async () => 
     readFile(new URL('../src/design-system/page-shell.css', import.meta.url), 'utf8')
   ]);
   assert.equal((tokens.match(/--pl-shell-header-content-gap:/g) || []).length, 1);
-  assert.ok(tokens.includes('--pl-shell-header-content-gap: 25px;'));
+  assert.ok(tokens.includes('--pl-shell-header-content-gap: 50px;'));
   assert.ok(shellCss.includes('.pl-page-shell > .pl-page-main'));
   assert.ok(shellCss.includes('padding-block-start: var(--pl-shell-header-content-gap);'));
   assert.ok(!shellCss.includes('--pl-shell-header-content-gap-mobile'));
