@@ -937,3 +937,61 @@ Pengguna menetapkan urutan halaman/area yang akan dibuat pertama kali setelah fo
 ## Status akhir
 
 RAW
+
+
+### Penegasan lanjutan — membangun ulang frontend dan waktu menyiapkan lingkungan pengujian online
+
+Pengguna mengubah arah pemeliharaan frontend PLUITS yang saat ini dipublikasikan melalui GitHub Pages. Karena jumlah pengguna masih sangat sedikit (dalam penjelasan disebut baru dua pengguna, lalu ditegaskan bahwa penggunaan praktis saat ini masih oleh pemilik sendiri), pengguna tidak lagi menganggap frontend lama perlu dipertahankan sebagai aplikasi yang harus terus berjalan selama pembangunan ulang.
+
+#### 1. Frontend lama tidak perlu dipertahankan
+
+- Pengguna mengarahkan agar website/frontend yang saat ini berada di GitHub Pages langsung dirombak dan dibersihkan, lalu dibangun ulang menggunakan struktur modular baru.
+- Arah ini menggantikan rencana sebelumnya yang mengharuskan website lama tetap berjalan selama frontend baru dikembangkan secara terpisah.
+- Tujuannya adalah memulai dari struktur yang sudah dirancang dan dimodularisasi, bukan terus menambal atau mempertahankan susunan frontend lama yang dianggap tidak lagi diperlukan.
+- Ini adalah arahan untuk mengganti frontend/runtime website lama. Arahan ini **tidak berarti menghapus database, akun, atau data pengguna**.
+- Database dan data akun yang telah ada tetap harus dijaga. Sebelum perubahan yang menyentuh integrasi backend, autentikasi, API, atau skema database, perlu audit kompatibilitas dan perlindungan data. Tidak boleh melakukan reset atau penghapusan data pengguna sebagai bagian dari pembersihan frontend.
+- Belum ada perintah teknis terpisah untuk menjalankan penghapusan atau deployment pada sesi sharing ini.
+
+#### 2. Urutan pembangunan dan pengujian bertahap
+
+Pengguna menegaskan bahwa pembangunan dilakukan bertahap, dan setiap tahap harus diuji sampai layak sebelum berpindah ke tahap berikutnya.
+
+1. **Fondasi dan struktur modular baru** — menyiapkan susunan frontend serta standar modularisasi yang telah dibahas.
+2. **Formulir/halaman Pendaftaran** — menjadi halaman pertama yang dibangun dan diuji. Pengujian tidak hanya menilai tampilan UI, tetapi juga kecocokan ukuran dan komponen, perilaku, validasi, fungsi alur, serta integrasi dan kualitas backend yang mendukungnya.
+3. **Beranda (Global Home)** — dikerjakan setelah tahap Pendaftaran dinilai baik.
+4. **Profil/area tingkat akun berikutnya** — pengguna menyebut bagian ini dengan ucapan transkripsi “ID-nya”. Mengacu pada urutan yang sebelumnya dibahas, kemungkinan yang dimaksud adalah Profil Utama, tetapi istilah ini perlu dikonfirmasi sebelum spesifikasi final dibuat.
+5. **Social Media** — dikembangkan setelah tahap-tahap sebelumnya. Fitur dan pengalaman Social Media perlu diselesaikan serta diuji sebagai satu bagian penting sebelum aplikasi dinilai cukup siap untuk membuka akses kepada pengguna lain.
+
+- Setiap tahap perlu melalui pemeriksaan UI/UX, responsivitas, fungsi, integrasi backend, dan pengujian terkait.
+- Tahap berikutnya tidak dimulai hanya karena halaman sebelumnya sudah terlihat selesai; fungsi dan integrasinya juga harus dinilai baik.
+- Kriteria penerimaan rinci, daftar test, dan batas “selesai” setiap tahap masih perlu dirancang.
+- Urutan ini memperbarui dan memperjelas rencana pengujian awal sebelumnya: Pendaftaran → Beranda → Profil Utama (menunggu konfirmasi istilah pada ucapan terbaru) → Social Media.
+
+#### 3. Lingkungan pengujian online disiapkan pada tahap yang lebih matang
+
+- Pengguna tidak meminta agar tempat pengujian online permanen dibuat sekarang, pada awal pembangunan ulang.
+- Setelah aplikasi baru sudah cukup berkembang dan Social Media telah selesai dibangun serta diuji, barulah disiapkan satu tempat/lingkungan pengujian yang dapat diakses secara online.
+- Lingkungan pengujian tersebut dimaksudkan untuk tetap tersedia dan digunakan kembali saat ada perubahan atau pengembangan versi berikutnya, misalnya versi 2.
+- Lingkungan pengujian harus dibedakan dari aplikasi yang digunakan pengguna umum. Data dan akses pengujian perlu dikendalikan agar data privat atau data uji tidak terbuka kepada publik.
+- Cara penyediaan hosting/preview, hubungan dengan production, backend dan database pengujian, kontrol akses, serta proses promosi versi belum diputuskan.
+- Pernyataan bahwa lingkungan pengujian akan dibiarkan online dicatat sebagai kebutuhan jangka panjang; bukan persetujuan untuk langsung mengubah workflow, hosting, atau deployment saat ini.
+
+#### Keputusan/arah eksplisit yang dicatat
+
+- Frontend lama di GitHub Pages tidak perlu lagi dipertahankan sebagai basis pengembangan; arahnya adalah dibersihkan/diganti dengan frontend baru yang modular.
+- Pembangunan dimulai dari struktur/fondasi modular baru, lalu Pendaftaran, Beranda, area profil tingkat akun, dan Social Media.
+- UI, fungsi, dan integrasi backend pada setiap tahap harus diuji dan dinilai baik sebelum melanjutkan.
+- Database serta data akun yang sudah ada tetap harus dijaga; pembersihan frontend tidak boleh menjadi alasan menghapus data.
+- Lingkungan pengujian online tersendiri baru disiapkan setelah aplikasi berkembang hingga Social Media selesai dan cukup siap diuji untuk akses pengguna lain.
+- Lingkungan pengujian online itu diharapkan tetap tersedia untuk menguji perubahan dan versi selanjutnya, termasuk versi 2.
+- Catatan ini adalah arah produk/proyek dalam Sharing Inbox. Belum ada perubahan kode, database, konfigurasi hosting, GitHub Actions, atau deployment yang dilakukan.
+
+#### Hal yang masih perlu dipastikan
+
+- Jumlah akun/pengguna aktif yang tepat dan akun mana yang wajib dipertahankan.
+- Apakah istilah “ID-nya” pada urutan terbaru memang merujuk ke Profil Utama.
+- Apakah penggantian frontend lama dilakukan langsung pada branch/URL produksi setelah fondasi siap, atau ada tahap cutover tertentu.
+- Bagaimana menjaga akun dan data lama tetap kompatibel dengan frontend, autentikasi, API, dan skema baru.
+- Kapan tepatnya aplikasi dianggap cukup siap untuk membuka akses pengguna lain.
+- Apakah lingkungan pengujian online akan menggunakan backend/database terpisah, data sintetis, atau mekanisme lain; bagaimana aksesnya dilindungi.
+- Bagaimana alur versi, misalnya versi produksi saat ini dan versi 2 yang diuji pada lingkungan online sebelum dirilis.
