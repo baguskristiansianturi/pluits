@@ -3,6 +3,7 @@ import { join, relative, resolve } from 'node:path';
 
 const root = resolve('src');
 const required = [
+  'CHANGE-MAP.md',
   'main.js',
   'app/create-app.js',
   'app/routes.js',

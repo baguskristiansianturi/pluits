@@ -2,6 +2,10 @@
 
 Status: bootstrap implementation; first stage only.
 
+## Change Map
+
+See CHANGE-MAP.md for canonical file ownership, dependencies, backend contracts, protected surfaces, and required checks.
+
 ## Current runtime scope
 
 - Account registration.

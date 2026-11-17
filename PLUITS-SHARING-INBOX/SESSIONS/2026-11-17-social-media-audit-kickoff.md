@@ -1131,3 +1131,13 @@ Implementasi baru harus sekaligus menjadi pengujian bahwa AI/developer mengikuti
 - UI dimensions, icon registry, colors, behavior, dan layouts dimasukkan sebagai provisional bootstrap values, bukan standar final.
 - Tidak ada perubahan database atau data pengguna.
 - Setelah pull request lolos CI, perubahan dapat dipromosikan ke main agar GitHub Pages deploy versi frontend baru.
+
+
+### Change Map dan batas penerimaan tahap pertama
+
+- Runtime V2 memiliki Change Map di src/CHANGE-MAP.md untuk mengikat pemilik file, sumber kebenaran, konsumen, kontrak Supabase, protected surfaces, dan test wajib.
+- Pendaftaran publik sengaja dinonaktifkan secara default melalui build flag VITE_PUBLIC_SIGNUP_ENABLED. Login dengan akun yang sudah ada tetap menjadi jalur UAT utama.
+- Login tidak memaksakan minlength password 8 karakter di browser agar akun lama dengan kebijakan password terdahulu tidak terblokir; aturan minimum 8 karakter tetap berlaku untuk signup/reset baru.
+- Backend security/migration tests yang tidak bergantung pada frontend lama dipertahankan atau ditulis ulang; test UI lama yang hanya memeriksa halaman yang dihapus tidak dibawa ke runtime baru.
+- Pull Request #43 telah menjalankan pipeline PR pada commit cfb00e20217f979cc97dbb4b26dfe94e8b4b5556 dengan hasil sukses untuk install, npm test, Vite build, verifikasi output, dan upload Pages artifact. Deploy dilewati karena PR tidak mengubah main.
+- Status akun nyata, email delivery, dan browser UAT masih menunggu pengujian pengguna setelah deploy.
