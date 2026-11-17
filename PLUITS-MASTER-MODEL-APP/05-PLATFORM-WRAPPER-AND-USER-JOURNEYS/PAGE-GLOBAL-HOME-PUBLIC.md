@@ -41,7 +41,6 @@ Introduce PLUITS to a first-time visitor before registration. Visitors understan
 
 ## Navigation and authentication
 - Shared `renderBrand()` defaults to `#/home`.
-- Guest `#/home` renders this page.
 - Guest `#/home` renders this public page.
 - Authenticated `#/home` renders `PAGE-GLOBAL-HOME-AUTHENTICATED` at the same route; the session selects the experience, not a different logo or route.
 - Shared `renderBrand()` always targets `#/home`, so the brand returns to the correct home state from every shared-header page.
