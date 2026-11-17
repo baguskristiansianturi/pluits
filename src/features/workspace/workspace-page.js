@@ -1,4 +1,5 @@
 import { assetUrl } from '../../config/runtime.js';
+import { routeHref } from '../../config/paths.js';
 import { renderIcon } from '../../design-system/icons.js';
 import { LAYOUT_REGISTRY } from '../../design-system/layouts.js';
 import './workspace-page.css';
@@ -29,7 +30,7 @@ export function mountWorkspacePage({ root, user, onSignOut }) {
   root.innerHTML =
     '<div class="workspace-page">' +
       '<header class="workspace-header">' +
-        '<a class="pluits-brand" href="#/workspace" aria-label="PLUITS ruang kerja"><img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt="" width="34" height="34"><span>PLUITS</span></a>' +
+        '<a class="pluits-brand" href="' + routeHref('login') + '" aria-label="PLUITS ruang kerja"><img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt="" width="34" height="34"><span>PLUITS</span></a>' +
         '<div class="workspace-header-right"><span class="workspace-label">RUANG KERJA</span><div class="workspace-user"><span class="workspace-avatar">' + initial + '</span><span class="workspace-user-name">' + name + '</span></div><button class="workspace-signout" type="button" data-sign-out>' + renderIcon('logout') + '<span>Keluar</span></button></div>' +
       '</header>' +
       '<main class="workspace-main">' +
