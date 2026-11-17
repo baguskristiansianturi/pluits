@@ -1,3 +1,4 @@
+import { routeHref } from '../../config/paths.js';
 import './policy-page.css';
 import '../../design-system/page-shell.css';
 import { renderPageHeader, renderPageFooter } from '../../design-system/page-shell.js';
