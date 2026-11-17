@@ -1,51 +1,34 @@
-# Public Global Home Feature
+# Global Home Feature
 
-Owner: `features/home` · Page: `PAGE-GLOBAL-HOME-PUBLIC` · Layout: `LAY-GLOBAL-HOME-001`  
-Status: IMPLEMENTED — provisional content/design; founder UAT pending.
+Owner: `features/home` · Pages: `PAGE-GLOBAL-HOME-PUBLIC`, `PAGE-GLOBAL-HOME-AUTHENTICATED` · Layout: `LAY-GLOBAL-HOME-001`
 
 ## Purpose
-Present PLUITS to visitors who are not signed in. Explain the platform's direction without claiming planned services are operational.
+Own one Global Home route, one page entry point, and one feature stylesheet. The active Supabase session selects which homepage content is rendered; there are not two independent homepage implementations.
 
 ## Runtime ownership
-- `home-page.js`: page composition and semantic content.
-- `home-page.css`: feature-scoped responsive presentation.
-- Routes/auth-aware destination: `src/app/`.
-- Shared header, footer, brand and shell: `src/design-system/page-shell.js`.
+- `home-page.js`: single `mountHomePage({ root, user, onSignOut })` entry point; public and authenticated content states.
+- `home-page.css`: all feature-scoped styles for both states.
+- `src/app/create-app.js`: supplies the current session user to the same renderer.
+- Shared header, footer, brand, shell, tokens and geometry: `src/design-system/`.
 
-## Content and availability
-- Hero introduces PLUITS as a connected digital ecosystem.
-- Ecosystem cards describe intended domains and carry a staged-development label.
-- Registration CTAs link to the existing registration screen; its submit remains disabled until the public signup release gate is cleared.
-- Google Play area is an availability notice only. No fabricated listing URL.
-- No fake people, posts, products, reviews, metrics or inventory.
+## Session behavior
+- Guest at `#/home`: public introduction, ecosystem preview, identity explanation, Android availability and registration/login actions.
+- Authenticated at `#/home`: personalized account welcome, ecosystem overview and account identity summary.
+- Shared PLUITS brand always links to `#/home`; session state determines the displayed homepage.
+- Successful login and sign-out update the same route through the existing Auth state listener.
+- Internal Workspace remains separate and unchanged.
+
+## Content truthfulness
+Do not fabricate posts, people, activity, notifications, recommendations, metrics, products, reviews, transactions or provider records. Authenticated content uses only the active session's display name/email until real product data sources are released.
 
 ## Shared resources
 - Official symbol: `public/assets/brand/pluits-logo.svg`.
 - Shared shell: `LAY-SHARED-PAGE-SHELL-001`.
 - Existing tokens: `src/design-system/tokens.css`.
-- No new font, icon, image, external package or global token.
+- No new global token, font, icon, image, external package or runtime dependency.
 
 ## Responsive behavior
-- Uses shared page gutter, container and shell vertical-rhythm tokens.
-- Desktop: editorial hero split and multi-column content.
-- Tablet: reduced hero and two-column ecosystem cards.
-- Mobile: stacked single-column sections, touch-sized actions, no fixed-width content.
-- Feature CSS is scoped to `.home-page`; it must not override shared page-shell geometry.
-
-## Dependencies and consumers
-- Guest route: `#/home`; empty URL/hash also resolves to public home.
-- Shared `renderBrand()` points to `#/home`.
-- Authenticated `#/home` redirects to the current internal workspace until authenticated Global Home is built.
-- Consumes shared page shell and canonical brand asset.
-
-## Change impact and procedure
-- Copy/section edits affect this feature and its Product Design specification.
-- Root route or auth redirect changes affect app routing and require route regression tests.
-- Default brand destination affects all `renderBrand()` consumers: auth, legal, workspace and public home.
-- Shared shell/token changes require a separate consumer impact audit.
-- For each change, read this file and the page specification; inspect route, auth, shell, token and asset dependencies; update docs/registries/tests in the same work item; run `npm test` and `npm run build`.
+Both states consume the same page shell, page gutters and canonical 50px navbar-to-content gap. State-specific sections use scoped styles in the same `home-page.css`; they do not alter shared shell geometry or styles on other pages.
 
 ## Validation
-- Implementation: complete in source.
-- Automated tests/build: pending CI for current commit.
-- Android/desktop visual UAT and founder acceptance: pending.
+Run `npm test` and `npm run build`. Verify guest and authenticated sessions on the same `#/home` route, login, logout, brand navigation and mobile/desktop layouts. Device visual UAT remains a separate step.
