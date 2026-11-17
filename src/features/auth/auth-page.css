@@ -442,11 +442,6 @@
   font-size: 11px;
 }
 
-.auth-footer {
-  min-height: 58px;
-  border-top: 1px solid rgba(198, 215, 210, 0.65);
-}
-
 @media (max-width: 1023px) {
   .auth-main {
     grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1fr);
@@ -464,10 +459,6 @@
 }
 
 @media (max-width: 767px) {
-  .auth-page {
-    padding-inline: var(--pl-page-gutter);
-  }
-
   .auth-main {
     display: flex;
     flex-direction: column;
