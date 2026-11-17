@@ -1,5 +1,13 @@
 export const LAYOUT_REGISTRY = Object.freeze([
   {
+    id: 'LAY-SHARED-PAGE-SHELL-001',
+    name: 'Shared Account and Legal Page Shell',
+    status: 'IMPLEMENTED',
+    owner: 'platform-ui-foundation',
+    purpose: 'Shared brand header, page frame, responsive geometry, and footer for login, registration, terms, and privacy pages',
+    slots: ['brand-header', 'page-content', 'optional-footer']
+  },
+  {
     id: 'LAY-AUTH-SPLIT-001',
     name: 'Auth Split Panel',
     status: 'PROVISIONAL',
