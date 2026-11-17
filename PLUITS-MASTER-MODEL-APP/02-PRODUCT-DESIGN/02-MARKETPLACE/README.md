@@ -4,6 +4,10 @@ Desain pengalaman pelanggan Marketplace: homepage discovery lintas merchant, kat
 
 Marketplace harus menampilkan **Store** dan **Restaurant & Café** sebagai dua vertikal merchant yang berbeda. Desain operasional pemilik/staf tidak dicampur ke halaman pelanggan Marketplace; masing-masing berada di folder Merchant Operations.
 
+## Homepage and discovery
+
+- [Marketplace homepage, search, and discovery rules](HOMEPAGE-DISCOVERY-RULES.md)
+
 ## Merchant Operations — Product Design
 
 - [Store](01-MERCHANT-OPERATIONS/01-STORE/README.md)

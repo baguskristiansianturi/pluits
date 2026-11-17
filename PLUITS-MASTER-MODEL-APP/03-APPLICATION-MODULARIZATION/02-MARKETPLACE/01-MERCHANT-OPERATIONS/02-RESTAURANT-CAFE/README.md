@@ -6,6 +6,7 @@ Blueprint teknis untuk modul operasional restoran/kafe. Implementasi harus dimul
 
 ## Technical documents
 
+- [Original Restaurant & Café development baseline](RESTAURANT-DEVELOPMENT-BASELINE.md)
 - [Domain model and state rules](DOMAIN-MODEL.md)
 - [Project feature register](03-PROJECT/FEATURE-REGISTER.csv)
 - [Risk register](04-CHECKLIST-AUDIT/RISK-REGISTER.md)

@@ -6,6 +6,7 @@ Store adalah sistem operasional merchant toko. Marketplace boleh membaca kontrak
 
 ## Technical documents
 
+- [Original Store development baseline](STORE-DEVELOPMENT-BASELINE.md)
 - [Architecture baseline](ARCHITECTURE-BASELINE.md)
 - [Testing and UAT baseline](TESTING-AND-UAT-BASELINE.md)
 - [Project register](03-PROJECT/README.md)

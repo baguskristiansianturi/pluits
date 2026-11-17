@@ -6,6 +6,7 @@ Folder ini memuat baseline desain produk Restaurant & Café yang sebelumnya tert
 
 ## Dokumen desain
 
+- [Product and experience baseline](RESTAURANT-PRODUCT-AND-EXPERIENCE-BASELINE.md)
 - [Design decision log](DECISION-LOG.md)
 
 ## Prinsip penting

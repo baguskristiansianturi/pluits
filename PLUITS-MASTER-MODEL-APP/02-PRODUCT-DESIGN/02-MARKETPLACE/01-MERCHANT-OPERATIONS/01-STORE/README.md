@@ -6,11 +6,12 @@ Folder ini memuat rancangan pengalaman Store untuk owner, staff, dan pelanggan p
 
 ## Dokumen desain
 
+- [Original Store design baseline](STORE-DESIGN-BASELINE.md)
 - [Product scope, eligibility, and roles](PRODUCT-SCOPE-AND-ROLES.md)
 - [Page inventory and navigation](PAGE-INVENTORY-AND-NAVIGATION.md)
 - [End-to-end flows](END-TO-END-FLOWS.md)
 - [Catalog, variants, and inventory rules](CATALOG-AND-INVENTORY-RULES.md)
-- [Homepage and discovery rules](HOMEPAGE-DISCOVERY-RULES.md)
+- [Marketplace homepage and discovery rules](../../HOMEPAGE-DISCOVERY-RULES.md)
 - [Store decision log](DECISION-LOG.md)
 - [Seller Center lifecycle and URL specification](SELLER-CENTER-STORE-LIFECYCLE-AND-URL-SPEC-2026-11-09.md)
 
