@@ -34,9 +34,9 @@ No final palette, spacing scale, radius scale, or shadow scale is declared by th
 
 ## Shared page-shell vertical spacing — current runtime contract
 
-The distance from the bottom edge of the shared navbar/header to the start of page content is **25px on desktop, tablet, and mobile**. This is one global shell rule, not a page-specific value.
+The distance from the bottom edge of the shared navbar/header to the start of page content is **50px on desktop, tablet, and mobile**. This is one global shell rule, not a page-specific value.
 
-- One token for every viewport: `--pl-shell-header-content-gap: 25px`.
+- One token for every viewport: `--pl-shell-header-content-gap: 50px`.
 - There is no separate mobile/tablet spacing token; the global gap does not change at breakpoints.
 - Runtime owner: `src/design-system/tokens.css`.
 - Enforcement: `src/design-system/page-shell.css`, using `.pl-page-shell > .pl-page-main` so page-specific layout classes cannot silently override the shared top gap.
