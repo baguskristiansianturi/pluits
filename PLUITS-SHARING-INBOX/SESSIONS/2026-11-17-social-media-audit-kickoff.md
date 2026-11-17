@@ -125,6 +125,50 @@ Messenger dan kebutuhan real-time hanya digunakan sebagai contoh bahwa kebutuhan
 
 Lanjutkan sharing dan audit Social Media dengan menggali pengalaman sosial inti, kebutuhan pengguna, serta perilaku fitur satu per satu. Catat setiap jawaban, kebutuhan, usulan, keputusan eksplisit, dan pertanyaan yang masih terbuka pada sesi Sharing Inbox. Jangan mengisi kekosongan dengan asumsi.
 
+
+### Audit baseline — Circle PLUITS yang sudah terdeploy
+
+**Status catatan:** temuan dari implementasi yang sudah ada; bukan keputusan desain/produk baru dan bukan persetujuan untuk mengubah kode.
+
+Rute `#/circle` saat ini diarahkan ke halaman Circle pengguna yang sudah login. Halaman tersebut dirender oleh alur `feedPage()` pada `src/pages/account/index.js`.
+
+#### Kerangka navigasi yang terlihat pada implementasi
+
+- Header desktop menampilkan identitas PLUITS, navigasi Circle, Reels, Jelajah, dan Inbox, kolom pencarian/lokasi, akses konten tersimpan, serta profil.
+- Navigasi bawah mobile menampilkan Circle, Jelajah, Buat, Inbox, dan Profil.
+- Circle menjadi pintu masuk utama untuk aktivitas sosial akun yang sudah login.
+
+#### Susunan konten Circle saat ini
+
+Urutan komposisi halaman dari implementasi saat ini:
+
+1. **Top 10 Trending** — konten/tempat yang sedang ramai berdasarkan postingan yang terhubung dengan entitas direktori lokal.
+2. **Tempat di sekitar pengguna** — bagian GeoDirectory/nearby.
+3. **Orang yang Mungkin Anda Kenal** — rekomendasi akun, dengan kartu horizontal dan tindakan mengikuti.
+4. **Cerita dari circle** — Story dari akun yang sudah diikuti dan memiliki Story publik yang masih aktif; ditampilkan sebagai deretan avatar/story melingkar yang dapat digeser horizontal.
+5. **Navigasi jenis konten** — tab Semua, Reel, Live, dan Blog, ditambah akses Buka Reels dan tombol muat ulang.
+6. **Feed Post** — daftar kartu postingan.
+7. **Konten ekosistem lain setelah feed** — Produk Lokal, Temukan Lebih Banyak, Kumpulan jasa/layanan, pintasan Akomodasi/Tiket/Transportasi/Jasa, serta materi ajakan bergabung dan unduh aplikasi.
+
+#### Perilaku feed dan kartu Post yang sudah ada
+
+- Feed mengambil Post publik yang berstatus diterbitkan.
+- Post dari akun yang diblokir, akun yang disembunyikan, atau Post yang disembunyikan pengguna tidak dimasukkan ke daftar yang ditampilkan.
+- Urutan rekomendasi saat ini mempertimbangkan akun yang diikuti, kecocokan minat/topik, kebaruan postingan, serta jumlah Like dan komentar. Ini adalah perilaku kode saat ini, bukan aturan ranking final yang sudah disetujui.
+- Kartu Post saat ini memuat identitas/username pemilik, waktu publikasi, menu tindakan, media foto/video atau galeri, area tindakan interaksi, caption, jumlah suka, dan jumlah komentar.
+- Story pada avatar Post juga dapat ditandai dengan ring ketika pemilik Post memiliki Story aktif.
+
+#### Catatan pemisahan ruang lingkup
+
+Implementasi Circle saat ini mencampurkan pengalaman Social Media dengan bagian GeoDirectory, Marketplace, dan layanan PLUITS lainnya. Hal ini dicatat sebagai kondisi aplikasi yang sudah ada, bukan kesimpulan bahwa semua bagian tersebut harus tetap berada di Home Circle.
+
+Untuk audit pengalaman Instagram berikutnya, perlu dibedakan:
+- bagian yang memang menjadi inti pengalaman sosial (misalnya Story, rekomendasi orang, tab konten, dan feed Post);
+- bagian ekosistem lain yang saat ini tampil di Circle (misalnya nearby, produk lokal, jasa, tiket, dan akomodasi).
+
+Belum ada keputusan untuk menghapus, memindahkan, mempertahankan, atau mengubah posisi bagian mana pun. Pembahasan visual dan perilaku detail tetap dilanjutkan bersama pengguna.
+
+
 ## Status akhir
 
 RAW
