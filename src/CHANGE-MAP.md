@@ -37,11 +37,14 @@ Scope: Account access, public Global Home and internal development workspace.
 ## Shared brand navigation
 `renderBrand()` defaults to `#/home`. Guest clicks open public Global Home. Authenticated clicks resolve through the auth-aware guard to the current internal workspace. Any change affects all shared-header consumers and requires route regression coverage.
 
-## Protected backend surfaces
+## Backend contracts and protected surfaces
 The existing Supabase Auth, SDK version pin, browser publishable key, database triggers, profiles, wallets, user data, RLS, migrations, SMTP and production Auth configuration are unchanged by this homepage increment.
 
-## Change rules and verification
-Keep feature changes within their owner. Shared route/brand changes require consumer impact review. Run `npm test`, `npm run build`, verify workflow/deployment, and perform manual Android/mobile and desktop UAT. Public signup, email delivery, Android publication and legal consent remain gated/not verified.
+## Change rules
+Keep feature changes within their owner. Shared route/brand changes require consumer impact review. Preserve Auth recovery, session persistence and existing workspace behavior. Do not change Supabase configuration, migrations, database records, RLS or triggers in this homepage scope.
+
+## Required verification
+Run `npm test`, `npm run build`, verify workflow/deployment, and perform manual Android/mobile and desktop UAT. Public signup, email delivery, Android publication and legal consent are NOT TESTED / NOT READY until their separate release gates are cleared.
 
 ## Current limitations
 - Signup remains disabled unless explicitly enabled after readiness review.
