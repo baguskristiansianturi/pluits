@@ -100,9 +100,13 @@ function renderTabContent(tab, context) {
   }
   if (tab === 'social' || tab === 'blog') {
     return '<section class="dashboard-view" aria-labelledby="view-title"><div class="dashboard-view-heading"><div><span class="dashboard-kicker">PENERBITAN & INTERAKSI</span><h1 id="view-title">' + (tab === 'blog' ? 'Blog Studio' : 'Social Media') + '</h1><p>Kelola format konten sosial dari satu identitas personal PLUITS.</p></div></div>' +
-      '<div class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>Jenis konten</h2><p>Setiap format memiliki alur pembuatan dan pengelolaan tersendiri.</p></div></div><div class="dashboard-content-types">' +
+      '<div class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>Jenis konten</h2><p>Setiap format memiliki alur pembuatan dan pengelolaan tersendiri.</p></div><button type="button" class="dashboard-text-action" data-open-tab="blog">Buka Blog Studio</button></div><div class="dashboard-content-types">' +
       '<article><span>01</span><strong>Feed</strong><p>Postingan foto, video, dan teks.</p></article><article><span>02</span><strong>Story</strong><p>Konten sementara.</p></article><article><span>03</span><strong>Reels</strong><p>Video pendek vertikal.</p></article><article><span>04</span><strong>Live</strong><p>Siaran langsung dan interaksi real-time.</p></article><article><span>05</span><strong>Blog</strong><p>Artikel dan publikasi editorial.</p></article>' +
       '</div></div><div class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>Template Personal Blog</h2><p>Pilih rancangan tampilan blog yang disediakan PLUITS.</p></div><span class="dashboard-status-pill">5 template</span></div><div class="dashboard-template-grid">' + BLOG_TEMPLATES.map((template) => '<button type="button" data-blog-template="' + template + '" class="dashboard-template' + (selectedTemplate === template ? ' is-selected' : '') + '" aria-pressed="' + (selectedTemplate === template) + '"><span class="dashboard-template-preview"><i></i><i></i><i></i></span><strong>' + template + '</strong><small>' + (selectedTemplate === template ? 'Dipilih untuk pratinjau' : 'Lihat pilihan') + '</small></button>').join('') + '</div><div class="dashboard-inline-note">Pemilihan template hanya pratinjau. Artikel, template aktif, dan publikasi tidak diubah dari dashboard ini.</div></div></section>';
+  }
+  const unavailableModule = MODULE_GROUPS[2].items.find((item) => item.id === tab);
+  if (unavailableModule) {
+    return '<section class="dashboard-view" aria-labelledby="view-title"><div class="dashboard-view-heading"><div><span class="dashboard-kicker">EKOSISTEM PLUITS</span><h1 id="view-title">' + unavailableModule.label + '</h1><p>Modul ini akan dibuka dari satu dashboard ketika halaman pengelolaannya siap.</p></div></div><div class="dashboard-panel">' + renderEmpty('Modul belum tersedia','Struktur navigasi sudah disiapkan. Pengelolaan operasional belum diaktifkan dan tidak ada data contoh yang ditampilkan.',unavailableModule.icon) + '</div></section>';
   }
   const ecosystem = MODULE_GROUPS[2].items;
   return '<section class="dashboard-view dashboard-overview" aria-labelledby="view-title"><div class="dashboard-view-heading"><div><span class="dashboard-kicker">PUSAT KENDALI PLUITS</span><h1 id="view-title">Selamat datang, ' + name + '.</h1><p>Satu akun untuk mengelola identitas, pekerjaan, transaksi, dan aktivitas sosial Anda.</p></div><span class="dashboard-overview-avatar">' + initial + '</span></div>' +
@@ -169,7 +173,6 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
   };
 
   function render() {
-    const active = state.tabs.find((tab) => tab.id === state.activeTab) || state.tabs[0];
     const headerActions =
       '<div class="dashboard-header-actions">' +
         '<button type="button" class="dashboard-header-action" data-notifications aria-expanded="' + state.notificationsOpen + '">' + renderIcon('mail') + '<span>Notifikasi</span></button>' +
