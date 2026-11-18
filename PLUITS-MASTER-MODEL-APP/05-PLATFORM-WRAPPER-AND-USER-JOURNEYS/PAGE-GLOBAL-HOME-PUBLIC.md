@@ -1,71 +1,61 @@
-# PAGE-GLOBAL-HOME — PLUITS Platform Homepage / Beranda
+# Global Home, Circle Home, and Discovery — Product/UI Specification
 
-Status: IMPLEMENTED — provisional copy/layout; founder visual UAT pending.  
-Page ID: `PAGE-GLOBAL-HOME` · Layout: `LAY-GLOBAL-HOME-001` · Owner: Platform Wrapper & User Journeys  
-Route: `#/home` and empty application hash for all sessions.
+Status: **IMPLEMENTATION PROTOTYPE / CONTENT SERVICES NOT CONNECTED**
+IDs: `PAGE-GLOBAL-HOME`, `PAGE-CIRCLE-HOME`, `PAGE-DISCOVER`.
 
-## Purpose and journey
-Introduce PLUITS as a platform to first-time visitors and returning users. Beranda is the front door of the PLUITS ecosystem, not a personal profile or authenticated Dashboard.
+## Product boundaries
+1. Global Home is the PLUITS platform homepage for guests and signed-in users. The PLUITS brand always returns here. Its scope is nationwide discovery, not a user's personal Circle.
+2. Jelajah is a nationwide discovery destination, independent of the user's Circle and current location.
+3. Circle Home is the personalized home. Its content is selected from Circle relationships, interests, and location-aware relevance. It remains usable without location permission; only location-based relevance is reduced.
+4. Dashboard remains the authenticated control center and is not replaced by either homepage.
 
-## Content architecture
-1. Hero — platform proposition, concise explanation, discovery/registration actions and conceptual ecosystem composition.
-2. Platform introduction — PLUITS is an ecosystem, not a single feature.
-3. Ecosystem overview — Social & Community, Local Discovery, Marketplace and Everyday Services.
-4. One identity — connected identity direction with role/permission boundaries.
-5. Android availability — Google Play information area without an invented listing URL.
-6. Closing CTA — invitation to explore or learn about registration, reflecting actual availability.
+## Global Home information architecture
+1. Global header: PLUITS brand, Favorit, notifications, cart, search, and session actions.
+2. Global introduction.
+3. Top Global — nationwide highlight rail; CTA opens Jelajah.
+4. Di Sekitar Anda — nearby rail; CTA opens discovery.
+5. Orang yang Mungkin Anda Kenal — people discovery rail.
+6. Stories — horizontal story rail.
+7. Social content categories: Feed, Reels, Live, Blog.
+8. Produk Lokal — CTA opens Marketplace/discovery.
+9. Semua Fitur.
+10. Shared footer and mobile bottom navigation.
 
-## Copy and truthfulness constraints
-- Main message: “Terhubung dengan lebih banyak hal, di satu tempat.”
-- Describe PLUITS as an ecosystem connecting people, communities, places, businesses and services.
-- Ecosystem cards describe product direction and carry “Dikembangkan bertahap”; they must not imply live availability.
-- No fabricated posts, names, testimonials, transaction counts, ratings, products, provider records or live activity.
-- Registration CTAs route to the existing registration screen; signup remains disabled by the release gate.
-- Google Play is “Coming soon”; no download URL until an official listing exists.
-- Keep noindex during internal product testing.
+## Sticky ownership and tab behavior
+- Header is sticky at the top during the initial page portion.
+- When the content-tab bar reaches the header's sticky boundary, release the header from sticky positioning. The content tabs then occupy the top sticky position.
+- When the user scrolls back above the handoff point, restore header sticky behavior.
+- The sticky tab bar remains reachable while scrolling.
+- Selecting Feed, Reels, Live, or Blog scrolls to that category; scroll observation updates the active tab.
+- Each category may contain feed items, recommendation blocks, and horizontal rails. A category is not restricted to one content format.
 
-## Shared visual and asset contracts
-- Shared shell: `LAY-SHARED-PAGE-SHELL-001`.
-- Page composition: `LAY-GLOBAL-HOME-001`.
-- Canonical asset only: `public/assets/brand/pluits-logo.svg`.
-- Consume existing tokens from `src/design-system/tokens.css`; no new global scales or tokens.
-- No external font, icon package, stock image, illustration asset or runtime dependency.
-- Feature styles are scoped under `.home-page` and `.home-*`.
+## Full-bleed carousel contract
+- Section headings, descriptions, and CTAs remain aligned to the shared page container.
+- Carousel viewport/track extends to physical viewport edges using a viewport-width breakout; do not widen the whole page shell.
+- Horizontal tracks use native overflow scrolling, touch horizontal panning, and mandatory start snap.
+- Track overflow must not create document/body horizontal scrolling.
+- Apply to Top Global, nearby, people, Stories, and future rails in every content category.
 
-## Responsive contract
-- Desktop: editorial two-column hero, four-column ecosystem grid, split identity and mobile sections.
-- Tablet: reduced hero scale and two-column ecosystem grid.
-- Mobile <=767px: single-column flow, stacked cards, readable copy, touch-sized actions, no fixed-width content.
-- Narrow mobile <=380px: compact header actions and scaled hero diagram.
-- Shared shell owns page gutters and vertical rhythm; feature CSS must not override `.pl-page-main` top/bottom spacing.
+## Responsive behavior and measurements
+- Shared page gutters, page width, spacing, typography, colors, radii, and icons inherit the existing design-system tokens and shared shell. Do not override the 50px shared header-to-content gap.
+- Mobile feature grid: two columns. Bottom navigation: five equal destinations, safe-area aware, fixed to viewport bottom; page reserves bottom space.
+- Provisional component-local values pending visual QA: general rail card basis 74vw mobile / clamp(220px,26vw,290px) otherwise; story diameter 54px mobile / 58px default; rail gap 9px mobile / 12px default; tab controls min-height 40px. These are implementation measurements, not approved global tokens.
+- Existing design tokens remain provisional; this feature does not approve platform-wide values or introduce global tokens.
 
-## Navigation and authentication
-- Shared `renderBrand()` defaults to `#/home`.
-- Guest and authenticated `#/home` both render this exact same landing-page composition.
-- Session state may change only account controls in the header and relevant CTA wording/targets. It must not render a personalized welcome panel, profile summary, feed, dashboard cards, or alternate page body.
-- Shared `renderBrand()` always targets `#/home`, so the brand returns to the same Beranda from every page.
-- Successful login and authenticated visits to guest-only Auth screens open the protected Dashboard at `#/dashboard`.
-- The signed-in account avatar/name links to the protected User Dashboard at `#/dashboard`.
-- Dashboard is the single post-login control center. Main Profile remains a separate area for identity and account settings; Social Media is accessed through the application launcher.
-- Workspace is an internal development term only; it is not a separate deployed route or user-facing page.
-- Login, recovery, legal routes and the signup release gate remain unchanged.
+## Location and privacy
+- Global Home and Jelajah remain nationwide even when a user grants location.
+- Circle may use location for nearby relevance only after permission is granted.
+- Explain the benefit before requesting location. Denial must not block core app usage.
+- Do not expose precise location in public content or profile by default.
 
-## Runtime ownership and dependencies
-- One composition: `src/features/home/home-page.js`.
-- One scoped stylesheet: `src/features/home/home-page.css`.
-- One entry point: `mountHomePage({ root, user, onSignOut })`; session only controls account actions.
-- Session supply: `src/app/create-app.js`.
-- Route registry: `src/config/paths.js`.
-- Route/session redirect: `src/app/routes.js`.
-- Shared brand destination: `src/design-system/page-shell.js`.
-- Layout registry: `src/design-system/layouts.js`.
-- Tests: `tests/routes.test.js`.
-- Source map: `src/CHANGE-MAP.md`.
+## Runtime mapping
+- Global Home: `src/features/home/home-page.js`, `home-page.css`.
+- Circle Home and Jelajah: `src/features/social/social-pages.js`, `social-pages.css`.
+- Route wiring: `src/app/create-app.js`, `src/app/routes.js`, `src/config/paths.js`.
+- Shared resources: `src/design-system/page-shell.js`, `page-shell.css`, `tokens.css`, and `icons.js`.
 
-## Change impact and procedure
-Copy/section edits affect this feature and this specification. Root route or auth redirect changes affect app routing and must preserve Auth recovery behavior. Default brand destination affects every `renderBrand()` consumer: auth, legal, Dashboard and public home. Shared shell/token changes require a separate consumer audit.
-
-For each change, read this specification, UI Foundation governance and responsive/layout guidance; inspect route, auth, shell, tokens and assets; update docs/registries/tests in the same work item; run `npm test` and `npm run build`; verify the same homepage for guest/authenticated sessions, desktop/tablet/mobile, anchors and brand links. Keep noindex until explicitly authorized.
+## Data truthfulness and dependencies
+No real feed, users, stories, live broadcasts, products, or nearby businesses are fabricated. Initial rails use explicit empty/provisional states until Social, Geo Directory, Marketplace, and notification/cart services are integrated. The create sheet is a disabled capability preview. Bottom navigation routes to Circle, Jelajah, Dashboard entry points.
 
 ## Validation
-Implementation complete in source. Automated tests, build and deployment must pass in CI. Android/desktop visual UAT and founder acceptance remain pending until inspected on real devices.
+Automated route tests are updated. CI must run `npm test` and `npm run build`. Verify sticky handoff in both scroll directions, tab jump/active state, full-bleed edge alignment, no body horizontal overflow, bottom navigation/safe area, desktop/tablet/mobile, and guest/authenticated states. Real content services, geolocation permission flow, cart/notifications, post creation, and Android visual UAT remain NOT IMPLEMENTED.
