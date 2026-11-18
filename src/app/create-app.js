@@ -2,7 +2,7 @@ import { resolveAuthenticatedRoute, resolveRoute } from './routes.js';
 import { routeHref } from '../config/paths.js';
 import { mountHomePage } from '../features/home/home-page.js';
 import { mountBusinessHomePage } from '../features/home/business-home-page.js';
-import { mountDiscoverPage, mountMessagesPage, mountProfilePage } from '../features/social/social-pages.js';
+import { mountDiscoverPage, mountMessagesPage, mountProfilePage, mountSettingsPage } from '../features/social/social-pages.js';
 import { mountDashboardPage } from '../features/dashboard/dashboard-page.js';
 import { mountAuthPage } from '../features/auth/auth-page.js';
 import { mountPolicyPage } from '../features/legal/policy-page.js';
@@ -20,15 +20,16 @@ export function createApp({root,authService}) {
   if(route==='circle'){navigate('social');return;}
   if(route==='messages'){mountMessagesPage({root,user:session?.user||null});return;}
   if(route==='profile'){mountProfilePage({root,user:session?.user||null});return;}
+  if(route==='settings'){mountSettingsPage({root,user:session?.user||null,onSignOut:()=>authService.signOut()});return;}
   if(route==='discover'){mountDiscoverPage({root,user:session?.user||null});return;}
   if(route==='dashboard'){mountDashboardPage({root,user:session.user,onSignOut:()=>authService.signOut()});return;}
   if(route==='terms'||route==='privacy'){mountPolicyPage({root,type:route});return;}
-  mountAuthPage({root,mode:route,authService,hasRecoverySession:Boolean(session),onAuthenticated(nextSession){session=nextSession;navigate('home');}});
+  mountAuthPage({root,mode:route,authService,hasRecoverySession:Boolean(session),onAuthenticated(nextSession){session=nextSession;navigate('social');}});
  }
  const unsubscribe=authService.subscribe((event,nextSession)=>{
   session=nextSession;
   if(event==='PASSWORD_RECOVERY'){const url=new URL(window.location.href);url.searchParams.set('auth','reset');window.history.replaceState(null,'',url);}
-  if(event==='SIGNED_OUT'&&ready&&['dashboard','social','messages','profile'].includes(resolveRoute(window.location.hash,window.location.search))){navigate('home');return;}
+  if(event==='SIGNED_OUT'&&ready&&['dashboard','social','messages','profile','settings'].includes(resolveRoute(window.location.hash,window.location.search))){navigate('home');return;}
   if(ready&&['INITIAL_SESSION','SIGNED_IN','SIGNED_OUT','PASSWORD_RECOVERY','USER_UPDATED'].includes(event))render();
  });
  const onRouteChange=()=>render();window.addEventListener('hashchange',onRouteChange);window.addEventListener('popstate',onRouteChange);
