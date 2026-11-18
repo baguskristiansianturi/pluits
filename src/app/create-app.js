@@ -19,7 +19,7 @@ export function createApp({root,authService}) {
   if(route==='discover'){mountDiscoverPage({root,user:session?.user||null});return;}
   if(route==='dashboard'){mountDashboardPage({root,user:session.user,onSignOut:()=>authService.signOut()});return;}
   if(route==='terms'||route==='privacy'){mountPolicyPage({root,type:route});return;}
-  mountAuthPage({root,mode:route,authService,hasRecoverySession:Boolean(session),onAuthenticated(nextSession){session=nextSession;navigate('dashboard');}});
+  mountAuthPage({root,mode:route,authService,hasRecoverySession:Boolean(session),onAuthenticated(nextSession){session=nextSession;navigate('home');}});
  }
  const unsubscribe=authService.subscribe((event,nextSession)=>{
   session=nextSession;
