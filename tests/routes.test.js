@@ -3,46 +3,54 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { resolveRoute, resolveAuthenticatedRoute } from '../src/app/routes.js';
 import { APP_ROUTES, routeHref } from '../src/config/paths.js';
+
 test('empty URL starts at public home while unknown routes retain safe registration fallback', () => {
   assert.equal(resolveRoute('', ''), 'home');
   assert.equal(resolveRoute('#/old-home', ''), 'register');
+  assert.equal(resolveRoute('#/workspace', ''), 'register');
 });
+
 test('auth routes and password recovery callback resolve correctly', () => {
   assert.equal(resolveRoute('#/login', ''), 'login');
   assert.equal(resolveRoute('#/forgot', ''), 'forgot');
   assert.equal(resolveRoute('#/register', ''), 'register');
   assert.equal(resolveRoute('#/home', '?auth=reset'), 'reset');
 });
-test('all page addresses come from one route registry', () => {
-  assert.deepEqual(Object.keys(APP_ROUTES), ['home','dashboard','register','login','forgot','reset','workspace','terms','privacy']);
-  for (const [route, path] of Object.entries(APP_ROUTES)) { assert.equal(routeHref(route), '#/' + path); assert.equal(resolveRoute(routeHref(route), ''), route); }
+
+test('the public route registry contains one Dashboard and no Workspace page', () => {
+  assert.deepEqual(Object.keys(APP_ROUTES), ['home','dashboard','register','login','forgot','reset','terms','privacy']);
+  for (const [route, path] of Object.entries(APP_ROUTES)) {
+    assert.equal(routeHref(route), '#/' + path);
+    assert.equal(resolveRoute(routeHref(route), ''), route);
+  }
+  assert.throws(() => routeHref('workspace'), /Unknown PLUITS route/);
 });
+
 test('shared brand renderer defaults to the global home route', async () => {
   const source = await readFile(new URL('../src/design-system/page-shell.js', import.meta.url), 'utf8');
   assert.match(source, /routeHref\('home'\)/);
 });
+
 test('legal document addresses resolve through the same route registry', () => {
   assert.equal(resolveRoute(routeHref('terms'), ''), 'terms');
   assert.equal(resolveRoute(routeHref('privacy'), ''), 'privacy');
 });
-test('Dashboard is a separate protected route for signed-in users', () => {
+
+test('Dashboard is the only protected post-login destination', () => {
   assert.equal(resolveAuthenticatedRoute('dashboard', false), 'login');
   assert.equal(resolveAuthenticatedRoute('dashboard', true), 'dashboard');
+  assert.equal(resolveRoute('#/workspace', ''), 'register');
 });
 
-test('workspace is guarded by a session and remains separate from Dashboard', () => {
-  assert.equal(resolveAuthenticatedRoute('workspace', false), 'login');
-  assert.equal(resolveAuthenticatedRoute('workspace', true), 'workspace');
-  assert.notEqual(routeHref('dashboard'), routeHref('workspace'));
-});
 test('the same global home route renders for guests and active users without redirecting away', () => {
   assert.equal(resolveAuthenticatedRoute('home', false), 'home');
   assert.equal(resolveAuthenticatedRoute('home', true), 'home');
 });
-test('signed-in users are sent to Global Home from guest auth screens', () => {
-  assert.equal(resolveAuthenticatedRoute('register', true), 'home');
-  assert.equal(resolveAuthenticatedRoute('login', true), 'home');
-  assert.equal(resolveAuthenticatedRoute('forgot', true), 'home');
+
+test('authenticated users are sent to Dashboard from guest auth screens', () => {
+  assert.equal(resolveAuthenticatedRoute('register', true), 'dashboard');
+  assert.equal(resolveAuthenticatedRoute('login', true), 'dashboard');
+  assert.equal(resolveAuthenticatedRoute('forgot', true), 'dashboard');
 });
 
 test('navbar-to-content spacing has one global design-system rule', async () => {
@@ -85,8 +93,21 @@ test('signed-in profile avatar on Global Home opens the protected Dashboard rout
   ]);
   assert.match(home, /class="home-account-link" href="' \+ routeHref\('dashboard'\)/);
   assert.match(home, /aria-label="Buka Dashboard pengguna"/);
+  assert.match(app, /navigate\('dashboard'\)/);
   assert.match(app, /mountDashboardPage/);
+  assert.doesNotMatch(app, /mountWorkspacePage|workspace-page/);
   assert.match(dashboard, /DASHBOARD PENGGUNA/);
-  assert.match(dashboard, /Aktivitas Anda/);
-  assert.match(dashboard, /Pemberitahuan/);
+  assert.match(dashboard, /Aplikasi & layanan/);
+  assert.match(dashboard, /Social Media/);
+  assert.match(dashboard, /Marketplace/);
+  assert.match(dashboard, /Pekerjaan & aktivitas/);
+});
+
+test('Dashboard shows honest availability states instead of invented operational data', async () => {
+  const dashboard = await readFile(new URL('../src/features/dashboard/dashboard-page.js', import.meta.url), 'utf8');
+  assert.match(dashboard, /TAHAP PENGEMBANGAN/);
+  assert.match(dashboard, /Belum ada pekerjaan yang terhubung/);
+  assert.match(dashboard, /Belum ada aktivitas yang tercatat/);
+  assert.match(dashboard, /Pusat pemberitahuan belum terhubung/);
+  assert.doesNotMatch(dashboard, /\b\d+\s*(posts|orders|products|notifications)\b/i);
 });
