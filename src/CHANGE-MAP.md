@@ -21,7 +21,7 @@ Scope: Account access, Global Home, Circle Home, Jelajah, and authenticated User
 | Supabase client | src/lib/supabase/client.js | lib/supabase | Auth service |
 | Global base styles | src/styles/global.css | styles | Entire frontend |
 
-## Route map
+## Runtime route map
 - Empty URL/hash and #/home → Global Home for guests and authenticated users.
 - PLUITS logo from public social surfaces → #/home.
 - #/circle → personalized Circle Home.
@@ -34,11 +34,19 @@ Scope: Account access, Global Home, Circle Home, Jelajah, and authenticated User
 ## Navigation contract
 Mobile navigation exposes Beranda (Circle), Jelajah, create hub, Pesan, and Akun. Initial Pesan and Akun entry points lead to the authenticated Dashboard surface until dedicated destinations are connected. The create hub is an honest capability preview; unavailable publishing actions remain disabled.
 
-## Shared UI constraints
-Global Home, Circle, and Jelajah consume the shared page shell and existing tokens. Keep canonical navbar-to-content gap at 50px. Do not alter Dashboard composition, auth, Supabase services, or global tokens in this increment.
+## Backend contracts and protected surfaces
+This increment changes frontend composition and adds two public-facing discovery routes only. Existing Supabase Auth, SDK pin, browser publishable key, database triggers, profiles, wallets, user data, RLS, migrations, SMTP, production Auth configuration, and Dashboard composition remain unchanged. No database schema, RLS, RPC, migration, account record, transaction record, or production data write is added. Frontend visibility is not an authorization boundary.
 
-## Data truthfulness
-Do not fabricate people, stories, posts, live streams, products, nearby businesses, notifications, cart data, or transactions. Show honest empty states until owning services are integrated.
+## Change rules
+Keep feature changes within their owner. Shared route/brand changes require consumer impact review. Preserve Auth recovery and session persistence. Do not change Supabase configuration, migrations, database records, RLS, triggers, Dashboard behavior, or global design tokens in this scope.
 
-## Validation
-Run npm test and npm run build. Manually verify desktop/tablet/mobile, sticky header-to-tabs handoff in both directions, tab scroll and active state, full-bleed rail edges, no document horizontal overflow, bottom navigation and safe area. Real Android visual acceptance and live service integration remain separate gates.
+## Required verification
+Run npm test and npm run build. Verify Global Home, Circle, and Jelajah routes; sticky header-to-tabs handoff in both directions; tab scroll and active state; full-bleed rail edges; no document horizontal overflow; bottom navigation and safe area; guest/authenticated behavior; and desktop/tablet/mobile layouts.
+
+## Current limitations
+- Signup remains disabled unless explicitly enabled after readiness review.
+- Social content, Stories, Live, Marketplace, Geo Directory, nearby businesses, notifications, cart data, and product feeds are not yet connected to operational data services.
+- Create actions remain disabled until their publishing services are available.
+- Pesan and Akun navigation currently enter the Dashboard surface; dedicated destinations are not yet connected.
+- Location permission request flow is not implemented; Circle displays a clear no-location fallback.
+- Real Android visual acceptance and founder product approval remain NOT TESTED / NOT READY.
