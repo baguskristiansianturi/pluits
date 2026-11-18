@@ -35,7 +35,6 @@ export function mountProfilePage({root,user=null}={}) {
  const initial=name.trim().charAt(0).toUpperCase()||'P';
  let ownedStores=[];
  let professionalServices=[];
- let servicePortfolio=[];
  let profileLoadController=new AbortController();
  const businessTabs=()=>{
   const tabs=[];
@@ -92,11 +91,6 @@ export function mountProfilePage({root,user=null}={}) {
   if(profileLoadController.signal.aborted)return;
   if(!storesResult.error)ownedStores=storesResult.data||[];
   if(!servicesResult.error)professionalServices=servicesResult.data||[];
-  const ids=professionalServices.map(item=>item.id);
-  if(ids.length){
-   const portfolioResult=await supabase.from('professional_portfolio_items').select('id,professional_id,title,description,external_url,display_order').in('professional_id',ids).eq('is_published',true).order('display_order');
-   if(!profileLoadController.signal.aborted&&!portfolioResult.error)servicePortfolio=portfolioResult.data||[];
-  }
   if(!profileLoadController.signal.aborted){
    root.querySelector('.social-profile-tabs')?.insertAdjacentHTML('beforeend',businessTabs());
    const panels=root.querySelectorAll('[data-profile-panel]');
@@ -126,7 +120,7 @@ export function mountProfilePage({root,user=null}={}) {
   const expanded=quick.getAttribute('aria-expanded')==='true';
   quick.setAttribute('aria-expanded',String(!expanded));
   panel.hidden=expanded;
- });
+ },{signal:profileLoadController.signal});
  return ()=>profileLoadController.abort();
 }
 export function mountSettingsPage({root,user=null,onSignOut}={}) {
