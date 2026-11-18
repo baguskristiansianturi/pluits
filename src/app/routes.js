@@ -9,7 +9,7 @@ export function resolveRoute(hash = '', search = '') {
   return ROUTES.has(route) ? route : 'register';
 }
 export function resolveAuthenticatedRoute(route, hasSession) {
-  if (['dashboard','social'].includes(route) && !hasSession) return 'login';
+  if (['dashboard','social','messages','profile'].includes(route) && !hasSession) return 'login';
   if (route === 'circle') return 'social';
   if (hasSession && ['register', 'login', 'forgot'].includes(route)) return 'social';
   return route;
