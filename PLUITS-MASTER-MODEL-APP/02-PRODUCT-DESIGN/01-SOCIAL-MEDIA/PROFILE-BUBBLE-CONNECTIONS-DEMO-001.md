@@ -12,13 +12,16 @@ Demonstrate the proposed PLUITS floating social-bubble visual: differently sized
 - Render inside the existing authenticated profile, above the identity card, visually bridging the cover and identity area.
 - The cover is a temporary visual placeholder, not a persisted user cover and not the final Living Cover implementation.
 - Bubbles represent demo categories only: Pasangan, Keluarga, Sahabat, and Circle.
+- The prototype uses original vector portrait illustrations so face deformation can be evaluated before real profile photos are connected.
+- Bubble Connections is intended as a selectable profile-cover theme, not a mandatory profile layout. Multiple cover themes may be offered later.
+- Proposed commercial entitlement: Gold membership includes this theme at no additional charge for the one-year Gold membership period. This is a product rule for later entitlement/billing implementation, not an active access gate in this demo.
 - Do not imply that any real account is connected. The demo note must remain visible.
 - No account invitations, relationship management, persistence, profile routing, or settings are implemented.
 
 ## Interaction and motion
 - Each bubble has a distinct size and simulated mass.
 - Bubbles drift gently inside a clipped, bounded field.
-- Collision response separates overlapping circles, transfers momentum, and applies a brief directional squash/stretch before elastic recovery.
+- Collision response uses low-restitution momentum transfer and partial overlap correction so the surfaces feel soft and briefly meld at contact. A thin translucent edge and subtle shared contact glow avoid a hard outlined-ball appearance. Directional squash/stretch is applied to the complete bubble element, so the portrait artwork deforms together with the bubble before elastic recovery.
 - Users can drag bubbles with pointer/touch input.
 - Optional device-orientation input is activated only after an explicit user tap; if unsupported or denied, autonomous motion and dragging remain available.
 - Tapping a bubble announces its demo category in an accessible live status region.
@@ -38,6 +41,7 @@ Demonstrate the proposed PLUITS floating social-bubble visual: differently sized
 - Existing design-system spacing, color, radius, and typography tokens are reused. No new global tokens or third-party runtime dependencies.
 
 ## Validation and limitations
+- The Gold one-year inclusion rule is documented as a proposed entitlement only; the current demo remains visible to all tiers while being evaluated.
 - Prototype only; no production relationship data or real connected profiles.
 - Device-orientation behavior depends on browser support and user permission.
 - Validate desktop and mobile widths, touch dragging, keyboard focus, reduced-motion, hidden-tab pause, and route teardown.

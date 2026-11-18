@@ -192,3 +192,15 @@
 .social-profile-card{margin-top:0}
 @media(max-width:480px){.social-profile-bubble-field{height:104px;margin-top:-52px}.social-profile-bubble-caption{align-items:flex-start;flex-direction:column;gap:7px}.social-profile-bubble-caption button{min-height:32px}}
 @media(prefers-reduced-motion:reduce){.social-profile-bubble{will-change:auto;transition:none}}
+
+
+/* Soft portrait bubbles: translucent hairline edges and shared elastic contact. */
+.social-profile-bubble{border:1px solid rgba(255,255,255,.62);background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(219,239,235,.78));box-shadow:0 5px 14px rgba(23,43,69,.12),inset 0 1px 3px rgba(255,255,255,.82);transition:box-shadow .12s ease,filter .12s ease}
+.social-profile-bubble.is-contacting{box-shadow:0 3px 10px rgba(23,43,69,.10),0 0 12px rgba(190,235,226,.58),inset 0 1px 4px rgba(255,255,255,.9);filter:saturate(1.05)}
+.social-profile-bubble-avatar.is-portrait{display:block;overflow:hidden;width:100%;height:100%;background:transparent}
+.social-profile-bubble-avatar.is-portrait svg{display:block;width:100%;height:100%;overflow:visible;transform-origin:50% 50%}
+.social-profile-bubble:nth-child(2) .social-profile-bubble-avatar svg{filter:hue-rotate(12deg)}
+.social-profile-bubble:nth-child(3) .social-profile-bubble-avatar svg{filter:hue-rotate(-18deg)}
+.social-profile-bubble:nth-child(4) .social-profile-bubble-avatar svg{filter:hue-rotate(28deg)}
+.social-profile-bubble:nth-child(5) .social-profile-bubble-avatar svg{filter:hue-rotate(-32deg)}
+@media(prefers-reduced-motion:reduce){.social-profile-bubble,.social-profile-bubble.is-contacting{transition:none}}
