@@ -96,18 +96,37 @@ test('signed-in profile avatar on Global Home opens the protected Dashboard rout
   assert.match(app, /navigate\('dashboard'\)/);
   assert.match(app, /mountDashboardPage/);
   assert.doesNotMatch(app, /mountWorkspacePage|workspace-page/);
-  assert.match(dashboard, /DASHBOARD PENGGUNA/);
-  assert.match(dashboard, /Aplikasi & layanan/);
+  assert.match(dashboard, /PUSAT KENDALI PLUITS/);
   assert.match(dashboard, /Social Media/);
   assert.match(dashboard, /Marketplace/);
-  assert.match(dashboard, /Pekerjaan & aktivitas/);
+  assert.match(dashboard, /data-resize="left"/);
+  assert.match(dashboard, /data-resize="right"/);
+  assert.match(dashboard, /data-toggle-left/);
+  assert.match(dashboard, /data-toggle-right/);
+  assert.match(dashboard, /data-select-tab/);
+  assert.match(dashboard, /Profil Sosial/);
+  assert.match(dashboard, /Akun Bisnis/);
+  assert.match(dashboard, /Transaksi/);
 });
 
-test('Dashboard shows honest availability states instead of invented operational data', async () => {
+test('Dashboard provides personal, business, transaction, and social management surfaces', async () => {
   const dashboard = await readFile(new URL('../src/features/dashboard/dashboard-page.js', import.meta.url), 'utf8');
-  assert.match(dashboard, /TAHAP PENGEMBANGAN/);
-  assert.match(dashboard, /Belum ada pekerjaan yang terhubung/);
-  assert.match(dashboard, /Belum ada aktivitas yang tercatat/);
-  assert.match(dashboard, /Pusat pemberitahuan belum terhubung/);
+  const css = await readFile(new URL('../src/features/dashboard/dashboard-page.css', import.meta.url), 'utf8');
+  for (const label of ['Store','Service','Pembelian','Penjualan','Privasi','Alamat','Rekening','Feed','Story','Reels','Live','Blog','AURELIA','STAVERO','BREWNOX','ROVANTA','LUNELLE']) {
+    assert.ok(dashboard.includes(label), 'Dashboard is missing ' + label);
+  }
+  assert.match(css, /grid-template-columns:var\(--dashboard-left-width/);
+  assert.match(css, /max-width:767px/);
+  assert.match(dashboard, /data-social-view="inbox"/);
+  assert.match(dashboard, /data-notifications/);
+  assert.match(dashboard, /data-transaction-status/);
+});
+
+test('Dashboard shows truthful empty states and does not fabricate user activity or transactions', async () => {
+  const dashboard = await readFile(new URL('../src/features/dashboard/dashboard-page.js', import.meta.url), 'utf8');
+  for (const emptyState of ['Belum ada proyek aktif','Belum ada Story','Belum ada aktivitas','Inbox belum terhubung','Belum ada notifikasi','Belum ada pembelian','Belum ada penjualan']) {
+    assert.ok(dashboard.includes(emptyState), 'Missing truthful empty state: ' + emptyState);
+  }
   assert.doesNotMatch(dashboard, /\b\d+\s*(posts|orders|products|notifications)\b/i);
+  assert.doesNotMatch(dashboard, /fake|dummy|mock data/i);
 });
