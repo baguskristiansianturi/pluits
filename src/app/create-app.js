@@ -3,7 +3,6 @@ import { routeHref } from '../config/paths.js';
 import { mountHomePage } from '../features/home/home-page.js';
 import { mountDashboardPage } from '../features/dashboard/dashboard-page.js';
 import { mountAuthPage } from '../features/auth/auth-page.js';
-import { mountWorkspacePage } from '../features/workspace/workspace-page.js';
 import { mountPolicyPage } from '../features/legal/policy-page.js';
 export function createApp({ root, authService }) {
   let session = null;
@@ -26,12 +25,8 @@ export function createApp({ root, authService }) {
       mountDashboardPage({ root, user: session.user, onSignOut: () => authService.signOut() });
       return;
     }
-    if (route === 'workspace') {
-      mountWorkspacePage({ root, user: session.user, onSignOut: () => authService.signOut() });
-      return;
-    }
     if (route === 'terms' || route === 'privacy') { mountPolicyPage({ root, type: route }); return; }
-    mountAuthPage({ root, mode: route, authService, hasRecoverySession: Boolean(session), onAuthenticated(nextSession) { session = nextSession; navigate('home'); } });
+    mountAuthPage({ root, mode: route, authService, hasRecoverySession: Boolean(session), onAuthenticated(nextSession) { session = nextSession; navigate('dashboard'); } });
   }
   const unsubscribe = authService.subscribe((event, nextSession) => {
     session = nextSession;
@@ -40,6 +35,7 @@ export function createApp({ root, authService }) {
       url.searchParams.set('auth', 'reset');
       window.history.replaceState(null, '', url);
     }
+    if (event === 'SIGNED_OUT' && ready && resolveRoute(window.location.hash, window.location.search) === 'dashboard') { navigate('home'); return; }
     if (ready && ['INITIAL_SESSION', 'SIGNED_IN', 'SIGNED_OUT', 'PASSWORD_RECOVERY', 'USER_UPDATED'].includes(event)) render();
   });
   const onRouteChange = () => render();

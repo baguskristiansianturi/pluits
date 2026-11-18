@@ -1,16 +1,20 @@
 flowchart TB
-  U[PLUITS User] --> H[PLUITS Main Homepage / App Shell]
-  H --> A[App Launcher & Global Navigation]
+  G[Guest] --> H[PLUITS Global Home]
+  H --> L[Login]
+  L --> D[User Dashboard]
+  U[Authenticated User] --> D
+  H -->|Signed-in account avatar| D
+  D --> A[Application Launcher]
   A --> S[Social Media]
   A --> M[Marketplace]
+  M --> ST[Store]
+  M --> RC[Restaurant & Cafe]
   A --> T[Tickets & Accommodation]
-  A --> G[Geo Directory]
-  A --> L[Logistics & Transportation]
+  A --> GD[Geo Directory]
+  A --> LT[Logistics & Transportation]
   A --> W[Digital Wallet]
-  H --> I[One PLUITS Identity & Membership]
-  I -. access and identity .-> S
-  I -. access and identity .-> M
-  I -. access and identity .-> T
-  I -. access and identity .-> G
-  I -. access and identity .-> L
-  I -. access and identity .-> W
+  D --> P[Work & Activity Overview]
+  D --> N[Cross-application Notifications]
+  D --> I[One PLUITS Identity & Membership]
+  I -. access and identity .-> A
+  B[PLUITS Logo] --> H

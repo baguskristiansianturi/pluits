@@ -6,7 +6,7 @@ The first frontend screen establishes a small, reviewable foundation in the exac
 2. Icons — local inline SVG registry in icons.js; no unreviewed external icon dependency.
 3. Colors — semantic tokens derived from the existing PLUITS teal brand mark and neutral ink/surface roles.
 4. Behavior — validation, loading, error, password visibility, confirmation-pending, keyboard focus, and auth-state transitions.
-5. Layouts — LAY-AUTH-SPLIT-001, LAY-USER-DASHBOARD-001, and LAY-WORKSPACE-BOARD-001 in layouts.js.
+5. Layouts — LAY-AUTH-SPLIT-001 and LAY-USER-DASHBOARD-001 in layouts.js.
 
 All token values, icon IDs, and layouts are marked PROVISIONAL until reviewed and approved. The feature screens consume these tokens and scoped styles; they must not create competing global scales.
 
@@ -39,7 +39,7 @@ The page vertical rhythm is owned by `tokens.css` and applied by `page-shell.css
 - Header-to-content distance: `--pl-shell-header-content-gap` / mobile counterpart.
 - Content-to-footer distance: `--pl-shell-content-footer-gap` / mobile counterpart.
 - Footer minimum height: shared desktop/mobile tokens.
-- Reading, standard, and workspace maximum widths: shared container tokens.
+- Reading and standard maximum widths: shared container tokens.
 
 Every page with shared chrome uses `.pl-page-shell`; every page body uses `.pl-page-main`. The main region owns both vertical gaps and expands to keep the footer at the bottom on short pages. Feature CSS may set its inner content width and composition, but MUST NOT add page-level top/bottom margins or padding that duplicate shell spacing. Page-specific section spacing is a separate content-layout concern, not shell geometry.
 
@@ -62,4 +62,4 @@ Every header/navigation rendered through `renderPageHeader()` receives a soft bo
 
 ## Global brand destination
 
-The shared `renderBrand()` renderer always targets the canonical `#/home` Beranda for guests and authenticated users. On Global Home, the signed-in account avatar/name links to the separate protected `#/dashboard` user Dashboard. The internal `#/workspace` remains a separate development workspace. Do not conflate these destinations.
+The shared `renderBrand()` renderer always targets the canonical `#/home` Beranda for guests and authenticated users. On Global Home, the signed-in account avatar/name links to the separate protected `#/dashboard` user Dashboard. Dashboard is the only post-login control center. Workspace is an internal development term and is not exposed as a separate product page or route.
