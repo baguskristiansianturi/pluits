@@ -46,3 +46,8 @@ Demonstrate the proposed PLUITS floating social-bubble visual: differently sized
 - Device-orientation behavior depends on browser support and user permission.
 - Validate desktop and mobile widths, touch dragging, keyboard focus, reduced-motion, hidden-tab pause, and route teardown.
 - Revisit performance and collision tuning on low-memory Android devices before production approval.
+
+
+## Access from profile settings
+- A dedicated `Tema Profil` category in account settings links users back to the profile preview so they can try Bubble Connections.
+- The preview is free to try during evaluation. This does not activate real account pairing, relationship persistence, or subscription entitlements.

@@ -238,6 +238,7 @@ export function mountSettingsPage({root,user=null,onSignOut}={}) {
   {id:'account',label:'Akun',icon:'user',title:'Akun & keamanan',desc:'Informasi akun yang digunakan untuk masuk ke PLUITS.'},
   {id:'privacy',label:'Privasi',icon:'lock',title:'Privasi & visibilitas',desc:'Kontrol profil publik dan bagaimana orang menemukan Anda.'},
   {id:'notifications',label:'Notifikasi',icon:'bell',title:'Notifikasi',desc:'Preferensi pemberitahuan dari aktivitas PLUITS.'},
+  {id:'cover',label:'Tema Profil',icon:'image',title:'Tema & sampul profil',desc:'Pratinjau pilihan tampilan profil dan efek visual.'},
   {id:'app',label:'Aplikasi',icon:'book',title:'Preferensi aplikasi',desc:'Pengaturan pengalaman penggunaan aplikasi PLUITS.'}
  ];
  let active='account';
@@ -249,6 +250,8 @@ export function mountSettingsPage({root,user=null,onSignOut}={}) {
    ? '<div class="social-settings-detail-row"><span>Visibilitas profil</span><strong>Pengaturan server belum tersedia</strong></div><div class="social-settings-note">Kontrol publik / privat belum diaktifkan karena belum ada penyimpanan preferensi privasi yang terhubung. Status profil tidak akan diubah hanya dari tampilan ini.</div>'
    : active==='notifications'
    ? '<div class="social-settings-detail-row"><span>Notifikasi aplikasi</span><strong>Belum terhubung</strong></div><div class="social-settings-note">Preferensi notifikasi akan tersedia setelah layanan notifikasi PLUITS diaktifkan.</div>'
+   : active==='cover'
+   ? '<div class="social-settings-detail-row"><span>Bubble Connections</span><strong>Demo gratis</strong></div><p class="social-settings-note">Coba tema sampul dengan gelembung koneksi yang bergerak, bertabrakan lembut, dan merespons kemiringan HP. Ini masih pratinjau visual; belum memasangkan akun atau menyimpan hubungan nyata.</p><a class="social-settings-shortcut" href="'+routeHref('profile')+'">Buka Profil & coba demo →</a><div class="social-settings-note">Tema ini direncanakan termasuk tanpa biaya tambahan selama satu tahun keanggotaan Gold. Aturan langganan belum diaktifkan.</div>'
    : '<div class="social-settings-detail-row"><span>Pengalaman aplikasi</span><strong>Versi aplikasi web</strong></div><div class="social-settings-note">PLUITS menggunakan tampilan aplikasi yang responsif. Pengaturan bahasa dan tampilan lanjutan belum diaktifkan.</div>';
   root.innerHTML=shell('Pengaturan','Pusat pengaturan akun dan pengalaman aplikasi Anda.','profile',
    '<section class="social-settings-layout"><nav class="social-settings-menu" aria-label="Kategori pengaturan">'+sections.map(item=>'<button type="button" data-settings-tab="'+item.id+'" class="'+(active===item.id?'is-active':'')+'">'+renderIcon(item.icon)+'<span>'+item.label+'</span><b>›</b></button>').join('')+'</nav>'
