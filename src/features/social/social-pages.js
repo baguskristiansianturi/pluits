@@ -13,7 +13,7 @@ export function mountMessagesPage({root}={}) {
  root.innerHTML=shell('Pesan','Pusat percakapan dan komunikasi Anda di PLUITS.','messages','<section class="social-home-section"><div class="social-section-heading"><h2>Kotak masuk</h2></div>'+emptyPanel('Belum ada percakapan','Pesan dari pengguna dan aktivitas komunikasi akan tampil di sini setelah layanan pesan diaktifkan.')+'</section>');
 }
 export function mountProfilePage({root,user=null}={}) {
- const safe=value=>String(value??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c]));
+ const safe=value=>String(value??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
  const email=safe(user?.email||''); const name=safe(user?.user_metadata?.display_name||user?.user_metadata?.full_name||'Pengguna PLUITS');
  root.innerHTML=shell('Profil','Kelola identitas publik dan konten yang tampil di profil Anda.','profile','<section class="social-home-section"><div class="social-profile-card"><div class="social-profile-avatar">'+name.slice(0,1).toUpperCase()+'</div><div><h2>'+name+'</h2><p>'+email+'</p><span>Profil pribadi PLUITS</span></div></div><div class="social-profile-tabs">'+['Feed','Reels','Trips','Blog','Live'].map(x=>'<button type="button">'+x+'</button>').join('')+'</div>'+emptyPanel('Belum ada konten profil','Postingan, Reels, Trips, Blog, dan Live yang Anda publikasikan akan muncul di sini.')+'</section>');
 }
