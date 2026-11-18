@@ -220,3 +220,6 @@
 }
 .dashboard-text-action{min-height:32px;padding:0 10px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-sm);background:var(--pl-color-surface);color:var(--pl-color-brand);font-size:9px;font-weight:750}
 .dashboard-text-action:hover{border-color:var(--pl-color-brand);color:var(--pl-color-ink)}
+
+.dashboard-order-filters button{flex:0 0 auto;padding:0;border:0;background:transparent;color:inherit;font:inherit;white-space:nowrap}
+.dashboard-order-filters button.is-current{color:var(--pl-color-brand);font-weight:800}
