@@ -132,7 +132,7 @@ export function mountProfilePage({root,user=null}={}) {
   panel.hidden=expanded;
  },{signal:profileLoadController.signal});
 
- let bubbleFrame=0,bubbleRunning=false,bubbleLastTime=0,bubbleTiltX=0,bubbleTiltY=0;
+ let bubbleFrame=0,bubbleRunning=false,bubbleLastTime=0,bubbleTiltX=0,bubbleTiltY=0,bubbleWidth=0,bubbleHeight=0;
  const bubbleField=root.querySelector('[data-bubble-field]');
  const bubbleStatus=root.querySelector('[data-bubble-status]');
  const bubbleMotionButton=root.querySelector('[data-bubble-motion]');
@@ -142,18 +142,19 @@ export function mountProfilePage({root,user=null}={}) {
  const resizeBubbles=()=>{
   if(!bubbleField)return;
   const rect=bubbleField.getBoundingClientRect();
+  bubbleWidth=rect.width;bubbleHeight=rect.height;
   bubbleStates.forEach((state,index)=>{
    state.radius=state.element.offsetWidth/2;
    if(!state.initialized){state.x=rect.width*[.23,.52,.73,.39][index];state.y=rect.height*[.48,.29,.66,.78][index];state.initialized=true;}
    state.x=Math.max(state.radius,Math.min(rect.width-state.radius,state.x));
    state.y=Math.max(state.radius,Math.min(rect.height-state.radius,state.y));
    state.mass=state.radius*state.radius;
+   state.element.style.left=state.x+'px';state.element.style.top=state.y+'px';
   });
  };
  const renderBubbles=()=>{
-  const rect=bubbleField?.getBoundingClientRect();
-  if(!rect||!rect.width||!rect.height)return;
-  const width=rect.width,height=rect.height;
+  if(!bubbleWidth||!bubbleHeight)return;
+  const width=bubbleWidth,height=bubbleHeight;
   bubbleStates.forEach(state=>{
    if(!state.dragging){
     state.vx+=bubbleTiltX*.00055;state.vy+=bubbleTiltY*.00055;
@@ -191,7 +192,7 @@ export function mountProfilePage({root,user=null}={}) {
   const now=performance.now();if(now-bubbleLastTime>16){renderBubbles();bubbleLastTime=now;}
   bubbleFrame=requestAnimationFrame(animateBubbles);
  };
- const startBubbles=()=>{if(reducedMotion||bubbleRunning||!bubbleStates.length)return;resizeBubbles();bubbleRunning=true;bubbleFrame=requestAnimationFrame(animateBubbles);};
+ const startBubbles=()=>{if(!bubbleStates.length)return;resizeBubbles();if(reducedMotion||bubbleRunning)return;bubbleRunning=true;bubbleFrame=requestAnimationFrame(animateBubbles);};
  const stopBubbles=()=>{bubbleRunning=false;if(bubbleFrame)cancelAnimationFrame(bubbleFrame);bubbleFrame=0;};
  const orientationHandler=event=>{bubbleTiltX=Math.max(-25,Math.min(25,event.gamma||0));bubbleTiltY=Math.max(-25,Math.min(25,event.beta||0));};
  const enableDeviceMotion=async()=>{
