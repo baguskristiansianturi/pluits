@@ -36,10 +36,10 @@ export function mountProfilePage({root,user=null}={}) {
  const bubbleDemo='<section class="social-profile-bubble-demo" aria-label="Demo Bubble Connections">'
   +'<div class="social-profile-cover"><span class="social-profile-cover-label">LIVING COVER · DEMO</span><span class="social-profile-cover-glow" aria-hidden="true"></span></div>'
   +'<div class="social-profile-bubble-field" data-bubble-field aria-label="Simulasi gelembung koneksi sosial">'
-  +'<button type="button" class="social-profile-bubble is-large" data-bubble data-name="Pasangan" data-description="Contoh koneksi pasangan" aria-label="Demo gelembung Pasangan"><span class="social-profile-bubble-avatar">P</span></button>'
-  +'<button type="button" class="social-profile-bubble is-medium" data-bubble data-name="Keluarga" data-description="Contoh koneksi keluarga" aria-label="Demo gelembung Keluarga"><span class="social-profile-bubble-avatar">K</span></button>'
-  +'<button type="button" class="social-profile-bubble is-small" data-bubble data-name="Sahabat" data-description="Contoh koneksi sahabat" aria-label="Demo gelembung Sahabat"><span class="social-profile-bubble-avatar">S</span></button>'
-  +'<button type="button" class="social-profile-bubble is-tiny" data-bubble data-name="Circle" data-description="Contoh anggota lingkaran sosial" aria-label="Demo gelembung Circle"><span class="social-profile-bubble-avatar">C</span></button>'
+  +'<button type="button" class="social-profile-bubble is-large" data-bubble data-name="Pasangan" data-description="Contoh koneksi pasangan" aria-label="Demo gelembung Pasangan"><span class="social-profile-bubble-avatar is-portrait" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><defs><linearGradient id="bubble-face-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e8d9"/><stop offset="1" stop-color="#d6e8e4"/></linearGradient></defs><circle cx="32" cy="32" r="31" fill="url(#bubble-face-bg)"/><path d="M13 29c0-15 8-23 20-23 12 0 20 9 19 23-5-5-10-8-18-8-7 0-14 3-21 8Z" fill="#34444a"/><ellipse cx="32" cy="34" rx="17" ry="20" fill="#d99d78"/><path d="M22 32q3-3 6 0M36 32q3-3 6 0" fill="none" stroke="#46352f" stroke-width="2" stroke-linecap="round"/><circle cx="25" cy="36" r="1.5" fill="#3b302d"/><circle cx="39" cy="36" r="1.5" fill="#3b302d"/><path d="M27 44q5 5 10 0" fill="none" stroke="#8f5146" stroke-width="2" stroke-linecap="round"/><path d="M17 58q4-12 15-12t15 12" fill="#547b78"/></svg></span></button>'
+  +'<button type="button" class="social-profile-bubble is-medium" data-bubble data-name="Keluarga" data-description="Contoh koneksi keluarga" aria-label="Demo gelembung Keluarga"><span class="social-profile-bubble-avatar is-portrait" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><defs><linearGradient id="bubble-face-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e8d9"/><stop offset="1" stop-color="#d6e8e4"/></linearGradient></defs><circle cx="32" cy="32" r="31" fill="url(#bubble-face-bg)"/><path d="M13 29c0-15 8-23 20-23 12 0 20 9 19 23-5-5-10-8-18-8-7 0-14 3-21 8Z" fill="#34444a"/><ellipse cx="32" cy="34" rx="17" ry="20" fill="#d99d78"/><path d="M22 32q3-3 6 0M36 32q3-3 6 0" fill="none" stroke="#46352f" stroke-width="2" stroke-linecap="round"/><circle cx="25" cy="36" r="1.5" fill="#3b302d"/><circle cx="39" cy="36" r="1.5" fill="#3b302d"/><path d="M27 44q5 5 10 0" fill="none" stroke="#8f5146" stroke-width="2" stroke-linecap="round"/><path d="M17 58q4-12 15-12t15 12" fill="#547b78"/></svg></span></button>'
+  +'<button type="button" class="social-profile-bubble is-small" data-bubble data-name="Sahabat" data-description="Contoh koneksi sahabat" aria-label="Demo gelembung Sahabat"><span class="social-profile-bubble-avatar is-portrait" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><defs><linearGradient id="bubble-face-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e8d9"/><stop offset="1" stop-color="#d6e8e4"/></linearGradient></defs><circle cx="32" cy="32" r="31" fill="url(#bubble-face-bg)"/><path d="M13 29c0-15 8-23 20-23 12 0 20 9 19 23-5-5-10-8-18-8-7 0-14 3-21 8Z" fill="#34444a"/><ellipse cx="32" cy="34" rx="17" ry="20" fill="#d99d78"/><path d="M22 32q3-3 6 0M36 32q3-3 6 0" fill="none" stroke="#46352f" stroke-width="2" stroke-linecap="round"/><circle cx="25" cy="36" r="1.5" fill="#3b302d"/><circle cx="39" cy="36" r="1.5" fill="#3b302d"/><path d="M27 44q5 5 10 0" fill="none" stroke="#8f5146" stroke-width="2" stroke-linecap="round"/><path d="M17 58q4-12 15-12t15 12" fill="#547b78"/></svg></span></button>'
+  +'<button type="button" class="social-profile-bubble is-tiny" data-bubble data-name="Circle" data-description="Contoh anggota lingkaran sosial" aria-label="Demo gelembung Circle"><span class="social-profile-bubble-avatar is-portrait" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><defs><linearGradient id="bubble-face-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e8d9"/><stop offset="1" stop-color="#d6e8e4"/></linearGradient></defs><circle cx="32" cy="32" r="31" fill="url(#bubble-face-bg)"/><path d="M13 29c0-15 8-23 20-23 12 0 20 9 19 23-5-5-10-8-18-8-7 0-14 3-21 8Z" fill="#34444a"/><ellipse cx="32" cy="34" rx="17" ry="20" fill="#d99d78"/><path d="M22 32q3-3 6 0M36 32q3-3 6 0" fill="none" stroke="#46352f" stroke-width="2" stroke-linecap="round"/><circle cx="25" cy="36" r="1.5" fill="#3b302d"/><circle cx="39" cy="36" r="1.5" fill="#3b302d"/><path d="M27 44q5 5 10 0" fill="none" stroke="#8f5146" stroke-width="2" stroke-linecap="round"/><path d="M17 58q4-12 15-12t15 12" fill="#547b78"/></svg></span></button>'
   +'</div><div class="social-profile-bubble-caption"><span class="social-profile-bubble-status" data-bubble-status aria-live="polite">Pratinjau interaksi · sentuh gelembung atau geser perlahan</span><button type="button" data-bubble-motion>Aktifkan gerak HP</button></div>'
   +'<p class="social-profile-bubble-note">Demo visual · belum ada akun atau hubungan yang terhubung</p></section>';
  let ownedStores=[];
@@ -155,6 +155,7 @@ export function mountProfilePage({root,user=null}={}) {
  const renderBubbles=()=>{
   if(!bubbleWidth||!bubbleHeight)return;
   const width=bubbleWidth,height=bubbleHeight;
+  bubbleStates.forEach(state=>state.element.classList.remove('is-contacting'));
   bubbleStates.forEach(state=>{
    if(!state.dragging){
     state.vx+=bubbleTiltX*.00055;state.vy+=bubbleTiltY*.00055;
@@ -168,17 +169,18 @@ export function mountProfilePage({root,user=null}={}) {
   for(let i=0;i<bubbleStates.length;i++)for(let j=i+1;j<bubbleStates.length;j++){
    const a=bubbleStates[i],b=bubbleStates[j],dx=b.x-a.x,dy=b.y-a.y,distance=Math.hypot(dx,dy)||.001,minDistance=a.radius+b.radius;
    if(distance>=minDistance)continue;
+   a.element.classList.add('is-contacting');b.element.classList.add('is-contacting');
    const nx=dx/distance,ny=dy/distance,overlap=minDistance-distance,inverseA=1/a.mass,inverseB=1/b.mass,totalInverse=inverseA+inverseB;
-   if(!a.dragging){a.x-=nx*overlap*(inverseA/totalInverse);a.y-=ny*overlap*(inverseA/totalInverse);}
-   if(!b.dragging){b.x+=nx*overlap*(inverseB/totalInverse);b.y+=ny*overlap*(inverseB/totalInverse);}
+   if(!a.dragging){a.x-=nx*overlap*.68*(inverseA/totalInverse);a.y-=ny*overlap*.68*(inverseA/totalInverse);}
+   if(!b.dragging){b.x+=nx*overlap*.68*(inverseB/totalInverse);b.y+=ny*overlap*.68*(inverseB/totalInverse);}
    const relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
    if(relative<0){
-    const impulse=-(1+.72)*relative/totalInverse;
+    const impulse=-(1+.28)*relative/totalInverse;
     if(!a.dragging){a.vx-=impulse*inverseA*nx;a.vy-=impulse*inverseA*ny;}
     if(!b.dragging){b.vx+=impulse*inverseB*nx;b.vy+=impulse*inverseB*ny;}
-    const impact=Math.min(.22,Math.max(.06,Math.abs(relative)*.12));
-    if(Math.abs(nx)>Math.abs(ny)){a.sx=b.sx=1-impact;a.sy=b.sy=1+impact*.65;}
-    else{a.sy=b.sy=1-impact;a.sx=b.sx=1+impact*.65;}
+    const impact=Math.min(.28,Math.max(.045,Math.abs(relative)*.15));
+    if(Math.abs(nx)>Math.abs(ny)){a.sx=b.sx=1-impact;a.sy=b.sy=1+impact*.48;}
+    else{a.sy=b.sy=1-impact;a.sx=b.sx=1+impact*.48;}
    }
   }
   bubbleStates.forEach(state=>{
