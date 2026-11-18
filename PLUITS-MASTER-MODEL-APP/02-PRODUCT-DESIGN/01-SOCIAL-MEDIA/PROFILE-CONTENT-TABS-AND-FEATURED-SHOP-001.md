@@ -25,6 +25,9 @@ Toko and Layanan are separate conditional tabs. Never show a combined “Toko / 
 - Inactive icons/text use the design-system muted color.
 - Active icons/text and active indicator use the PLUITS brand token `--pl-color-brand`; no hard-coded black or one-off icon colors.
 - Feed remains icon-only. Other tabs keep their labels.
+- Every tab occupies an equal-width flex slot, using the existing `--pl-space-16` (64px) minimum basis so the center-to-center spacing remains consistent when optional Toko/Layanan tabs appear; overflow scrolls horizontally on narrow screens rather than compressing individual tabs unevenly.
+- The icon-to-label gap is shared by every labelled tab and consumes the existing `--pl-space-2` (8px) token. Feed remains icon-only and is centered in the same slot width.
+- Tab icons use one consistent 19px rendered size across viewport widths; the Feed glyph follows the same size to avoid a separate spacing rhythm.
 - Horizontal carousel behavior is reserved for genuinely long lists (more than three cards); do not force carousel presentation for one or two items.
 
 ## Store/service content and routing
