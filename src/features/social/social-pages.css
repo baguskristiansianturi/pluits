@@ -145,3 +145,28 @@
 .social-profile-tab-panel[hidden]{display:none}
 .social-profile-tab-panel{min-width:0}
 @media(max-width:420px){.social-profile-tabs button{gap:5px;padding-inline:6px;font-size:10px}.social-profile-tabs button.is-icon-only{flex-basis:48px}.social-profile-tabs button .ui-icon{width:16px;height:16px;flex-basis:16px}}
+
+/* Profile tab icon system: neutral by default, PLUITS brand accent when selected. */
+.social-profile-tabs{display:flex;align-items:stretch;justify-content:space-around;gap:0;margin:26px 0 18px;padding:0;border-top:1px solid var(--pl-color-border);border-bottom:1px solid var(--pl-color-border);overflow-x:auto;scrollbar-width:none}
+.social-profile-tabs::-webkit-scrollbar{display:none}
+.social-profile-tabs button{position:relative;display:flex;min-width:0;min-height:54px;flex:1;align-items:center;justify-content:center;gap:7px;padding:0 10px;border:0;border-radius:0;background:transparent;color:var(--pl-color-muted);font:inherit;font-size:11px;font-weight:650;white-space:nowrap;cursor:pointer;transition:color .18s ease,background .18s ease}
+.social-profile-tabs button .ui-icon{width:19px;height:19px;flex:0 0 19px;color:currentColor}
+.social-profile-tabs button.is-active{color:var(--pl-color-brand)}
+.social-profile-tabs button.is-active::after{position:absolute;right:12px;bottom:-1px;left:12px;height:2px;border-radius:2px;background:var(--pl-color-brand);content:""}
+.social-profile-tabs button.is-icon-only{flex:0 0 58px;padding:0}
+.social-profile-tabs button.is-icon-only .ui-icon{width:21px;height:21px;flex-basis:21px}
+.social-profile-tabs button:focus-visible{outline:2px solid var(--pl-color-brand);outline-offset:-3px}
+.social-profile-tab-panel[hidden]{display:none}
+.social-profile-tab-panel{min-width:0}
+.social-profile-business-card{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-md);background:var(--pl-color-surface)}
+.social-profile-business-icon{display:grid;width:44px;height:44px;flex:0 0 44px;place-items:center;border-radius:12px;background:var(--pl-color-brand-soft);color:var(--pl-color-brand)}
+.social-profile-business-icon .ui-icon{width:21px;height:21px}
+.social-profile-business-card strong{color:var(--pl-color-ink);font-size:13px}
+.social-profile-business-card p{margin:4px 0;color:var(--pl-color-muted);font-size:11px}
+.social-profile-business-card small{color:var(--pl-color-muted);font-size:10px;line-height:1.5}
+.social-profile-featured-list{display:flex;gap:12px;margin-top:14px;overflow-x:auto;scrollbar-width:thin}
+.social-profile-featured-list article{min-width:min(220px,72vw);padding:14px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-md);background:var(--pl-color-canvas)}
+.social-profile-featured-list strong{color:var(--pl-color-ink);font-size:12px}
+.social-profile-featured-list p{color:var(--pl-color-muted);font-size:11px}
+.social-profile-featured-list a{color:var(--pl-color-brand);font-size:11px;font-weight:700;text-decoration:none}
+@media(max-width:420px){.social-profile-tabs button{gap:5px;padding-inline:6px;font-size:10px}.social-profile-tabs button.is-icon-only{flex-basis:48px}.social-profile-tabs button .ui-icon{width:17px;height:17px;flex-basis:17px}}
