@@ -19,3 +19,9 @@ Status rancangan: PROPOSED → IN-DESIGN → REVIEW → APPROVED.
 
 ## Bubble Connections prototype
 - `PROFILE-BUBBLE-CONNECTIONS-DEMO-001.md` defines the temporary visual demo on the authenticated profile. It is visible to all account tiers for evaluation and does not create real relationship data or settings.
+
+
+### Bubble Connections — visual direction and entitlement proposal
+- Keep the current float and opt-in device-tilt behavior; refine only the soft-body collision feel, thin blended edge, and portrait deformation.
+- Treat Bubble Connections as one selectable cover theme among future alternatives.
+- Proposed offer: included at no extra charge for the one-year Gold membership period. This is not yet enforced by subscription entitlements.
