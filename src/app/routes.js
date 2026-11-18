@@ -9,7 +9,7 @@ export function resolveRoute(hash = '', search = '') {
   return ROUTES.has(route) ? route : 'register';
 }
 export function resolveAuthenticatedRoute(route, hasSession) {
-  if (route === 'workspace' && !hasSession) return 'login';
+  if (['dashboard', 'workspace'].includes(route) && !hasSession) return 'login';
   if (hasSession && ['register', 'login', 'forgot'].includes(route)) return 'home';
   return route;
 }
