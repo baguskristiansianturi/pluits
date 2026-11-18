@@ -3,9 +3,11 @@
 Khusus aplikasi utama PLUITS sebagai pembungkus/portal ekosistem: homepage utama, global navigation, app launcher, account/membership, notifikasi lintas aplikasi, deep links dan journey lintas aplikasi. Homepage wrapper tidak menggantikan homepage internal tiap aplikasi.
 
 ## Global Home
-- Public visitor page: `PAGE-GLOBAL-HOME-PUBLIC`, route `#/home`, layout `LAY-GLOBAL-HOME-001`.
-- The page introduces the platform, previews ecosystem domains, explains the single-identity direction, and provides login/registration entry points.
+- Global Home adalah satu halaman Beranda utama PLUITS pada route `#/home`.
+- Beranda memperkenalkan PLUITS sebagai ekosistem digital, menampilkan arah ruang-ruang ekosistem, menjelaskan satu identitas, dan memberikan jalur masuk/pendaftaran.
+- Pengunjung dan pengguna yang sudah login melihat komposisi homepage yang sama. Status sesi hanya menyesuaikan kontrol akun dan CTA; tidak mengubah Beranda menjadi profil pribadi, feed, atau dashboard.
 - Ecosystem cards and Android availability must reflect actual release state. Do not claim planned services are live or invent a Google Play listing.
-- Authenticated Global Home: `PAGE-GLOBAL-HOME-AUTHENTICATED`, selected at the same `#/home` route whenever a valid session is active. It greets the active account and acts as the cross-ecosystem platform entry point; it is not Circle or the Social Media personal space.
-- The internal development workspace remains a separate protected route and is not the authenticated Global Home.
-- These are two content states of one Global Home route and implementation: one renderer, one feature stylesheet, and the same shared header/brand/shell. See [Public Global Homepage](./PAGE-GLOBAL-HOME-PUBLIC.md) and [Authenticated Global Home](./PAGE-GLOBAL-HOME-AUTHENTICATED.md) for state-specific content and validation contracts.
+- PLUITS logo from every page always returns to the same `#/home` Beranda.
+- User Dashboard, Main Profile, Circle, and Social Media personal space are separate product areas and must not replace Global Home.
+- Internal development Workspace remains a separate protected route; it is not the user's dashboard and not the homepage.
+- See [Global Home specification](./PAGE-GLOBAL-HOME-PUBLIC.md) and [authenticated session behavior](./PAGE-GLOBAL-HOME-AUTHENTICATED.md).
