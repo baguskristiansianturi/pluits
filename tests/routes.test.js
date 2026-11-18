@@ -62,7 +62,7 @@ test('Global Home keeps one public-facing landing composition for guests and sig
   assert.match(home, /home-ecosystem-grid/);
   assert.match(home, /home-identity-section/);
   assert.match(home, /home-mobile-section/);
-  assert.match(home, /if \(isAuthenticated\)/);
+  assert.match(home, /isAuthenticated \?/);
   assert.match(home, /data-sign-out/);
   assert.doesNotMatch(home, /global-home-welcome|global-home-profile-strip|AKUN AKTIF/);
   assert.doesNotMatch(home, /if \(user\)/);
