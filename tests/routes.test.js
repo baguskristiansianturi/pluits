@@ -14,7 +14,7 @@ test('auth routes and password recovery callback resolve correctly', () => {
   assert.equal(resolveRoute('#/workspace', '?auth=reset'), 'reset');
 });
 test('all page addresses come from one route registry', () => {
-  assert.deepEqual(Object.keys(APP_ROUTES), ['home','register','login','forgot','reset','workspace','terms','privacy']);
+  assert.deepEqual(Object.keys(APP_ROUTES), ['home','dashboard','register','login','forgot','reset','workspace','terms','privacy']);
   for (const [route, path] of Object.entries(APP_ROUTES)) { assert.equal(routeHref(route), '#/' + path); assert.equal(resolveRoute(routeHref(route), ''), route); }
 });
 test('shared brand renderer defaults to the global home route', async () => {
@@ -25,9 +25,15 @@ test('legal document addresses resolve through the same route registry', () => {
   assert.equal(resolveRoute(routeHref('terms'), ''), 'terms');
   assert.equal(resolveRoute(routeHref('privacy'), ''), 'privacy');
 });
-test('workspace is guarded by a session', () => {
+test('Dashboard is a separate protected route for signed-in users', () => {
+  assert.equal(resolveAuthenticatedRoute('dashboard', false), 'login');
+  assert.equal(resolveAuthenticatedRoute('dashboard', true), 'dashboard');
+});
+
+test('workspace is guarded by a session and remains separate from Dashboard', () => {
   assert.equal(resolveAuthenticatedRoute('workspace', false), 'login');
   assert.equal(resolveAuthenticatedRoute('workspace', true), 'workspace');
+  assert.notEqual(routeHref('dashboard'), routeHref('workspace'));
 });
 test('the same global home route renders for guests and active users without redirecting away', () => {
   assert.equal(resolveAuthenticatedRoute('home', false), 'home');
@@ -69,4 +75,18 @@ test('Global Home keeps one public-facing landing composition for guests and sig
   assert.match(shell, /routeHref\('home'\)/);
   assert.doesNotMatch(css, /\.home-page--authenticated|\.global-home-/);
   assert.doesNotMatch(main, /authenticated-home\.css/);
+});
+
+test('signed-in profile avatar on Global Home opens the protected Dashboard route', async () => {
+  const [home, app, dashboard] = await Promise.all([
+    readFile(new URL('../src/features/home/home-page.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/app/create-app.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/features/dashboard/dashboard-page.js', import.meta.url), 'utf8')
+  ]);
+  assert.match(home, /class="home-account-link" href="' \+ routeHref\('dashboard'\)/);
+  assert.match(home, /aria-label="Buka Dashboard pengguna"/);
+  assert.match(app, /mountDashboardPage/);
+  assert.match(dashboard, /DASHBOARD PENGGUNA/);
+  assert.match(dashboard, /Aktivitas Anda/);
+  assert.match(dashboard, /Pemberitahuan/);
 });
