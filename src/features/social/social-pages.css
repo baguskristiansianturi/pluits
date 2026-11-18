@@ -26,3 +26,41 @@
 @media(max-width:767px){.social-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.social-intro{margin-bottom:25px}.social-section-heading h2{font-size:17px}}
 
 .social-profile-card{display:flex;align-items:center;gap:16px;padding:22px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-md);background:var(--pl-color-surface)}.social-profile-avatar{display:grid;width:68px;height:68px;flex:0 0 auto;place-items:center;border-radius:50%;background:var(--pl-color-brand-soft);color:var(--pl-color-ink);font-size:24px;font-weight:800}.social-profile-card h2{margin:0 0 4px}.social-profile-card p{margin:0;color:var(--pl-color-muted);font-size:12px}.social-profile-card span{color:var(--pl-color-muted);font-size:10px}.social-profile-tabs{display:flex;gap:8px;overflow:auto;margin:22px 0}.social-profile-tabs button{padding:9px 15px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-pill);background:var(--pl-color-surface);color:var(--pl-color-text);font-size:11px;font-weight:700;white-space:nowrap}
+
+
+/* Account settings hub — app surface, not website footer chrome. */
+.social-profile-card{flex-wrap:wrap}
+.social-profile-identity{min-width:0;flex:1}
+.social-profile-identity h2{margin:0 0 4px;color:var(--pl-color-ink);font-size:20px}
+.social-settings-shortcut{display:inline-flex;min-height:42px;align-items:center;gap:8px;padding:0 14px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-pill);color:var(--pl-color-ink);font-size:12px;font-weight:750;text-decoration:none}
+.social-settings-shortcut .ui-icon{width:17px;height:17px}
+.social-settings-layout{display:grid;grid-template-columns:minmax(190px,260px) minmax(0,1fr);gap:16px;align-items:start}
+.social-settings-menu,.social-settings-panel,.social-settings-account{border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-lg);background:var(--pl-color-surface)}
+.social-settings-menu{display:grid;gap:4px;padding:8px}
+.social-settings-menu button{display:flex;min-height:48px;align-items:center;gap:11px;padding:0 12px;border:0;border-radius:var(--pl-radius-md);background:transparent;color:var(--pl-color-text);text-align:left;font:inherit;font-size:12px;font-weight:700}
+.social-settings-menu button.is-active{background:var(--pl-color-brand-soft);color:var(--pl-color-ink)}
+.social-settings-menu button .ui-icon{width:18px;height:18px}
+.social-settings-menu button b{margin-left:auto;font-size:18px;font-weight:500;color:var(--pl-color-muted)}
+.social-settings-panel{min-height:220px;padding:24px}
+.social-settings-panel-heading h2{margin:9px 0 5px;color:var(--pl-color-ink);font-size:21px}
+.social-settings-panel-heading p,.social-settings-account p{margin:0;color:var(--pl-color-muted);font-size:12px;line-height:1.6}
+.social-settings-detail-row{display:flex;justify-content:space-between;gap:16px;padding:17px 0;border-bottom:1px solid var(--pl-color-border);font-size:12px}
+.social-settings-detail-row span{color:var(--pl-color-muted)}
+.social-settings-detail-row strong{max-width:65%;overflow-wrap:anywhere;color:var(--pl-color-ink);text-align:right}
+.social-settings-note{margin-top:16px;padding:13px;border-radius:var(--pl-radius-md);background:var(--pl-color-canvas);color:var(--pl-color-muted);font-size:11px;line-height:1.65}
+.social-settings-account{grid-column:2;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px}
+.social-settings-account strong{color:var(--pl-color-ink);font-size:13px}
+.social-signout-button{display:inline-flex;min-height:42px;align-items:center;gap:8px;padding:0 15px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-pill);background:var(--pl-color-surface);color:var(--pl-color-ink);font:inherit;font-size:12px;font-weight:750}
+.social-signout-button:disabled{opacity:.55}
+.social-signout-button .ui-icon{width:16px;height:16px}
+.social-settings-back{grid-column:2;color:var(--pl-color-muted);font-size:12px;text-decoration:none}
+.social-shell{padding-bottom:calc(74px + env(safe-area-inset-bottom,0px))}
+@media(max-width:767px){
+ .social-settings-layout{grid-template-columns:minmax(0,1fr);gap:12px}
+ .social-settings-menu{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .social-settings-menu button{min-width:0;padding-inline:9px;font-size:11px}
+ .social-settings-account,.social-settings-back{grid-column:1}
+ .social-settings-panel{padding:18px}
+ .social-profile-card{padding:16px}
+ .social-settings-account{align-items:flex-start;flex-direction:column}
+}
