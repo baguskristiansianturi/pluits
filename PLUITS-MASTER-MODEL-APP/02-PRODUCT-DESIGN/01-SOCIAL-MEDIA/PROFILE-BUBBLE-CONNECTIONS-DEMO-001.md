@@ -22,7 +22,7 @@ Demonstrate the proposed PLUITS floating social-bubble visual: differently sized
 - Each bubble has a distinct size and simulated mass.
 - Bubbles drift gently inside a clipped, bounded field.
 - Collision response uses low-restitution momentum transfer and partial overlap correction so the surfaces feel soft and briefly meld at contact. A thin translucent edge and subtle shared contact glow avoid a hard outlined-ball appearance. Directional squash/stretch is applied to the complete bubble element, so the portrait artwork deforms together with the bubble before elastic recovery.
-- Users can drag bubbles with pointer/touch input.
+- Users can drag bubbles with pointer/touch input. Pointer capture is tracked per active pointer and explicitly released on pointer-up, cancellation, lost capture, window blur, document hide, and route teardown so an interrupted drag cannot leave the interaction holding input after the user leaves the profile.
 - Optional device-orientation input is activated only after an explicit user tap; if unsupported or denied, autonomous motion and dragging remain available.
 - Tapping a bubble announces its demo category in an accessible live status region.
 - Pause animation when the document is hidden; stop animation during teardown.
