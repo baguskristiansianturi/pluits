@@ -1,6 +1,6 @@
 # Social Media — Product Design
 
-Ruang desain khusus Social Media. Isi dengan product brief, persona, kebutuhan pengguna, information architecture, sitemap, user journey, alur per skenario, page inventory, wireframe, UI/UX, visual references, design system khusus, component inventory, responsive states, accessibility, serta acceptance criteria desain.
+Ruang desain khusus Social Media. Isi dengan product brief, persona, kebutuhan pengguna, information architecture, sitemap, user journey, alur per skenario, page inventory, wireframe, UI/UX, visual references, component inventory, responsive states, accessibility, serta acceptance criteria desain.
 
 Status rancangan: PROPOSED → IN-DESIGN → REVIEW → APPROVED.
 
@@ -16,12 +16,15 @@ Status rancangan: PROPOSED → IN-DESIGN → REVIEW → APPROVED.
 - This UI change does not create a store backend, catalogue, or featured-item persistence contract.
 - Runtime mapping: `src/features/social/social-pages.js`, `src/features/social/social-pages.css`, and `src/design-system/icons.js`.
 
-
 ## Bubble Connections prototype
 - `PROFILE-BUBBLE-CONNECTIONS-DEMO-001.md` defines the temporary visual demo on the authenticated profile. It is visible to all account tiers for evaluation and does not create real relationship data or settings.
+- Keep the current float, press/rebound, drag, and opt-in device-tilt behavior; future refinements must preserve those interactions.
 
-
-### Bubble Connections — visual direction and entitlement proposal
-- Keep the current float and opt-in device-tilt behavior; refine only the soft-body collision feel, thin blended edge, and portrait deformation.
-- Treat Bubble Connections as one selectable cover theme among future alternatives.
-- Proposed offer: included at no extra charge for the one-year Gold membership period. This is not yet enforced by subscription entitlements.
+## Curated visual asset libraries
+- `PLUITS-VISUAL-ASSET-LIBRARIES-001.md` is the canonical specification for the two dedicated collections:
+  - **PLUITS Fluvara** — profile-cover stills, video, and original fluid-motion assets.
+  - **Social Reaction Characters** — animated human/character expressions for comments and approved social interactions.
+- Actual static asset folders are under `public/assets/library/`. Their README files define the storage boundaries and provenance rules.
+- The folders currently contain governance notes only; no production artwork or animation files have been approved or added.
+- Do not merge reaction-character assets into Fluvara. They serve different product surfaces.
+- Fluvara is the approved working product name; trademark availability and legal clearance remain pending.
