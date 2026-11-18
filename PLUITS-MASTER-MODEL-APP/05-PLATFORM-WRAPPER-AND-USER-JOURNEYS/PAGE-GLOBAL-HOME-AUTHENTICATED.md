@@ -1,53 +1,34 @@
-# PAGE-GLOBAL-HOME-AUTHENTICATED — Authenticated Global Home
+# Global Home — Authenticated Session Behavior
 
-Status: IMPLEMENTED — provisional composition; founder visual UAT pending.  
-Page ID: `PAGE-GLOBAL-HOME-AUTHENTICATED` · Layout: `LAY-GLOBAL-HOME-001` · Owner: Platform Wrapper & User Journeys  
-Route: `#/home`, selected when an active Supabase session exists.
+Status: SPECIFICATION FOR THE SAME GLOBAL HOME PAGE — NOT A SEPARATE PAGE  
+Reference: `PAGE-GLOBAL-HOME` · Layout: `LAY-GLOBAL-HOME-001` · Route: `#/home`
 
 ## Purpose
-Serve as the main PLUITS platform entry point for the currently authenticated account. It welcomes the active user and introduces the cross-ecosystem areas without pretending that unfinished products, feeds, transactions, or activity data are already live.
+Define how the existing PLUITS Beranda responds when a Supabase session is active. This document does not define another homepage, another page layout, or a dashboard.
 
-Global Home is not Circle and is not the Social Media personal space. It is also not the Main Profile; those are separate product areas in the accepted build sequence.
+## Required behavior
+- Authenticated `#/home` renders the same public-facing PLUITS platform landing page as a guest sees.
+- Keep the same hero, platform introduction, ecosystem overview, identity explainer, Android information, closing CTA, page shell, spacing, and footer.
+- The header may replace guest login/registration actions with a compact account identity and sign-out control.
+- Primary calls to action may change wording or point to the ecosystem section because the user is already signed in.
+- Do not replace the landing page with a personalized greeting, account/email panel, profile summary, dashboard cards, feed, activity stream, or account workspace.
+- User Dashboard, Main Profile, Circle, and Social Media personal space are separate product areas.
+- The internal development Workspace remains a separate protected route and is not the user's dashboard or Beranda.
 
-## Content architecture
-1. Personalized welcome using the account display name, with email as a secondary identifier.
-2. Cross-ecosystem overview: Social & Community, Local Discovery, Marketplace, and Everyday Services.
-3. Account identity summary with an authenticated state.
-4. Clear note that Circle/social personal space is a separate experience and will be designed in the Social Media stage.
-
-## Truthfulness and data constraints
-- Do not fabricate feed items, friends, communities, notifications, recommendations, counts, transactions, products, providers, or profile attributes.
-- Ecosystem cards are informational until the relevant product modules are released.
-- Display name falls back to the email prefix; email is read from the active Supabase session.
-- User metadata is used only for display, never for authorization.
-- Sign-out uses the existing Auth service. No Supabase schema, RLS, migration, or database change is part of this page.
-
-## Navigation and session behavior
-- Guest `#/home` renders `PAGE-GLOBAL-HOME-PUBLIC`.
-- Authenticated `#/home` renders this page at the exact same route.
-- The shared PLUITS brand always points to `#/home`; the active session determines which homepage is shown.
-- Successful login navigates to `#/home`.
-- Authenticated users visiting guest-only login/register/forgot routes return to `#/home`.
-- The internal development workspace remains a separate protected route and is not the authenticated Global Home.
-- Sign-out changes the active session; the auth-state listener then renders the public homepage.
+## Data and security constraints
+- Read the active session only to determine whether account controls should be shown and to display the account name in the header.
+- Escape all user-provided display values before rendering.
+- Sign-out uses the existing Auth service. No Supabase schema, RLS, migration, or database change is part of this behavior.
+- Do not fabricate feed items, friends, notifications, recommendations, counts, transactions, products, providers, or profile attributes.
 
 ## Runtime ownership
-- Composition: authenticated state inside `src/features/home/home-page.js`.
-- Scoped styles: authenticated state inside `src/features/home/home-page.css`.
-- One shared entry point: `mountHomePage({ root, user, onSignOut })`; session presence selects content.
-- Session-based selection: `src/app/create-app.js`.
+- Single composition: `src/features/home/home-page.js`.
+- Single stylesheet: `src/features/home/home-page.css`.
+- Session supplied by `src/app/create-app.js`.
 - Route policy: `src/app/routes.js`.
 - Shared brand: `src/design-system/page-shell.js`.
 - Layout registry: `src/design-system/layouts.js`.
-- CSS entry: `src/main.js`.
 - Regression coverage: `tests/routes.test.js`.
 
-## Responsive and shared design rules
-- Consume the existing shared page shell, brand asset, tokens, typography, and icon registry.
-- The shared shell exclusively owns navbar-to-content spacing, page gutters, and vertical rhythm.
-- Desktop uses a four-column ecosystem overview; tablet uses two columns; mobile stacks to one column. Shared page shell geometry remains identical to the public state.
-- No new global spacing, color, typography, or breakpoint tokens are introduced.
-- Feature styles remain scoped under `.home-page--authenticated` and `.global-home-*`, in the same stylesheet as the public state.
-
 ## Validation
-Run `npm test` and `npm run build`; verify guest and authenticated sessions on `#/home`, sign-in, sign-out, brand navigation from every shared shell, and desktop/tablet/mobile layouts. Visual UAT remains pending until inspected on real devices.
+Run `npm test` and `npm run build`; verify the same landing sections appear for guest and authenticated sessions on `#/home`. Verify only header account controls and CTA behavior change. Test sign-in, sign-out, brand navigation, and desktop/tablet/mobile layouts. Visual UAT remains pending until inspected on real devices.
