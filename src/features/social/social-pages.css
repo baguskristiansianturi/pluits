@@ -170,3 +170,12 @@
 .social-profile-featured-list p{color:var(--pl-color-muted);font-size:11px}
 .social-profile-featured-list a{color:var(--pl-color-brand);font-size:11px;font-weight:700;text-decoration:none}
 @media(max-width:420px){.social-profile-tabs button{gap:5px;padding-inline:6px;font-size:10px}.social-profile-tabs button.is-icon-only{flex-basis:48px}.social-profile-tabs button .ui-icon{width:17px;height:17px;flex-basis:17px}}
+
+.social-profile-entity-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.social-profile-entity-list.is-carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;padding-bottom:8px}
+.social-profile-entity-list.is-carousel .social-profile-business-card{min-width:min(280px,78vw);scroll-snap-align:start}
+.social-profile-business-card{min-width:0}
+.social-profile-business-card .social-profile-business-icon{color:var(--pl-color-brand)}
+.social-profile-tabs button .ui-icon{color:currentColor}
+.social-profile-tabs button.is-active .ui-icon{color:var(--pl-color-brand)}
+@media(max-width:560px){.social-profile-entity-list{grid-template-columns:minmax(0,1fr)}}
