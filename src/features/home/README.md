@@ -16,7 +16,9 @@ Own one public-facing PLUITS platform homepage. It introduces the ecosystem to v
 - Authenticated at `#/home`: the exact same hero, platform introduction, ecosystem overview, identity section, Android information and closing CTA. Only account controls and action wording change (account identity and sign-out replace login/register).
 - Session state must never replace the landing page with a personal welcome panel, profile summary, feed, dashboard cards, or account workspace.
 - The PLUITS logo always links to `#/home`, regardless of session.
-- Internal Workspace remains a separate protected development route and is not the user's dashboard or Global Home.
+- The signed-in account avatar and name link to the protected User Dashboard at `#/dashboard`.
+- User Dashboard is a separate protected feature at `src/features/dashboard/`; it is not rendered inside Global Home.
+- Internal Workspace remains a separate protected development route and is not the user's Dashboard or Global Home.
 
 ## Content truthfulness
 Do not fabricate posts, people, activity, notifications, recommendations, metrics, products, reviews, transactions, or provider records. Ecosystem and Android information must reflect actual release state.
