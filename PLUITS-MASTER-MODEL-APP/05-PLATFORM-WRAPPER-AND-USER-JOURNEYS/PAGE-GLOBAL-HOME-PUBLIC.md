@@ -63,7 +63,7 @@ Introduce PLUITS as a platform to first-time visitors and returning users. Beran
 - Source map: `src/CHANGE-MAP.md`.
 
 ## Change impact and procedure
-Copy/section edits affect this feature and this specification. Root route or auth redirect changes affect app routing and must preserve Auth recovery/workspace behavior. Default brand destination affects every `renderBrand()` consumer: auth, legal, workspace and public home. Shared shell/token changes require a separate consumer audit.
+Copy/section edits affect this feature and this specification. Root route or auth redirect changes affect app routing and must preserve Auth recovery behavior. Default brand destination affects every `renderBrand()` consumer: auth, legal, workspace and public home. Shared shell/token changes require a separate consumer audit.
 
 For each change, read this specification, UI Foundation governance and responsive/layout guidance; inspect route, auth, shell, tokens and assets; update docs/registries/tests in the same work item; run `npm test` and `npm run build`; verify the same homepage for guest/authenticated sessions, desktop/tablet/mobile, anchors and brand links. Keep noindex until explicitly authorized.
 

@@ -27,7 +27,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
       ? 'Masukkan alamat email yang terhubung dengan akun Anda. Kami akan mengirimkan petunjuk pemulihan.'
       : isReset
         ? 'Gunakan kata sandi baru untuk mengamankan kembali akun Anda.'
-        : 'Masuk untuk melanjutkan ke ruang kerja PLUITS dan layanan yang terhubung dengan akun Anda.';
+        : 'Masuk untuk melanjutkan ke Dashboard PLUITS dan mengelola aktivitas Anda.';
 
   let fields = '';
   if (isRegister) {

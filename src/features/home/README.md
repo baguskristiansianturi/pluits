@@ -3,7 +3,7 @@
 Owner: `features/home` · Canonical page: `PAGE-GLOBAL-HOME` · Layout: `LAY-GLOBAL-HOME-001`
 
 ## Purpose
-Own one public-facing PLUITS platform homepage. It introduces the ecosystem to visitors and remains the same homepage after login. It is not a personal profile, account dashboard, WordPress-style admin page, Circle, or Workspace.
+Own one public-facing PLUITS platform homepage. It introduces the ecosystem to visitors and remains the same homepage after login. It is not a personal profile or authenticated Dashboard.
 
 ## Runtime ownership
 - `home-page.js`: single `mountHomePage({ root, user, onSignOut })` entry point and one landing-page composition.
@@ -17,8 +17,8 @@ Own one public-facing PLUITS platform homepage. It introduces the ecosystem to v
 - Session state must never replace the landing page with a personal welcome panel, profile summary, feed, dashboard cards, or account workspace.
 - The PLUITS logo always links to `#/home`, regardless of session.
 - The signed-in account avatar and name link to the protected User Dashboard at `#/dashboard`.
-- User Dashboard is a separate protected feature at `src/features/dashboard/`; it is not rendered inside Global Home.
-- Internal Workspace remains a separate protected development route and is not the user's Dashboard or Global Home.
+- User Dashboard is the single post-login control center at `src/features/dashboard/`; it is not rendered inside Global Home.
+- Workspace is an internal development term only; it is not a separate protected route or user-facing page.
 
 ## Content truthfulness
 Do not fabricate posts, people, activity, notifications, recommendations, metrics, products, reviews, transactions, or provider records. Ecosystem and Android information must reflect actual release state.

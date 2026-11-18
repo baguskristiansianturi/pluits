@@ -11,7 +11,7 @@ test('auth routes and password recovery callback resolve correctly', () => {
   assert.equal(resolveRoute('#/login', ''), 'login');
   assert.equal(resolveRoute('#/forgot', ''), 'forgot');
   assert.equal(resolveRoute('#/register', ''), 'register');
-  assert.equal(resolveRoute('#/workspace', '?auth=reset'), 'reset');
+  assert.equal(resolveRoute('#/home', '?auth=reset'), 'reset');
 });
 test('all page addresses come from one route registry', () => {
   assert.deepEqual(Object.keys(APP_ROUTES), ['home','dashboard','register','login','forgot','reset','workspace','terms','privacy']);

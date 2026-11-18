@@ -6,15 +6,32 @@ import './dashboard-page.css';
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 
+const modules = [
+  { title:'Social Media', description:'Kelola konten, percakapan, komunitas, dan aktivitas sosial Anda.', detail:'Ruang sosial PLUITS', icon:'message' },
+  { title:'Marketplace', description:'Kelola aktivitas merchant melalui Store serta Restaurant & Café.', detail:'Store · Restaurant & Café', icon:'book' },
+  { title:'Tickets & Accommodation', description:'Akses layanan tiket, perjalanan, dan akomodasi dalam satu ekosistem.', detail:'Perjalanan dan akomodasi', icon:'book' },
+  { title:'Geo Directory', description:'Kelola informasi tempat, lokasi, dan direktori usaha.', detail:'Tempat dan direktori', icon:'message' },
+  { title:'Logistics & Transportation', description:'Akses kebutuhan pengiriman, logistik, dan transportasi.', detail:'Logistik dan transportasi', icon:'message' },
+  { title:'Digital Wallet', description:'Akses layanan dompet digital dan transaksi PLUITS.', detail:'Dompet dan pembayaran', icon:'book' }
+];
+
 export function mountDashboardPage({ root, user, onSignOut } = {}) {
   const displayName = String(user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Pengguna').trim();
   const safeName = escapeHtml(displayName);
   const email = escapeHtml(user?.email || 'Email akun tidak tersedia');
   const initial = escapeHtml(displayName.slice(0, 1).toUpperCase() || 'P');
 
+  const moduleCards = modules.map((module) =>
+    '<article class="dashboard-module-card" aria-label="' + module.title + ', belum tersedia">' +
+      '<div class="dashboard-module-icon">' + renderIcon(module.icon) + '</div>' +
+      '<div class="dashboard-module-copy"><span class="dashboard-module-status">TAHAP PENGEMBANGAN</span>' +
+      '<h3>' + module.title + '</h3><p>' + module.description + '</p><small>' + module.detail + '</small></div>' +
+    '</article>'
+  ).join('');
+
   const headerActions =
-    '<div class="dashboard-header-actions"><a class="dashboard-home-link" href="' + routeHref('home') + '">Beranda PLUITS</a>' +
-    '<span class="dashboard-header-avatar" aria-hidden="true">' + initial + '</span>' +
+    '<div class="dashboard-header-actions"><div class="dashboard-header-user"><span class="dashboard-header-avatar" aria-hidden="true">' + initial + '</span>' +
+    '<span class="dashboard-header-name">' + safeName + '</span></div>' +
     '<button class="dashboard-signout" type="button" data-sign-out>' + renderIcon('logout') + '<span>Keluar</span></button></div>';
 
   root.innerHTML =
@@ -24,30 +41,32 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
         '<section class="dashboard-welcome" aria-labelledby="dashboard-title">' +
           '<div class="dashboard-welcome-copy"><span class="dashboard-eyebrow">DASHBOARD PENGGUNA</span>' +
           '<h1 id="dashboard-title">Selamat datang, ' + safeName + '.</h1>' +
-          '<p>Ini adalah ruang utama untuk mengakses akun dan mengikuti aktivitas Anda di PLUITS.</p>' +
-          '<span class="dashboard-account-status"><i></i> Akun Anda sedang aktif</span></div>' +
-          '<div class="dashboard-welcome-avatar" aria-hidden="true">' + initial + '</div>' +
+          '<p>Satu tempat untuk mengakses aplikasi, mengelola pekerjaan, dan mengikuti seluruh aktivitas Anda di PLUITS.</p>' +
+          '<span class="dashboard-account-email">' + email + '</span></div>' +
+          '<div class="dashboard-welcome-mark" aria-hidden="true">' + renderIcon('check') + '</div>' +
         '</section>' +
-        '<section class="dashboard-overview" aria-labelledby="dashboard-overview-title">' +
-          '<div class="dashboard-section-heading"><div><span class="dashboard-eyebrow">RINGKASAN AKUN</span><h2 id="dashboard-overview-title">Akun Anda</h2></div>' +
-          '<span class="dashboard-section-note">Informasi sesi saat ini</span></div>' +
-          '<article class="dashboard-account-card"><span class="dashboard-account-icon">' + renderIcon('message') + '</span>' +
-            '<div class="dashboard-account-copy"><span>Nama pengguna</span><strong>' + safeName + '</strong></div>' +
-            '<div class="dashboard-account-copy"><span>Email akun</span><strong>' + email + '</strong></div>' +
-            '<span class="dashboard-account-badge">Terautentikasi</span></article>' +
+        '<section class="dashboard-modules" aria-labelledby="dashboard-modules-title">' +
+          '<div class="dashboard-section-heading"><div><span class="dashboard-eyebrow">EKOSISTEM PLUITS</span><h2 id="dashboard-modules-title">Aplikasi & layanan</h2></div>' +
+          '<p>Semua ruang pengelolaan akan terhubung melalui satu akun PLUITS.</p></div>' +
+          '<div class="dashboard-module-grid">' + moduleCards + '</div>' +
         '</section>' +
-        '<section class="dashboard-activity-grid" aria-label="Aktivitas dan pemberitahuan">' +
-          '<article class="dashboard-info-card"><div class="dashboard-card-heading"><span class="dashboard-card-icon">' + renderIcon('book') + '</span><span class="dashboard-card-kicker">AKTIVITAS</span></div>' +
-            '<h2>Aktivitas Anda</h2><p>Riwayat aktivitas akan ditampilkan di sini setelah sumber aktivitas PLUITS terhubung ke Dashboard.</p>' +
-            '<span class="dashboard-empty-state">Belum ada data aktivitas yang ditampilkan.</span></article>' +
-          '<article class="dashboard-info-card"><div class="dashboard-card-heading"><span class="dashboard-card-icon">' + renderIcon('message') + '</span><span class="dashboard-card-kicker">PEMBERITAHUAN</span></div>' +
-            '<h2>Pemberitahuan</h2><p>Informasi penting dari akun dan ruang PLUITS akan dikumpulkan di bagian ini.</p>' +
-            '<span class="dashboard-empty-state">Pusat pemberitahuan belum terhubung.</span></article>' +
+        '<section class="dashboard-work" aria-labelledby="dashboard-work-title">' +
+          '<div class="dashboard-section-heading"><div><span class="dashboard-eyebrow">PUSAT PENGELOLAAN</span><h2 id="dashboard-work-title">Pekerjaan & aktivitas</h2></div>' +
+          '<p>Ringkasan aktivitas lintas aplikasi dalam satu tempat.</p></div>' +
+          '<div class="dashboard-work-grid">' +
+            '<article class="dashboard-work-card"><div class="dashboard-work-card-top">' + renderIcon('book') + '<span>PEKERJAAN SAYA</span></div>' +
+              '<h3>Kelola pekerjaan</h3><p>Konten, pengelolaan toko, dan pekerjaan dari layanan PLUITS akan ditampilkan di sini.</p>' +
+              '<span class="dashboard-empty-state">Belum ada pekerjaan yang terhubung.</span></article>' +
+            '<article class="dashboard-work-card"><div class="dashboard-work-card-top">' + renderIcon('message') + '<span>AKTIVITAS TERBARU</span></div>' +
+              '<h3>Aktivitas Anda</h3><p>Perubahan dan aktivitas dari Social Media, Marketplace, serta layanan lain akan tercatat di bagian ini.</p>' +
+              '<span class="dashboard-empty-state">Belum ada aktivitas yang tercatat.</span></article>' +
+            '<article class="dashboard-work-card"><div class="dashboard-work-card-top">' + renderIcon('mail') + '<span>PEMBERITAHUAN</span></div>' +
+              '<h3>Informasi penting</h3><p>Pemberitahuan akun dan pembaruan dari aplikasi PLUITS akan dikumpulkan di sini.</p>' +
+              '<span class="dashboard-empty-state">Pusat pemberitahuan belum terhubung.</span></article>' +
+          '</div>' +
         '</section>' +
-        '<section class="dashboard-explore"><div><span class="dashboard-eyebrow">LANJUTKAN PERJALANAN</span><h2>Jelajahi PLUITS</h2><p>Kembali ke Beranda untuk mengenal ekosistem PLUITS dan ruang-ruang yang sedang dikembangkan.</p></div>' +
-          '<a class="dashboard-explore-link" href="' + routeHref('home') + '">Buka Beranda PLUITS ' + renderIcon('arrow') + '</a></section>' +
       '</main>' +
-      renderPageFooter({ copyright:'© 2026 PLUITS. All rights reserved.', attribution:'Dashboard pengguna PLUITS.',
+      renderPageFooter({ copyright:'© 2026 PLUITS. All rights reserved.', attribution:'Satu akun untuk seluruh ekosistem PLUITS.',
         groups:[{title:'Navigasi',items:[{label:'Beranda PLUITS',route:'home'},{label:'Dashboard',route:'dashboard'}]},
           {title:'Informasi',items:[{label:'Ketentuan Layanan',route:'terms'},{label:'Kebijakan Privasi',route:'privacy'}]}] }) +
     '</div>';

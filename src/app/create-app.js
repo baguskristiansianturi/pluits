@@ -40,6 +40,7 @@ export function createApp({ root, authService }) {
       url.searchParams.set('auth', 'reset');
       window.history.replaceState(null, '', url);
     }
+    if (event === 'SIGNED_OUT' && ready && resolveRoute(window.location.hash, window.location.search) === 'dashboard') { navigate('home'); return; }
     if (ready && ['INITIAL_SESSION', 'SIGNED_IN', 'SIGNED_OUT', 'PASSWORD_RECOVERY', 'USER_UPDATED'].includes(event)) render();
   });
   const onRouteChange = () => render();

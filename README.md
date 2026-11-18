@@ -6,9 +6,9 @@ PLUITS is a live multi-application platform. The deployed application code remai
 
 ## Current frontend delivery
 
-The frontend is being replaced with a clean modular foundation. Stage 01 contains account registration UI, existing-account login, password recovery, and a temporary authenticated development workspace. The new runtime is in src/. Existing Supabase migrations, Auth users, profiles, wallet records, backend data, Master Model documents, and Sharing Inbox records are preserved.
+The frontend is being replaced with a clean modular foundation. The current frontend includes account access, public Global Home, and one authenticated User Dashboard as the post-login control center. The new runtime is in src/. Existing Supabase migrations, Auth users, profiles, wallet records, backend data, Master Model documents, and Sharing Inbox records are preserved.
 
-Public signup is disabled while SMTP, legal documents, and durable consent recording are reviewed. The site remains noindex during this internal stage. The workspace is not the final Global Home, Primary Profile, or Social Media experience.
+Public signup is disabled while SMTP, legal documents, and durable consent recording are reviewed. The site remains noindex during this internal stage. Workspace is an internal development term, not a separate user-facing page or route.
 
 ## Main working areas
 - [PLUITS Master Model App](PLUITS-MASTER-MODEL-APP/README.md) — ecosystem models, product design, application modularization, shared services and the main PLUITS wrapper.

@@ -3,7 +3,6 @@ import './styles/global.css';
 import './features/home/home-page.css';
 import './features/dashboard/dashboard-page.css';
 import './features/auth/auth-page.css';
-import './features/workspace/workspace-page.css';
 import './features/legal/policy-page.css';
 import { supabase } from './lib/supabase/client.js';
 import { createAuthService } from './services/auth/auth-service.js';
