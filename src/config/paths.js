@@ -1,2 +1,2 @@
-export const APP_ROUTES = Object.freeze({ home:'home', social:'social', circle:'circle', discover:'discover', dashboard:'dashboard', messages:'messages', profile:'profile', register:'register', login:'login', forgot:'forgot', reset:'reset', terms:'terms', privacy:'privacy' });
+export const APP_ROUTES = Object.freeze({ home:'home', social:'social', circle:'circle', discover:'discover', dashboard:'dashboard', messages:'messages', profile:'profile', settings:'settings', register:'register', login:'login', forgot:'forgot', reset:'reset', terms:'terms', privacy:'privacy' });
 export function routeHref(route) { const path=APP_ROUTES[route]; if(!path) throw new TypeError('Unknown PLUITS route: '+route); return '#/'+path; }
