@@ -45,6 +45,7 @@ Introduce PLUITS as a platform to first-time visitors and returning users. Beran
 - Session state may change only account controls in the header and relevant CTA wording/targets. It must not render a personalized welcome panel, profile summary, feed, dashboard cards, or alternate page body.
 - Shared `renderBrand()` always targets `#/home`, so the brand returns to the same Beranda from every page.
 - Login success and authenticated visits to guest-only Auth screens return to `#/home`.
+- The signed-in account avatar/name links to the separate protected User Dashboard at `#/dashboard`.
 - User Dashboard, Circle, Main Profile, and Social Media personal space remain separate product areas.
 - Internal development Workspace remains a separate protected route and must not be presented as the user's Global Home.
 - Existing workspace protection, login, recovery, legal routes and signup release gate remain unchanged.

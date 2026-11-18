@@ -26,7 +26,7 @@ export function mountHomePage({ root, user = null, onSignOut } = {}) {
   ).join('');
 
   const headerActions = isAuthenticated
-    ? '<div class="home-header-actions home-header-actions--signed-in"><span class="home-account-avatar" aria-hidden="true">' + initial + '</span><span class="home-account-name">' + safeName + '</span><button class="home-signout-button" type="button" data-sign-out aria-label="Keluar dari akun">' + renderIcon('logout') + '<span>Keluar</span></button></div>'
+    ? '<div class="home-header-actions home-header-actions--signed-in"><a class="home-account-link" href="' + routeHref('dashboard') + '" aria-label="Buka Dashboard pengguna" title="Dashboard"><span class="home-account-avatar" aria-hidden="true">' + initial + '</span><span class="home-account-name">' + safeName + '</span></a><button class="home-signout-button" type="button" data-sign-out aria-label="Keluar dari akun">' + renderIcon('logout') + '<span>Keluar</span></button></div>'
     : '<div class="home-header-actions"><a class="home-header-login" href="' + routeHref('login') + '">Masuk</a><a class="home-button home-button--small" href="' + routeHref('register') + '">Daftar</a></div>';
 
   const primaryHref = isAuthenticated ? '#ekosistem' : routeHref('register');

@@ -117,6 +117,8 @@
 
 
 /* Session controls are the only authenticated variation; the landing page remains identical. */
+.home-account-link{display:inline-flex;min-height:40px;align-items:center;gap:9px;border-radius:var(--pl-radius-pill);text-decoration:none}
+.home-account-link:focus-visible{outline:2px solid var(--pl-color-brand);outline-offset:4px}
 .home-header-actions--signed-in{gap:10px}
 .home-account-avatar{display:grid;width:34px;height:34px;flex:0 0 auto;place-items:center;border-radius:50%;background:var(--pl-color-brand-soft);color:var(--pl-color-ink);font-size:12px;font-weight:800}
 .home-account-name{max-width:150px;overflow:hidden;color:var(--pl-color-ink);font-size:12px;font-weight:750;text-overflow:ellipsis;white-space:nowrap}

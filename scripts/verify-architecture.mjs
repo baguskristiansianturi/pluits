@@ -12,6 +12,7 @@ const required = [
   'design-system/icons.js',
   'design-system/layouts.js',
   'features/auth/auth-page.js',
+  'features/dashboard/dashboard-page.js',
   'features/workspace/workspace-page.js',
   'services/auth/auth-service.js',
   'lib/supabase/client.js'
