@@ -11,4 +11,4 @@ Khusus aplikasi utama PLUITS sebagai pembungkus/portal ekosistem: homepage utama
 - The signed-in account avatar/name on Global Home opens the protected User Dashboard at `#/dashboard`.
 - User Dashboard is the personal starting point for account overview, activity and notifications. Main Profile, Circle, and Social Media personal space remain separate product areas.
 - Internal development Workspace remains a separate protected route; it is not the user's dashboard and not the homepage.
-- See [Global Home specification](./PAGE-GLOBAL-HOME-PUBLIC.md) and [authenticated session behavior](./PAGE-GLOBAL-HOME-AUTHENTICATED.md).
+- See [Global Home specification](./PAGE-GLOBAL-HOME-PUBLIC.md), [authenticated session behavior](./PAGE-GLOBAL-HOME-AUTHENTICATED.md), and [User Dashboard specification](./PAGE-USER-DASHBOARD.md).
