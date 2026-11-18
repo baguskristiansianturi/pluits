@@ -14,7 +14,7 @@ Scope: Public Business Homepage, authenticated Social App, Jelajah, Ruang Kerja,
 | Shared brand/header/footer | src/design-system/page-shell.js and page-shell.css | design-system | Business Homepage, Social Home, Jelajah, Auth, Legal and Ruang Kerja |
 | Public Business Homepage | src/features/home/business-home-page.js and business-home.css | features/home | #/home; PLUITS brand destination |
 | Authenticated Social Home (former Global Home composition) | src/features/home/home-page.js and home-page.css | features/home | protected #/social after login |
-| Jelajah, Messages, Profile, and legacy Circle route | src/features/social/social-pages.js and social-pages.css | features/social | #/discover, #/messages, #/profile; legacy #/circle redirects to #/social |
+| Jelajah, Messages, Profile, Settings, and legacy Circle route | src/features/social/social-pages.js and social-pages.css | features/social | #/discover, #/messages, #/profile, #/settings; legacy #/circle redirects to #/social |
 | Ruang Kerja | src/features/dashboard/dashboard-page.js and dashboard-page.css | features/dashboard | Protected #/dashboard |
 | Auth UI | src/features/auth/auth-page.js and auth-page.css | features/auth | App router |
 | Legal draft screens | src/features/legal/policy-page.js and policy-page.css | features/legal | App router |
@@ -30,11 +30,12 @@ Scope: Public Business Homepage, authenticated Social App, Jelajah, Ruang Kerja,
 - #/discover → nationwide Jelajah, independent of user location.
 - #/dashboard → authenticated Ruang Kerja, entered from the center plus button.
 - #/messages and #/profile → dedicated authenticated app destinations.
+- #/settings → protected account settings hub linked from Profile; sign-out uses the existing auth service.
 - Guest access to protected app routes → #/login.
 - Workspace remains an internal development term only.
 
 ## Navigation contract
-The signed-in app navigation exposes Beranda (#/social), Jelajah (#/discover), center plus / Ruang Kerja (#/dashboard), Pesan (#/messages), and Profil (#/profile). The PLUITS logo is intentionally separate and returns to the public business homepage (#/home).
+The signed-in app navigation exposes Beranda (#/social), Jelajah (#/discover), center plus / Ruang Kerja (#/dashboard), Pesan (#/messages), and Profil (#/profile). Profile links to the dedicated account settings hub (#/settings), where sign-out is available. The PLUITS logo is intentionally separate and returns to the public business homepage (#/home).
 The Social Home header uses icon-only Favorit, account, search, cart, and notifications actions. The former Global Home composition is reused as the signed-in social home; the separate business-center surface remains a distinct product area and must not be folded into social content. Header and sticky category tabs span the physical viewport width while their inner content observes shared page gutters. Horizontal content rails remain full-bleed without widening the page shell.
 
 ## Backend contracts and protected surfaces
@@ -45,12 +46,12 @@ Demo fixtures for Top Global, nearby, people, Stories, Live, Blog, and product r
 Keep feature changes within their owner. Shared route/brand changes require consumer impact review. Preserve Auth recovery and session persistence. Do not change Supabase configuration, migrations, database records, RLS, triggers, Dashboard behavior, or global design tokens in this scope.
 
 ## Required verification
-Run npm test and npm run build. Verify Public homepage, Social Home, legacy Circle redirect, Jelajah, Messages, and Profile routes; icon-only header; full-width header and sticky tabs; sticky handoff in both directions; tab scroll and active state; real public Feed/Reels query and signed media rendering; loading/error/empty states; visual demo rails; full-bleed rail edges; no document horizontal overflow; bottom navigation and safe area; guest/authenticated behavior; desktop/tablet/mobile layouts.
+Run npm test and npm run build. Verify Public homepage, Social Home, legacy Circle redirect, Jelajah, Messages, Profile, and Settings routes; icon-only header; full-width header and sticky tabs; sticky handoff in both directions; tab scroll and active state; real public Feed/Reels query and signed media rendering; loading/error/empty states; visual demo rails; full-bleed rail edges; no document horizontal overflow; bottom navigation and safe area; Profile → Settings navigation; sign-out confirmation and auth session clearing; no website footer on signed-in app surfaces; guest/authenticated behavior; desktop/tablet/mobile layouts.
 
 ## Current limitations
 - Signup remains disabled unless explicitly enabled after readiness review.
 - Stories, Live, Blog, Marketplace, Geo Directory, nearby businesses, notifications, cart data, and product feeds are not yet connected to operational data services; corresponding Global Home content currently uses visual demo fixtures where noted in the canonical page specification.
 - Create actions remain disabled until their publishing services are available.
-- Messages and Profile have initial dedicated surfaces; inbox data, profile editing, profile visibility controls, and published profile media are not yet connected.
+- Messages remains an initial empty inbox surface. Profile has a dedicated settings hub and working sign-out action; profile editing, profile visibility persistence, notification preferences, and published profile media are not yet connected.
 - Location permission request flow is not implemented; Circle displays a clear no-location fallback.
 - Real Android visual acceptance and founder product approval remain NOT TESTED / NOT READY.
