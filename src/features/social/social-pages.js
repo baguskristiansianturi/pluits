@@ -176,7 +176,7 @@ export function mountProfilePage({root,user=null}={}) {
     const impulse=-(1+.72)*relative/totalInverse;
     if(!a.dragging){a.vx-=impulse*inverseA*nx;a.vy-=impulse*inverseA*ny;}
     if(!b.dragging){b.vx+=impulse*inverseB*nx;b.vy+=impulse*inverseB*ny;}
-    const impact=Math.min(.2,Math.abs(relative)*.025);
+    const impact=Math.min(.22,Math.max(.06,Math.abs(relative)*.12));
     if(Math.abs(nx)>Math.abs(ny)){a.sx=b.sx=1-impact;a.sy=b.sy=1+impact*.65;}
     else{a.sy=b.sy=1-impact;a.sx=b.sx=1+impact*.65;}
    }
