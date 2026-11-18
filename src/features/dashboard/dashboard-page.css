@@ -218,3 +218,5 @@
  .dashboard-view-heading{align-items:flex-start}
  .dashboard-overview-avatar{width:38px;height:38px;font-size:13px}
 }
+.dashboard-text-action{min-height:32px;padding:0 10px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-sm);background:var(--pl-color-surface);color:var(--pl-color-brand);font-size:9px;font-weight:750}
+.dashboard-text-action:hover{border-color:var(--pl-color-brand);color:var(--pl-color-ink)}
