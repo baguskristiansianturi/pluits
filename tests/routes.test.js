@@ -119,6 +119,7 @@ test('Dashboard provides personal, business, transaction, and social management 
   assert.match(css, /max-width:767px/);
   assert.match(dashboard, /data-social-view="inbox"/);
   assert.match(dashboard, /data-notifications/);
+  assert.match(dashboard, /data-transaction-status/);
 });
 
 test('Dashboard shows truthful empty states and does not fabricate user activity or transactions', async () => {
