@@ -2,6 +2,7 @@ import { routeHref } from '../../config/paths.js';
 import '../../design-system/page-shell.css';
 import { renderBrand } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
+import { supabase } from '../../lib/supabase/client.js';
 import './social-pages.css';
 
 function bottomNav(active){
@@ -32,6 +33,27 @@ export function mountProfilePage({root,user=null}={}) {
  const verified=Boolean(metadata.is_verified||metadata.verified||user?.email_confirmed_at);
  const badgeLabel=accountLevel==='regular'?'Regular':accountLevel.charAt(0).toUpperCase()+accountLevel.slice(1);
  const initial=name.trim().charAt(0).toUpperCase()||'P';
+ let ownedStores=[];
+ let professionalServices=[];
+ let profileLoadController=new AbortController();
+ const businessTabs=()=>{
+  const tabs=[];
+  if(ownedStores.length)tabs.push('<button type="button" role="tab" id="profile-tab-store" aria-controls="profile-panel-store" aria-selected="false" data-profile-tab="store">'+renderIcon('store')+'<span>Toko</span></button>');
+  if(professionalServices.length)tabs.push('<button type="button" role="tab" id="profile-tab-service" aria-controls="profile-panel-service" aria-selected="false" data-profile-tab="service">'+renderIcon('briefcase')+'<span>Layanan</span></button>');
+  return tabs.join('');
+ };
+ const businessPanels=()=>{
+  const panels=[];
+  if(ownedStores.length){
+   const listClass=ownedStores.length>3?'social-profile-entity-list is-carousel':'social-profile-entity-list';
+   panels.push('<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-store" aria-labelledby="profile-tab-store" data-profile-panel="store" hidden><div class="'+listClass+'">'+ownedStores.map(store=>'<article class="social-profile-business-card"><span class="social-profile-business-icon">'+renderIcon('store')+'</span><div><strong>'+safe(store.name)+'</strong><p>'+safe([store.public_area,store.public_city].filter(Boolean).join(', '))+'</p><small>'+safe(store.description||'Toko aktif dan terverifikasi di PLUITS')+'</small></div></article>').join('')+'</div>'+emptyPanel('Produk unggulan belum dipilih','Bagian ini hanya menampilkan produk yang dipilih pemilik sebagai unggulan. Katalog lengkap tetap berada di homepage toko.')+'</section>');
+  }
+  if(professionalServices.length){
+   const listClass=professionalServices.length>3?'social-profile-entity-list is-carousel':'social-profile-entity-list';
+   panels.push('<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-service" aria-labelledby="profile-tab-service" data-profile-panel="service" hidden><div class="'+listClass+'">'+professionalServices.map(service=>'<article class="social-profile-business-card"><span class="social-profile-business-icon">'+renderIcon('briefcase')+'</span><div><strong>'+safe(service.display_name||service.username)+'</strong><p>'+safe(service.headline||service.profession_category||'Layanan profesional')+'</p><small>'+safe(service.bio||'Profil layanan aktif dan publik')+'</small></div></article>').join('')+'</div></section>');
+  }
+  return panels.join('');
+ };
  const profileContent='<section class="social-profile-page">'
   +'<section class="social-profile-card" aria-label="Identitas profil">'
   +'<a class="social-profile-gear" href="'+routeHref('settings')+'" aria-label="Pusat pengaturan akun" title="Pusat pengaturan akun">'+renderIcon('settings')+'</a>'
@@ -48,18 +70,34 @@ export function mountProfilePage({root,user=null}={}) {
   +'</section>'
   +'<div class="social-profile-tabs" role="tablist" aria-label="Konten profil">'
   +'<button type="button" class="is-active is-icon-only" role="tab" id="profile-tab-feed" aria-label="Feed" aria-controls="profile-panel-feed" aria-selected="true" data-profile-tab="feed">'+renderIcon('grid')+'</button>'
-  +'<button type="button" role="tab" id="profile-tab-reels" aria-controls="profile-panel-reels" aria-selected="false" data-profile-tab="reels">'+renderIcon('play')+'<span>Reels</span></button>'
-  +'<button type="button" role="tab" id="profile-tab-trips" aria-controls="profile-panel-trips" aria-selected="false" data-profile-tab="trips">'+renderIcon('mapPin')+'<span>Trips</span></button>'
-  +'<button type="button" role="tab" id="profile-tab-blog" aria-controls="profile-panel-blog" aria-selected="false" data-profile-tab="blog">'+renderIcon('book')+'<span>Blog</span></button>'
-  +'<button type="button" role="tab" id="profile-tab-store" aria-controls="profile-panel-store" aria-selected="false" data-profile-tab="store">'+renderIcon('store')+'<span>Toko / Layanan</span></button>'
+  +'<button type="button" role="tab" id="profile-tab-reels" aria-controls="profile-panel-reels" aria-selected="false" data-profile-tab="reels">'+renderIcon('film')+'<span>Reels</span></button>'
+  +'<button type="button" role="tab" id="profile-tab-trips" aria-controls="profile-panel-trips" aria-selected="false" data-profile-tab="trips">'+renderIcon('map')+'<span>Trips</span></button>'
+  +'<button type="button" role="tab" id="profile-tab-blog" aria-controls="profile-panel-blog" aria-selected="false" data-profile-tab="blog">'+renderIcon('fileText')+'<span>Blog</span></button>'
+  +businessTabs()
   +'</div>'
   +'<section class="social-profile-tab-panel is-active" role="tabpanel" id="profile-panel-feed" aria-labelledby="profile-tab-feed" data-profile-panel="feed">'+emptyPanel('Belum ada postingan','Postingan foto dan konten Feed yang dipublikasikan akan tampil di sini.')+'</section>'
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-reels" aria-labelledby="profile-tab-reels" data-profile-panel="reels" hidden>'+emptyPanel('Belum ada Reels','Video pendek yang dipublikasikan akan tampil di sini.')+'</section>'
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-trips" aria-labelledby="profile-tab-trips" data-profile-panel="trips" hidden>'+emptyPanel('Belum ada Trips','Perjalanan dan cerita perjalanan yang dipublikasikan akan tampil di sini.')+'</section>'
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-blog" aria-labelledby="profile-tab-blog" data-profile-panel="blog" hidden>'+emptyPanel('Belum ada Blog','Artikel blog yang dipublikasikan akan tampil di sini.')+'</section>'
-  +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-store" aria-labelledby="profile-tab-store" data-profile-panel="store" hidden>'+emptyPanel('Belum ada produk atau layanan unggulan','Pemilik profil dapat memilih produk atau layanan unggulan dari tokonya. Bagian ini hanya menampilkan pilihan unggulan, bukan seluruh katalog.')+'</section>'
+  +businessPanels()
   +'</section>';
  root.innerHTML='<div class="pl-page-shell social-shell"><header class="pl-page-header social-header"><div class="social-brand">'+renderBrand({href:routeHref('home'),label:'PLUITS'})+'<span>Profil</span></div><a href="'+routeHref('settings')+'">Pengaturan akun</a></header><main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
+ const loadBusinessPresence=async()=>{
+  if(!user?.id)return;
+  const [storesResult,servicesResult]=await Promise.all([
+   supabase.from('stores').select('id,name,username,description,public_city,public_area').eq('owner_user_id',user.id).eq('store_status','active').eq('verification_status','verified').order('name'),
+   supabase.from('professional_profiles').select('id,username,display_name,headline,bio,profession_category').eq('user_id',user.id).eq('profile_status','active').eq('visibility','public').order('created_at')
+  ]);
+  if(profileLoadController.signal.aborted)return;
+  if(!storesResult.error)ownedStores=storesResult.data||[];
+  if(!servicesResult.error)professionalServices=servicesResult.data||[];
+  if(!profileLoadController.signal.aborted){
+   root.querySelector('.social-profile-tabs')?.insertAdjacentHTML('beforeend',businessTabs());
+   const panels=root.querySelectorAll('[data-profile-panel]');
+   panels[panels.length-1]?.insertAdjacentHTML('afterend',businessPanels());
+  }
+ };
+ loadBusinessPresence().catch(()=>{});
  root.addEventListener('click',event=>{
   const tab=event.target.closest('[data-profile-tab]');
   if(tab&&root.contains(tab)){
@@ -82,7 +120,8 @@ export function mountProfilePage({root,user=null}={}) {
   const expanded=quick.getAttribute('aria-expanded')==='true';
   quick.setAttribute('aria-expanded',String(!expanded));
   panel.hidden=expanded;
- });
+ },{signal:profileLoadController.signal});
+ return ()=>profileLoadController.abort();
 }
 export function mountSettingsPage({root,user=null,onSignOut}={}) {
  const safe=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));

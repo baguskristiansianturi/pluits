@@ -30,3 +30,12 @@ Icon meaning and visual shape require product-owner review. The developer must n
 - `play` — Reels; `mapPin` — Trips; `book` — Blog; `store` — combined Toko / Layanan tab.
 - `grid` and `store` are local inline SVG entries in `src/design-system/icons.js`; profile tabs use `renderIcon()`.
 - The product owner explicitly requested and approved the grid and storefront icon meanings. Keep accessible names on icon-led controls.
+
+## Profile navigation icon refinements
+- `grid`: icon-only Feed.
+- `film`: Reels.
+- `map`: Trips.
+- `fileText`: Blog.
+- `store`: Toko.
+- `briefcase`: Layanan.
+- All are inline SVGs with consistent outline treatment and inherit the PLUITS design token color from their parent control; active state is brand-token teal and inactive state is muted neutral.
