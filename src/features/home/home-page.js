@@ -22,7 +22,7 @@ function storyRail() {
 }
 function bottomNav() {
   return '<nav class="global-bottom-nav" aria-label="Navigasi utama">' +
-    '<a href="' + routeHref('home') + '" class="is-active" aria-current="page">' + renderIcon('book') + '<span>Beranda</span></a>' +
+    '<a href="' + routeHref('social') + '" class="is-active" aria-current="page">' + renderIcon('book') + '<span>Beranda</span></a>' +
     '<a href="' + routeHref('discover') + '">' + renderIcon('eye') + '<span>Jelajah</span></a>' +
     '<a class="global-create-button" href="' + routeHref('dashboard') + '" aria-label="Buka Ruang Kerja" title="Ruang Kerja"><span>+</span></a>' +
     '<a href="' + routeHref('dashboard') + '" aria-label="Pesan">' + renderIcon('message') + '<span>Pesan</span></a>' +
