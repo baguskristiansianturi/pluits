@@ -64,3 +64,55 @@
  .social-profile-card{padding:16px}
  .social-settings-account{align-items:flex-start;flex-direction:column}
 }
+
+/* Profile identity card — borderless app profile composition. */
+.social-profile-page{max-width:100%;padding-top:4px}
+.social-profile-card{position:relative;display:grid;grid-template-columns:108px minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:center;gap:14px 18px;padding:14px 0;border:0;border-radius:0;background:transparent}
+.social-profile-gear{position:absolute;top:0;right:0;display:grid;width:38px;height:38px;place-items:center;border-radius:50%;color:var(--pl-color-ink);text-decoration:none}
+.social-profile-gear:hover{background:var(--pl-color-canvas)}
+.social-profile-gear .ui-icon{width:20px;height:20px}
+.social-profile-avatar-wrap{grid-column:1;grid-row:1;display:flex;align-items:center;flex-direction:column;gap:8px}
+.social-profile-avatar{width:88px;height:88px;border-radius:50%;font-size:30px}
+.social-account-badge{max-width:108px;padding:5px 8px;border-radius:var(--pl-radius-pill);background:var(--pl-color-canvas);color:var(--pl-color-ink);font-size:9px;font-weight:800;text-align:center;white-space:nowrap}
+.social-account-badge.is-silver{background:#edf0f3;color:#59616b}
+.social-account-badge.is-gold{background:#f7efd9;color:#8a6417}
+.social-account-badge.is-platinum{background:#e9edf4;color:#52647c}
+.social-account-badge.is-priority{background:#242a35;color:#fff}
+.social-profile-identity{grid-column:2;grid-row:1;align-self:center;min-width:0;padding-right:36px}
+.social-profile-identity h1{margin:0 0 5px;color:var(--pl-color-ink);font-size:clamp(19px,3vw,26px);font-weight:800;letter-spacing:-.035em;overflow-wrap:anywhere}
+.social-profile-identity p{margin:0;color:var(--pl-color-muted);font-size:12px}
+.social-profile-stats{grid-column:3;grid-row:1;display:flex;align-items:center;gap:clamp(12px,3vw,30px);padding-right:42px}
+.social-profile-stats>div{display:flex;min-width:52px;flex-direction:column;align-items:center;gap:4px}
+.social-profile-stats strong{color:var(--pl-color-ink);font-size:17px;font-weight:800}
+.social-profile-stats span{color:var(--pl-color-muted);font-size:10px;white-space:nowrap}
+.social-profile-actions{grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.social-upgrade-action{display:flex;flex-direction:column;align-items:stretch;gap:5px}
+.social-profile-primary,.social-profile-secondary{display:flex;min-height:44px;align-items:center;justify-content:center;padding:0 14px;border:0;border-radius:var(--pl-radius-md);background:var(--pl-color-ink);color:#fff;font:inherit;font-size:12px;font-weight:750;text-align:center;text-decoration:none}
+.social-profile-secondary{background:var(--pl-color-canvas);color:var(--pl-color-ink)}
+.social-upgrade-link{align-self:flex-start;margin-left:3px;color:var(--pl-color-muted);font-size:10px;text-decoration:none}
+.social-upgrade-link:hover{text-decoration:underline}
+.social-profile-quick-panel{grid-column:1/-1;margin-top:8px;padding:14px 0;border-top:1px solid var(--pl-color-border)}
+.social-profile-quick-panel[hidden]{display:none}
+.social-profile-quick-heading{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+.social-profile-quick-heading strong{color:var(--pl-color-ink);font-size:14px}
+.social-profile-quick-heading span{color:var(--pl-color-muted);font-size:11px}
+.social-profile-quick-panel>a{display:flex;min-height:48px;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--pl-color-border);color:var(--pl-color-ink);font-size:12px;text-decoration:none}
+.social-profile-quick-panel>a>span{display:flex;align-items:center;gap:10px}
+.social-profile-quick-panel .ui-icon{width:17px;height:17px;color:var(--pl-color-muted)}
+.social-profile-quick-panel b{color:var(--pl-color-muted);font-size:10px;font-weight:700;white-space:nowrap}
+.social-profile-page .social-profile-tabs{margin-top:26px}
+@media(max-width:767px){
+ .social-profile-card{grid-template-columns:88px minmax(0,1fr);gap:12px 13px;padding-top:8px}
+ .social-profile-avatar{width:72px;height:72px;font-size:25px}
+ .social-account-badge{max-width:100px;padding:4px 6px;font-size:8px}
+ .social-profile-identity{grid-column:2;grid-row:1;padding-right:34px}
+ .social-profile-identity h1{font-size:19px}
+ .social-profile-identity p{font-size:11px}
+ .social-profile-stats{grid-column:1/-1;grid-row:2;justify-content:space-around;gap:8px;padding:8px 0 2px}
+ .social-profile-stats>div{min-width:0;flex:1}
+ .social-profile-stats strong{font-size:16px}
+ .social-profile-stats span{font-size:10px}
+ .social-profile-actions{grid-row:3;gap:8px;margin-top:4px}
+ .social-profile-primary,.social-profile-secondary{min-height:43px;padding-inline:8px;font-size:10px}
+ .social-upgrade-link{font-size:9px}
+}
