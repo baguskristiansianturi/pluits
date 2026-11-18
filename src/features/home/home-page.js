@@ -26,7 +26,7 @@ function bottomNav() {
     '<a href="' + routeHref('discover') + '">' + renderIcon('eye') + '<span>Jelajah</span></a>' +
     '<a class="global-create-button" href="' + routeHref('dashboard') + '" aria-label="Buka Ruang Kerja" title="Ruang Kerja"><span>+</span></a>' +
     '<a href="' + routeHref('dashboard') + '" aria-label="Pesan">' + renderIcon('message') + '<span>Pesan</span></a>' +
-    '<a href="' + routeHref('dashboard') + '" aria-label="Akun">' + renderIcon('user') + '<span>Akun</span></a></nav>';
+    '<a href="' + routeHref('dashboard') + '" aria-label="Profil">' + renderIcon('user') + '<span>Profil</span></a></nav>';
 }
 function createSheet() {
   return '<div class="global-create-backdrop" data-create-backdrop hidden><section class="global-create-sheet" role="dialog" aria-modal="true" aria-labelledby="create-title"><button type="button" class="global-create-close" data-close-create aria-label="Tutup">×</button><span class="global-kicker">MULAI SESUATU</span><h2 id="create-title">Buat di PLUITS</h2><p>Pilih format yang ingin disiapkan. Publikasi akan diaktifkan setelah layanan terkait tersedia.</p><div class="global-create-options"><button disabled>Feed <small>Belum tersedia</small></button><button disabled>Reels <small>Belum tersedia</small></button><button disabled>Story <small>Belum tersedia</small></button><button disabled>Live <small>Belum tersedia</small></button><button disabled>Blog <small>Belum tersedia</small></button></div><a href="' + routeHref('dashboard') + '">Buka Dashboard pengelolaan →</a></section></div>';
@@ -94,8 +94,8 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
     return '<section class="global-content-section" id="content-' + tab.id + '" data-content-section="' + tab.id + '"><div class="global-content-intro"><span class="global-kicker">' + String(index+1).padStart(2,'0') + ' / SOCIAL CONTENT</span><h2>' + tab.label + '</h2><p>' + note + '</p></div>' + body + '</section>';
   }).join('');
   root.innerHTML = '<div class="pl-page-shell home-page global-home-page">' +
-    '<header class="pl-page-header global-header" data-global-header><div class="global-brand-group">' + renderBrand({href:routeHref('home'),label:'PLUITS Global Home'}) + '<a class="global-icon-button global-favorite-link" href="' + routeHref('dashboard') + '" aria-label="Favorit" title="Favorit">' + renderIcon('heart') + '</a></div>' + actions + '</header>' +
-    '<main class="pl-page-main home-main global-home-main"><section class="global-home-intro"><span class="global-kicker">PLUITS · INDONESIA</span><h1>Temukan apa yang sedang terjadi.</h1><p>Jelajahi cerita, orang, tempat, komunitas, dan aktivitas dari seluruh Indonesia.</p></section>' +
+    '<header class="pl-page-header global-header" data-global-header><div class="global-brand-group">' + renderBrand({href:routeHref('home'),label:'PLUITS'}) + '<a class="global-icon-button global-favorite-link" href="' + routeHref('dashboard') + '" aria-label="Favorit" title="Favorit">' + renderIcon('heart') + '</a></div>' + actions + '</header>' +
+    '<main class="pl-page-main home-main global-home-main"><section class="global-home-intro"><span class="global-kicker">PLUITS · INDONESIA</span><h1>Beranda Anda di PLUITS.</h1><p>Ikuti cerita, temukan orang, dan terhubung dengan komunitas dalam satu ruang sosial.</p></section>' +
     discovery +
     '<section class="global-section global-stories" id="stories">' + heading('Stories','Momen terbaru dari akun yang Anda ikuti.') + storyRail() + '</section>' +
     '<nav class="global-content-tabs" data-content-tabs aria-label="Kategori konten">' + contentTabs.map((tab,i)=>'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-controls="content-' + tab.id + '">' + tab.label + '</button>').join('') + '</nav>' +
