@@ -34,7 +34,7 @@ export function mountProfilePage({root,user=null}={}) {
  const initial=name.trim().charAt(0).toUpperCase()||'P';
  const profileContent='<section class="social-profile-page">'
   +'<section class="social-profile-card" aria-label="Identitas profil">'
-  +'<a class="social-profile-gear" href="'+routeHref('settings')+'" aria-label="Pusat pengaturan akun" title="Pusat pengaturan akun">'+renderIcon('user')+'</a>'
+  +'<a class="social-profile-gear" href="'+routeHref('settings')+'" aria-label="Pusat pengaturan akun" title="Pusat pengaturan akun">'+renderIcon('settings')+'</a>'
   +'<div class="social-profile-avatar-wrap"><div class="social-profile-avatar">'+initial+'</div><span class="social-account-badge is-'+accountLevel+'">'+badgeLabel+'</span></div>'
   +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p></div>'
   +'<div class="social-profile-stats"><div><strong>—</strong><span>Pengikut</span></div><div><strong>—</strong><span>Mengikuti</span></div><div><strong>—</strong><span>Diikuti</span></div></div>'
