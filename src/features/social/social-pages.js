@@ -138,7 +138,7 @@ export function mountProfilePage({root,user=null}={}) {
  const bubbleMotionButton=root.querySelector('[data-bubble-motion]');
  const bubbleElements=bubbleField?[...bubbleField.querySelectorAll('[data-bubble]')]:[];
  const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches||false;
- const bubbleStates=bubbleElements.map((element,index)=>({element,x:0,y:0,vx:[.34,-.27,.22,-.31][index]||.2,vy:[-.19,.24,.29,-.16][index]||.18,radius:0,mass:1,sx:1,sy:1,dragging:false,lastX:0,lastY:0}));
+ const bubbleStates=bubbleElements.map((element,index)=>({element,x:0,y:0,vx:[.34,-.27,.22,-.31][index]||.2,vy:[-.19,.24,.29,-.16][index]||.18,radius:0,mass:1,sx:1,sy:1,dragging:false,activePointerId:null,lastX:0,lastY:0}));
  const resizeBubbles=()=>{
   if(!bubbleField)return;
   const rect=bubbleField.getBoundingClientRect();
@@ -208,26 +208,36 @@ export function mountProfilePage({root,user=null}={}) {
    if(bubbleStatus)bubbleStatus.textContent='Miringkan HP perlahan untuk menggeser gelembung.';
   }catch(error){if(bubbleStatus)bubbleStatus.textContent='Sensor tidak dapat diaktifkan pada perangkat ini.';}
  };
+ const releaseBubblePointer=state=>{
+  state.dragging=false;
+  const pointerId=state.activePointerId;
+  state.activePointerId=null;
+  if(pointerId!==null&&state.element.hasPointerCapture?.(pointerId))state.element.releasePointerCapture(pointerId);
+ };
+ const releaseAllBubblePointers=()=>bubbleStates.forEach(releaseBubblePointer);
  bubbleStates.forEach(state=>{
   state.element.addEventListener('click',()=>{if(bubbleStatus)bubbleStatus.textContent=state.element.dataset.name+' · '+state.element.dataset.description+' — hanya contoh demo.';});
   state.element.addEventListener('pointerdown',event=>{
-   const rect=bubbleField.getBoundingClientRect();state.dragging=true;state.lastX=event.clientX-rect.left;state.lastY=event.clientY-rect.top;
+   if(state.activePointerId!==null)return;
+   const rect=bubbleField.getBoundingClientRect();state.dragging=true;state.activePointerId=event.pointerId;state.lastX=event.clientX-rect.left;state.lastY=event.clientY-rect.top;
    state.element.setPointerCapture?.(event.pointerId);
   });
   state.element.addEventListener('pointermove',event=>{
-   if(!state.dragging)return;
+   if(!state.dragging||event.pointerId!==state.activePointerId)return;
    const rect=bubbleField.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;
    state.vx=(x-state.lastX)*.18;state.vy=(y-state.lastY)*.18;state.x=x;state.y=y;state.lastX=x;state.lastY=y;
   });
-  const release=()=>{state.dragging=false;};
-  state.element.addEventListener('pointerup',release);state.element.addEventListener('pointercancel',release);
+  state.element.addEventListener('pointerup',()=>releaseBubblePointer(state));
+  state.element.addEventListener('pointercancel',()=>releaseBubblePointer(state));
+  state.element.addEventListener('lostpointercapture',()=>releaseBubblePointer(state));
  });
  bubbleMotionButton?.addEventListener('click',enableDeviceMotion);
- const visibilityHandler=()=>{if(document.hidden)stopBubbles();else startBubbles();};
- document.addEventListener('visibilitychange',visibilityHandler);window.addEventListener('resize',resizeBubbles);startBubbles();
+ const visibilityHandler=()=>{if(document.hidden){releaseAllBubblePointers();stopBubbles();}else startBubbles();};
+ const blurHandler=()=>releaseAllBubblePointers();
+ document.addEventListener('visibilitychange',visibilityHandler);window.addEventListener('resize',resizeBubbles);window.addEventListener('blur',blurHandler);startBubbles();
  return ()=>{
-  profileLoadController.abort();stopBubbles();window.removeEventListener('deviceorientation',orientationHandler);
-  window.removeEventListener('resize',resizeBubbles);document.removeEventListener('visibilitychange',visibilityHandler);
+  releaseAllBubblePointers();profileLoadController.abort();stopBubbles();window.removeEventListener('deviceorientation',orientationHandler);
+  window.removeEventListener('resize',resizeBubbles);window.removeEventListener('blur',blurHandler);document.removeEventListener('visibilitychange',visibilityHandler);
  };
 
 }
