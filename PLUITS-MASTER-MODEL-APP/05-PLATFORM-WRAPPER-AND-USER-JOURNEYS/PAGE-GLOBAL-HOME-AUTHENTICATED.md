@@ -10,11 +10,11 @@ Define how the existing PLUITS Beranda responds when a Supabase session is activ
 - Authenticated `#/home` renders the same public-facing PLUITS platform landing page as a guest sees.
 - Keep the same hero, platform introduction, ecosystem overview, identity explainer, Android information, closing CTA, page shell, spacing, and footer.
 - The header may replace guest login/registration actions with a compact account identity and sign-out control.
-- The account avatar/name is a link to the separate protected User Dashboard at `#/dashboard`.
+- The account avatar/name links to the protected User Dashboard at `#/dashboard`.
 - Primary calls to action may change wording or point to the ecosystem section because the user is already signed in.
 - Do not replace the landing page with a personalized greeting, account/email panel, profile summary, dashboard cards, feed, or activity stream.
-- User Dashboard, Main Profile, Circle, and Social Media personal space are separate product areas. Dashboard is opened by the signed-in account avatar; it is not embedded in or substituted for Global Home.
-- The internal development Workspace remains a separate protected route and is not the user's dashboard or Beranda.
+- Dashboard is the single post-login control center for accessing PLUITS applications and managing cross-application work. Main Profile remains a separate area for identity and account settings.
+- Workspace is an internal development term only and is not a separate deployed route or user-facing page.
 
 ## Data and security constraints
 - Read the active session only to determine whether account controls should be shown and to display the account name in the header.

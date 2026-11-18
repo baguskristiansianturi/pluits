@@ -5,7 +5,7 @@ Page ID: `PAGE-GLOBAL-HOME` · Layout: `LAY-GLOBAL-HOME-001` · Owner: Platform 
 Route: `#/home` and empty application hash for all sessions.
 
 ## Purpose and journey
-Introduce PLUITS as a platform to first-time visitors and returning users. Beranda is the front door of the PLUITS ecosystem, not a personal profile, account dashboard, WordPress-style admin page, Circle, or Workspace.
+Introduce PLUITS as a platform to first-time visitors and returning users. Beranda is the front door of the PLUITS ecosystem, not a personal profile or authenticated Dashboard.
 
 ## Content architecture
 1. Hero — platform proposition, concise explanation, discovery/registration actions and conceptual ecosystem composition.
@@ -44,11 +44,11 @@ Introduce PLUITS as a platform to first-time visitors and returning users. Beran
 - Guest and authenticated `#/home` both render this exact same landing-page composition.
 - Session state may change only account controls in the header and relevant CTA wording/targets. It must not render a personalized welcome panel, profile summary, feed, dashboard cards, or alternate page body.
 - Shared `renderBrand()` always targets `#/home`, so the brand returns to the same Beranda from every page.
-- Login success and authenticated visits to guest-only Auth screens return to `#/home`.
-- The signed-in account avatar/name links to the separate protected User Dashboard at `#/dashboard`.
-- User Dashboard, Circle, Main Profile, and Social Media personal space remain separate product areas.
-- Internal development Workspace remains a separate protected route and must not be presented as the user's Global Home.
-- Existing workspace protection, login, recovery, legal routes and signup release gate remain unchanged.
+- Successful login and authenticated visits to guest-only Auth screens open the protected Dashboard at `#/dashboard`.
+- The signed-in account avatar/name links to the protected User Dashboard at `#/dashboard`.
+- Dashboard is the single post-login control center. Main Profile remains a separate area for identity and account settings; Social Media is accessed through the application launcher.
+- Workspace is an internal development term only; it is not a separate deployed route or user-facing page.
+- Login, recovery, legal routes and the signup release gate remain unchanged.
 
 ## Runtime ownership and dependencies
 - One composition: `src/features/home/home-page.js`.
@@ -63,7 +63,7 @@ Introduce PLUITS as a platform to first-time visitors and returning users. Beran
 - Source map: `src/CHANGE-MAP.md`.
 
 ## Change impact and procedure
-Copy/section edits affect this feature and this specification. Root route or auth redirect changes affect app routing and must preserve Auth recovery behavior. Default brand destination affects every `renderBrand()` consumer: auth, legal, workspace and public home. Shared shell/token changes require a separate consumer audit.
+Copy/section edits affect this feature and this specification. Root route or auth redirect changes affect app routing and must preserve Auth recovery behavior. Default brand destination affects every `renderBrand()` consumer: auth, legal, Dashboard and public home. Shared shell/token changes require a separate consumer audit.
 
 For each change, read this specification, UI Foundation governance and responsive/layout guidance; inspect route, auth, shell, tokens and assets; update docs/registries/tests in the same work item; run `npm test` and `npm run build`; verify the same homepage for guest/authenticated sessions, desktop/tablet/mobile, anchors and brand links. Keep noindex until explicitly authorized.
 
