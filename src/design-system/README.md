@@ -6,7 +6,7 @@ The first frontend screen establishes a small, reviewable foundation in the exac
 2. Icons — local inline SVG registry in icons.js; no unreviewed external icon dependency.
 3. Colors — semantic tokens derived from the existing PLUITS teal brand mark and neutral ink/surface roles.
 4. Behavior — validation, loading, error, password visibility, confirmation-pending, keyboard focus, and auth-state transitions.
-5. Layouts — LAY-AUTH-SPLIT-001 and LAY-WORKSPACE-BOARD-001 in layouts.js.
+5. Layouts — LAY-AUTH-SPLIT-001, LAY-USER-DASHBOARD-001, and LAY-WORKSPACE-BOARD-001 in layouts.js.
 
 All token values, icon IDs, and layouts are marked PROVISIONAL until reviewed and approved. The feature screens consume these tokens and scoped styles; they must not create competing global scales.
 
@@ -62,4 +62,4 @@ Every header/navigation rendered through `renderPageHeader()` receives a soft bo
 
 ## Global brand destination
 
-The shared `renderBrand()` renderer defaults to the canonical `#/home` route. Guest navigation opens public Global Home; authenticated navigation is resolved by the app route guard to the current internal workspace until authenticated Global Home is implemented. Do not hard-code a different brand destination in individual feature headers without a documented exception.
+The shared `renderBrand()` renderer always targets the canonical `#/home` Beranda for guests and authenticated users. On Global Home, the signed-in account avatar/name links to the separate protected `#/dashboard` user Dashboard. The internal `#/workspace` remains a separate development workspace. Do not conflate these destinations.
