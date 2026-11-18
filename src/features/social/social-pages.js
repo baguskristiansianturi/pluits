@@ -24,7 +24,7 @@ export function mountMessagesPage({root}={}) {
 export function mountProfilePage({root,user=null}={}) {
  const safe=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  const email=safe(user?.email||''); const name=safe(user?.user_metadata?.display_name||user?.user_metadata?.full_name||'Pengguna PLUITS');
- const profileContent='<section class="social-home-section"><div class="social-profile-card"><div class="social-profile-avatar">'+name.slice(0,1).toUpperCase()+'</div><div class="social-profile-identity"><h2>'+name+'</h2><p>'+email+'</p><span>Profil pribadi PLUITS</span></div><a class="social-settings-shortcut" href="'+routeHref('settings')+'">'+renderIcon('settings')+'<span>Pengaturan</span></a></div><div class="social-profile-tabs">'+['Feed','Reels','Trips','Blog','Live'].map(x=>'<button type="button">'+x+'</button>').join('')+'</div>'+emptyPanel('Belum ada konten profil','Postingan, Reels, Trips, Blog, dan Live yang Anda publikasikan akan muncul di sini.')+'</section>';
+ const profileContent='<section class="social-home-section"><div class="social-profile-card"><div class="social-profile-avatar">'+name.slice(0,1).toUpperCase()+'</div><div class="social-profile-identity"><h2>'+name+'</h2><p>'+email+'</p><span>Profil pribadi PLUITS</span></div><a class="social-settings-shortcut" href="'+routeHref('settings')+'">'+renderIcon('lock')+'<span>Pengaturan</span></a></div><div class="social-profile-tabs">'+['Feed','Reels','Trips','Blog','Live'].map(x=>'<button type="button">'+x+'</button>').join('')+'</div>'+emptyPanel('Belum ada konten profil','Postingan, Reels, Trips, Blog, dan Live yang Anda publikasikan akan muncul di sini.')+'</section>';
  root.innerHTML=shell('Profil','Identitas dan aktivitas publik Anda di PLUITS.','profile',profileContent);
 }
 export function mountSettingsPage({root,user=null,onSignOut}={}) {
@@ -34,7 +34,7 @@ export function mountSettingsPage({root,user=null,onSignOut}={}) {
   {id:'account',label:'Akun',icon:'user',title:'Akun & keamanan',desc:'Informasi akun yang digunakan untuk masuk ke PLUITS.'},
   {id:'privacy',label:'Privasi',icon:'lock',title:'Privasi & visibilitas',desc:'Kontrol profil publik dan bagaimana orang menemukan Anda.'},
   {id:'notifications',label:'Notifikasi',icon:'bell',title:'Notifikasi',desc:'Preferensi pemberitahuan dari aktivitas PLUITS.'},
-  {id:'app',label:'Aplikasi',icon:'settings',title:'Preferensi aplikasi',desc:'Pengaturan pengalaman penggunaan aplikasi PLUITS.'}
+  {id:'app',label:'Aplikasi',icon:'book',title:'Preferensi aplikasi',desc:'Pengaturan pengalaman penggunaan aplikasi PLUITS.'}
  ];
  let active='account';
  const render=()=>{
