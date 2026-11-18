@@ -10,6 +10,7 @@ export function resolveRoute(hash = '', search = '') {
 }
 export function resolveAuthenticatedRoute(route, hasSession) {
   if (route === 'dashboard' && !hasSession) return 'login';
-  if (hasSession && ['register', 'login', 'forgot'].includes(route)) return 'dashboard';
+  if (route === 'circle') return 'home';
+  if (hasSession && ['register', 'login', 'forgot'].includes(route)) return 'home';
   return route;
 }
