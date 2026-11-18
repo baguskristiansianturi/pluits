@@ -25,15 +25,20 @@ Toko and Layanan are separate conditional tabs. Never show a combined “Toko / 
 - Inactive icons/text use the design-system muted color.
 - Active icons/text and active indicator use the PLUITS brand token `--pl-color-brand`; no hard-coded black or one-off icon colors.
 - Feed remains icon-only. Other tabs keep their labels.
-- Horizontal carousel behavior is reserved for genuinely long lists; do not force carousel presentation for one or two items.
+- Horizontal carousel behavior is reserved for genuinely long lists (more than three cards); do not force carousel presentation for one or two items.
 
 ## Store/service content and routing
+- One Toko tab represents all active, verified stores owned by the account; multiple stores are listed inside the panel rather than creating duplicate tabs.
+- One Layanan tab represents the owner's active, public professional profiles; multiple service profiles are listed inside the panel rather than creating duplicate tabs.
 - Store panel must ultimately show only owner-selected featured products, never the complete catalogue. Selecting a featured item should open the owner's canonical storefront homepage.
 - Service panel must show only owner-selected featured services/portfolio items. Selecting an item should open its public service destination.
 - Current schema does not yet provide a product-level featured-selection field, and current app router does not yet implement the documented `#/shop/{username}` storefront route. Do not fake either capability or display arbitrary catalogue products as featured.
 - Until the featured selection and public destination contracts are implemented, show a truthful empty state rather than fabricated featured items or broken links.
 
 ## Runtime mapping
+- Optional business tabs are inserted only after the authenticated-owner presence queries succeed and return at least one eligible record. Do not use editable `user_metadata` as an ownership signal.
+- Query failures fail closed: the four core content tabs remain visible and optional business tabs are omitted.
+- Query cancellation is tied to profile-page teardown.
 - `src/features/social/social-pages.js`: conditional presence lookup and tab/panel rendering.
 - `src/features/social/social-pages.css`: responsive tab styling and conditional showcase panels.
 - `src/design-system/icons.js`: shared grid, film, map, document, storefront and briefcase icons.
