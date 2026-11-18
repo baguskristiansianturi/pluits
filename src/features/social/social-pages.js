@@ -46,11 +46,36 @@ export function mountProfilePage({root,user=null}={}) {
   +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('mail')+'Kontak</span><b>Kelola →</b></a>'
   +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('lock')+'Privasi profil · Publik / Privat</span><b>Kelola →</b></a></section>'
   +'</section>'
-  +'<div class="social-profile-tabs">'+['Feed','Reels','Trips','Blog','Live'].map(x=>'<button type="button">'+x+'</button>').join('')+'</div>'
-  +emptyPanel('Belum ada konten profil','Postingan, Reels, Trips, Blog, dan Live yang Anda publikasikan akan muncul di sini.')
+  +'<div class="social-profile-tabs" role="tablist" aria-label="Konten profil">'
+  +'<button type="button" class="is-active is-icon-only" role="tab" id="profile-tab-feed" aria-label="Feed" aria-controls="profile-panel-feed" aria-selected="true" data-profile-tab="feed">'+renderIcon('grid')+'</button>'
+  +'<button type="button" role="tab" id="profile-tab-reels" aria-controls="profile-panel-reels" aria-selected="false" data-profile-tab="reels">'+renderIcon('play')+'<span>Reels</span></button>'
+  +'<button type="button" role="tab" id="profile-tab-trips" aria-controls="profile-panel-trips" aria-selected="false" data-profile-tab="trips">'+renderIcon('mapPin')+'<span>Trips</span></button>'
+  +'<button type="button" role="tab" id="profile-tab-blog" aria-controls="profile-panel-blog" aria-selected="false" data-profile-tab="blog">'+renderIcon('book')+'<span>Blog</span></button>'
+  +'<button type="button" role="tab" id="profile-tab-store" aria-controls="profile-panel-store" aria-selected="false" data-profile-tab="store">'+renderIcon('store')+'<span>Toko / Layanan</span></button>'
+  +'</div>'
+  +'<section class="social-profile-tab-panel is-active" role="tabpanel" id="profile-panel-feed" aria-labelledby="profile-tab-feed" data-profile-panel="feed">'+emptyPanel('Belum ada postingan','Postingan foto dan konten Feed yang dipublikasikan akan tampil di sini.')+'</section>'
+  +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-reels" aria-labelledby="profile-tab-reels" data-profile-panel="reels" hidden>'+emptyPanel('Belum ada Reels','Video pendek yang dipublikasikan akan tampil di sini.')+'</section>'
+  +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-trips" aria-labelledby="profile-tab-trips" data-profile-panel="trips" hidden>'+emptyPanel('Belum ada Trips','Perjalanan dan cerita perjalanan yang dipublikasikan akan tampil di sini.')+'</section>'
+  +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-blog" aria-labelledby="profile-tab-blog" data-profile-panel="blog" hidden>'+emptyPanel('Belum ada Blog','Artikel blog yang dipublikasikan akan tampil di sini.')+'</section>'
+  +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-store" aria-labelledby="profile-tab-store" data-profile-panel="store" hidden>'+emptyPanel('Belum ada produk atau layanan unggulan','Pemilik profil dapat memilih produk atau layanan unggulan dari tokonya. Bagian ini hanya menampilkan pilihan unggulan, bukan seluruh katalog.')+'</section>'
   +'</section>';
  root.innerHTML='<div class="pl-page-shell social-shell"><header class="pl-page-header social-header"><div class="social-brand">'+renderBrand({href:routeHref('home'),label:'PLUITS'})+'<span>Profil</span></div><a href="'+routeHref('settings')+'">Pengaturan akun</a></header><main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
  root.addEventListener('click',event=>{
+  const tab=event.target.closest('[data-profile-tab]');
+  if(tab&&root.contains(tab)){
+   const selected=tab.dataset.profileTab;
+   root.querySelectorAll('[data-profile-tab]').forEach(item=>{
+    const active=item===tab;
+    item.classList.toggle('is-active',active);
+    item.setAttribute('aria-selected',String(active));
+   });
+   root.querySelectorAll('[data-profile-panel]').forEach(panel=>{
+    const active=panel.dataset.profilePanel===selected;
+    panel.classList.toggle('is-active',active);
+    panel.hidden=!active;
+   });
+   return;
+  }
   const quick=event.target.closest('[data-profile-quick]');
   if(!quick||!root.contains(quick))return;
   const panel=root.querySelector('[data-profile-quick-panel]');

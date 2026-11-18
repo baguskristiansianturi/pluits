@@ -24,3 +24,9 @@ Each icon entry should record:
 5. Add the selected icon only after approval, then map it to the runtime library.
 
 Icon meaning and visual shape require product-owner review. The developer must not make that visual decision on the user's behalf.
+
+## Profile content tab icons — approved
+- `grid` — 3×3 square grid, used for icon-only Feed tab.
+- `play` — Reels; `mapPin` — Trips; `book` — Blog; `store` — combined Toko / Layanan tab.
+- `grid` and `store` are local inline SVG entries in `src/design-system/icons.js`; profile tabs use `renderIcon()`.
+- The product owner explicitly requested and approved the grid and storefront icon meanings. Keep accessible names on icon-led controls.
