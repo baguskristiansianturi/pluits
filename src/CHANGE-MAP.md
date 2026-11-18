@@ -14,7 +14,7 @@ Scope: Public Business Homepage, authenticated Social App, Jelajah, Ruang Kerja,
 | Shared brand/header/footer | src/design-system/page-shell.js and page-shell.css | design-system | Business Homepage, Social Home, Jelajah, Auth, Legal and Ruang Kerja |
 | Public Business Homepage | src/features/home/business-home-page.js and business-home.css | features/home | #/home; PLUITS brand destination |
 | Authenticated Social Home (former Global Home composition) | src/features/home/home-page.js and home-page.css | features/home | protected #/social after login |
-| Jelajah, Messages, Profile, Settings, and legacy Circle route | src/features/social/social-pages.js and social-pages.css | features/social | #/discover, #/messages, #/profile, #/settings; legacy #/circle redirects to #/social |
+| Jelajah, Messages, redesigned Profile, Settings, and legacy Circle route | src/features/social/social-pages.js and social-pages.css | features/social | #/discover, #/messages, #/profile, #/settings; legacy #/circle redirects to #/social |
 | Ruang Kerja | src/features/dashboard/dashboard-page.js and dashboard-page.css | features/dashboard | Protected #/dashboard |
 | Auth UI | src/features/auth/auth-page.js and auth-page.css | features/auth | App router |
 | Legal draft screens | src/features/legal/policy-page.js and policy-page.css | features/legal | App router |
@@ -52,6 +52,6 @@ Run npm test and npm run build. Verify Public homepage, Social Home, legacy Circ
 - Signup remains disabled unless explicitly enabled after readiness review.
 - Stories, Live, Blog, Marketplace, Geo Directory, nearby businesses, notifications, cart data, and product feeds are not yet connected to operational data services; corresponding Global Home content currently uses visual demo fixtures where noted in the canonical page specification.
 - Create actions remain disabled until their publishing services are available.
-- Messages remains an initial empty inbox surface. Profile has a dedicated settings hub and working sign-out action; profile editing, profile visibility persistence, notification preferences, and published profile media are not yet connected.
+- Messages remains an initial empty inbox surface. Profile now has a borderless identity card, tier badge, follower-stat placeholders, upgrade entry point, quick profile settings panel, and account-settings shortcut. Profile editing, privacy persistence, subscription checkout, follower counts, notification preferences, and published profile media are not yet connected.
 - Location permission request flow is not implemented; Circle displays a clear no-location fallback.
 - Real Android visual acceptance and founder product approval remain NOT TESTED / NOT READY.
