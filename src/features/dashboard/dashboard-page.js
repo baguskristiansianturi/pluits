@@ -53,7 +53,7 @@ function renderEmpty(title, description, icon = 'book') {
 }
 
 function renderTabContent(tab, context) {
-  const { name, email, initial, selectedBusinessType, selectedTemplate, transactionMode, settingsSection } = context;
+  const { name, email, initial, selectedBusinessType, selectedTemplate, transactionMode, transactionStatus, settingsSection } = context;
   if (tab === 'profile') {
     return '<section class="dashboard-view" aria-labelledby="view-title">' +
       '<div class="dashboard-view-heading"><div><span class="dashboard-kicker">IDENTITAS PERSONAL</span><h1 id="view-title">Profil Sosial</h1><p>Identitas yang digunakan untuk berinteraksi, membuat konten, dan bertransaksi di PLUITS.</p></div><span class="dashboard-profile-avatar">' + initial + '</span></div>' +
@@ -77,7 +77,7 @@ function renderTabContent(tab, context) {
   if (tab === 'transactions') {
     return '<section class="dashboard-view" aria-labelledby="view-title"><div class="dashboard-view-heading"><div><span class="dashboard-kicker">PUSAT TRANSAKSI</span><h1 id="view-title">Transaksi</h1><p>Pantau aktivitas pembelian maupun penjualan dari satu akun PLUITS.</p></div></div>' +
       '<div class="dashboard-panel"><div class="dashboard-transaction-switch" role="tablist" aria-label="Jenis transaksi"><button type="button" data-transaction-mode="purchase" class="' + (transactionMode === 'purchase' ? 'is-active' : '') + '" role="tab" aria-selected="' + (transactionMode === 'purchase') + '">Pembelian</button><button type="button" data-transaction-mode="sales" class="' + (transactionMode === 'sales' ? 'is-active' : '') + '" role="tab" aria-selected="' + (transactionMode === 'sales') + '">Penjualan</button></div>' +
-      '<div class="dashboard-order-filters"><span class="is-current">Semua</span><span>Menunggu pembayaran</span><span>Diproses</span><span>Dikirim</span><span>Selesai</span><span>Dibatalkan</span></div>' +
+      '<div class="dashboard-order-filters">' + [{id:'all',label:'Semua'},{id:'waiting',label:'Menunggu pembayaran'},{id:'processing',label:'Diproses'},{id:'shipping',label:'Dikirim'},{id:'completed',label:'Selesai'},{id:'cancelled',label:'Dibatalkan'}].map((item) => '<button type="button" data-transaction-status="' + item.id + '" class="' + (transactionStatus === item.id ? 'is-current' : '') + '">' + item.label + '</button>').join('') + '</div>' +
       renderEmpty(transactionMode === 'purchase' ? 'Belum ada pembelian' : 'Belum ada penjualan', transactionMode === 'purchase' ? 'Pesanan yang Anda lakukan di PLUITS akan tercatat dan dapat dipantau dari sini.' : 'Pesanan dari pelanggan pada akun bisnis Anda akan tercatat dan dapat dikelola dari sini.','arrow') +
       '</div><div class="dashboard-inline-note">Status pembayaran, konfirmasi pesanan, pengiriman, dan penyelesaian transaksi akan menggunakan data transaksi sebenarnya. Belum ada data contoh yang ditampilkan.</div></section>';
   }
@@ -147,6 +147,7 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
     selectedBusinessType:'',
     selectedTemplate:'AURELIA',
     transactionMode:'purchase',
+    transactionStatus:'all',
     settingsSection:'account'
   };
 
@@ -188,7 +189,7 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
       '<span class="dashboard-module-link-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-module-link-label">' + item.label + '</span>' +
       (item.status ? '<small>' + item.status + '</small>' : '') + '</button>'
     ).join('') + '</div></section>').join('');
-    const center = renderTabContent(state.activeTab, { name, email, initial, selectedBusinessType:state.selectedBusinessType, selectedTemplate:state.selectedTemplate, transactionMode:state.transactionMode, settingsSection:state.settingsSection });
+    const center = renderTabContent(state.activeTab, { name, email, initial, selectedBusinessType:state.selectedBusinessType, selectedTemplate:state.selectedTemplate, transactionMode:state.transactionMode, transactionStatus:state.transactionStatus, settingsSection:state.settingsSection });
     root.innerHTML =
       '<div class="pl-page-shell dashboard-page">' +
         renderPageHeader({ label:'PLUITS Dashboard', brandHref:routeHref('home'), note:'PUSAT KENDALI PENGGUNA', rightContent:headerActions, variant:'workspace' }) +
@@ -223,7 +224,8 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
     if (target.matches('[data-close-notifications]')) { state.notificationsOpen = false; render(); return; }
     if (target.matches('[data-social-view]')) { state.socialView = target.dataset.socialView; render(); return; }
     if (target.matches('[data-business-type]')) { state.selectedBusinessType = target.dataset.businessType; render(); return; }
-    if (target.matches('[data-transaction-mode]')) { state.transactionMode = target.dataset.transactionMode; render(); return; }
+    if (target.matches('[data-transaction-mode]')) { state.transactionMode = target.dataset.transactionMode; state.transactionStatus = 'all'; render(); return; }
+    if (target.matches('[data-transaction-status]')) { state.transactionStatus = target.dataset.transactionStatus; render(); return; }
     if (target.matches('[data-settings-section]')) { state.settingsSection = target.dataset.settingsSection; render(); return; }
     if (target.matches('[data-blog-template]')) { state.selectedTemplate = target.dataset.blogTemplate; render(); return; }
     if (target.matches('[data-sign-out]')) {
