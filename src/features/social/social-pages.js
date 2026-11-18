@@ -23,9 +23,41 @@ export function mountMessagesPage({root}={}) {
 }
 export function mountProfilePage({root,user=null}={}) {
  const safe=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
- const email=safe(user?.email||''); const name=safe(user?.user_metadata?.display_name||user?.user_metadata?.full_name||'Pengguna PLUITS');
- const profileContent='<section class="social-home-section"><div class="social-profile-card"><div class="social-profile-avatar">'+name.slice(0,1).toUpperCase()+'</div><div class="social-profile-identity"><h2>'+name+'</h2><p>'+email+'</p><span>Profil pribadi PLUITS</span></div><a class="social-settings-shortcut" href="'+routeHref('settings')+'">'+renderIcon('lock')+'<span>Pengaturan</span></a></div><div class="social-profile-tabs">'+['Feed','Reels','Trips','Blog','Live'].map(x=>'<button type="button">'+x+'</button>').join('')+'</div>'+emptyPanel('Belum ada konten profil','Postingan, Reels, Trips, Blog, dan Live yang Anda publikasikan akan muncul di sini.')+'</section>';
- root.innerHTML=shell('Profil','Identitas dan aktivitas publik Anda di PLUITS.','profile',profileContent);
+ const metadata=user?.user_metadata||{};
+ const name=safe(metadata.display_name||metadata.full_name||metadata.name||'Pengguna PLUITS');
+ const username=safe(metadata.username||'nama_pengguna');
+ const level=String(metadata.account_level||'regular').toLowerCase();
+ const allowedLevels=['regular','silver','gold','platinum','priority'];
+ const accountLevel=allowedLevels.includes(level)?level:'regular';
+ const verified=Boolean(metadata.is_verified||metadata.verified||user?.email_confirmed_at);
+ const badgeLabel=accountLevel==='regular'?(verified?'Regular · Terverifikasi':'Regular · Belum terverifikasi'):accountLevel.charAt(0).toUpperCase()+accountLevel.slice(1);
+ const initial=name.trim().charAt(0).toUpperCase()||'P';
+ const profileContent='<section class="social-profile-page">'
+  +'<section class="social-profile-card" aria-label="Identitas profil">'
+  +'<a class="social-profile-gear" href="'+routeHref('settings')+'" aria-label="Pusat pengaturan akun" title="Pusat pengaturan akun">'+renderIcon('user')+'</a>'
+  +'<div class="social-profile-avatar-wrap"><div class="social-profile-avatar">'+initial+'</div><span class="social-account-badge is-'+accountLevel+'">'+badgeLabel+'</span></div>'
+  +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p></div>'
+  +'<div class="social-profile-stats"><div><strong>—</strong><span>Pengikut</span></div><div><strong>—</strong><span>Mengikuti</span></div><div><strong>—</strong><span>Diikuti</span></div></div>'
+  +'<div class="social-profile-actions"><div class="social-upgrade-action"><a class="social-profile-primary" href="#/settings">Upgrade / Langganan</a><a class="social-upgrade-link" href="#/settings">Mulai dari Silver</a></div><button type="button" class="social-profile-secondary" data-profile-quick aria-expanded="false">Pengaturan Profil Cepat</button></div>'
+  +'<section class="social-profile-quick-panel" data-profile-quick-panel hidden><div class="social-profile-quick-heading"><strong>Pengaturan Profil Cepat</strong><span>Kelola informasi dan visibilitas profil Anda</span></div>'
+  +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('image')+'Foto profil</span><b>Kelola →</b></a>'
+  +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('book')+'Bio</span><b>Kelola →</b></a>'
+  +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('mapPin')+'Alamat</span><b>Kelola →</b></a>'
+  +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('mail')+'Kontak</span><b>Kelola →</b></a>'
+  +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('lock')+'Privasi profil · Publik / Privat</span><b>Kelola →</b></a></section>'
+  +'</section>'
+  +'<div class="social-profile-tabs">'+['Feed','Reels','Trips','Blog','Live'].map(x=>'<button type="button">'+x+'</button>').join('')+'</div>'
+  +emptyPanel('Belum ada konten profil','Postingan, Reels, Trips, Blog, dan Live yang Anda publikasikan akan muncul di sini.')
+  +'</section>';
+ root.innerHTML='<div class="pl-page-shell social-shell"><header class="pl-page-header social-header"><div class="social-brand">'+renderBrand({href:routeHref('home'),label:'PLUITS'})+'<span>Profil</span></div><a href="'+routeHref('settings')+'">Pengaturan akun</a></header><main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
+ root.addEventListener('click',event=>{
+  const quick=event.target.closest('[data-profile-quick]');
+  if(!quick||!root.contains(quick))return;
+  const panel=root.querySelector('[data-profile-quick-panel]');
+  const expanded=quick.getAttribute('aria-expanded')==='true';
+  quick.setAttribute('aria-expanded',String(!expanded));
+  panel.hidden=expanded;
+ });
 }
 export function mountSettingsPage({root,user=null,onSignOut}={}) {
  const safe=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
