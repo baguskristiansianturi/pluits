@@ -1,7 +1,7 @@
 import { routeHref } from '../../config/paths.js';
 import { supabase } from '../../lib/supabase/client.js';
 import '../../design-system/page-shell.css';
-import { renderBrand, renderPageFooter } from '../../design-system/page-shell.js';
+import { renderBrand } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
 import './home-page.css';
 
@@ -102,7 +102,7 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
     streams +
     '<section class="global-section global-products" id="local-products">' + heading('Produk Lokal','Temukan produk dari pelaku usaha di berbagai daerah.','Kunjungi Marketplace',routeHref('discover')) + '<div class="global-product-demo-rail">' + [['GADGET','Audio personal','product-a'],['FASHION','Gaya harian','product-b'],['HOME','Ruang nyaman','product-c'],['CREATIVE','Karya lokal','product-d']].map((item,i)=>'<article class="global-product-demo"><div class="global-product-art global-product-art--' + (i+1) + '"><span>' + item[0] + '</span></div><small>CONTOH PRODUK</small><strong>' + item[1] + '</strong><span>Pratinjau katalog</span></article>').join('') + '</div></section>' +
     '<section class="global-section global-features" id="all-features">' + heading('Semua Fitur','Jelajahi layanan dan ruang yang terhubung di PLUITS.') + '<div class="global-feature-grid">' + [['Social & Community','message'],['Marketplace','cart'],['Restaurant & Café','book'],['Tickets & Accommodation','image'],['Geo Directory','mapPin'],['Logistics & Transportation','arrow'],['Digital Wallet','lock'],['More services','sparkles']].map(([label,icon])=>'<a href="' + routeHref('discover') + '">' + renderIcon(icon) + '<strong>' + label + '</strong></a>').join('') + '</div></section></main>' +
-    renderPageFooter({copyright:'© 2026 PLUITS. All rights reserved.',attribution:'One connected digital ecosystem.',groups:[{title:'Jelajahi',items:[{label:'Beranda',route:'home'},{label:'Jelajah',route:'discover'}]},{title:'Pengelolaan',items:[{label:'Ruang Kerja',route:'dashboard'}]},{title:'Informasi',items:[{label:'Ketentuan Layanan',route:'terms'},{label:'Kebijakan Privasi',route:'privacy'}]}]}) + bottomNav() + '</div>';
+    bottomNav() + '</div>';
   const header=root.querySelector('[data-global-header]');
   const tabs=root.querySelector('[data-content-tabs]');
   const updateSticky=()=>{if(header&&tabs)header.classList.toggle('is-released',tabs.getBoundingClientRect().top<=header.offsetHeight);};
