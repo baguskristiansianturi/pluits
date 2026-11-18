@@ -15,3 +15,7 @@ Status rancangan: PROPOSED → IN-DESIGN → REVIEW → APPROVED.
 - Do not fabricate featured products, services, store URLs, prices, or item records. Until owner-selection data and destination contracts are connected, show a truthful empty state.
 - This UI change does not create a store backend, catalogue, or featured-item persistence contract.
 - Runtime mapping: `src/features/social/social-pages.js`, `src/features/social/social-pages.css`, and `src/design-system/icons.js`.
+
+
+## Bubble Connections prototype
+- `PROFILE-BUBBLE-CONNECTIONS-DEMO-001.md` defines the temporary visual demo on the authenticated profile. It is visible to all account tiers for evaluation and does not create real relationship data or settings.
