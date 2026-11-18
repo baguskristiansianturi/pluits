@@ -22,9 +22,9 @@ function storyRail() {
 }
 function bottomNav() {
   return '<nav class="global-bottom-nav" aria-label="Navigasi utama">' +
-    '<a href="' + routeHref('circle') + '">' + renderIcon('book') + '<span>Beranda</span></a>' +
+    '<a href="' + routeHref('home') + '" class="is-active" aria-current="page">' + renderIcon('book') + '<span>Beranda</span></a>' +
     '<a href="' + routeHref('discover') + '">' + renderIcon('eye') + '<span>Jelajah</span></a>' +
-    '<button type="button" class="global-create-button" data-open-create aria-label="Buat konten"><span>+</span></button>' +
+    '<a class="global-create-button" href="' + routeHref('dashboard') + '" aria-label="Buka Ruang Kerja" title="Ruang Kerja"><span>+</span></a>' +
     '<a href="' + routeHref('dashboard') + '" aria-label="Pesan">' + renderIcon('message') + '<span>Pesan</span></a>' +
     '<a href="' + routeHref('dashboard') + '" aria-label="Akun">' + renderIcon('user') + '<span>Akun</span></a></nav>';
 }
@@ -97,12 +97,12 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
     '<header class="pl-page-header global-header" data-global-header><div class="global-brand-group">' + renderBrand({href:routeHref('home'),label:'PLUITS Global Home'}) + '<a class="global-icon-button global-favorite-link" href="' + routeHref('dashboard') + '" aria-label="Favorit" title="Favorit">' + renderIcon('heart') + '</a></div>' + actions + '</header>' +
     '<main class="pl-page-main home-main global-home-main"><section class="global-home-intro"><span class="global-kicker">PLUITS · INDONESIA</span><h1>Temukan apa yang sedang terjadi.</h1><p>Jelajahi cerita, orang, tempat, komunitas, dan aktivitas dari seluruh Indonesia.</p></section>' +
     discovery +
-    '<section class="global-section global-stories" id="stories">' + heading('Stories','Momen terbaru dari akun yang Anda ikuti.','Circle',routeHref('circle')) + storyRail() + '</section>' +
+    '<section class="global-section global-stories" id="stories">' + heading('Stories','Momen terbaru dari akun yang Anda ikuti.') + storyRail() + '</section>' +
     '<nav class="global-content-tabs" data-content-tabs aria-label="Kategori konten">' + contentTabs.map((tab,i)=>'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-controls="content-' + tab.id + '">' + tab.label + '</button>').join('') + '</nav>' +
     streams +
     '<section class="global-section global-products" id="local-products">' + heading('Produk Lokal','Temukan produk dari pelaku usaha di berbagai daerah.','Kunjungi Marketplace',routeHref('discover')) + '<div class="global-product-demo-rail">' + [['GADGET','Audio personal','product-a'],['FASHION','Gaya harian','product-b'],['HOME','Ruang nyaman','product-c'],['CREATIVE','Karya lokal','product-d']].map((item,i)=>'<article class="global-product-demo"><div class="global-product-art global-product-art--' + (i+1) + '"><span>' + item[0] + '</span></div><small>CONTOH PRODUK</small><strong>' + item[1] + '</strong><span>Pratinjau katalog</span></article>').join('') + '</div></section>' +
     '<section class="global-section global-features" id="all-features">' + heading('Semua Fitur','Jelajahi layanan dan ruang yang terhubung di PLUITS.') + '<div class="global-feature-grid">' + [['Social & Community','message'],['Marketplace','cart'],['Restaurant & Café','book'],['Tickets & Accommodation','image'],['Geo Directory','mapPin'],['Logistics & Transportation','arrow'],['Digital Wallet','lock'],['More services','sparkles']].map(([label,icon])=>'<a href="' + routeHref('discover') + '">' + renderIcon(icon) + '<strong>' + label + '</strong></a>').join('') + '</div></section></main>' +
-    renderPageFooter({copyright:'© 2026 PLUITS. All rights reserved.',attribution:'One connected digital ecosystem.',groups:[{title:'Jelajahi',items:[{label:'Global Home',route:'home'},{label:'Jelajah',route:'discover'},{label:'Beranda Circle',route:'circle'}]},{title:'Akun',items:[{label:'Dashboard',route:'dashboard'},{label:'Masuk',route:'login'}]},{title:'Informasi',items:[{label:'Ketentuan Layanan',route:'terms'},{label:'Kebijakan Privasi',route:'privacy'}]}]}) + bottomNav() + createSheet() + '</div>';
+    renderPageFooter({copyright:'© 2026 PLUITS. All rights reserved.',attribution:'One connected digital ecosystem.',groups:[{title:'Jelajahi',items:[{label:'Beranda',route:'home'},{label:'Jelajah',route:'discover'}]},{title:'Pengelolaan',items:[{label:'Ruang Kerja',route:'dashboard'}]},{title:'Informasi',items:[{label:'Ketentuan Layanan',route:'terms'},{label:'Kebijakan Privasi',route:'privacy'}]}]}) + bottomNav() + '</div>';
   const header=root.querySelector('[data-global-header]');
   const tabs=root.querySelector('[data-content-tabs]');
   const updateSticky=()=>{if(header&&tabs)header.classList.toggle('is-released',tabs.getBoundingClientRect().top<=header.offsetHeight);};
@@ -116,11 +116,5 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
   }
   const controller=new AbortController();
   loadPublicFeed(root,controller.signal).catch(()=>{const target=root.querySelector('[data-live-feed]');if(target)target.innerHTML=renderFeedState('Feed belum dapat dimuat');});
-  const backdrop=root.querySelector('[data-create-backdrop]');
-  const openCreate=()=>{backdrop.hidden=false;root.querySelector('[data-close-create]')?.focus();};
-  root.querySelector('[data-open-create]')?.addEventListener('click',openCreate);
-  root.querySelector('[data-close-create]')?.addEventListener('click',()=>{backdrop.hidden=true;});
-  backdrop?.addEventListener('click',event=>{if(event.target===backdrop)backdrop.hidden=true;});
-  if (window.location.hash.includes('create=1')) openCreate();
   return ()=>{controller.abort();window.removeEventListener('scroll',updateSticky);observer?.disconnect();};
 }
