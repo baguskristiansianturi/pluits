@@ -22,11 +22,11 @@ function storyRail() {
 }
 function bottomNav() {
   return '<nav class="global-bottom-nav" aria-label="Navigasi utama">' +
-    '<a href="' + routeHref('home') + '" class="is-active" aria-current="page">' + renderIcon('book') + '<span>Beranda</span></a>' +
+    '<a href="' + routeHref('social') + '" class="is-active" aria-current="page">' + renderIcon('book') + '<span>Beranda</span></a>' +
     '<a href="' + routeHref('discover') + '">' + renderIcon('eye') + '<span>Jelajah</span></a>' +
     '<a class="global-create-button" href="' + routeHref('dashboard') + '" aria-label="Buka Ruang Kerja" title="Ruang Kerja"><span>+</span></a>' +
-    '<a href="' + routeHref('dashboard') + '" aria-label="Pesan">' + renderIcon('message') + '<span>Pesan</span></a>' +
-    '<a href="' + routeHref('dashboard') + '" aria-label="Profil">' + renderIcon('user') + '<span>Profil</span></a></nav>';
+    '<a href="' + routeHref('messages') + '" aria-label="Pesan">' + renderIcon('message') + '<span>Pesan</span></a>' +
+    '<a href="' + routeHref('profile') + '" aria-label="Profil">' + renderIcon('user') + '<span>Profil</span></a></nav>';
 }
 function createSheet() {
   return '<div class="global-create-backdrop" data-create-backdrop hidden><section class="global-create-sheet" role="dialog" aria-modal="true" aria-labelledby="create-title"><button type="button" class="global-create-close" data-close-create aria-label="Tutup">×</button><span class="global-kicker">MULAI SESUATU</span><h2 id="create-title">Buat di PLUITS</h2><p>Pilih format yang ingin disiapkan. Publikasi akan diaktifkan setelah layanan terkait tersedia.</p><div class="global-create-options"><button disabled>Feed <small>Belum tersedia</small></button><button disabled>Reels <small>Belum tersedia</small></button><button disabled>Story <small>Belum tersedia</small></button><button disabled>Live <small>Belum tersedia</small></button><button disabled>Blog <small>Belum tersedia</small></button></div><a href="' + routeHref('dashboard') + '">Buka Dashboard pengelolaan →</a></section></div>';
@@ -79,7 +79,7 @@ function demoContent(kind) {
   return '<div class="global-blog-demo-grid"><article class="global-blog-demo"><div class="global-blog-art global-blog-art--one"><span>JURNAL PERJALANAN</span></div><div><small>CONTOH ARTIKEL · 6 MENIT BACA</small><strong>Menemukan sisi lain dari sebuah kota</strong><p>Pratinjau kartu artikel untuk menguji tampilan Blog di Global Home.</p></div></article><article class="global-blog-demo"><div class="global-blog-art global-blog-art--two"><span>CATATAN HARIAN</span></div><div><small>CONTOH ARTIKEL · 4 MENIT BACA</small><strong>Cerita kecil yang layak dibagikan</strong><p>Contoh visual sementara, bukan artikel yang sudah dipublikasikan.</p></div></article></div>';
 }
 export function mountHomePage({root,user=null,onSignOut}={}) {
-  const account = '<a class="global-icon-button" href="' + routeHref(user?'dashboard':'login') + '" aria-label="' + (user?'Akun':'Masuk') + '" title="' + (user?'Akun':'Masuk') + '">' + renderIcon('user') + '</a>';
+  const account = '<a class="global-icon-button" href="' + routeHref(user?'profile':'login') + '" aria-label="' + (user?'Akun':'Masuk') + '" title="' + (user?'Akun':'Masuk') + '">' + renderIcon('user') + '</a>';
   const actions = '<div class="global-header-actions">' + account + '<a class="global-icon-button" href="' + routeHref('discover') + '" aria-label="Cari" title="Cari">' + renderIcon('search') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Keranjang" title="Keranjang">' + renderIcon('cart') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Notifikasi" title="Notifikasi">' + renderIcon('bell') + '</a></div>';
   const discovery = [
     ['top-global','Top Global','Sorotan aktivitas dari seluruh Indonesia.','Lihat Semua',demoCards.global],
