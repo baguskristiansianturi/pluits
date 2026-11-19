@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {resolveRoute,resolveAuthenticatedRoute} from '../src/app/routes.js';
 import {APP_ROUTES,routeHref} from '../src/config/paths.js';
+import {PUBLIC_INFO_PAGES} from '../src/features/public-info/pages/index.js';
 test('Social app and account settings routes',()=>{assert.deepEqual(Object.keys(APP_ROUTES),['home','social','circle','discover','dashboard','messages','profile','settings','register','login','forgot','reset','terms','privacy','about','help','faq','contact','guidelines','marketplaceInfo','sellerTerms','paymentPolicy','refundPolicy','shippingPolicy','accountDeletion','safety','cookies','privacyChoices','complaints','prohibitedItems']);assert.equal(resolveRoute('/pluits/',''),'home');assert.equal(resolveRoute('/pluits/circle/',''),'circle');assert.equal(resolveRoute('/pluits/discover/',''),'discover');assert.equal(resolveRoute('/pluits/social/',''),'social');assert.equal(resolveRoute('/pluits/messages/',''),'messages');assert.equal(resolveRoute('/pluits/profile/',''),'profile');assert.equal(resolveRoute('/pluits/settings/',''),'settings');assert.equal(routeHref('home'),'/pluits/');assert.equal(routeHref('settings'),'/pluits/settings/');});
 test('authenticated app routes require a session',()=>{for(const route of ['dashboard','social','messages','profile','settings'])assert.equal(resolveAuthenticatedRoute(route,false),'login');assert.equal(resolveAuthenticatedRoute('settings',true),'settings');assert.equal(resolveAuthenticatedRoute('home',true),'home');assert.equal(resolveAuthenticatedRoute('circle',true),'social');assert.equal(resolveAuthenticatedRoute('login',true),'social');});
 test('shared brand always returns to public business homepage',async()=>{const shell=await readFile(new URL('../src/design-system/page-shell.js',import.meta.url),'utf8');assert.match(shell,/routeHref\('home'\)/);});
@@ -63,3 +64,24 @@ test('legal policy pages contain structured draft disclosures and accessible sec
 });
 
 test('public homepage does not expose a development workspace entry',async()=>{const home=await readFile(new URL('../src/features/home/business-home-page.js',import.meta.url),'utf8');assert.doesNotMatch(home,/Ruang Kerja|business-workspace-entry|pluits-demo/);});
+
+test('every configured route has a clean direct URL and round-trips to its route key',()=>{
+ for(const [key,slug] of Object.entries(APP_ROUTES)){
+  const href=routeHref(key);
+  assert.equal(href,slug?'/pluits/'+slug+'/':'/pluits/');
+  assert.equal(resolveRoute(href,''),key);
+  assert.doesNotMatch(href,/#/);
+ }
+});
+
+test('every public footer information page is owned by a grouped page module',()=>{
+ const expected=['about','help','faq','contact','guidelines','marketplaceInfo','sellerTerms','paymentPolicy','refundPolicy','shippingPolicy','accountDeletion','safety','cookies','privacyChoices','complaints','prohibitedItems'];
+ assert.deepEqual(Object.keys(PUBLIC_INFO_PAGES).sort(),expected.sort());
+ for(const key of expected){
+  const page=PUBLIC_INFO_PAGES[key];
+  assert.ok(page.title,key+' title');
+  assert.ok(page.intro,key+' intro');
+  assert.ok(page.status,key+' status');
+  assert.ok(Array.isArray(page.sections) && page.sections.length>0,key+' sections');
+ }
+});
