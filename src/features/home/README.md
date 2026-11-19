@@ -1,36 +1,42 @@
-# Global Home Feature
+# PLUITS Home Experiences
 
-Owner: `features/home` · Canonical page: `PAGE-GLOBAL-HOME` · Layout: `LAY-GLOBAL-HOME-001`
+Owner: `features/home`.
 
-## Purpose
-Own one public-facing PLUITS platform homepage. It introduces the ecosystem to visitors and remains the same homepage after login. It is not a personal profile or authenticated Dashboard.
+## Route ownership
+- Public marketing homepage: `#/home`, mounted by `business-home-page.js` and styled by `business-home.css`.
+- Social discovery/home stream: `#/social`, mounted by `home-page.js` and styled by `home-page.css`.
+- These are intentionally distinct experiences. Do not duplicate routes or mount both pages on the same route.
+- The public homepage remains the same for guests and signed-in users. Session state changes only the account action and primary CTA.
+- The Social experience retains its own feed/discovery composition and must not be restyled or behaviorally changed as part of public homepage work.
+
+## Public homepage purpose
+Introduce PLUITS as a connected digital ecosystem through benefit-led marketing copy and service-relevant visuals. The page speaks to both individual users and business owners, explains what they can discover and how they can participate, then guides visitors to register, sign in, or explore.
 
 ## Runtime ownership
-- `home-page.js`: single `mountHomePage({ root, user, onSignOut })` entry point and one landing-page composition.
-- `home-page.css`: feature-scoped styles for that same composition.
-- `src/app/create-app.js`: supplies the active session so the header actions and calls to action can reflect login state.
-- Shared header, footer, brand, shell, tokens and geometry: `src/design-system/`.
+- `business-home-page.js`: single `mountBusinessHomePage({ root, user })` entry point and public landing-page composition.
+- `business-home.css`: feature-scoped visual treatment.
+- `src/app/create-app.js`: maps the existing `home` route to the public homepage and keeps `social` as the Social experience.
+- Shared brand, page shell, footer, icons and tokens: `src/design-system/`.
 
-## Session behavior
-- Guest at `#/home`: platform landing page with login and registration actions.
-- Authenticated at `#/home`: the exact same hero, platform introduction, ecosystem overview, identity section, Android information and closing CTA. Only account controls and action wording change (account identity and sign-out replace login/register).
-- Session state must never replace the landing page with a personal welcome panel, profile summary, feed, dashboard cards, or account workspace.
-- The PLUITS logo always links to `#/home`, regardless of session.
-- The signed-in account avatar and name link to the protected User Dashboard at `#/dashboard`.
-- User Dashboard is the single post-login control center at `src/features/dashboard/`; it is not rendered inside Global Home.
-- Workspace is an internal development term only; it is not a separate protected route or user-facing page.
+## Shared resources and boundaries
+- Use the official `public/assets/brand/pluits-logo.svg` via the shared brand conventions.
+- Use the existing `renderBrand()`, `renderPageFooter()`, `renderIcon()`, shared tokens, and page-shell contract.
+- Keep the 50px shared navbar-to-content gap. Do not change global tokens, shared footer renderer, route table, auth flow, Supabase, database, or other feature modules for page-local presentation.
+- Use only registered local icons and existing brand assets. No new package, font, external image, remote asset, or runtime dependency.
+- Current public landing-page illustrations are CSS compositions and registered icons; they are not presented as real user posts, merchants, products, metrics, or testimonials.
 
 ## Content truthfulness
-Do not fabricate posts, people, activity, notifications, recommendations, metrics, products, reviews, transactions, or provider records. Ecosystem and Android information must reflect actual release state.
+- Do not fabricate people, posts, activity, engagement, business listings, products, reviews, transaction counts, or provider verification.
+- Explain product value in customer-facing language, not architecture or technical feature labels.
+- Keep Social, Discover, Marketplace, and Services as the four connected ecosystem spaces.
+- Do not claim planned merchant operations or vertical integrations are already available.
+- Android and iOS download panels must be clearly marked **Coming Soon** and must not link to unavailable app-store listings.
 
-## Shared resources
-- Official symbol: `public/assets/brand/pluits-logo.svg`.
-- Shared shell: `LAY-SHARED-PAGE-SHELL-001`.
-- Existing tokens: `src/design-system/tokens.css`.
-- No new global token, font, icon, image, external package or runtime dependency.
+## Footer
+The public homepage includes an Android Google Play and iOS App Store availability panel immediately before the shared footer. Both platforms show Coming Soon; the shared footer remains the canonical reusable footer.
 
 ## Responsive behavior
-The same landing page consumes the shared page shell, page gutters and canonical 50px navbar-to-content gap on desktop, tablet and mobile. Session controls use scoped styles and do not alter shared shell geometry or other pages.
+Use the shared page shell, container, gutters, tokens and breakpoint contracts. Keep all sections within the viewport on mobile; prevent body horizontal overflow. Preserve accessible navigation, keyboard focus, readable contrast, and reduced-motion behavior.
 
 ## Validation
-Run `npm test` and `npm run build`. Verify guest and authenticated sessions show the same landing sections on `#/home`, while header actions change appropriately. Verify login, logout, brand navigation and mobile/desktop layouts. Device visual UAT remains a separate step.
+Run `npm test` and `npm run build`. Verify `#/home` for guest and authenticated sessions, primary/header/footer links, mobile and desktop layout, no body horizontal overflow, and that `#/social` still mounts the existing Social experience unchanged. Browser/device visual UAT remains separate from automated build evidence.

@@ -1,68 +1,58 @@
-# Global Home, Circle Home, and Discovery — Product/UI Specification
+# Public PLUITS Homepage — Marketing Landing Page
 
-Status: **IMPLEMENTATION PROTOTYPE / CONTENT SERVICES PARTIALLY CONNECTED**
-IDs: `PAGE-GLOBAL-HOME`, `PAGE-CIRCLE-HOME`, `PAGE-DISCOVER`.
+Status: **IMPLEMENTATION PROTOTYPE / PRODUCT OWNER DIRECTION APPROVED**
+Route: `#/home`
+Runtime owner: `src/features/home/business-home-page.js`, `business-home.css`.
 
-## Product boundaries
-1. Global Home is the PLUITS platform homepage for guests and signed-in users. The PLUITS brand always returns here. Its scope is nationwide discovery, not a user's personal Circle.
-2. Jelajah is a nationwide discovery destination, independent of the user's Circle and current location.
-3. Circle Home is the personalized home. Its content is selected from Circle relationships, interests, and location-aware relevance. It remains usable without location permission; only location-based relevance is reduced.
-4. Dashboard remains the authenticated control center and is not replaced by either homepage.
+## Purpose
+The public homepage is PLUITS' customer-facing marketing landing page. It must introduce the platform clearly, communicate practical benefits, and guide visitors toward registration, sign-in, or discovery. It is not a technical product manual, personal feed, user profile, or authenticated Dashboard.
 
-## Global Home information architecture
-1. Full-viewport global header: PLUITS brand and icon-only Favorit at left; account, search, cart, and notifications as icon actions at right. Header background, divider, and hit area extend to both physical viewport edges.
-2. Global introduction.
-3. Top Global — nationwide highlight rail; CTA opens Jelajah.
-4. Di Sekitar Anda — nearby rail; CTA opens discovery.
-5. Orang yang Mungkin Anda Kenal — people discovery rail.
-6. Stories — horizontal story rail.
-7. Social content categories: Feed, Reels, Live, Blog.
-8. Produk Lokal — CTA opens Marketplace/discovery.
-9. Semua Fitur.
-10. Shared footer and mobile bottom navigation.
+## Audience and message
+The page addresses two audiences:
+1. Individuals who want to connect with people, share stories, discover communities, and find useful places or activities.
+2. Business owners and service providers who want their business to be easier to discover, present their offer, and build customer relationships.
 
-## Sticky ownership and tab behavior
-- Header is sticky at the top during the initial page portion.
-- When the content-tab bar reaches the header's sticky boundary, release the header from sticky positioning. The content tabs then occupy the top sticky position.
-- When the user scrolls back above the handoff point, restore header sticky behavior.
-- The sticky tab bar remains reachable while scrolling and spans the full viewport width; no detached left/right gutters.
-- Selecting Feed, Reels, Live, or Blog scrolls to that category; scroll observation updates the active tab.
-- Each category may contain feed items, recommendation blocks, and horizontal rails. A category is not restricted to one content format.
+Use benefit-led, approachable marketing copy. Avoid implementation jargon, architecture descriptions, database terms, module ownership language, and claims that planned functionality is already live.
 
-## Full-bleed carousel and navigation contract
-- Section headings, descriptions, and CTAs remain aligned to the shared page container.
-- Carousel viewport/track extends to physical viewport edges using a viewport-width breakout; do not widen the whole page shell.
-- Applies to Top Global, nearby, people, Stories, Produk Lokal, and future rails inside content categories.
-- Horizontal tracks use native overflow scrolling, touch horizontal panning, and mandatory start snap. Track overflow must not create document/body horizontal scrolling.
-- Header and content-tab surfaces use full-bleed width independently of the standard-width page content. Their contents retain the shared page gutter.
+## Page composition
+1. Shared PLUITS header with brand, anchors to audience sections, sign-in and registration actions; authenticated visitors see an account/dashboard action.
+2. Hero: concise platform promise, primary registration/dashboard CTA, secondary ecosystem CTA, and an original CSS composition showing the four connected spaces.
+3. Brand promise strip: connect people, discovery, and opportunity.
+4. For individuals: share stories, discover communities, explore places and interests.
+5. For business owners: present a business, build customer relationships, and improve local discoverability.
+6. Ecosystem discovery: food, local products, places/activities, and professional services. Copy describes the intended value without pretending that every vertical is fully operational.
+7. Closing CTA for registration or Dashboard.
+8. App availability panel immediately before the shared footer:
+   - Android — Google Play — Coming Soon.
+   - iOS — App Store — Coming Soon.
+   - No fake download links or non-functional buttons.
+9. Shared footer with canonical brand/legal/account links and approved footer credit.
 
-## Content data contract
-- Feed reads real `public` + `published` rows from `public.user_posts`, newest first, with author identity from `public.user_profiles`. It includes the public post stream, not only content authored by the currently signed-in user.
-- Reels reads the same public published post source and selects `content_kind = 'reel'`.
-- Media and public avatar assets are resolved from the private `pluits-user-media` bucket through authenticated/authorized signed URLs. Existing RLS and Storage policies remain the access boundary; the frontend must not bypass them.
-- Feed cards display the actual author, username, publication date, media, and caption when present. Empty captions remain empty; do not invent captions or engagement counts.
-- Top Global, nearby discovery, people suggestions, Stories, Live, Blog, and product cards currently use clearly isolated, visual demo fixtures for UI evaluation. These are not real users, events, recommendations, inventory, broadcasts, or published articles. Replace/remove them when the relevant services are ready.
-- Demo fixtures must never be inserted into Supabase or presented as verified/operational records.
+## Four connected spaces
+Show the ecosystem as a connected composition, not a stack of technical modules:
+- Social — share stories and connect.
+- Discover — explore people, places and interests.
+- Marketplace — find products and local businesses.
+- Services — discover professional and local services.
 
-## Responsive behavior and measurements
-- Shared page gutters, page width, spacing, typography, colors, radii, and icons inherit the existing design-system tokens and shared shell. Do not override the 50px shared header-to-content gap.
-- Mobile feature grid: two columns. Bottom navigation: five equal destinations, safe-area aware, fixed to viewport bottom; page reserves bottom space.
-- Provisional component-local values pending visual QA: general rail card basis 74vw mobile / clamp(220px,26vw,290px) otherwise; story diameter 54px mobile / 58px default; rail gap 9px mobile / 12px default; tab controls min-height 42px. These are implementation measurements, not approved global tokens.
-- Header action icon hit area: 38px default / 34px mobile. SVGs are sourced from the shared local icon registry.
-- Existing design tokens remain provisional; this feature does not approve platform-wide values or introduce global tokens.
+## Session behavior
+Guests and authenticated users see the same page composition. Session state only changes the account action and primary CTA. Do not redirect the user away from the public homepage merely because a session exists. The logo always returns to `#/home`. Successful login continues to the existing authenticated destination; this page change does not alter auth flow.
 
-## Location and privacy
-- Global Home and Jelajah remain nationwide even when a user grants location.
-- Circle may use location for nearby relevance only after permission is granted.
-- Explain the benefit before requesting location. Denial must not block core app usage.
-- Do not expose precise location in public content or profile by default.
+## Boundaries and truthfulness
+- Keep the existing Social experience at `#/social` separate and unchanged.
+- Keep Dashboard at `#/dashboard` separate and unchanged.
+- Do not change route definitions, authentication, Supabase, backend contracts, database schema, global tokens, shared shell, or shared footer renderer for page-local work.
+- Do not fabricate people, posts, metrics, merchants, products, testimonials, reviews, transactions, or availability.
+- App-store badges are informational and non-interactive until official listings exist.
+- Do not claim the Android or iOS applications are released.
 
-## Runtime mapping
-- Global Home and public Feed/Reels data rendering: `src/features/home/home-page.js`, `home-page.css`.
-- Circle Home and Jelajah: `src/features/social/social-pages.js`, `social-pages.css`.
-- Route wiring: `src/app/create-app.js`, `src/app/routes.js`, `src/config/paths.js`.
-- Shared brand/header/footer and icon glyphs: `src/design-system/page-shell.js`, `page-shell.css`, `tokens.css`, and `icons.js`.
-- Data access uses the existing browser Supabase client in `src/lib/supabase/client.js`.
+## Responsive and accessibility
+Use the shared shell, brand renderer, page-footer renderer, icon registry, and design tokens. Keep the 50px navbar-to-content gap. Hero visual and content must adapt to tablet/mobile without horizontal page overflow. Maintain visible focus, accessible names, meaningful headings, and reduced-motion support.
 
-## Validation
-Automated route tests and CI must run `npm test` and `npm run build`. Verify public post visibility under guest and signed-in sessions, signed media loading, author/avatar fallback, feed/reel filtering, loading/error/empty states, sticky handoff in both scroll directions, tab jump/active state, full-bleed header/tab/rail edges, no body horizontal overflow, bottom navigation/safe area, desktop/tablet/mobile. Real Android visual UAT, live Story/Live/blog/product services, geolocation permission flow, cart/notifications, and post creation remain NOT IMPLEMENTED / NOT ACCEPTED.
+## Acceptance checks
+- `#/home` loads one marketing landing page for guest and authenticated sessions.
+- Header, hero, audience, discovery, CTA, and footer links resolve to existing routes or in-page anchors.
+- Android and iOS both display Coming Soon without linking to nonexistent store listings.
+- `#/social` continues to render the existing social feed/discovery page.
+- No changes to Dashboard, auth, routing contracts, Supabase, or unrelated feature styles.
+- Run `npm test` and `npm run build`; record CI deployment and device UAT separately.
