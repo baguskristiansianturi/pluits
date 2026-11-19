@@ -149,6 +149,7 @@ export function mountProfilePage({root,user=null}={}) {
 export function mountSettingsPage({root,user=null,onSignOut,onUpdateProfile}={}) {
  const safe=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  const email=safe(user?.email||'Email tidak tersedia');
+ const controller=new AbortController();
  const isLocalDemo=user?.app_metadata?.provider==='local-demo';
  const metadata=user?.user_metadata||{};
  const sections=[
@@ -192,7 +193,7 @@ export function mountSettingsPage({root,user=null,onSignOut,onUpdateProfile}={})
    if(status)status.textContent='Profil simulasi berhasil disimpan di browser ini.';
   }catch(error){if(status)status.textContent=error?.message||'Perubahan belum berhasil disimpan.';}
   finally{if(submitButton)submitButton.disabled=false;}
- });
+ },{signal:controller.signal});
  root.addEventListener('click',async event=>{
   const tab=event.target.closest('[data-settings-tab]');
   if(tab&&root.contains(tab)){active=tab.dataset.settingsTab;render();return;}
@@ -203,5 +204,6 @@ export function mountSettingsPage({root,user=null,onSignOut,onUpdateProfile}={})
    try{const result=await onSignOut();if(result?.error)throw result.error;}
    catch(error){signout.disabled=false;signout.textContent='Keluar';window.alert(error?.message||'Tidak dapat keluar. Silakan coba lagi.');}
   }
- });
+ },{signal:controller.signal});
+ return ()=>controller.abort();
 }
