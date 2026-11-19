@@ -64,12 +64,26 @@ async function loadPublicFeed(root,signal) {
   const {data:profiles}=await supabase.from('user_profiles').select('id,display_name,username,avatar_path').in('id',ids);
   if(signal.aborted)return;
   const profileMap=new Map((profiles||[]).map(profile=>[profile.id,profile]));
-  const hydrated=await Promise.all(rows.map(async post=>{
+  // Resolve all media paths in one Storage request instead of issuing up to
+  // two signed-URL requests per post. Deduplication also avoids asking for the
+  // same author's avatar repeatedly when several posts belong to that author.
+  const mediaPaths=[...new Set(rows.flatMap(post=>{
     const profile=profileMap.get(post.user_id)||{};
-    const mediaResult=post.media_path?await supabase.storage.from('pluits-user-media').createSignedUrl(post.media_path,3600):{data:null};
-    const avatarResult=profile.avatar_path?await supabase.storage.from('pluits-user-media').createSignedUrl(profile.avatar_path,3600):{data:null};
-    return {...post,authorName:profile.display_name||'Pengguna PLUITS',username:profile.username||'pengguna',mediaUrl:mediaResult.data?.signedUrl||'',avatarUrl:avatarResult.data?.signedUrl||''};
-  }));
+    return [post.media_path,profile.avatar_path].filter(Boolean);
+  }))];
+  let signedUrlMap=new Map();
+  if(mediaPaths.length){
+    const {data:signedFiles,error:signedError}=await supabase.storage
+      .from('pluits-user-media').createSignedUrls(mediaPaths,3600);
+    if(!signedError){
+      signedUrlMap=new Map((signedFiles||[]).map(file=>[file.path,file.signedUrl||'']));
+    }
+  }
+  if(signal.aborted)return;
+  const hydrated=rows.map(post=>{
+    const profile=profileMap.get(post.user_id)||{};
+    return {...post,authorName:profile.display_name||'Pengguna PLUITS',username:profile.username||'pengguna',mediaUrl:signedUrlMap.get(post.media_path)||'',avatarUrl:signedUrlMap.get(profile.avatar_path)||''};
+  });
   if(signal.aborted)return;
   target.innerHTML=hydrated.map(renderPostCard).join('');
   if(reelsTarget){const reels=hydrated.filter(post=>post.content_kind==='reel');reelsTarget.innerHTML=reels.length?reels.map(renderPostCard).join(''):renderFeedState('Belum ada Reels yang diterbitkan');}
