@@ -6,6 +6,7 @@ import { mountDiscoverPage, mountMessagesPage, mountProfilePage, mountSettingsPa
 import { mountDashboardPage } from '../features/dashboard/dashboard-page.js';
 import { mountAuthPage } from '../features/auth/auth-page.js';
 import { mountPolicyPage } from '../features/legal/policy-page.js';
+import { mountPublicInfoPage } from '../features/public-info/public-info-page.js';
 export function createApp({root,authService}) {
  let session=null,ready=false,cleanupPage=null;
  const navigate=route=>{const next=routeHref(route);if(window.location.hash===next){render();return;}window.location.hash=next;};
@@ -24,6 +25,7 @@ export function createApp({root,authService}) {
   if(route==='discover'){mountDiscoverPage({root,user:session?.user||null});return;}
   if(route==='dashboard'){mountDashboardPage({root,user:session.user,onSignOut:()=>authService.signOut()});return;}
   if(route==='terms'||route==='privacy'){mountPolicyPage({root,type:route});return;}
+  if(['about','help','faq','contact','guidelines','marketplaceInfo','sellerTerms','paymentPolicy','refundPolicy','shippingPolicy','accountDeletion','safety','cookies'].includes(route)){mountPublicInfoPage({root,type:route});return;}
   mountAuthPage({root,mode:route,authService,hasRecoverySession:Boolean(session),onAuthenticated(nextSession){session=nextSession;navigate('social');}});
  }
  const unsubscribe=authService.subscribe((event,nextSession)=>{
