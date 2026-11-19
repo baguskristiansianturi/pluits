@@ -11,6 +11,8 @@ Owns the public informational pages, Help Center entry points, Marketplace infor
 - `public-info-page.css` — page-local content styling only.
 
 ## Route ownership
+
+See [ROUTE-001-CLEAN-PUBLIC-URLS.md](./ROUTE-001-CLEAN-PUBLIC-URLS.md) for the canonical clean-path URL contract, direct-load generation, browser-history behavior, and validation requirements.
 Routes are registered in `src/config/paths.js` and dispatched by `src/app/create-app.js`. Route path slugs may be hyphenated; `src/app/routes.js` maps canonical paths back to route keys.
 
 ## Content truthfulness
