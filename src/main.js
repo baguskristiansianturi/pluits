@@ -6,9 +6,13 @@ import './features/auth/auth-page.css';
 import './features/legal/policy-page.css';
 import { supabase } from './lib/supabase/client.js';
 import { createAuthService } from './services/auth/auth-service.js';
+import { createLocalDemoAuthService } from './services/auth/local-demo-auth-service.js';
 import { createApp } from './app/create-app.js';
 import { APP_BASE_URL } from './config/runtime.js';
-const authService = createAuthService(supabase, { appUrl: APP_BASE_URL });
+const localDemoRequested = new URLSearchParams(window.location.search).get('pluits-demo') === '1';
+const authService = localDemoRequested
+  ? createLocalDemoAuthService()
+  : createAuthService(supabase, { appUrl: APP_BASE_URL });
 const root = document.querySelector('#app');
 if (!root) throw new Error('PLUITS app root (#app) is missing.');
 createApp({ root, authService });
