@@ -39,5 +39,5 @@ export function renderPublicFooter() {
     copyright:'© 2026 PLUITS. All rights reserved.',
     attribution:'One connected digital ecosystem.',
     groups:GROUPS
-  }).replace('<div class="pl-footer-bottom">', '<div class="pl-footer-payment-methods"><span class="pl-footer-payment-title">Metode Pembayaran</span><div class="pl-footer-payment-list"><span>QRIS</span><span>Visa</span><span>Mastercard</span><span>JCB</span><span>GoPay</span><span>OVO</span><span>DANA</span><span>ShopeePay</span><span>Virtual Account</span><span>Transfer Bank</span><span>Alfamart</span><span>Indomaret</span></div></div><div class="pl-footer-bottom">');
+  }).replace('<div class="pl-footer-bottom">', '<div class="pl-footer-payment-methods"><span class="pl-footer-payment-title">Metode Pembayaran</span><div class="pl-footer-payment-list"><span>QRIS</span><span>Visa</span><span>Mastercard</span><span>JCB</span><span>American Express</span><span>GoPay</span><span>ShopeePay</span><span>QRIS via OVO, DANA &amp; LinkAja</span><span>Virtual Account</span><span>Mandiri Bill Payment</span><span>Alfamart</span><span>Indomaret</span><span>Alfamidi</span><span>Akulaku</span><span>Kredivo</span></div></div><div class="pl-footer-bottom">');
 }
