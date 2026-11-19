@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { restoreInitialSession } from '../../src/app/create-app.js';
+import { restoreInitialSession } from '../../src/app/restore-initial-session.js';
 
 test('a failed persisted-session restore falls back to guest mode so login can mount',async()=>{
  const warnings=[];

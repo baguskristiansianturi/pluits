@@ -1,4 +1,5 @@
 import { resolveAuthenticatedRoute, resolveRoute } from './routes.js';
+import { restoreInitialSession } from './restore-initial-session.js';
 import { routeHref } from '../config/paths.js';
 import { mountHomePage } from '../features/home/home-page.js';
 import { mountBusinessHomePage } from '../features/home/business-home-page.js';
@@ -7,17 +8,6 @@ import { mountDashboardPage } from '../features/dashboard/dashboard-page.js';
 import { mountAuthPage } from '../features/auth/auth-page.js';
 import { mountPolicyPage } from '../features/legal/policy-page.js';
 import { mountPublicInfoPage } from '../features/public-info/public-info-page.js';
-export async function restoreInitialSession(authService) {
- try {
-  return await authService.getSession();
- } catch(error) {
-  // A stale/unreadable persisted session must not prevent the public login page
-  // from mounting. Continue as a guest; sign-in can establish a fresh session.
-  console.warn('PLUITS could not restore the saved session; continuing in guest mode.', error);
-  return null;
- }
-}
-
 export function createApp({root,authService}) {
  let session=null,ready=false,cleanupPage=null;
  const navigate=route=>{const next=routeHref(route);if(window.location.hash===next){render();return;}window.location.hash=next;};
