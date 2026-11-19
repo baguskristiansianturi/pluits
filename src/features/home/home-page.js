@@ -1,5 +1,4 @@
 import { routeHref } from '../../config/paths.js';
-import { supabase } from '../../lib/supabase/client.js';
 import '../../design-system/page-shell.css';
 import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
@@ -50,10 +49,21 @@ function renderPostCard(post) {
 function renderFeedState(message,loading=false) {
   return '<div class="global-feed-state' + (loading?' is-loading':'') + '">' + (loading?'<span class="global-feed-spinner" aria-hidden="true"></span>':'<span class="global-feed-state-icon">' + renderIcon('image') + '</span>') + '<strong>' + message + '</strong>' + (!loading?'<p>Konten publik yang sudah diterbitkan akan muncul di sini.</p>':'') + '</div>';
 }
-async function loadPublicFeed(root,signal) {
+async function loadPublicFeed(root,signal,isLocalDemo=false) {
   const target=root.querySelector('[data-live-feed]');
   const reelsTarget=root.querySelector('[data-live-reels]');
   if(!target||signal.aborted)return;
+  if(isLocalDemo){
+    const demoPosts=[
+      {authorName:'Bagus',username:'bagus-demo',caption:'Mencoba tampilan Feed PLUITS dalam lingkungan pengembangan.',content_kind:'feed',media_type:'image',created_at:new Date().toISOString()},
+      {authorName:'Ayu Pratiwi',username:'ayu.pratiwi',caption:'Cerita kecil dari perjalanan akhir pekan di Bali.',content_kind:'feed',media_type:'image',created_at:new Date(Date.now()-3600000).toISOString()},
+      {authorName:'Raka Mahendra',username:'raka.visual',caption:'Menguji tampilan video pendek pada halaman sosial.',content_kind:'reel',media_type:'video',created_at:new Date(Date.now()-7200000).toISOString()}
+    ];
+    target.innerHTML=demoPosts.filter(post=>post.content_kind==='feed').map(renderPostCard).join('');
+    if(reelsTarget)reelsTarget.innerHTML=demoPosts.filter(post=>post.content_kind==='reel').map(renderPostCard).join('');
+    return;
+  }
+  const {supabase} = await import('../../lib/supabase/client.js');
   if(publicFeedCache.posts&&Date.now()-publicFeedCache.savedAt<PUBLIC_FEED_CACHE_TTL){
     const cached=publicFeedCache.posts;
     target.innerHTML=cached.length?cached.map(renderPostCard).join(''):renderFeedState('Belum ada postingan publik');
@@ -147,6 +157,6 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
     root.querySelectorAll('[data-content-section]').forEach(section=>observer.observe(section));
   }
   const controller=new AbortController();
-  loadPublicFeed(root,controller.signal).catch(()=>{const target=root.querySelector('[data-live-feed]');if(target)target.innerHTML=renderFeedState('Feed belum dapat dimuat');});
+  loadPublicFeed(root,controller.signal,user?.app_metadata?.provider==='local-demo').catch(()=>{const target=root.querySelector('[data-live-feed]');if(target)target.innerHTML=renderFeedState('Feed belum dapat dimuat');});
   return ()=>{controller.abort();window.removeEventListener('scroll',updateSticky);observer?.disconnect();};
 }
