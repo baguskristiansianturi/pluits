@@ -62,4 +62,4 @@ test('legal policy pages contain structured draft disclosures and accessible sec
  assert.match(css,/\.policy-contents\s*\{/);
 });
 
-test('public homepage exposes a permanent local development workspace entry',async()=>{const home=await readFile(new URL('../src/features/home/business-home-page.js',import.meta.url),'utf8');assert.match(home,/business-workspace-entry/);assert.match(home,/\?pluits-demo=1#\/profile/);assert.match(home,/mode simulasi/);});
+test('public homepage does not expose a development workspace entry',async()=>{const home=await readFile(new URL('../src/features/home/business-home-page.js',import.meta.url),'utf8');assert.doesNotMatch(home,/Ruang Kerja|business-workspace-entry|pluits-demo/);});
