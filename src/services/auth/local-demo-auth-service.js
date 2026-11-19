@@ -38,10 +38,27 @@ export function createLocalDemoAuthService(storage = globalThis.localStorage) {
       return () => listeners.delete(callback);
     },
     demoSignIn() {
-      const session = demoSession();
+      const session = readSession() || demoSession();
       storage?.setItem(STORAGE_KEY, JSON.stringify(session));
-      emit('SIGNED_IN', session);
+      emit('INITIAL_SESSION', session);
       return session;
+    },
+    async updateProfile(updates = {}) {
+      const session = readSession() || demoSession();
+      const displayName = String(updates.display_name || updates.full_name || session.user.user_metadata.display_name || '').trim();
+      const username = String(updates.username || session.user.user_metadata.username || '').trim().toLowerCase().replace(/^@/, '');
+      if (displayName.length < 2 || displayName.length > 80) throw new Error('Nama tampilan harus terdiri dari 2 sampai 80 karakter.');
+      if (!/^[a-z0-9][a-z0-9._-]{2,29}$/.test(username)) throw new Error('Username harus 3–30 karakter dan hanya memakai huruf kecil, angka, titik, garis bawah, atau tanda hubung.');
+      session.user.user_metadata = {
+        ...session.user.user_metadata,
+        ...updates,
+        display_name: displayName,
+        full_name: displayName,
+        username
+      };
+      storage?.setItem(STORAGE_KEY, JSON.stringify(session));
+      emit('USER_UPDATED', session);
+      return session.user;
     },
     async signOut() {
       storage?.removeItem(STORAGE_KEY);
