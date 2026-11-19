@@ -50,3 +50,10 @@
     padding-block-end: var(--pl-shell-content-footer-gap-mobile);
   }
 }
+
+/* Public footer payment methods — shared by the homepage and all public information pages. */
+.pl-footer-payment-methods{padding:18px 0 20px;border-top:1px solid var(--pl-color-border)}
+.pl-footer-payment-title{display:block;margin-bottom:11px;color:var(--pl-color-ink);font-size:11px;font-weight:750}
+.pl-footer-payment-list{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.pl-footer-payment-list span{display:inline-flex;min-height:29px;align-items:center;padding:0 11px;border:1px solid var(--pl-color-border);border-radius:7px;background:var(--pl-color-surface);color:var(--pl-color-muted);font-size:10px;font-weight:750;white-space:nowrap}
+@media(max-width:767px){.pl-footer-payment-methods{padding:16px 0}.pl-footer-payment-list{gap:6px}.pl-footer-payment-list span{min-height:27px;padding-inline:9px;font-size:9px}}
