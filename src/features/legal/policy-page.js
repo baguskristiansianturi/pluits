@@ -7,7 +7,7 @@ import { renderPublicFooter } from '../public-info/public-footer.js';
 import { LEGAL_POLICIES } from './pages/index.js';
 
 export function mountPolicyPage({ root, type }) {
-  const policy = POLICIES[type];
+  const policy = LEGAL_POLICIES[type];
   if (!policy) return;
   const sections = policy.sections.map(([heading, copy], index) =>
     '<section class="policy-section" id="policy-section-' + (index + 1) + '"><h2>' + (index + 1) + '. ' + heading + '</h2><p>' + copy + '</p></section>'
