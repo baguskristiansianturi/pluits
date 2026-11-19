@@ -1,6 +1,6 @@
 import { routeHref } from '../../config/paths.js';
 import '../../design-system/page-shell.css';
-import { renderPageHeader } from '../../design-system/page-shell.js';
+import { renderPageHeader, renderBrand } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
 import { listDemoStores } from '../../services/store/local-demo-store-service.js';
 import './social-pages.css';
