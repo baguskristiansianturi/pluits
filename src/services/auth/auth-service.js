@@ -36,6 +36,9 @@ export function getAuthErrorMessage(error) {
   if (message.includes('failed to fetch') || message.includes('network request failed') || message.includes('networkerror') || error?.name === 'TypeError') {
     return 'PLUITS tidak dapat terhubung ke layanan login. Periksa koneksi internet lalu coba kembali.';
   }
+  if (Number(error?.status) === 402 || message.includes('payment required') || message.includes('fair use policy')) {
+    return 'Layanan login PLUITS sedang dibatasi oleh Supabase (HTTP 402). Ini bukan kesalahan password. Admin perlu memeriksa Usage & Billing organisasi Supabase sebelum login dapat digunakan kembali.';
+  }
   if (Number(error?.status) === 429 || message.includes('rate limit') || message.includes('too many requests')) {
     return 'Permintaan terlalu sering. Tunggu sebentar sebelum mencoba lagi.';
   }
