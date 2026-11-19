@@ -43,6 +43,9 @@ The common public footer is rendered through the existing shared `renderPageFoot
 | Pembatalan & Pengembalian Dana | `#/refund-policy` | Draft until cancellation/refund operations and provider flows are implemented |
 | Pengiriman | `#/shipping-policy` | Draft until logistics providers, tracking and responsibilities are defined |
 | Penghapusan Akun | `#/account-deletion` | Preparation page only; external request workflow and in-app deletion must be built |
+| Pilihan Privasi | `#/privacy-choices` | Preparation page; data access/correction/deletion controls must be implemented |
+| Pengaduan & Sengketa | `#/complaints` | Preparation page; staffed intake, case handling and escalation must be built |
+| Kebijakan Produk | `#/prohibited-items` | Draft; prohibited/restricted categories and listing enforcement require legal and operational review |
 | Kebijakan Cookie | `#/cookies` | Must be finalized only after auditing actual cookies, local storage and third-party scripts |
 
 Do not hide draft status. Draft labels are not acceptable substitutes for final policies when submitting a public app-store release.
