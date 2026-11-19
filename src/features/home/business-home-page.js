@@ -57,9 +57,10 @@ function discoveryShowcase() {
 export function mountBusinessHomePage({root,user=null}={}) {
   const primaryHref = routeHref(user ? 'dashboard' : 'register');
   const primaryLabel = user ? 'Buka Dashboard' : 'Bergabung dengan PLUITS';
+  const workspaceEntry = '<a class="business-header-cta business-workspace-entry" href="?pluits-demo=1#/profile" aria-label="Buka ruang kerja pengembangan PLUITS (mode simulasi)">Ruang Kerja</a>';
   const headerAction = user
-    ? '<a class="business-header-cta" href="' + routeHref('dashboard') + '">Dashboard</a>'
-    : '<div class="business-header-actions"><a class="business-login-link" href="' + routeHref('login') + '">Masuk</a><a class="business-header-cta" href="' + routeHref('register') + '">Daftar</a></div>';
+    ? '<div class="business-header-actions"><a class="business-login-link" href="' + routeHref('dashboard') + '">Dashboard</a>' + workspaceEntry + '</div>'
+    : '<div class="business-header-actions"><a class="business-login-link" href="' + routeHref('login') + '">Masuk</a><a class="business-header-cta" href="' + routeHref('register') + '">Daftar</a>' + workspaceEntry + '</div>';
 
   const footerMarkup = renderPublicFooter();
 
