@@ -1,63 +1,48 @@
-# PLUITS Frontend V2 — Runtime Structure
+# PLUITS Frontend Runtime
 
-Status: bootstrap implementation; first stage only.
+Status: current modular frontend implementation; consult the change map for exact implementation status.
 
-## Change Map
+## Start here
 
-See CHANGE-MAP.md for canonical file ownership, dependencies, backend contracts, protected surfaces, and required checks.
+- [CHANGE-MAP.md](./CHANGE-MAP.md) — canonical technical map for route ownership, feature ownership, dependencies, backend contracts, protected surfaces and required regression checks.
+- [../AGENTS.md](../AGENTS.md) — repository-wide engineering rules and mandatory change workflow.
+- [Platform UI Foundation](../PLUITS-MASTER-MODEL-APP/06-PLATFORM-UI-FOUNDATION/README.md) — canonical cross-platform UI standards and approval status.
 
-## Current runtime scope
-
-- Account registration.
-- Email/password login for existing Supabase accounts.
-- Signup confirmation pending state and resend request.
-- Password recovery and reset.
-- Authenticated internal workspace after login.
-- Draft-only policy information pages.
-
-This workspace is not the Global Home, Primary Profile, or Social Media experience.
-
-## Module ownership
+## Runtime ownership
 
 | Path | Responsibility |
 |---|---|
-| app/ | Application bootstrap, route resolution, auth guard, lifecycle |
-| config/ | Non-secret runtime URL and asset configuration |
-| design-system/ | Provisional dimensions/tokens, local icon registry, layout registry |
-| features/auth/ | Registration, login, recovery, and auth screen interactions |
-| features/workspace/ | Authenticated development workspace |
-| features/legal/ | Explicit draft status for policy documents |
-| services/auth/ | Supabase Auth calls and validation; no DOM rendering |
-| lib/supabase/ | One shared browser Supabase client |
-| styles/ | Small global reset and base styles |
+| `app/` | Bootstrap, route resolution, authentication guards and application lifecycle |
+| `config/` | Runtime paths, asset URLs and non-secret configuration |
+| `design-system/` | Runtime implementation of shared tokens, icon registry, brand/header/footer shell and layout helpers |
+| `features/auth/` | Registration, login, password recovery and reset UI |
+| `features/home/` | Public business homepage and authenticated Social home experiences |
+| `features/dashboard/` | Protected Ruang Kerja dashboard |
+| `features/social/` | Social destinations including discovery, messages, profile and settings |
+| `features/legal/` | Draft legal/policy screens |
+| `services/` | Business/service orchestration and data access; no page rendering or DOM ownership |
+| `lib/` | Low-level SDK clients and adapters |
+| `styles/` | Global reset and base styles only |
+
+## Source-of-truth boundaries
+
+- Product requirements and approved product decisions belong in `PLUITS-MASTER-MODEL-APP/`.
+- Cross-platform visual and interaction standards belong in `06-PLATFORM-UI-FOUNDATION/`.
+- The actual shared UI implementation belongs in `src/design-system/`.
+- Feature-specific behavior and scoped styles belong in the owning `src/features/<feature>/` folder.
+- Detailed source ownership and route/backend contracts belong in [CHANGE-MAP.md](./CHANGE-MAP.md).
+- Do not create a second token, icon, shell, or shared-component registry inside a feature folder.
+
+The UI Foundation documentation defines the rules; this runtime folder implements them. If a required standard is missing, document the gap in the relevant UI Foundation library/register and follow its approval process before introducing a new global rule or external dependency.
 
 ## Dependency direction
 
-- app → features/services/lib.
-- features → config/design-system; feature screens receive service interfaces by injection.
-- services → lib/config only; services never import page or feature UI.
-- lib does not import app or feature modules.
-- Feature CSS is scoped to its owning page root.
-
-## UI foundation order
-
-1. Dimensions and responsive scale.
-2. Local icon registry.
-3. Semantic color tokens.
-4. Interaction states and validation.
-5. Layout registry.
-
-The current values and layouts are PROVISIONAL. They are test material for the first registration screen and workspace, not approved global standards.
-
-## Authentication boundaries
-
-- Browser client uses only the Supabase publishable key.
-- Signup goes through supabase.auth.signUp with full_name metadata and the canonical app redirect.
-- Database triggers already create profile and wallet records. The frontend must not duplicate those inserts.
-- User metadata is display information only, never authorization.
-- Existing Supabase users, profiles, database migrations, media, and other records must be preserved.
-- The consent checkbox currently gates the UI. A durable legal-consent record and final legal documents remain open requirements before public registration.
+- `app` may coordinate features, services and low-level libraries.
+- Features may consume config and design-system exports and call their supported service boundaries.
+- Services may depend on config and low-level libraries; they must not import feature UI or manipulate page DOM.
+- Low-level libraries must not import app or feature modules.
+- Feature styles remain scoped to their owning feature root unless a change is explicitly approved as global.
 
 ## Verification
 
-Run npm test and npm run build. GitHub Actions runs both on pull requests and deploys GitHub Pages only from main.
+Run `npm test` and `npm run build`. Consult CHANGE-MAP.md for the routes and regression surfaces relevant to the current change. Automated checks do not replace browser/device visual acceptance.
