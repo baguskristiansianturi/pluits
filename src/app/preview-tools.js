@@ -1,3 +1,4 @@
+import { routeHref } from '../config/paths.js';
 const PREVIEW_GROUPS = [
   { title: 'Halaman publik', routes: [
     ['home','Homepage'],['login','Masuk'],['register','Daftar'],['terms','Ketentuan Layanan'],['privacy','Kebijakan Privasi'],
@@ -16,7 +17,7 @@ export function createPreviewTools(root) {
   const controller = new AbortController();
   const links = PREVIEW_GROUPS.map(group =>
     '<section class="pl-preview-group"><strong>' + group.title + '</strong><div>' +
-    group.routes.map(([route,label]) => '<a href="#/' + route + '" data-preview-route>' + label + '</a>').join('') +
+    group.routes.map(([route,label]) => '<a href="' + routeHref(route) + '" data-preview-route>' + label + '</a>').join('') +
     '</div></section>'
   ).join('');
   root.insertAdjacentHTML('beforeend',
