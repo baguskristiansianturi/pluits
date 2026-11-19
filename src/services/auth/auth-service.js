@@ -33,8 +33,14 @@ export function getAuthErrorMessage(error) {
   if (message.includes('email address not authorized') || message.includes('not authorized')) {
     return 'Layanan email Supabase belum mengizinkan alamat ini. Konfigurasi SMTP perlu diperiksa.';
   }
-  if (message.includes('rate limit') || message.includes('too many requests')) {
+  if (message.includes('failed to fetch') || message.includes('network request failed') || message.includes('networkerror') || error?.name === 'TypeError') {
+    return 'PLUITS tidak dapat terhubung ke layanan login. Periksa koneksi internet lalu coba kembali.';
+  }
+  if (Number(error?.status) === 429 || message.includes('rate limit') || message.includes('too many requests')) {
     return 'Permintaan terlalu sering. Tunggu sebentar sebelum mencoba lagi.';
+  }
+  if (Number(error?.status) >= 500) {
+    return 'Layanan autentikasi sedang mengalami gangguan. Coba kembali beberapa saat lagi.';
   }
   if (message.includes('weak password') || message.includes('password should')) {
     return 'Password belum memenuhi aturan keamanan Supabase.';

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createAuthService } from '../src/services/auth/auth-service.js';
+import { createAuthService, getAuthErrorMessage } from '../src/services/auth/auth-service.js';
 
 function createFakeSupabase(overrides = {}) {
   const calls = [];
@@ -97,4 +97,11 @@ test('registration rejects passwords shorter than eight characters', async () =>
     /minimal 8/
   );
   assert.equal(calls.some(([name]) => name === 'signUp'), false);
+});
+
+
+test('auth errors distinguish network failures and service outages',()=>{
+  assert.match(getAuthErrorMessage(new TypeError('Failed to fetch')),/tidak dapat terhubung/i);
+  assert.match(getAuthErrorMessage({status:503,message:'service unavailable'}),/gangguan/i);
+  assert.match(getAuthErrorMessage({status:429,message:'too many requests'}),/terlalu sering/i);
 });
