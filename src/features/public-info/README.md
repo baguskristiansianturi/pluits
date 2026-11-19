@@ -16,7 +16,7 @@ Routes are registered in `src/config/paths.js` and dispatched by `src/app/create
 ## Content truthfulness
 - Informational pages may describe the product direction in ordinary language.
 - Legal, marketplace, payment, refund, seller and cookie policies remain clearly marked as drafts or preparation until their content is verified, approved and operationally supported.
-- The account deletion page is currently an informational preparation page, not a functioning deletion request form. Do not represent it as App Store / Google Play ready.
+- The account deletion and privacy choices pages are currently informational preparation pages, not functioning request forms. The complaints page is not a staffed intake or dispute-resolution workflow. Do not represent it as App Store / Google Play ready.
 - Contact details must not be invented. The Contact page must be updated with real, monitored channels before release.
 - Midtrans is the planned payment provider only. Footer methods are forward-looking; activation and eligibility must be confirmed for the PLUITS merchant account.
 - Do not claim escrow, buyer protection, guaranteed refunds, verification, moderation SLAs, or other controls unless implemented and verified.
