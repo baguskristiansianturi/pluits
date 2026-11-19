@@ -1,5 +1,4 @@
-name: Deploy to GitHub Pages
-# Pull requests validate and upload an artifact; they never deploy to Pages.
+name: Validate PLUITS
 
 on:
   pull_request:
@@ -12,17 +11,14 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pluits-pages-v4-${{ github.ref }}
+  group: pluits-validation-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify production surface and backend contracts
+      - name: Verify architecture and production contracts
         run: npm test
 
       - name: Build Vite production
@@ -49,19 +45,3 @@ jobs:
           test -f dist/assets/brand/pluits-icon-192.png
           test -f dist/assets/brand/pluits-icon-512.png
           test -f dist/assets/brand/apple-touch-icon.png
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Deploy to GitHub Pages
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-        id: deployment
-        uses: actions/deploy-pages@v4
-        with:
-          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
