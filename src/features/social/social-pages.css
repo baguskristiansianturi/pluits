@@ -206,3 +206,14 @@
 .social-profile-bubble:nth-child(4) .social-profile-bubble-avatar svg{filter:hue-rotate(28deg)}
 .social-profile-bubble:nth-child(5) .social-profile-bubble-avatar svg{filter:hue-rotate(-32deg)}
 @media(prefers-reduced-motion:reduce){.social-profile-bubble,.social-profile-bubble.is-contacting{transition:none}}
+
+
+/* Development preview profile editor — isolated from production services. */
+.social-settings-demo-form{display:grid;gap:12px;margin-top:18px}
+.social-settings-demo-form label{display:grid;gap:6px;color:var(--pl-color-text);font-size:12px;font-weight:700}
+.social-settings-demo-form input{width:100%;min-height:42px;padding:0 12px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-md);background:var(--pl-color-surface);color:var(--pl-color-ink);font:inherit;font-size:13px}
+.social-settings-demo-form button{min-height:44px;padding:0 16px;border:0;border-radius:var(--pl-radius-pill);background:var(--pl-color-ink);color:#fff;font:inherit;font-size:12px;font-weight:750}
+.social-settings-demo-form button:disabled{opacity:.6}
+.social-profile-bio,.social-profile-location{margin:7px 0 0;color:var(--pl-color-muted);font-size:12px;line-height:1.55}
+.social-profile-location{display:flex;align-items:center;justify-content:center;gap:5px}
+.social-profile-location .ui-icon{width:14px;height:14px}
