@@ -271,3 +271,33 @@
 /* Keep image captions legible over photography without decorative circles competing with content. */
 .business-discovery-visual:before{inset:0;border:0;border-radius:0;background:linear-gradient(180deg,rgba(17,35,54,.04),rgba(17,35,54,.56))}
 .business-discovery-visual:after{display:none}
+
+
+/* Public homepage polish: keep the first content edge at the shared 50px shell gap
+   and present app availability as compact, balanced platform cards. */
+.business-home-hero{padding-top:0}
+.business-app-download{align-items:center;gap:28px;padding:30px 0 38px}
+.business-app-download-copy{max-width:470px;flex:1 1 420px}
+.business-app-download h2{max-width:440px;margin:9px 0 8px;font-size:clamp(22px,2.7vw,29px);line-height:1.12}
+.business-app-download-copy p{font-size:11px;line-height:1.65}
+.business-app-badges{display:grid;grid-template-columns:repeat(2,minmax(148px,1fr));gap:10px;flex:0 1 340px}
+.business-app-badge{min-width:0;min-height:58px;gap:10px;padding:9px 12px;border:1px solid var(--pl-color-border);border-radius:14px;background:var(--pl-color-surface);box-shadow:0 5px 18px rgba(23,43,69,.045)}
+.business-app-icon{width:27px;height:27px;flex:0 0 27px;color:var(--pl-color-ink)}
+.business-app-icon .ui-icon{width:22px;height:22px}
+.business-app-badge small{font-size:6.5px;letter-spacing:.09em;line-height:1.2}
+.business-app-badge strong{font-size:12px;line-height:1.2;white-space:nowrap}
+.business-app-badge em{font-size:8px;line-height:1.2}
+@media(max-width:767px){
+ .business-home-hero{padding-top:0}
+ .business-app-download{gap:18px;padding:26px 0 32px}
+ .business-app-download-copy{flex:initial;max-width:560px}
+ .business-app-badges{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;flex:initial}
+ .business-app-badge{min-height:56px;padding:8px 10px;gap:8px}
+ .business-app-icon{width:24px;height:24px;flex-basis:24px}
+ .business-app-icon .ui-icon{width:20px;height:20px}
+ .business-app-badge strong{font-size:11px}
+}
+@media(max-width:359px){
+ .business-app-badges{grid-template-columns:1fr}
+ .business-app-badge{max-width:none}
+}
