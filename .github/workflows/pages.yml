@@ -1,13 +1,10 @@
 name: Deploy PLUITS development preview to GitHub Pages
 
 on:
-  workflow_run:
-    workflows:
-      - Validate PLUITS
-    types:
-      - completed
+  push:
     branches:
       - development/preview
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -20,17 +17,14 @@ concurrency:
 
 jobs:
   build:
-    if: github.event.workflow_run.head_branch == 'development/preview' && github.event.workflow_run.conclusion == 'success'
+    if: github.ref == 'refs/heads/development/preview'
     environment:
-      name: github-pages
+      name: github-pages-preview
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout validated development commit
+      - name: Checkout development preview
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
-          persist-credentials: false
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
