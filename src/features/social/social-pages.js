@@ -5,6 +5,11 @@ import { renderIcon } from '../../design-system/icons.js';
 import { supabase } from '../../lib/supabase/client.js';
 import './social-pages.css';
 
+// Short-lived in-memory cache prevents repeated profile navigation from
+// re-fetching the same business-presence data on every mount.
+const BUSINESS_PRESENCE_CACHE_TTL = 60_000;
+const businessPresenceCache = new Map();
+
 function bottomNav(active){
  return '<nav class="global-bottom-nav" aria-label="Navigasi aplikasi">'
  + '<a href="'+routeHref('social')+'" class="'+(active==='social'?'is-active':'')+'">'+renderIcon('book')+'<span>Beranda</span></a>'
@@ -85,13 +90,21 @@ export function mountProfilePage({root,user=null}={}) {
  root.innerHTML='<div class="pl-page-shell social-shell"><header class="pl-page-header social-header"><div class="social-brand">'+renderBrand({href:routeHref('home'),label:'PLUITS'})+'<span>Profil</span></div><a href="'+routeHref('settings')+'">Pengaturan akun</a></header><main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
  const loadBusinessPresence=async()=>{
   if(!user?.id)return;
-  const [storesResult,servicesResult]=await Promise.all([
-   supabase.from('stores').select('id,name,username,description,public_city,public_area').eq('owner_user_id',user.id).eq('store_status','active').eq('verification_status','verified').order('name'),
-   supabase.from('professional_profiles').select('id,username,display_name,headline,bio,profession_category').eq('user_id',user.id).eq('profile_status','active').eq('visibility','public').order('created_at')
-  ]);
-  if(profileLoadController.signal.aborted)return;
-  if(!storesResult.error)ownedStores=storesResult.data||[];
-  if(!servicesResult.error)professionalServices=servicesResult.data||[];
+  const cached=businessPresenceCache.get(user.id);
+  if(cached&&Date.now()-cached.savedAt<BUSINESS_PRESENCE_CACHE_TTL){
+   ownedStores=cached.ownedStores;
+   professionalServices=cached.professionalServices;
+  }else{
+   const [storesResult,servicesResult]=await Promise.all([
+    supabase.from('stores').select('id,name,username,description,public_city,public_area').eq('owner_user_id',user.id).eq('store_status','active').eq('verification_status','verified').order('name'),
+    supabase.from('professional_profiles').select('id,username,display_name,headline,bio,profession_category').eq('user_id',user.id).eq('profile_status','active').eq('visibility','public').order('created_at')
+   ]);
+   if(profileLoadController.signal.aborted)return;
+   if(storesResult.error||servicesResult.error)return;
+   ownedStores=storesResult.data||[];
+   professionalServices=servicesResult.data||[];
+   businessPresenceCache.set(user.id,{ownedStores,professionalServices,savedAt:Date.now()});
+  }
   if(!profileLoadController.signal.aborted){
    root.querySelector('.social-profile-tabs')?.insertAdjacentHTML('beforeend',businessTabs());
    const panels=root.querySelectorAll('[data-profile-panel]');
