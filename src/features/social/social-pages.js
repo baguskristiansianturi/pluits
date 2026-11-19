@@ -2,7 +2,6 @@ import { routeHref } from '../../config/paths.js';
 import '../../design-system/page-shell.css';
 import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
-import { supabase } from '../../lib/supabase/client.js';
 import { listDemoStores } from '../../services/store/local-demo-store-service.js';
 import './social-pages.css';
 
@@ -96,6 +95,7 @@ export function mountProfilePage({root,user=null}={}) {
    ownedStores=listDemoStores();
    professionalServices=[];
   }else{
+  const {supabase}=await import('../../lib/supabase/client.js');
   const cached=businessPresenceCache.get(user.id);
   if(cached&&Date.now()-cached.savedAt<BUSINESS_PRESENCE_CACHE_TTL){
    ownedStores=cached.ownedStores;
