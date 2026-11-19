@@ -1,6 +1,6 @@
 # PLUITS Development Preview Environment
 
-**Status:** Implemented in the `development/preview` branch; automated validation and hosted browser acceptance are pending.
+**Status:** Deployed to GitHub Pages preview; automated validation and 27-route browser smoke test passed. Founder visual/product acceptance remains pending.
 
 ## Purpose
 
@@ -33,17 +33,34 @@ GitHub Pages must not deploy from `main`. Cloudflare must not consume the develo
 - The same production source paths remain in use; preview behavior is selected by a build-time environment flag.
 - Production builds do not enable demo mode unless explicitly configured.
 
+## Latest verification evidence
+
+- **Development branch commit:** `90ae5d82c90e7db585b8e482889b693742b3cf61`
+- **GitHub Actions preview deployment:** successful; [run 44555638088](https://github.com/baguskristiansianturi/pluits/actions/runs/44555638088)
+- **Automated suite:** 47 passed, 0 failed.
+- **Architecture guard:** passed across 23 JavaScript modules.
+- **Production-surface guard:** passed across 34 runtime files.
+- **Vite build:** passed.
+- **Hosted browser smoke test:** all 27 registered routes rendered; preview navigation remained available; local profile edit persisted and appeared on the profile page; no Supabase login was required.
+
 ## Acceptance checklist
 
-- [ ] All public routes render in the preview.
-- [ ] All authenticated routes are reachable through the demo session.
-- [ ] Home, Feed, Reels, Stories, Discover, Messages, Profile, Settings and Dashboard render without Supabase.
-- [ ] Profile edits persist after refresh in the same browser.
-- [ ] Demo Store drafts persist locally and remain unpublished.
-- [ ] Logout and demo-session re-entry behave predictably.
-- [ ] No Supabase request is required for preview bootstrap or navigation.
-- [ ] Automated tests and production build pass.
-- [ ] Android browser review covers all routes, navigation, forms, overflow and responsive states.
-- [ ] Production deployment is not triggered by preview commits.
+- [x] All public routes render in the preview.
+- [x] All authenticated routes are reachable through the demo session.
+- [x] Social Home, Discover, Messages, Profile, Settings and Dashboard render without Supabase.
+- [x] Demo profile edits persist in browser storage and appear on Profile.
+- [x] Demo Store drafts persist locally and remain unpublished.
+- [x] Preview navigator lists all 27 public and member routes.
+- [x] Automated tests and production build pass.
+- [x] Hosted browser smoke test covers all 27 routes.
+- [x] Production deployment is not triggered by preview commits.
+- [ ] Founder visual/product acceptance on Android remains pending.
 
-A successful build or deployment is not proof of full route coverage or founder acceptance. Record actual browser/device UAT separately.
+## Known preview limitations
+
+- The Messages route is a functional empty-state surface; it is not connected to a live messaging backend.
+- Some product, social publishing, notification, and ecosystem modules remain presentation prototypes or disabled flows until their backend services are implemented.
+- Feed/Reels preview uses local fixtures; missing media assets can show the designed fallback state.
+- Login and registration screens are available for visual review but do not create or authenticate production accounts in demo mode.
+
+A successful build or deployment is not proof that every product feature is operational. Keep backend feature readiness, browser/device UAT, founder acceptance, and production release as separate statuses.
