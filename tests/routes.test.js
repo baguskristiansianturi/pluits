@@ -90,3 +90,25 @@ test('every public footer information page is owned by a grouped page module',()
   assert.ok(Array.isArray(page.sections) && page.sections.length>0,key+' sections');
  }
 });
+
+test('every footer destination resolves through the canonical route registry',async()=>{
+ const footer=await readFile(new URL('../src/features/public-info/public-footer.js',import.meta.url),'utf8');
+ const footerRoutes=[...footer.matchAll(/route:'([^']+)'/g)].map(match=>match[1]);
+ assert.ok(footerRoutes.length>0);
+ for(const route of footerRoutes){
+  assert.ok(Object.hasOwn(APP_ROUTES,route),'footer route '+route+' must be registered');
+  assert.ok(!routeHref(route).includes('#'),'footer route '+route+' must use a clean pathname');
+ }
+});
+
+test('legal policy content is separated into dedicated page folders',async()=>{
+ const [registry,terms,privacy]=await Promise.all([
+  readFile(new URL('../src/features/legal/pages/index.js',import.meta.url),'utf8'),
+  readFile(new URL('../src/features/legal/pages/terms/index.js',import.meta.url),'utf8'),
+  readFile(new URL('../src/features/legal/pages/privacy/index.js',import.meta.url),'utf8')
+ ]);
+ assert.match(registry,/TERMS_POLICY/);
+ assert.match(registry,/PRIVACY_POLICY/);
+ assert.match(terms,/export const TERMS_POLICY/);
+ assert.match(privacy,/export const PRIVACY_POLICY/);
+});
