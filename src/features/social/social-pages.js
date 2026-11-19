@@ -96,8 +96,8 @@ export function mountProfilePage({root,user=null}={}) {
    professionalServices=cached.professionalServices;
   }else{
    const [storesResult,servicesResult]=await Promise.all([
-    supabase.from('stores').select('id,name,username,description,public_city,public_area').eq('owner_user_id',user.id).eq('store_status','active').eq('verification_status','verified').order('name'),
-    supabase.from('professional_profiles').select('id,username,display_name,headline,bio,profession_category').eq('user_id',user.id).eq('profile_status','active').eq('visibility','public').order('created_at')
+    supabase.from('stores').select('id,name,username,description,public_city,public_area').eq('owner_user_id',user.id).eq('store_status','active').eq('verification_status','verified').order('name').abortSignal(profileLoadController.signal),
+    supabase.from('professional_profiles').select('id,username,display_name,headline,bio,profession_category').eq('user_id',user.id).eq('profile_status','active').eq('visibility','public').order('created_at').abortSignal(profileLoadController.signal)
    ]);
    if(profileLoadController.signal.aborted)return;
    if(storesResult.error||servicesResult.error)return;
