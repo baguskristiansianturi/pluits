@@ -39,6 +39,25 @@ function businessExperience() {
   ).join('') + '</div>';
 }
 
+
+function paymentExperience() {
+  const methods = [
+    ['grid','QRIS','Satu kode untuk berbagai aplikasi mobile banking dan dompet digital.','Pembayaran praktis'],
+    ['briefcase','Transfer bank & Virtual Account','Pilihan transfer dari bank-bank besar di Indonesia.','BCA · BNI · BRI · Mandiri · BSI'],
+    ['message','Dompet digital','Bayar langsung melalui aplikasi pembayaran pilihan pelanggan.','GoPay · OVO · DANA · ShopeePay · LinkAja'],
+    ['lock','Kartu debit & kredit','Pilihan kartu untuk pelanggan lokal maupun internasional.','Visa · Mastercard · JCB · American Express'],
+    ['store','Gerai pembayaran','Pilihan pembayaran tunai melalui jaringan gerai ritel.','Alfamart · Indomaret'],
+    ['check','PayLater & cicilan','Pilihan pembayaran bertahap dari penyedia yang mendukung.','Kredivo · Akulaku · Indodana'],
+    ['user','Debit langsung','Pembayaran langsung dari rekening bank, jika tersedia.','Mengikuti dukungan mitra']
+  ];
+  return '<section class="business-payment-showcase" aria-labelledby="business-payment-title">' +
+    '<div class="business-payment-heading"><div><span class="business-eyebrow">PEMBAYARAN UNTUK BISNIS</span><h3 id="business-payment-title">Berikan pelanggan lebih banyak cara untuk membayar.</h3><p>Mulai dari QRIS hingga kartu dan dompet digital, pilihan pembayaran dirancang agar pelanggan dapat memilih cara yang paling nyaman.</p></div><span class="business-payment-note">DIRANCANG UNTUK INDONESIA</span></div>' +
+    '<div class="business-payment-grid">' + methods.map(([symbol,title,copy,examples]) =>
+      '<article class="business-payment-card"><span class="business-payment-icon">' + icon(symbol) + '</span><div><h4>' + title + '</h4><p>' + copy + '</p><small>' + examples + '</small></div></article>'
+    ).join('') + '</div>' +
+    '<div class="business-payment-trust"><div class="business-payment-trust-icon">' + icon('lock') + '</div><div><span class="business-card-overline">TRANSAKSI LEBIH TENANG</span><h4>Pembayaran melalui mitra tepercaya. Lebih jelas bagi kedua pihak.</h4><p>PLUITS merencanakan penggunaan payment gateway pihak ketiga untuk menjadi perantara pembayaran antara pelanggan dan bisnis. Mitra pembayaran membantu memproses transaksi dan mengirimkan konfirmasi, sementara PLUITS membantu pelanggan dan pemilik usaha mengikuti status pesanan dengan lebih jelas.</p><p class="business-payment-disclaimer">Pilihan dan ketersediaan metode mengikuti mitra pembayaran, jenis usaha, serta proses aktivasi. Fitur pembayaran ini belum aktif dan belum terhubung ke penyedia pembayaran.</p></div></div>' +
+    '</section>';
+}
 function discoveryShowcase() {
   const cards = [
     ['Kuliner','Temukan tempat makan dan cerita di baliknya.','food','food'],
@@ -77,7 +96,7 @@ export function mountBusinessHomePage({root,user=null}={}) {
         '<div class="business-home-business-copy">' + sectionIntro('UNTUK PELAKU USAHA','Bawa bisnis Anda lebih dekat kepada pelanggan.','Bangun kehadiran digital yang lebih mudah ditemukan. Perkenalkan apa yang Anda tawarkan, ceritakan nilai bisnis Anda, dan buka jalan untuk hubungan yang lebih bermakna.') +
           '<a class="business-primary-cta" href="' + primaryHref + '">' + (user ? 'Buka Dashboard' : 'Mulai bersama PLUITS') + ' <span aria-hidden="true">→</span></a></div>' +
         '<div class="business-home-business-visual"><div class="business-owner-photo">' + photo('business','') + '<div><span>UNTUK PELAKU USAHA</span><strong>Bisnis Anda punya cerita. Biarkan lebih banyak orang menemukannya.</strong></div></div></div>' +
-      '</div><div class="business-owner-grid-wrap">' + businessExperience() + '</div></section>' +
+      '</div><div class="business-owner-grid-wrap">' + businessExperience() + '</div>' + paymentExperience() + '</section>' +
       '<section class="business-home-section business-discovery-section" id="ekosistem">' +
         sectionIntro('LEBIH BANYAK UNTUK DIJELAJAHI','Dari cerita sehari-hari hingga kebutuhan lokal.','PLUITS membuka ruang untuk menemukan hal-hal yang dekat dengan kehidupan: tempat, produk, usaha, komunitas, dan layanan.') +
         discoveryShowcase() +
