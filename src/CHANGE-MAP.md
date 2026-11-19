@@ -12,10 +12,10 @@ Scope: Public Business Homepage, authenticated Social App, Jelajah, Ruang Kerja,
 | Design tokens | src/design-system/tokens.css | design-system | All feature screens |
 | Icon registry | src/design-system/icons.js | design-system | All features |
 | Shared brand/header/footer | src/design-system/page-shell.js and page-shell.css | design-system | Business Homepage, Social Home, Jelajah, Auth, Legal and Ruang Kerja |
-| Public Business Homepage | src/features/home/business-home-page.js and business-home.css | features/home | #/home; PLUITS brand destination |
-| Authenticated Social Home (former Global Home composition) | src/features/home/home-page.js and home-page.css | features/home | protected #/social after login |
-| Jelajah, Messages, redesigned Profile, Settings, and legacy Circle route | src/features/social/social-pages.js and social-pages.css | features/social | #/discover, #/messages, #/profile, #/settings; legacy #/circle redirects to #/social |
-| Ruang Kerja | src/features/dashboard/dashboard-page.js and dashboard-page.css | features/dashboard | Protected #/dashboard |
+| Public Business Homepage | src/features/home/business-home-page.js and business-home.css | features/home | `/pluits/`; PLUITS brand destination |
+| Authenticated Social Home (former Global Home composition) | src/features/home/home-page.js and home-page.css | features/home | protected `/pluits/social/` after login |
+| Jelajah, Messages, redesigned Profile, Settings, and legacy Circle route | src/features/social/social-pages.js and social-pages.css | features/social | `/pluits/discover/`, `/pluits/messages/`, `/pluits/profile/`, `/pluits/settings/`; legacy `/pluits/circle/` redirects to `/pluits/social/` |
+| Ruang Kerja | src/features/dashboard/dashboard-page.js and dashboard-page.css | features/dashboard | Protected `/pluits/dashboard/` |
 | Auth UI | src/features/auth/auth-page.js and auth-page.css | features/auth | App router |
 | Legal draft screens | src/features/legal/policy-page.js and policy-page.css | features/legal | App router |
 | Public footer information pages | src/features/public-info/pages/ grouped by company, support, community, marketplace and privacy; shared frame in public-info-page.js | features/public-info | Public homepage, Auth, legal and footer destinations |
