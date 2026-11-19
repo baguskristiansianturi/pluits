@@ -10,7 +10,9 @@ export function resolveRoute(hash = '', search = '') {
   return ROUTES.has(route) ? route : (ROUTE_KEYS_BY_PATH.get(route) || 'register');
 }
 export function resolveAuthenticatedRoute(route, hasSession) {
-  if (['dashboard','social','messages','profile','settings'].includes(route) && !hasSession) return 'login';
+  // Public-safe frontend surfaces remain renderable without a remote account session.
+  // Only account/business workspace actions stay behind authentication.
+  if (route === 'dashboard' && !hasSession) return 'login';
   if (route === 'circle') return 'social';
   if (hasSession && ['register', 'login', 'forgot'].includes(route)) return 'social';
   return route;
