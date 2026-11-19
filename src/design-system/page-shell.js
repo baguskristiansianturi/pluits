@@ -15,8 +15,9 @@ export function renderNavbar({ items = [], active = '', ariaLabel = 'Navigasi ut
   }).join('');
   return '<nav class="pl-navbar' + (className ? ' ' + escapeHtml(className) : '') + '" aria-label="' + escapeHtml(ariaLabel) + '">' + links + '</nav>';
 }
-export function renderPageHeader({ note = 'EKOSISTEM DIGITAL TERINTEGRASI', label = 'PLUITS', brandHref, items = [], active = '', navLabel = 'Navigasi utama', rightContent = '', variant = '' } = {}) {
-  return '<header class="pl-page-header' + (variant ? ' pl-page-header--' + escapeHtml(variant) : '') + '">' +
+export function renderPageHeader({ note = 'EKOSISTEM DIGITAL TERINTEGRASI', label = 'PLUITS', brandHref, items = [], active = '', navLabel = 'Navigasi utama', rightContent = '', variant = '', className = '', dataGlobalHeader = false } = {}) {
+  const classes = ['pl-page-header', variant ? 'pl-page-header--' + variant : '', className].filter(Boolean).map(escapeHtml).join(' ');
+  return '<header class="' + classes + '"' + (dataGlobalHeader ? ' data-global-header' : '') + '>' +
     renderBrand({ href: brandHref, label }) + (items.length ? renderNavbar({ items, active, ariaLabel: navLabel }) : '') +
     (rightContent || '<span class="pl-page-header-note">' + escapeHtml(note) + '</span>') + '</header>';
 }
