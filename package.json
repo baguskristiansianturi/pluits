@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "npm run verify:architecture && npm run verify:production && node --test",
     "verify:architecture": "node scripts/verify-architecture.mjs",
-    "verify:production": "node scripts/verify-production-surface.mjs"
+    "verify:production": "node scripts/verify-production-surface.mjs",
+    "start": "node scripts/preview-server.mjs"
   },
   "devDependencies": {
     "vite": "^8.3.0"
