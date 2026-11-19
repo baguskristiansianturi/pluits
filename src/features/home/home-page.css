@@ -1,7 +1,7 @@
 .global-home-page{background:var(--pl-color-surface);padding-bottom:calc(76px + env(safe-area-inset-bottom,0px));overflow-x:clip}
 .global-header{position:sticky;top:0;z-index:40;background:var(--pl-color-surface);width:calc(100% + 2 * var(--pl-page-gutter));margin-inline:calc(-1 * var(--pl-page-gutter));padding-inline:var(--pl-page-gutter)}
 .global-header.is-released{position:relative}
-.global-brand-group{display:flex;align-items:center;gap:18px;min-width:0}
+.global-header-tools{display:flex;align-items:center;gap:clamp(8px,2vw,18px)}
 .global-header-actions{display:flex;align-items:center;gap:clamp(8px,2vw,18px)}
 .global-icon-button{display:grid;width:38px;height:38px;flex:0 0 auto;place-items:center;border:0;border-radius:50%;background:transparent;color:var(--pl-color-ink);text-decoration:none}
 .global-icon-button:active{background:var(--pl-color-canvas)}
@@ -125,7 +125,7 @@
 .global-create-sheet>a{color:var(--pl-color-brand);font-size:12px;font-weight:750;text-decoration:none}
 @media(max-width:767px){
  .global-header{gap:8px}
- .global-brand-group{gap:7px}
+ .global-header-tools{gap:7px}
  .global-header-actions{gap:4px}
  .global-icon-button{width:34px;height:34px}
  .global-icon-button .ui-icon{width:19px;height:19px}
