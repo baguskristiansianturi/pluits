@@ -1,5 +1,5 @@
 .business-home{background:var(--pl-color-surface);min-height:100vh;color:var(--pl-color-ink);overflow:clip}
-.pl-page-header--business-home{min-height:var(--pl-shell-header-height);display:flex;align-items:center;gap:24px}
+.pl-page-header--business-home{display:flex;align-items:center;gap:24px}
 .business-home-nav{display:flex;align-items:center;justify-content:center;gap:clamp(16px,2.5vw,34px);margin-left:auto}
 .business-home-nav a,.business-login-link{color:var(--pl-color-text);font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
 .business-home-actions,.business-header-actions{display:flex;align-items:center;gap:18px}

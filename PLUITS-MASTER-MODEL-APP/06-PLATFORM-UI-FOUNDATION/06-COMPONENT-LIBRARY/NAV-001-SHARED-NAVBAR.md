@@ -50,3 +50,19 @@ Changing only navbar content/configuration must not change divider thickness, co
 ## Change record
 
 - **2026-11-18:** Added a mandatory 1px soft bottom divider to the shared page header. Header bottom and footer top now share the same divider tokens.
+
+
+## Shared geometry and brand sizing
+
+The shared header geometry is enforced centrally:
+
+| Viewport | Runtime height token | Current value |
+|---|---|---:|
+| Desktop and tablet | `--pl-shell-header-height` | 82px |
+| Mobile (≤767px) | `--pl-shell-header-height-mobile` | 68px |
+
+Both `height` and `min-height` consume the same token in `src/design-system/page-shell.css`. Page-specific CSS may configure content and behavior, but must not set a competing header height or minimum height.
+
+The shared brand renderer uses the canonical 34 × 34 px logo token, with LOGO-02's 4 px symbol-to-wordmark gap and the global 19 px desktop / 17 px mobile wordmark typography. No page-local logo dimensions are allowed.
+
+**Approval boundary:** The current 82/68 px header values are runtime baseline values, not newly approved design decisions. The token and responsive registers continue to mark global dimensions provisional until the product owner formally approves them.

@@ -62,3 +62,13 @@ Use `03-APPLICATION-MODULARIZATION/` for code ownership, module boundaries, arch
 | Regression test | `tests/routes.test.js` | Confirms there is exactly one token and the shared shell consumes it |
 
 Feature pages must not define or override navbar-to-content spacing. New pages use the shared page-shell contract rather than adding their own gap.
+
+
+## NAV-001 — Shared header geometry and LOGO-02
+
+| Specification | Runtime source | Token/API | Consumer rule |
+|---|---|---|---|
+| `06-COMPONENT-LIBRARY/NAV-001-SHARED-NAVBAR.md` | `src/design-system/page-shell.css` | `--pl-shell-header-height`, `--pl-shell-header-height-mobile` | Every shared page header has one fixed 82px desktop/tablet and 68px mobile runtime height; feature CSS cannot override it |
+| `03-BRAND-ASSETS/LOGO-02-SYMBOL-WORDMARK.md` | `src/styles/global.css`, `src/design-system/page-shell.js` | `--pl-brand-logo-size`, `--pl-brand-lockup-gap`, `.pluits-brand` | Every shared brand renderer uses the canonical 34px symbol and 4px lockup gap |
+| Responsive header consumers | `src/features/home/home-page.css`, `src/features/home/business-home.css`, `src/features/dashboard/dashboard-page.css`, `src/features/social/social-pages.css` | Content-only modifiers | Configure sticky state, spacing, and actions only; do not define header height |
+| Regression coverage | `tests/routes.test.js` | Shared-header sizing assertions | Checks fixed token use, brand dimensions, and absence of page-local height overrides |

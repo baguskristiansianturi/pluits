@@ -16,3 +16,34 @@ test('public footer uses canonical shared renderer and contains all key policy/h
 
 test('hyphenated public URLs resolve to their registered route keys',()=>{assert.equal(resolveRoute('#/marketplace-info',''),'marketplaceInfo');assert.equal(resolveRoute('#/seller-terms',''),'sellerTerms');assert.equal(resolveRoute('#/payment-policy',''),'paymentPolicy');assert.equal(resolveRoute('#/account-deletion',''),'accountDeletion');assert.equal(resolveRoute('#/privacy-choices',''),'privacyChoices');assert.equal(resolveRoute('#/complaints',''),'complaints');assert.equal(resolveRoute('#/prohibited-items',''),'prohibitedItems');});
 test('authentication pages use the same complete public footer',async()=>{const auth=await readFile(new URL('../src/features/auth/auth-page.js',import.meta.url),'utf8');assert.match(auth,/renderPublicFooter/);assert.doesNotMatch(auth,/renderPageFooter/);});
+
+
+test('shared page headers and brand sizing follow one responsive foundation',async()=>{
+ const read=path=>readFile(new URL(path,import.meta.url),'utf8');
+ const [tokens,shell,global,home,business,dashboard,social,homePage,businessPage,authPage,dashboardPage]=await Promise.all([
+  read('../src/design-system/tokens.css'),
+  read('../src/design-system/page-shell.css'),
+  read('../src/styles/global.css'),
+  read('../src/features/home/home-page.css'),
+  read('../src/features/home/business-home.css'),
+  read('../src/features/dashboard/dashboard-page.css'),
+  read('../src/features/social/social-pages.css'),
+  read('../src/features/home/home-page.js'),
+  read('../src/features/home/business-home-page.js'),
+  read('../src/features/auth/auth-page.js'),
+  read('../src/features/dashboard/dashboard-page.js')
+ ]);
+ assert.match(tokens,/--pl-shell-header-height:\s*82px/);
+ assert.match(tokens,/--pl-shell-header-height-mobile:\s*68px/);
+ assert.match(tokens,/--pl-brand-logo-size:\s*34px/);
+ assert.match(tokens,/--pl-brand-lockup-gap:\s*4px/);
+ assert.match(shell,/\.pl-page-header\s*\{[^}]*height:\s*var\(--pl-shell-header-height\)/s);
+ assert.match(shell,/\.pl-page-header\s*\{[^}]*height:\s*var\(--pl-shell-header-height-mobile\)/s);
+ assert.match(global,/\.pluits-brand img\s*\{[^}]*width:\s*var\(--pl-brand-logo-size\)[^}]*height:\s*var\(--pl-brand-logo-size\)/s);
+ for(const css of [home,business,dashboard,social]) assert.doesNotMatch(css,/\.pl-page-header[^}]*min-height\s*:/s);
+ assert.doesNotMatch(home,/\.global-header\s*\{[^}]*min-height\s*:/s);
+ assert.match(homePage,/class="pl-page-header global-header"/);
+ assert.match(businessPage,/renderPageHeader\(/);
+ assert.match(authPage,/renderPageHeader\(/);
+ assert.match(dashboardPage,/renderPageHeader\(/);
+});

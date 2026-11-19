@@ -124,7 +124,7 @@
 .global-create-options button:disabled{opacity:.75}
 .global-create-sheet>a{color:var(--pl-color-brand);font-size:12px;font-weight:750;text-decoration:none}
 @media(max-width:767px){
- .global-header{min-height:var(--pl-shell-header-height-mobile);gap:8px}
+ .global-header{gap:8px}
  .global-brand-group{gap:7px}
  .global-header-actions{gap:4px}
  .global-icon-button{width:34px;height:34px}

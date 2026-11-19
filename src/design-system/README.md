@@ -63,3 +63,16 @@ Every header/navigation rendered through `renderPageHeader()` receives a soft bo
 ## Global brand destination
 
 The shared `renderBrand()` renderer always targets the canonical `#/home` Beranda for guests and authenticated users. On Global Home, the signed-in account avatar/name links to the separate protected `#/dashboard` user Dashboard. Dashboard is the only post-login control center. Workspace is an internal development term and is not exposed as a separate product page or route.
+
+
+## Shared header geometry — NAV-001
+
+The shared page header has one fixed runtime height at each viewport class, rather than a minimum height that can grow with page-specific content:
+
+- Desktop and tablet: `--pl-shell-header-height` (currently 82px).
+- Mobile: `--pl-shell-header-height-mobile` (currently 68px).
+- Runtime enforcement: `height` and `min-height` are both bound to the same token in `src/design-system/page-shell.css`.
+- Feature styles may configure header content, gaps, sticky behavior, and action controls, but must not redefine the shared header height.
+- The logo remains 34 × 34 CSS px at every viewport, controlled only by `--pl-brand-logo-size`; wordmark typography remains controlled by `src/styles/global.css`.
+
+**Status note:** These dimensions describe the current runtime baseline. The token register and responsive system still identify global dimension values as provisional pending formal product-owner approval. This audit does not silently upgrade provisional tokens to Approved.
