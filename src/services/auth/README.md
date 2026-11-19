@@ -1,9 +1,9 @@
 # Auth Service
 
 Owner: services/auth  
-Status: active bootstrap service.
+Status: Supabase adapter plus isolated local-demo adapter.
 
-The service is injected with the single Supabase client and owns:
+The production service is injected with the single Supabase client and owns:
 - get current session and subscribe to Auth state changes;
 - register with display name metadata and canonical email redirect;
 - resend signup confirmation;
@@ -12,6 +12,8 @@ The service is injected with the single Supabase client and owns:
 - sign-out;
 - input validation and user-facing error mapping.
 
-It must not render HTML, access the DOM, or decide user permissions from user_metadata.
+The local-demo adapter is selected only by the explicit `?pluits-demo=1` preview query parameter. It persists a synthetic session locally, labels the user with `app_metadata.provider = local-demo`, and never calls Supabase Auth. It is strictly for frontend UAT and must never be used as production authentication or authorization.
 
-The current database already has Auth-user triggers for profile and wallet creation. Do not duplicate those inserts in the frontend.
+Services must not render HTML, access the DOM, or decide user permissions from user_metadata.
+
+The current database already has Auth-user triggers for profile and wallet creation. Do not duplicate those inserts in the production frontend.
