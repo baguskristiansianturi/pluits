@@ -75,7 +75,7 @@ Official references:
 - Google Play — User Data policy and Data safety: https://support.google.com/googleplay/android-developer/answer/10144311
 - Google Play — Account deletion requirements: https://support.google.com/googleplay/android-developer/answer/13327111
 
-## 6. Apple App Store readiness
+## 5A. Midtrans payment-channel reference\n\nThe footer and payment information page must reflect the current official Midtrans catalogue, not a generic list copied from other gateways. The currently documented categories include Visa, Mastercard, JCB, American Express; Permata, BCA, BNI and BRI Virtual Accounts; Mandiri Bill Payment; GoPay, ShopeePay and QRIS; Indomaret, Alfamart, Alfamidi and DAN+DAN; and Akulaku / Kredivo cardless credit. OVO, DANA and LinkAja are listed as apps that can pay a QRIS transaction, not as separate direct e-wallet channels in the current Midtrans channel table.\n\nActivation, eligibility, fees, settlement, refunds and available methods must be confirmed in the PLUITS merchant account and signed agreement. The public footer is a forward-looking display until PLUITS has completed activation.\n\nOfficial references:\n- Midtrans — supported payment methods: https://docs.midtrans.com/docs/apa-saja-metode-pembayaran-yang-disediakan-oleh-midtrans\n- Midtrans — activating payment methods: https://docs.midtrans.com/docs/payment-methods\n- Midtrans — QRIS compatible apps: https://docs.midtrans.com/docs/apps-or-partners-that-can-be-used-for-paying-qris-transaction-in-midtrans\n\n## 6. Apple App Store readiness
 
 Before release, complete and verify at least:
 - Public privacy-policy URL in App Store Connect and an in-app path to the policy.
