@@ -6,6 +6,9 @@ const packageJson = JSON.parse(await readFile('package.json', 'utf8'));
 const indexHtml = await readFile('index.html', 'utf8');
 const workflow = await readFile('.github/workflows/deploy.yml', 'utf8');
 const serviceWorker = await readFile('public/sw.js', 'utf8');
+const routeConfig = await readFile('src/config/paths.js', 'utf8');
+const routeGenerator = await readFile('scripts/generate-pages-routes.mjs', 'utf8');
+const appRouter = await readFile('src/app/routes.js', 'utf8');
 
 async function walk(directory) {
   const output = [];
@@ -32,19 +35,26 @@ if (!indexHtml.includes('noindex,nofollow') || !indexHtml.includes('/src/main.js
 if (!packageJson.scripts?.test?.includes('verify:architecture')) {
   throw new Error('npm test must run the architecture boundary gate.');
 }
+if (!packageJson.scripts?.build?.includes('generate-pages-routes.mjs')) {
+  throw new Error('Production build must generate direct-load route folders for GitHub Pages.');
+}
 if (!workflow.includes('npm test') || !workflow.includes('npm run build')) {
   throw new Error('GitHub Actions must test and build before deployment.');
 }
 if (runtimeFiles.some((path) => /pages\/account|components\/social|style\.css/.test(path))) {
   throw new Error('Legacy frontend runtime paths remain in the new source tree.');
 }
-
-
 if (!runtime.includes("VITE_PUBLIC_SIGNUP_ENABLED === 'true'")) {
   throw new Error('Public signup must remain disabled unless explicitly enabled after readiness review.');
 }
 if (!runtime.includes('Pendaftaran belum dibuka')) {
   throw new Error('The registration screen must communicate the public signup release gate.');
+}
+if (!routeConfig.includes("home: ''") || !appRouter.includes('window.location.pathname') || appRouter.includes('window.location.hash')) {
+  throw new Error('PLUITS navigation must use independent pathname routes, not hash routes.');
+}
+if (!routeGenerator.includes("join(routeDirectory, 'index.html')") || !routeGenerator.includes("'404.html'")) {
+  throw new Error('GitHub Pages route entry points and fallback must be generated.');
 }
 if (!serviceWorker.includes('caches.keys()') || !serviceWorker.includes('caches.delete(key)')) {
   throw new Error('Service worker must remove legacy PLUITS shell caches on activation.');

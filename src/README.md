@@ -19,7 +19,8 @@ Status: current modular frontend implementation; consult the change map for exac
 | `features/home/` | Public business homepage and authenticated Social home experiences |
 | `features/dashboard/` | Protected Ruang Kerja dashboard |
 | `features/social/` | Social destinations including discovery, messages, profile and settings |
-| `features/legal/` | Draft legal/policy screens |
+| `features/legal/` | Draft legal/policy screens: Terms and Privacy, with their dedicated section navigation |
+| `features/public-info/` | Public footer information pages; page copy is grouped under `pages/company/`, `pages/support/`, `pages/community/`, `pages/marketplace/`, and `pages/privacy/` |
 | `services/` | Business/service orchestration and data access; no page rendering or DOM ownership |
 | `lib/` | Low-level SDK clients and adapters |
 | `styles/` | Global reset and base styles only |
