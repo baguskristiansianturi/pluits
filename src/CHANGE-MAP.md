@@ -7,7 +7,7 @@ Scope: Public Business Homepage, authenticated Social App, Jelajah, Ruang Kerja,
 | Domain | Canonical path | Owner | Consumers |
 |---|---|---|---|
 | App lifecycle and route guards | src/app/create-app.js | app | All routed features |
-| Route names and session redirects | src/app/routes.js | app | App and route tests |
+| Clean URL route names, pathname resolution and session redirects | src/config/paths.js and src/app/routes.js | app/config | App and route tests |
 | Runtime URLs and release flags | src/config/runtime.js | config | App, features and Auth service |
 | Design tokens | src/design-system/tokens.css | design-system | All feature screens |
 | Icon registry | src/design-system/icons.js | design-system | All features |
@@ -18,24 +18,27 @@ Scope: Public Business Homepage, authenticated Social App, Jelajah, Ruang Kerja,
 | Ruang Kerja | src/features/dashboard/dashboard-page.js and dashboard-page.css | features/dashboard | Protected #/dashboard |
 | Auth UI | src/features/auth/auth-page.js and auth-page.css | features/auth | App router |
 | Legal draft screens | src/features/legal/policy-page.js and policy-page.css | features/legal | App router |
+| Public footer information pages | src/features/public-info/pages/ grouped by company, support, community, marketplace and privacy; shared frame in public-info-page.js | features/public-info | Public homepage, Auth, legal and footer destinations |
 | Auth operations | src/services/auth/auth-service.js | services/auth | App and Auth feature |
 | Supabase client | src/lib/supabase/client.js | lib/supabase | Auth and public social feed |
 | Global base styles | src/styles/global.css | styles | Entire frontend |
 
 ## Runtime route map
-- #/home → public PLUITS Homepage / pusat bisnis; the PLUITS logo always returns here, including from the signed-in app.
-- #/social → authenticated social-media Beranda; successful login and authenticated visits to Login, Registration, or Forgot Password resolve here.
-- An existing authenticated session with an empty URL hash starts at #/social; an explicit #/home remains the public business homepage.
-- Legacy #/circle → #/social; Circle Home is no longer a separate primary destination.
-- #/discover → nationwide Jelajah, independent of user location.
-- #/dashboard → authenticated Ruang Kerja, entered from the center plus button.
-- #/messages and #/profile → dedicated authenticated app destinations.
-- #/settings → protected account settings hub linked from Profile; sign-out uses the existing auth service.
-- Guest access to protected app routes → #/login.
+- `/pluits/` → public PLUITS Homepage / pusat bisnis; the PLUITS logo always returns here, including from the signed-in app.
+- `/pluits/social/` → authenticated social-media Beranda; successful login and authenticated visits to Login, Registration, or Forgot Password resolve here.
+- An existing authenticated session at the public root resolves to `/pluits/social/`; the explicit `/pluits/` remains the public business homepage.
+- `/pluits/circle/` → legacy route that redirects to `/pluits/social/`; Circle Home is no longer a separate primary destination.
+- `/pluits/discover/` → nationwide Jelajah, independent of user location.
+- `/pluits/dashboard/` → authenticated Ruang Kerja, entered from the center plus button.
+- `/pluits/messages/` and `/pluits/profile/` → dedicated authenticated app destinations.
+- `/pluits/settings/` → protected account settings hub linked from Profile; sign-out uses the existing auth service.
+- Guest access to protected app routes → `/pluits/login/`.
+- Each public footer destination has its own clean URL, including `/pluits/about/`, `/pluits/help/`, `/pluits/faq/`, `/pluits/contact/`, `/pluits/marketplace-info/`, `/pluits/terms/`, and `/pluits/privacy/`.
+- Production build generates a static route entry directory for every configured route so direct URL entry and refresh work on GitHub Pages. Route slugs are maintained once in `src/config/paths.js`.
 - Workspace remains an internal development term only.
 
 ## Navigation contract
-The signed-in app navigation exposes Beranda (#/social), Jelajah (#/discover), center plus / Ruang Kerja (#/dashboard), Pesan (#/messages), and Profil (#/profile). Profile links to the dedicated account settings hub (#/settings), where sign-out is available. The PLUITS logo is intentionally separate and returns to the public business homepage (#/home).
+The signed-in app navigation exposes Beranda (/pluits/social/), Jelajah (/pluits/discover/), center plus / Ruang Kerja (/pluits/dashboard/), Pesan (/pluits/messages/), and Profil (/pluits/profile/). Profile links to the dedicated account settings hub (/pluits/settings/), where sign-out is available. The PLUITS logo is intentionally separate and returns to the public business homepage (/pluits/).
 The Social Home header uses icon-only Favorit, account, search, cart, and notifications actions. The former Global Home composition is reused as the signed-in social home; the separate business-center surface remains a distinct product area and must not be folded into social content. Header and sticky category tabs span the physical viewport width while their inner content observes shared page gutters. Horizontal content rails remain full-bleed without widening the page shell.
 
 ## Backend contracts and protected surfaces
