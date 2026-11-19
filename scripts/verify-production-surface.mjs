@@ -53,7 +53,7 @@ if (!runtime.includes('Pendaftaran belum dibuka')) {
 if (!routeConfig.includes("home: ''") || !appRouter.includes('window.location.pathname') || appRouter.includes('window.location.hash')) {
   throw new Error('PLUITS navigation must use independent pathname routes, not hash routes.');
 }
-if (!routeGenerator.includes("join(outputRoot, slug, 'index.html')") || !routeGenerator.includes("'404.html'")) {
+if (!routeGenerator.includes("join(routeDirectory, 'index.html')") || !routeGenerator.includes("'404.html'")) {
   throw new Error('GitHub Pages route entry points and fallback must be generated.');
 }
 if (!serviceWorker.includes('caches.keys()') || !serviceWorker.includes('caches.delete(key)')) {
