@@ -1,4 +1,5 @@
 import { routeHref } from '../../config/paths.js';
+import { assetUrl } from '../../config/runtime.js';
 import '../../design-system/page-shell.css';
 import { renderBrand, renderPageFooter } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
@@ -10,7 +11,7 @@ const sectionIntro = (eyebrow, title, copy) => '<div class="business-section-int
 
 function ecosystemOrbit() {
   return '<div class="business-orbit" aria-label="Empat ruang utama PLUITS: Social, Discover, Marketplace, dan Services">' +
-    '<div class="business-orbit-core"><img src="/pluits/assets/brand/pluits-logo.svg" alt=""><strong>PLUITS</strong><small>ONE CONNECTED ECOSYSTEM</small></div>' +
+    '<div class="business-orbit-core"><img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt=""><strong>PLUITS</strong><small>ONE CONNECTED ECOSYSTEM</small></div>' +
     '<div class="business-orbit-node business-orbit-node--social"><span>' + icon('message') + '</span><b>Social</b><small>Bagikan cerita</small></div>' +
     '<div class="business-orbit-node business-orbit-node--discover"><span>' + icon('eye') + '</span><b>Discover</b><small>Temukan hal baru</small></div>' +
     '<div class="business-orbit-node business-orbit-node--marketplace"><span>' + icon('store') + '</span><b>Marketplace</b><small>Jelajahi kebutuhan</small></div>' +
@@ -22,7 +23,7 @@ function ecosystemOrbit() {
 function userExperience() {
   const items = [
     ['image','Bagikan cerita','Ungkapkan momen, ide, dan hal yang berarti bagi Anda.','user-story'],
-    ['users','Temukan komunitas','Dekatkan diri dengan orang-orang yang punya minat serupa.','user-community'],
+    ['message','Temukan komunitas','Dekatkan diri dengan orang-orang yang punya minat serupa.','user-community'],
     ['mapPin','Jelajahi sekitar','Temukan tempat, aktivitas, dan inspirasi di sekitar Anda.','user-explore']
   ];
   return '<div class="business-benefit-grid">' + items.map(([symbol,title,copy,kind],index) =>
