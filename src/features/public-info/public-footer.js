@@ -1,0 +1,43 @@
+import { renderPageFooter } from '../../design-system/page-shell.js';
+
+const GROUPS = [
+  { title:'PLUITS', items:[
+    {label:'Tentang PLUITS',route:'about'},
+    {label:'Hubungi Kami',route:'contact'},
+    {label:'Masuk',route:'login'},
+    {label:'Daftar',route:'register'}
+  ]},
+  { title:'Bantuan', items:[
+    {label:'Pusat Bantuan',route:'help'},
+    {label:'Pertanyaan Umum',route:'faq'},
+    {label:'Keamanan & Keselamatan',route:'safety'},
+    {label:'Penghapusan Akun',route:'accountDeletion'}
+  ]},
+  { title:'Jelajahi', items:[
+    {label:'Beranda',route:'home'},
+    {label:'Social',route:'social'},
+    {label:'Discover',route:'discover'},
+    {label:'Marketplace',route:'marketplaceInfo'}
+  ]},
+  { title:'Marketplace', items:[
+    {label:'Cara Kerja Marketplace',route:'marketplaceInfo'},
+    {label:'Ketentuan Penjual',route:'sellerTerms'},
+    {label:'Pembayaran',route:'paymentPolicy'},
+    {label:'Pembatalan & Pengembalian Dana',route:'refundPolicy'},
+    {label:'Pengiriman',route:'shippingPolicy'}
+  ]},
+  { title:'Kebijakan', items:[
+    {label:'Ketentuan Layanan',route:'terms'},
+    {label:'Kebijakan Privasi',route:'privacy'},
+    {label:'Pedoman Komunitas',route:'guidelines'},
+    {label:'Kebijakan Cookie',route:'cookies'}
+  ]}
+];
+
+export function renderPublicFooter() {
+  return renderPageFooter({
+    copyright:'© 2026 PLUITS. All rights reserved.',
+    attribution:'One connected digital ecosystem.',
+    groups:GROUPS
+  }).replace('<div class="pl-footer-bottom">', '<div class="pl-footer-payment-methods"><span class="pl-footer-payment-title">Metode Pembayaran</span><div class="pl-footer-payment-list"><span>QRIS</span><span>Visa</span><span>Mastercard</span><span>JCB</span><span>GoPay</span><span>OVO</span><span>DANA</span><span>ShopeePay</span><span>Virtual Account</span><span>Transfer Bank</span><span>Alfamart</span><span>Indomaret</span></div></div><div class="pl-footer-bottom">');
+}
