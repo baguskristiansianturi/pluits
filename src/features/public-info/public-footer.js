@@ -11,7 +11,8 @@ const GROUPS = [
     {label:'Pusat Bantuan',route:'help'},
     {label:'Pertanyaan Umum',route:'faq'},
     {label:'Keamanan & Keselamatan',route:'safety'},
-    {label:'Penghapusan Akun',route:'accountDeletion'}
+    {label:'Penghapusan Akun',route:'accountDeletion'},
+    {label:'Pengaduan & Sengketa',route:'complaints'}
   ]},
   { title:'Jelajahi', items:[
     {label:'Beranda',route:'home'},
@@ -22,6 +23,7 @@ const GROUPS = [
   { title:'Marketplace', items:[
     {label:'Cara Kerja Marketplace',route:'marketplaceInfo'},
     {label:'Ketentuan Penjual',route:'sellerTerms'},
+    {label:'Kebijakan Produk',route:'prohibitedItems'},
     {label:'Pembayaran',route:'paymentPolicy'},
     {label:'Pembatalan & Pengembalian Dana',route:'refundPolicy'},
     {label:'Pengiriman',route:'shippingPolicy'}
@@ -30,7 +32,8 @@ const GROUPS = [
     {label:'Ketentuan Layanan',route:'terms'},
     {label:'Kebijakan Privasi',route:'privacy'},
     {label:'Pedoman Komunitas',route:'guidelines'},
-    {label:'Kebijakan Cookie',route:'cookies'}
+    {label:'Kebijakan Cookie',route:'cookies'},
+    {label:'Pilihan Privasi',route:'privacyChoices'}
   ]}
 ];
 
