@@ -10,6 +10,7 @@ import { createApp } from './app/create-app.js';
 import { APP_BASE_URL } from './config/runtime.js';
 const localDemoRequested = import.meta.env.VITE_PLUITS_DEMO_MODE === 'true'
   || new URLSearchParams(window.location.search).get('pluits-demo') === '1';
+if (localDemoRequested) await import('./app/preview-tools.css');
 const authService = localDemoRequested
   ? createLocalDemoAuthService()
   : createAuthService((await import('./lib/supabase/client.js')).supabase, { appUrl: APP_BASE_URL });
