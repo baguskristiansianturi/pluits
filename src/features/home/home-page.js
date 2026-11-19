@@ -36,7 +36,7 @@ function createSheet() {
 function renderPostCard(post) {
   const media = post.mediaUrl
     ? (post.media_type === 'video'
-      ? '<video class="global-post-media" src="' + escapeHtml(post.mediaUrl) + '" controls playsinline preload="metadata"></video>'
+      ? '<video class="global-post-media" src="' + escapeHtml(post.mediaUrl) + '" controls playsinline preload="none"></video>'
       : '<img class="global-post-media" src="' + escapeHtml(post.mediaUrl) + '" alt="Konten dari ' + escapeHtml(post.authorName) + '" loading="lazy">')
     : '<div class="global-post-media-fallback">' + renderIcon(post.media_type === 'video' ? 'play' : 'image') + '<span>Media tidak dapat dimuat</span></div>';
   const avatar = post.avatarUrl
