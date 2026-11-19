@@ -76,3 +76,12 @@ The shared page header has one fixed runtime height at each viewport class, rath
 - The logo remains 34 × 34 CSS px at every viewport, controlled only by `--pl-brand-logo-size`; wordmark typography remains controlled by `src/styles/global.css`.
 
 **Status note:** These dimensions describe the current runtime baseline. The token register and responsive system still identify global dimension values as provisional pending formal product-owner approval. This audit does not silently upgrade provisional tokens to Approved.
+
+
+## Shared header adoption — NAV-002
+
+- Runtime header contract: `renderPageHeader()` in `src/design-system/page-shell.js`; all experience-specific header content is supplied through its navigation items or `rightContent` slot.
+- Global Home (`src/features/home/home-page.js`), Social pages (`src/features/social/social-pages.js`), Dashboard, Auth, Legal, and Public Information pages use the shared renderer. Feature-specific classes may control only placement/experience behavior (for example sticky behavior and action-slot composition); they must not replace the shared brand renderer, logo sizing, header height, divider, or base geometry.
+- `className` and `dataGlobalHeader` are integration hooks for scoped behavior and lifecycle observation. They do not create a second header implementation.
+- Social's bottom app navigation remains a separate navigation pattern from the page header. It must be documented and governed as its own component/variant; it is not a substitute for the shared header.
+- Validation status: runtime adoption updated; full visual regression across all listed routes and viewports remains pending until browser verification is completed.
