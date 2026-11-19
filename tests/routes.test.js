@@ -47,3 +47,17 @@ test('shared page headers and brand sizing follow one responsive foundation',asy
  assert.match(authPage,/renderPageHeader\(/);
  assert.match(dashboardPage,/renderPageHeader\(/);
 });
+
+
+test('legal policy pages contain structured draft disclosures and accessible section navigation',async()=>{
+ const policy=await readFile(new URL('../src/features/legal/policy-page.js',import.meta.url),'utf8');
+ const css=await readFile(new URL('../src/features/legal/policy-page.css',import.meta.url),'utf8');
+ assert.match(policy,/Rancangan privasi/);
+ assert.match(policy,/audit data dan tinjauan hukum/);
+ assert.match(policy,/aria-label="Daftar isi"/);
+ assert.match(policy,/Penghapusan akun/);
+ assert.match(policy,/Penyedia dan pembagian data/);
+ assert.match(policy,/belum menjadi ketentuan final/);
+ assert.match(css,/\.policy-section\s*\{/);
+ assert.match(css,/\.policy-contents\s*\{/);
+});
