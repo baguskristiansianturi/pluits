@@ -1,8 +1,9 @@
-name: Deploy PLUITS preview to GitHub Pages
+name: Deploy PLUITS development preview to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches:
+      - development/preview
   workflow_dispatch:
 
 permissions:
@@ -11,11 +12,12 @@ permissions:
   id-token: write
 
 concurrency:
-  group: github-pages
+  group: pluits-development-preview
   cancel-in-progress: true
 
 jobs:
   build:
+    if: github.ref == 'refs/heads/development/preview'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -30,16 +32,18 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Build for GitHub Pages
+      - name: Build isolated development preview
+        env:
+          VITE_PLUITS_DEMO_MODE: 'true'
         run: npm run build -- --base=/pluits/
       - name: Verify build output
         run: test -f dist/index.html
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Upload site artifact
+      - name: Upload preview artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
-      - name: Deploy to GitHub Pages
+      - name: Deploy development preview
         id: deployment
         uses: actions/deploy-pages@v4
