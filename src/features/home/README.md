@@ -34,7 +34,7 @@ Introduce PLUITS as a connected digital ecosystem through benefit-led marketing 
 - Android and iOS download panels must be clearly marked **Coming Soon** and must not link to unavailable app-store listings.
 
 ## Footer
-The public homepage includes an Android Google Play and iOS App Store availability panel immediately before the shared footer. Both platforms show Coming Soon; the shared footer remains the canonical reusable footer.
+The public homepage includes an Android Google Play and iOS App Store availability panel immediately before the shared footer. Both platforms show Coming Soon. The homepage and public information pages share the footer configuration in `src/features/public-info/public-footer.js`, rendered through the canonical shared footer renderer. The footer includes the approved public navigation groups and planned payment-method labels.
 
 ## Responsive behavior
 Use the shared page shell, container, gutters, tokens and breakpoint contracts. Keep all sections within the viewport on mobile; prevent body horizontal overflow. Preserve accessible navigation, keyboard focus, readable contrast, and reduced-motion behavior.
