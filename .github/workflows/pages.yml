@@ -6,6 +6,8 @@ on:
       - Validate PLUITS
     types:
       - completed
+    branches:
+      - development/preview
 
 permissions:
   contents: read
