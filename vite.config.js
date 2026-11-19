@@ -1,14 +1,6 @@
 import { defineConfig } from 'vite'
-import { copyFileSync } from 'node:fs'
-import { resolve } from 'node:path'
 
 export default defineConfig({
-  base: '/pluits/',
-  plugins: [{
-    name: 'github-pages-spa-fallback',
-    writeBundle() {
-      const index = resolve('dist/index.html')
-      copyFileSync(index, resolve('dist/404.html'))
-    }
-  }]
+  // Cloudflare Pages serves the app from the project root.
+  base: '/',
 })
