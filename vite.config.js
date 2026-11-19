@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  // Cloudflare Pages serves the app from the project root.
-  base: '/',
+  // GitHub Pages project sites are served from /pluits/.
+  base: '/pluits/',
 })
