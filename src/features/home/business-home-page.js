@@ -1,7 +1,8 @@
 import { routeHref } from '../../config/paths.js';
 import { assetUrl } from '../../config/runtime.js';
 import '../../design-system/page-shell.css';
-import { renderBrand, renderPageFooter } from '../../design-system/page-shell.js';
+import { renderBrand } from '../../design-system/page-shell.js';
+import { renderPublicFooter } from '../public-info/public-footer.js';
 import { renderIcon } from '../../design-system/icons.js';
 import { HOME_VISUALS } from './home-visuals.js';
 import './business-home.css';
@@ -60,8 +61,7 @@ export function mountBusinessHomePage({root,user=null}={}) {
     ? '<a class="business-header-cta" href="' + routeHref('dashboard') + '">Dashboard</a>'
     : '<div class="business-header-actions"><a class="business-login-link" href="' + routeHref('login') + '">Masuk</a><a class="business-header-cta" href="' + routeHref('register') + '">Daftar</a></div>';
 
-  const footerMarkup = renderPageFooter({copyright:'© 2026 PLUITS. All rights reserved.',attribution:'One connected digital ecosystem.',groups:[{title:'Jelajahi',items:[{label:'Beranda',route:'home'},{label:'Jelajahi PLUITS',route:'discover'},{label:'Untuk Pengguna',href:'#untuk-pengguna'},{label:'Untuk Pelaku Usaha',href:'#untuk-bisnis'}]},{title:'Ekosistem',items:[{label:'Social',route:'social'},{label:'Discover',route:'discover'},{label:'Marketplace',route:'discover'},{label:'Services',route:'discover'}]},{title:'Akun',items:[{label:'Masuk',route:'login'},{label:'Daftar',route:'register'}]},{title:'Informasi',items:[{label:'Ketentuan Layanan',route:'terms'},{label:'Kebijakan Privasi',route:'privacy'}]}]})
-    .replace('<div class="pl-footer-bottom">', '<div class="pl-footer-payment-methods"><span class="pl-footer-payment-title">Metode Pembayaran</span><div class="pl-footer-payment-list"><span>QRIS</span><span>Visa</span><span>Mastercard</span><span>JCB</span><span>GoPay</span><span>OVO</span><span>DANA</span><span>ShopeePay</span><span>Virtual Account</span><span>Transfer Bank</span><span>Alfamart</span><span>Indomaret</span></div></div><div class="pl-footer-bottom">');
+  const footerMarkup = renderPublicFooter();
 
   root.innerHTML = '<div class="pl-page-shell business-home">' +
     '<header class="pl-page-header business-home-header">' + renderBrand({href:routeHref('home'),label:'PLUITS — Beranda'}) +
