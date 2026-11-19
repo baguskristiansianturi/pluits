@@ -7,7 +7,7 @@ export function resolveRoute(hash = '', search = '') {
   const raw = String(hash || '').replace(/^#\/?/, '').split('?')[0];
   if (!raw) return 'home';
   const route = raw.replace(/^\/+|\/+$/g, '');
-  return ROUTES.has(route) ? route : 'register';
+  return ROUTES.has(route) ? route : (ROUTE_KEYS_BY_PATH.get(route) || 'register');
 }
 export function resolveAuthenticatedRoute(route, hasSession) {
   if (['dashboard','social','messages','profile','settings'].includes(route) && !hasSession) return 'login';
