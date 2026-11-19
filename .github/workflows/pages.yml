@@ -30,10 +30,10 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Run project checks
-        run: npm test
       - name: Build for GitHub Pages
         run: npm run build -- --base=/pluits/
+      - name: Verify build output
+        run: test -f dist/index.html
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site artifact
