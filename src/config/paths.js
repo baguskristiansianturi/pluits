@@ -31,9 +31,8 @@ export const APP_ROUTES = Object.freeze({
   prohibitedItems: 'prohibited-items'
 });
 
-const BASE_PATH = import.meta.env.BASE_URL.endsWith('/')
-  ? import.meta.env.BASE_URL
-  : import.meta.env.BASE_URL + '/';
+const PUBLIC_BASE_URL = import.meta.env?.BASE_URL || '/pluits/';
+const BASE_PATH = PUBLIC_BASE_URL.endsWith('/') ? PUBLIC_BASE_URL : PUBLIC_BASE_URL + '/';
 
 export function routeHref(route) {
   if (!Object.prototype.hasOwnProperty.call(APP_ROUTES, route)) {
