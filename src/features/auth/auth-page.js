@@ -2,7 +2,8 @@ import { assetUrl, PUBLIC_SIGNUP_ENABLED } from '../../config/runtime.js';
 import { routeHref } from '../../config/paths.js';
 import { renderIcon } from '../../design-system/icons.js';
 import '../../design-system/page-shell.css';
-import { renderPageHeader, renderPageFooter } from '../../design-system/page-shell.js';
+import { renderPageHeader } from '../../design-system/page-shell.js';
+import { renderPublicFooter } from '../public-info/public-footer.js';
 
 function passwordField({ id, label, autocomplete, placeholder, help, minLength = 0 }) {
   const minLengthAttribute = minLength ? ' minlength="' + minLength + '"' : '';
@@ -100,7 +101,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
           '<p class="auth-security-note">' + renderIcon('lock') + '<span>Jaga kerahasiaan kata sandi dan jangan bagikan tautan pemulihan akun kepada siapa pun.</span></p>' +
         '</section>' +
       '</main>' +
-      renderPageFooter() +
+      renderPublicFooter() +
     '</div>';
 
   const form = root.querySelector('[data-auth-form]');
