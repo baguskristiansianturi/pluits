@@ -36,6 +36,9 @@ export function createApp({root,authService}) {
   if(ready&&['INITIAL_SESSION','SIGNED_IN','SIGNED_OUT','PASSWORD_RECOVERY','USER_UPDATED'].includes(event))render();
  });
  const onRouteChange=()=>render();window.addEventListener('hashchange',onRouteChange);window.addEventListener('popstate',onRouteChange);
- restoreInitialSession(authService).then(initial=>{session=initial;ready=true;if(initial&&!window.location.hash){window.location.hash=routeHref('social');return;}render();});
+ const initialSession = authService.isLocalDemo
+  ? Promise.resolve(authService.demoSignIn())
+  : restoreInitialSession(authService);
+ initialSession.then(initial=>{session=initial;ready=true;if(initial&&!window.location.hash){window.location.hash=routeHref('social');return;}render();});
  return ()=>{cleanupPage?.();unsubscribe();window.removeEventListener('hashchange',onRouteChange);window.removeEventListener('popstate',onRouteChange);};
 }
