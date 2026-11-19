@@ -57,7 +57,7 @@ test('legal policy pages contain structured draft disclosures and accessible sec
  assert.match(policy,/aria-label="Daftar isi"/);
  assert.match(policy,/Penghapusan akun/);
  assert.match(policy,/Penyedia dan pembagian data/);
- assert.match(policy,/belum menjadi ketentuan final/);
+ assert.match(policy,/belum berlaku sebagai dokumen final/);
  assert.match(css,/\.policy-section\s*\{/);
  assert.match(css,/\.policy-contents\s*\{/);
 });
