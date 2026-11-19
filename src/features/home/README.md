@@ -30,6 +30,7 @@ Introduce PLUITS as a connected digital ecosystem through benefit-led marketing 
 - Explain product value in customer-facing language, not architecture or technical feature labels.
 - Keep Social, Discover, Marketplace, and Services as the four connected ecosystem spaces.
 - Do not claim planned merchant operations or vertical integrations are already available.
+- The public homepage may show the planned payment-channel families and third-party payment-gateway direction only with a clear notice that payments are not yet active or integrated. Follow the shared [PLUITS Payments discovery baseline](../../../PLUITS-MASTER-MODEL-APP/04-SHARED-PLATFORM-SERVICES/PLUITS-PAYMENTS-AND-PAYMENT-METHODS.md).
 - Android and iOS download panels must be clearly marked **Coming Soon** and must not link to unavailable app-store listings.
 
 ## Footer
