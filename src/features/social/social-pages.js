@@ -171,7 +171,7 @@ export function mountSettingsPage({root,user=null,onSignOut}={}) {
   root.innerHTML=shell('Pengaturan','Pusat pengaturan akun dan pengalaman aplikasi Anda.','profile',
    '<section class="social-settings-layout"><nav class="social-settings-menu" aria-label="Kategori pengaturan">'+sections.map(item=>'<button type="button" data-settings-tab="'+item.id+'" class="'+(active===item.id?'is-active':'')+'">'+renderIcon(item.icon)+'<span>'+item.label+'</span><b>›</b></button>').join('')+'</nav>'
    +'<section class="social-settings-panel"><div class="social-settings-panel-heading"><span class="social-kicker">PENGATURAN PLUITS</span><h2>'+selected.title+'</h2><p>'+selected.desc+'</p></div>'+detail+'</section>'
-   +(onSignOut?'<section class="social-settings-account"><div><strong>Keluar dari PLUITS</strong><p>Akhiri sesi akun pada perangkat ini.</p></div><button type="button" class="social-signout-button" data-sign-out>'+renderIcon('logout')+'<span>Keluar</span></button></section>':'')
+   +'<section class="social-settings-account"><div><strong>Keluar dari PLUITS</strong><p>Akhiri sesi akun pada perangkat ini.</p></div><button type="button" class="social-signout-button" data-sign-out>'+renderIcon('logout')+'<span>Keluar</span></button></section>'
    +'<a class="social-settings-back" href="'+routeHref('profile')+'">← Kembali ke Profil</a></section>');
  };
  render();
