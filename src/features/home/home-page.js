@@ -66,7 +66,7 @@ async function loadPublicFeed(root,signal) {
   const {data:posts,error}=await supabase.from('user_posts')
     .select('id,user_id,caption,media_path,media_type,content_kind,created_at')
     .eq('visibility','public').eq('moderation_status','published')
-    .order('created_at',{ascending:false}).limit(20);
+    .order('created_at',{ascending:false}).limit(20).abortSignal(signal);
   if(signal.aborted)return;
   if(error){target.innerHTML=renderFeedState('Feed belum dapat dimuat');if(reelsTarget)reelsTarget.innerHTML=renderFeedState('Reels belum dapat dimuat');return;}
   const rows=posts||[];
@@ -77,7 +77,7 @@ async function loadPublicFeed(root,signal) {
     return;
   }
   const ids=[...new Set(rows.map(post=>post.user_id))];
-  const {data:profiles}=await supabase.from('user_profiles').select('id,display_name,username,avatar_path').in('id',ids);
+  const {data:profiles}=await supabase.from('user_profiles').select('id,display_name,username,avatar_path').in('id',ids).abortSignal(signal);
   if(signal.aborted)return;
   const profileMap=new Map((profiles||[]).map(profile=>[profile.id,profile]));
   // Resolve all media paths in one Storage request instead of issuing up to
