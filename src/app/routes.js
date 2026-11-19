@@ -9,10 +9,10 @@ export function resolveRoute(hash = '', search = '') {
   const route = raw.replace(/^\/+|\/+$/g, '');
   return ROUTES.has(route) ? route : (ROUTE_KEYS_BY_PATH.get(route) || 'register');
 }
-export function resolveAuthenticatedRoute(route, hasSession, developerProfilePreview = false) {
-  // This flag is supplied only by createApp in Vite development builds.
-  // It grants no access to any other authenticated route.
-  if (route === 'profile' && developerProfilePreview) return 'profile';
+export function resolveAuthenticatedRoute(route, hasSession, developerPreview = false) {
+  // Frontend-only preview grants navigation through every app route with a mock identity.
+  // It does not modify or bypass Supabase/backend authorization.
+  if (developerPreview) return route;
   if (['dashboard','social','messages','profile','settings'].includes(route) && !hasSession) return 'login';
   if (route === 'circle') return 'social';
   if (hasSession && ['register', 'login', 'forgot'].includes(route)) return 'social';
