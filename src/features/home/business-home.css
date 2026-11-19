@@ -267,3 +267,7 @@
 @media(prefers-reduced-motion:reduce){
  .business-discovery-visual img{transition:none}
 }
+
+/* Keep image captions legible over photography without decorative circles competing with content. */
+.business-discovery-visual:before{inset:0;border:0;border-radius:0;background:linear-gradient(180deg,rgba(17,35,54,.04),rgba(17,35,54,.56))}
+.business-discovery-visual:after{display:none}
