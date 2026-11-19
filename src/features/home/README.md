@@ -22,8 +22,8 @@ Introduce PLUITS as a connected digital ecosystem through benefit-led marketing 
 - Use the official `public/assets/brand/pluits-logo.svg` via the shared brand conventions.
 - Use the existing `renderBrand()`, `renderPageFooter()`, `renderIcon()`, shared tokens, and page-shell contract.
 - Keep the 50px shared navbar-to-content gap. Do not change global tokens, shared footer renderer, route table, auth flow, Supabase, database, or other feature modules for page-local presentation.
-- Use only registered local icons and existing brand assets. No new package, font, external image, remote asset, or runtime dependency.
-- Current public landing-page illustrations are CSS compositions and registered icons; they are not presented as real user posts, merchants, products, metrics, or testimonials.
+- Use only registered local icons and existing brand assets. Public-homepage photography is now managed by the dedicated `home-visuals.js` registry; Unsplash CDN photos are an explicit approved exception. No new package, font, external script, or runtime dependency is added.
+- Public landing-page photos are editorial stock imagery managed through `home-visuals.js`; they are illustrative, not PLUITS user posts, verified merchants, real products, metrics, or testimonials. See `HOME-VISUAL-GUIDE.md` for image replacement, crop, and spacing guidance.
 
 ## Content truthfulness
 - Do not fabricate people, posts, activity, engagement, business listings, products, reviews, transaction counts, or provider verification.
