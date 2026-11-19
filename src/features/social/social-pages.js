@@ -146,9 +146,11 @@ export function mountProfilePage({root,user=null}={}) {
  return ()=>profileLoadController.abort();
 
 }
-export function mountSettingsPage({root,user=null,onSignOut}={}) {
+export function mountSettingsPage({root,user=null,onSignOut,onUpdateProfile}={}) {
  const safe=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  const email=safe(user?.email||'Email tidak tersedia');
+ const isLocalDemo=user?.app_metadata?.provider==='local-demo';
+ const metadata=user?.user_metadata||{};
  const sections=[
   {id:'account',label:'Akun',icon:'user',title:'Akun & keamanan',desc:'Informasi akun yang digunakan untuk masuk ke PLUITS.'},
   {id:'privacy',label:'Privasi',icon:'lock',title:'Privasi & visibilitas',desc:'Kontrol profil publik dan bagaimana orang menemukan Anda.'},
@@ -160,7 +162,9 @@ export function mountSettingsPage({root,user=null,onSignOut}={}) {
  const render=()=>{
   const selected=sections.find(item=>item.id===active)||sections[0];
   const detail=active==='account'
-   ? '<div class="social-settings-detail-row"><span>Email akun</span><strong>'+email+'</strong></div><div class="social-settings-detail-row"><span>Metode masuk</span><strong>Email & kata sandi</strong></div><div class="social-settings-note">Perubahan email dan kata sandi dikelola melalui alur keamanan akun. Kami tidak menampilkan atau menyimpan kata sandi di halaman ini.</div>'
+   ? (isLocalDemo
+     ? '<form class="social-settings-demo-form" data-demo-profile-form><div class="social-settings-detail-row"><span>Email simulasi</span><strong>'+email+'</strong></div><label>Nama tampilan<input name="display_name" value="'+safe(metadata.display_name||metadata.full_name||'Bagus')+'" minlength="2" maxlength="80" required></label><label>Username<input name="username" value="'+safe(metadata.username||'bagus-demo')+'" minlength="3" maxlength="30" required></label><label>Bio<input name="bio" value="'+safe(metadata.bio||'')+'" maxlength="160" placeholder="Ceritakan sedikit tentang Anda"></label><label>Kota<input name="city" value="'+safe(metadata.city||'')+'" maxlength="80" placeholder="Kota domisili"></label><button type="submit">Simpan perubahan profil simulasi</button><p class="social-settings-note" data-demo-profile-status>Perubahan hanya tersimpan di browser ini, tidak dikirim ke Supabase.</p></form>'
+     : '<div class="social-settings-detail-row"><span>Email akun</span><strong>'+email+'</strong></div><div class="social-settings-detail-row"><span>Metode masuk</span><strong>Email & kata sandi</strong></div><div class="social-settings-note">Perubahan email dan kata sandi dikelola melalui alur keamanan akun. Kami tidak menampilkan atau menyimpan kata sandi di halaman ini.</div>')
    : active==='privacy'
    ? '<div class="social-settings-detail-row"><span>Visibilitas profil</span><strong>Pengaturan server belum tersedia</strong></div><div class="social-settings-note">Kontrol publik / privat belum diaktifkan karena belum ada penyimpanan preferensi privasi yang terhubung. Status profil tidak akan diubah hanya dari tampilan ini.</div>'
    : active==='notifications'
@@ -175,6 +179,20 @@ export function mountSettingsPage({root,user=null,onSignOut}={}) {
    +'<a class="social-settings-back" href="'+routeHref('profile')+'">← Kembali ke Profil</a></section>');
  };
  render();
+ root.addEventListener('submit',async event=>{
+  const form=event.target.closest('[data-demo-profile-form]');
+  if(!form||!isLocalDemo)return;
+  event.preventDefault();
+  const values=new FormData(form);
+  const status=form.querySelector('[data-demo-profile-status]');
+  const submitButton=form.querySelector('button[type="submit"]');
+  submitButton.disabled=true;
+  try{
+   await onUpdateProfile?.({display_name:values.get('display_name'),username:values.get('username'),bio:values.get('bio'),city:values.get('city')});
+   if(status)status.textContent='Profil simulasi berhasil disimpan di browser ini.';
+  }catch(error){if(status)status.textContent=error?.message||'Perubahan belum berhasil disimpan.';}
+  finally{if(submitButton)submitButton.disabled=false;}
+ });
  root.addEventListener('click',async event=>{
   const tab=event.target.closest('[data-settings-tab]');
   if(tab&&root.contains(tab)){active=tab.dataset.settingsTab;render();return;}
