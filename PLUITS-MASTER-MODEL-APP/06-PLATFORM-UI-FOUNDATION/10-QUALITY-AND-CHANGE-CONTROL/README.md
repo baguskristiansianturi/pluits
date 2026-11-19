@@ -38,3 +38,8 @@ Do not mark a UI change complete when a required viewport, shared consumer, or c
 ## Shared header divider regression check
 
 When changing the shared divider tokens or page-header chrome, verify all consumers of `renderPageHeader()` at desktop, tablet, and mobile widths. Confirm that the line remains subtle, spans the shared header container, does not alter the header's defined height, and does not introduce duplicate borders in page-level CSS. Check the footer top boundary remains visually matched.
+
+
+## Repository structure audit records
+
+Repository-wide documentation placement and structure audits are maintained in [`REPOSITORY-AUDITS/`](./REPOSITORY-AUDITS/). Keep audit reports here rather than creating a generic audit folder at the repository root.
