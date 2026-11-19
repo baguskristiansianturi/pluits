@@ -5,3 +5,7 @@ Layanan bersama lintas aplikasi: account & identity, membership, notification, p
 ## Payment services
 
 - [PLUITS Payments — payment methods and transaction trust](PLUITS-PAYMENTS-AND-PAYMENT-METHODS.md) — proposed third-party gateway direction, Indonesia payment-channel discovery, customer/merchant trust copy, and pre-integration requirements.
+
+## Public website, Help Center and app-store readiness
+
+- [Public Website, Help Center, Legal Pages & App Store Readiness](PUBLIC-WEBSITE-HELP-LEGAL-AND-APP-STORE-READINESS.md) — canonical public footer taxonomy, public page inventory, policy publication status, and Google Play / Apple App Store release gates.
