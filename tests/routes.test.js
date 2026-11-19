@@ -63,3 +63,7 @@ test('legal policy pages contain structured draft disclosures and accessible sec
 });
 
 test('public homepage does not expose a development workspace entry',async()=>{const home=await readFile(new URL('../src/features/home/business-home-page.js',import.meta.url),'utf8');assert.doesNotMatch(home,/Ruang Kerja|business-workspace-entry|pluits-demo/);});
+
+test('developer frontend preview can navigate across every app route without a user login',()=>{for(const route of ['home','social','discover','dashboard','messages','profile','settings','register','login','forgot','terms','privacy'])assert.equal(resolveAuthenticatedRoute(route,false,true),route);assert.equal(resolveAuthenticatedRoute('profile',false,false),'login');assert.equal(resolveAuthenticatedRoute('social',false,false),'login');});
+
+test('developer frontend preview uses an explicit build flag and a mock identity without changing production auth',async()=>{const app=await readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8');assert.match(app,/import\.meta\.env\.VITE_PLUITS_FRONTEND_PREVIEW === 'true'/);assert.match(app,/developerPreviewSession/);assert.match(app,/Promise\.resolve\(developerPreviewSession\)/);const routes=await readFile(new URL('../src/app/routes.js',import.meta.url),'utf8');assert.match(routes,/if \(developerPreview\) return route/);});

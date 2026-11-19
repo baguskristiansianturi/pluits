@@ -153,3 +153,17 @@ The full development/release loop is complete only after:
 **Latest verified PR run:** [43450851746 — SUCCESS](https://github.com/baguskristiansianturi/pluits/actions/runs/43450851746), commit `f942a2fd02beadacf676099cbd86fe84c9d979a8`. Production-surface verification PASS; module-boundary verification PASS across 54 source modules; 44 tests PASS / 0 FAIL; Vite build and `dist/index.html` verification PASS; Pages artifact upload PASS; production deployment SKIPPED. Artifact `14051395400` expires 14 November 2026 at 15:16 UTC.
 
 The agreed module folders and architecture test are now tracked. One runtime module has also been extracted: app-wide Realtime presence is owned by `src/services/realtime/presence/index.js` and has unit tests. Several page controllers and data-access paths still need incremental extraction. Hosted preview and isolated backend environment are not configured. Migration/security gates remain open. Do not label PLUITS fully release-ready. Hosted preview and isolated backend environment are not configured. Migration/security gates remain open. Do not label PLUITS fully release-ready.
+
+
+## 11. Local developer-only Profile preview — implemented on development branch
+
+A route-level preview is available for frontend work without creating or signing into a customer account:
+
+- Start the Vite development server with `npm run dev`.
+- Open the local app using `/?developer-preview=profile#/profile` (the Vite server's local origin).
+- The preview uses a synthetic in-memory developer identity and skips session restoration for this route.
+- The bypass is compiled behind `import.meta.env.DEV`; production builds cannot activate it with a URL query parameter.
+- Only the Profile route is exempted. Dashboard, Social, Messages and Settings remain session-protected.
+- No Supabase user is created, no production credentials are used, and no production route or authentication policy is changed.
+
+**Important limitation:** this is a local development entry point, not a hosted preview URL. The repository still has no separate private preview host or credentials. Do not deploy this route to the production GitHub Pages site, and do not claim that a public branch URL is a private developer workspace. A secure hosted preview remains blocked until a separate host with access control is connected. Backend-dependent profile features must remain mocked or safely omitted in this preview.

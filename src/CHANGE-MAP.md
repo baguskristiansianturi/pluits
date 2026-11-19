@@ -48,6 +48,11 @@ Keep feature changes within their owner. Shared route/brand changes require cons
 ## Required verification
 Run npm test and npm run build. Verify Public homepage, Social Home, legacy Circle redirect, Jelajah, Messages, Profile, and Settings routes; icon-only header; full-width header and sticky tabs; sticky handoff in both directions; tab scroll and active state; real public Feed/Reels query and signed media rendering; loading/error/empty states; visual demo rails; full-bleed rail edges; no document horizontal overflow; bottom navigation and safe area; Profile → Settings navigation; sign-out confirmation and auth session clearing; no website footer on signed-in app surfaces; guest/authenticated behavior; desktop/tablet/mobile layouts.
 
+## Frontend development preview
+- An explicit `VITE_PLUITS_FRONTEND_PREVIEW=true` build flag enables a mock frontend identity and allows navigation across all registered frontend routes without signing in as a real user.
+- This is frontend-only presentation behavior. Supabase Auth, backend authorization, RLS, and production session behavior are unchanged.
+- The flag must only be used for an isolated development preview build; do not publish that build on the public production Pages site.
+
 ## Current limitations
 - Signup remains disabled unless explicitly enabled after readiness review.
 - Stories, Live, Blog, Marketplace, Geo Directory, nearby businesses, notifications, cart data, and product feeds are not yet connected to operational data services; corresponding Global Home content currently uses visual demo fixtures where noted in the canonical page specification.
