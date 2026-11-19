@@ -9,19 +9,21 @@ import { mountAuthPage } from '../features/auth/auth-page.js';
 import { mountPolicyPage } from '../features/legal/policy-page.js';
 import { mountPublicInfoPage } from '../features/public-info/public-info-page.js';
 export function createApp({root,authService}) {
+ const developerProfilePreview = import.meta.env.DEV && new URLSearchParams(window.location.search).get('developer-preview') === 'profile';
+ const developerPreviewUser = developerProfilePreview ? { id:'pluits-developer-preview', email:'developer-preview@pluits.local', user_metadata:{ display_name:'Bagus', full_name:'Bagus', username:'bagus-preview', account_level:'regular', verified:true } } : null;
  let session=null,ready=false,cleanupPage=null;
  const navigate=route=>{const next=routeHref(route);if(window.location.hash===next){render();return;}window.location.hash=next;};
  function render(){
   cleanupPage?.();cleanupPage=null;
   if(!ready){root.innerHTML='<main class="app-loading" role="status">Menyiapkan PLUITS…</main>';return;}
   const requested=resolveRoute(window.location.hash,window.location.search);
-  const route=resolveAuthenticatedRoute(requested,Boolean(session));
+  const route=resolveAuthenticatedRoute(requested,Boolean(session),developerProfilePreview && requested==='profile');
   if(route!==requested){navigate(route);return;}
   if(route==='home'){mountBusinessHomePage({root,user:session?.user||null});return;}
   if(route==='social'){cleanupPage=mountHomePage({root,user:session?.user||null,onSignOut:()=>authService.signOut()});return;}
   if(route==='circle'){navigate('social');return;}
   if(route==='messages'){mountMessagesPage({root,user:session?.user||null});return;}
-  if(route==='profile'){cleanupPage=mountProfilePage({root,user:session?.user||null});return;}
+  if(route==='profile'){cleanupPage=mountProfilePage({root,user:session?.user||developerPreviewUser||null});return;}
   if(route==='settings'){mountSettingsPage({root,user:session?.user||null,onSignOut:()=>authService.signOut()});return;}
   if(route==='discover'){mountDiscoverPage({root,user:session?.user||null});return;}
   if(route==='dashboard'){mountDashboardPage({root,user:session.user,onSignOut:()=>authService.signOut()});return;}
@@ -36,9 +38,11 @@ export function createApp({root,authService}) {
   if(ready&&['INITIAL_SESSION','SIGNED_IN','SIGNED_OUT','PASSWORD_RECOVERY','USER_UPDATED'].includes(event))render();
  });
  const onRouteChange=()=>render();window.addEventListener('hashchange',onRouteChange);window.addEventListener('popstate',onRouteChange);
- const initialSession = authService.isLocalDemo
-  ? Promise.resolve(authService.demoSignIn())
-  : restoreInitialSession(authService);
- initialSession.then(initial=>{session=initial;ready=true;if(initial&&!window.location.hash){window.location.hash=routeHref('social');return;}render();});
+ const initialSession = developerProfilePreview
+  ? Promise.resolve(null)
+  : authService.isLocalDemo
+   ? Promise.resolve(authService.demoSignIn())
+   : restoreInitialSession(authService);
+ initialSession.then(initial=>{session=initial;ready=true;if(developerProfilePreview){if(resolveRoute(window.location.hash,window.location.search)!=='profile')window.location.hash=routeHref('profile');else render();return;}if(initial&&!window.location.hash){window.location.hash=routeHref('social');return;}render();});
  return ()=>{cleanupPage?.();unsubscribe();window.removeEventListener('hashchange',onRouteChange);window.removeEventListener('popstate',onRouteChange);};
 }

@@ -63,3 +63,7 @@ test('legal policy pages contain structured draft disclosures and accessible sec
 });
 
 test('public homepage does not expose a development workspace entry',async()=>{const home=await readFile(new URL('../src/features/home/business-home-page.js',import.meta.url),'utf8');assert.doesNotMatch(home,/Ruang Kerja|business-workspace-entry|pluits-demo/);});
+
+test('developer profile preview bypass is limited to the profile route',()=>{assert.equal(resolveAuthenticatedRoute('profile',false,true),'profile');for(const route of ['dashboard','social','messages','settings'])assert.equal(resolveAuthenticatedRoute(route,false,true),'login');assert.equal(resolveAuthenticatedRoute('profile',false,false),'login');});
+
+test('developer preview is restricted to Vite development mode and never changes public auth routes',async()=>{const app=await readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8');assert.match(app,/import\.meta\.env\.DEV && new URLSearchParams\(window\.location\.search\)\.get\('developer-preview'\) === 'profile'/);assert.match(app,/developerProfilePreview \? Promise\.resolve\(null\)/);const routes=await readFile(new URL('../src/app/routes.js',import.meta.url),'utf8');assert.match(routes,/route === 'profile' && developerProfilePreview/);});
