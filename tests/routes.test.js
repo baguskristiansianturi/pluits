@@ -42,7 +42,7 @@ test('shared page headers and brand sizing follow one responsive foundation',asy
  assert.match(global,/\.pluits-brand img\s*\{[^}]*width:\s*var\(--pl-brand-logo-size\)[^}]*height:\s*var\(--pl-brand-logo-size\)/s);
  for(const css of [home,business,dashboard,social]) assert.doesNotMatch(css,/\.pl-page-header[^}]*min-height\s*:/s);
  assert.doesNotMatch(home,/\.global-header\s*\{[^}]*min-height\s*:/s);
- assert.match(homePage,/class="pl-page-header global-header"/);
+ assert.match(homePage,/className:'global-header'/);assert.match(homePage,/dataGlobalHeader:true/);
  assert.match(businessPage,/renderPageHeader\(/);
  assert.match(authPage,/renderPageHeader\(/);
  assert.match(dashboardPage,/renderPageHeader\(/);
