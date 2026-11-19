@@ -136,8 +136,9 @@
 @media(max-width:767px){
  .pl-page-header--business-home{gap:10px}
  .business-home-nav{display:none}
- .business-header-actions{gap:12px}
- .business-header-cta{min-height:40px;padding-inline:16px}
+ .business-header-actions{gap:8px}
+ .business-header-cta{min-height:40px;padding-inline:12px}
+ .business-workspace-entry{padding-inline:9px;font-size:10px}
  .business-home-hero{grid-template-columns:1fr;gap:22px;min-height:0;padding-block:42px 48px}
  .business-home-hero h1{font-size:clamp(38px,10vw,54px)}
  .business-home-hero-visual{width:100%;max-width:420px;margin-inline:auto}
