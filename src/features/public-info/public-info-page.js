@@ -85,6 +85,25 @@ const PAGES = {
     ['Laporkan masalah','Gunakan fitur pelaporan yang tersedia pada konten atau akun. Kanal pengaduan tambahan akan diumumkan setelah siap.'],
     ['Privasi pribadi','Hindari membagikan alamat rumah, dokumen identitas, informasi keuangan, atau lokasi sensitif secara terbuka.']
   ]},
+  privacyChoices:{title:'Pilihan Privasi',intro:'Informasi mengenai pilihan dan permintaan Anda terkait data pribadi di PLUITS.',status:'Kontrol privasi sedang dipersiapkan',sections:[
+    ['Mengelola informasi','Pengaturan profil dan privasi yang tersedia dapat digunakan untuk mengelola informasi yang Anda tampilkan. Kontrol tambahan akan disediakan mengikuti fitur yang tersedia.'],
+    ['Permintaan data','PLUITS sedang menyiapkan mekanisme untuk permintaan akses, koreksi, dan penghapusan data pribadi melalui kanal yang dapat diverifikasi.'],
+    ['Preferensi komunikasi','Pengaturan notifikasi dan komunikasi akan dijelaskan di dalam aplikasi ketika kontrol tersebut tersedia.'],
+    ['Status saat ini','Halaman ini merupakan informasi persiapan. Jangan menganggap semua pilihan atau permintaan data sudah dapat diproses melalui halaman ini.']
+  ]},
+  complaints:{title:'Pengaduan & Sengketa',intro:'Informasi untuk menyampaikan keluhan mengenai akun, konten, merchant, pesanan, atau transaksi.',status:'Alur pengaduan sedang disiapkan',sections:[
+    ['Jenis pengaduan','Pengguna dapat membutuhkan bantuan untuk masalah akun, konten, dugaan penipuan, informasi usaha, pesanan, pembayaran, atau pengiriman.'],
+    ['Informasi yang perlu disiapkan','Simpan nomor pesanan atau referensi transaksi, waktu kejadian, uraian masalah, dan bukti yang relevan. Jangan kirim kata sandi atau kode OTP.'],
+    ['Penanganan','Proses penerimaan, verifikasi, eskalasi, waktu respons, dan penyelesaian akan ditetapkan sebelum layanan transaksi diluncurkan.'],
+    ['Status saat ini','Halaman ini belum menyediakan formulir pengaduan aktif atau menjanjikan batas waktu penyelesaian. Kanal resmi akan diumumkan setelah siap.']
+  ]},
+  prohibitedItems:{title:'Kebijakan Produk',intro:'Ketentuan mengenai produk dan layanan yang boleh ditampilkan atau ditawarkan melalui Marketplace PLUITS.',status:'Rancangan kebijakan — perlu ditinjau',sections:[
+    ['Kewajiban penjual','Penjual hanya boleh menawarkan produk dan layanan yang sah, memiliki hak untuk dijual, dan sesuai dengan peraturan di wilayah transaksi.'],
+    ['Produk yang dilarang','Dilarang menawarkan barang ilegal, barang palsu, barang curian, produk yang membahayakan, obat atau zat yang dibatasi tanpa izin, senjata terlarang, eksploitasi, serta layanan yang melanggar hukum.'],
+    ['Informasi menyesatkan','Dilarang menggunakan foto, merek, klaim, harga, ulasan, atau informasi ketersediaan yang menipu atau tidak memiliki dasar.'],
+    ['Peninjauan dan tindakan','Kebijakan moderasi listing, penurunan produk, pembatasan akun, pemberitahuan, dan banding harus mengikuti proses operasional yang benar-benar dibangun.'],
+    ['Status dokumen','Daftar final harus ditinjau sesuai kategori marketplace dan hukum yang berlaku sebelum fitur transaksi dibuka untuk publik.']
+  ]},
   cookies:{title:'Kebijakan Cookie',intro:'Informasi mengenai cookie dan teknologi serupa yang mungkin digunakan pada website PLUITS.',status:'Perlu disesuaikan dengan inventaris teknologi',sections:[
     ['Penggunaan teknologi','Website dapat menggunakan penyimpanan browser atau teknologi serupa untuk menjalankan fungsi penting, menjaga sesi, dan mengingat preferensi. Penggunaan aktual harus dikonfirmasi melalui audit teknologi.'],
     ['Teknologi pihak ketiga','Jika analitik, iklan, atau layanan pihak ketiga digunakan, jenis teknologi dan tujuan pemrosesannya harus dijelaskan secara spesifik.'],
