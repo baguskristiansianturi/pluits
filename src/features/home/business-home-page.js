@@ -40,24 +40,7 @@ function businessExperience() {
 }
 
 
-function paymentExperience() {
-  const methods = [
-    ['grid','QRIS','Satu kode untuk berbagai aplikasi mobile banking dan dompet digital.','Pembayaran praktis'],
-    ['briefcase','Transfer bank & Virtual Account','Pilihan transfer dari bank-bank besar di Indonesia.','BCA · BNI · BRI · Mandiri · BSI'],
-    ['message','Dompet digital','Bayar langsung melalui aplikasi pembayaran pilihan pelanggan.','GoPay · OVO · DANA · ShopeePay · LinkAja'],
-    ['lock','Kartu debit & kredit','Pilihan kartu untuk pelanggan lokal maupun internasional.','Visa · Mastercard · JCB · American Express'],
-    ['store','Gerai pembayaran','Pilihan pembayaran tunai melalui jaringan gerai ritel.','Alfamart · Indomaret'],
-    ['check','PayLater & cicilan','Pilihan pembayaran bertahap dari penyedia yang mendukung.','Kredivo · Akulaku · Indodana'],
-    ['user','Debit langsung','Pembayaran langsung dari rekening bank, jika tersedia.','Mengikuti dukungan mitra']
-  ];
-  return '<section class="business-payment-showcase" aria-labelledby="business-payment-title">' +
-    '<div class="business-payment-heading"><div><span class="business-eyebrow">PEMBAYARAN UNTUK BISNIS</span><h3 id="business-payment-title">Berikan pelanggan lebih banyak cara untuk membayar.</h3><p>Mulai dari QRIS hingga kartu dan dompet digital, pilihan pembayaran dirancang agar pelanggan dapat memilih cara yang paling nyaman.</p></div><span class="business-payment-note">DIRANCANG UNTUK INDONESIA</span></div>' +
-    '<div class="business-payment-grid">' + methods.map(([symbol,title,copy,examples]) =>
-      '<article class="business-payment-card"><span class="business-payment-icon">' + icon(symbol) + '</span><div><h4>' + title + '</h4><p>' + copy + '</p><small>' + examples + '</small></div></article>'
-    ).join('') + '</div>' +
-    '<div class="business-payment-trust"><div class="business-payment-trust-icon">' + icon('lock') + '</div><div><span class="business-card-overline">TRANSAKSI LEBIH TENANG</span><h4>Pembayaran melalui mitra tepercaya. Lebih jelas bagi kedua pihak.</h4><p>PLUITS merencanakan penggunaan payment gateway pihak ketiga untuk menjadi perantara pembayaran antara pelanggan dan bisnis. Mitra pembayaran membantu memproses transaksi dan mengirimkan konfirmasi, sementara PLUITS membantu pelanggan dan pemilik usaha mengikuti status pesanan dengan lebih jelas.</p><p class="business-payment-disclaimer">Pilihan dan ketersediaan metode mengikuti mitra pembayaran, jenis usaha, serta proses aktivasi. Fitur pembayaran ini belum aktif dan belum terhubung ke penyedia pembayaran.</p></div></div>' +
-    '</section>';
-}
+
 function discoveryShowcase() {
   const cards = [
     ['Kuliner','Temukan tempat makan dan cerita di baliknya.','food','food'],
@@ -76,6 +59,9 @@ export function mountBusinessHomePage({root,user=null}={}) {
   const headerAction = user
     ? '<a class="business-header-cta" href="' + routeHref('dashboard') + '">Dashboard</a>'
     : '<div class="business-header-actions"><a class="business-login-link" href="' + routeHref('login') + '">Masuk</a><a class="business-header-cta" href="' + routeHref('register') + '">Daftar</a></div>';
+
+  const footerMarkup = renderPageFooter({copyright:'© 2026 PLUITS. All rights reserved.',attribution:'One connected digital ecosystem.',groups:[{title:'Jelajahi',items:[{label:'Beranda',route:'home'},{label:'Jelajahi PLUITS',route:'discover'},{label:'Untuk Pengguna',href:'#untuk-pengguna'},{label:'Untuk Pelaku Usaha',href:'#untuk-bisnis'}]},{title:'Ekosistem',items:[{label:'Social',route:'social'},{label:'Discover',route:'discover'},{label:'Marketplace',route:'discover'},{label:'Services',route:'discover'}]},{title:'Akun',items:[{label:'Masuk',route:'login'},{label:'Daftar',route:'register'}]},{title:'Informasi',items:[{label:'Ketentuan Layanan',route:'terms'},{label:'Kebijakan Privasi',route:'privacy'}]}]})
+    .replace('<div class="pl-footer-bottom">', '<div class="pl-footer-payment-methods"><span class="pl-footer-payment-title">Metode Pembayaran</span><div class="pl-footer-payment-list"><span>QRIS</span><span>Visa</span><span>Mastercard</span><span>JCB</span><span>GoPay</span><span>OVO</span><span>DANA</span><span>ShopeePay</span><span>Virtual Account</span><span>Transfer Bank</span><span>Alfamart</span><span>Indomaret</span></div></div><div class="pl-footer-bottom">');
 
   root.innerHTML = '<div class="pl-page-shell business-home">' +
     '<header class="pl-page-header business-home-header">' + renderBrand({href:routeHref('home'),label:'PLUITS — Beranda'}) +
@@ -96,7 +82,7 @@ export function mountBusinessHomePage({root,user=null}={}) {
         '<div class="business-home-business-copy">' + sectionIntro('UNTUK PELAKU USAHA','Bawa bisnis Anda lebih dekat kepada pelanggan.','Bangun kehadiran digital yang lebih mudah ditemukan. Perkenalkan apa yang Anda tawarkan, ceritakan nilai bisnis Anda, dan buka jalan untuk hubungan yang lebih bermakna.') +
           '<a class="business-primary-cta" href="' + primaryHref + '">' + (user ? 'Buka Dashboard' : 'Mulai bersama PLUITS') + ' <span aria-hidden="true">→</span></a></div>' +
         '<div class="business-home-business-visual"><div class="business-owner-photo">' + photo('business','') + '<div><span>UNTUK PELAKU USAHA</span><strong>Bisnis Anda punya cerita. Biarkan lebih banyak orang menemukannya.</strong></div></div></div>' +
-      '</div><div class="business-owner-grid-wrap">' + businessExperience() + '</div>' + paymentExperience() + '</section>' +
+      '</div><div class="business-owner-grid-wrap">' + businessExperience() + '</div></section>' +
       '<section class="business-home-section business-discovery-section" id="ekosistem">' +
         sectionIntro('LEBIH BANYAK UNTUK DIJELAJAHI','Dari cerita sehari-hari hingga kebutuhan lokal.','PLUITS membuka ruang untuk menemukan hal-hal yang dekat dengan kehidupan: tempat, produk, usaha, komunitas, dan layanan.') +
         discoveryShowcase() +
@@ -104,6 +90,6 @@ export function mountBusinessHomePage({root,user=null}={}) {
       '<section class="business-home-closing"><div><span class="business-eyebrow">MULAI DARI SINI</span><h2>Temukan ruang Anda di PLUITS.</h2><p>Terhubung sebagai diri sendiri, atau hadirkan bisnis Anda untuk ditemukan lebih banyak orang.</p></div><a class="business-primary-cta" href="' + primaryHref + '">' + primaryLabel + ' <span aria-hidden="true">→</span></a></section>' +
       '<section class="business-app-download" aria-labelledby="business-app-download-title"><div class="business-app-download-copy"><span class="business-eyebrow">PLUITS ON THE GO</span><h2 id="business-app-download-title">Tetap terhubung, di mana pun Anda berada.</h2><p>Aplikasi PLUITS untuk Android dan iOS sedang dalam persiapan. Nantikan kehadirannya.</p></div><div class="business-app-badges"><div class="business-app-badge" aria-label="Google Play untuk Android — Coming Soon"><span class="business-app-icon">' + icon('play') + '</span><span><small>GET IT ON</small><strong>Google Play</strong><em>Coming Soon</em></span></div><div class="business-app-badge" aria-label="App Store untuk iOS — Coming Soon"><span class="business-app-icon">' + icon('grid') + '</span><span><small>DOWNLOAD ON THE</small><strong>App Store</strong><em>Coming Soon</em></span></div></div></section>' +
     '</main>' +
-    renderPageFooter({copyright:'© 2026 PLUITS. All rights reserved.',attribution:'One connected digital ecosystem.',groups:[{title:'Jelajahi',items:[{label:'Beranda',route:'home'},{label:'Jelajahi PLUITS',route:'discover'},{label:'Untuk Pengguna',href:'#untuk-pengguna'},{label:'Untuk Pelaku Usaha',href:'#untuk-bisnis'}]},{title:'Ekosistem',items:[{label:'Social',route:'social'},{label:'Discover',route:'discover'},{label:'Marketplace',route:'discover'},{label:'Services',route:'discover'}]},{title:'Akun',items:[{label:'Masuk',route:'login'},{label:'Daftar',route:'register'}]},{title:'Informasi',items:[{label:'Ketentuan Layanan',route:'terms'},{label:'Kebijakan Privasi',route:'privacy'}]}]}) +
+    footerMarkup +
   '</div>';
 }
