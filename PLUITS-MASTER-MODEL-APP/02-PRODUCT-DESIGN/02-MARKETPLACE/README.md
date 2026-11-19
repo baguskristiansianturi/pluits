@@ -4,6 +4,10 @@ Desain pengalaman pelanggan Marketplace: homepage discovery lintas merchant, kat
 
 Marketplace harus menampilkan **Store** dan **Restaurant & Café** sebagai dua vertikal merchant yang berbeda. Desain operasional pemilik/staf tidak dicampur ke halaman pelanggan Marketplace; masing-masing berada di folder Merchant Operations.
 
+## Shared payment experience
+
+- [PLUITS Payments — payment methods and transaction trust](../../04-SHARED-PLATFORM-SERVICES/PLUITS-PAYMENTS-AND-PAYMENT-METHODS.md) defines the shared payment-channel discovery baseline and trust boundaries. Marketplace checkout must follow this shared policy; it must not promise escrow, split settlement, or provider capabilities that have not been confirmed.
+
 ## Homepage and discovery
 
 - [Marketplace homepage, search, and discovery rules](HOMEPAGE-DISCOVERY-RULES.md)
