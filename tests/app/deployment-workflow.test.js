@@ -14,6 +14,7 @@ test('GitHub Pages deploys only a validated development preview, never productio
 
   assert.match(preview, /workflow_run:/);
   assert.match(preview, /workflows:\s*\n\s*- Validate PLUITS/);
+  assert.match(preview, /branches:\s*\n\s*- development\/preview/);
   assert.match(preview, /head_branch == 'development\/preview'/);
   assert.match(preview, /conclusion == 'success'/);
   assert.match(preview, /ref: \$\{\{ github\.event\.workflow_run\.head_sha \}\}/);
