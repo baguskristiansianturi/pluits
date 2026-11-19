@@ -34,8 +34,10 @@ test('preview profile supports local edits and stores only in browser storage', 
 test('all registered protected destinations remain reachable in demo session', async () => {
   const routes = await read('../../src/config/paths.js');
   const resolver = await read('../../src/app/routes.js');
+  const previewNav = await read('../../src/app/preview-tools.js');
   for (const route of ['social','circle','discover','dashboard','messages','profile','settings']) {
     assert.ok(routes.includes(route+':'));
   }
   assert.match(resolver, /if \(\['dashboard','social','messages','profile','settings'\]\.includes\(route\) && !hasSession\)/);
+  for (const route of ['home','login','register','terms','privacy','about','help','faq','contact','guidelines','marketplaceInfo','sellerTerms','paymentPolicy','refundPolicy','shippingPolicy','accountDeletion','safety','cookies','privacyChoices','complaints','prohibitedItems','social','discover','messages','profile','settings','dashboard']) assert.ok(previewNav.includes("['"+route+"'"));
 });
