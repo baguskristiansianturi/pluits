@@ -7,6 +7,8 @@ import './home-page.css';
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const contentTabs = [{id:'feed',label:'Feed'},{id:'reels',label:'Reels'},{id:'live',label:'Live'},{id:'blog',label:'Blog'}];
+const PUBLIC_FEED_CACHE_TTL = 30_000;
+let publicFeedCache = { savedAt: 0, posts: null };
 const demoCards = {
   global:[['TRENDING','Cerita dari Bali','Momen dan cerita yang sedang ramai','sunset'],['KOMUNITAS','Ruang kreatif','Temukan komunitas dengan minat serupa','creative'],['KULINER','Rasa Nusantara','Rekomendasi tempat dan pengalaman lokal','food'],['JELAJAH','Akhir pekan','Inspirasi perjalanan di Indonesia','travel']],
   nearby:[['DENPASAR','Sudut kota hari ini','Tempat menarik di sekitar Anda','city'],['KULINER','Tempat ngopi','Ruang santai untuk bertemu','coffee'],['AKTIVITAS','Agenda lokal','Aktivitas menarik di sekitar','event'],['KOMUNITAS','Teman sekitar','Kenali komunitas di area Anda','people']],
@@ -52,6 +54,15 @@ async function loadPublicFeed(root,signal) {
   const target=root.querySelector('[data-live-feed]');
   const reelsTarget=root.querySelector('[data-live-reels]');
   if(!target||signal.aborted)return;
+  if(publicFeedCache.posts&&Date.now()-publicFeedCache.savedAt<PUBLIC_FEED_CACHE_TTL){
+    const cached=publicFeedCache.posts;
+    target.innerHTML=cached.length?cached.map(renderPostCard).join(''):renderFeedState('Belum ada postingan publik');
+    if(reelsTarget){
+      const reels=cached.filter(post=>post.content_kind==='reel');
+      reelsTarget.innerHTML=reels.length?reels.map(renderPostCard).join(''):renderFeedState('Belum ada Reels');
+    }
+    return;
+  }
   const {data:posts,error}=await supabase.from('user_posts')
     .select('id,user_id,caption,media_path,media_type,content_kind,created_at')
     .eq('visibility','public').eq('moderation_status','published')
@@ -59,7 +70,12 @@ async function loadPublicFeed(root,signal) {
   if(signal.aborted)return;
   if(error){target.innerHTML=renderFeedState('Feed belum dapat dimuat');if(reelsTarget)reelsTarget.innerHTML=renderFeedState('Reels belum dapat dimuat');return;}
   const rows=posts||[];
-  if(!rows.length){target.innerHTML=renderFeedState('Belum ada postingan publik');if(reelsTarget)reelsTarget.innerHTML=renderFeedState('Belum ada Reels');return;}
+  if(!rows.length){
+    publicFeedCache={savedAt:Date.now(),posts:[]};
+    target.innerHTML=renderFeedState('Belum ada postingan publik');
+    if(reelsTarget)reelsTarget.innerHTML=renderFeedState('Belum ada Reels');
+    return;
+  }
   const ids=[...new Set(rows.map(post=>post.user_id))];
   const {data:profiles}=await supabase.from('user_profiles').select('id,display_name,username,avatar_path').in('id',ids);
   if(signal.aborted)return;
@@ -85,6 +101,7 @@ async function loadPublicFeed(root,signal) {
     return {...post,authorName:profile.display_name||'Pengguna PLUITS',username:profile.username||'pengguna',mediaUrl:signedUrlMap.get(post.media_path)||'',avatarUrl:signedUrlMap.get(profile.avatar_path)||''};
   });
   if(signal.aborted)return;
+  publicFeedCache={savedAt:Date.now(),posts:hydrated};
   target.innerHTML=hydrated.map(renderPostCard).join('');
   if(reelsTarget){const reels=hydrated.filter(post=>post.content_kind==='reel');reelsTarget.innerHTML=reels.length?reels.map(renderPostCard).join(''):renderFeedState('Belum ada Reels yang diterbitkan');}
 }
