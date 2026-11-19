@@ -1,4 +1,4 @@
-name: Validate PLUITS
+name: Build and deploy PLUITS to GitHub Pages
 
 on:
   pull_request:
@@ -11,13 +11,19 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-  group: pluits-validation-${{ github.ref }}
+  group: pluits-github-pages-production
   cancel-in-progress: true
 
 jobs:
-  validate:
+  build:
+    if: github.event_name != 'pull_request'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -45,3 +51,37 @@ jobs:
           test -f dist/assets/brand/pluits-icon-192.png
           test -f dist/assets/brand/pluits-icon-512.png
           test -f dist/assets/brand/apple-touch-icon.png
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy PLUITS to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  validate-pull-request:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify architecture and production contracts
+        run: npm test
+
+      - name: Build Vite production
+        run: npm run build
