@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+      - development/frontend-workbench
   workflow_dispatch:
 
 permissions:
@@ -39,7 +40,9 @@ jobs:
       - name: Verify production surface and backend contracts
         run: npm test
 
-      - name: Build Vite production
+      - name: Build Vite application
+        env:
+          VITE_PLUITS_FRONTEND_PREVIEW: ${{ github.ref == 'refs/heads/development/frontend-workbench' && 'true' || 'false' }}
         run: npm run build
 
       - name: Verify build output
