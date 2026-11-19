@@ -7,8 +7,9 @@ Owns the public informational pages, Help Center entry points, Marketplace infor
 
 ## Files
 - `public-footer.js` — the single footer navigation configuration used by the public homepage, account pages, Terms, Privacy, and public information pages. It calls the canonical `renderPageFooter()` renderer and appends the planned payment-method labels.
-- `public-info-page.js` — content and mount function for public information routes.
-- `public-info-page.css` — page-local content styling only.
+- `public-info-page.js` — shared page frame and mount function; it consumes the page registry.
+- `public-info-page.css` — shared public-information page styling only.
+- `pages/` — page content grouped by ownership: company, support, community, marketplace and privacy. See [pages/README.md](./pages/README.md).
 
 ## Route ownership
 
