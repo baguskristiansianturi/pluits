@@ -3,7 +3,8 @@ import { APP_ROUTES } from '../config/paths.js';
 const ROUTE_KEYS_BY_PATH = new Map(
   Object.entries(APP_ROUTES).map(([key, path]) => [path, key])
 );
-const BASE_PATH = new URL(import.meta.env.BASE_URL, window.location.origin).pathname;
+const PUBLIC_BASE_URL = import.meta.env?.BASE_URL || '/pluits/';
+const BASE_PATH = new URL(PUBLIC_BASE_URL, 'https://pluits.invalid').pathname;
 
 export function resolveRoute(pathname = window.location.pathname, search = window.location.search) {
   const query = new URLSearchParams(String(search || '').replace(/^\?/, ''));
