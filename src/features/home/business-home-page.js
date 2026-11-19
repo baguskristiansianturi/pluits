@@ -1,7 +1,7 @@
 import { routeHref } from '../../config/paths.js';
 import { assetUrl } from '../../config/runtime.js';
 import '../../design-system/page-shell.css';
-import { renderBrand } from '../../design-system/page-shell.js';
+import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderPublicFooter } from '../public-info/public-footer.js';
 import { renderIcon } from '../../design-system/icons.js';
 import { HOME_VISUALS } from './home-visuals.js';
@@ -64,9 +64,7 @@ export function mountBusinessHomePage({root,user=null}={}) {
   const footerMarkup = renderPublicFooter();
 
   root.innerHTML = '<div class="pl-page-shell business-home">' +
-    '<header class="pl-page-header business-home-header">' + renderBrand({href:routeHref('home'),label:'PLUITS — Beranda'}) +
-      '<nav class="business-home-nav" aria-label="Navigasi homepage"><a href="#untuk-pengguna">Untuk Pengguna</a><a href="#untuk-bisnis">Untuk Bisnis</a><a href="#ekosistem">Jelajahi</a></nav>' + headerAction +
-    '</header>' +
+    renderPageHeader({variant:'business-home',brandHref:routeHref('home'),label:'PLUITS — Beranda',rightContent:'<nav class="business-home-nav" aria-label="Navigasi homepage"><a href="#untuk-pengguna">Untuk Pengguna</a><a href="#untuk-bisnis">Untuk Bisnis</a><a href="#ekosistem">Jelajahi</a></nav>'+headerAction}) +
     '<main class="pl-page-main business-home-main">' +
       '<section class="business-home-hero">' +
         '<div class="business-home-hero-copy"><span class="business-eyebrow">LEBIH DEKAT. LEBIH TERHUBUNG.</span><h1>Satu tempat untuk <em>terhubung</em>, menemukan, dan berkembang.</h1><p>Temukan cerita, orang, komunitas, bisnis, dan berbagai hal menarik di sekitar Anda. Semua berawal dari satu ruang yang menghubungkan banyak kemungkinan.</p><div class="business-home-cta"><a class="business-primary-cta" href="' + primaryHref + '">' + primaryLabel + ' <span aria-hidden="true">→</span></a><a class="business-secondary-cta" href="#ekosistem">Kenali PLUITS</a></div><div class="business-home-trustline"><span>' + icon('check') + '</span><small>Satu identitas untuk menjelajahi ekosistem PLUITS.</small></div></div>' +
