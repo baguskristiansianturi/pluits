@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - main
-      - development/preview
   workflow_dispatch:
 
 permissions:
