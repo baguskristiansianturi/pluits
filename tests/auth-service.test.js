@@ -105,3 +105,9 @@ test('auth errors distinguish network failures and service outages',()=>{
   assert.match(getAuthErrorMessage({status:503,message:'service unavailable'}),/gangguan/i);
   assert.match(getAuthErrorMessage({status:429,message:'too many requests'}),/terlalu sering/i);
 });
+
+
+test('auth errors explain Supabase HTTP 402 service restrictions',()=>{
+  assert.match(getAuthErrorMessage({status:402,message:'Payment Required'}),/HTTP 402/i);
+  assert.match(getAuthErrorMessage({status:402,message:'Payment Required'}),/bukan kesalahan password/i);
+});
