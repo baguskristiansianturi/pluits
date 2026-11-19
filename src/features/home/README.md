@@ -41,3 +41,8 @@ Use the shared page shell, container, gutters, tokens and breakpoint contracts. 
 
 ## Validation
 Run `npm test` and `npm run build`. Verify `#/home` for guest and authenticated sessions, primary/header/footer links, mobile and desktop layout, no body horizontal overflow, and that `#/social` still mounts the existing Social experience unchanged. Browser/device visual UAT remains separate from automated build evidence.
+
+## Development workspace entry
+- The public homepage exposes a permanent `Ruang Kerja` entry in its shared header. It opens `?pluits-demo=1#/profile`, which activates the local demo auth service and lands in the profile workspace without requiring Supabase sign-in.
+- This is a local simulation entry for frontend implementation and review only. It is not an administrator grant, does not authenticate a production user, and must never be wired to production privileges or real merchant/customer data.
+- Keep the entry available from the public homepage so the owner does not need to recover a temporary URL from a previous conversation. If the local demo environment is later removed, replace this entry with an equally persistent, secure development-access mechanism before removing it.
