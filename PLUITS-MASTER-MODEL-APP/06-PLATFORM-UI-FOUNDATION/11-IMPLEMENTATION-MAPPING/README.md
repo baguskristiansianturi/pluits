@@ -74,13 +74,14 @@ Feature pages must not define or override navbar-to-content spacing. New pages u
 | Regression coverage | `tests/routes.test.js` | Shared-header sizing assertions | Checks fixed token use, brand dimensions, and absence of page-local height overrides |
 
 
-## FOOTER-PAYMENTS-001 — Public payment channel presentation
+## FOOTER-PAYMENTS-001 — Public payment brand presentation
 
 | Specification | Runtime source | API/token | Consumers |
 |---|---|---|---|
-| `04-SHARED-PLATFORM-SERVICES/PLUITS-PAYMENTS-AND-PAYMENT-METHODS.md` | `src/features/public-info/public-footer.js` | `renderPaymentMethods()`, compact inline SVG channel pictograms | Public Global Home and public information pages through `renderPublicFooter()` |
+| Payment channel taxonomy | `04-SHARED-PLATFORM-SERVICES/PLUITS-PAYMENTS-AND-PAYMENT-METHODS.md` | `PAYMENT_GROUPS`, `renderPaymentMethods()` | Public Global Home and public information pages through `renderPublicFooter()` |
+| Brand assets | `src/features/public-info/public-footer.js` | Original QRIS, BCA, BNI, BRI (2025), Bank Mandiri, GoPay, Visa and Mastercard SVG marks | Brand marks are visual demo content; they do not assert provider integration or acceptance |
 | Shared shell styling | `src/design-system/page-shell.css` | `.pl-footer-payment-*` | Footer only; no global token or shell geometry changes |
-| Responsive checks | GitHub Actions production build and test suite | 6/3/2-column card grid | Desktop, tablet, and mobile |
-| Status | IMPLEMENTED IN SOURCE — payment channels remain proposed and not activated | Inline SVG only; no remote image requests or new dependencies | Verify CI and Pages deployment before acceptance |
+| Responsive layout | `src/design-system/page-shell.css` | 4/2-column card grid | Desktop/tablet and mobile |
+| Public presentation | `src/features/public-info/public-footer.js` | Only customer-facing heading and payment category labels | No implementation status, activation disclaimer, or internal roadmap copy in the public footer |
 
-The footer presents payment *channel families*, not provider logos or a claim of live acceptance. Do not add a specific provider/network mark or label a channel as active until the payment provider and channel activation are confirmed. SVG pictograms are inline, accessible-hidden decoration; labels carry the meaning. The availability disclaimer must remain visible.
+The footer uses real brand marks rather than pictograms. Keep assets small, preserve aspect ratios, and retain descriptive alt text. The demo presentation is separate from provider selection, activation, and transaction capability, which remain internal product decisions. Do not represent any provider as integrated in product behavior until the corresponding payment capability is implemented and verified.
