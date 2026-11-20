@@ -86,7 +86,7 @@ export function mountBusinessHomePage({root,user=null}={}) {
         discoveryShowcase() +
       '</section>' +
       '<section class="business-home-closing"><div><span class="business-eyebrow">MULAI DARI SINI</span><h2>Temukan ruang Anda di PLUITS.</h2><p>Terhubung sebagai diri sendiri, atau hadirkan bisnis Anda untuk ditemukan lebih banyak orang.</p></div><a class="business-primary-cta" href="' + primaryHref + '">' + primaryLabel + ' <span aria-hidden="true">→</span></a></section>' +
-      '
+      `
 <section class="business-app-download" aria-labelledby="business-app-download-title">
 <div class="business-app-download-copy">
 <span class="business-eyebrow">PLUITS ON THE GO</span>
@@ -122,7 +122,7 @@ export function mountBusinessHomePage({root,user=null}={}) {
 </div></div><div class="business-phone-caption"><span>02 / DISCOVER</span><strong>Explore more.</strong></div>
 </article>
 </div>
-</section>' +
+</section>` +
     '</main>' +
     footerMarkup +
   '</div>';
