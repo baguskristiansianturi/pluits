@@ -23,6 +23,32 @@ PLUITS harus bekerja untuk dua pihak:
 
 Pengguna menekankan aturan yang nyata dan adil. Platform harus mempertemukan permintaan dan penawaran dengan aturan yang dapat dipahami dan dipertanggungjawabkan, bukan sekadar mengejar keuntungan sepihak.
 
+
+### Push sebagai sistem promosi lintas-ekosistem PLUITS
+
+Pengguna menegaskan bahwa Push tidak boleh diperlakukan sebagai slot iklan permanen yang selalu menguasai bagian paling atas homepage Accommodation. Penempatan seperti itu dapat mengganggu pengalaman eksplorasi dan menggeser hasil Nearby/Local yang seharusnya relevan bagi pengguna.
+
+Push merupakan sistem promosi internal PLUITS yang mengikuti konteks perjalanan pengguna di seluruh ekosistem:
+- Ketika pengguna menjelajahi Accommodation, promosi yang relevan dengan akomodasi dapat ditampilkan.
+- Ketika pengguna menjelajahi Restaurant & Café, promosi yang relevan dengan restoran/kafe dapat ditampilkan.
+- Ketika pengguna menjelajahi kategori atau layanan lain, Push mengikuti konteks tersebut.
+- Push juga dapat hadir secara kontekstual di sela-sela Feed saat pengguna scrolling, dengan mempertimbangkan minat yang terdeteksi dan frekuensi agar tidak mengganggu.
+
+Dengan demikian PLUITS tidak harus bergantung terutama pada jaringan iklan eksternal seperti Google Ads. PLUITS dapat membangun ekosistem periklanan dan promosi internal yang menghubungkan pengelola/penyedia dengan pengguna di dalam platform.
+
+Prinsip distribusi yang disampaikan:
+- Nearby/local discovery dan hasil organik tetap memiliki ruang yang adil; promosi berbayar tidak boleh secara otomatis menggusur hasil lokal yang relevan.
+- Push ditampilkan mengikuti konteks halaman, kategori yang sedang dijelajahi, lokasi, serta minat pengguna yang terdeteksi.
+- Daily Push Allocation dan kredit Push tambahan yang dibahas sebelumnya perlu dirancang sebagai bagian dari sistem Push lintas-ekosistem, bukan hanya fitur promosi Accommodation.
+- Ketika pengguna telah menyelesaikan transaksi untuk kebutuhan/produk/layanan tertentu di PLUITS, sistem harus menghentikan atau menyesuaikan promosi yang mengejar kebutuhan yang sama. Contohnya, setelah pengguna berhasil memesan akomodasi, iklan yang terus mengejar pengguna untuk memesan akomodasi serupa tidak lagi relevan.
+- Penggunaan sinyal minat dan riwayat transaksi harus memperhatikan privasi, transparansi, kontrol pengguna, serta batas frekuensi promosi.
+
+Pengguna menyatakan bahwa teknologi algoritma Push lintas-ekosistem tersebut merupakan kemampuan jangka panjang. Untuk tahap sekarang, fokusnya adalah menyiapkan frontend yang memudahkan pengguna mengeksplorasi Accommodation dan kategori terkait. Struktur frontend perlu memberi ruang bagi integrasi Push di masa depan tanpa mengunci desain pada penempatan iklan tertentu.
+
+### Konteks Push dan Fluid Priority
+
+Push merupakan salah satu kemampuan promosi yang dapat terhubung dengan akun/keanggotaan penyedia, termasuk pembahasan Gold, Platinum, dan Fluid Priority. Namun, tier akun, harga, kuota, hak, dan ketentuan komersial belum ditetapkan dalam sesi ini. Jangan menjadikan asumsi tier atau target pendapatan sebagai batas awal dalam merancang kemampuan produk. Rancang kebutuhan pengalaman dan kapabilitas platform terlebih dahulu; model akun dan monetisasi dibahas setelahnya.
+
 ## Masalah/kebutuhan yang muncul
 
 - Accommodation perlu satu ekosistem dan satu homepage untuk seluruh kelas/jenis akomodasi.
