@@ -12,4 +12,27 @@
 @media(max-width:900px){.vn-nav{gap:18px}.vn-hero{grid-template-columns:.9fr 1.1fr}.vn-category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.vn-place-grid-four{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:680px){.vn-header-tools{gap:4px}.vn-search{height:36px;padding-inline:9px}.vn-search input{font-size:9px}.vn-header-actions .global-icon-button{width:29px;height:29px}.vn-nav{min-height:40px;gap:16px;overflow-x:auto;scrollbar-width:none}.vn-nav::-webkit-scrollbar{display:none}.vn-nav>a{font-size:9px}.vn-nav-location{font-size:8px}.vn-preview-note{padding:9px 0}.vn-preview-note p{font-size:9px}
 .vn-hero{grid-template-columns:1fr;min-height:0;margin:15px 0 52px}.vn-hero-copy{padding:34px 24px 27px}.vn-hero h1{font-size:39px}.vn-hero-copy>p{font-size:11px}.vn-hero-index{margin-top:28px}.vn-hero-image{min-height:0;aspect-ratio:1.2}.vn-section-head{align-items:flex-start;gap:10px;margin-bottom:16px}.vn-section-head h2{font-size:25px}.vn-section-head p{font-size:9px}.vn-section-head>a{font-size:9px}.vn-category-section,.vn-place-section{margin-bottom:52px}.vn-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}.vn-category-image{aspect-ratio:1.16}.vn-category-label{right:8px;bottom:8px;left:8px;font-size:10px}.vn-feature-banner,.vn-lifestyle-banner{grid-template-columns:1fr;min-height:0;margin-bottom:52px}.vn-feature-image,.vn-lifestyle-image{min-height:0;aspect-ratio:1.35}.vn-feature-copy,.vn-lifestyle-copy{padding:27px 23px 30px}.vn-feature-copy h2,.vn-lifestyle-copy h2{font-size:37px}.vn-place-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 10px}.vn-place-photo{aspect-ratio:.92}.vn-place-info h3{font-size:17px}.vn-place-type{font-size:7px}.vn-place-meta{align-items:flex-start;flex-direction:column;gap:5px}.vn-place-meta b{font-size:8px}.vn-place-grid-four{grid-template-columns:repeat(2,minmax(0,1fr))}.vn-visit-cta{align-items:flex-start;flex-direction:column;margin-bottom:38px;padding:27px 22px}.vn-visit-cta h2{font-size:32px}}
+@media(max-width:680px){
+/* Venue cards are destination listings on mobile, not product tiles. */
+.vn-place-grid,.vn-place-grid-four{grid-template-columns:1fr;gap:13px}
+.vn-place-card{display:grid;grid-template-columns:40% minmax(0,1fr);align-items:stretch;min-height:142px;border:1px solid #ecefea;background:#fff}
+.vn-place-photo,.vn-place-grid-four .vn-place-photo{height:100%;min-height:142px;aspect-ratio:auto}
+.vn-place-tag{top:8px;left:8px;padding:5px 6px;font-size:7px}
+.vn-place-wish{top:7px;right:7px;width:29px;height:29px;font-size:17px}
+.vn-place-info{display:flex;min-width:0;flex-direction:column;justify-content:center;padding:11px 12px}
+.vn-place-type{font-size:7px;line-height:1.4;letter-spacing:.09em}
+.vn-place-info h3,.vn-place-grid-four .vn-place-info h3{margin:6px 0;font-size:18px;line-height:1.18}
+.vn-place-location{font-size:9px}
+.vn-place-meta{align-items:flex-start;flex-direction:column;gap:6px;margin-top:9px;padding-top:8px}
+.vn-place-meta>span{font-size:9px}
+.vn-place-meta small{font-size:8px}
+.vn-place-meta b{font-size:9px}
+}
+@media(max-width:359px){
+.vn-place-card{grid-template-columns:40% minmax(0,1fr);min-height:132px}
+.vn-place-photo,.vn-place-grid-four .vn-place-photo{min-height:132px}
+.vn-place-info{padding:9px}
+.vn-place-info h3,.vn-place-grid-four .vn-place-info h3{font-size:16px}
+.vn-place-meta{gap:4px}
+}
 @media(max-width:359px){.vn-hero h1{font-size:35px}.vn-place-grid{gap:16px 8px}.vn-place-info h3{font-size:15px}}@media(prefers-reduced-motion:reduce){.vn-category-image img,.vn-place-photo>img{transition:none}}
