@@ -12,7 +12,7 @@ Scope: Public Business Homepage, Accommodation Discovery, Hangout & Leisure, Mar
 | Design tokens | src/design-system/tokens.css | design-system | All feature screens |
 | Icon registry | src/design-system/icons.js | design-system | All features |
 | Shared brand/header/footer | src/design-system/page-shell.js and page-shell.css | design-system | Business Homepage, Social Home, Jelajah, Auth, Legal and Ruang Kerja |
-| Accommodation Discovery Homepage | src/features/accommodation/accommodation-home-page.js and accommodation-home-page.css | features/accommodation | #/accommodation; frontend-only discovery preview |
+| Accommodation Discovery and Property Detail Preview | src/features/accommodation/accommodation-home-page.js and accommodation-home-page.css | features/accommodation | #/accommodation; frontend-only discovery and editorial property detail preview |
 | Public Business Homepage | src/features/home/business-home-page.js and business-home.css | features/home | #/home; PLUITS brand destination |
 | Authenticated Social Home (former Global Home composition) | src/features/home/home-page.js and home-page.css | features/home | protected #/social after login |
 | Jelajah, Messages, redesigned Profile, Settings, and legacy Circle route | src/features/social/social-pages.js and social-pages.css | features/social | #/discover, #/messages, #/profile, #/settings; legacy #/circle redirects to #/social |
@@ -49,6 +49,12 @@ Keep feature changes within their owner. Shared route/brand changes require cons
 
 ## Required verification
 Run npm test and npm run build. Verify Public homepage, Social Home, legacy Circle redirect, Jelajah, Messages, Profile, and Settings routes; icon-only header; full-width header and sticky tabs; sticky handoff in both directions; tab scroll and active state; real public Feed/Reels query and signed media rendering; loading/error/empty states; visual demo rails; full-bleed rail edges; no document horizontal overflow; bottom navigation and safe area; Profile → Settings navigation; sign-out confirmation and auth session clearing; no website footer on signed-in app surfaces; guest/authenticated behavior; desktop/tablet/mobile layouts.
+
+## Accommodation detail preview
+- Property cards open an editorial photo-led detail overlay: gallery, property identity, overview, review placeholder, room/unit options, facilities, area, and policy disclosure.
+- Booking utility is presented as a clear sample-price rail on desktop and a sticky selection bar on mobile. Room choices are illustrative only; dates, guest count, rates, taxes, inventory, booking, and payment are not connected.
+- No review score or verified review is fabricated. Review section explicitly remains empty until real PLUITS account-linked experiences exist.
+- Property gallery images, room types, and displayed prices are frontend fixtures and must not be interpreted as real property inventory or offers.
 
 ## Current limitations
 - Signup remains disabled unless explicitly enabled after readiness review.

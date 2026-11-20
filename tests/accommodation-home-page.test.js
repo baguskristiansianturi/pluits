@@ -24,6 +24,12 @@ test('Accommodation homepage provides quick search and local discovery', async (
   assert.match(page, /LOCAL DISCOVERY/);
   assert.match(page, /Contoh eksplorasi lokal/);
   assert.match(page, /Tanggal belum memeriksa ketersediaan/);
+  assert.match(page, /propertyDetailMarkup/);
+  assert.match(page, /ac-detail-gallery/);
+  assert.match(page, /Pilih kamar atau unit/);
+  assert.match(page, /Ulasan nantinya ditampilkan dari akun PLUITS/);
+  assert.match(page, /ac-detail-mobile-bar/);
+  assert.match(page, /ac-nav-location/);
 });
 
 test('Accommodation preview fixtures do not claim live inventory or verified reviews', async () => {
@@ -40,6 +46,8 @@ test('Accommodation page styles remain feature-scoped and use shared tokens', as
   assert.match(css, /\.ac-page/);
   assert.match(css, /var\(--pl-color-ink\)/);
   assert.match(css, /var\(--pl-container-wide\)/);
+  assert.match(css, /\.ac-detail-gallery/);
+  assert.match(css, /\.ac-detail-mobile-bar/);
   assert.doesNotMatch(css, /:root\s*\{/);
 });
 
