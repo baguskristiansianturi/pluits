@@ -63,13 +63,13 @@ const detailGallery = property => {
   return [property.image, ...(images[property.id] || []).filter(image => image !== property.image)].slice(0,4);
 };
 
-const propertyDetailMarkup = property => {
+const propertyDetailMarkup = (property, root) => {
   const photos = detailGallery(property);
   const roomPrice = property.price;
   return `<div class="ac-detail-page">
-    <div class="ac-detail-topline"><span class="ac-eyebrow">PLUITS ACCOMMODATION · PROPERTY PREVIEW</span><button type="button" class="ac-detail-share" data-detail-share="${escapeHtml(property.id)}">${icon('share')} Bagikan</button></div>
+    <div class="ac-detail-topline"><span class="ac-eyebrow">PLUITS ACCOMMODATION · PROPERTY PREVIEW</span><button type="button" class="ac-detail-share" data-detail-share="${escapeHtml(property.id)}">${icon('arrow')} Bagikan</button></div>
     <div class="ac-detail-gallery" aria-label="Galeri foto contoh ${escapeHtml(property.name)}"><img class="ac-detail-photo-main" src="${photo(photos[0],1200)}" alt="${escapeHtml(property.name)}"/><div class="ac-detail-photo-side"><img src="${photo(photos[1],700)}" alt="Suasana ${escapeHtml(property.name)}"/><img src="${photo(photos[2],700)}" alt="Fasilitas ${escapeHtml(property.name)}"/><img src="${photo(photos[3],700)}" alt="Area ${escapeHtml(property.name)}"/><span class="ac-detail-photo-count">Foto contoh · 4 gambar</span></div></div>
-    <div class="ac-detail-heading"><div><span class="ac-eyebrow">${escapeHtml(property.type)} · ${escapeHtml(property.area)}, Bali</span><h2 id="ac-modal-title">${escapeHtml(property.name)}</h2><p>${escapeHtml(property.description)}</p><div class="ac-detail-facts"><span>${icon('mapPin')} ${escapeHtml(property.area)}, Bali</span><span>${icon('users')} Maks. ${property.guests} tamu (contoh)</span><span>${icon('image')} Galeri preview</span></div></div><button type="button" class="ac-detail-save" data-detail-save="${escapeHtml(property.id)}" aria-pressed="false">${icon('heart')} Simpan</button></div>
+    <div class="ac-detail-heading"><div><span class="ac-eyebrow">${escapeHtml(property.type)} · ${escapeHtml(property.area)}, Bali</span><h2 id="ac-modal-title">${escapeHtml(property.name)}</h2><p>${escapeHtml(property.description)}</p><div class="ac-detail-facts"><span>${icon('mapPin')} ${escapeHtml(property.area)}, Bali</span><span>${icon('user')} Maks. ${property.guests} tamu (contoh)</span><span>${icon('image')} Galeri preview</span></div></div><button type="button" class="ac-detail-save" data-detail-save="${escapeHtml(property.id)}" aria-pressed="false">${icon('heart')} Simpan</button></div>
     <div class="ac-detail-layout"><div class="ac-detail-main-column">
       <section class="ac-detail-section"><span class="ac-eyebrow">ABOUT THIS STAY</span><h3>Tentang tempat ini</h3><p>${escapeHtml(property.description)} Informasi ini merupakan deskripsi contoh untuk memperlihatkan struktur halaman detail, bukan keterangan resmi dari pengelola.</p></section>
       <section class="ac-detail-section"><span class="ac-eyebrow">GUEST EXPERIENCE</span><h3>Ulasan pengunjung</h3><div class="ac-detail-empty-review"><span>${icon('message')}</span><div><strong>Belum ada ulasan pada preview ini</strong><p>Ulasan nantinya ditampilkan dari akun PLUITS yang benar-benar memiliki pengalaman kunjungan atau transaksi terkait.</p></div></div></section>
@@ -198,7 +198,7 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
       const property = ACCOMMODATION_PREVIEW_PROPERTIES.find(item => item.id === openButton.dataset.openProperty);
       if (!property) return;
       lastFocused = openButton;
-      root.querySelector('#ac-modal-content').innerHTML = propertyDetailMarkup(property);
+      root.querySelector('#ac-modal-content').innerHTML = propertyDetailMarkup(property, root);
       root.querySelector('#ac-property-modal').hidden = false;
       root.querySelector('#ac-modal-close').focus();
       root.querySelectorAll('[data-room-choice]').forEach(button => button.addEventListener('click', () => {
