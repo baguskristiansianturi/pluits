@@ -72,3 +72,15 @@ Feature pages must not define or override navbar-to-content spacing. New pages u
 | `03-BRAND-ASSETS/LOGO-02-SYMBOL-WORDMARK.md` | `src/styles/global.css`, `src/design-system/page-shell.js` | `--pl-brand-logo-size`, `--pl-brand-lockup-gap`, `.pluits-brand` | Every shared brand renderer uses the canonical 34px symbol and 4px lockup gap |
 | Responsive header consumers | `src/features/home/home-page.css`, `src/features/home/business-home.css`, `src/features/dashboard/dashboard-page.css`, `src/features/social/social-pages.css` | Content-only modifiers | Configure sticky state, spacing, and actions only; do not define header height |
 | Regression coverage | `tests/routes.test.js` | Shared-header sizing assertions | Checks fixed token use, brand dimensions, and absence of page-local height overrides |
+
+
+## FOOTER-PAYMENTS-001 — Public payment channel presentation
+
+| Specification | Runtime source | API/token | Consumers |
+|---|---|---|---|
+| `04-SHARED-PLATFORM-SERVICES/PLUITS-PAYMENTS-AND-PAYMENT-METHODS.md` | `src/features/public-info/public-footer.js` | `renderPaymentMethods()`, compact inline SVG channel pictograms | Public Global Home and public information pages through `renderPublicFooter()` |
+| Shared shell styling | `src/design-system/page-shell.css` | `.pl-footer-payment-*` | Footer only; no global token or shell geometry changes |
+| Responsive checks | GitHub Actions production build and test suite | 6/3/2-column card grid | Desktop, tablet, and mobile |
+| Status | IMPLEMENTED IN SOURCE — payment channels remain proposed and not activated | Inline SVG only; no remote image requests or new dependencies | Verify CI and Pages deployment before acceptance |
+
+The footer presents payment *channel families*, not provider logos or a claim of live acceptance. Do not add a specific provider/network mark or label a channel as active until the payment provider and channel activation are confirmed. SVG pictograms are inline, accessible-hidden decoration; labels carry the meaning. The availability disclaimer must remain visible.
