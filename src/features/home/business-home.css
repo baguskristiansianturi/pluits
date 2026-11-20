@@ -660,3 +660,147 @@
   .business-phone-card--android{left:3%}
   .business-phone-card--iphone{right:15%}
 }
+
+
+/* Final responsive product showcase — one source of truth in this page stylesheet. */
+.business-app-mockups{
+  position:relative;
+  isolation:isolate;
+  display:block;
+  width:100%;
+  min-height:clamp(390px,42vw,450px);
+  padding:0;
+  overflow:visible;
+  background:transparent;
+}
+.business-app-mockups:before{
+  content:"";
+  position:absolute;
+  z-index:-2;
+  inset:7% 4% 5%;
+  border-radius:50%;
+  background:
+    radial-gradient(ellipse at 50% 48%, rgba(7,169,155,.16) 0%, rgba(7,169,155,.09) 24%, rgba(116,166,207,.10) 48%, rgba(116,166,207,0) 74%);
+  filter:blur(20px);
+  pointer-events:none;
+}
+.business-app-mockups:after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:10% 8% 8%;
+  border-radius:50%;
+  background:
+    radial-gradient(ellipse at center, transparent 48%, rgba(23,43,69,.055) 48.25%, transparent 48.8%),
+    radial-gradient(ellipse at center, transparent 67%, rgba(8,169,158,.07) 67.2%, transparent 67.7%);
+  pointer-events:none;
+}
+.business-phone-card{
+  position:absolute;
+  top:50%;
+  display:block;
+  width:auto;
+  min-width:0;
+  gap:0;
+}
+.business-phone-card--android{
+  z-index:2;
+  left:19%;
+  transform:translateY(-49%) rotate(-1.7deg);
+}
+.business-phone-card--iphone{
+  z-index:1;
+  right:19%;
+  transform:translateY(-52%) rotate(2deg) scale(.94);
+  transform-origin:center;
+}
+.business-device{
+  width:clamp(148px,15vw,188px);
+  padding:6px;
+}
+.business-device-screen,
+.business-device--iphone .business-device-screen{
+  min-height:clamp(340px,34vw,392px);
+}
+.pluits-app-topbar{gap:4px}
+.pluits-app-topbar img{width:19px;height:19px;flex:0 0 19px}
+.pluits-app-topbar strong{letter-spacing:-.035em}
+@media(max-width:1023px){
+  .business-app-mockups{min-height:410px}
+  .business-phone-card--android{left:15%}
+  .business-phone-card--iphone{right:15%}
+  .business-device{width:clamp(146px,19vw,176px)}
+  .business-device-screen,
+  .business-device--iphone .business-device-screen{min-height:360px}
+}
+@media(max-width:767px){
+  .business-app-mockups{
+    width:100%;
+    min-height:clamp(365px,106vw,410px);
+    margin:0 auto;
+    overflow:visible;
+  }
+  .business-app-mockups:before{inset:8% 0 6%;filter:blur(16px)}
+  .business-app-mockups:after{inset:12% 2% 10%}
+  .business-phone-card--android{
+    left:11%;
+    top:50%;
+    transform:translateY(-49%) rotate(-1.4deg);
+  }
+  .business-phone-card--iphone{
+    right:11%;
+    top:49%;
+    transform:translateY(-51%) rotate(1.8deg) scale(.94);
+  }
+  .business-device{width:min(43vw,174px);padding:5px}
+  .business-device--android{border-radius:27px}
+  .business-device--iphone{border-radius:32px}
+  .business-device-screen,
+  .business-device--iphone .business-device-screen{
+    min-height:clamp(320px,94vw,365px);
+    border-radius:21px;
+  }
+  .business-device--iphone .business-device-screen{border-radius:27px}
+  .business-os-status{height:23px}
+  .business-os-status--iphone{height:30px}
+  .pluits-app-topbar{height:32px;padding-inline:8px;gap:3px}
+  .pluits-app-topbar img{width:17px;height:17px;flex-basis:17px}
+  .pluits-app-greeting{padding:9px 8px 6px}
+  .pluits-app-greeting strong{font-size:clamp(9px,2.8vw,11px)}
+  .pluits-story-row{gap:6px;padding:3px 7px 7px}
+  .pluits-story-photo{width:clamp(26px,8vw,33px);height:clamp(26px,8vw,33px)}
+  .pluits-feed-card{margin-inline:5px}
+  .pluits-post-photo{height:clamp(78px,25vw,100px)}
+  .pluits-post-head{padding:5px}
+  .pluits-post-head>img{width:21px;height:21px}
+  .pluits-post-actions{gap:6px;padding:5px 6px 3px}
+  .pluits-post-caption{font-size:6px;padding-inline:6px}
+  .pluits-comment-preview{margin-inline:5px;padding:4px}
+  .pluits-discover-heading{padding:8px 8px 6px}
+  .pluits-discover-heading strong{font-size:clamp(15px,4.4vw,18px)}
+  .pluits-search-field{margin-inline:7px;padding:6px}
+  .pluits-place-card{height:clamp(68px,23vw,88px);margin-inline:6px}
+  .pluits-place-card--food{height:clamp(58px,19vw,74px)}
+  .pluits-app-nav{bottom:9px;height:31px}
+  .pluits-app-nav--iphone{bottom:8px;height:33px}
+}
+@media(max-width:380px){
+  .business-app-mockups{min-height:360px}
+  .business-phone-card--android{left:9%}
+  .business-phone-card--iphone{right:9%}
+  .business-device{width:44vw;padding:4px}
+  .business-device-screen,
+  .business-device--iphone .business-device-screen{min-height:320px}
+  .pluits-app-topbar{height:29px}
+  .pluits-story-row{gap:4px}
+  .pluits-story b{font-size:5.8px}
+  .pluits-post-photo{height:76px}
+  .pluits-place-card{height:66px}
+  .pluits-place-card--food{height:56px}
+}
+@media(min-width:768px) and (max-width:900px){
+  .business-app-mockups{min-height:390px}
+  .business-device{width:clamp(145px,19vw,170px)}
+  .business-phone-card--android{left:13%}
+  .business-phone-card--iphone{right:13%}
+}
