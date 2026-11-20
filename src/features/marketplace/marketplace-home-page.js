@@ -3,56 +3,100 @@ import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderPublicFooter } from '../public-info/public-footer.js';
 import { renderIcon } from '../../design-system/icons.js';
 
-const IMG = (id, width=720) => 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=' + width + '&q=78';
+const image = (id, width=720) => 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=' + width + '&q=74';
 const PRODUCTS = [
-  {id:1,name:'Everyday Leather Sneakers',category:'Fashion',price:689000,old:899000,tag:'STYLE EDIT',image:'photo-1542291026-7eec264c27ff'},
-  {id:2,name:'Classic Minimal Watch',category:'Accessories',price:529000,old:749000,tag:'BEST PICK',image:'photo-1523275335684-37898b6baf30'},
-  {id:3,name:'Studio Wireless Headphones',category:'Electronics',price:899000,old:1199000,tag:'TECH FIND',image:'photo-1505740420928-5e560c06d30e'},
-  {id:4,name:'Structured Daily Shoulder Bag',category:'Fashion',price:759000,old:990000,tag:'NEW',image:'photo-1548036328-c9fa89d128fa'},
-  {id:5,name:'Instant Camera Compact',category:'Electronics',price:1299000,old:1599000,tag:'POPULAR',image:'photo-1516035069371-29a1b244cc32'},
-  {id:6,name:'Modern Skincare Essentials',category:'Beauty',price:349000,old:459000,tag:'BEAUTY EDIT',image:'photo-1556228578-0d85b1a4d571'},
-  {id:7,name:'Soft Knit Everyday Top',category:'Fashion',price:429000,old:599000,tag:'WARDROBE',image:'photo-1483985988355-763728e1935b'},
-  {id:8,name:'Contemporary Table Lamp',category:'Home',price:579000,old:699000,tag:'HOME EDIT',image:'photo-1507473885765-e6ed057f782c'},
-  {id:9,name:'Essential Sunglasses',category:'Accessories',price:319000,old:429000,tag:'SUMMER',image:'photo-1511499767150-a48a237f0083'},
-  {id:10,name:'Premium Running Shoes',category:'Sports',price:799000,old:999000,tag:'ACTIVE',image:'photo-1542291026-7eec264c27ff'},
-  {id:11,name:'Ceramic Coffee Set',category:'Home',price:289000,old:359000,tag:'HOME EDIT',image:'photo-1495474472287-4d71bcdd2085'},
-  {id:12,name:'Daily Carry Backpack',category:'Accessories',price:649000,old:799000,tag:'EVERYDAY',image:'photo-1553062407-98eeb64c6a62'}
+  {id:1,name:'Relaxed Linen Shirt',category:'Fashion',price:385000,old:485000,store:'Sundays Studio',area:'Seminyak',tag:'WARDROBE EDIT',image:'photo-1598033129183-c4f50c736f10'},
+  {id:2,name:'Everyday Canvas Tote',category:'Fashion',price:245000,old:320000,store:'Common Ground',area:'Canggu',tag:'EVERYDAY',image:'photo-1590874103328-eac38a683ce7'},
+  {id:3,name:'Minimal Leather Sandals',category:'Fashion',price:429000,old:560000,store:'Sundays Studio',area:'Seminyak',tag:'LOCAL FIND',image:'photo-1543163521-1bf539c55dd2'},
+  {id:4,name:'Cotton Weekend Set',category:'Fashion',price:520000,old:650000,store:'The Linen Room',area:'Denpasar',tag:'NEW ARRIVAL',image:'photo-1483985988355-763728e1935b'},
+  {id:5,name:'Handwoven Table Runner',category:'Lifestyle & Living',price:275000,old:350000,store:'Ruang Rupa Living',area:'Ubud',tag:'HANDCRAFTED',image:'photo-1600210492486-724fe5c67fb0'},
+  {id:6,name:'Ceramic Everyday Cup',category:'Lifestyle & Living',price:145000,old:185000,store:'Ruang Rupa Living',area:'Ubud',tag:'MADE WITH CARE',image:'photo-1493106641515-6b5631de4bb9'},
+  {id:7,name:'Natural Home Fragrance',category:'Lifestyle & Living',price:189000,old:245000,store:'Scent & Form',area:'Sanur',tag:'HOME RITUAL',image:'photo-1602874801007-bd458bb1b8b6'},
+  {id:8,name:'Woven Market Basket',category:'Lifestyle & Living',price:315000,old:395000,store:'Ruang Rupa Living',area:'Ubud',tag:'LOCAL CRAFT',image:'photo-1590736969955-71cc94901144'}
 ];
 const CATEGORIES = [
-  ['Fashion','photo-1483985988355-763728e1935b'],['Electronics','photo-1505740420928-5e560c06d30e'],['Beauty','photo-1556228578-0d85b1a4d571'],['Home & Living','photo-1495474472287-4d71bcdd2085'],['Accessories','photo-1548036328-c9fa89d128fa'],['Sports','photo-1542291026-7eec264c27ff']
+  {name:'Pakaian Wanita',parent:'Fashion',image:'photo-1483985988355-763728e1935b'},
+  {name:'Pakaian Pria',parent:'Fashion',image:'photo-1515886657613-9f3515b0c78f'},
+  {name:'Modest Fashion',parent:'Fashion',image:'photo-1539109136881-3be0616acf4b'},
+  {name:'Sepatu & Sandal',parent:'Fashion',image:'photo-1543163521-1bf539c55dd2'},
+  {name:'Tas & Aksesori',parent:'Fashion',image:'photo-1590874103328-eac38a683ce7'},
+  {name:'Home & Living',parent:'Lifestyle & Living',image:'photo-1600210492486-724fe5c67fb0'},
+  {name:'Dekorasi Rumah',parent:'Lifestyle & Living',image:'photo-1616486338812-3dadae4b4ace'},
+  {name:'Produk Lokal',parent:'Lifestyle & Living',image:'photo-1603006905003-be475563bc59'}
 ];
 const money = value => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(value);
 const esc = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icon = name => renderIcon(name);
-const productCard = (p) => '<article class="mk-product" data-product="'+p.id+'"><div class="mk-product-media"><img src="'+IMG(p.image,560)+'" alt="'+esc(p.name)+'" loading="lazy" decoding="async"><span class="mk-product-tag">'+esc(p.tag)+'</span><button class="mk-wish" type="button" aria-label="Simpan '+esc(p.name)+'" aria-pressed="false">'+icon('heart')+'</button><button class="mk-quick-add" type="button" data-add="'+p.id+'">Tambah ke tas</button></div><div class="mk-product-info"><span class="mk-product-category">'+esc(p.category)+'</span><h3>'+esc(p.name)+'</h3><div class="mk-price-row"><strong>'+money(p.price)+'</strong><del>'+money(p.old)+'</del></div><span class="mk-demo-note">Contoh produk</span></div></article>';
-const sectionHead = (eyebrow,title,copy='',href='#koleksi') => '<div class="mk-section-head"><div><span class="mk-eyebrow">'+eyebrow+'</span><h2>'+title+'</h2>'+(copy?'<p>'+copy+'</p>':'')+'</div><a href="'+href+'">Lihat semua <span aria-hidden="true">↗</span></a></div>';
+const productCard = p => '<article class="mk-product" data-product="' + p.id + '"><div class="mk-product-media"><img src="' + image(p.image,560) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async"><span class="mk-product-tag">' + esc(p.tag) + '</span><button class="mk-wish" type="button" aria-label="Simpan ' + esc(p.name) + '" aria-pressed="false">' + icon('heart') + '</button><button class="mk-quick-add" type="button" data-add="' + p.id + '">Tambah ke keranjang</button></div><div class="mk-product-info"><span class="mk-product-category">' + esc(p.category) + '</span><h3>' + esc(p.name) + '</h3><div class="mk-price-row"><strong>' + money(p.price) + '</strong><del>' + money(p.old) + '</del></div><div class="mk-product-meta"><span>' + esc(p.store) + '</span><span>' + esc(p.area) + ', Bali</span></div></div></article>';
+const sectionHead = (eyebrow,title,copy='',href='#koleksi') => '<div class="mk-section-head"><div><span class="mk-eyebrow">' + eyebrow + '</span><h2>' + title + '</h2>' + (copy?'<p>'+copy+'</p>':'') + '</div><a href="' + href + '">Jelajahi <span aria-hidden="true">↗</span></a></div>';
 
 export function mountMarketplaceHomePage({root,user=null}={}) {
- let activeCategory='Semua', query='', cart=0, saved=new Set(), activeTab='Pilihan';
- const categories = CATEGORIES.map(([name,image])=>'<button class="mk-category" type="button" data-category="'+name+'"><span class="mk-category-image"><img src="'+IMG(image,260)+'" alt="" loading="lazy"></span><span>'+name+'</span></button>').join('');
- const hero = '<section class="mk-hero"><div class="mk-hero-copy"><span class="mk-eyebrow">THE EVERYDAY EDIT · 01</span><h1>Temukan hal baik.<br><em>Pilih yang berarti.</em></h1><p>Kurasi pilihan untuk gaya hidup yang bergerak bersama Anda — dari daily essentials hingga little luxuries.</p><a class="mk-dark-button" href="#pilihan">Jelajahi koleksi <span>↗</span></a><div class="mk-hero-index"><b>01</b><span></span><small>CURATED FOR EVERY DAY</small></div></div><div class="mk-hero-image"><img src="'+IMG('photo-1529139574466-a303027c1d8b',1400)+'" alt="Editorial fashion collection" fetchpriority="high"><div class="mk-hero-image-caption"><span>NEW SEASON</span><strong>Less, but better.</strong></div></div></section>';
- const special = '<section class="mk-offer-section" id="special-offers"><div class="mk-offer-main"><img src="'+IMG('photo-1490481651871-ab68de25d43d',1100)+'" alt="Pilihan gaya dan fashion" loading="lazy"><div class="mk-offer-overlay"><span>THE STYLE REFRESH</span><h2>Small changes.<br>Fresh perspective.</h2><p>Temukan pilihan baru untuk keseharian.</p><a href="#pilihan">Explore the edit ↗</a></div></div><div class="mk-offer-side"><div class="mk-offer-side-image"><img src="'+IMG('photo-1512499617640-c74ae3a79d37',720)+'" alt="Aksesori pilihan" loading="lazy"></div><span class="mk-eyebrow">THE DETAILS</span><h3>Finishing touches.</h3><p>Aksesori sederhana, sentuhan yang berbeda.</p><a href="#kategori">Temukan aksesori ↗</a></div></section>';
- const footer = renderPublicFooter();
- const headerMarkup=renderPageHeader({brandHref:routeHref('home'),label:'PLUITS Marketplace',className:'global-header mk-header',rightContent:'<div class="global-header-tools mk-header-tools"><div class="global-header-actions mk-header-actions"><button type="button" class="global-icon-button mk-header-icon" id="mk-wishlist-link" aria-label="Wishlist" title="Wishlist">'+icon('heart')+'</button><button type="button" class="global-icon-button mk-header-icon mk-cart" id="mk-cart" aria-label="Keranjang" title="Keranjang">'+icon('cart')+'<b id="mk-cart-count">0</b></button></div></div>',dataGlobalHeader:true});
- root.innerHTML = '<div class="pl-page-shell mk-page">'+headerMarkup+'<nav class="mk-nav" id="mk-nav" aria-label="Kategori utama"><a href="#kategori">Kategori</a><a href="#pilihan">Pilihan editor</a><a href="#trending">Trending</a><a href="#special-offers">Special offers</a><a href="#stores">Discover stores</a><span class="mk-nav-note">A MORE CONSIDERED WAY TO SHOP</span></nav><main class="pl-page-main mk-main"><div class="mk-demo-banner"><span>PREVIEW CATALOG</span><p>Produk dan harga di halaman ini adalah data contoh untuk pengujian tampilan.</p></div>'+hero+'<section class="mk-category-section" id="kategori">'+sectionHead('DISCOVER BY CATEGORY','Jelajahi kategori','Temukan inspirasi dari berbagai pilihan yang dikurasi.')+'<div class="mk-category-grid">'+categories+'</div></section>'+special+'<section class="mk-product-section" id="pilihan">'+sectionHead('A LITTLE INSPIRATION','Pilihan untuk Anda','Pilihan produk contoh untuk menguji pengalaman katalog.')+'<div class="mk-filter-row"><div class="mk-filter-tabs" role="group" aria-label="Filter produk"><button class="is-active" data-filter="Semua">Semua</button><button data-filter="Fashion">Fashion</button><button data-filter="Electronics">Electronics</button><button data-filter="Beauty">Beauty</button><button data-filter="Home">Home</button></div><label class="mk-sort-label">Urutkan <select id="mk-sort"><option value="featured">Pilihan</option><option value="low">Harga terendah</option><option value="high">Harga tertinggi</option></select></label></div><div class="mk-product-grid" id="mk-product-grid">'+PRODUCTS.slice(0,8).map(productCard).join('')+'</div><p class="mk-empty" id="mk-empty" hidden>Tidak ada produk yang cocok. Coba kata kunci atau kategori lain.</p></section><section class="mk-trending" id="trending"><div class="mk-trending-image"><img src="'+IMG('photo-1505740420928-5e560c06d30e',1000)+'" alt="Headphones pilihan teknologi" loading="lazy"></div><div class="mk-trending-copy"><span class="mk-eyebrow">THE TECH EDIT</span><h2>Good design.<br>Better everyday.</h2><p>Perangkat yang memadukan fungsi, bentuk, dan pengalaman yang menyenangkan.</p><a href="#pilihan" class="mk-text-link">Explore tech selection ↗</a></div></section><section class="mk-product-section mk-best-section"><div class="mk-tabs-heading">'+sectionHead('MOST-LOVED FINDS','Pilihan yang sedang dilirik','Kumpulan contoh produk untuk menguji rak rekomendasi.')+'<div class="mk-mini-tabs"><button class="is-active" data-tab="Pilihan">Pilihan</button><button data-tab="Terbaru">Terbaru</button></div></div><div class="mk-product-grid mk-product-grid--compact" id="mk-best-grid">'+PRODUCTS.slice(4,8).map(productCard).join('')+'</div></section><section class="mk-stores" id="stores">'+sectionHead('MEET THE CURATORS','Discover stores','Ruang untuk mengenal merchant dan koleksi mereka.')+'<div class="mk-store-grid"><article><div class="mk-store-photo"><img src="'+IMG('photo-1490481651871-ab68de25d43d',700)+'" alt="Fashion store" loading="lazy"></div><span>FASHION & LIFESTYLE</span><h3>Atelier Everyday</h3><p>Curated essentials for modern living.</p><a href="#pilihan">Jelajahi koleksi ↗</a></article><article><div class="mk-store-photo"><img src="'+IMG('photo-1505740420928-5e560c06d30e',700)+'" alt="Technology store" loading="lazy"></div><span>TECH & GADGETS</span><h3>Form & Function</h3><p>Thoughtful tools for daily life.</p><a href="#pilihan">Jelajahi koleksi ↗</a></article><article><div class="mk-store-photo"><img src="'+IMG('photo-1556228578-0d85b1a4d571',700)+'" alt="Beauty store" loading="lazy"></div><span>BEAUTY & CARE</span><h3>Daily Ritual</h3><p>Little rituals, meaningful moments.</p><a href="#pilihan">Jelajahi koleksi ↗</a></article></div></section><section class="mk-newsletter"><div><span class="mk-eyebrow">STAY IN THE LOOP</span><h2>Good things are worth discovering.</h2><p>Jelajahi pilihan terbaru dari ekosistem PLUITS.</p></div><a href="'+routeHref('register')+'">Kenali PLUITS <span>↗</span></a></section></main>'+footer+'</div><div class="mk-toast" id="mk-toast" role="status" aria-live="polite"></div>';
- const grid=root.querySelector('#mk-product-grid'), best=root.querySelector('#mk-best-grid'), sort=root.querySelector('#mk-sort'), toast=root.querySelector('#mk-toast');
- const showToast = message => { toast.textContent=message; toast.classList.add('is-visible'); clearTimeout(showToast.timer); showToast.timer=setTimeout(()=>toast.classList.remove('is-visible'),2200); };
- const filtered = () => {
-  let list=PRODUCTS.filter(p=>(activeCategory==='Semua'||p.category===activeCategory||activeCategory==='Home & Living'&&p.category==='Home')&&(!query||(p.name+' '+p.category).toLowerCase().includes(query)));
-  if(sort.value==='low')list.sort((a,b)=>a.price-b.price); if(sort.value==='high')list.sort((a,b)=>b.price-a.price); return list;
- };
- const renderProducts=()=>{const list=filtered();grid.innerHTML=list.map(productCard).join('');root.querySelector('#mk-empty').hidden=list.length>0;root.querySelectorAll('[data-filter]').forEach(b=>b.classList.toggle('is-active',b.dataset.filter===activeCategory));};
- const onClick=e=>{
-  const add=e.target.closest('[data-add]'); if(add){cart++;root.querySelector('#mk-cart-count').textContent=cart;showToast('Ditambahkan ke keranjang contoh.');return;}
-  const wish=e.target.closest('.mk-wish');if(wish){const card=wish.closest('[data-product]'),id=Number(card.dataset.product);if(saved.has(id)){saved.delete(id);wish.setAttribute('aria-pressed','false');wish.classList.remove('is-saved');showToast('Dihapus dari wishlist.');}else{saved.add(id);wish.setAttribute('aria-pressed','true');wish.classList.add('is-saved');showToast('Disimpan ke wishlist.');}return;}
-  const filter=e.target.closest('[data-filter]');if(filter){activeCategory=filter.dataset.filter;renderProducts();return;}
-  const category=e.target.closest('[data-category]');if(category){activeCategory=category.dataset.category;renderProducts();root.querySelector('#pilihan').scrollIntoView({behavior:'smooth'});return;}
-  const tab=e.target.closest('[data-tab]');if(tab){activeTab=tab.dataset.tab;root.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('is-active',b===tab));const items=activeTab==='Terbaru'?[...PRODUCTS].reverse().slice(0,4):PRODUCTS.slice(4,8);best.innerHTML=items.map(productCard).join('');return;}
-  if(e.target.closest('#mk-cart'))showToast(cart+' item contoh di keranjang.');
-  if(e.target.closest('#mk-wishlist-link'))showToast(saved.size+' produk tersimpan di wishlist.');
+  let activeCategory='Semua', query='', cart=0;
+  const saved = new Set();
+  const categoryMarkup = CATEGORIES.map(c=>'<button class="mk-category" type="button" data-category="' + esc(c.parent) + '" aria-label="Jelajahi ' + esc(c.name) + '"><span class="mk-category-image"><img src="' + image(c.image,320) + '" alt="" loading="lazy" decoding="async"></span><span>' + esc(c.name) + '</span></button>').join('');
+  const hero = '<section class="mk-hero"><div class="mk-hero-copy"><span class="mk-eyebrow">PLUITS MARKETPLACE · BALI EDITION</span><h1>Temukan gaya.<br><em>Temukan tempat.</em></h1><p>Jelajahi pilihan fashion dan lifestyle dari toko-toko lokal. Kenali produknya, temukan tokonya, lalu kunjungi langsung.</p><a class="mk-dark-button" href="#kategori">Jelajahi pilihan <span>↗</span></a><div class="mk-hero-index"><b>01</b><span></span><small>LOCAL STORES · GOOD FINDS</small></div></div><div class="mk-hero-image"><img src="' + image('photo-1529139574466-a303027c1d8b',1440) + '" alt="Editorial fashion collection" fetchpriority="high"><div class="mk-hero-image-caption"><span>FASHION & LIFESTYLE</span><strong>Made for everyday.</strong></div></div></section>';
+  const categories = '<section class="mk-category-section" id="kategori"><div class="mk-section-head"><div><span class="mk-eyebrow">EXPLORE THE EDIT</span><h2>Jelajahi kategori</h2><p>Pilihan yang dekat dengan gaya dan keseharian Anda.</p></div></div><div class="mk-category-grid">' + categoryMarkup + '</div></section>';
+  const feature = '<section class="mk-feature-banner"><div class="mk-feature-image"><img src="' + image('photo-1490481651871-ab68de25d43d',1100) + '" alt="Pilihan fashion untuk keseharian" loading="lazy"></div><div class="mk-feature-copy"><span class="mk-eyebrow">FASHION, WITH A LOCAL POINT OF VIEW</span><h2>Find your<br>everyday favourite.</h2><p>Dari butik, modest wear, hingga label lokal — temukan koleksi dan toko di balik setiap pilihan.</p><a href="#fashion" class="mk-text-link">Jelajahi fashion ↗</a></div></section>';
+  const lifestyle = '<section class="mk-lifestyle-banner"><div class="mk-lifestyle-copy"><span class="mk-eyebrow">A LITTLE MORE MEANINGFUL</span><h2>Make room<br>for good living.</h2><p>Home essentials, dekorasi, kerajinan, dan temuan lokal untuk ruang yang terasa lebih personal.</p><a href="#lifestyle" class="mk-text-link">Jelajahi lifestyle ↗</a></div><div class="mk-lifestyle-image"><img src="' + image('photo-1600210492486-724fe5c67fb0',1100) + '" alt="Interior dan produk lifestyle" loading="lazy"></div></section>';
+  const stores = '<section class="mk-stores" id="stores">' + sectionHead('MEET THE LOCAL STORES','Toko pilihan di Bali','Contoh tampilan toko yang nantinya terhubung ke Geo Directory.') + '<div class="mk-store-grid"><article><div class="mk-store-photo"><img src="' + image('photo-1490481651871-ab68de25d43d',760) + '" alt="Butik fashion" loading="lazy"></div><div class="mk-store-info"><span>FASHION BOUTIQUE · CONTOH</span><h3>Sundays Studio</h3><p>Seminyak, Bali</p><span class="mk-store-distance">Profil toko & lokasi akan terhubung ke Geo Directory</span></div></article><article><div class="mk-store-photo"><img src="' + image('photo-1600210492486-724fe5c67fb0',760) + '" alt="Toko home living" loading="lazy"></div><div class="mk-store-info"><span>LIFESTYLE & LIVING · CONTOH</span><h3>Ruang Rupa Living</h3><p>Ubud, Bali</p><span class="mk-store-distance">Profil toko & lokasi akan terhubung ke Geo Directory</span></div></article><article><div class="mk-store-photo"><img src="' + image('photo-1590874103328-eac38a683ce7',760) + '" alt="Toko aksesori" loading="lazy"></div><div class="mk-store-info"><span>FASHION & ACCESSORIES · CONTOH</span><h3>Common Ground</h3><p>Canggu, Bali</p><span class="mk-store-distance">Profil toko & lokasi akan terhubung ke Geo Directory</span></div></article></div></section>';
+  const header = renderPageHeader({
+    brandHref:routeHref('home'),label:'PLUITS Marketplace',className:'global-header mk-header',
+    rightContent:'<div class="global-header-tools mk-header-tools"><label class="mk-search" aria-label="Cari produk dan toko">' + icon('search') + '<input id="mk-search-input" type="search" placeholder="Cari produk, brand, atau toko..." autocomplete="off"></label><div class="global-header-actions mk-header-actions"><button type="button" class="global-icon-button mk-header-icon" id="mk-wishlist-link" aria-label="Wishlist" title="Wishlist">' + icon('heart') + '</button><button type="button" class="global-icon-button mk-header-icon mk-cart" id="mk-cart" aria-label="Keranjang" title="Keranjang">' + icon('cart') + '<b id="mk-cart-count">0</b></button></div></div>',
+    dataGlobalHeader:true
+  });
+  root.innerHTML = '<div class="pl-page-shell mk-page">' + header +
+    '<nav class="mk-nav" aria-label="Navigasi Marketplace"><a href="#kategori">Kategori</a><a href="#fashion">Fashion</a><a href="#lifestyle">Lifestyle & Living</a><a href="#koleksi">Produk pilihan</a><a href="#stores">Toko lokal</a><span class="mk-nav-location">' + icon('mapPin') + ' BALI</span></nav>' +
+    '<main class="pl-page-main mk-main"><div class="mk-preview-note"><span>PREVIEW CATALOG</span><p>Foto, produk, harga, dan nama toko adalah contoh visual — belum merupakan data merchant aktif.</p></div>' +
+    hero + categories + feature +
+    '<section class="mk-product-section" id="fashion">' + sectionHead('THE FASHION EDIT','Fashion finds','Koleksi contoh dari butik dan toko fashion lokal.') +
+    '<div class="mk-filter-row"><div class="mk-filter-tabs" role="group" aria-label="Filter fashion"><button class="is-active" data-filter="Fashion">Semua fashion</button><button data-filter="Semua">Semua kategori</button></div><a href="#koleksi" class="mk-filter-more">Lihat koleksi lengkap ↗</a></div><div class="mk-product-grid" id="mk-fashion-grid"></div></section>' +
+    lifestyle +
+    '<section class="mk-product-section" id="lifestyle">' + sectionHead('LIFESTYLE & LIVING','Good things for living','Pilihan rumah, dekorasi, dan produk lokal.') +
+    '<div class="mk-product-grid" id="mk-lifestyle-grid"></div></section>' +
+    '<section class="mk-product-section mk-all-products" id="koleksi">' + sectionHead('DISCOVER MORE','Jelajahi semua pilihan','Cari produk fashion dan lifestyle dari toko-toko lokal.') +
+    '<div class="mk-filter-row"><div class="mk-filter-tabs" role="group" aria-label="Filter produk"><button class="is-active" data-filter="Semua">Semua</button><button data-filter="Fashion">Fashion</button><button data-filter="Lifestyle & Living">Lifestyle & Living</button></div><label class="mk-sort-label">Urutkan <select id="mk-sort"><option value="featured">Pilihan</option><option value="low">Harga terendah</option><option value="high">Harga tertinggi</option></select></label></div><div class="mk-product-grid" id="mk-all-grid"></div><p class="mk-empty" id="mk-empty" hidden>Tidak ada produk yang cocok. Coba kata kunci lain.</p></section>' +
+    stores +
+    '<section class="mk-visit-cta"><div><span class="mk-eyebrow">MORE THAN JUST SHOPPING</span><h2>Temukan tokonya.<br>Datang dan rasakan langsung.</h2><p>Setiap merchant akan memiliki identitas lokasi yang terhubung dengan Geo Directory PLUITS.</p></div><a href="#stores" class="mk-dark-button">Jelajahi toko lokal <span>↗</span></a></section></main>' + renderPublicFooter() + '</div><div class="mk-toast" id="mk-toast" role="status" aria-live="polite"></div>';
 
- };
- root.addEventListener('click',onClick);
- sort.addEventListener('change',renderProducts);
- return ()=>{root.removeEventListener('click',onClick);};
+  const fashionGrid=root.querySelector('#mk-fashion-grid');
+  const lifestyleGrid=root.querySelector('#mk-lifestyle-grid');
+  const allGrid=root.querySelector('#mk-all-grid');
+  const sort=root.querySelector('#mk-sort');
+  const search=root.querySelector('#mk-search-input');
+  const toast=root.querySelector('#mk-toast');
+  let toastTimer=null;
+  const showToast=message=>{toast.textContent=message;toast.classList.add('is-visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('is-visible'),2200);};
+  const filtered=()=>{
+    let list=PRODUCTS.filter(p=>(activeCategory==='Semua'||p.category===activeCategory)&&(!query||(p.name+' '+p.category+' '+p.store+' '+p.area).toLowerCase().includes(query)));
+    if(sort.value==='low')list=[...list].sort((a,b)=>a.price-b.price);
+    if(sort.value==='high')list=[...list].sort((a,b)=>b.price-a.price);
+    return list;
+  };
+  const renderAll=()=>{
+    const list=filtered();
+    allGrid.innerHTML=list.map(productCard).join('');
+    fashionGrid.innerHTML=PRODUCTS.filter(p=>p.category==='Fashion').map(productCard).join('');
+    lifestyleGrid.innerHTML=PRODUCTS.filter(p=>p.category==='Lifestyle & Living').map(productCard).join('');
+    root.querySelector('#mk-empty').hidden=list.length>0;
+    root.querySelectorAll('[data-filter]').forEach(button=>button.classList.toggle('is-active',button.dataset.filter===activeCategory));
+  };
+  const onInput=()=>{query=search.value.trim().toLowerCase();renderAll();};
+  const onChange=()=>renderAll();
+  const onClick=event=>{
+    const add=event.target.closest('[data-add]');
+    if(add){cart++;root.querySelector('#mk-cart-count').textContent=cart;showToast('Ditambahkan ke keranjang contoh.');return;}
+    const wish=event.target.closest('.mk-wish');
+    if(wish){const id=Number(wish.closest('[data-product]').dataset.product);if(saved.has(id)){saved.delete(id);wish.setAttribute('aria-pressed','false');wish.classList.remove('is-saved');showToast('Dihapus dari wishlist.');}else{saved.add(id);wish.setAttribute('aria-pressed','true');wish.classList.add('is-saved');showToast('Disimpan ke wishlist contoh.');}return;}
+    const filter=event.target.closest('[data-filter]');
+    if(filter){activeCategory=filter.dataset.filter;renderAll();root.querySelector('#koleksi').scrollIntoView({behavior:'smooth'});return;}
+    const category=event.target.closest('[data-category]');
+    if(category){activeCategory=category.dataset.category;renderAll();root.querySelector('#koleksi').scrollIntoView({behavior:'smooth'});return;}
+    if(event.target.closest('#mk-cart'))showToast(cart+' item contoh di keranjang.');
+    if(event.target.closest('#mk-wishlist-link'))showToast(saved.size+' produk contoh tersimpan.');
+  };
+  root.addEventListener('click',onClick);
+  search.addEventListener('input',onInput);
+  sort.addEventListener('change',onChange);
+  renderAll();
+  return ()=>{root.removeEventListener('click',onClick);search.removeEventListener('input',onInput);sort.removeEventListener('change',onChange);clearTimeout(toastTimer);};
 }
