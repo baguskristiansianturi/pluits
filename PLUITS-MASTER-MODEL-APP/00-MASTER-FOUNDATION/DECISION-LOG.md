@@ -232,4 +232,4 @@ Salin untuk keputusan berikutnya:
 - **Dampak user journey:** public restaurant page → dining areas or menu → menu detail → cart → dine-in/table-validation or online fulfillment → operational Restaurant & Café flow → verified review and optional social sharing.
 - **Dokumen yang diperbarui:** `PLUITS-SHARING-INBOX/SESSIONS/2026-11-21-RESTAURANT-CAFE-EXPERIENCE-AND-CHECKOUT.md`; `02-PRODUCT-DESIGN/07-HANGOUT-LEISURE/RESTAURANT-CAFE-PUBLIC-EXPERIENCE.md`; `03-APPLICATION-MODULARIZATION/07-RESTAURANT-CAFE-FRONTEND-BOUNDARY.md`.
 - **Supersedes:** tidak ada; memperjelas alur publik dan frontend tanpa mengubah aturan sesi LIVE yang telah disepakati.
-- **Status implementasi:** documentation APPROVED; frontend IN PROGRESS; backend/session integration NOT STARTED; production deployment NOT AUTHORIZED; Android UAT PENDING.
+- **Status implementasi:** documentation APPROVED; frontend IMPLEMENTED and DEPLOYED to development preview on commit `19c6259ff274755489d9915dfe10f8863fbd32f9`; automated tests and Vite build SUCCESS (workflow `44780945774`); backend/session integration NOT STARTED; production deployment NOT AUTHORIZED; Android UAT and founder acceptance PENDING.
