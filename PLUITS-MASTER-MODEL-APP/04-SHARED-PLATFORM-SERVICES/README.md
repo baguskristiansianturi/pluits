@@ -9,3 +9,7 @@ Layanan bersama lintas aplikasi: account & identity, membership, notification, p
 ## Public website, Help Center and app-store readiness
 
 - [Public Website, Help Center, Legal Pages & App Store Readiness](PUBLIC-WEBSITE-HELP-LEGAL-AND-APP-STORE-READINESS.md) — canonical public footer taxonomy, public page inventory, policy publication status, and Google Play / Apple App Store release gates.
+
+## Promotion and Priority direction
+
+- [PLUITS Push & Priority — Technical Direction 001](./PUSH-AND-PRIORITY-TECHNICAL-DIRECTION-001.md) — cross-ecosystem contextual promotion, fairness, conversion suppression, privacy questions, and future Priority integration. Status: PROPOSED / UNDER ANALYSIS; not an approved architecture.
