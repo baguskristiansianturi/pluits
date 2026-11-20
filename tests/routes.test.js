@@ -73,3 +73,42 @@ test('Venue discovery homepage shares Marketplace shell and serves customer disc
 test('Venue provider homepage is a public place profile distinct from product detail',async()=>{const app=await readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8');const page=await readFile(new URL('../src/features/venue/venue-provider-page.js',import.meta.url),'utf8');assert.match(app,/mountVenueProviderPage/);assert.match(page,/RESTAURANT PROFILE/);assert.match(page,/mountRestaurantOrdering/);assert.match(page,/PLAN YOUR VISIT/);assert.match(page,/kind:'Restaurant'/);});
 
 test('restaurant ordering frontend includes menu detail sheet and merchant-separated carts',async()=>{const ordering=await readFile(new URL('../src/features/venue/restaurant-ordering.js',import.meta.url),'utf8');const page=await readFile(new URL('../src/features/venue/venue-provider-page.js',import.meta.url),'utf8');assert.match(page,/mountRestaurantOrdering/);assert.match(page,/restaurant-ordering-root/);assert.match(ordering,/pluits-demo-merchant-carts-v1/);assert.match(ordering,/role="dialog"/);assert.match(ordering,/data-merchant/);assert.match(ordering,/Setiap restoran akan diproses sebagai pesanan terpisah/);});
+
+
+test('Restaurant & Café public page renders merchant-configured dining areas and facilities',async()=>{
+ const page=await readFile(new URL('../src/features/venue/venue-provider-page.js',import.meta.url),'utf8');
+ const css=await readFile(new URL('../src/features/venue/venue-provider-page.css',import.meta.url),'utf8');
+ assert.match(page,/provider\.areas/);
+ assert.match(page,/vpp-areas/);
+ assert.match(page,/Indoor Air-conditioned Dining/);
+ assert.match(page,/Garden Dining/);
+ assert.match(page,/Private Dining & Special Moments/);
+ assert.match(page,/vpp-facilities/);
+ assert.match(css,/\.vpp-area-grid/);
+ assert.match(css,/\.vpp-facilities/);
+});
+
+test('Restaurant checkout separates dine-in table validation from online fulfillment',async()=>{
+ const ordering=await readFile(new URL('../src/features/venue/restaurant-ordering.js',import.meta.url),'utf8');
+ assert.match(ordering,/Apakah Anda sedang berada di restoran ini/);
+ assert.match(ordering,/data-order-mode="dine-in"/);
+ assert.match(ordering,/data-order-mode="online"/);
+ assert.match(ordering,/ro-table-number/);
+ assert.match(ordering,/data-fulfillment="pickup"/);
+ assert.match(ordering,/data-fulfillment="delivery"/);
+ assert.match(ordering,/tidak dianggap sebagai check-in/);
+ assert.match(ordering,/belum ada check-in atau sesi LIVE yang dibuat/);
+ assert.match(ordering,/const cartButton=\(\)=>qty\(\)\?/);
+});
+
+test('Restaurant review preview supports complete multi-item order context and source-aware menu labels',async()=>{
+ const page=await readFile(new URL('../src/features/venue/venue-provider-page.js',import.meta.url),'utf8');
+ const ordering=await readFile(new URL('../src/features/venue/restaurant-ordering.js',import.meta.url),'utf8');
+ assert.equal((page.match(/vpp-review-order-items/g)||[]).length,3);
+ const reviewCards=page.split('class="vpp-review-card"').slice(1);
+ assert.equal(reviewCards.length,3);
+ for(const card of reviewCards)assert.match(card,/vpp-review-order-items/);
+ assert.match(page,/detail pesanan hanya berasal dari backend dan persetujuan/);
+ assert.match(ordering,/PILIHAN RESTORAN/);
+ assert.doesNotMatch(ordering,/BEST SELLER|CHEF PICK/);
+});

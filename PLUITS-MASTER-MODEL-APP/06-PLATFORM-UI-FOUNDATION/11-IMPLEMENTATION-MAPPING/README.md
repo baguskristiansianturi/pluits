@@ -72,3 +72,16 @@ Feature pages must not define or override navbar-to-content spacing. New pages u
 | `03-BRAND-ASSETS/LOGO-02-SYMBOL-WORDMARK.md` | `src/styles/global.css`, `src/design-system/page-shell.js` | `--pl-brand-logo-size`, `--pl-brand-lockup-gap`, `.pluits-brand` | Every shared brand renderer uses the canonical 34px symbol and 4px lockup gap |
 | Responsive header consumers | `src/features/home/home-page.css`, `src/features/home/business-home.css`, `src/features/dashboard/dashboard-page.css`, `src/features/social/social-pages.css` | Content-only modifiers | Configure sticky state, spacing, and actions only; do not define header height |
 | Regression coverage | `tests/routes.test.js` | Shared-header sizing assertions | Checks fixed token use, brand dimensions, and absence of page-local height overrides |
+
+
+## PD-RC-001 — Restaurant & Café public experience (page-local composition)
+
+| Specification | Runtime source | API/token | Consumer |
+|---|---|---|---|
+| `02-PRODUCT-DESIGN/07-HANGOUT-LEISURE/RESTAURANT-CAFE-PUBLIC-EXPERIENCE.md` | `src/features/venue/venue-provider-page.js`, `venue-provider-page.css` | `mountVenueProviderPage()`, `.vpp-*` | Public restaurant provider route |
+| Food Menu & Ordering | `src/features/venue/restaurant-ordering.js`, `restaurant-ordering.css` | `mountRestaurantOrdering()`, `.ro-*` | Restaurant provider menu section |
+| Shared shell and tokens | `src/design-system/page-shell.js`, `page-shell.css`, `tokens.css` | `renderPageHeader()`, existing PLUITS tokens | Restaurant provider page |
+| Regression coverage | `tests/routes.test.js` | Restaurant area, review context, checkout-routing assertions | Restaurant public route and ordering interactions |
+| Technical boundary | `03-APPLICATION-MODULARIZATION/07-RESTAURANT-CAFE-FRONTEND-BOUNDARY.md` | Table/session validation is backend-authoritative | Dine-in integration boundary |
+
+Status: frontend preview implementation in progress. No Restaurant & Café table/session backend schema or RPC is present in the inspected migration set; do not infer successful table validation or LIVE sessions from frontend state.

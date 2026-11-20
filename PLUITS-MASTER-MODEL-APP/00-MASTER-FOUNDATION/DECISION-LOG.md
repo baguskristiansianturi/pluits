@@ -212,3 +212,24 @@ Salin untuk keputusan berikutnya:
 - **Tanggal:** 15 November 2026
 - **Keputusan:** Circle is canonically `#/account/explore`. Human-readable aliases `#/circle` and `#/account/circle` must resolve to the same Circle feed, never Profile. Jelajah remains `#/search`, a distinct public discovery surface. Mobile navigation order remains Circle → Jelajah → Buat → Pesan → Profil.
 - **Implementasi:** PR #32 merged at `8e4fe58a6505575d2dfb2fb5c66ddd295d1588ac`; CI #2039 passed all automated checks and produced the Pages artifact. Live Pages deployment and authenticated Android walkthrough still require verification.
+
+
+## D-014 — Restaurant & Café public experience, dining areas, and session-aware ordering
+
+- **Tanggal keputusan:** 21 November 2026
+- **Status:** DECIDED — frontend design and preview scope only; not a production release approval.
+- **Founder approval:** explicit instruction to consolidate the new dining-area and checkout flow with the previously agreed Restaurant & Café operating model, document it, and then begin frontend coding.
+- **Konteks:** A restaurant's public page must communicate the actual physical dining experience as well as its menu. Checkout must distinguish a guest who is already at the restaurant from an online customer, and dine-in orders must join the existing verified table/visit-session lifecycle.
+- **Keputusan final:**
+  1. Add configurable Dining Areas & Experiences (e.g. air-conditioned indoor room, garden, outdoor, beachfront/front-row seating, private dining and special-occasion setup). Only merchant-enabled areas appear. Basic facilities such as parking may remain concise text facts.
+  2. Keep menu cards photo-led without a sticky price/checkout bar. Price and purchase controls appear inside the opened item-detail panel.
+  3. Support multi-item carts and full order-item context in reviews; item highlights are optional and do not replace the complete order.
+  4. Checkout first asks whether the customer is physically at the restaurant. Dine-in asks for a table number and then requires authoritative backend table/session validation. Online customers follow the restaurant's configured online fulfillment route.
+  5. A table number, GPS, or frontend state alone never proves check-in and never creates a LIVE visit. Verified dine-in orders attach to the canonical active visit session. Existing call controls remain available only while the verified session is LIVE and are disabled after closure/final payment.
+  6. Review verification and public sharing consent remain separate. Public item details require customer permission; account privacy rules govern profile and chat affordances.
+  7. Separate system-derived Most Ordered / Customer Favorite signals from merchant-designated Signature / Recommended labels. Never claim demo tags or data are real performance evidence.
+- **Batas:** this decision authorizes frontend design/preview work only. It does not override Social P0 release priority, approve production rollout, or authorize Supabase schema/RLS/Auth/payment/production-data changes. The current frontend has no verified Restaurant & Café table/session/order backend contract; integration remains a documented boundary.
+- **Dampak user journey:** public restaurant page → dining areas or menu → menu detail → cart → dine-in/table-validation or online fulfillment → operational Restaurant & Café flow → verified review and optional social sharing.
+- **Dokumen yang diperbarui:** `PLUITS-SHARING-INBOX/SESSIONS/2026-11-21-RESTAURANT-CAFE-EXPERIENCE-AND-CHECKOUT.md`; `02-PRODUCT-DESIGN/07-HANGOUT-LEISURE/RESTAURANT-CAFE-PUBLIC-EXPERIENCE.md`; `03-APPLICATION-MODULARIZATION/07-RESTAURANT-CAFE-FRONTEND-BOUNDARY.md`.
+- **Supersedes:** tidak ada; memperjelas alur publik dan frontend tanpa mengubah aturan sesi LIVE yang telah disepakati.
+- **Status implementasi:** documentation APPROVED; frontend IN PROGRESS; backend/session integration NOT STARTED; production deployment NOT AUTHORIZED; Android UAT PENDING.

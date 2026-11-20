@@ -8,3 +8,7 @@ Area spesifikasi implementasi per aplikasi: module boundaries, frontend, backend
 - Pemetaan antara spesifikasi UI dan file runtime dicatat di `06-PLATFORM-UI-FOUNDATION/11-IMPLEMENTATION-MAPPING/`, sedangkan keputusan arsitektur dan kepemilikan teknis tetap dicatat di sini.
 
 Jangan campur spesifikasi visual/wireframe dengan arsitektur teknis. Jangan mengubah shared runtime tanpa audit konsumen dan dampak.
+
+
+## Current application-specific boundaries
+- `07-RESTAURANT-CAFE-FRONTEND-BOUNDARY.md` — Restaurant & Café public frontend ownership and dine-in/backend integration boundary (AM-RC-001).
