@@ -12,7 +12,7 @@ const PRODUCTS = [
   {id:5,name:'Instant Camera Compact',category:'Electronics',price:1299000,old:1599000,tag:'POPULAR',image:'photo-1516035069371-29a1b244cc32'},
   {id:6,name:'Modern Skincare Essentials',category:'Beauty',price:349000,old:459000,tag:'BEAUTY EDIT',image:'photo-1556228578-0d85b1a4d571'},
   {id:7,name:'Soft Knit Everyday Top',category:'Fashion',price:429000,old:599000,tag:'WARDROBE',image:'photo-1483985988355-763728e1935b'},
-  {id:8,name:'Contemporary Table Lamp',category:'Home',price:579000,old:699000,tag:'HOME EDIT',image:'photo-150 doméstico'},
+  {id:8,name:'Contemporary Table Lamp',category:'Home',price:579000,old:699000,tag:'HOME EDIT',image:'photo-1507473885765-e6ed057f782c'},
   {id:9,name:'Essential Sunglasses',category:'Accessories',price:319000,old:429000,tag:'SUMMER',image:'photo-1511499767150-a48a237f0083'},
   {id:10,name:'Premium Running Shoes',category:'Sports',price:799000,old:999000,tag:'ACTIVE',image:'photo-1542291026-7eec264c27ff'},
   {id:11,name:'Ceramic Coffee Set',category:'Home',price:289000,old:359000,tag:'HOME EDIT',image:'photo-1495474472287-4d71bcdd2085'},
