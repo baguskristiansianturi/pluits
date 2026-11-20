@@ -89,14 +89,14 @@ export function mountBusinessHomePage({root,user=null}={}) {
       `
 <section class="business-app-download" aria-labelledby="business-app-download-title">
 <div class="business-app-download-copy">
-<span class="business-eyebrow">PLUITS ON THE GO</span>
-<h2 id="business-app-download-title">Dunia Anda, lebih dekat ke mana saja.</h2>
-<p>Jelajahi tempat menarik, bagikan cerita, dan tetap terhubung dengan orang-orang serta komunitas yang Anda sukai.</p>
+<span class="business-eyebrow">PLUITS</span>
+<h2 id="business-app-download-title">Temukan cerita. Temukan dunia Anda.</h2>
+<p>Bagikan momen, temukan tempat istimewa, dan terhubung dengan orang-orang yang membuat hari lebih berarti.</p>
 <div class="business-app-store-badges">
 <div class="business-app-badge" role="img" aria-label="Google Play — Segera Hadir"><span class="business-app-icon business-app-icon--google"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#00A0FF" d="M7 5v38l19-19Z"/><path fill="#00D26A" d="m7 5 23 22 7-8L13 3Z"/><path fill="#FFCE00" d="m30 27 13-7c3-2 3-4 0-6l-6-3-15 14Z"/><path fill="#F44336" d="m7 43 23-22 7 8-24 14c-3 2-5 1-6 0Z"/></svg></span><span><small>UNDUH DI</small><strong>Google Play</strong><em>Segera Hadir</em></span></div>
 <div class="business-app-badge" role="img" aria-label="App Store — Segera Hadir"><span class="business-app-icon business-app-icon--apple"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.7 12.8c0-2.2 1.8-3.3 1.9-3.4-1-1.5-2.6-1.7-3.2-1.7-1.4-.1-2.7.8-3.4.8-.7 0-1.8-.8-2.9-.8-1.5 0-2.9.9-3.7 2.2-1.6 2.8-.4 6.9 1.1 9.1.7 1.1 1.5 2.3 2.6 2.2 1-.1 1.4-.7 2.7-.7s1.7.7 2.8.7c1.2 0 1.9-1.1 2.6-2.2.8-1.2 1.1-2.4 1.1-2.5-.1 0-2.1-.8-2.1-3.7ZM14.4 6.2c.6-.8 1-1.8.9-2.9-.9 0-2 .6-2.6 1.4-.6.7-1.1 1.8-1 2.8 1 .1 2-.5 2.7-1.3Z"/></svg></span><span><small>UNDUH DI</small><strong>App Store</strong><em>Segera Hadir</em></span></div>
 </div>
-<span class="business-app-note">Dibuat untuk Android &amp; iOS</span>
+
 </div>
 <div class="business-app-mockups" aria-label="Pratinjau aplikasi PLUITS pada Android dan iPhone">
   <article class="business-phone-card business-phone-card--android">
@@ -104,7 +104,7 @@ export function mountBusinessHomePage({root,user=null}={}) {
       <div class="business-device-screen">
         <div class="business-os-status"><span>9:41</span><span>● ▮ ▰</span></div>
         <header class="pluits-app-topbar"><img src="${assetUrl('assets/brand/pluits-logo.svg')}" alt=""><strong>pluits</strong><button type="button" aria-label="Pesan">✉</button></header>
-        <div class="pluits-app-greeting"><strong>Selamat pagi</strong><span>Ada cerita baru hari ini.</span></div>
+        <div class="pluits-app-greeting"><strong>Selamat pagi, Bagus Kristian</strong><span>Ada banyak cerita menarik hari ini.</span></div>
         <div class="pluits-story-row" aria-label="Cerita terbaru">
           <div class="pluits-story pluits-story--add"><span class="pluits-story-photo"><img src="${escapeHtml(HOME_VISUALS.community.src)}" alt=""></span><b>Cerita Anda</b></div>
           <div class="pluits-story"><span class="pluits-story-photo"><img src="${escapeHtml(HOME_VISUALS.business.src)}" alt=""></span><b>Nadia</b></div>
@@ -112,17 +112,17 @@ export function mountBusinessHomePage({root,user=null}={}) {
           <div class="pluits-story"><span class="pluits-story-photo"><img src="${escapeHtml(HOME_VISUALS.discovery.src)}" alt=""></span><b>Amelia</b></div>
         </div>
         <article class="pluits-feed-card">
-          <div class="pluits-post-head"><img src="${escapeHtml(HOME_VISUALS.business.src)}" alt=""><span><b>Nadia Putri</b><small>Canggu, Bali · 12 menit lalu</small></span><button type="button" aria-label="Lainnya">•••</button></div>
+          <div class="pluits-post-head"><img src="${escapeHtml(HOME_VISUALS.business.src)}" alt=""><span><b>Bagus Kristian</b><small>Bali · 12 menit lalu</small></span><button type="button" aria-label="Lainnya">•••</button></div>
           <img class="pluits-post-photo" src="${escapeHtml(HOME_VISUALS.food.src)}" alt="Hidangan brunch di sebuah kafe">
           <div class="pluits-post-actions"><span class="pluits-like">♥ <b>128</b></span><span>◯ <b>24 komentar</b></span><span class="pluits-save">♡</span></div>
-          <p class="pluits-post-caption"><b>Nadia Putri</b> Akhir pekan paling pas dinikmati dengan kopi dan teman baik. ☕</p>
+          <p class="pluits-post-caption"><b>Bagus Kristian</b> Menikmati sudut Bali yang selalu punya cerita. ☀️</p>
           <div class="pluits-comment-preview"><img src="${escapeHtml(HOME_VISUALS.community.src)}" alt=""><span><b>Rani</b> Tempatnya terlihat nyaman banget!</span></div>
         </article>
         <nav class="pluits-app-nav" aria-label="Navigasi aplikasi"><span class="is-active"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><small>Beranda</small></span><span><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><small>Jelajahi</small></span><span class="pluits-nav-add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.8 4.8 0 0 1 8.8-2.4 4.8 4.8 0 0 1 8.8 2.4Z"/></svg><small>Aktivitas</small></span><span><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg><small>Profil</small></span></nav>
         <div class="business-android-gesture"></div>
       </div>
     </div>
-    <div class="business-phone-caption"><strong>Android</strong><span>Nyaman untuk setiap aktivitas.</span></div>
+    
   </article>
   <article class="business-phone-card business-phone-card--iphone">
     <div class="business-device business-device--iphone">
@@ -145,7 +145,7 @@ export function mountBusinessHomePage({root,user=null}={}) {
         <div class="business-iphone-home"></div>
       </div>
     </div>
-    <div class="business-phone-caption"><strong>iPhone</strong><span>Pengalaman yang terasa akrab.</span></div>
+    
   </article>
 </div>` +
     '</main>' +
