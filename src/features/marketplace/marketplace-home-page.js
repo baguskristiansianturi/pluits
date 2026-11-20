@@ -4,7 +4,7 @@ import { renderPublicFooter } from '../public-info/public-footer.js';
 import { renderIcon } from '../../design-system/icons.js';
 
 const image = (id, width=720) => 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=' + width + '&q=74';
-const PRODUCTS = [
+export const PRODUCTS = [
   {id:1,name:'Relaxed Linen Shirt',category:'Fashion',price:385000,old:485000,store:'Sundays Studio',area:'Seminyak',tag:'WARDROBE EDIT',image:'photo-1598033129183-c4f50c736f10'},
   {id:2,name:'Everyday Canvas Tote',category:'Fashion',price:245000,old:320000,store:'Common Ground',area:'Canggu',tag:'EVERYDAY',image:'photo-1590874103328-eac38a683ce7'},
   {id:3,name:'Minimal Leather Sandals',category:'Fashion',price:429000,old:560000,store:'Sundays Studio',area:'Seminyak',tag:'LOCAL FIND',image:'photo-1543163521-1bf539c55dd2'},
@@ -27,7 +27,7 @@ const CATEGORIES = [
 const money = value => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(value);
 const esc = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icon = name => renderIcon(name);
-const productCard = p => '<article class="mk-product" data-product="' + p.id + '"><div class="mk-product-media"><img src="' + image(p.image,560) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async"><span class="mk-product-tag">' + esc(p.tag) + '</span><button class="mk-wish" type="button" aria-label="Simpan ' + esc(p.name) + '" aria-pressed="false">' + icon('heart') + '</button><button class="mk-quick-add" type="button" data-add="' + p.id + '">Tambah ke keranjang</button></div><div class="mk-product-info"><span class="mk-product-category">' + esc(p.category) + '</span><h3>' + esc(p.name) + '</h3><div class="mk-price-row"><strong>' + money(p.price) + '</strong><del>' + money(p.old) + '</del></div><div class="mk-product-meta"><span>' + esc(p.store) + '</span><span>' + esc(p.area) + ', Bali</span></div></div></article>';
+const productCard = p => '<article class="mk-product" data-product="' + p.id + '"><a class="mk-product-open" href="#/product?id=' + p.id + '" aria-label="Lihat detail ' + esc(p.name) + '"><div class="mk-product-media"><img src="' + image(p.image,560) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async"><span class="mk-product-tag">' + esc(p.tag) + '</span></div><div class="mk-product-info"><span class="mk-product-category">' + esc(p.category) + '</span><h3>' + esc(p.name) + '</h3></div></a><div class="mk-product-actions"><button class="mk-wish" type="button" aria-label="Simpan ' + esc(p.name) + '" aria-pressed="false">' + icon('heart') + '</button><button class="mk-quick-add" type="button" data-add="' + p.id + '">Tambah ke keranjang</button></div><div class="mk-product-info"><div class="mk-price-row"><strong>' + money(p.price) + '</strong><del>' + money(p.old) + '</del></div><div class="mk-product-meta"><span>' + esc(p.store) + '</span><span>' + esc(p.area) + ', Bali</span></div></div></article>';
 const sectionHead = (eyebrow,title,copy='',href='#koleksi') => '<div class="mk-section-head"><div><span class="mk-eyebrow">' + eyebrow + '</span><h2>' + title + '</h2>' + (copy?'<p>'+copy+'</p>':'') + '</div><a href="' + href + '">Jelajahi <span aria-hidden="true">↗</span></a></div>';
 
 export function mountMarketplaceHomePage({root,user=null}={}) {
