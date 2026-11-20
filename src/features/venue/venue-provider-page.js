@@ -19,5 +19,6 @@ export function mountVenueProviderPage({root,user=null}={}){
  const cleanupOrdering=mountRestaurantOrdering({root,provider});
  const save=root.querySelector('#vpp-save'),toast=root.querySelector('#vpp-toast');
  save?.addEventListener('click',()=>{save.classList.toggle('is-saved');save.setAttribute('aria-pressed',String(save.classList.contains('is-saved')));toast.textContent=save.classList.contains('is-saved')?'Tempat disimpan (preview).':'Tempat dihapus dari simpanan (preview).';toast.classList.add('is-visible');});
- root.querySelector('#vpp-contact')?.addEventListener('click',()=>{toast.textContent='Kontak penyedia akan tersedia setelah profil terhubung dengan akun merchant.';toast.classList.add('is-visible');});\n return cleanupOrdering;
+ root.querySelector('#vpp-contact')?.addEventListener('click',()=>{toast.textContent='Kontak penyedia akan tersedia setelah profil terhubung dengan akun merchant.';toast.classList.add('is-visible');});
+ return cleanupOrdering;
 }
