@@ -98,31 +98,56 @@ export function mountBusinessHomePage({root,user=null}={}) {
 </div>
 <span class="business-app-note">Designed for Android &amp; iOS</span>
 </div>
-<div class="business-app-mockups" aria-label="PLUITS mobile app preview">
-<article class="business-phone-card business-phone-card--primary">
-<div class="business-phone"><div class="business-phone-screen">
-<div class="business-phone-status"><span>9:41</span><span>● ● ▰</span></div>
-<div class="business-phone-topbar"><img src="${assetUrl('assets/brand/pluits-logo.svg')}" alt="PLUITS logo"><strong>PLUITS</strong><span>•••</span></div>
-<div class="business-phone-welcome"><small>YOUR COMMUNITY</small><strong>Good things happen when we connect.</strong></div>
-<div class="business-phone-stories"><i><b>B</b></i><i><b>A</b></i><i><b>M</b></i><i><b>J</b></i></div>
-<div class="business-phone-feed"><div class="business-phone-feed-head"><i>B</i><span><b>Bagus Kristian</b><small>Shared a moment · 12 min</small></span><em>•••</em></div><div class="business-phone-feed-art"><span>MAKE EVERY<br>CONNECTION<br><b>MEANINGFUL.</b></span><img src="${assetUrl('assets/brand/pluits-logo.svg')}" alt=""></div><div class="business-phone-reactions"><span>♡ 24</span><span>◯ 8 comments</span><span>↗</span></div></div>
-<div class="business-phone-nav"><span>⌂</span><span>⌕</span><span>＋</span><span>♡</span><span>◯</span></div>
-</div></div><div class="business-phone-caption"><span>01 / SOCIAL</span><strong>Stay connected.</strong></div>
-</article>
-<article class="business-phone-card business-phone-card--secondary">
-<div class="business-phone"><div class="business-phone-screen">
-<div class="business-phone-status"><span>9:41</span><span>● ● ▰</span></div>
-<div class="business-phone-topbar"><img src="${assetUrl('assets/brand/pluits-logo.svg')}" alt="PLUITS logo"><strong>Discover</strong><span>⌕</span></div>
-<div class="business-phone-discover-title"><small>EXPLORE YOUR WORLD</small><strong>Find something<br>worth discovering.</strong></div>
-<div class="business-phone-search">⌕ &nbsp; Places, food, stores and more</div>
-<div class="business-phone-category"><span>All</span><span>Food</span><span>Places</span></div>
-<div class="business-phone-place business-phone-place--one"><span>LOCAL SPOTLIGHT</span><b>Good food.<br>Good company.</b></div>
-<div class="business-phone-place business-phone-place--two"><span>NEAR YOU</span><b>Discover<br>something new.</b></div>
-<div class="business-phone-nav"><span>⌂</span><span>⌕</span><span>＋</span><span>♡</span><span>◯</span></div>
-</div></div><div class="business-phone-caption"><span>02 / DISCOVER</span><strong>Explore more.</strong></div>
-</article>
-</div>
-</section>` +
+<div class="business-app-mockups" aria-label="Pratinjau aplikasi PLUITS pada Android dan iPhone">
+  <article class="business-phone-card business-phone-card--android">
+    <div class="business-device business-device--android">
+      <div class="business-device-screen">
+        <div class="business-os-status"><span>9:41</span><span>● ▮ ▰</span></div>
+        <header class="pluits-app-topbar"><img src="${assetUrl('assets/brand/pluits-logo.svg')}" alt=""><strong>pluits</strong><button type="button" aria-label="Pesan">✉</button></header>
+        <div class="pluits-app-greeting"><strong>Selamat pagi, Bagus</strong><span>Ada cerita baru hari ini.</span></div>
+        <div class="pluits-story-row" aria-label="Cerita terbaru">
+          <div class="pluits-story pluits-story--add"><span class="pluits-story-photo"><img src="${escapeHtml(HOME_VISUALS.community.src)}" alt=""></span><b>Cerita Anda</b></div>
+          <div class="pluits-story"><span class="pluits-story-photo"><img src="${escapeHtml(HOME_VISUALS.business.src)}" alt=""></span><b>Nadia</b></div>
+          <div class="pluits-story"><span class="pluits-story-photo"><img src="${escapeHtml(HOME_VISUALS.food.src)}" alt=""></span><b>Rizky</b></div>
+          <div class="pluits-story"><span class="pluits-story-photo"><img src="${escapeHtml(HOME_VISUALS.discovery.src)}" alt=""></span><b>Amelia</b></div>
+        </div>
+        <article class="pluits-feed-card">
+          <div class="pluits-post-head"><img src="${escapeHtml(HOME_VISUALS.business.src)}" alt=""><span><b>Nadia Putri</b><small>Canggu, Bali · 12 menit lalu</small></span><button type="button" aria-label="Lainnya">•••</button></div>
+          <img class="pluits-post-photo" src="${escapeHtml(HOME_VISUALS.food.src)}" alt="Hidangan brunch di sebuah kafe">
+          <div class="pluits-post-actions"><span class="pluits-like">♥ <b>128</b></span><span>◯ <b>24 komentar</b></span><span class="pluits-save">♡</span></div>
+          <p class="pluits-post-caption"><b>Nadia Putri</b> Akhir pekan paling pas dinikmati dengan kopi dan teman baik. ☕</p>
+          <div class="pluits-comment-preview"><img src="${escapeHtml(HOME_VISUALS.community.src)}" alt=""><span><b>Rani</b> Tempatnya terlihat nyaman banget!</span></div>
+        </article>
+        <nav class="pluits-app-nav" aria-label="Navigasi aplikasi"><span class="is-active"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><small>Beranda</small></span><span><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><small>Jelajahi</small></span><span class="pluits-nav-add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.8 4.8 0 0 1 8.8-2.4 4.8 4.8 0 0 1 8.8 2.4Z"/></svg><small>Aktivitas</small></span><span><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg><small>Profil</small></span></nav>
+        <div class="business-android-gesture"></div>
+      </div>
+    </div>
+    <div class="business-phone-caption"><strong>Android</strong><span>Nyaman untuk setiap aktivitas.</span></div>
+  </article>
+  <article class="business-phone-card business-phone-card--iphone">
+    <div class="business-device business-device--iphone">
+      <div class="business-device-screen">
+        <div class="business-iphone-island"></div>
+        <div class="business-os-status business-os-status--iphone"><span>9:41</span><span>● ▮ ▰</span></div>
+        <header class="pluits-app-topbar pluits-app-topbar--iphone"><img src="${assetUrl('assets/brand/pluits-logo.svg')}" alt=""><strong>Jelajahi</strong><button type="button" aria-label="Pesan">✉</button></header>
+        <div class="pluits-discover-heading"><span>Temukan di sekitar Anda</span><strong>Ada banyak hal<br>menarik menanti.</strong></div>
+        <div class="pluits-search-field"><span>⌕</span> Cari tempat, kuliner, dan lainnya</div>
+        <div class="pluits-story-row pluits-story-row--iphone" aria-label="Cerita terbaru">
+          <div class="pluits-story pluits-story--add"><span class="pluits-story-photo"><img src="${escapeHtml(HOME_VISUALS.community.src)}" alt=""></span><b>Cerita Anda</b></div>
+          <div class="pluits-story"><span class="pluits-story-photo"><img src="${escapeHtml(HOME_VISUALS.discovery.src)}" alt=""></span><b>Travel</b></div>
+          <div class="pluits-story"><span class="pluits-story-photo"><img src="${escapeHtml(HOME_VISUALS.food.src)}" alt=""></span><b>Kuliner</b></div>
+          <div class="pluits-story"><span class="pluits-story-photo"><img src="${escapeHtml(HOME_VISUALS.business.src)}" alt=""></span><b>Lokal</b></div>
+        </div>
+        <div class="pluits-discover-section-head"><b>Tempat pilihan</b><span>Lihat semua</span></div>
+        <article class="pluits-place-card"><img src="${escapeHtml(HOME_VISUALS.discovery.src)}" alt="Pemandangan alam Bali"><div><span>ALAM &amp; WISATA</span><b>Temukan sisi lain Bali</b><small>Tempat menarik untuk dikunjungi</small></div><i>♡</i></article>
+        <article class="pluits-place-card pluits-place-card--food"><img src="${escapeHtml(HOME_VISUALS.food.src)}" alt="Hidangan di restoran"><div><span>KULINER</span><b>Rasa yang selalu dirindukan</b><small>Rekomendasi di sekitar Anda</small></div><i>♡</i></article>
+        <nav class="pluits-app-nav pluits-app-nav--iphone" aria-label="Navigasi aplikasi"><span class="is-active"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><small>Beranda</small></span><span><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><small>Jelajahi</small></span><span class="pluits-nav-add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.8 4.8 0 0 1 8.8-2.4 4.8 4.8 0 0 1 8.8 2.4Z"/></svg><small>Aktivitas</small></span><span><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg><small>Profil</small></span></nav>
+        <div class="business-iphone-home"></div>
+      </div>
+    </div>
+    <div class="business-phone-caption"><strong>iPhone</strong><span>Pengalaman yang terasa akrab.</span></div>
+  </article>
+</div>` +
     '</main>' +
     footerMarkup +
   '</div>';
