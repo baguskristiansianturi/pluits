@@ -58,7 +58,7 @@ function renderPaymentMethods() {
   const cards = PAYMENT_GROUPS.map((group) => {
     const logos = group.logos.map(([label, src]) =>
       '<img class="pl-footer-payment-logo" src="' + src + '" alt="' + label +
-      '" loading="lazy" decoding="async" referrerpolicy="no-referrer">'
+      '" width="58" height="24" loading="lazy" decoding="async" referrerpolicy="no-referrer">'
     ).join('');
     return '<div class="pl-footer-payment-card"><span class="pl-footer-payment-card-title">' +
       group.title + '</span><div class="pl-footer-payment-logos">' + logos + '</div></div>';
