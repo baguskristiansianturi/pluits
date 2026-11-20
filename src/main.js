@@ -3,6 +3,7 @@ import './styles/global.css';
 import './features/home/home-page.css';
 import './features/marketplace/marketplace-home-page.css';
 import './features/venue/venue-home-page.css';
+import './features/accommodation/accommodation-home-page.css';
 import './features/marketplace/marketplace-product-page.css';
 import './features/dashboard/dashboard-page.css';
 import './features/auth/auth-page.css';

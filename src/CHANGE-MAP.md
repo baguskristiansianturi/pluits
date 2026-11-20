@@ -1,7 +1,7 @@
 # Frontend V2 — Change Map
 
 Status: IMPLEMENTATION PROTOTYPE / PROVISIONAL PRODUCT FOUNDATION
-Scope: Public Business Homepage, authenticated Social App, Jelajah, Ruang Kerja, Messages, Profile, and separate business-center direction.
+Scope: Public Business Homepage, Accommodation Discovery, Hangout & Leisure, Marketplace, authenticated Social App, Jelajah, Ruang Kerja, Messages, Profile, and separate business-center direction.
 
 ## Source-of-truth and ownership
 | Domain | Canonical path | Owner | Consumers |
@@ -12,6 +12,7 @@ Scope: Public Business Homepage, authenticated Social App, Jelajah, Ruang Kerja,
 | Design tokens | src/design-system/tokens.css | design-system | All feature screens |
 | Icon registry | src/design-system/icons.js | design-system | All features |
 | Shared brand/header/footer | src/design-system/page-shell.js and page-shell.css | design-system | Business Homepage, Social Home, Jelajah, Auth, Legal and Ruang Kerja |
+| Accommodation Discovery Homepage | src/features/accommodation/accommodation-home-page.js and accommodation-home-page.css | features/accommodation | #/accommodation; frontend-only discovery preview |
 | Public Business Homepage | src/features/home/business-home-page.js and business-home.css | features/home | #/home; PLUITS brand destination |
 | Authenticated Social Home (former Global Home composition) | src/features/home/home-page.js and home-page.css | features/home | protected #/social after login |
 | Jelajah, Messages, redesigned Profile, Settings, and legacy Circle route | src/features/social/social-pages.js and social-pages.css | features/social | #/discover, #/messages, #/profile, #/settings; legacy #/circle redirects to #/social |
@@ -23,6 +24,7 @@ Scope: Public Business Homepage, authenticated Social App, Jelajah, Ruang Kerja,
 | Global base styles | src/styles/global.css | styles | Entire frontend |
 
 ## Runtime route map
+- #/accommodation → public Accommodation discovery homepage; frontend-only sample data in this increment.
 - #/home → public PLUITS Homepage / pusat bisnis; the PLUITS logo always returns here, including from the signed-in app.
 - #/social → authenticated social-media Beranda; successful login and authenticated visits to Login, Registration, or Forgot Password resolve here.
 - An existing authenticated session with an empty URL hash starts at #/social; an explicit #/home remains the public business homepage.
@@ -50,7 +52,7 @@ Run npm test and npm run build. Verify Public homepage, Social Home, legacy Circ
 
 ## Current limitations
 - Signup remains disabled unless explicitly enabled after readiness review.
-- Stories, Live, Blog, Marketplace, Geo Directory, nearby businesses, notifications, cart data, and product feeds are not yet connected to operational data services; corresponding Global Home content currently uses visual demo fixtures where noted in the canonical page specification.
+- Stories, Live, Blog, Marketplace, Geo Directory, Accommodation inventory/booking, nearby businesses, notifications, cart data, and product feeds are not yet connected to operational data services; corresponding Global Home content currently uses visual demo fixtures where noted in the canonical page specification.
 - Create actions remain disabled until their publishing services are available.
 - Messages remains an initial empty inbox surface. Profile now has a borderless identity card, tier badge, follower-stat placeholders, upgrade entry point, quick profile settings panel, and account-settings shortcut. Profile editing, privacy persistence, subscription checkout, follower counts, notification preferences, and published profile media are not yet connected.
 - Location permission request flow is not implemented; Circle displays a clear no-location fallback.
