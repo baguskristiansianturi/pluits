@@ -2,3 +2,46 @@
 @media(max-width:900px){.mk-header-top{grid-template-columns:150px minmax(150px,1fr) auto;gap:16px}.mk-header-actions{gap:13px}.mk-header-actions>a span,.mk-header-icon span{display:none}.mk-nav{gap:22px}.mk-hero{min-height:420px}.mk-hero-image{min-height:420px}.mk-category-grid{gap:14px}.mk-offer-section{grid-template-columns:1.3fr .8fr}.mk-product-grid{gap:23px 13px}}
 @media(max-width:680px){.mk-header-top,.mk-nav,.mk-main{width:calc(100% - 28px)}.mk-header-top{min-height:65px;grid-template-columns:auto minmax(0,1fr) auto;gap:10px}.mk-brand .pluits-brand{font-size:15px}.mk-brand .pluits-brand img{width:27px;height:27px}.mk-search{height:38px;padding:0 9px;gap:7px}.mk-search input{font-size:11px}.mk-search kbd{display:none}.mk-header-actions{gap:10px}.mk-header-actions .ui-icon{width:18px;height:18px}.mk-header-actions>a{display:none}.mk-header-icon span{display:none}.mk-header-icon{padding:0}.mk-menu-toggle{display:block;padding:0 2px}.mk-nav{display:none;height:auto;padding:10px 0 15px;flex-wrap:wrap;gap:12px 19px}.mk-nav.is-open{display:flex}.mk-nav>a{font-size:10px}.mk-nav-note{display:none}.mk-demo-banner{align-items:flex-start;gap:8px;padding:9px 0}.mk-demo-banner p{font-size:9px;line-height:1.5}.mk-demo-banner span{font-size:8px;white-space:nowrap}.mk-hero{grid-template-columns:1fr;min-height:0;margin:16px 0 52px}.mk-hero-copy{min-height:300px;padding:31px 25px 24px}.mk-hero h1{font-size:43px;margin:15px 0 12px}.mk-hero-copy>p{max-width:320px;font-size:11px}.mk-dark-button{min-height:42px;font-size:10px}.mk-hero-index{margin-top:25px}.mk-hero-image{min-height:260px;max-height:300px}.mk-hero-image-caption{right:18px;bottom:18px}.mk-hero-image-caption strong{font-size:21px}.mk-section-head{align-items:flex-end;margin-bottom:17px}.mk-section-head h2{font-size:27px}.mk-section-head p{max-width:260px;font-size:10px}.mk-section-head>a{font-size:9px}.mk-category-section,.mk-product-section,.mk-stores{margin-bottom:55px}.mk-category-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 12px}.mk-category{gap:7px;font-size:10px}.mk-offer-section{grid-template-columns:1fr;gap:10px;margin-bottom:55px}.mk-offer-main{min-height:285px}.mk-offer-side{display:grid;grid-template-columns:115px 1fr;grid-template-rows:auto auto auto;column-gap:14px;padding:14px}.mk-offer-side-image{grid-row:1/4;height:112px;margin:0}.mk-offer-side .mk-eyebrow{align-self:end;font-size:8px}.mk-offer-side h3{margin:2px 0;font-size:21px}.mk-offer-side p{margin:0;font-size:10px}.mk-offer-side>a{grid-column:2;font-size:9px;justify-self:start;margin-top:4px}.mk-filter-row{align-items:flex-start;flex-direction:column;gap:8px}.mk-filter-tabs{width:100%;gap:17px}.mk-filter-tabs button{font-size:10px}.mk-sort-label{align-self:flex-end}.mk-product-grid,.mk-product-grid--compact{grid-template-columns:repeat(2,minmax(0,1fr));gap:23px 11px}.mk-product-media{aspect-ratio:.78}.mk-product-tag{top:8px;left:8px;padding:5px 6px;font-size:7px}.mk-wish{top:7px;right:7px;width:30px;height:30px}.mk-quick-add{right:6px;bottom:6px;left:6px;min-height:34px;font-size:9px;opacity:1;transform:none}.mk-product-info{padding-top:9px}.mk-product-info h3{font-size:11px}.mk-price-row{gap:6px}.mk-price-row strong{font-size:11px}.mk-price-row del{font-size:9px}.mk-trending{grid-template-columns:1fr;margin-bottom:55px}.mk-trending-image{min-height:230px;max-height:260px}.mk-trending-copy{padding:27px 24px 32px}.mk-trending-copy h2{font-size:37px}.mk-trending-copy p{font-size:11px}.mk-mini-tabs{margin-top:-5px}.mk-store-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 12px}.mk-store-grid article:last-child{display:none}.mk-store-grid h3{font-size:18px}.mk-store-grid p{font-size:10px}.mk-newsletter{align-items:flex-start;flex-direction:column;margin-bottom:35px;padding:25px 22px}.mk-newsletter h2{font-size:27px}.mk-page .pl-page-footer{width:calc(100% - 28px)}.mk-toast{right:14px;bottom:14px}}
 @media(max-width:380px){.mk-header-top{grid-template-columns:auto minmax(0,1fr) auto;gap:7px}.mk-brand .pluits-brand{font-size:13px}.mk-brand .pluits-brand img{width:24px;height:24px}.mk-header-actions{gap:7px}.mk-search input{font-size:10px}.mk-hero h1{font-size:38px}.mk-section-head h2{font-size:24px}.mk-product-info h3{font-size:10px}}
+
+/* Marketplace uses the canonical PLUITS page-header geometry and brand mark. */
+.mk-header.pl-page-header{position:sticky;top:0;z-index:40;width:min(100%,var(--pl-container-wide));height:var(--pl-shell-header-height);min-height:var(--pl-shell-header-height);margin-inline:auto;padding:0;border-bottom:var(--pl-shell-divider-width) solid var(--pl-shell-divider-color);background:rgba(255,255,255,.97);backdrop-filter:blur(14px);gap:clamp(12px,2vw,24px)}
+.mk-header .pluits-brand{display:inline-flex;align-items:center;flex:0 0 auto;gap:0}
+.mk-header .pluits-brand img{width:var(--pl-brand-logo-size);height:var(--pl-brand-logo-size);object-fit:contain}
+.mk-header .pluits-brand span{display:none}
+.mk-header-tools{display:flex;align-items:center;justify-content:flex-end;gap:clamp(10px,2vw,22px);min-width:0;flex:1}
+.mk-header .mk-search{width:min(100%,470px);height:42px;min-width:120px;flex:1;margin:0;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-pill);background:#fff}
+.mk-header .mk-search>.ui-icon{width:17px;height:17px;flex:0 0 auto}
+.mk-header .mk-search input{min-width:0}
+.mk-header-actions{display:flex;align-items:center;gap:clamp(5px,1vw,12px);flex:0 0 auto}
+.mk-header-actions .mk-header-icon{display:grid;width:40px;height:40px;place-items:center;padding:0;border:0;border-radius:50%;background:transparent;color:var(--pl-color-ink);cursor:pointer}
+.mk-header-actions .mk-header-icon:hover{background:var(--pl-color-canvas)}
+.mk-header-actions .mk-header-icon .ui-icon{width:20px;height:20px}
+.mk-header-actions .mk-cart b{top:0;left:23px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--pl-color-brand);font-size:9px;line-height:16px}
+.mk-menu-toggle{display:none;width:38px;height:38px;place-items:center;border:0;border-radius:50%;background:transparent;color:var(--pl-color-ink);font-size:20px;cursor:pointer}
+.mk-nav{width:min(100%,var(--pl-container-wide));height:45px;margin:0 auto 10px;gap:clamp(16px,2.5vw,30px);border-bottom:1px solid #eceeeb}
+.mk-nav>a{font-size:12px}
+@media(max-width:767px){
+ .mk-header.pl-page-header{height:var(--pl-shell-header-height-mobile);min-height:var(--pl-shell-header-height-mobile);gap:10px}
+ .mk-header .pluits-brand img{width:var(--pl-brand-logo-size);height:var(--pl-brand-logo-size)}
+ .mk-header-tools{gap:7px}
+ .mk-header .mk-search{height:38px;min-width:0;width:auto;padding:0 11px;gap:7px}
+ .mk-header .mk-search input{font-size:11px}
+ .mk-header-actions{gap:2px}
+ .mk-header-actions .mk-header-icon{width:34px;height:34px}
+ .mk-header-actions .mk-header-icon .ui-icon{width:19px;height:19px}
+ .mk-header-actions .mk-account{display:none}
+ .mk-header-actions .mk-cart b{top:-1px;left:19px}
+ .mk-menu-toggle{display:grid;width:32px;height:34px}
+ .mk-nav{display:none;height:auto;min-height:0;padding:12px 0 15px;flex-wrap:wrap;gap:12px 20px;border-bottom:1px solid #eceeeb}
+ .mk-nav.is-open{display:flex}
+ .mk-nav>a{font-size:11px}
+ .mk-nav-note{display:none}
+}
+@media(max-width:380px){
+ .mk-header.pl-page-header{gap:7px}
+ .mk-header-tools{gap:5px}
+ .mk-header .mk-search{padding-inline:8px}
+ .mk-header .mk-search input{font-size:10px}
+ .mk-header-actions .mk-header-icon{width:31px;height:32px}
+ .mk-menu-toggle{width:27px}
+}
