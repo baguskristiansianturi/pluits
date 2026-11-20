@@ -648,3 +648,15 @@
   .pluits-place-card{height:80px}
   .pluits-place-card--food{height:68px}
 }
+
+/* Keep a clear, intentional overlap at every viewport width. */
+.business-phone-card--android{left:19%}
+.business-phone-card--iphone{right:19%}
+@media(max-width:900px){
+  .business-phone-card--android{left:16%}
+  .business-phone-card--iphone{right:16%}
+}
+@media(max-width:767px){
+  .business-phone-card--android{left:3%}
+  .business-phone-card--iphone{right:15%}
+}
