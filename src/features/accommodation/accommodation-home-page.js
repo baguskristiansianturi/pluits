@@ -92,7 +92,7 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
   let lastFocused = null;
 
   const normalized = value => String(value || '').trim().toLocaleLowerCase('id-ID');
-  const matchesDestination = (property, query) => !query || [property.name, property.area, property.type].some(value => normalized(value).includes(query));
+  const matchesDestination = (property, query) => !query || localAreaMatches(property, query) || [property.name, property.type].some(value => normalized(value).includes(query));
   const localAreaMatches = (property, query) => {
     if (!query) return ['denpasar','sanur','kuta'].includes(normalized(property.area));
     if (['denpasar','denpasar, bali'].includes(query)) return ['denpasar','sanur','kuta'].includes(normalized(property.area));
@@ -103,7 +103,7 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
   };
 
   function renderResults() {
-    const query = normalized(destinationInput.value).replace(/,?\\s*bali$/, '').trim();
+    const query = normalized(destinationInput.value).replace(/,?\s*bali$/, '').trim();
     const type = typeInput.value;
     const budget = Number(budgetInput.value);
     const guests = Number(guestsInput.value);
