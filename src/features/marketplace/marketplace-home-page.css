@@ -185,3 +185,18 @@
  .mk-hero h1{font-size:38px}
  .mk-section-head h2{font-size:23px}
 }
+
+/* Category photo-feed treatment: tight image grid with readable in-image labels. */
+.mk-category-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.mk-category{display:block;min-width:0}
+.mk-category-image{position:relative;display:block;aspect-ratio:1.08;overflow:hidden;background:#ecece7}
+.mk-category-image:after{position:absolute;inset:42% 0 0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.62));content:"";pointer-events:none}
+.mk-category-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .45s}
+.mk-category-label{position:absolute;z-index:1;right:10px;bottom:10px;left:10px;color:#fff;font-size:11px;font-weight:600;line-height:1.3;letter-spacing:.01em;text-shadow:0 1px 5px rgba(0,0,0,.28)}
+.mk-category:hover .mk-category-image img{transform:scale(1.045)}
+@media(max-width:900px){.mk-category-grid{gap:5px}}
+@media(max-width:680px){
+ .mk-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+ .mk-category-image{aspect-ratio:1.12}
+ .mk-category-label{right:8px;bottom:8px;left:8px;font-size:10px}
+}
