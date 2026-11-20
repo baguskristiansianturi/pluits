@@ -39,7 +39,7 @@ test('Accommodation page styles remain feature-scoped and use shared tokens', as
   const css = await read('../src/features/accommodation/accommodation-home-page.css');
   assert.match(css, /\.ac-page/);
   assert.match(css, /var\(--pl-color-ink\)/);
-  assert.match(css, /var\(--pl-page-gutter\)/);
+  assert.match(css, /var\(--pl-container-wide\)/);
   assert.doesNotMatch(css, /:root\s*\{/);
 });
 
