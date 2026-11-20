@@ -38,19 +38,27 @@ const GROUPS = [
 ];
 
 const PAYMENT_GROUPS = [
-  { title:'QRIS', logos:[['qris','QRIS']] },
-  { title:'Transfer Bank', logos:[['bca','BCA'],['bni','BNI'],['bri','BRI'],['mandiri','Bank Mandiri']] },
-  { title:'Kartu', logos:[['visa','Visa'],['mastercard','Mastercard']] },
-  { title:'E-Wallet', logos:[['gopay','GoPay'],['ovo','OVO'],['dana','DANA'],['shopee-pay','ShopeePay'],['linkaja','LinkAja']] }
+  { title:'QRIS', logos:[['QRIS','https://upload.wikimedia.org/wikipedia/commons/e/e1/QRIS_logo.svg']] },
+  { title:'Transfer Bank', logos:[
+    ['BCA','https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg'],
+    ['BNI','https://upload.wikimedia.org/wikipedia/commons/f/f0/Bank_Negara_Indonesia_logo_%282004%29.svg'],
+    ['BRI','https://upload.wikimedia.org/wikipedia/commons/6/6b/BRI_2025.svg'],
+    ['Mandiri','https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg']
+  ] },
+  { title:'Kartu', logos:[
+    ['Visa',(import.meta.env?.BASE_URL || '/') + 'assets/payments/visa.svg'],
+    ['Mastercard',(import.meta.env?.BASE_URL || '/') + 'assets/payments/mastercard.svg']
+  ] },
+  { title:'E-Wallet', logos:[
+    ['GoPay','https://upload.wikimedia.org/wikipedia/commons/b/b1/GoPay_logo.svg']
+  ] }
 ];
-
-const PAYMENT_ASSET_BASE = (import.meta.env?.BASE_URL || '/').replace(/\/$/, '') + '/assets/payments/';
 
 function renderPaymentMethods() {
   const cards = PAYMENT_GROUPS.map((group) => {
-    const logos = group.logos.map(([file, label]) =>
-      '<img class="pl-footer-payment-logo pl-footer-payment-logo--' + file + '" src="' +
-      PAYMENT_ASSET_BASE + file + '.svg" alt="' + label + '" loading="lazy" decoding="async">'
+    const logos = group.logos.map(([label, src]) =>
+      '<img class="pl-footer-payment-logo" src="' + src + '" alt="' + label +
+      '" loading="lazy" decoding="async" referrerpolicy="no-referrer">'
     ).join('');
     return '<div class="pl-footer-payment-card"><span class="pl-footer-payment-card-title">' +
       group.title + '</span><div class="pl-footer-payment-logos">' + logos + '</div></div>';
