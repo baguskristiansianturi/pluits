@@ -38,3 +38,10 @@ Current photo references are from Unsplash CDN and use the Unsplash License. The
 
 ## Responsive breakpoints
 The homepage uses the established PLUITS contracts: desktop at 1024px and above, tablet 768–1023px, mobile 767px and below. Page gutter, logo, navbar, footer, and shell geometry remain owned by the shared design system.
+
+
+## Device mockup composition
+- The Android and iPhone previews overlap naturally; Android remains the foreground device.
+- Keep the space behind the devices as a soft, low-contrast teal/blue radial glow. It is atmospheric lighting only, not a panel, card, frame, or separate decorative object.
+- Keep the in-screen PLUITS symbol and wordmark visually grouped with a compact gap. The shared site-header lockup remains governed separately by the design-system brand token.
+- Preserve compact device proportions and responsive spacing on mobile; do not restore oversized handset heights or a large backdrop.
