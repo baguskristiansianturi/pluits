@@ -1,48 +1,42 @@
 import { routeHref } from '../../config/paths.js';
 import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderPublicFooter } from '../public-info/public-footer.js';
-import '../../design-system/page-shell.css';
+import { renderIcon } from '../../design-system/icons.js';
 import './venue-home-page.css';
-
-const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const photo = (id, width=900) => 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=' + width + '&q=82';
-
-const CATEGORIES = [
-  {id:'food',title:'Restoran & Kafe',sub:'Makan, minum, dan berkumpul',image:'photo-1414235077428-338989a2e8c0',count:'Temukan tempat makan',filter:'restaurant'},
-  {id:'beauty',title:'Beauty & Wellness',sub:'Rawat diri dan relaksasi',image:'photo-1560066984-138dadb4c035',count:'Salon, spa, dan perawatan',filter:'wellness'},
-  {id:'fitness',title:'Fitness & Sports',sub:'Bergerak dan tetap aktif',image:'photo-1534438327276-14e5300c3a48',count:'Gym, kelas, dan lapangan',filter:'fitness'},
-  {id:'activity',title:'Aktivitas & Hiburan',sub:'Isi waktu dengan pengalaman',image:'photo-1511882150382-421056c89033',count:'Aktivitas dan tiket',filter:'activities'},
-  {id:'spaces',title:'Tempat & Ruang',sub:'Temukan ruang sesuai kebutuhan',image:'photo-1497366754035-f200968a6e72',count:'Studio, coworking, dan venue',filter:'spaces'}
+const photo=(id,w=720)=>'https://images.unsplash.com/'+id+'?auto=format&fit=crop&w='+w+'&q=74';
+const icon=name=>renderIcon(name);
+const CATEGORIES=[
+ {name:'Restoran & Kafe',image:'photo-1414235077428-338989a2e8c0'},
+ {name:'Fitness & Sports',image:'photo-1534438327276-14e5300c3a48'},
+ {name:'Beauty & Wellness',image:'photo-1560066984-138dadb4c035'},
+ {name:'Aktivitas & Hiburan',image:'photo-1511882150382-421056c89033'},
+ {name:'Tempat & Ruang',image:'photo-1497366754035-f200968a6e72'},
+ {name:'Wisata & Atraksi',image:'photo-1530789253388-582c481c54b0'}
 ];
-
-const PLACES = [
-  {name:'The Garden Table',type:'Restaurant · Brunch & Dining',area:'Seminyak, Bali',rating:'4.9',reviews:'328 ulasan',price:'Mulai Rp45.000',image:'photo-1517248135467-4c7edcad34c4',tag:'Pilihan populer'},
-  {name:'Kalyana Wellness',type:'Spa · Massage & Treatment',area:'Canggu, Bali',rating:'4.8',reviews:'186 ulasan',price:'Mulai Rp150.000',image:'photo-1540555700478-4be289fbecef',tag:'Banyak dipesan'},
-  {name:'Northside Studio',type:'Fitness · Gym & Classes',area:'Denpasar, Bali',rating:'4.9',reviews:'94 ulasan',price:'Kelas mulai Rp60.000',image:'photo-1534438327276-14e5300c3a48',tag:'Kelas tersedia'}
+const PLACES=[
+ {name:'The Garden Table',type:'RESTAURANT · BRUNCH & DINING',area:'Seminyak',rating:'4.9',reviews:'328',price:'Mulai Rp45.000',image:'photo-1517248135467-4c7edcad34c4',tag:'POPULAR'},
+ {name:'Kalyana Wellness',type:'SPA · MASSAGE & TREATMENT',area:'Canggu',rating:'4.8',reviews:'186',price:'Mulai Rp150.000',image:'photo-1540555700478-4be289fbecef',tag:'WELLNESS'},
+ {name:'Northside Studio',type:'FITNESS · GYM & CLASSES',area:'Denpasar',rating:'4.9',reviews:'94',price:'Kelas mulai Rp60.000',image:'photo-1534438327276-14e5300c3a48',tag:'CLASSES'},
+ {name:'Ubud Nature Escape',type:'ACTIVITY · OUTDOOR EXPERIENCE',area:'Ubud',rating:'4.9',reviews:'212',price:'Mulai Rp120.000',image:'photo-1470770841072-f978cf4d019e',tag:'EXPERIENCE'}
 ];
-
-function categoryCards(){
-  return CATEGORIES.map((item,index)=>'<a class="venue-discovery-category" href="#venue-results" data-category="'+item.filter+'"><div class="venue-discovery-category-image"><img src="'+photo(item.image,700)+'" alt="'+esc(item.title)+'" loading="lazy"><span>0'+(index+1)+'</span></div><div class="venue-discovery-category-copy"><h3>'+item.title+'</h3><p>'+item.sub+'</p></div></a>').join('');
-}
-function placeCards(){
-  return PLACES.map((item,index)=>'<article class="venue-place-card"><a class="venue-place-image" href="'+routeHref('marketplace')+'"><img src="'+photo(item.image,850)+'" alt="'+esc(item.name)+'" loading="lazy"><span class="venue-place-tag">'+item.tag+'</span><button class="venue-favorite" type="button" aria-label="Simpan '+esc(item.name)+'" data-favorite="'+index+'">♡</button></a><div class="venue-place-info"><div class="venue-place-type">'+item.type+'</div><h3><a href="'+routeHref('marketplace')+'">'+item.name+'</a></h3><p class="venue-place-area"><span>⌖</span> '+item.area+'</p><div class="venue-place-meta"><span>★ '+item.rating+' <small>('+item.reviews+')</small></span><b>'+item.price+'</b></div><a class="venue-place-action" href="'+routeHref('marketplace')+'">Lihat tempat <span>→</span></a></div></article>').join('');
-}
-
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const categoryMarkup=()=>CATEGORIES.map((c,i)=>'<button class="vn-category" type="button" data-category="'+i+'"><span class="vn-category-image"><img src="'+photo(c.image,520)+'" alt="" loading="lazy"><span class="vn-category-label">'+c.name+'</span></span></button>').join('');
+const placeCard=(p,i)=>'<article class="vn-place-card"><a class="vn-place-photo" href="#/venue/place?id='+i+'"><img src="'+photo(p.image,720)+'" alt="'+esc(p.name)+'" loading="lazy"><span class="vn-place-tag">'+p.tag+'</span><button class="vn-place-wish" type="button" data-wish="'+i+'" aria-label="Simpan '+esc(p.name)+'">♡</button></a><div class="vn-place-info"><span class="vn-place-type">'+p.type+'</span><h3><a href="#/venue/place?id='+i+'">'+p.name+'</a></h3><p class="vn-place-location">'+icon('mapPin')+' '+p.area+', Bali</p><div class="vn-place-meta"><span>★ '+p.rating+' <small>('+p.reviews+' ulasan)</small></span><b>'+p.price+'</b></div></div></article>';
 export function mountVenueHomePage({root,user=null}={}){
-  const authAction=user
-    ? '<a class="venue-user-link" href="'+routeHref('dashboard')+'">Akun saya</a>'
-    : '<div class="venue-user-actions"><a href="'+routeHref('login')+'">Masuk</a><a class="venue-user-signup" href="'+routeHref('register')+'">Daftar</a></div>';
-  root.innerHTML='<div class="pl-page-shell venue-home">'+
-    renderPageHeader({variant:'venue-home',brandHref:routeHref('home'),label:'PLUITS',rightContent:'<nav class="venue-nav" aria-label="Navigasi"><a href="#venue-categories">Kategori</a><a href="#venue-results">Tempat pilihan</a><a href="#venue-how">Cara menggunakan</a></nav>'+authAction})+
-    '<main class="pl-page-main venue-main">'+
-      '<section class="venue-discovery-hero"><div class="venue-hero-copy"><span class="venue-eyebrow">TEMUKAN PENGALAMAN DI SEKITARMU</span><h1>Ada tempat menarik untuk <em>kamu temukan.</em></h1><p>Jelajahi restoran, kafe, salon, tempat olahraga, aktivitas, dan berbagai layanan. Temukan tempatnya, pesan yang kamu butuhkan, lalu nikmati pengalamannya.</p><form class="venue-search" id="venue-search"><span>⌕</span><input type="search" aria-label="Cari tempat atau aktivitas" placeholder="Cari restoran, salon, gym, aktivitas..."><button type="submit">Cari</button></form><div class="venue-location-note"><span>⌖</span> Jelajahi tempat berdasarkan lokasi dan kebutuhanmu</div></div><div class="venue-hero-photo"><img src="'+photo('photo-1517248135467-4c7edcad34c4',1300)+'" alt="Suasana pengunjung menikmati restoran" fetchpriority="high"><div class="venue-hero-photo-caption"><span>YOUR NEXT EXPERIENCE</span><strong>Temukan tempat. Buat rencana. Nikmati waktumu.</strong></div></div></section>'+
-      '<section class="venue-category-section" id="venue-categories"><div class="venue-section-title"><div><span class="venue-eyebrow">JELAJAHI BERDASARKAN KATEGORI</span><h2>Mau ke mana hari ini?</h2></div><a href="#venue-results">Jelajahi semua <span>→</span></a></div><div class="venue-category-row">'+categoryCards()+'</div></section>'+
-      '<section class="venue-featured-section" id="venue-results"><div class="venue-section-title"><div><span class="venue-eyebrow">TEMPAT UNTUK KAMU</span><h2>Temukan tempat menarik</h2><p>Inspirasi tempat dan layanan untuk pengalaman berikutnya.</p></div><a href="'+routeHref('marketplace')+'">Lihat semua tempat <span>→</span></a></div><div class="venue-place-grid">'+placeCards()+'</div></section>'+
-      '<section class="venue-how-section" id="venue-how"><div class="venue-how-heading"><span class="venue-eyebrow">DARI MENEMUKAN SAMPAI BERKUNJUNG</span><h2>Semua pengalaman,<br><em>lebih mudah dalam satu tempat.</em></h2><p>PLUITS menghubungkan perjalananmu dari mencari tempat sampai menikmati layanan yang tersedia.</p></div><div class="venue-how-steps"><article><span>01</span><div class="venue-step-icon">⌕</div><h3>Temukan</h3><p>Cari tempat berdasarkan kategori, lokasi, kebutuhan, dan ulasan pengunjung.</p></article><article><span>02</span><div class="venue-step-icon">▤</div><h3>Pilih & pesan</h3><p>Lihat foto, layanan, menu, harga, jadwal, lalu reservasi atau lakukan pemesanan.</p></article><article><span>03</span><div class="venue-step-icon">⌖</div><h3>Kunjungi</h3><p>Dapatkan informasi lokasi, datang ke tempat, check-in, dan gunakan layananmu.</p></article><article><span>04</span><div class="venue-step-icon">☆</div><h3>Bagikan pengalaman</h3><p>Tulis ulasan, simpan tempat favorit, dan temukan rekomendasi berikutnya.</p></article></div></section>'+
-      '<section class="venue-experience-banner"><div><span class="venue-eyebrow">YOUR CITY, YOUR EXPERIENCE</span><h2>Tempat berikutnya yang ingin kamu kunjungi?</h2><p>Mulai jelajahi berbagai tempat dan pengalaman di PLUITS.</p></div><a href="#venue-categories" class="venue-explore-button">Mulai menjelajah <span>→</span></a></section>'+
-    '</main>'+renderPublicFooter()+'</div>';
-  const search=root.querySelector('#venue-search');
-  search?.addEventListener('submit',(event)=>{event.preventDefault();const query=search.querySelector('input')?.value?.trim();if(query){const target=root.querySelector('#venue-results');target?.scrollIntoView({behavior:'smooth',block:'start'});const heading=target?.querySelector('h2');if(heading)heading.textContent='Hasil jelajah untuk “'+query+'”';}});
-  root.querySelectorAll('[data-category]').forEach(link=>link.addEventListener('click',()=>{const heading=root.querySelector('#venue-results h2');if(heading)heading.textContent='Jelajahi '+(CATEGORIES.find(item=>item.filter===link.dataset.category)?.title||'tempat pilihan');}));
-  root.querySelectorAll('[data-favorite]').forEach(button=>button.addEventListener('click',(event)=>{event.preventDefault();event.stopPropagation();const active=button.classList.toggle('is-saved');button.textContent=active?'♥':'♡';button.setAttribute('aria-pressed',String(active));}));
+ const header=renderPageHeader({brandHref:routeHref('home'),label:'PLUITS',className:'global-header vn-header',rightContent:'<div class="global-header-tools vn-header-tools"><label class="vn-search" aria-label="Cari tempat dan aktivitas">'+icon('search')+'<input id="vn-search" type="search" placeholder="Cari tempat, aktivitas, atau layanan..." autocomplete="off"></label><div class="global-header-actions vn-header-actions"><button type="button" class="global-icon-button" id="vn-saved" aria-label="Tempat tersimpan">'+icon('heart')+'</button><a class="global-icon-button" href="'+routeHref(user?'dashboard':'login')+'" aria-label="Akun">'+icon('user')+'</a></div></div>',dataGlobalHeader:true});
+ root.innerHTML='<div class="pl-page-shell vn-page">'+header+
+ '<nav class="vn-nav" aria-label="Navigasi Venue"><a href="#vn-categories">Kategori</a><a href="#vn-popular">Tempat pilihan</a><a href="#vn-experiences">Aktivitas</a><a href="#vn-nearby">Di sekitar</a><span class="vn-nav-location">'+icon('mapPin')+' BALI</span></nav>'+
+ '<main class="pl-page-main vn-main"><div class="vn-preview-note"><span>DISCOVER PLACES</span><p>Jelajahi tempat, layanan, dan pengalaman di sekitarmu.</p></div>'+
+ '<section class="vn-hero"><div class="vn-hero-copy"><span class="vn-eyebrow">PLUITS · PLACES & EXPERIENCES</span><h1>Temukan tempat.<br><em>Rasakan pengalaman.</em></h1><p>Dari tempat makan favorit hingga aktivitas baru. Temukan tempat menarik, lihat apa yang tersedia, lalu rencanakan kunjunganmu.</p><a class="vn-dark-button" href="#vn-categories">Jelajahi tempat <span>↗</span></a><div class="vn-hero-index"><b>01</b><span></span><small>PLACES · SERVICES · EXPERIENCES</small></div></div><div class="vn-hero-image"><img src="'+photo('photo-1517248135467-4c7edcad34c4',1440)+'" alt="Suasana restoran dan pengunjung" fetchpriority="high"><div class="vn-hero-image-caption"><span>DISCOVER YOUR NEXT PLACE</span><strong>Good places. Great experiences.</strong></div></div></section>'+
+ '<section class="vn-category-section" id="vn-categories"><div class="vn-section-head"><div><span class="vn-eyebrow">EXPLORE PLACES</span><h2>Jelajahi kategori</h2><p>Temukan tempat berdasarkan hal yang ingin kamu lakukan.</p></div></div><div class="vn-category-grid">'+categoryMarkup()+'</div></section>'+
+ '<section class="vn-feature-banner" id="vn-experiences"><div class="vn-feature-image"><img src="'+photo('photo-1470770841072-f978cf4d019e',1100)+'" alt="Pengalaman menjelajahi alam Bali" loading="lazy"></div><div class="vn-feature-copy"><span class="vn-eyebrow">MAKE TIME FOR SOMETHING NEW</span><h2>Find your<br>next experience.</h2><p>Aktivitas, atraksi, kelas, dan pengalaman menarik untuk mengisi waktumu.</p><a href="#vn-popular" class="vn-text-link">Temukan pengalaman ↗</a></div></section>'+
+ '<section class="vn-place-section" id="vn-popular"><div class="vn-section-head"><div><span class="vn-eyebrow">PLACES TO KNOW</span><h2>Tempat pilihan</h2><p>Inspirasi tempat yang bisa kamu kunjungi berikutnya.</p></div><a href="#vn-categories">Jelajahi semua <span>↗</span></a></div><div class="vn-place-grid">'+PLACES.slice(0,3).map(placeCard).join('')+'</div></section>'+
+ '<section class="vn-lifestyle-banner" id="vn-nearby"><div class="vn-lifestyle-copy"><span class="vn-eyebrow">AROUND YOUR AREA</span><h2>Something good<br>is closer than you think.</h2><p>Temukan tempat di sekitar lokasimu dan rencanakan kunjungan dengan lebih mudah.</p><a href="#vn-popular" class="vn-text-link">Jelajahi tempat sekitar ↗</a></div><div class="vn-lifestyle-image"><img src="'+photo('photo-1519608487953-e999c86e7455',1100)+'" alt="Suasana destinasi dan lingkungan sekitar" loading="lazy"></div></section>'+
+ '<section class="vn-place-section vn-more-places"><div class="vn-section-head"><div><span class="vn-eyebrow">MORE TO EXPLORE</span><h2>Lebih banyak untuk dikunjungi</h2></div></div><div class="vn-place-grid vn-place-grid-four">'+PLACES.map(placeCard).join('')+'</div></section>'+
+ '<section class="vn-visit-cta"><div><span class="vn-eyebrow">FROM DISCOVERY TO YOUR VISIT</span><h2>Temukan tempatnya.<br>Jalani pengalamannya.</h2><p>Lihat informasi, pilih layanan atau aktivitas, lakukan pemesanan, lalu kunjungi tempatnya.</p></div><a class="vn-dark-button" href="#vn-categories">Mulai menjelajah <span>↗</span></a></section></main>'+renderPublicFooter()+'</div>';
+ const search=root.querySelector('#vn-search');
+ search?.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();root.querySelectorAll('.vn-place-card').forEach(card=>{card.hidden=!!q&&!card.textContent.toLowerCase().includes(q);});});
+ root.querySelectorAll('[data-category]').forEach(button=>button.addEventListener('click',()=>{const name=CATEGORIES[Number(button.dataset.category)]?.name||'Tempat pilihan';root.querySelector('#vn-popular h2').textContent=name;root.querySelector('#vn-popular')?.scrollIntoView({behavior:'smooth'});}));
+ root.querySelectorAll('[data-wish]').forEach(button=>button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();button.classList.toggle('is-saved');button.textContent=button.classList.contains('is-saved')?'♥':'♡';}));
+ root.querySelector('#vn-saved')?.addEventListener('click',()=>{const n=root.querySelectorAll('.vn-place-wish.is-saved').length;root.querySelector('#vn-popular h2').textContent=n+' tempat tersimpan';root.querySelector('#vn-popular')?.scrollIntoView({behavior:'smooth'});});
 }
