@@ -347,3 +347,99 @@
  .business-app-badges{grid-template-columns:repeat(2,minmax(0,1fr))}
  .business-app-badge{max-width:none}
 }
+
+/* PLUITS On The Go — native responsive phone mockups using the official brand mark. */
+.business-app-download{display:grid;grid-template-columns:minmax(260px,.78fr) minmax(0,1.22fr);align-items:center;gap:clamp(28px,5vw,72px);padding:66px 0 72px;border-top:1px solid var(--pl-color-border);overflow:hidden}
+.business-app-download-copy{max-width:430px}
+.business-app-download h2{max-width:410px;margin:14px 0 13px;font-size:clamp(30px,3.8vw,46px);line-height:1.04;letter-spacing:-.05em}
+.business-app-download-copy p{max-width:390px;font-size:13px;line-height:1.8}
+.business-app-store-badges{display:flex;flex-wrap:wrap;gap:9px;margin-top:25px}
+.business-app-badge{display:flex;min-width:150px;min-height:55px;align-items:center;gap:10px;padding:8px 12px;border:1px solid #26313e;border-radius:10px;background:#111820;color:#fff;box-shadow:0 8px 20px rgba(16,31,46,.12)}
+.business-app-icon{display:grid;width:25px;height:25px;flex:0 0 25px;place-items:center;color:#fff}
+.business-app-icon svg{display:block;width:100%;height:100%}
+.business-app-badge>span:last-child{display:grid;gap:2px}
+.business-app-badge small{color:rgba(255,255,255,.68);font-size:6px;font-weight:800;letter-spacing:.1em}
+.business-app-badge strong{color:#fff;font-size:12px;line-height:1.15}
+.business-app-badge em{width:max-content;margin-top:2px;padding:2px 6px;border:1px solid rgba(255,255,255,.2);border-radius:4px;color:#fff;font-size:8px;font-style:normal;font-weight:750}
+.business-app-note{display:block;margin-top:13px;color:var(--pl-color-muted);font-size:10px;font-weight:650;letter-spacing:.04em}
+.business-app-mockups{position:relative;display:flex;min-width:0;min-height:500px;align-items:center;justify-content:center;gap:clamp(12px,3vw,34px);padding:12px 8px 4px}
+.business-app-mockups:before{position:absolute;inset:8% 5%;border-radius:48%;background:radial-gradient(ellipse,rgba(8,173,158,.12),rgba(8,173,158,0) 68%);content:""}
+.business-phone-card{position:relative;z-index:1;display:grid;justify-items:center;gap:13px;min-width:0}
+.business-phone-card--primary{transform:translateY(12px) rotate(-3deg)}
+.business-phone-card--secondary{transform:translateY(-18px) rotate(3deg)}
+.business-phone{width:clamp(170px,17vw,218px);padding:7px;border:2px solid #26313e;border-radius:31px;background:#101820;box-shadow:0 24px 50px rgba(16,31,46,.22),inset 0 0 0 1px rgba(255,255,255,.16)}
+.business-phone-screen{position:relative;min-height:360px;overflow:hidden;border-radius:24px;background:#fbfcfc;color:#172b45}
+.business-phone-status{display:flex;height:23px;align-items:center;justify-content:space-between;padding:0 12px;font-size:7px;font-weight:800}
+.business-phone-topbar{display:flex;height:34px;align-items:center;gap:7px;padding:0 11px;border-bottom:1px solid #e8eeed}
+.business-phone-topbar img{width:17px;height:17px;object-fit:contain}
+.business-phone-topbar strong{font-size:10px;letter-spacing:.12em}
+.business-phone-topbar>span{margin-left:auto;color:#62717e;font-size:12px}
+.business-phone-welcome{display:grid;gap:5px;padding:15px 12px 10px}
+.business-phone-welcome small,.business-phone-discover-title small{color:#08a99a;font-size:6px;font-weight:850;letter-spacing:.13em}
+.business-phone-welcome strong{max-width:150px;font-size:16px;line-height:1.08;letter-spacing:-.04em}
+.business-phone-stories{display:flex;gap:9px;padding:3px 12px 12px}
+.business-phone-stories i,.business-phone-feed-head>i{display:grid;width:27px;height:27px;flex:0 0 27px;place-items:center;border:2px solid #0eaa9c;border-radius:50%;background:#e5f4f1;color:#087e76;font-size:8px;font-style:normal;font-weight:850}
+.business-phone-feed{margin:0 8px;padding:8px;border:1px solid #e8eeed;border-radius:11px;background:#fff}
+.business-phone-feed-head{display:flex;align-items:center;gap:6px}
+.business-phone-feed-head>span{display:grid;gap:2px}
+.business-phone-feed-head b{font-size:7px}
+.business-phone-feed-head small{color:#89969b;font-size:6px}
+.business-phone-feed-head em{margin-left:auto;color:#89969b;font-size:10px;font-style:normal}
+.business-phone-feed-art{position:relative;display:flex;min-height:142px;align-items:flex-end;overflow:hidden;margin-top:8px;padding:12px;border-radius:7px;background:linear-gradient(145deg,#0d827b,#142d45 70%)}
+.business-phone-feed-art:before,.business-phone-feed-art:after{position:absolute;border:1px solid rgba(255,255,255,.24);border-radius:50%;content:""}
+.business-phone-feed-art:before{width:170px;height:170px;top:-80px;right:-50px}
+.business-phone-feed-art:after{width:110px;height:110px;top:-50px;right:10px}
+.business-phone-feed-art>span{position:relative;z-index:1;color:#fff;font-size:15px;font-weight:800;line-height:1.04;letter-spacing:-.04em}
+.business-phone-feed-art>span b{color:#80e1d6}
+.business-phone-feed-art img{position:absolute;right:10px;bottom:10px;width:22px;height:22px;opacity:.8;filter:brightness(0) invert(1)}
+.business-phone-reactions{display:flex;justify-content:space-between;padding-top:8px;color:#75838b;font-size:6px}
+.business-phone-nav{position:absolute;right:0;bottom:0;left:0;display:flex;height:31px;align-items:center;justify-content:space-around;border-top:1px solid #e9efed;background:#fff;color:#66767c;font-size:12px}
+.business-phone-nav span:nth-child(3){display:grid;width:20px;height:20px;place-items:center;border-radius:7px;background:#08ad9e;color:#fff}
+.business-phone-discover-title{display:grid;gap:7px;padding:18px 12px 12px}
+.business-phone-discover-title strong{font-size:18px;line-height:1.05;letter-spacing:-.045em}
+.business-phone-search{margin:0 10px;padding:9px;border:1px solid #e3eae8;border-radius:8px;color:#8a979c;font-size:7px}
+.business-phone-category{display:flex;gap:6px;padding:11px 10px}
+.business-phone-category span{padding:5px 8px;border-radius:20px;background:#edf4f2;color:#50616b;font-size:6px;font-weight:750}
+.business-phone-category span:first-child{background:#102d45;color:#fff}
+.business-phone-place{position:relative;display:flex;min-height:104px;flex-direction:column;justify-content:flex-end;overflow:hidden;margin:0 10px 8px;padding:10px;border-radius:8px;background:linear-gradient(135deg,#c6d8d0,#6b9b91 55%,#193e50)}
+.business-phone-place:after{position:absolute;top:-32px;right:-12px;width:120px;height:120px;border:1px solid rgba(255,255,255,.65);border-radius:50%;content:""}
+.business-phone-place--two{min-height:84px;background:linear-gradient(135deg,#e7d9c4,#a9a58d 50%,#344e56)}
+.business-phone-place span,.business-phone-place b{position:relative;z-index:1;color:#fff}
+.business-phone-place span{font-size:5px;font-weight:850;letter-spacing:.12em}
+.business-phone-place b{margin-top:4px;font-size:13px;line-height:1.05}
+.business-phone-caption{display:grid;gap:3px;text-align:center}
+.business-phone-caption span{color:var(--pl-color-brand);font-size:7px;font-weight:850;letter-spacing:.13em}
+.business-phone-caption strong{color:var(--pl-color-ink);font-size:12px}
+@media(max-width:900px){.business-app-download{grid-template-columns:1fr;gap:24px}.business-app-download-copy{max-width:600px}.business-app-mockups{min-height:460px}.business-phone{width:clamp(168px,25vw,210px)}}
+@media(max-width:767px){
+ .business-app-download{gap:18px;padding:48px 0 44px}
+ .business-app-download h2{max-width:340px;font-size:clamp(29px,8vw,38px)}
+ .business-app-download-copy p{font-size:12px}
+ .business-app-store-badges{gap:7px;margin-top:19px}
+ .business-app-badge{min-width:0;min-height:49px;padding:7px 9px;gap:7px}
+ .business-app-icon{width:22px;height:22px;flex-basis:22px}
+ .business-app-badge strong{font-size:10px}
+ .business-app-mockups{min-height:390px;gap:12px;padding-inline:0}
+ .business-phone{width:min(42vw,190px);padding:6px;border-radius:26px}
+ .business-phone-screen{min-height:320px;border-radius:20px}
+ .business-phone-welcome{padding:12px 10px 8px}
+ .business-phone-welcome strong{font-size:14px}
+ .business-phone-feed-art{min-height:115px}
+ .business-phone-feed-art>span{font-size:12px}
+ .business-phone-discover-title{padding:14px 10px 10px}
+ .business-phone-discover-title strong{font-size:16px}
+ .business-phone-place{min-height:87px}
+ .business-phone-place--two{min-height:70px}
+ .business-phone-caption strong{font-size:11px}
+}
+@media(max-width:380px){
+ .business-app-mockups{gap:7px;min-height:355px}
+ .business-phone{width:43vw;padding:5px;border-radius:23px}
+ .business-phone-screen{min-height:300px;border-radius:18px}
+ .business-phone-topbar{gap:5px;padding-inline:8px}
+ .business-phone-welcome strong{font-size:12px}
+ .business-phone-feed-art{min-height:98px}
+ .business-phone-place{min-height:76px}
+ .business-phone-place--two{min-height:62px}
+ .business-phone-caption strong{font-size:10px}
+}
