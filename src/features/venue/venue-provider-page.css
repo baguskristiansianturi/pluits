@@ -59,3 +59,12 @@
 .vpp-gallery-viewer-scroll img{display:block;width:100%;max-height:78vh;object-fit:contain;background:#222}
 .vpp-gallery-viewer-scroll figcaption{padding:7px 0;color:#aeb5ae;font-size:10px}
 @media(max-width:760px){.vpp-area-gallery-preview{grid-template-rows:108px 32px}.vpp-gallery-viewer-scroll{padding:8px 8px 24px}.vpp-gallery-viewer-scroll img{max-height:72vh}}
+
+.vpp-footer-info{padding:38px 0 48px;border-top:1px solid #ecefea;background:#fafbf9}
+.vpp-footer-info-inner{width:min(100%,var(--pl-container-wide));margin:auto;padding:0 clamp(20px,5vw,68px)}
+.vpp-footer-info h2{margin:10px 0 22px;font:400 30px Georgia,serif}
+.vpp-footer-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.vpp-footer-info-grid>div>b{display:block;margin-bottom:10px;font-size:10px}
+.vpp-footer-info-grid p{margin:7px 0;color:#748077;font-size:9px;line-height:1.7}
+.vpp-footer-info-grid p .ui-icon{width:12px;height:12px;vertical-align:middle}
+@media(max-width:760px){.vpp-footer-info{padding:30px 0}.vpp-footer-info-grid{grid-template-columns:1fr;gap:18px}}
