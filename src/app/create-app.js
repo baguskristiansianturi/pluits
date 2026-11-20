@@ -4,6 +4,7 @@ import { createPreviewTools } from './preview-tools.js';
 import { routeHref } from '../config/paths.js';
 import { mountHomePage } from '../features/home/home-page.js';
 import { mountBusinessHomePage } from '../features/home/business-home-page.js';
+import { mountMarketplaceHomePage } from '../features/marketplace/marketplace-home-page.js';
 import { mountDiscoverPage, mountMessagesPage, mountProfilePage, mountSettingsPage } from '../features/social/social-pages.js';
 import { mountDashboardPage } from '../features/dashboard/dashboard-page.js';
 import { mountAuthPage } from '../features/auth/auth-page.js';
