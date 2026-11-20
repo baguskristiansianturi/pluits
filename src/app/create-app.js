@@ -5,6 +5,7 @@ import { routeHref } from '../config/paths.js';
 import { mountHomePage } from '../features/home/home-page.js';
 import { mountBusinessHomePage } from '../features/home/business-home-page.js';
 import { mountMarketplaceHomePage } from '../features/marketplace/marketplace-home-page.js';
+import { mountMarketplaceProductPage } from '../features/marketplace/marketplace-product-page.js';
 import { mountDiscoverPage, mountMessagesPage, mountProfilePage, mountSettingsPage } from '../features/social/social-pages.js';
 import { mountDashboardPage } from '../features/dashboard/dashboard-page.js';
 import { mountAuthPage } from '../features/auth/auth-page.js';
@@ -23,6 +24,7 @@ export function createApp({root,authService}) {
   if(route!==requested){navigate(route);return;}
   if(route==='home'){mountBusinessHomePage({root,user:session?.user||null});attachPreviewTools();return;}
   if(route==='marketplace'){cleanupPage=mountMarketplaceHomePage({root,user:session?.user||null});attachPreviewTools();return;}
+  if(route==='product'){cleanupPage=mountMarketplaceProductPage({root,user:session?.user||null});attachPreviewTools();return;}
   if(route==='social'){cleanupPage=mountHomePage({root,user:session?.user||null,onSignOut:()=>authService.signOut()});attachPreviewTools();return;}
   if(route==='circle'){navigate('social');return;}
   if(route==='messages'){mountMessagesPage({root,user:session?.user||null});attachPreviewTools();return;}
