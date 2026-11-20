@@ -88,6 +88,7 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
   const nearbyGrid = root.querySelector('#ac-nearby-grid');
   const exploreGrid = root.querySelector('#ac-explore-grid');
   const saved = new Set();
+  let showSavedOnly = false;
   let lastFocused = null;
 
   const normalized = value => String(value || '').trim().toLocaleLowerCase('id-ID');
@@ -102,14 +103,14 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
   };
 
   function renderResults() {
-    const query = normalized(destinationInput.value);
+    const query = normalized(destinationInput.value).replace(/,?\\s*bali$/, '').trim();
     const type = typeInput.value;
     const budget = Number(budgetInput.value);
     const guests = Number(guestsInput.value);
     const checkin = root.querySelector('#ac-checkin').value;
     const checkout = root.querySelector('#ac-checkout').value;
     const filtered = ACCOMMODATION_PREVIEW_PROPERTIES.filter(property =>
-      matchesDestination(property, query) &&
+      matchesDestination(property, query) && (!showSavedOnly || saved.has(property.id)) &&
       (type === 'all' || property.type === type) &&
       (!budget || property.price <= budget) &&
       property.guests >= guests
@@ -129,7 +130,8 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
     root.querySelector('#ac-results-summary').textContent = filtered.length + ' pilihan contoh' + dateText + ' · ' + guests + ' tamu. Tanggal belum memeriksa ketersediaan.';
     root.querySelector('#ac-nearby').hidden = local.length === 0;
     root.querySelector('#ac-empty-state').hidden = filtered.length !== 0;
-    root.querySelector('#ac-explore').hidden = filtered.length === 0;
+    root.querySelector('#ac-empty-state strong').textContent = showSavedOnly ? 'Belum ada akomodasi tersimpan.' : 'Belum ada pilihan yang cocok.';
+    root.querySelector('#ac-explore').hidden = filtered.length > 0 && other.length === 0;
     root.querySelectorAll('[data-save-property]').forEach(button => {
       const active = saved.has(button.dataset.saveProperty);
       button.classList.toggle('is-saved', active);
@@ -164,7 +166,6 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
       return;
     }
     if (event.target.id === 'ac-property-modal' || event.target.closest('#ac-modal-close')) closeModal();
-    if (event.target.closest('#ac-empty-reset')) { form.reset(); destinationInput.value = ''; typeInput.value = 'all'; budgetInput.value = '0'; renderResults(); }
   });
   function closeModal() {
     root.querySelector('#ac-property-modal').hidden = true;
@@ -172,8 +173,12 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
   }
   root.querySelector('#ac-modal-close').addEventListener('click', closeModal);
   root.querySelector('#ac-saved').addEventListener('click', () => {
+    showSavedOnly = !showSavedOnly;
     const button = root.querySelector('#ac-saved');
-    button.setAttribute('aria-label', saved.size ? saved.size + ' akomodasi tersimpan' : 'Belum ada akomodasi tersimpan');
+    button.setAttribute('aria-pressed', String(showSavedOnly));
+    button.setAttribute('aria-label', showSavedOnly ? 'Tampilkan semua akomodasi' : 'Tampilkan akomodasi tersimpan');
+    renderResults();
+    root.querySelector('#ac-nearby').scrollIntoView({ behavior:'smooth', block:'start' });
   });
   root.querySelector('#ac-checkin').addEventListener('change', () => {
     const checkin = root.querySelector('#ac-checkin');
