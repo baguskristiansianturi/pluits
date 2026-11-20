@@ -37,7 +37,9 @@ test('Accommodation preview fixtures do not claim live inventory or verified rev
   assert.match(page, /Frontend-only preview fixtures/);
   assert.match(page, /ACCOMMODATION_PREVIEW_PROPERTIES/);
   assert.match(page, /Preview eksplorasi menggunakan data contoh/);
-  assert.match(page, /Profil lengkap, inventori kamar, ketersediaan, dan reservasi belum diaktifkan/);
+  assert.match(page, /Informasi ini merupakan deskripsi contoh untuk memperlihatkan struktur halaman detail/);
+  assert.match(page, /Belum ada reservasi atau pembayaran yang diproses/);
+  assert.match(page, /Harga akhir, pajak, biaya layanan, dan ketersediaan akan dihitung setelah data inventori terhubung/);
   assert.doesNotMatch(page, /verified provider|verified property|ulasan terverifikasi/i);
 });
 
