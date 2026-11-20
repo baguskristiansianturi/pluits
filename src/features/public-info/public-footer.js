@@ -42,7 +42,7 @@ const PAYMENT_GROUPS = [
   { title:'Transfer Bank', logos:[
     ['BCA','https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg'],
     ['BNI','https://upload.wikimedia.org/wikipedia/commons/f/f0/Bank_Negara_Indonesia_logo_%282004%29.svg'],
-    ['BRI','https://upload.wikimedia.org/wikipedia/commons/6/6b/BRI_2025.svg'],
+    ['BRI','https://upload.wikimedia.org/wikipedia/commons/5/59/BRI_2025.svg'],
     ['Mandiri','https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg']
   ] },
   { title:'Kartu', logos:[
