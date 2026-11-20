@@ -2,7 +2,8 @@ import { routeHref } from '../../config/paths.js';
 import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderPublicFooter } from '../public-info/public-footer.js';
 import { renderIcon } from '../../design-system/icons.js';
-import './venue-provider-page.css';\nimport { mountRestaurantOrdering } from './restaurant-ordering.js';
+import './venue-provider-page.css';
+import { mountRestaurantOrdering } from './restaurant-ordering.js';
 
 const photo=(id,w=900)=>'https://images.unsplash.com/'+id+'?auto=format&fit=crop&w='+w+'&q=78';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
