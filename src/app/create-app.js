@@ -22,6 +22,7 @@ export function createApp({root,authService}) {
   const route=resolveAuthenticatedRoute(requested,Boolean(session));
   if(route!==requested){navigate(route);return;}
   if(route==='home'){mountBusinessHomePage({root,user:session?.user||null});attachPreviewTools();return;}
+  if(route==='marketplace'){cleanupPage=mountMarketplaceHomePage({root,user:session?.user||null});attachPreviewTools();return;
   if(route==='social'){cleanupPage=mountHomePage({root,user:session?.user||null,onSignOut:()=>authService.signOut()});attachPreviewTools();return;}
   if(route==='circle'){navigate('social');return;}
   if(route==='messages'){mountMessagesPage({root,user:session?.user||null});attachPreviewTools();return;}
