@@ -32,16 +32,17 @@ Each restaurant configures its own set of enabled areas/experiences. Example typ
 
 Each area may carry:
 - Display name and type.
-- One or more photographs and a cover image.
-- Description / atmosphere.
-- Capacity and seating notes.
-- Availability or reservation requirement.
-- Additional charge, minimum spend, or custom request terms when applicable.
-- Optional booking/request action.
+- A gallery of up to **35 photographs** per area, with a cover image.
+- A short merchant-authored description with a strict character limit (recommended 120 characters) so the card remains image-led.
+- Capacity, seating notes, availability, reservation requirements, extra charges, minimum spend, and custom-request terms as supporting information outside the compact image card (for example in the lower provider information/footer area or a dedicated detail context).
 
-Only configured areas are rendered. Restaurants are not required to offer every type. Basic facts such as parking can remain a concise text/amenity list rather than an image card.
+The homepage preview shows **3 photographs** plus a clear gallery/count affordance. Tapping any preview opens a scrollable gallery viewer; the full gallery is capped at 35 images. The gallery count must reflect the actual number of published images, never a placeholder count.
 
-Merchant setup/persistence is a later operational interface/backend scope. This public UI consumes a provider configuration model; demo content must be marked as preview data.
+Only configured areas are rendered. Restaurants are not required to offer every type. Basic facts such as parking can remain concise text/amenity information near the lower page/footer rather than becoming an image card. Merchant setup/persistence is a later operational interface/backend scope. This public UI consumes a provider configuration model; demo content must be marked as preview data.
+
+### Provider chat ownership
+
+The public provider page must expose a **Chat penyedia** entry point. Conversations are addressed to the restaurant/store merchant inbox and handled through the PLUITS merchant operating account/inbox, not routed to the owner's personal PLUITS profile or personal chat identity. The merchant identity and inbox are backend-owned; frontend must not simulate a working conversation or infer a personal recipient when the merchant inbox integration is not ready.
 
 ## 4. Food Menu & Ordering
 
