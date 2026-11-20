@@ -6,6 +6,7 @@ import { mountHomePage } from '../features/home/home-page.js';
 import { mountBusinessHomePage } from '../features/home/business-home-page.js';
 import { mountMarketplaceHomePage } from '../features/marketplace/marketplace-home-page.js';
 import { mountVenueHomePage } from '../features/venue/venue-home-page.js';
+import { mountAccommodationHomePage } from '../features/accommodation/accommodation-home-page.js';
 import { mountVenueProviderPage } from '../features/venue/venue-provider-page.js';
 import { mountMarketplaceProductPage } from '../features/marketplace/marketplace-product-page.js';
 import { mountDiscoverPage, mountMessagesPage, mountProfilePage, mountSettingsPage } from '../features/social/social-pages.js';
@@ -26,6 +27,7 @@ export function createApp({root,authService}) {
   if(route!==requested){navigate(route);return;}
   if(route==='home'){mountBusinessHomePage({root,user:session?.user||null});attachPreviewTools();return;}
   if(route==='venue'){mountVenueHomePage({root,user:session?.user||null});attachPreviewTools();return;}
+  if(route==='accommodation'){cleanupPage=mountAccommodationHomePage({root,user:session?.user||null});attachPreviewTools();return;}
   if(route==='venueProvider'){mountVenueProviderPage({root,user:session?.user||null});attachPreviewTools();return;}
   if(route==='marketplace'){cleanupPage=mountMarketplaceHomePage({root,user:session?.user||null});attachPreviewTools();return;}
   if(route==='product'){cleanupPage=mountMarketplaceProductPage({root,user:session?.user||null});attachPreviewTools();return;}
