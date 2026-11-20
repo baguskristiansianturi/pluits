@@ -49,6 +49,39 @@ const propertyCard = property => `
     </div>
   </article>`;
 
+const detailGallery = property => {
+  const images = {
+    'kedaton-city-stay':['photo-1564501049412-61c2a3083791','photo-1542314831-068cd1dbfeeb','photo-1590490360182-c33d57733427','photo-1566073771259-6a8506099945'],
+    'sanur-garden-homestay':['photo-1564013799919-ab600027ffc6','photo-1600607687939-ce8a6c25118c','photo-1600210492486-724fe5c67fb0','photo-1613490493576-7fde63acd811'],
+    'ubud-hills-guesthouse':['photo-1551882547-ff40c63fe5fa','photo-1566073771259-6a8506099945','photo-1571896349842-33c89424de2d','photo-1600607687939-ce8a6c25118c'],
+    'canggu-coastal-inn':['photo-1542314831-068cd1dbfeeb','photo-1564501049412-61c2a3083791','photo-1590490360182-c33d57733427','photo-1566073771259-6a8506099945'],
+    'kuta-coast-hotel':['photo-1564501049412-61c2a3083791','photo-1566073771259-6a8506099945','photo-1542314831-068cd1dbfeeb','photo-1590490360182-c33d57733427'],
+    'ubud-river-retreat':['photo-1571896349842-33c89424de2d','photo-1600607687939-ce8a6c25118c','photo-1613490493576-7fde63acd811','photo-1564013799919-ab600027ffc6'],
+    'seminyak-private-villa':['photo-1613490493576-7fde63acd811','photo-1564013799919-ab600027ffc6','photo-1600607687939-ce8a6c25118c','photo-1600210492486-724fe5c67fb0'],
+    'nusa-dua-suite':['photo-1590490360182-c33d57733427','photo-1564501049412-61c2a3083791','photo-1566073771259-6a8506099945','photo-1600210492486-724fe5c67fb0']
+  };
+  return [property.image, ...(images[property.id] || []).filter(image => image !== property.image)].slice(0,4);
+};
+
+const propertyDetailMarkup = property => {
+  const photos = detailGallery(property);
+  const roomPrice = property.price;
+  return `<div class="ac-detail-page">
+    <div class="ac-detail-topline"><span class="ac-eyebrow">PLUITS ACCOMMODATION · PROPERTY PREVIEW</span><button type="button" class="ac-detail-share" data-detail-share="${escapeHtml(property.id)}">${icon('share')} Bagikan</button></div>
+    <div class="ac-detail-gallery" aria-label="Galeri foto contoh ${escapeHtml(property.name)}"><img class="ac-detail-photo-main" src="${photo(photos[0],1200)}" alt="${escapeHtml(property.name)}"/><div class="ac-detail-photo-side"><img src="${photo(photos[1],700)}" alt="Suasana ${escapeHtml(property.name)}"/><img src="${photo(photos[2],700)}" alt="Fasilitas ${escapeHtml(property.name)}"/><img src="${photo(photos[3],700)}" alt="Area ${escapeHtml(property.name)}"/><span class="ac-detail-photo-count">Foto contoh · 4 gambar</span></div></div>
+    <div class="ac-detail-heading"><div><span class="ac-eyebrow">${escapeHtml(property.type)} · ${escapeHtml(property.area)}, Bali</span><h2 id="ac-modal-title">${escapeHtml(property.name)}</h2><p>${escapeHtml(property.description)}</p><div class="ac-detail-facts"><span>${icon('mapPin')} ${escapeHtml(property.area)}, Bali</span><span>${icon('users')} Maks. ${property.guests} tamu (contoh)</span><span>${icon('image')} Galeri preview</span></div></div><button type="button" class="ac-detail-save" data-detail-save="${escapeHtml(property.id)}" aria-pressed="false">${icon('heart')} Simpan</button></div>
+    <div class="ac-detail-layout"><div class="ac-detail-main-column">
+      <section class="ac-detail-section"><span class="ac-eyebrow">ABOUT THIS STAY</span><h3>Tentang tempat ini</h3><p>${escapeHtml(property.description)} Informasi ini merupakan deskripsi contoh untuk memperlihatkan struktur halaman detail, bukan keterangan resmi dari pengelola.</p></section>
+      <section class="ac-detail-section"><span class="ac-eyebrow">GUEST EXPERIENCE</span><h3>Ulasan pengunjung</h3><div class="ac-detail-empty-review"><span>${icon('message')}</span><div><strong>Belum ada ulasan pada preview ini</strong><p>Ulasan nantinya ditampilkan dari akun PLUITS yang benar-benar memiliki pengalaman kunjungan atau transaksi terkait.</p></div></div></section>
+      <section class="ac-detail-section"><span class="ac-eyebrow">ROOMS & OPTIONS</span><h3>Pilih kamar atau unit</h3><p class="ac-detail-section-copy">Contoh opsi untuk memperlihatkan alur pemilihan. Harga bukan tarif penawaran dan belum memeriksa ketersediaan.</p><div class="ac-room-list"><article class="ac-room-option is-selected" data-room-option="standard"><div class="ac-room-thumb"><img src="${photo(photos[1],420)}" alt="Ilustrasi kamar standard"/></div><div class="ac-room-info"><strong>Kamar / Unit Standard</strong><span>${property.guests} tamu · Detail fasilitas menyusul</span><small>Contoh opsi · kebijakan belum tersedia</small></div><div class="ac-room-price"><strong>${money(roomPrice)}</strong><span>/ malam</span><button type="button" data-room-choice="standard" aria-pressed="true">Dipilih</button></div></article><article class="ac-room-option" data-room-option="comfort"><div class="ac-room-thumb"><img src="${photo(photos[2],420)}" alt="Ilustrasi kamar comfort"/></div><div class="ac-room-info"><strong>Kamar / Unit Comfort</strong><span>${property.guests} tamu · Opsi ruang lebih luas (contoh)</span><small>Contoh opsi · kebijakan belum tersedia</small></div><div class="ac-room-price"><strong>${money(Math.round(roomPrice*1.25))}</strong><span>/ malam</span><button type="button" data-room-choice="comfort" aria-pressed="false">Pilih opsi</button></div></article></div></section>
+      <section class="ac-detail-section"><span class="ac-eyebrow">FACILITIES</span><h3>Fasilitas dan layanan</h3><div class="ac-amenity-list">${property.highlights.map(item=>'<span>'+icon('check')+escapeHtml(item)+'</span>').join('')}<span>${icon('check')} Fasilitas lain menunggu konfirmasi pengelola</span></div></section>
+      <section class="ac-detail-section"><span class="ac-eyebrow">LOCATION</span><h3>Lokasi dan kawasan</h3><div class="ac-detail-location"><span>${icon('mapPin')}</span><div><strong>${escapeHtml(property.area)}, Bali</strong><p>Area ditampilkan sebagai informasi kawasan pada data contoh. Alamat dan titik peta resmi belum tersedia.</p></div></div></section>
+      <section class="ac-detail-section"><span class="ac-eyebrow">POLICIES</span><h3>Kebijakan penginapan</h3><p>Jam check-in, check-out, ketentuan anak, deposit, hewan peliharaan, dan pembatalan akan ditampilkan berdasarkan kebijakan resmi masing-masing pengelola. Informasi tersebut belum tersedia pada preview ini.</p></section>
+    </div><aside class="ac-detail-booking"><span class="ac-eyebrow">PRICE PREVIEW</span><strong class="ac-detail-price" data-detail-price>${money(roomPrice)}</strong><span class="ac-detail-per-night">contoh harga per malam</span><div class="ac-detail-booking-fields"><label>Check-in<input type="date" value="${escapeHtml(root.querySelector('#ac-checkin')?.value || '')}" disabled/></label><label>Check-out<input type="date" value="${escapeHtml(root.querySelector('#ac-checkout')?.value || '')}" disabled/></label><label>Tamu<input type="text" value="${escapeHtml(root.querySelector('#ac-guests')?.selectedOptions?.[0]?.textContent || '2 tamu')}" disabled/></label></div><div class="ac-detail-price-note">Harga akhir, pajak, biaya layanan, dan ketersediaan akan dihitung setelah data inventori terhubung.</div><button type="button" class="ac-detail-book-button" data-detail-scroll-rooms>Pilih opsi kamar</button><span class="ac-detail-booking-footnote">Belum ada reservasi atau pembayaran yang diproses.</span></aside></div>
+    <div class="ac-detail-mobile-bar"><div><strong>${money(roomPrice)}</strong><span>/ malam · contoh</span></div><button type="button" data-detail-scroll-rooms>Pilih opsi</button></div>
+  </div>`;
+};
+
 const typeMarkup = () => ACCOMMODATION_TYPES.filter(type => type.value !== 'all').map(type => `
   <button class="ac-type-card" type="button" data-type-choice="${escapeHtml(type.value)}">
     <span class="ac-type-image"><img src="${photo(type.image, 520)}" alt="" loading="lazy"><span>${escapeHtml(type.label)}</span></span>
@@ -64,7 +97,7 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
   });
 
   root.innerHTML = '<div class="pl-page-shell ac-page">'+header+
-    '<nav class="ac-nav" aria-label="Navigasi Accommodation"><a href="#ac-search">Cari penginapan</a><a href="#ac-nearby">Di sekitar area</a><a href="#ac-types">Jenis akomodasi</a><a href="#ac-explore">Jelajahi Bali</a><span>'+icon('mapPin')+' LOKASI DEMO: DENPASAR</span></nav>'+
+    '<nav class="ac-nav" aria-label="Navigasi Accommodation"><a href="#ac-search">Cari penginapan</a><a href="#ac-nearby">Di sekitar area</a><a href="#ac-types">Jenis akomodasi</a><a href="#ac-explore">Jelajahi Bali</a><span>'+icon('mapPin')+' <span id="ac-nav-location">LOKASI DEMO: DENPASAR</span></span></nav>'+
     '<main class="pl-page-main ac-main">'+
       '<section class="ac-intro" id="ac-search"><div class="ac-intro-copy"><span class="ac-eyebrow">PLUITS · ACCOMMODATION</span><h1>Temukan tempat<br><em>untuk beristirahat.</em></h1><p>Jelajahi hotel, resort, villa, homestay, dan berbagai pilihan menginap dalam satu pengalaman.</p></div><div class="ac-intro-note"><span>ONE PLACE TO EXPLORE</span><p>Mulai dari penginapan sederhana hingga resort dengan layanan lengkap. Temukan pilihan yang sesuai dengan perjalananmu.</p></div></section>'+
       '<form class="ac-search-panel" id="ac-search-form">'+
@@ -125,7 +158,7 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
     nearbyGrid.innerHTML = local.map(propertyCard).join('');
     exploreGrid.innerHTML = other.map(propertyCard).join('');
     const locationLabel = destinationInput.value.trim() || 'Denpasar';
-    root.querySelector('#ac-nav-location').lastChild.textContent = query ? ' ' + locationLabel.toLocaleUpperCase('id-ID') : ' LOKASI DEMO: DENPASAR';
+    root.querySelector('#ac-nav-location').textContent = query ? locationLabel.toLocaleUpperCase('id-ID') : 'LOKASI DEMO: DENPASAR';
     root.querySelector('#ac-nearby-title').textContent = query ? 'Di sekitar ' + locationLabel : 'Pilihan di sekitar Denpasar';
     root.querySelector('#ac-nearby-copy').textContent = query ? 'Pilihan area terdekat dalam data preview untuk tujuan yang kamu masukkan.' : 'Contoh eksplorasi lokal. Ini bukan hasil geolokasi perangkat.';
     root.querySelector('#ac-nearby-count').textContent = local.length + ' pilihan';
@@ -165,9 +198,36 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
       const property = ACCOMMODATION_PREVIEW_PROPERTIES.find(item => item.id === openButton.dataset.openProperty);
       if (!property) return;
       lastFocused = openButton;
-      root.querySelector('#ac-modal-content').innerHTML = '<img class="ac-modal-image" src="'+photo(property.image,1000)+'" alt="'+escapeHtml(property.name)+'"><div class="ac-modal-body"><span class="ac-eyebrow">'+escapeHtml(property.type)+' · '+escapeHtml(property.area)+', BALI</span><h2 id="ac-modal-title">'+escapeHtml(property.name)+'</h2><p>'+escapeHtml(property.description)+'</p><ul>'+property.highlights.map(item=>'<li>'+escapeHtml(item)+'</li>').join('')+'</ul><div class="ac-modal-price"><span>Contoh harga per malam</span><strong>'+money(property.price)+'</strong></div><p class="ac-modal-note">Ini adalah preview data contoh. Profil lengkap, inventori kamar, ketersediaan, dan reservasi belum diaktifkan.</p></div>';
+      root.querySelector('#ac-modal-content').innerHTML = propertyDetailMarkup(property);
       root.querySelector('#ac-property-modal').hidden = false;
       root.querySelector('#ac-modal-close').focus();
+      root.querySelectorAll('[data-room-choice]').forEach(button => button.addEventListener('click', () => {
+        const selected = button.dataset.roomChoice;
+        root.querySelectorAll('[data-room-choice]').forEach(item => {
+          const active = item.dataset.roomChoice === selected;
+          item.setAttribute('aria-pressed', String(active));
+          item.textContent = active ? 'Dipilih' : 'Pilih opsi';
+          item.closest('.ac-room-option').classList.toggle('is-selected', active);
+        });
+        const selectedPrice = selected === 'comfort' ? Math.round(property.price * 1.25) : property.price;
+        root.querySelector('[data-detail-price]').textContent = money(selectedPrice);
+        root.querySelectorAll('.ac-detail-mobile-bar strong').forEach(item => item.textContent = money(selectedPrice));
+      }));
+      root.querySelectorAll('[data-detail-scroll-rooms]').forEach(button => button.addEventListener('click', () => root.querySelector('.ac-room-list')?.scrollIntoView({behavior:'smooth',block:'center'})));
+      root.querySelector('[data-detail-save]')?.addEventListener('click', event => {
+        const button = event.currentTarget;
+        const active = saved.has(property.id);
+        active ? saved.delete(property.id) : saved.add(property.id);
+        button.setAttribute('aria-pressed', String(!active));
+        button.innerHTML = icon('heart') + (!active ? ' Tersimpan' : ' Simpan');
+        button.classList.toggle('is-saved', !active);
+        renderResults();
+      });
+      root.querySelector('[data-detail-share]')?.addEventListener('click', async event => {
+        const shareData = {title:property.name,text:'Lihat preview '+property.name+' di PLUITS',url:window.location.href};
+        if (navigator.share) { try { await navigator.share(shareData); } catch {} }
+        else if (navigator.clipboard?.writeText) { try { await navigator.clipboard.writeText(shareData.url); event.currentTarget.textContent = 'Tautan disalin'; } catch {} }
+      });
       return;
     }
     if (event.target.id === 'ac-property-modal' || event.target.closest('#ac-modal-close')) closeModal();
