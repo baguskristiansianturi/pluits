@@ -8,3 +8,7 @@ Area untuk product brief, persona, information architecture, sitemap, user journ
 - Setiap folder aplikasi di Product Design wajib merujuk dan menggunakan Platform UI Foundation. Jangan menyalin atau membuat standar global tandingan di folder ekosistem.
 
 Setiap aplikasi memiliki folder desain sendiri. Desain halaman boleh berbeda sesuai kebutuhan, tetapi tetap memakai fondasi antarmuka bersama PLUITS.
+
+
+## Current product-design folders
+- `07-HANGOUT-LEISURE/RESTAURANT-CAFE-PUBLIC-EXPERIENCE.md` — approved public restaurant profile, dining areas, menu ordering, reviews and customer journey (PD-RC-001).
