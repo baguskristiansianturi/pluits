@@ -105,6 +105,9 @@ test('Restaurant review preview supports complete multi-item order context and s
  const page=await readFile(new URL('../src/features/venue/venue-provider-page.js',import.meta.url),'utf8');
  const ordering=await readFile(new URL('../src/features/venue/restaurant-ordering.js',import.meta.url),'utf8');
  assert.equal((page.match(/vpp-review-order-items/g)||[]).length,3);
+ const reviewCards=page.split('class="vpp-review-card"').slice(1);
+ assert.equal(reviewCards.length,3);
+ for(const card of reviewCards)assert.match(card,/vpp-review-order-items/);
  assert.match(page,/detail pesanan hanya berasal dari backend dan persetujuan/);
  assert.match(ordering,/PILIHAN RESTORAN/);
  assert.doesNotMatch(ordering,/BEST SELLER|CHEF PICK/);
