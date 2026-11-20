@@ -42,6 +42,7 @@ The homepage uses the established PLUITS contracts: desktop at 1024px and above,
 
 ## Device mockup composition
 - The Android and iPhone previews overlap naturally; Android remains the foreground device.
-- Keep the space behind the devices as a soft, low-contrast teal/blue radial glow. It is atmospheric lighting only, not a panel, card, frame, or separate decorative object.
-- Keep the in-screen PLUITS symbol and wordmark visually grouped with a compact gap. The shared site-header lockup remains governed separately by the design-system brand token.
-- Preserve compact device proportions and responsive spacing on mobile; do not restore oversized handset heights or a large backdrop.
+- Responsive device layout, dimensions, overlap, and ambient background are owned by the final rules in `business-home.css`. Do not add a second override stylesheet.
+- The background is a restrained teal/blue atmospheric field with very subtle orbital contours; it must remain integrated into the page, never a card or panel.
+- Keep the in-screen PLUITS symbol and wordmark visually grouped with a compact gap.
+- Validate narrow mobile (320–380px), standard mobile (390–430px), tablet (768–1023px), and desktop (1024px+) before considering the composition complete.
