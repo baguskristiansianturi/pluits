@@ -13,6 +13,8 @@ const money = value => new Intl.NumberFormat('id-ID', { style:'currency', curren
 export const ACCOMMODATION_PREVIEW_PROPERTIES = [
   { id:'kedaton-city-stay', name:'Kedaton City Stay', type:'Hotel', area:'Denpasar', price:520000, guests:3, image:'photo-1566073771259-6a8506099945', description:'Penginapan kota untuk perjalanan singkat, urusan pekerjaan, dan menjelajahi pusat Bali.', highlights:['Akses area kota','Kamar ber-AC','Pilihan sarapan'] },
   { id:'sanur-garden-homestay', name:'Sanur Garden Homestay', type:'Homestay', area:'Sanur', price:450000, guests:4, image:'photo-1564013799919-ab600027ffc6', description:'Suasana tinggal yang lebih tenang dengan nuansa rumah dan akses ke kawasan Sanur.', highlights:['Suasana taman','Area duduk bersama','Dekat kawasan pantai'] },
+  { id:'ubud-hills-guesthouse', name:'Ubud Hills Guesthouse', type:'Guesthouse', area:'Ubud', price:780000, guests:3, image:'photo-1551882547-ff40c63fe5fa', description:'Guesthouse dengan suasana hangat untuk menjelajahi kawasan Ubud.', highlights:['Area santai','Kamar nyaman','Akses kawasan Ubud'] },
+  { id:'canggu-coastal-inn', name:'Canggu Coastal Inn', type:'Inn', area:'Canggu', price:650000, guests:2, image:'photo-1542314831-068cd1dbfeeb', description:'Penginapan ringkas untuk menikmati kawasan Canggu.', highlights:['Area bersama','Pilihan sarapan','Dekat kawasan Canggu'] },
   { id:'kuta-coast-hotel', name:'Kuta Coast Hotel', type:'Hotel', area:'Kuta', price:690000, guests:3, image:'photo-1564501049412-61c2a3083791', description:'Pilihan menginap untuk menikmati kawasan Kuta dan akses ke berbagai kebutuhan perjalanan.', highlights:['Kolam renang','Restoran','Akses kawasan Kuta'] },
   { id:'ubud-river-retreat', name:'Ubud River Retreat', type:'Resort', area:'Ubud', price:1450000, guests:4, image:'photo-1571896349842-33c89424de2d', description:'Retreat bernuansa alam untuk menikmati suasana Ubud dan waktu istirahat yang lebih santai.', highlights:['Pemandangan alam','Kolam renang','Area relaksasi'] },
   { id:'seminyak-private-villa', name:'Seminyak Private Villa', type:'Villa', area:'Seminyak', price:1850000, guests:6, image:'photo-1613490493576-7fde63acd811', description:'Villa privat dengan ruang yang lebih leluasa untuk keluarga atau perjalanan bersama teman.', highlights:['Kolam privat','Ruang keluarga','Dapur'] },
@@ -25,6 +27,8 @@ const ACCOMMODATION_TYPES = [
   { label:'Resort', value:'Resort', image:'photo-1571896349842-33c89424de2d' },
   { label:'Villa', value:'Villa', image:'photo-1613490493576-7fde63acd811' },
   { label:'Homestay', value:'Homestay', image:'photo-1564013799919-ab600027ffc6' },
+  { label:'Guesthouse', value:'Guesthouse', image:'photo-1551882547-ff40c63fe5fa' },
+  { label:'Inn', value:'Inn', image:'photo-1542314831-068cd1dbfeeb' },
   { label:'Serviced Apartment', value:'Serviced Apartment', image:'photo-1590490360182-c33d57733427' }
 ];
 
@@ -68,7 +72,7 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
         '<label class="ac-search-field"><span>Check-in</span><input id="ac-checkin" name="checkin" type="date"></label>'+
         '<label class="ac-search-field"><span>Check-out</span><input id="ac-checkout" name="checkout" type="date"></label>'+
         '<label class="ac-search-field"><span>Tamu</span><select id="ac-guests" name="guests"><option value="1">1 tamu</option><option value="2" selected>2 tamu</option><option value="3">3 tamu</option><option value="4">4 tamu</option><option value="5">5 tamu</option><option value="6">6+ tamu</option></select></label>'+
-        '<label class="ac-search-field"><span>Jenis akomodasi</span><select id="ac-type" name="type"><option value="all">Semua jenis</option><option>Hotel</option><option>Resort</option><option>Villa</option><option>Homestay</option><option>Serviced Apartment</option></select></label>'+
+        '<label class="ac-search-field"><span>Jenis akomodasi</span><select id="ac-type" name="type"><option value="all">Semua jenis</option><option>Hotel</option><option>Resort</option><option>Villa</option><option>Homestay</option><option>Guesthouse</option><option>Inn</option><option>Serviced Apartment</option></select></label>'+
         '<label class="ac-search-field"><span>Anggaran per malam</span><select id="ac-budget" name="budget"><option value="0">Semua anggaran</option><option value="600000">Hingga Rp600 ribu</option><option value="1000000">Hingga Rp1 juta</option><option value="1500000">Hingga Rp1,5 juta</option><option value="2000000">Hingga Rp2 juta</option></select></label>'+
         '<div class="ac-search-actions"><button class="ac-search-submit" type="submit">'+icon('search')+' Cari akomodasi</button><button class="ac-search-reset" type="reset">Atur ulang</button></div>'+
         '<p class="ac-search-disclaimer">Preview eksplorasi menggunakan data contoh. Harga dan ketersediaan belum terhubung ke inventori langsung.</p>'+
@@ -121,6 +125,7 @@ export function mountAccommodationHomePage({ root, user = null } = {}) {
     nearbyGrid.innerHTML = local.map(propertyCard).join('');
     exploreGrid.innerHTML = other.map(propertyCard).join('');
     const locationLabel = destinationInput.value.trim() || 'Denpasar';
+    root.querySelector('#ac-nav-location').lastChild.textContent = query ? ' ' + locationLabel.toLocaleUpperCase('id-ID') : ' LOKASI DEMO: DENPASAR';
     root.querySelector('#ac-nearby-title').textContent = query ? 'Di sekitar ' + locationLabel : 'Pilihan di sekitar Denpasar';
     root.querySelector('#ac-nearby-copy').textContent = query ? 'Pilihan area terdekat dalam data preview untuk tujuan yang kamu masukkan.' : 'Contoh eksplorasi lokal. Ini bukan hasil geolokasi perangkat.';
     root.querySelector('#ac-nearby-count').textContent = local.length + ' pilihan';
