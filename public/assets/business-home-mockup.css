@@ -60,3 +60,23 @@
 .pluits-place-card{height:64px}
 .pluits-place-card--food{height:52px}
 }
+
+/* Refined visual bridge between the handset frames; glow only, never a backdrop card. */
+.business-app-mockups:before{
+  display:block;
+  position:absolute;
+  inset:9% 10% 7%;
+  border-radius:50%;
+  background:radial-gradient(ellipse at 48% 48%, rgba(8,173,158,.15) 0%, rgba(8,173,158,.08) 34%, rgba(133,190,220,.10) 53%, rgba(8,173,158,0) 76%);
+  filter:blur(12px);
+  pointer-events:none;
+}
+.business-phone-card--android{z-index:2}
+.business-phone-card--iphone{z-index:1}
+.pluits-app-topbar{gap:3px}
+.pluits-app-topbar img{width:19px;height:19px}
+.pluits-app-topbar strong{letter-spacing:-.04em}
+@media(max-width:767px){
+  .business-app-mockups:before{inset:10% 5% 8%;filter:blur(10px)}
+  .pluits-app-topbar{gap:2px}
+}
