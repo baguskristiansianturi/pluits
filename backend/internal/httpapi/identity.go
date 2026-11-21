@@ -54,6 +54,7 @@ func (h *IdentityHandler) allowIdentifier(w http.ResponseWriter, r *http.Request
 func (h *IdentityHandler) Register(mux *http.ServeMux) {
 	mux.HandleFunc("POST /v1/identity/register", h.register)
 	mux.HandleFunc("POST /v1/identity/verify-email", h.verifyEmail)
+	mux.HandleFunc("POST /v1/identity/resend-verification", h.resendVerification)
 	mux.HandleFunc("POST /v1/identity/login", h.login)
 	mux.HandleFunc("POST /v1/identity/refresh", h.refresh)
 	mux.HandleFunc("POST /v1/identity/logout", h.logout)
@@ -219,4 +220,19 @@ func (h *IdentityHandler) completePasswordReset(w http.ResponseWriter, r *http.R
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]string{"status":"password_updated"})
+}
+
+func (h *IdentityHandler) resendVerification(w http.ResponseWriter, r *http.Request) {
+	if h.service == nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	if !h.allowRequest(w, r, "identity.resend_verification", 5, time.Hour) { return }
+	var input passwordResetRequest
+	if err := decodeJSON(w, r, &input); err != nil { writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"}); return }
+	if email, emailErr := identity.NormalizeEmail(input.Email); emailErr == nil {
+		if !h.allowIdentifier(w, r, "identity.resend_verification.email", email.Canonical, 3, time.Hour) { return }
+	}
+	if err := h.service.ResendVerification(r.Context(), input.Email); err != nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"})
+		return
+	}
+	writeJSON(w, http.StatusAccepted, map[string]string{"status":"accepted","message":"If the account requires verification, a new email will be sent."})
 }
