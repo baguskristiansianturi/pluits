@@ -2,7 +2,6 @@ import { routeHref } from '../../config/paths.js';
 import '../../design-system/page-shell.css';
 import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
-import { createDemoStore, listDemoStores } from '../../services/store/local-demo-store-service.js';
 import './dashboard-page.css';
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
@@ -54,7 +53,7 @@ function renderEmpty(title, description, icon = 'book') {
 }
 
 function renderTabContent(tab, context) {
-  const { name, email, initial, selectedBusinessType, selectedTemplate, transactionMode, transactionStatus, settingsSection, demoStores = [], isLocalDemo = false } = context;
+  const { name, email, initial, selectedBusinessType, selectedTemplate, transactionMode, transactionStatus, settingsSection } = context;
   if (tab === 'profile') {
     return '<section class="dashboard-view" aria-labelledby="view-title">' +
       '<div class="dashboard-view-heading"><div><span class="dashboard-kicker">IDENTITAS PERSONAL</span><h1 id="view-title">Profil Sosial</h1><p>Identitas yang digunakan untuk berinteraksi, membuat konten, dan bertransaksi di PLUITS.</p></div><span class="dashboard-profile-avatar">' + initial + '</span></div>' +
@@ -66,19 +65,13 @@ function renderTabContent(tab, context) {
       '</div></div></section>';
   }
   if (tab === 'business') {
-    const demoStoreForm = isLocalDemo && selectedBusinessType === 'store'
-      ? '<form class="dashboard-panel" data-demo-store-form><div class="dashboard-panel-heading"><div><h2>Data awal toko simulasi</h2><p>Isi untuk menguji alur pembuatan toko. Data hanya tersimpan di browser ini dan tidak dikirim ke PLUITS.</p></div></div><div class="dashboard-field-grid"><label>Nama toko<input name="name" type="text" minlength="2" maxlength="80" placeholder="Contoh: Toko Bagus" required></label><label>Username toko<input name="username" type="text" minlength="3" maxlength="30" placeholder="toko.bagus" required></label><label>Kota / area operasional<input name="city" type="text" minlength="2" maxlength="80" placeholder="Denpasar" required></label><label>Deskripsi toko<input name="description" type="text" maxlength="240" placeholder="Ceritakan toko Anda"></label></div><button class="dashboard-text-action" type="submit">Simpan draft toko simulasi</button></form>'
-      : '';
-    const demoStoreList = isLocalDemo
-      ? '<div class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>Draft toko di perangkat ini</h2><p>Draft simulasi tidak tampil di Marketplace dan tidak memiliki status verifikasi.</p></div></div>' + (demoStores.length ? '<div class="dashboard-shortcuts">' + demoStores.map((store) => '<article><strong>' + escapeHtml(store.name) + '</strong><small>@' + escapeHtml(store.username) + ' · ' + escapeHtml(store.public_city) + ' · Draft simulasi</small></article>').join('') + '</div>' : renderEmpty('Belum ada draft toko','Pilih Store lalu isi formulir untuk menguji pembuatan toko.','book')) + '</div>'
-      : '';
     return '<section class="dashboard-view" aria-labelledby="view-title"><div class="dashboard-view-heading"><div><span class="dashboard-kicker">IDENTITAS USAHA</span><h1 id="view-title">Akun Bisnis</h1><p>Buat identitas bisnis yang terhubung dengan akun personal PLUITS Anda.</p></div></div>' +
       '<div class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>Buat akun bisnis</h2><p>Pilih jenis akun sesuai aktivitas usaha. Satu akun bisnis hanya memiliki satu jenis.</p></div><span class="dashboard-status-pill">Rancangan awal</span></div>' +
       '<div class="dashboard-business-options">' +
       '<button type="button" class="dashboard-business-option' + (selectedBusinessType === 'store' ? ' is-selected' : '') + '" data-business-type="store" aria-pressed="' + (selectedBusinessType === 'store') + '"><span class="dashboard-option-symbol">' + renderIcon('book') + '</span><strong>Store</strong><p>Untuk usaha yang menjual produk fisik atau digital.</p><span>Pilih Store</span></button>' +
       '<button type="button" class="dashboard-business-option' + (selectedBusinessType === 'service' ? ' is-selected' : '') + '" data-business-type="service" aria-pressed="' + (selectedBusinessType === 'service') + '"><span class="dashboard-option-symbol">' + renderIcon('message') + '</span><strong>Service</strong><p>Untuk penyedia jasa, layanan, dan keahlian profesional.</p><span>Pilih Service</span></button>' +
       '</div>' +
-      (isLocalDemo ? demoStoreForm + demoStoreList : '<div class="dashboard-business-next"><span>' + (selectedBusinessType ? 'Pilihan sementara: ' + (selectedBusinessType === 'store' ? 'Store' : 'Service') : 'Pilih jenis akun bisnis untuk melihat langkah berikutnya.') + '</span><button type="button" disabled>Pengaturan pembuatan belum tersedia</button></div><div class="dashboard-inline-note">Akun bisnis sungguhan memerlukan backend dan pemeriksaan hak akses. Mode ini tidak membuat atau mengubah data produksi.</div>') +
+      '<div class="dashboard-business-next"><span>' + (selectedBusinessType ? 'Pilihan sementara: ' + (selectedBusinessType === 'store' ? 'Store' : 'Service') : 'Pilih jenis akun bisnis untuk melihat langkah berikutnya.') + '</span><button type="button" disabled>Pengaturan pembuatan belum tersedia</button></div><div class="dashboard-inline-note">Pembuatan akun bisnis menunggu API PLUITS dan pemeriksaan hak akses. Tidak ada data simulasi yang disimpan.</div>' +
       '</div></section>';
   }
   if (tab === 'transactions') {
@@ -142,8 +135,6 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
   const email = escapeHtml(user?.email || 'Email akun tidak tersedia');
   const initial = escapeHtml(displayName.slice(0, 1).toUpperCase() || 'P');
   const layout = readLayout();
-  const isLocalDemo = user?.app_metadata?.provider === 'local-demo';
-  let demoStores = isLocalDemo ? listDemoStores() : [];
   const state = {
     tabs:[{ id:'dashboard', label:'Dashboard', closable:false }],
     activeTab:'dashboard',
@@ -198,7 +189,7 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
       '<span class="dashboard-module-link-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-module-link-label">' + item.label + '</span>' +
       (item.status ? '<small>' + item.status + '</small>' : '') + '</button>'
     ).join('') + '</div></section>').join('');
-    const center = renderTabContent(state.activeTab, { name, email, initial, selectedBusinessType:state.selectedBusinessType, selectedTemplate:state.selectedTemplate, transactionMode:state.transactionMode, transactionStatus:state.transactionStatus, settingsSection:state.settingsSection, demoStores, isLocalDemo });
+    const center = renderTabContent(state.activeTab, { name, email, initial, selectedBusinessType:state.selectedBusinessType, selectedTemplate:state.selectedTemplate, transactionMode:state.transactionMode, transactionStatus:state.transactionStatus, settingsSection:state.settingsSection });
     root.innerHTML =
       '<div class="pl-page-shell dashboard-page">' +
         renderPageHeader({ label:'PLUITS Dashboard', brandHref:routeHref('home'), note:'PUSAT KENDALI PENGGUNA', rightContent:headerActions, variant:'workspace' }) +
@@ -219,26 +210,6 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
         '</main>' +
       '</div>';
   }
-
-  root.addEventListener('submit', (event) => {
-    const form = event.target.closest('[data-demo-store-form]');
-    if (!form || !isLocalDemo) return;
-    event.preventDefault();
-    const values = new FormData(form);
-    try {
-      createDemoStore({
-        name: values.get('name'),
-        username: values.get('username'),
-        city: values.get('city'),
-        description: values.get('description')
-      });
-      demoStores = listDemoStores();
-      state.selectedBusinessType = 'store';
-      render();
-    } catch (error) {
-      window.alert(error?.message || 'Draft toko simulasi belum dapat disimpan.');
-    }
-  }, { signal });
 
   root.addEventListener('click', async (event) => {
     const target = event.target.closest('button');
