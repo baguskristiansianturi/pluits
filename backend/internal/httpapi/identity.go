@@ -1,19 +1,50 @@
 package httpapi
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"io"
+	"net"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/baguskristiansianturi/pluits/backend/internal/identity"
 )
 
-type IdentityHandler struct { service *identity.Service }
+type RequestLimiter interface {
+	Allow(context.Context, string, string, int, time.Duration) (bool, error)
+}
 
-func NewIdentityHandler(service *identity.Service) *IdentityHandler {
-	return &IdentityHandler{service: service}
+type IdentityHandler struct {
+	service *identity.Service
+	limiter RequestLimiter
+}
+
+func NewIdentityHandler(service *identity.Service, limiters ...RequestLimiter) *IdentityHandler {
+	handler := &IdentityHandler{service: service}
+	if len(limiters) > 0 { handler.limiter = limiters[0] }
+	return handler
+}
+
+func (h *IdentityHandler) allowRequest(w http.ResponseWriter, r *http.Request, scope string, limit int, window time.Duration) bool {
+	if h.limiter == nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"})
+		return false
+	}
+	peer := r.RemoteAddr
+	if host, _, err := net.SplitHostPort(peer); err == nil { peer = host }
+	allowed, err := h.limiter.Allow(r.Context(), scope, peer, limit, window)
+	if err != nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"})
+		return false
+	}
+	if !allowed {
+		writeJSON(w, http.StatusTooManyRequests, map[string]string{"error":"rate_limit_exceeded"})
+		return false
+	}
+	return true
 }
 
 func (h *IdentityHandler) Register(mux *http.ServeMux) {
@@ -59,10 +90,11 @@ func decodeJSON(w http.ResponseWriter, r *http.Request, target any) error {
 }
 
 func (h *IdentityHandler) register(w http.ResponseWriter, r *http.Request) {
-	if h.service == nil {
+	if h.service == nil || h.limiter == nil {
 		writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"})
 		return
 	}
+	if !h.allowRequest(w, r, "identity.register", 5, time.Hour) { return }
 	var input registerRequest
 	if err := decodeJSON(w, r, &input); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"})
@@ -94,6 +126,7 @@ func (h *IdentityHandler) verifyEmail(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"})
 		return
 	}
+	if !h.allowRequest(w, r, "identity.verify", 20, time.Hour) { return }
 	var input verifyEmailRequest
 	if err := decodeJSON(w, r, &input); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"})
@@ -108,6 +141,7 @@ func (h *IdentityHandler) verifyEmail(w http.ResponseWriter, r *http.Request) {
 
 func (h *IdentityHandler) login(w http.ResponseWriter, r *http.Request) {
 	if h.service == nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	if !h.allowRequest(w, r, "identity.login", 10, 15*time.Minute) { return }
 	var input loginRequest
 	if err := decodeJSON(w, r, &input); err != nil { writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"}); return }
 	tokens, err := h.service.Login(r.Context(), input.Email, input.Password)
@@ -118,6 +152,7 @@ func (h *IdentityHandler) login(w http.ResponseWriter, r *http.Request) {
 
 func (h *IdentityHandler) refresh(w http.ResponseWriter, r *http.Request) {
 	if h.service == nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	if !h.allowRequest(w, r, "identity.refresh", 60, time.Minute) { return }
 	var input refreshRequest
 	if err := decodeJSON(w, r, &input); err != nil { writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"}); return }
 	tokens, err := h.service.Refresh(r.Context(), input.RefreshToken)
@@ -128,6 +163,7 @@ func (h *IdentityHandler) refresh(w http.ResponseWriter, r *http.Request) {
 
 func (h *IdentityHandler) logout(w http.ResponseWriter, r *http.Request) {
 	if h.service == nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	if !h.allowRequest(w, r, "identity.logout", 30, time.Minute) { return }
 	const prefix = "Bearer "
 	header := r.Header.Get("Authorization")
 	if !strings.HasPrefix(header, prefix) { writeJSON(w, http.StatusUnauthorized, map[string]string{"error":"invalid_session"}); return }
