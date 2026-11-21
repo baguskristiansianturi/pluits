@@ -226,7 +226,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
     }
   });
 
-  if (isReset && !hasRecoverySession) {
+  if (isReset && !hasRecoverySession && !new URLSearchParams(window.location.search).get('token')) {
     showStatus(status, 'Sesi pemulihan belum ditemukan. Gunakan tautan terbaru dari email atau minta tautan baru.', 'info');
   }
 }
