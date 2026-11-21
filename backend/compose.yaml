@@ -109,6 +109,7 @@ services:
     restart: unless-stopped
     environment:
       PLUITS_API_DOMAIN: ${PLUITS_API_DOMAIN:?Set PLUITS_API_DOMAIN in backend/.env}
+      PLUITS_TLS_CONTACT_EMAIL: ${PLUITS_TLS_CONTACT_EMAIL:?Set PLUITS_TLS_CONTACT_EMAIL in backend/.env}
     ports:
       - "80:80"
       - "443:443"
