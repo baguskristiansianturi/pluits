@@ -154,8 +154,9 @@ Detailed database ownership, global data, identity, privacy and migration rules 
 
 ## Data model and migration policy
 
-- Supabase remains the live production source of truth until a separately reviewed migration is completed.
-- The new backend starts with its own clean PostgreSQL database. Supabase is a reference/legacy environment only and is not a dependency of the new backend.
+- PLUITS-owned PostgreSQL is the sole target source of truth. Supabase is retired from the PLUITS target architecture and must not receive new data or traffic.
+- The old SQL migration set is retained temporarily as read-only reconstruction material. It is not an active runtime dependency and must not be applied to any Supabase project.
+- Domain cutover is not complete merely because the identity foundation exists: social, Inbox, media, GeoDirectory, Marketplace, merchant operations and other domains still require PLUITS-owned schemas/APIs and regression tests.
 - Do not copy production credentials, service-role keys, user passwords, private messages, or personal data into Git.
 - Do not create demo users, fake marketplace listings, fake orders, fake reviews, fake balances or seeded social activity.
 - Do not modify or replay the existing Supabase migration history.
@@ -192,7 +193,8 @@ Detailed database ownership, global data, identity, privacy and migration rules 
 | Marketplace and merchant domains | Not started |
 | Docker image and self-hosted Compose topology | Implemented in source; not deployed |
 | Public API hosting, persistent database and SMTP configuration | Not started; requires controlled host, DNS/TLS and provider configuration |
-| First-party frontend auth cutover | Adapter implemented; remains disabled until API deployment and verification |
-| Production data migration/cutover | Not started |
+| First-party frontend auth cutover | Supabase and local-demo bootstrap removed; Go adapter is canonical; API origin still requires deployment configuration |
+| Domain-by-domain schema/API migration from legacy SQL and runtime integrations | Not started beyond identity foundation |
+| Supabase project decommissioning | Requested; provider tool does not expose project deletion |
 
 The first real account deployment and registration steps are documented in [First PLUITS Account Runbook](docs/FIRST-ACCOUNT-REGISTRATION-RUNBOOK.md). The codebase can be maintained through GitHub from a phone. Signup remains disabled in the live frontend until the first-party API URL, provider mode, deployment secrets and SMTP delivery are configured and tested. A public API still needs a compute host and a database; free hosting limits must be verified before deployment. No paid service or hosting resource has been created by this work.
