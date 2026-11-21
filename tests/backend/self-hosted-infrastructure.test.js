@@ -16,6 +16,7 @@ test('only the HTTPS edge publishes public ports', () => {
 
 test('Caddy is the HTTPS reverse proxy for the private Go API', () => {
   assert.match(caddy, /reverse_proxy api:8080/);
+  assert.match(caddy, /health_uri \/health\/ready/);
   assert.match(caddy, /Strict-Transport-Security/);
 });
 
