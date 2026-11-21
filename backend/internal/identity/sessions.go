@@ -19,6 +19,7 @@ const (
 
 type SessionTokens struct {
 	AccountID string `json:"account_id"`
+	Email string `json:"email"`
 	AccessToken string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 	AccessExpiresAt time.Time `json:"access_expires_at"`
@@ -58,7 +59,7 @@ func (s *Service) Login(ctx context.Context, emailInput, password string) (Sessi
 	if err != nil { return SessionTokens{}, ErrIdentityUnavailable }
 	now := time.Now().UTC()
 	result := SessionTokens{
-		AccountID: accountID, AccessToken: access, RefreshToken: refresh,
+		AccountID: accountID, Email: email.Canonical, AccessToken: access, RefreshToken: refresh,
 		AccessExpiresAt: now.Add(accessTokenTTL), RefreshExpiresAt: now.Add(refreshTokenTTL),
 	}
 	tx, err := s.db.BeginTx(ctx, nil)
@@ -86,13 +87,14 @@ func (s *Service) Refresh(ctx context.Context, rawRefreshToken string) (SessionT
 	if err != nil { return SessionTokens{}, ErrIdentityUnavailable }
 	defer tx.Rollback()
 
-	var oldID, accountID, familyID string
+	var oldID, accountID, familyID, accountEmail string
 	var expiresAt time.Time
 	var revokedAt sql.NullTime
 	err = tx.QueryRowContext(ctx, `
-		SELECT id::text, account_id::text, token_family_id::text, refresh_expires_at, revoked_at
-		FROM pluits.sessions WHERE refresh_token_hash = $1 FOR UPDATE
-	`, hash[:]).Scan(&oldID, &accountID, &familyID, &expiresAt, &revokedAt)
+		SELECT s.id::text, s.account_id::text, s.token_family_id::text, s.refresh_expires_at, s.revoked_at, e.email_normalized
+		FROM pluits.sessions s JOIN pluits.account_emails e ON e.account_id=s.account_id AND e.is_primary=TRUE
+		WHERE s.refresh_token_hash = $1 FOR UPDATE OF s
+	`, hash[:]).Scan(&oldID, &accountID, &familyID, &expiresAt, &revokedAt, &accountEmail)
 	if errors.Is(err, sql.ErrNoRows) { return SessionTokens{}, ErrInvalidSession }
 	if err != nil { return SessionTokens{}, ErrIdentityUnavailable }
 
@@ -120,7 +122,7 @@ func (s *Service) Refresh(ctx context.Context, rawRefreshToken string) (SessionT
 	if err != nil { return SessionTokens{}, ErrIdentityUnavailable }
 	now := time.Now().UTC()
 	result := SessionTokens{
-		AccountID: accountID, AccessToken: access, RefreshToken: refresh,
+		AccountID: accountID, Email: accountEmail, AccessToken: access, RefreshToken: refresh,
 		AccessExpiresAt: now.Add(accessTokenTTL), RefreshExpiresAt: expiresAt,
 	}
 	accessHash := TokenHash(access)
