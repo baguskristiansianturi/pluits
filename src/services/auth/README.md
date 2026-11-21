@@ -2,20 +2,17 @@
 
 Owner: services/auth
 
-The frontend supports two explicit authentication adapters:
-- **Supabase legacy adapter**: retained for the current live site while the independent Go API is prepared. It is dynamically loaded only when VITE_AUTH_PROVIDER is not first-party.
-- **First-party Go API adapter**: selected only with VITE_AUTH_PROVIDER=first-party and VITE_API_BASE_URL configured. It calls PLUITS-owned identity endpoints for registration, email verification, login, refresh rotation, logout and password recovery.
+PLUITS uses one authentication authority: the first-party Go identity API owned by PLUITS.
 
-The first-party adapter stores only the rotating refresh token in tab-scoped sessionStorage; access tokens remain in memory. This reduces persistence but does not eliminate browser XSS risk. A future same-site HttpOnly-cookie session design requires an API origin/proxy and CSRF controls before replacing this bearer-token flow.
-
-The local-demo adapter is selected only by the explicit ?pluits-demo=1 preview query parameter. It persists a synthetic session locally, labels the user with app_metadata.provider = local-demo, and never calls Supabase Auth. It is strictly for frontend UAT and must never be used as production authentication or authorization.
-
-Services must not render HTML, access the DOM, or decide user permissions from user_metadata.
+- The frontend does not load a Supabase SDK/client, third-party identity provider, or local/demo authentication adapter.
+- The first-party adapter calls PLUITS identity endpoints for registration, email verification, login, refresh rotation, logout and password recovery.
+- If `VITE_API_BASE_URL` is not configured, the public application still mounts in guest mode, but account actions return a clear backend-not-connected message. It must never fall back to another provider.
+- The adapter stores only the rotating refresh token in tab-scoped sessionStorage; access tokens remain in memory. This reduces persistence but does not eliminate browser XSS risk. A future same-site HttpOnly-cookie session design requires an API origin/proxy and CSRF controls.
 
 ## First-party deployment flags
 
-- VITE_AUTH_PROVIDER=first-party
-- VITE_API_BASE_URL=https://<deployed-api-origin>
-- VITE_PUBLIC_SIGNUP_ENABLED=true only after database, SMTP, CORS, API and verification journey are validated.
+- `VITE_AUTH_PROVIDER=first-party` (canonical; no alternate provider is supported)
+- `VITE_API_BASE_URL=https://<PLUITS-owned-api-origin>`
+- `VITE_PUBLIC_SIGNUP_ENABLED=true` only after database, SMTP, CORS, API, backup/restore and verification journey are validated.
 
-Without all three flags, public signup remains disabled. Do not place backend secrets in Vite variables or browser bundles.
+Without a reachable HTTPS API and the release gate, public signup remains disabled. Do not place backend secrets in Vite variables or browser bundles.
