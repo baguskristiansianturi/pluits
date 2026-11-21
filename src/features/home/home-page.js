@@ -1,5 +1,4 @@
 import { routeHref } from '../../config/paths.js';
-import { supabase } from '../../lib/supabase/client.js';
 import '../../design-system/page-shell.css';
 import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
@@ -7,8 +6,6 @@ import './home-page.css';
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const contentTabs = [{id:'feed',label:'Feed'},{id:'reels',label:'Reels'},{id:'live',label:'Live'},{id:'blog',label:'Blog'}];
-const PUBLIC_FEED_CACHE_TTL = 30_000;
-let publicFeedCache = { savedAt: 0, posts: null };
 const demoCards = {
   global:[['TRENDING','Cerita dari Bali','Momen dan cerita yang sedang ramai','sunset'],['KOMUNITAS','Ruang kreatif','Temukan komunitas dengan minat serupa','creative'],['KULINER','Rasa Nusantara','Rekomendasi tempat dan pengalaman lokal','food'],['JELAJAH','Akhir pekan','Inspirasi perjalanan di Indonesia','travel']],
   nearby:[['DENPASAR','Sudut kota hari ini','Tempat menarik di sekitar Anda','city'],['KULINER','Tempat ngopi','Ruang santai untuk bertemu','coffee'],['AKTIVITAS','Agenda lokal','Aktivitas menarik di sekitar','event'],['KOMUNITAS','Teman sekitar','Kenali komunitas di area Anda','people']],
@@ -49,61 +46,6 @@ function renderPostCard(post) {
 }
 function renderFeedState(message,loading=false) {
   return '<div class="global-feed-state' + (loading?' is-loading':'') + '">' + (loading?'<span class="global-feed-spinner" aria-hidden="true"></span>':'<span class="global-feed-state-icon">' + renderIcon('image') + '</span>') + '<strong>' + message + '</strong>' + (!loading?'<p>Konten publik yang sudah diterbitkan akan muncul di sini.</p>':'') + '</div>';
-}
-async function loadPublicFeed(root,signal) {
-  const target=root.querySelector('[data-live-feed]');
-  const reelsTarget=root.querySelector('[data-live-reels]');
-  if(!target||signal.aborted)return;
-  if(publicFeedCache.posts&&Date.now()-publicFeedCache.savedAt<PUBLIC_FEED_CACHE_TTL){
-    const cached=publicFeedCache.posts;
-    target.innerHTML=cached.length?cached.map(renderPostCard).join(''):renderFeedState('Belum ada postingan publik');
-    if(reelsTarget){
-      const reels=cached.filter(post=>post.content_kind==='reel');
-      reelsTarget.innerHTML=reels.length?reels.map(renderPostCard).join(''):renderFeedState('Belum ada Reels');
-    }
-    return;
-  }
-  const {data:posts,error}=await supabase.from('user_posts')
-    .select('id,user_id,caption,media_path,media_type,content_kind,created_at')
-    .eq('visibility','public').eq('moderation_status','published')
-    .order('created_at',{ascending:false}).limit(20).abortSignal(signal);
-  if(signal.aborted)return;
-  if(error){target.innerHTML=renderFeedState('Feed belum dapat dimuat');if(reelsTarget)reelsTarget.innerHTML=renderFeedState('Reels belum dapat dimuat');return;}
-  const rows=posts||[];
-  if(!rows.length){
-    publicFeedCache={savedAt:Date.now(),posts:[]};
-    target.innerHTML=renderFeedState('Belum ada postingan publik');
-    if(reelsTarget)reelsTarget.innerHTML=renderFeedState('Belum ada Reels');
-    return;
-  }
-  const ids=[...new Set(rows.map(post=>post.user_id))];
-  const {data:profiles}=await supabase.from('user_profiles').select('id,display_name,username,avatar_path').in('id',ids).abortSignal(signal);
-  if(signal.aborted)return;
-  const profileMap=new Map((profiles||[]).map(profile=>[profile.id,profile]));
-  // Resolve all media paths in one Storage request instead of issuing up to
-  // two signed-URL requests per post. Deduplication also avoids asking for the
-  // same author's avatar repeatedly when several posts belong to that author.
-  const mediaPaths=[...new Set(rows.flatMap(post=>{
-    const profile=profileMap.get(post.user_id)||{};
-    return [post.media_path,profile.avatar_path].filter(Boolean);
-  }))];
-  let signedUrlMap=new Map();
-  if(mediaPaths.length){
-    const {data:signedFiles,error:signedError}=await supabase.storage
-      .from('pluits-user-media').createSignedUrls(mediaPaths,3600);
-    if(!signedError){
-      signedUrlMap=new Map((signedFiles||[]).map(file=>[file.path,file.signedUrl||'']));
-    }
-  }
-  if(signal.aborted)return;
-  const hydrated=rows.map(post=>{
-    const profile=profileMap.get(post.user_id)||{};
-    return {...post,authorName:profile.display_name||'Pengguna PLUITS',username:profile.username||'pengguna',mediaUrl:signedUrlMap.get(post.media_path)||'',avatarUrl:signedUrlMap.get(profile.avatar_path)||''};
-  });
-  if(signal.aborted)return;
-  publicFeedCache={savedAt:Date.now(),posts:hydrated};
-  target.innerHTML=hydrated.map(renderPostCard).join('');
-  if(reelsTarget){const reels=hydrated.filter(post=>post.content_kind==='reel');reelsTarget.innerHTML=reels.length?reels.map(renderPostCard).join(''):renderFeedState('Belum ada Reels yang diterbitkan');}
 }
 function demoContent(kind) {
   if(kind==='live')return '<article class="global-live-demo"><div class="global-live-art"><span class="global-live-indicator">LIVE · CONTOH</span><div class="global-live-orbit">PL</div><strong>Temukan siaran langsung</strong><small>Pratinjau tampilan ruang Live</small></div><div class="global-live-meta"><strong>Live bersama komunitas</strong><p>Contoh kartu siaran untuk menguji hierarki informasi dan tombol interaksi.</p><span>0 penonton · Tampilan demo</span></div></article>';
@@ -147,6 +89,9 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
     root.querySelectorAll('[data-content-section]').forEach(section=>observer.observe(section));
   }
   const controller=new AbortController();
-  loadPublicFeed(root,controller.signal).catch(()=>{const target=root.querySelector('[data-live-feed]');if(target)target.innerHTML=renderFeedState('Feed belum dapat dimuat');});
+  const feedTarget=root.querySelector('[data-live-feed]');
+  const reelsTarget=root.querySelector('[data-live-reels]');
+  if(feedTarget)feedTarget.innerHTML=renderFeedState('Feed menunggu layanan backend PLUITS');
+  if(reelsTarget)reelsTarget.innerHTML=renderFeedState('Reels menunggu layanan backend PLUITS');
   return ()=>{controller.abort();window.removeEventListener('scroll',updateSticky);observer?.disconnect();};
 }
