@@ -21,7 +21,7 @@ Email worker ---- outbound SMTP STARTTLS
 Backup worker --- PostgreSQL dump -> age encryption -> persistent backup volume
 ```
 
-Only Caddy publishes host ports. PostgreSQL has no published port. The API has no published host port. The API and email worker share the internal data network and a restricted outbound network; the database is only on the internal data network. The backup worker has no internet-facing port and encrypts dumps before writing them to disk.
+Only Caddy publishes host ports. PostgreSQL has no published port. The API has no published host port. The API and email worker share the internal data network and a restricted outbound network; the database is only on the internal data network. Caddy has a fixed address on the data network, and only that exact address is trusted when the API reads the forwarded client IP for rate limiting. The backup worker has no internet-facing port and encrypts dumps before writing them to disk.
 
 ## Host and DNS prerequisites
 
@@ -55,7 +55,7 @@ The age key file contains the private decryption identity. Keep it offline in at
 
 Never reuse the encryption key as the rate-limit key. Never commit the .env file or private age key.
 
-## Deploy and verify
+Set \`PLUITS_BACKEND_SUBNET\`, \`PLUITS_EDGE_PROXY_IP\` and \`PLUITS_TRUSTED_PROXY_CIDRS\` consistently. The default edge address is \`172.31.255.2\`; if the subnet conflicts with the host network, choose another private subnet and update all three values together. Only the configured edge proxy CIDR may supply \`X-Forwarded-For\`; untrusted forwarded headers are ignored.\n\n## Deploy and verify
 
 ```sh
 cd backend
