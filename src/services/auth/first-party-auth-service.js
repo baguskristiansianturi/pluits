@@ -14,12 +14,12 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage } = {}
   if (sessionStore === undefined) {
     try { sessionStore = globalThis.sessionStorage; } catch { sessionStore = null; }
   }
-  if (!apiBaseUrl || !appUrl) throw new TypeError('API base URL and canonical app URL are required.');
-  const parsed = new URL(apiBaseUrl);
-  if (parsed.protocol !== 'https:' && parsed.hostname !== 'localhost' && parsed.hostname !== '127.0.0.1') {
+  if (!appUrl) throw new TypeError('The canonical app URL is required.');
+  const parsed = apiBaseUrl ? new URL(apiBaseUrl) : null;
+  if (parsed && parsed.protocol !== 'https:' && parsed.hostname !== 'localhost' && parsed.hostname !== '127.0.0.1') {
     throw new TypeError('The first-party API must use HTTPS.');
   }
-  const base = parsed.toString().replace(/\/$/, '');
+  const base = parsed ? parsed.toString().replace(/\/$/, '') : null;
   const listeners = new Set();
   let session = null;
 
@@ -32,6 +32,7 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage } = {}
     const headers = { Accept: 'application/json' };
     if (body !== undefined) headers['Content-Type'] = 'application/json';
     if (accessToken) headers.Authorization = 'Bearer ' + accessToken;
+    if (!base) throw new Error('Backend akun PLUITS belum terhubung. Login dan pendaftaran belum tersedia.');
     let response;
     try {
       response = await fetch(base + path, {
@@ -87,6 +88,7 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage } = {}
       return error?.message || 'Permintaan belum berhasil. Periksa koneksi lalu coba lagi.';
     },
     async getSession() {
+      if (!base) return null;
       const refreshToken = sessionStore?.getItem(STORAGE_KEY);
       if (!refreshToken) return null;
       try {
@@ -148,7 +150,10 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage } = {}
       session = null;
     },
     async signOut() {
-      if (session?.access_token) {
+      if (!base) {
+        sessionStore?.removeItem(STORAGE_KEY);
+        emit('SIGNED_OUT', null);
+      } else if (session?.access_token) {
         try { await request('/v1/identity/logout', { accessToken: session.access_token }); }
         finally { sessionStore?.removeItem(STORAGE_KEY); emit('SIGNED_OUT', null); }
       } else {
