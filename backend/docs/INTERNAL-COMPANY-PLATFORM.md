@@ -112,9 +112,11 @@ Future digital payments must be a separately governed domain:
 
 Owning and operating the backend gives PLUITS control over its technology and infrastructure design. Physical compute, storage, connectivity, power, redundancy and external delivery networks still have finite capacity and operational requirements.
 
+Capacity planning must include a deliberate safety margin rather than running at the minimum expected demand. The engineering target is to design, benchmark and operate for several multiples of forecast peak load (initial planning reference: up to 6x the measured baseline for critical paths), with headroom across compute, database connections, storage I/O, queues and network throughput. This is a design and validation target—not an instruction to provision six times the infrastructure on day one. Build efficient software and the ability to add capacity through controlled horizontal scaling when measured demand requires it.
+
 Scale in evidence-based stages: one deployable modular backend and PostgreSQL; independent background workers and object storage; caching/search/realtime components when required; separate services and databases for independently scaling or high-risk domains; and multi-region/data residency only when demand, legal obligations and operations justify it.
 
-Never call a system unlimited. Build horizontal scaling, quotas, backpressure, observability and graceful degradation into the design.
+Never call a system unlimited. Build horizontal scaling, quotas, backpressure, observability, load-shedding and graceful degradation into the design. Capacity targets must be verified with repeatable load tests and failure/recovery drills, not inferred from a server-size number.
 
 ## 10. Implementation sequence
 
