@@ -44,7 +44,7 @@ The database will be organized around domain ownership, not around frontend page
 | Trips & Services | Itineraries and bookable service requests | Provider ownership and fulfillment are explicit |
 | Trust & Safety | Reports, moderation cases, appeals and audit trails | Moderation actions are attributable and reviewable |
 
-Schemas may be introduced incrementally. The initial `pluits` namespace is only a root boundary; domain schemas/tables must follow approved contracts and tests.
+Schemas may be introduced incrementally. The initial `pluits` namespace is the root boundary. The first-party identity tables are introduced by migration `000002_first_party_identity.sql`; other domain schemas/tables follow their approved contracts and tests.
 
 ## 4. Identity and account design constraints
 
@@ -58,7 +58,7 @@ The approved platform principle is one PLUITS identity across personal, professi
 - No Supabase credentials, passwords, sessions or profile rows are transferred. New accounts register directly against the Go API.
 - Authentication schema must include account lifecycle, email/phone verification, session revocation, recovery, abuse throttling and auditability before public registration is enabled.
 
-No identity tables were created in the initial database stage; the next step is to implement the first-party account contract for new registrations.
+The first-party identity schema is now authored in migration `000002_first_party_identity.sql`: accounts, normalized email addresses, Argon2id credential metadata, personal profiles, one-time email-verification challenge hashes, opaque session-token hashes and security events. Registration/authentication handlers and delivery infrastructure are still the next implementation stage.
 
 ## 5. Relational data rules
 
@@ -125,13 +125,13 @@ Migration requirements:
 - A public always-on service still needs compute, database storage, bandwidth and backups. Free tiers have limits and must not be represented as unlimited or production-grade.
 - Do not create paid cloud resources, add billing commitments or provision external services without explicit authorization.
 
-## 10. Exit criteria before identity tables
+## 10. Identity schema safety gates
 
-Before the next stage creates identity/auth tables, complete:
-- Approved first-party account lifecycle and recovery rules.
-- Threat model for credential storage, sessions, email verification and abuse prevention.
-- Fresh-database integration tests and negative authorization tests.
-- No production data import or account linking is required for the initial clean start.
+The identity schema is additive and has not been applied to a persistent production database. Before enabling registration:
+- Complete the threat model for credential storage, sessions, email verification and abuse prevention.
+- Add fresh-database integration tests and negative authorization tests.
+- Implement encrypted, retryable email delivery without exposing challenge secrets.
+- Enforce database least privilege and application-level authorization.
 
 ## 11. Current state
 
@@ -141,7 +141,8 @@ Implemented in source:
 - Explicit migration CLI.
 - Version/checksum migration ledger and advisory lock.
 - Initial isolated `pluits` schema migration.
-- PostgreSQL integration test in CI.
+- First-party identity schema migration authored with account, credential, profile, verification, session and security-event tables.
+- PostgreSQL integration test expanded to assert identity migration and table creation.
 
 Not implemented:
 - Identity/account tables or auth endpoints.
