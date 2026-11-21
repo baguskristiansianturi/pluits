@@ -17,8 +17,9 @@ func Load() (Config, error) {
 	if port == "" {
 		port = "8080"
 	}
-	if _, err := strconv.Atoi(port); err != nil {
-		return Config{}, fmt.Errorf("PORT must be a valid TCP port number: %w", err)
+	portNumber, err := strconv.Atoi(port)
+	if err != nil || portNumber < 1 || portNumber > 65535 {
+		return Config{}, fmt.Errorf("PORT must be an integer between 1 and 65535")
 	}
 
 	return Config{
