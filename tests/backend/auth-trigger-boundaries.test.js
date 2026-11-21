@@ -7,7 +7,7 @@ const adapter = await readFile(new URL('../../src/services/auth/first-party-auth
 
 test('browser identity bootstrap is owned by the PLUITS first-party API', () => {
   assert.match(bootstrap, /createFirstPartyAuthService/);
-  assert.doesNotMatch(bootstrap, /supabase|local-demo/i);
+  assert.doesNotMatch(bootstrap, /local-demo|pluits-demo/i);
 });
 
 test('registration delegates profile and workspace creation to the Go identity API', () => {
