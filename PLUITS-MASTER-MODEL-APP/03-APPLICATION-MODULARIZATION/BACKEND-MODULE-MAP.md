@@ -45,7 +45,7 @@ The scope is the platform target, not a claim that all capabilities are already 
 - Transport vertical: verified operators, drivers and vehicles; service areas, quotes, schedules, dispatch, trip lifecycle, safety and reconciliation.
 - Accommodation vertical: verified properties, room/unit inventory, rate plans, availability, reservations, guest privacy, cancellation and settlement.
 - Trips remain itinerary/planning objects that reference authoritative bookings; Marketplace aggregates vertical listings and transactions without taking over merchant operations.
-- Detailed boundaries, lifecycle rules, security and global data requirements: [`backend/docs/PLATFORM-DOMAIN-CONTRACTS.md`](../../backend/docs/PLATFORM-DOMAIN-CONTRACTS.md).
+- Detailed boundaries, lifecycle rules, security and global data requirements: [`backend/docs/PLATFORM-DOMAIN-CONTRACTS.md`](../../backend/docs/PLATFORM-DOMAIN-CONTRACTS.md). Identity mapping and safe authentication transition: [`backend/docs/IDENTITY-AND-AUTH-BRIDGE.md`](../../backend/docs/IDENTITY-AND-AUTH-BRIDGE.md).
 
 ## Technology baseline
 
