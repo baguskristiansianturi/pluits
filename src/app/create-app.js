@@ -4,6 +4,7 @@ import { createPreviewTools } from './preview-tools.js';
 import { routeHref } from '../config/paths.js';
 import { mountHomePage } from '../features/home/home-page.js';
 import { mountBusinessHomePage } from '../features/home/business-home-page.js';
+import { mountBusinessPartnersPage } from '../features/home/business-partners-page.js';
 import { mountMarketplaceHomePage } from '../features/marketplace/marketplace-home-page.js';
 import { mountVenueHomePage } from '../features/venue/venue-home-page.js';
 import { mountAccommodationHomePage } from '../features/accommodation/accommodation-home-page.js';
@@ -26,6 +27,7 @@ export function createApp({root,authService}) {
   const route=resolveAuthenticatedRoute(requested,Boolean(session));
   if(route!==requested){navigate(route);return;}
   if(route==='home'){mountBusinessHomePage({root,user:session?.user||null});attachPreviewTools();return;}
+  if(route==='businessPartners'){mountBusinessPartnersPage({root});attachPreviewTools();return;
   if(route==='venue'){mountVenueHomePage({root,user:session?.user||null});attachPreviewTools();return;}
   if(route==='accommodation'){cleanupPage=mountAccommodationHomePage({root,user:session?.user||null});attachPreviewTools();return;}
   if(route==='venueProvider'){mountVenueProviderPage({root,user:session?.user||null});attachPreviewTools();return;}
