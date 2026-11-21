@@ -1,91 +1,80 @@
-# First PLUITS Account — Release and Registration Runbook
+# First PLUITS Account — Release Runbook
 
-This runbook is the final operational path from the current tested code to the first real account. It does not create fake users and does not use the existing Supabase project.
+This runbook creates the first genuine account through the PLUITS-owned Go API. It does not create synthetic users or seed data.
 
 ## Current readiness
 
 Implemented in source:
-- First-party Go API registration, email verification, login, refresh rotation, logout and password recovery.
-- PostgreSQL migrations through product registry and scoped authorization.
-- Encrypted email outbox and SMTP STARTTLS worker.
-- Browser adapter, email verification route and password-reset route.
-- Docker images and a self-hosted PostgreSQL/API/worker Compose stack.
+- Go identity API and PostgreSQL migrations.
+- Registration, verification, login, refresh rotation, logout and password recovery.
+- Encrypted transactional email outbox and SMTP STARTTLS worker.
+- First-party browser adapter.
+- Self-hosted Compose stack with PostgreSQL, migration job, API, email worker, HTTPS edge and encrypted local backup worker.
 
-Still required before the first real registration:
-- A host controlled by PLUITS Official Indonesia that can run Docker Compose and remain online.
-- A persistent disk/volume and backup destination for PostgreSQL.
-- A DNS name and HTTPS reverse proxy for the API.
-- A real SMTP sender account and credentials.
-- Runtime secrets generated on the host.
-- GitHub Pages build variables for the first-party API.
+Still required:
+- A PLUITS-controlled always-on host and persistent disk.
+- API DNS name and publicly reachable HTTPS.
+- Real SMTP sender credentials.
+- Independent application secrets and an offline backup decryption key.
+- Off-host encrypted backup replication and a successful restore drill.
+- Host monitoring and alerting.
 
-No server, database, domain, SMTP account or paid resource has been provisioned by this repository work.
+No production host, DNS, SMTP sender or paid resource has been provisioned by repository work.
 
 ## 1. Prepare the host
 
-Install Docker Engine and the Docker Compose plugin on the chosen PLUITS-controlled host. Do not expose PostgreSQL publicly. The included Compose file binds the API to loopback so a TLS reverse proxy can forward requests to it.
+Install Docker Engine and Docker Compose v2 on a Linux host controlled by PLUITS Official Indonesia. Point the API DNS A/AAAA record to the host. Permit inbound TCP 80/443 and UDP 443. Do not expose PostgreSQL or the Go API directly.
 
-Copy backend/.env.example to backend/.env on the host. Do not upload the completed .env file to GitHub or paste its secrets into chat.
+Copy `backend/.env.example` to `backend/.env` on the host. Replace every placeholder. Generate:
+- PostgreSQL password: `openssl rand -hex 24`
+- Email outbox encryption key: `openssl rand -base64 32`
+- Rate-limit HMAC key: `openssl rand -base64 32` (independent)
+- Backup encryption keypair: `age-keygen -o pluits-backup-key.txt`
 
-Generate independent secrets on the host:
-- PLUITS_OUTBOX_ENCRYPTION_KEY: openssl rand -base64 32
-- PLUITS_RATE_LIMIT_KEY: openssl rand -base64 32
-- POSTGRES_PASSWORD: openssl rand -hex 24
+Keep the age private key offline and configure only its public `age1...` recipient. Configure the exact frontend origin, API domain, TLS contact email, app URL and SMTP STARTTLS credentials.
 
-Use the first key only for encrypted email payloads and the second only for HMAC rate-limit identifiers. Set POSTGRES_PASSWORD to the hexadecimal output so it remains URL-safe in the internal PostgreSQL connection URL.
+## 2. Start the self-hosted stack
 
-Set:
-- PLUITS_ALLOWED_ORIGINS to the exact frontend origin, currently https://baguskristiansianturi.github.io. Never use *.
-- PLUITS_PUBLIC_BASE_URL to https://baguskristiansianturi.github.io/pluits
-- PLUITS_SMTP_HOST, PLUITS_SMTP_PORT=587, PLUITS_SMTP_FROM, PLUITS_SMTP_USERNAME and PLUITS_SMTP_PASSWORD to the real provider settings.
+From `backend/` on the host:
 
-## 2. Start the backend
+```sh
+docker compose --env-file .env -f compose.yaml config --quiet
+docker compose --env-file .env -f compose.yaml up --build -d
+docker compose --env-file .env -f compose.yaml ps
+docker compose --env-file .env -f compose.yaml logs --tail=100 api email-worker edge backup
+```
 
-From backend/ on the host:
-- docker compose --env-file .env -f compose.yaml up --build -d
-- docker compose --env-file .env -f compose.yaml ps
-- docker compose --env-file .env -f compose.yaml logs --tail=100 api email-worker
+Caddy obtains and renews the API TLS certificate. PostgreSQL has no public port; Caddy is the only public ingress. Verify:
+- `https://<API_DOMAIN>/health/live`
+- `https://<API_DOMAIN>/health/ready`
+- Allowed CORS origin is accepted; unlisted origins are rejected.
+- SMTP verification and recovery messages reach a controlled mailbox.
+- An encrypted backup is created and can be decrypted with the offline key.
+- A restore drill from the off-host backup copy succeeds.
 
-The migration service applies the numbered migrations before the API and email worker start. PostgreSQL data is held in the named pluits-postgres-data volume.
+The local backup volume alone is not disaster recovery. Replicate encrypted dumps to a second PLUITS-controlled location before storing real user data.
 
-Configure the host's HTTPS reverse proxy to forward to 127.0.0.1:8080. Keep PostgreSQL private. Configure monitoring, encrypted backups and tested restore procedures before storing valuable user data.
+## 3. Connect the frontend
 
-## 3. Verify service and browser connectivity
+In GitHub repository Settings → Secrets and variables → Actions → Variables, set:
+- `VITE_API_BASE_URL=https://<API_DOMAIN>`
+- `VITE_PUBLIC_SIGNUP_ENABLED=false` initially.
 
-Check:
-- GET https://api.<PLUITS-owned-domain>/health/live
-- GET https://api.<PLUITS-owned-domain>/health/ready
+The authentication provider is fixed to the PLUITS first-party adapter in source; no provider selector variable is used. Deploy, verify guest pages and API connectivity, then test the complete identity flow with a controlled mailbox.
 
-Check CORS preflight from the configured frontend origin. The API must return 204 and the exact Access-Control-Allow-Origin value; an unlisted origin must receive 403.
+## 4. First genuine account
 
-Check email delivery using a controlled mailbox before enabling public signup. The worker must deliver the verification message and mark the outbox row sent. Never inspect, print or log the one-time token outside the intended email link.
+Only after all release gates pass:
+1. Set `VITE_PUBLIC_SIGNUP_ENABLED=true` and deploy.
+2. Open PLUITS registration.
+3. Enter the founder's real account details and accept the current legal documents.
+4. Submit. The API creates the pending account, profile, consent, workspace, membership, product grant and encrypted outbox item in one transaction.
+5. Verify using the one-time email link.
+6. Sign in and check `GET /v1/identity/me`.
+7. Test refresh rotation, logout and password recovery.
 
-## 4. Connect the PLUITS frontend
-
-In GitHub repository settings, open Settings → Secrets and variables → Actions → Variables. Set:
-- VITE_AUTH_PROVIDER = first-party
-- VITE_API_BASE_URL = https://api.<PLUITS-owned-domain>
-- VITE_PUBLIC_SIGNUP_ENABLED = false for the first deployment
-
-The Pages workflow reads these variables at build time. Deploy with signup disabled first and verify that the existing public site loads and the first-party API can be reached. The first-party Go adapter is the only supported adapter; there is no Supabase or demo fallback.
-
-Only after the HTTPS API, CORS, SMTP verification, database persistence and backup checks pass, set VITE_PUBLIC_SIGNUP_ENABLED = true and run the Pages workflow again.
-
-## 5. First real account test
-
-Once the first-party build is deployed:
-1. Open the PLUITS registration page.
-2. Enter the real account details and accept the current Terms of Service and Privacy Policy.
-3. Submit registration. The API should return a generic accepted response and create one pending account, profile, personal workspace, owner membership, baseline PLUITS product membership, consent records and encrypted outbox item. No other product access is granted.
-4. Open the verification email and follow its one-time link.
-5. Return to PLUITS and sign in with the same email and password.
-6. Verify the account profile and personal workspace through GET /v1/identity/me.
-7. Test logout, sign in again, and password recovery using the same mailbox.
-
-The first account is created by the real registration flow. Do not manually insert an account row, disable verification, seed a user or expose an outbox token.
+Never manually insert an account, disable verification, seed a fake user or expose the outbox token.
 
 ## Stop conditions
 
-Do not enable signup if any of these are missing: persistent database, HTTPS API, exact CORS allowlist, independent encryption and HMAC keys, SMTP delivery, verified email link routing, backups and successful restore validation.
-
-Do not run the Compose stack on an ephemeral host or assume a free database tier is persistent. The code is self-hostable; durable global service availability still depends on the physical infrastructure and operational controls selected by PLUITS.
+Keep signup disabled if any of these are missing: durable PostgreSQL, HTTPS API, exact CORS, independent secrets, SMTP delivery, encrypted backup, off-host replication, successful restore drill and host monitoring. A development Codespace or ephemeral runner is not production hosting.
