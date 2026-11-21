@@ -1,0 +1,14 @@
+[Unit]
+Description=Replicate encrypted PLUITS PostgreSQL backups to secondary PLUITS host
+Wants=network-online.target
+After=network-online.target docker.service
+ConditionPathIsDirectory=/srv/pluits/backups
+
+[Service]
+Type=oneshot
+User=root
+EnvironmentFile=/etc/pluits/backup-replication.env
+ExecStart=/usr/local/sbin/pluits-backup-replicate
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
