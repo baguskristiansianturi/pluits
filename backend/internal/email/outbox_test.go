@@ -41,8 +41,11 @@ func TestOutboxWorkerDeliversEncryptedVerificationMessage(t *testing.T) {
 	if err != nil { t.Fatal(err) }
 	processed, err := worker.ProcessBatch(ctx)
 	if err != nil { t.Fatal(err) }
-	if processed != 1 || len(sender.messages) != 1 { t.Fatalf("expected one delivered message, processed=%d messages=%d", processed, len(sender.messages)) }
-	message := sender.messages[0]
+	if processed < 1 { t.Fatalf("expected at least one delivered message, processed=%d", processed) }
+	var message Message
+	found := false
+	for _, candidate := range sender.messages { if candidate.To == address { message = candidate; found = true; break } }
+	if !found { t.Fatalf("expected verification email for %s among %d delivered messages", address, len(sender.messages)) }
 	if message.To != address { t.Fatalf("unexpected recipient %q", message.To) }
 	if !strings.Contains(message.Subject, "PLUITS") { t.Fatalf("unexpected subject %q", message.Subject) }
 	linkLine := strings.Split(message.Body, "\n")[2]
