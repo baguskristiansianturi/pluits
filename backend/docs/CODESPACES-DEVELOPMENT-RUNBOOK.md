@@ -4,7 +4,7 @@ Status: DEVELOPMENT ONLY. This environment is temporary and is not approved for 
 
 ## Purpose
 
-Run the existing Go API and PostgreSQL migrations from a browser-accessible development environment while the PLUITS frontend remains on GitHub Pages. No custom domain, paid hosting, or change to the existing Supabase project is required for this development setup.
+Run the existing Go API and PostgreSQL migrations from a browser-accessible development environment while the PLUITS frontend remains on GitHub Pages. No custom domain or paid hosting is required for this disposable development setup. It does not provision production infrastructure.
 
 ## Create the Codespace
 
@@ -48,7 +48,7 @@ Keep port visibility set to **Private**. Do not change it to Public.
 - The identity routes require separate encryption and rate-limit keys. They are intentionally not enabled by this base setup.
 - Real registration also requires an SMTP STARTTLS sender and a persistent, backed-up database. Do not bypass email verification or expose verification tokens to create the first real account.
 - Do not point the production GitHub Pages frontend at this temporary API until the identity release gates, CORS, SMTP delivery, persistence, backup/restore, and account-registration restrictions have been reviewed.
-- The existing Supabase project and current production authentication remain unchanged.
+- Supabase is not used by this development environment or by the PLUITS target architecture.
 - Stop the Codespace when finished to avoid consuming its monthly compute quota.
 
 ## Next release gate
