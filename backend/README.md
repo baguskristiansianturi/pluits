@@ -2,7 +2,7 @@
 
 **Status:** foundation and PostgreSQL migration tooling implemented in source; no public deployment and no production cutover.
 
-This is the first-party backend codebase for the full PLUITS ecosystem. It is intentionally isolated from the existing frontend and Supabase production runtime while domain contracts and migration safety are established.
+This is the first-party backend codebase for the PLUITS ecosystem and the first product on the company's reusable internal backend platform. It starts with a clean PostgreSQL database and has no runtime dependency on Supabase.
 
 ## Platform scope
 
@@ -94,18 +94,18 @@ go build ./cmd/api
 go build ./cmd/migrate
 ```
 
-Detailed database ownership, global data, identity, privacy and migration rules are documented in [`docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`](docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md). The cross-platform domain contracts for profiles, dashboards, transport and accommodation are in [`docs/PLATFORM-DOMAIN-CONTRACTS.md`](docs/PLATFORM-DOMAIN-CONTRACTS.md). The existing Supabase identity mapping and safe first-party authentication transition are documented in [`docs/IDENTITY-AND-AUTH-BRIDGE.md`](docs/IDENTITY-AND-AUTH-BRIDGE.md).
+Detailed database ownership, global data, identity, privacy and migration rules are documented in [`docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`](docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md). The cross-platform domain contracts for profiles, dashboards, transport and accommodation are in [`docs/PLATFORM-DOMAIN-CONTRACTS.md`](docs/PLATFORM-DOMAIN-CONTRACTS.md). The clean first-party account strategy is documented in [`docs/IDENTITY-AND-AUTH-BRIDGE.md`](docs/IDENTITY-AND-AUTH-BRIDGE.md). The reusable company-owned backend platform for PLUITS, BDM, Bagusin and future internal products is documented in [`docs/INTERNAL-COMPANY-PLATFORM.md`](docs/INTERNAL-COMPANY-PLATFORM.md).
 
 ## Data model and migration policy
 
 - Supabase remains the live production source of truth until a separately reviewed migration is completed.
-- The new database is a distinct target. Never run the new migration command against production Supabase.
+- The new backend starts with its own clean PostgreSQL database. Supabase is a reference/legacy environment only and is not a dependency of the new backend.
 - Do not copy production credentials, service-role keys, user passwords, private messages, or personal data into Git.
 - Do not create demo users, fake marketplace listings, fake orders, fake reviews, fake balances or seeded social activity.
 - Do not modify or replay the existing Supabase migration history.
 - Account/membership rules that remain PROPOSED are not treated as approved schema requirements.
 - Domain tables must be designed from the approved PLUITS business model, current live schema inventory, privacy boundaries and ownership rules.
-- Any data transfer needs stable identity mapping, export/import reconciliation, backup, repeatable dry-run, rollback and founder acceptance.
+- No Supabase account or profile import is planned. New test and production accounts will register directly with the Go API. Any future cross-product data transfer requires explicit approval.
 - Passwords must never be exported in plaintext. Account migration requires a secure credential-reset, verified linking or other reviewed strategy.
 - Backend authorization is mandatory. Frontend visibility is not security.
 
