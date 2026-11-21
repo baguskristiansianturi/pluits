@@ -93,6 +93,12 @@ func UpFS(ctx context.Context, db *sql.DB, source fs.FS) error {
 	}
 
 	known := make(map[int64]struct{}, len(migrations))
+	var highestApplied int64
+	for version, previous := range applied {
+		if version > highestApplied {
+			highestApplied = version
+		}
+	}
 	for _, item := range migrations {
 		known[item.version] = struct{}{}
 	}
@@ -103,6 +109,9 @@ func UpFS(ctx context.Context, db *sql.DB, source fs.FS) error {
 	}
 
 	for _, item := range migrations {
+		if _, ok := applied[item.version]; !ok && item.version <= highestApplied {
+			return fmt.Errorf("migration %s is older than the latest applied migration; refusing out-of-order history", item.name)
+		}
 		if previous, ok := applied[item.version]; ok {
 			if previous.name != item.name || previous.checksum != item.checksum {
 				return fmt.Errorf("applied migration %d was changed: database has %s (%s), source has %s (%s)", item.version, previous.name, previous.checksum, item.name, item.checksum)
