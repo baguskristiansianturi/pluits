@@ -54,11 +54,11 @@ The approved platform principle is one PLUITS identity across personal, professi
 - Workspace roles and explicit permissions control actions; membership does not replace authorization.
 - Do not merge personal profile and merchant storefront into one record.
 - Do not expose private addresses, exact coordinates, credential data, recovery tokens or private media through public profile APIs.
-- Existing Supabase Auth users and profiles need a stable identity mapping plan before import.
-- Never transfer plaintext passwords. Use verified account linking, secure password reset or a separately reviewed credential migration.
+- The new backend starts clean; existing Supabase data is reference-only and is not imported.
+- No Supabase credentials, passwords, sessions or profile rows are transferred. New accounts register directly against the Go API.
 - Authentication schema must include account lifecycle, email/phone verification, session revocation, recovery, abuse throttling and auditability before public registration is enabled.
 
-No identity or membership tables are created in this database stage because the account model and current production data mapping must first be reconciled.
+No identity tables were created in the initial database stage; the next step is to implement the first-party account contract for new registrations.
 
 ## 5. Relational data rules
 
@@ -128,13 +128,10 @@ Migration requirements:
 ## 10. Exit criteria before identity tables
 
 Before the next stage creates identity/auth tables, complete:
-- Inventory of the current production Auth identity and related profile triggers.
-- Reconciliation of profile, seller workspace, professional profile and role ownership.
-- Approved account lifecycle and recovery rules.
+- Approved first-party account lifecycle and recovery rules.
 - Threat model for credential storage, sessions, email verification and abuse prevention.
-- Data mapping for stable IDs and duplicate detection.
-- Positive and negative authorization tests.
-- Backup, import dry-run, reconciliation and rollback plan.
+- Fresh-database integration tests and negative authorization tests.
+- No production data import or account linking is required for the initial clean start.
 
 ## 11. Current state
 
