@@ -63,7 +63,7 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage = glob
       expires_at: Math.floor(new Date(tokens.access_expires_at).getTime() / 1000),
       user: {
         id: tokens.account_id,
-        email,
+        email: tokens.email || email,
         user_metadata: {},
         app_metadata: { provider: 'pluits-first-party' }
       }
@@ -87,7 +87,9 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage = glob
       if (!refreshToken) return null;
       try {
         const tokens = await request('/v1/identity/refresh', { body: { refresh_token: refreshToken } });
-        return emit('TOKEN_REFRESHED', toSession(tokens));
+        const nextSession = toSession(tokens, tokens.email);
+        emit('TOKEN_REFRESHED', nextSession);
+        return nextSession;
       } catch {
         storage?.removeItem(STORAGE_KEY);
         session = null;
