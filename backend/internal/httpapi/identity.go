@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"net"
+	"net/netip"
 	"net/http"
 	"strings"
 	"time"
@@ -20,6 +21,7 @@ type RequestLimiter interface {
 type IdentityHandler struct {
 	service *identity.Service
 	limiter RequestLimiter
+	trustedProxyCIDRs []netip.Prefix
 }
 
 func NewIdentityHandler(service *identity.Service, limiters ...RequestLimiter) *IdentityHandler {
@@ -28,10 +30,41 @@ func NewIdentityHandler(service *identity.Service, limiters ...RequestLimiter) *
 	return handler
 }
 
+func (h *IdentityHandler) SetTrustedProxyCIDRs(raw string) error {
+  var prefixes []netip.Prefix
+  for _, value := range strings.Split(raw, ",") {
+    value = strings.TrimSpace(value)
+    if value == "" { continue }
+    prefix, err := netip.ParsePrefix(value)
+    if err != nil { return errors.New("PLUITS_TRUSTED_PROXY_CIDRS contains an invalid CIDR") }
+    prefixes = append(prefixes, prefix.Masked())
+  }
+  h.trustedProxyCIDRs = prefixes
+  return nil
+}
+
+func (h *IdentityHandler) clientIdentifier(r *http.Request) string {
+  peer := r.RemoteAddr
+  if host, _, err := net.SplitHostPort(peer); err == nil { peer = host }
+  peerIP, err := netip.ParseAddr(peer)
+  if err != nil { return peer }
+  peerIP = peerIP.Unmap()
+
+  trusted := false
+  for _, prefix := range h.trustedProxyCIDRs {
+    if prefix.Contains(peerIP) { trusted = true; break }
+  }
+  if trusted {
+    forwarded := strings.TrimSpace(strings.Split(r.Header.Get("X-Forwarded-For"), ",")[0])
+    if forwardedIP, parseErr := netip.ParseAddr(forwarded); parseErr == nil {
+      return forwardedIP.Unmap().String()
+    }
+  }
+  return peerIP.String()
+}
+
 func (h *IdentityHandler) allowRequest(w http.ResponseWriter, r *http.Request, scope string, limit int, window time.Duration) bool {
-	peer := r.RemoteAddr
-	if host, _, err := net.SplitHostPort(peer); err == nil { peer = host }
-	return h.allowIdentifier(w, r, scope, peer, limit, window)
+  return h.allowIdentifier(w, r, scope, h.clientIdentifier(r), limit, window)
 }
 
 func (h *IdentityHandler) allowIdentifier(w http.ResponseWriter, r *http.Request, scope, identifier string, limit int, window time.Duration) bool {
