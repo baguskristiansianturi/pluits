@@ -26,6 +26,8 @@ type RegistrationInput struct {
 	Email string
 	Password string
 	DisplayName string
+	TermsVersion string
+	PrivacyVersion string
 }
 
 type RegistrationResult struct {
@@ -92,6 +94,16 @@ func (s *Service) Register(ctx context.Context, input RegistrationInput) (Regist
 		INSERT INTO pluits.personal_profiles (account_id, display_name)
 		VALUES ($1, $2)
 	`, accountID, displayName); err != nil { return RegistrationResult{}, ErrIdentityUnavailable }
+
+	termsVersion := input.TermsVersion
+	if termsVersion == "" { termsVersion = "2026-11-21" }
+	privacyVersion := input.PrivacyVersion
+	if privacyVersion == "" { privacyVersion = "2026-11-21" }
+	if _, err = tx.ExecContext(ctx, `
+		INSERT INTO pluits.account_consents (account_id, consent_type, document_version, source)
+		VALUES ($1, 'terms_of_service', $2, 'web_registration'),
+		       ($1, 'privacy_policy', $3, 'web_registration')
+	`, accountID, termsVersion, privacyVersion); err != nil { return RegistrationResult{}, ErrIdentityUnavailable }
 
 	expiresAt := time.Now().UTC().Add(30 * time.Minute)
 	if _, err = tx.ExecContext(ctx, `
