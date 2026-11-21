@@ -41,6 +41,12 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - Startup database connectivity check when `DATABASE_URL` is configured.
 - Conservative HTTP timeouts and graceful shutdown.
 
+### API security baseline
+- Every API response receives a cryptographically random request ID and security headers.
+- Panic recovery returns a generic server error while logging the correlation ID; panic details are not returned to clients.
+- Request bodies are capped at 2 MiB for the JSON API. Media uploads must use a separately authorized object-storage flow rather than the application API process.
+- This is a baseline only; distributed rate limiting, authentication, authorization, MFA, audit storage and edge protections remain future work.
+
 ### Database migration system
 - Dedicated `pluits_meta.schema_migrations` ledger.
 - Ordered SQL migrations named `<version>_<description>.sql`.
@@ -88,7 +94,7 @@ go build ./cmd/api
 go build ./cmd/migrate
 ```
 
-Detailed database ownership, global data, identity, privacy and migration rules are documented in [`docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`](docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md).
+Detailed database ownership, global data, identity, privacy and migration rules are documented in [`docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`](docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md). The cross-platform domain contracts for profiles, dashboards, transport and accommodation are in [`docs/PLATFORM-DOMAIN-CONTRACTS.md`](docs/PLATFORM-DOMAIN-CONTRACTS.md).
 
 ## Data model and migration policy
 
@@ -109,12 +115,16 @@ Detailed database ownership, global data, identity, privacy and migration rules 
 |---|---|
 | Go API process | Implemented in source |
 | Health/readiness endpoints | Implemented in source |
+| API request IDs, security headers, panic recovery and body cap | Implemented in source; CI validation pending |
 | PostgreSQL connection pool | Implemented in source |
 | Versioned migration runner | Implemented in source |
 | Migration checksum/lock/transaction | Implemented in source |
 | Initial isolated database namespace | Migration authored; CI integration test verifies application |
 | Unit and PostgreSQL integration tests | Added; CI run pending |
-| Identity/authentication | Not started |
+| Identity/authentication and workspace authorization | Not started; existing Supabase identity mapping must be audited first |
+| Profiles and permission-scoped dashboards | Target contract documented; API not started |
+| Transport operations | Target contract documented; schema/API not started |
+| Accommodation operations | Target contract documented; schema/API not started |
 | Social, messaging, media, calls/live | Not started |
 | Marketplace and merchant domains | Not started |
 | Public hosting/deployment | Not started |
