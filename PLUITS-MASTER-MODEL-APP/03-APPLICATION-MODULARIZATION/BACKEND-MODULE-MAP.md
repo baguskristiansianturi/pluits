@@ -87,10 +87,10 @@ Specific vendors and production hosting are not locked in by this baseline. Free
 
 - `backend/` contains the Go 1.27 HTTP service, PostgreSQL connection pool, liveness/readiness endpoints, baseline API security middleware and explicit migration CLI.
 - Migration runner records immutable version/checksum history, serializes runs with a PostgreSQL advisory lock, and commits each migration with its ledger row.
-- Initial migration creates only the isolated `pluits` namespace; it does not create account or domain tables before approved contracts and production mapping.
+- Migration `000001` creates the isolated `pluits` namespace. Migration `000002` now defines the first-party identity schema; registration endpoints and frontend integration remain pending.
 - GitHub Actions provisions disposable PostgreSQL 17 and runs Go race tests, migration integration tests and builds both API and migration commands.
 - Detailed database rules: `backend/docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`.
-- No identity schema, domain tables, production data copy, public API deployment or frontend integration has been performed yet.
+- The first-party identity schema is authored. No registration endpoint, production data copy, public API deployment or frontend integration has been performed yet.
 
 ## Definition of ready
 
