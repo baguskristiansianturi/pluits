@@ -49,7 +49,7 @@ func (s *Service) Register(ctx context.Context, input RegistrationInput) (Regist
 	if err != nil { return RegistrationResult{}, err }
 	if err := ValidatePassword(input.Password); err != nil { return RegistrationResult{}, err }
 	displayName := stringsTrim(input.DisplayName)
-	if len([]rune(displayName)) < 2 || len([]rune(displayName)) > 80 { return RegistrationResult{}, errors.New("display name must contain 1 to 80 characters") }
+	if len([]rune(displayName)) < 2 || len([]rune(displayName)) > 80 { return RegistrationResult{}, errors.New("display name must contain 2 to 80 characters") }
 
 	passwordHash, err := HashPassword(input.Password)
 	if err != nil { return RegistrationResult{}, fmt.Errorf("prepare credentials: %w", err) }
