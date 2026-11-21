@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
-	"strconv"
 	"strings"
 	"time"
 
@@ -49,8 +48,8 @@ func (w *OutboxWorker) ProcessBatch(ctx context.Context) (int, error) {
 		WHERE (status = 'pending' AND available_at <= NOW())
 		   OR (status = 'processing' AND locked_at < NOW() - INTERVAL '5 minutes')
 		ORDER BY created_at
-		FOR UPDATE SKIP LOCKED
 		LIMIT $1
+		FOR UPDATE SKIP LOCKED
 	`, w.batchSize)
 	if err != nil { return 0, err }
 	var batch []queuedMessage
@@ -126,4 +125,3 @@ func retryDelay(attempt int) time.Duration {
 	return time.Duration(seconds) * time.Second
 }
 
-var _ = strconv.Itoa
