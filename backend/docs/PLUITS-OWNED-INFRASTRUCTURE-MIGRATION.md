@@ -28,6 +28,7 @@
 - Encrypted email outbox and SMTP worker.
 - Self-hosted Compose topology: PostgreSQL, migration job, API, email worker, Caddy and encrypted backup worker.
 - Private Docker data network; only HTTPS edge publishes internet-facing ports.
+- Authentication rate limiting reads forwarded client IP only from the exact configured edge-proxy address.
 - No production secrets, hostnames or credentials committed.
 
 ## Domain migration register
