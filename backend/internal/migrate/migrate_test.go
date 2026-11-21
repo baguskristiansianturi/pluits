@@ -40,6 +40,12 @@ func TestMigrationRunnerIsIdempotentAndProtectsHistory(t *testing.T) {
 	if count != 1 {
 		t.Fatalf("expected exactly one ledger record for migration 1, got %d", count)
 	}
+	var latestMigrationCount int
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM pluits_meta.schema_migrations WHERE version = 7").Scan(&latestMigrationCount); err != nil { t.Fatal(err) }
+	if latestMigrationCount != 1 { t.Fatalf("expected migration 7 to be applied exactly once, got %d", latestMigrationCount) }
+	var productCount int
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM pluits.platform_products WHERE product_key='pluits'").Scan(&productCount); err != nil { t.Fatal(err) }
+	if productCount != 1 { t.Fatalf("expected PLUITS core product to be registered, got %d", productCount) }
 
 	var identityMigrationCount int
 	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM pluits_meta.schema_migrations WHERE version = 2").Scan(&identityMigrationCount); err != nil {
