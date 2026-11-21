@@ -57,8 +57,10 @@ func UpFS(ctx context.Context, db *sql.DB, source fs.FS) error {
 		_, _ = conn.ExecContext(context.Background(), "SELECT pg_advisory_unlock($1)", advisoryLockID)
 	}()
 
+	if _, err := conn.ExecContext(ctx, "CREATE SCHEMA IF NOT EXISTS pluits_meta"); err != nil {
+		return fmt.Errorf("create migration metadata schema: %w", err)
+	}
 	if _, err := conn.ExecContext(ctx, `
-		CREATE SCHEMA IF NOT EXISTS pluits_meta;
 		CREATE TABLE IF NOT EXISTS pluits_meta.schema_migrations (
 			version BIGINT PRIMARY KEY,
 			name TEXT NOT NULL UNIQUE,
@@ -66,7 +68,7 @@ func UpFS(ctx context.Context, db *sql.DB, source fs.FS) error {
 			applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 		)
 	`); err != nil {
-		return fmt.Errorf("initialize migration ledger: %w", err)
+		return fmt.Errorf("create migration ledger: %w", err)
 	}
 
 	rows, err := conn.QueryContext(ctx, "SELECT version, name, checksum FROM pluits_meta.schema_migrations ORDER BY version")
