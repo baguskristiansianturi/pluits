@@ -39,7 +39,7 @@ If email delivery is not yet configured, registration may be tested up to the pe
 
 The backend is owned and governed by PLUITS Official Indonesia. Customer identity and privileged workspace access remain separate authorization concerns. Any future identity federation or account linking requires explicit proof of account ownership, consent and separate authorization.
 
-Internal staff/service identities are distinct from customer identities. Staff access must use dedicated roles, MFA, audit and least privilege. A PLUITS customer must not automatically receive BDM operator access or Bagusin admin access.
+Internal staff/service identities are distinct from customer identities. Staff access must use dedicated roles, MFA, audit and least privilege. A regular PLUITS account must not automatically receive privileged operator, merchant or financial-administration access.
 
 ## 6. Data model principles
 
@@ -73,5 +73,5 @@ Internal staff/service identities are distinct from customer identities. Staff a
 
 - Existing Supabase schema/frontend behavior has been reviewed only as a product reference.
 - No Supabase data, credentials, passwords, tokens or sessions are imported.
-- Go API currently has health/readiness and PostgreSQL foundation; first-party auth endpoints are not yet implemented.
-- Next implementation stage: first-party identity schema, secure registration, verification outbox, session rotation, login/logout and end-to-end tests against disposable PostgreSQL.
+- Go API currently has health/readiness and PostgreSQL foundation. The first-party identity schema migration is authored; registration, verification delivery, login, refresh rotation and logout endpoints are not yet implemented.
+- Next implementation stage: implement the identity repository and secure registration flow, then verification delivery, session rotation, login/logout and end-to-end tests against disposable PostgreSQL.
