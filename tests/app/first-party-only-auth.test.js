@@ -7,5 +7,6 @@ test('browser bootstrap has no Supabase or synthetic authentication fallback', a
   const runtime = await readFile(new URL('../../src/config/runtime.js', import.meta.url), 'utf8');
   assert.match(main, /createFirstPartyAuthService/);
   assert.doesNotMatch(main, /supabase|local-demo|pluits-demo/i);
-  assert.match(runtime, /VITE_AUTH_PROVIDER \|\| 'first-party'/);
+  assert.match(runtime, /AUTH_PROVIDER = 'first-party'/);
+  assert.doesNotMatch(runtime, /VITE_AUTH_PROVIDER/);
 });
