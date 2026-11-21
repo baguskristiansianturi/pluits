@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-const migration = await readFile(new URL('../../supabase/migrations/20261115123634_protect_user_post_moderation_status.sql', import.meta.url), 'utf8');
+const migration = await readFile(new URL('../../backend/legacy-schema-reference/sql/migrations/20261115123634_protect_user_post_moderation_status.sql', import.meta.url), 'utf8');
 
 test('post owners cannot set internal moderation states or reverse moderator decisions', () => {
   assert.match(migration, /before insert or update of moderation_status on public\.user_posts/i);
