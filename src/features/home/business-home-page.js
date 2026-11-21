@@ -55,10 +55,10 @@ function discoveryShowcase() {
 }
 
 export function mountBusinessHomePage({root,user=null}={}) {
-  const primaryHref = routeHref(user ? 'dashboard' : 'register');
-  const primaryLabel = user ? 'Buka Dashboard' : 'Bergabung dengan PLUITS';
+  const primaryHref = routeHref(user ? 'social' : 'register');
+  const primaryLabel = user ? 'Buka PLUITS' : 'Bergabung dengan PLUITS';
   const headerAction = user
-    ? '<div class="business-header-actions"><a class="business-login-link" href="' + routeHref('dashboard') + '">Dashboard</a></div>'
+    ? '<div class="business-header-actions"><a class="business-login-link" href="' + routeHref('social') + '">Buka PLUITS</a></div>'
     : '<div class="business-header-actions"><a class="business-login-link" href="' + routeHref('login') + '">Masuk</a><a class="business-header-cta" href="' + routeHref('register') + '">Daftar</a></div>';
 
   const footerMarkup = renderPublicFooter();
@@ -78,7 +78,7 @@ export function mountBusinessHomePage({root,user=null}={}) {
       '</section>' +
       '<section class="business-home-business-band" id="untuk-bisnis"><div class="business-home-business-inner">' +
         '<div class="business-home-business-copy">' + sectionIntro('UNTUK PELAKU USAHA','Bawa bisnis Anda lebih dekat kepada pelanggan.','Bangun kehadiran digital yang lebih mudah ditemukan. Perkenalkan apa yang Anda tawarkan, ceritakan nilai bisnis Anda, dan buka jalan untuk hubungan yang lebih bermakna.') +
-          '<a class="business-primary-cta" href="' + primaryHref + '">' + (user ? 'Buka Dashboard' : 'Mulai bersama PLUITS') + ' <span aria-hidden="true">→</span></a></div>' +
+          '<a class="business-primary-cta" href="' + (user ? routeHref('businessPartners') : primaryHref) + '">' + (user ? 'Jelajahi Business Partners' : 'Mulai bersama PLUITS') + ' <span aria-hidden="true">→</span></a></div>' +
         '<div class="business-home-business-visual"><div class="business-owner-photo">' + photo('business','') + '<div><span>UNTUK PELAKU USAHA</span><strong>Bisnis Anda punya cerita. Biarkan lebih banyak orang menemukannya.</strong></div></div></div>' +
       '</div><div class="business-owner-grid-wrap">' + businessExperience() + '</div></section>' +
       '<section class="business-home-section business-discovery-section" id="ekosistem">' +
