@@ -59,7 +59,10 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - A standalone worker claims queued messages with PostgreSQL row locking, sends through SMTP with mandatory STARTTLS, retries transient failures and marks terminal failures.
 - HTTP handlers exist for registration, verification, login, refresh and logout. Identity service is disabled unless its outbox encryption key is configured.
 - PostgreSQL-backed shared rate limiting is applied by IP and canonical email for identity routes; access-token authentication middleware checks active account and session state on every protected request.
-- MFA, password reset, account recovery, trusted-device controls, key-rotation keyrings, and broader abuse/fraud detection remain outstanding. Do not treat the identity module as production-ready until these release gates and deployment configuration are reviewed.
+- Password reset uses one-time hashed challenges, encrypted outbox delivery and revokes all active sessions after completion.
+- New accounts receive an isolated personal workspace and `personal_owner` role. Product access is not inherited; each product requires an explicit workspace grant and product-scoped role.
+- `GET /v1/identity/me` returns the authenticated account's verified primary email, personal profile, workspace and role assignments.
+- MFA, trusted-device controls, keyring-based outbox key rotation, account recovery support operations and broader abuse/fraud detection remain outstanding. Do not treat the identity module as production-ready until these release gates and deployment configuration are reviewed.
 
 ### Database migration system
 - Dedicated `pluits_meta.schema_migrations` ledger.
@@ -70,22 +73,26 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - Re-running migrations is idempotent.
 - Editing or deleting an already-applied migration is rejected.
 - Migrations are **not** run automatically by API startup; an explicit command is required.
-- Migration `000001` creates the isolated `pluits` namespace. Migration `000002` defines first-party accounts, email addresses, credential metadata, personal profiles, verification challenge hashes, session token hashes and security events. These migrations are authored but have not been applied to a persistent production database.
+- Migration `000001` creates the isolated `pluits` namespace. Migration `000002` defines first-party identity and session data; `000003` adds encrypted email delivery; `000004` adds shared rate limits; `000005` adds personal workspaces, scoped authorization, legal-consent records and password-reset challenges. These migrations are validated against disposable PostgreSQL CI, not applied to a persistent production database.
 
 ### Identity API and email worker
 
 Identity routes:
 - POST /v1/identity/register
 - POST /v1/identity/verify-email
+- POST /v1/identity/resend-verification
+- POST /v1/identity/password-reset/request
+- POST /v1/identity/password-reset/complete
 - POST /v1/identity/login
 - POST /v1/identity/refresh
 - POST /v1/identity/logout (Bearer access token)
+- GET /v1/identity/me (Bearer access token)
 
-The API only activates the identity service when PLUITS_OUTBOX_ENCRYPTION_KEY is configured. Supply a base64 raw-standard-encoded 32-byte key and keep it in the runtime secret manager, never in Git or PostgreSQL. PLUITS_OUTBOX_KEY_VERSION defaults to 1. Identity routes also require PLUITS_RATE_LIMIT_KEY, a separate base64 raw-standard-encoded 32-byte HMAC key. Rate-limit buckets store HMAC identifiers rather than raw IP or email values.
+The API only activates identity routes when both PLUITS_OUTBOX_ENCRYPTION_KEY and PLUITS_RATE_LIMIT_KEY are configured. Supply a base64 raw-standard-encoded 32-byte key and keep it in the runtime secret manager, never in Git or PostgreSQL. PLUITS_OUTBOX_KEY_VERSION defaults to 1. Identity routes also require PLUITS_RATE_LIMIT_KEY, a separate base64 raw-standard-encoded 32-byte HMAC key. Rate-limit buckets store HMAC identifiers rather than raw IP or email values.
 
 The email worker is a separate process. Configure DATABASE_URL, PLUITS_OUTBOX_ENCRYPTION_KEY, PLUITS_OUTBOX_KEY_VERSION, PLUITS_PUBLIC_BASE_URL, PLUITS_SMTP_HOST, PLUITS_SMTP_PORT, PLUITS_SMTP_FROM, PLUITS_SMTP_USERNAME and PLUITS_SMTP_PASSWORD, then run: go run ./cmd/email-worker from the backend directory.
 
-SMTP STARTTLS is mandatory. The worker never logs verification tokens or email bodies. A real SMTP provider and HTTPS PLUITS verification page must be configured before public account registration is enabled. No provider credentials are committed or assumed.
+SMTP STARTTLS is mandatory. The worker never logs verification tokens or email bodies. Verification and password-reset links resolve through the PLUITS auth route. A real SMTP provider, HTTPS PLUITS deployment, API deployment and exact CORS allowlist must be configured before public account registration is enabled. The frontend first-party API adapter is implemented but remains opt-in; the live frontend continues using its existing Supabase adapter until a reviewed backend cutover. No provider credentials are committed or assumed.
 
 ### Current migration command
 
@@ -149,18 +156,22 @@ Detailed database ownership, global data, identity, privacy and migration rules 
 | Versioned migration runner | Implemented in source |
 | Migration checksum/lock/transaction | Implemented in source |
 | Initial isolated database namespace | Migration authored; CI integration test verifies application |
-| First-party identity schema and encrypted email outbox | Migrations authored; PostgreSQL CI validation pending |
+| First-party identity schema, encrypted email outbox, rate limits, workspaces and authorization | Migrations authored; PostgreSQL CI integration tests run on each main push |
 | Argon2id password hashing and opaque token primitives | Implemented in source; CI validation pending |
 | AES-256-GCM outbox secret encryption | Implemented in source; CI validation pending |
 | Unit and PostgreSQL integration tests | Added; CI run pending |
 | Identity schema | Authored: accounts, email addresses, credentials, personal profiles, verification challenges, sessions and security events |
-| Registration, verification, login, refresh and logout handlers/services | Implemented in source; CI integration validation pending |
+| Registration, verification, login, refresh, logout and password recovery | Implemented in source; PostgreSQL integration tests added |
+| Personal workspace and scoped role assignment | Implemented in source; PostgreSQL integration tests added |
+| Product authorization policy evaluator | Implemented in source; cross-product isolation integration tests added |
+| Current-account endpoint and first-party browser auth adapter | Implemented in source; frontend tests added |
 | Profiles and permission-scoped dashboards | Target contract documented; API not started |
 | Transport operations | Target contract documented; schema/API not started |
 | Accommodation operations | Target contract documented; schema/API not started |
 | Social, messaging, media, calls/live | Not started |
 | Marketplace and merchant domains | Not started |
-| Public hosting/deployment | Not started |
+| Public API hosting, persistent database and SMTP configuration | Not started; requires explicit infrastructure and provider setup |
+| First-party frontend auth cutover | Adapter implemented; remains disabled until API deployment and verification |
 | Production data migration/cutover | Not started |
 
-The codebase can be maintained through GitHub from a phone. A public API still needs a compute host and a database; free hosting limits must be verified before deployment. No paid service or hosting resource has been created by this work.
+The codebase can be maintained through GitHub from a phone. Signup remains disabled in the live frontend until the first-party API URL, provider mode, deployment secrets and SMTP delivery are configured and tested. A public API still needs a compute host and a database; free hosting limits must be verified before deployment. No paid service or hosting resource has been created by this work.
