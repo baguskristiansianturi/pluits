@@ -80,6 +80,6 @@ The product owner explicitly authorized a clean replacement of the old frontend 
 ## PLUITS-owned infrastructure directive — 22 November 2026
 
 - PLUITS backend ownership belongs to the Go API and PostgreSQL platform under `backend/`; the runtime is self-hosted and provider-independent.
-- The frontend uses only `first-party-auth-service.js`. If the API URL is not configured, guest pages may load but account actions must clearly report that the PLUITS backend is not connected. Never fall back to Supabase or synthetic accounts.
+- The frontend uses only `first-party-auth-service.js`. If the API URL is not configured, guest pages may load but account actions must clearly report that the PLUITS backend is not connected. Never fall back to external identity providers or synthetic accounts.
 - Migrate identity, profile, social/feed, Inbox/chat, media/storage, GeoDirectory, Marketplace, Store, Restaurant & Café and wallet into PLUITS-owned PostgreSQL schemas, Go APIs, workers and object storage with server-side authorization and regression tests.
 - Do not reintroduce archived provider-specific SQL or provider-specific runtime code.
