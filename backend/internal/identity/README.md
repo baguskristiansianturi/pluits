@@ -12,7 +12,7 @@ Implemented:
 - HMAC-keyed PostgreSQL rate limits shared across API instances. Client identifiers are not stored in plaintext.
 - Email outbox worker supports row-lock claiming, stale-job recovery, retry backoff and SMTP STARTTLS delivery.
 - Password recovery uses generic responses, one-time hashed challenges, encrypted email delivery and session-family revocation after reset.
-- Registration creates a personal workspace, membership, owner role and versioned Terms/Privacy consent records.
+- Registration creates a personal workspace, membership, personal-owner role, baseline PLUITS product grant/member role and versioned Terms/Privacy consent records. No other product access is granted.
 - Product access requires both an explicit workspace-to-product grant and a product-scoped role/permission.
 - Current-account endpoint returns only the authenticated account's verified primary identity, personal profile and workspace roles.
 
