@@ -1,7 +1,7 @@
 export const PRIVACY_POLICY = {
     title: 'Kebijakan Privasi',
     status: 'Rancangan privasi · menunggu audit data dan tinjauan hukum',
-    intro: 'Privasi merupakan bagian dari rancangan PLUITS. Ini adalah kerangka transparansi, bukan pernyataan final seluruh pemrosesan data. Sebelum publikasi, setiap kategori harus dicocokkan dengan kode aplikasi, Supabase, penyimpanan media, log, analitik, dan seluruh SDK/vendor yang digunakan.',
+    intro: 'Privasi merupakan bagian dari rancangan PLUITS. Ini adalah kerangka transparansi, bukan pernyataan final seluruh pemrosesan data. Sebelum publikasi, setiap kategori harus dicocokkan dengan kode aplikasi, backend dan penyimpanan milik PLUITS, log, analitik, serta seluruh penyedia layanan eksternal yang benar-benar digunakan.',
     sections: [
       ['Pengelola data','Identitas badan usaha/operator PLUITS, alamat terdaftar, kontak privasi, dan yurisdiksi pemrosesan harus dicantumkan sebelum dokumen berlaku. Informasi tersebut belum ditetapkan pada halaman ini.'],
       ['Kategori data','Bergantung pada fitur, data dapat mencakup informasi akun dan autentikasi; profil dan preferensi; konten, foto, video, komentar, dan interaksi; pesan dan laporan; informasi toko, produk, pesanan atau layanan; data perangkat, log keamanan dan diagnostik; serta lokasi apabila pengguna memberikan izin. Daftar final wajib diverifikasi terhadap implementasi.'],
