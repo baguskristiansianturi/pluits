@@ -65,6 +65,7 @@ type registerRequest struct {
 	Email string `json:"email"`
 	Password string `json:"password"`
 	DisplayName string `json:"display_name"`
+	TermsAccepted bool `json:"terms_accepted"`
 }
 
 type verifyEmailRequest struct {
@@ -109,11 +110,13 @@ func (h *IdentityHandler) register(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"})
 		return
 	}
+	if !input.TermsAccepted { writeJSON(w, http.StatusBadRequest, map[string]string{"error":"terms_required"}); return }
 	if email, emailErr := identity.NormalizeEmail(input.Email); emailErr == nil {
 		if !h.allowIdentifier(w, r, "identity.register.email", email.Canonical, 3, time.Hour) { return }
 	}
 	result, err := h.service.Register(r.Context(), identity.RegistrationInput{
 		Email: input.Email, Password: input.Password, DisplayName: input.DisplayName,
+		TermsVersion: "2026-11-21", PrivacyVersion: "2026-11-21",
 	})
 	if err != nil {
 		if strings.Contains(err.Error(), "invalid email") || strings.Contains(err.Error(), "password") || strings.Contains(err.Error(), "display name") {
