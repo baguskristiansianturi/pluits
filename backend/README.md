@@ -47,6 +47,13 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - Request bodies are capped at 2 MiB for the JSON API. Media uploads must use a separately authorized object-storage flow rather than the application API process.
 - This is a baseline only; distributed rate limiting, authentication, authorization, MFA, audit storage and edge protections remain future work.
 
+### First-party identity security primitives
+- Argon2id password hashing with parameter encoding and bounded verification settings.
+- Cryptographically random opaque bearer tokens; only SHA-256 token hashes are intended for persistence.
+- AES-256-GCM encryption for short-lived secrets queued for email delivery.
+- PostgreSQL email outbox schema stores encrypted payloads and delivery/retry metadata, not plaintext verification tokens.
+- Registration, email delivery worker, verification, login/session rotation and recovery HTTP flows are not yet implemented; do not expose account creation in production until the complete flow is implemented and tested.
+
 ### Database migration system
 - Dedicated `pluits_meta.schema_migrations` ledger.
 - Ordered SQL migrations named `<version>_<description>.sql`.
@@ -120,7 +127,9 @@ Detailed database ownership, global data, identity, privacy and migration rules 
 | Versioned migration runner | Implemented in source |
 | Migration checksum/lock/transaction | Implemented in source |
 | Initial isolated database namespace | Migration authored; CI integration test verifies application |
-| First-party identity schema | Migration authored; PostgreSQL CI validation pending |
+| First-party identity schema and encrypted email outbox | Migrations authored; PostgreSQL CI validation pending |
+| Argon2id password hashing and opaque token primitives | Implemented in source; CI validation pending |
+| AES-256-GCM outbox secret encryption | Implemented in source; CI validation pending |
 | Unit and PostgreSQL integration tests | Added; CI run pending |
 | Identity schema | Authored: accounts, email addresses, credentials, personal profiles, verification challenges, sessions and security events |
 | Registration/authentication endpoints | Not implemented; next stage |
