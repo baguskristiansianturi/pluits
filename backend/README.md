@@ -58,7 +58,8 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - AES-256-GCM protects short-lived verification secrets in the email outbox.
 - A standalone worker claims queued messages with PostgreSQL row locking, sends through SMTP with mandatory STARTTLS, retries transient failures and marks terminal failures.
 - HTTP handlers exist for registration, verification, login, refresh and logout. Identity service is disabled unless its outbox encryption key is configured.
-- Shared/distributed rate limiting, MFA, password reset, account recovery, access-token authentication middleware and key-rotation keyrings remain outstanding. Do not expose these endpoints publicly until those release gates are implemented.
+- PostgreSQL-backed shared rate limiting is applied by IP and canonical email for identity routes; access-token authentication middleware checks active account and session state on every protected request.
+- MFA, password reset, account recovery, trusted-device controls, key-rotation keyrings, and broader abuse/fraud detection remain outstanding. Do not treat the identity module as production-ready until these release gates and deployment configuration are reviewed.
 
 ### Database migration system
 - Dedicated `pluits_meta.schema_migrations` ledger.
@@ -80,7 +81,7 @@ Identity routes:
 - POST /v1/identity/refresh
 - POST /v1/identity/logout (Bearer access token)
 
-The API only activates the identity service when PLUITS_OUTBOX_ENCRYPTION_KEY is configured. Supply a base64 raw-standard-encoded 32-byte key and keep it in the runtime secret manager, never in Git or PostgreSQL. PLUITS_OUTBOX_KEY_VERSION defaults to 1.
+The API only activates the identity service when PLUITS_OUTBOX_ENCRYPTION_KEY is configured. Supply a base64 raw-standard-encoded 32-byte key and keep it in the runtime secret manager, never in Git or PostgreSQL. PLUITS_OUTBOX_KEY_VERSION defaults to 1. Identity routes also require PLUITS_RATE_LIMIT_KEY, a separate base64 raw-standard-encoded 32-byte HMAC key. Rate-limit buckets store HMAC identifiers rather than raw IP or email values.
 
 The email worker is a separate process. Configure DATABASE_URL, PLUITS_OUTBOX_ENCRYPTION_KEY, PLUITS_OUTBOX_KEY_VERSION, PLUITS_PUBLIC_BASE_URL, PLUITS_SMTP_HOST, PLUITS_SMTP_PORT, PLUITS_SMTP_FROM, PLUITS_SMTP_USERNAME and PLUITS_SMTP_PASSWORD, then run: go run ./cmd/email-worker from the backend directory.
 
