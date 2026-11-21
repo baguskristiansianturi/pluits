@@ -68,7 +68,7 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage } = {}
       user: {
         id: tokens.account_id,
         email: tokens.email || email,
-        user_metadata: {},
+        user_metadata: { full_name: tokens.display_name || '', display_name: tokens.display_name || '' },
         app_metadata: { provider: 'pluits-first-party' }
       }
     };
