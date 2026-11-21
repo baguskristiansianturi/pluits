@@ -93,6 +93,14 @@ func UpFS(ctx context.Context, db *sql.DB, source fs.FS) error {
 	known := make(map[int64]struct{}, len(migrations))
 	for _, item := range migrations {
 		known[item.version] = struct{}{}
+	}
+	for version, previous := range applied {
+		if _, ok := known[version]; !ok {
+			return fmt.Errorf("applied migration %d (%s) is missing from source; restore the original file instead of rewriting history", version, previous.name)
+		}
+	}
+
+	for _, item := range migrations {
 		if previous, ok := applied[item.version]; ok {
 			if previous.name != item.name || previous.checksum != item.checksum {
 				return fmt.Errorf("applied migration %d was changed: database has %s (%s), source has %s (%s)", item.version, previous.name, previous.checksum, item.name, item.checksum)
@@ -120,11 +128,6 @@ func UpFS(ctx context.Context, db *sql.DB, source fs.FS) error {
 		}
 	}
 
-	for version, previous := range applied {
-		if _, ok := known[version]; !ok {
-			return fmt.Errorf("applied migration %d (%s) is missing from source; restore the original file instead of rewriting history", version, previous.name)
-		}
-	}
 	return nil
 }
 
