@@ -11,7 +11,7 @@ func CORSHandler(next http.Handler, configuredOrigins []string) http.Handler {
 	allowed := make(map[string]struct{}, len(configuredOrigins))
 	for _, origin := range configuredOrigins {
 		origin = strings.TrimSpace(origin)
-		if origin == "" { continue }
+		if origin == "" || origin == "*" { continue }
 		allowed[origin] = struct{}{}
 	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
