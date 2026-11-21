@@ -141,7 +141,7 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage = glob
       if (!token) throw new Error('Token pemulihan tidak ditemukan. Minta tautan pemulihan baru.');
       await request('/v1/identity/password-reset/complete', { body: { token, password } });
       storage?.removeItem(STORAGE_KEY);
-      emit('SIGNED_OUT', null);
+      session = null;
     },
     async signOut() {
       if (session?.access_token) {
