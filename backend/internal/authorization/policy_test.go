@@ -38,6 +38,9 @@ func TestWorkspaceAndProductPermissionsAreExplicit(t *testing.T) {
 
 	policy, err := NewPolicy(db)
 	if err != nil { t.Fatal(err) }
+	pluitsAccess, err := policy.Can(ctx, accountID, workspaceID, "pluits", "pluits.account.use")
+	if err != nil { t.Fatal(err) }
+	if !pluitsAccess { t.Fatal("newly registered account should receive baseline PLUITS member access") }
 	allowed, err := policy.Can(ctx, accountID, workspaceID, "", "workspace.manage")
 	if err != nil { t.Fatal(err) }
 	if !allowed { t.Fatal("personal workspace owner should manage their own workspace") }
