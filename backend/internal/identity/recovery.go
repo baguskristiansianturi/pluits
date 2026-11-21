@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"time"
 )
 
 // RequestPasswordReset always returns nil for unknown addresses so callers cannot
@@ -93,4 +92,3 @@ func (s *Service) ResetPassword(ctx context.Context, rawToken, newPassword strin
 	return nil
 }
 
-var _ = time.Second
