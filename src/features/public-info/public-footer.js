@@ -28,6 +28,9 @@ const GROUPS = [
     {label:'Pembatalan & Pengembalian Dana',route:'refundPolicy'},
     {label:'Pengiriman',route:'shippingPolicy'}
   ]},
+  { title:'Partner', items:[
+    {label:'Kemitraan PLUITS',route:'contact'}
+  ]},
   { title:'Kebijakan', items:[
     {label:'Ketentuan Layanan',route:'terms'},
     {label:'Kebijakan Privasi',route:'privacy'},
