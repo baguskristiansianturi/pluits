@@ -15,7 +15,7 @@ The backend must support the complete PLUITS ecosystem and its shared identity:
 - Marketplace: discovery, catalog, cart, checkout, orders, payment records, fulfillment, reviews and dispute/refund workflows.
 - Merchant operations: Store and Restaurant & Café as separate operational modules connected to Marketplace.
 - GeoDirectory: entities, categories, locations, claims, memberships, sources and verified place/business relationships.
-- Trips, tickets, accommodation, logistics/transportation, blog, entitlements and wallet foundations.
+- Trips, tickets, accommodation operations, transport operations, logistics, blog, entitlements and wallet foundations.
 - Platform-wide audit, trust/safety, search/discovery, analytics, localization, multi-currency and regional configuration.
 
 The scope is the platform target, not a claim that all capabilities are already implemented or should be released simultaneously. Social Media remains the first product release gate under D-002.
@@ -38,6 +38,14 @@ The scope is the platform target, not a claim that all capabilities are already 
 | Blog | Blog profiles, posts, categories and published/draft visibility | Blog, Blog Studio |
 | Entitlements & Wallet | Entitlements and wallet account/request scaffolding; regulated financial flows require separate controls | Future gated UI |
 | Trust, Safety & Audit | Reports, moderation cases, appeals, audit events and policy enforcement | Safety Center, Admin |
+
+## Extended domain contracts
+
+- Global identity, profile contexts and permission-scoped Personal, Professional, Business and platform-operations dashboards.
+- Transport vertical: verified operators, drivers and vehicles; service areas, quotes, schedules, dispatch, trip lifecycle, safety and reconciliation.
+- Accommodation vertical: verified properties, room/unit inventory, rate plans, availability, reservations, guest privacy, cancellation and settlement.
+- Trips remain itinerary/planning objects that reference authoritative bookings; Marketplace aggregates vertical listings and transactions without taking over merchant operations.
+- Detailed boundaries, lifecycle rules, security and global data requirements: [`backend/docs/PLATFORM-DOMAIN-CONTRACTS.md`](../../backend/docs/PLATFORM-DOMAIN-CONTRACTS.md).
 
 ## Technology baseline
 
@@ -73,7 +81,7 @@ Specific vendors and production hosting are not locked in by this baseline. Free
 
 ## Current implementation
 
-- `backend/` contains the Go 1.27 HTTP service, PostgreSQL connection pool, liveness/readiness endpoints and explicit migration CLI.
+- `backend/` contains the Go 1.27 HTTP service, PostgreSQL connection pool, liveness/readiness endpoints, baseline API security middleware and explicit migration CLI.
 - Migration runner records immutable version/checksum history, serializes runs with a PostgreSQL advisory lock, and commits each migration with its ledger row.
 - Initial migration creates only the isolated `pluits` namespace; it does not create account or domain tables before approved contracts and production mapping.
 - GitHub Actions provisions disposable PostgreSQL 17 and runs Go race tests, migration integration tests and builds both API and migration commands.
