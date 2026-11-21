@@ -59,3 +59,13 @@ test('first-party provider sends verification and password recovery requests', a
   assert.deepEqual(JSON.parse(calls[0].options.body), { token: 'one-time-token' });
   assert.equal(calls[1].url, 'https://api.pluits.example/v1/identity/password-reset/request');
 });
+
+test('missing PLUITS API keeps guest access available and refuses account actions', async () => {
+  const storage = createStorage();
+  const service = createFirstPartyAuthService({ appUrl: 'https://pluits.example/', storage });
+  assert.equal(await service.getSession(), null);
+  await assert.rejects(
+    service.signIn({ email: 'bagus@example.test', password: 'a-long-unique-password' }),
+    /Backend akun PLUITS belum terhubung/
+  );
+});
