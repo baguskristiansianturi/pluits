@@ -39,6 +39,15 @@ func TestRegistrationVerificationLifecyclePostgres(t *testing.T) {
 		WHERE e.email_normalized = $1
 	`, email).Scan(&accountID, &normalized); err != nil { t.Fatal(err) }
 	if normalized != email { t.Fatalf("unexpected normalized email %q", normalized) }
+	var workspaceID, membershipID string
+	if err := db.QueryRowContext(ctx, "SELECT id::text FROM pluits.workspaces WHERE created_by_account_id=$1 AND workspace_type='personal'", accountID).Scan(&workspaceID); err != nil { t.Fatal(err) }
+	if err := db.QueryRowContext(ctx, "SELECT id::text FROM pluits.workspace_memberships WHERE workspace_id=$1 AND account_id=$2 AND membership_status='active'", workspaceID, accountID).Scan(&membershipID); err != nil { t.Fatal(err) }
+	var ownerRoleCount int
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM pluits.membership_roles mr JOIN pluits.authorization_roles r ON r.id=mr.role_id WHERE mr.membership_id=$1 AND r.role_key='personal_owner'", membershipID).Scan(&ownerRoleCount); err != nil { t.Fatal(err) }
+	if ownerRoleCount != 1 { t.Fatalf("expected personal_owner role, got %d", ownerRoleCount) }
+	var consentCount int
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM pluits.account_consents WHERE account_id=$1", accountID).Scan(&consentCount); err != nil { t.Fatal(err) }
+	if consentCount != 2 { t.Fatalf("expected terms and privacy consent records, got %d", consentCount) }
 
 	var status string
 	if err := db.QueryRowContext(ctx, "SELECT status FROM pluits.accounts WHERE id = $1", accountID).Scan(&status); err != nil { t.Fatal(err) }
