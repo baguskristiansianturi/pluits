@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 	"time"
 
@@ -16,6 +17,7 @@ import (
 	"github.com/baguskristiansianturi/pluits/backend/internal/config"
 	"github.com/baguskristiansianturi/pluits/backend/internal/database"
 	"github.com/baguskristiansianturi/pluits/backend/internal/httpapi"
+	"github.com/baguskristiansianturi/pluits/backend/internal/identity"
 )
 
 func main() {
@@ -37,6 +39,20 @@ func main() {
 
 	mux := http.NewServeMux()
 	httpapi.NewHealthHandler(db).Register(mux)
+	var identityService *identity.Service
+	if encodedKey := os.Getenv("PLUITS_OUTBOX_ENCRYPTION_KEY"); encodedKey != "" {
+		if db == nil { log.Fatal("DATABASE_URL is required when identity encryption is configured") }
+		key, keyErr := identity.DecodeEncryptionKey(encodedKey)
+		if keyErr != nil { log.Fatal("PLUITS_OUTBOX_ENCRYPTION_KEY must be base64-encoded 32-byte key material") }
+		keyVersion := int64(1)
+		if raw := os.Getenv("PLUITS_OUTBOX_KEY_VERSION"); raw != "" {
+			keyVersion, keyErr = strconv.ParseInt(raw, 10, 16)
+			if keyErr != nil || keyVersion < 1 { log.Fatal("PLUITS_OUTBOX_KEY_VERSION must be a positive integer") }
+		}
+		identityService, err = identity.NewService(db, key, int16(keyVersion))
+		if err != nil { log.Fatalf("configure identity service: %v", err) }
+	}
+	httpapi.NewIdentityHandler(identityService).Register(mux)
 
 	server := &http.Server{
 		Addr:              ":" + cfg.Port,
