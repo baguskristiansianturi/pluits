@@ -62,7 +62,12 @@ func main() {
 		identityLimiter, err = identity.NewRateLimiter(db, key)
 		if err != nil { log.Fatalf("configure identity rate limiter: %v", err) }
 	}
-	identityHandler := httpapi.NewIdentityHandler(identityService, identityLimiter)
+	var identityHandler *httpapi.IdentityHandler
+  if identityLimiter != nil {
+    identityHandler = httpapi.NewIdentityHandler(identityService, identityLimiter)
+  } else {
+    identityHandler = httpapi.NewIdentityHandler(identityService)
+  }
   if err := identityHandler.SetTrustedProxyCIDRs(os.Getenv("PLUITS_TRUSTED_PROXY_CIDRS")); err != nil {
     log.Fatal("configure trusted proxy CIDRs: ", err)
   }
