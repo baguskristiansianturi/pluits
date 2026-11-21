@@ -1,0 +1,78 @@
+services:
+  database:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in backend/.env}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in backend/.env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in backend/.env}
+    volumes:
+      - pluits-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks: [private]
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrate
+    restart: "no"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?sslmode=disable
+    command: ["-command=up"]
+    depends_on:
+      database:
+        condition: service_healthy
+    networks: [private]
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    restart: unless-stopped
+    environment:
+      PORT: "8080"
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?sslmode=disable
+      PLUITS_OUTBOX_ENCRYPTION_KEY: ${PLUITS_OUTBOX_ENCRYPTION_KEY:?Set PLUITS_OUTBOX_ENCRYPTION_KEY in backend/.env}
+      PLUITS_OUTBOX_KEY_VERSION: ${PLUITS_OUTBOX_KEY_VERSION:-1}
+      PLUITS_RATE_LIMIT_KEY: ${PLUITS_RATE_LIMIT_KEY:?Set PLUITS_RATE_LIMIT_KEY in backend/.env}
+      PLUITS_ALLOWED_ORIGINS: ${PLUITS_ALLOWED_ORIGINS:?Set exact HTTPS origins in backend/.env}
+    ports:
+      - "127.0.0.1:${PLUITS_API_LOCAL_PORT:-8080}:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    networks: [private]
+
+  email-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: email-worker
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?sslmode=disable
+      PLUITS_OUTBOX_ENCRYPTION_KEY: ${PLUITS_OUTBOX_ENCRYPTION_KEY:?Set PLUITS_OUTBOX_ENCRYPTION_KEY in backend/.env}
+      PLUITS_OUTBOX_KEY_VERSION: ${PLUITS_OUTBOX_KEY_VERSION:-1}
+      PLUITS_PUBLIC_BASE_URL: ${PLUITS_PUBLIC_BASE_URL:?Set PLUITS_PUBLIC_BASE_URL in backend/.env}
+      PLUITS_SMTP_HOST: ${PLUITS_SMTP_HOST:?Set PLUITS_SMTP_HOST in backend/.env}
+      PLUITS_SMTP_PORT: ${PLUITS_SMTP_PORT:-587}
+      PLUITS_SMTP_FROM: ${PLUITS_SMTP_FROM:?Set PLUITS_SMTP_FROM in backend/.env}
+      PLUITS_SMTP_USERNAME: ${PLUITS_SMTP_USERNAME:-}
+      PLUITS_SMTP_PASSWORD: ${PLUITS_SMTP_PASSWORD:-}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    networks: [private]
+
+networks:
+  private:
+    driver: bridge
+
+volumes:
+  pluits-postgres-data:
