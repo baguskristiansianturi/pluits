@@ -63,3 +63,4 @@ jobs:
           docker build --target api -t pluits-api:ci .
           docker build --target migrate -t pluits-migrate:ci .
           docker build --target email-worker -t pluits-email-worker:ci .
+          docker build -t pluits-postgres-backup:ci ./infra/backup
