@@ -48,6 +48,7 @@ The Compose stack contains PostgreSQL, the migration job, Go API, email worker, 
 - A separate outbound network for API/email worker connections.
 - Caddy as the only internet-facing ingress on TCP 80/443 and UDP 443.
 - No public PostgreSQL port and no direct public API port.
+- A fixed private edge-proxy address; authentication throttling trusts forwarded client IP only from that configured address.
 - Persistent named volumes for PostgreSQL, encrypted backups and TLS state.
 - Non-root/distroless API and worker containers, read-only root filesystems, dropped Linux capabilities and no-new-privileges.
 
