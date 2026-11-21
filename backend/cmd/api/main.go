@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
@@ -69,7 +70,7 @@ func main() {
 
 	server := &http.Server{
 		Addr:              ":" + cfg.Port,
-		Handler:           httpapi.SecureHandler(mux),
+		Handler:           httpapi.SecureHandler(httpapi.CORSHandler(mux, strings.Split(os.Getenv("PLUITS_ALLOWED_ORIGINS"), ","))),
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       15 * time.Second,
 		WriteTimeout:      30 * time.Second,
