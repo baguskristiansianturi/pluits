@@ -57,6 +57,7 @@ func TestMigrationRunnerIsIdempotentAndProtectsHistory(t *testing.T) {
 		"pluits.email_verification_challenges",
 		"pluits.sessions",
 		"pluits.security_events",
+		"pluits.email_outbox",
 	} {
 		var actual sql.NullString
 		if err := db.QueryRowContext(ctx, "SELECT to_regclass($1)", table).Scan(&actual); err != nil {
