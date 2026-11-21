@@ -39,6 +39,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	httpapi.NewHealthHandler(db).Register(mux)
+	mux.Handle("GET /v1/identity/me", httpapi.NewAccountMeHandler(db))
 	var identityService *identity.Service
 	var identityLimiter *identity.RateLimiter
 	if encodedKey := os.Getenv("PLUITS_OUTBOX_ENCRYPTION_KEY"); encodedKey != "" {
