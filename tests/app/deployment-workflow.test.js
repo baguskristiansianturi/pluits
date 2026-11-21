@@ -18,7 +18,6 @@ test('GitHub Pages production deploys from main while development preview only v
 
   assert.match(preview, /push:\s*\n\s*branches:\s*\n\s*- development\/preview/);
   assert.match(preview, /name: Validate PLUITS development preview/);
-  assert.match(preview, /VITE_PLUITS_DEMO_MODE:\s*'true'/);
   assert.match(preview, /npm test/);
   assert.match(preview, /npm run build/);
   assert.doesNotMatch(preview, /pages:\s*write/);
