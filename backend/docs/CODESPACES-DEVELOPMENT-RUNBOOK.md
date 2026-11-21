@@ -48,7 +48,7 @@ Keep port visibility set to **Private**. Do not change it to Public.
 - The identity routes require separate encryption and rate-limit keys. They are intentionally not enabled by this base setup.
 - Real registration also requires an SMTP STARTTLS sender and a persistent, backed-up database. Do not bypass email verification or expose verification tokens to create the first real account.
 - Do not point the production GitHub Pages frontend at this temporary API until the identity release gates, CORS, SMTP delivery, persistence, backup/restore, and account-registration restrictions have been reviewed.
-- Supabase is not used by this development environment or by the PLUITS target architecture.
+- This development environment uses only the PLUITS Go API and PostgreSQL services.
 - Stop the Codespace when finished to avoid consuming its monthly compute quota.
 
 ## Next release gate
