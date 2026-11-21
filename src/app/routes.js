@@ -9,6 +9,7 @@ const BASE_PATH = new URL(PUBLIC_BASE_URL, 'https://pluits.invalid').pathname;
 export function resolveRoute(pathname = window.location.pathname, search = window.location.search) {
   const query = new URLSearchParams(String(search || '').replace(/^\?/, ''));
   if (query.get('auth') === 'reset') return 'reset';
+  if (query.get('auth') === 'verify') return 'verify';
 
   let path = String(pathname || '/');
   if (path.startsWith(BASE_PATH)) path = path.slice(BASE_PATH.length);
