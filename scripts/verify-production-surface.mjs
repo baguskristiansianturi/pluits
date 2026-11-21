@@ -23,11 +23,14 @@ async function walk(directory) {
 const runtimeFiles = await walk(sourceRoot);
 const runtime = (await Promise.all(runtimeFiles.map((path) => readFile(path, 'utf8')))).join('\n');
 
-if (/service[_-]?role\s*[:=]\s*['"]|sb_secret_[A-Za-z0-9]+/i.test(runtime)) {
-  throw new Error('A privileged Supabase secret appears in browser runtime code.');
+if (/supabase|@supabase/i.test(runtime)) {
+  throw new Error('Supabase runtime references are forbidden; use PLUITS first-party services.');
 }
-if (!runtime.includes('@supabase/supabase-js@2.119.0')) {
-  throw new Error('The Supabase browser SDK must remain version-pinned.');
+if (/local-demo|pluits-demo/i.test(runtime)) {
+  throw new Error('Synthetic local-demo authentication must not ship in the production runtime.');
+}
+if (!runtime.includes('createFirstPartyAuthService')) {
+  throw new Error('The browser runtime must use the PLUITS first-party identity adapter.');
 }
 if (!indexHtml.includes('noindex,nofollow') || !indexHtml.includes('/src/main.js')) {
   throw new Error('index.html must load the new frontend entry point.');
