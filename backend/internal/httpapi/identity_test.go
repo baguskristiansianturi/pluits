@@ -10,7 +10,7 @@ import (
 func TestIdentityEndpointsAreUnavailableWithoutConfiguredService(t *testing.T) {
 	mux := http.NewServeMux()
 	NewIdentityHandler(nil).Register(mux)
-	for _, path := range []string{"/v1/identity/register", "/v1/identity/verify-email", "/v1/identity/login", "/v1/identity/refresh", "/v1/identity/logout"} {
+	for _, path := range []string{"/v1/identity/register", "/v1/identity/verify-email", "/v1/identity/login", "/v1/identity/refresh", "/v1/identity/logout", "/v1/identity/resend-verification", "/v1/identity/password-reset/request", "/v1/identity/password-reset/complete"} {
 		req := httptest.NewRequest(http.MethodPost, path, strings.NewReader(`{}`))
 		req.Header.Set("Content-Type", "application/json")
 		rec := httptest.NewRecorder()
