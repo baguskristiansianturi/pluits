@@ -15,7 +15,7 @@ Public signup is disabled while SMTP, legal documents, and durable consent recor
 - [PLUITS Sharing Inbox](PLUITS-SHARING-INBOX/README.md) — raw notes and outcomes from each discussion session, waiting for review and sorting.
 - [Application source](src/) — current application implementation.
 - [PLUITS Backend](backend/) — first-party Go API, PostgreSQL migrations, identity and worker services.
-- [Legacy SQL reference](supabase/) — historical schema/security definitions retained only for migration reconstruction; not connected to the frontend.
+- [Legacy SQL reference](backend/legacy-schema-reference/) — historical schema/security definitions retained only for migration reconstruction; not connected to the frontend.
 - [Automated tests](tests/) and [engineering scripts](scripts/).
 
 ## Working principle
