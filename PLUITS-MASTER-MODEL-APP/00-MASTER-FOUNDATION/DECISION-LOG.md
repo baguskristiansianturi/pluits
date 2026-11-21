@@ -231,4 +231,4 @@ Salin untuk keputusan berikutnya:
 - **Dampak frontend/backend/data/security/operasi:** modul backend baru dikembangkan terisolasi di `backend/`; frontend tetap memakai integrasi produksi saat ini sampai adapter dan capability pengganti lolos pengujian.
 - **Dokumen yang diperbarui:** `03-APPLICATION-MODULARIZATION/BACKEND-MODULE-MAP.md` dan `backend/README.md`.
 - **Supersedes:** tidak menghapus keputusan arsitektur Supabase historis; menetapkan arah transisi first-party backend.
-- **Status implementasi:** IN PROGRESS — Go service foundation dan CI telah dibuat di branch `backend/independent-foundation`; database schema, domain modules, hosting, migration, dan production cutover belum dimulai.
+- **Status implementasi:** IN PROGRESS — Go 1.27 API, PostgreSQL connection pool, migration CLI, checksum/advisory-lock/transaction runner, initial isolated `pluits` namespace, PostgreSQL integration CI, dan database migration strategy telah dibuat di branch `backend/independent-foundation`. Identity/domain tables, hosting, production data migration, dan cutover belum dimulai.
