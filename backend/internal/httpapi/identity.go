@@ -29,13 +29,17 @@ func NewIdentityHandler(service *identity.Service, limiters ...RequestLimiter) *
 }
 
 func (h *IdentityHandler) allowRequest(w http.ResponseWriter, r *http.Request, scope string, limit int, window time.Duration) bool {
+	peer := r.RemoteAddr
+	if host, _, err := net.SplitHostPort(peer); err == nil { peer = host }
+	return h.allowIdentifier(w, r, scope, peer, limit, window)
+}
+
+func (h *IdentityHandler) allowIdentifier(w http.ResponseWriter, r *http.Request, scope, identifier string, limit int, window time.Duration) bool {
 	if h.limiter == nil {
 		writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"})
 		return false
 	}
-	peer := r.RemoteAddr
-	if host, _, err := net.SplitHostPort(peer); err == nil { peer = host }
-	allowed, err := h.limiter.Allow(r.Context(), scope, peer, limit, window)
+	allowed, err := h.limiter.Allow(r.Context(), scope, identifier, limit, window)
 	if err != nil {
 		writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"})
 		return false
@@ -100,6 +104,9 @@ func (h *IdentityHandler) register(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"})
 		return
 	}
+	if email, emailErr := identity.NormalizeEmail(input.Email); emailErr == nil {
+		if !h.allowIdentifier(w, r, "identity.register.email", email.Canonical, 3, time.Hour) { return }
+	}
 	result, err := h.service.Register(r.Context(), identity.RegistrationInput{
 		Email: input.Email, Password: input.Password, DisplayName: input.DisplayName,
 	})
@@ -144,6 +151,9 @@ func (h *IdentityHandler) login(w http.ResponseWriter, r *http.Request) {
 	if !h.allowRequest(w, r, "identity.login", 10, 15*time.Minute) { return }
 	var input loginRequest
 	if err := decodeJSON(w, r, &input); err != nil { writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"}); return }
+	if email, emailErr := identity.NormalizeEmail(input.Email); emailErr == nil {
+		if !h.allowIdentifier(w, r, "identity.login.email", email.Canonical, 5, 15*time.Minute) { return }
+	}
 	tokens, err := h.service.Login(r.Context(), input.Email, input.Password)
 	if errors.Is(err, identity.ErrInvalidCredentials) { writeJSON(w, http.StatusUnauthorized, map[string]string{"error":"invalid_credentials"}); return }
 	if err != nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
