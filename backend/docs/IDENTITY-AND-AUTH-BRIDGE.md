@@ -37,7 +37,7 @@ If email delivery is not yet configured, registration may be tested up to the pe
 
 ## 5. Product and company identity boundaries
 
-The company backend may support PLUITS, BDM Transport, Bagusin and future internal products. Customer accounts are product-scoped by default. Cross-product account linking or SSO requires explicit proof of account ownership, consent and separate product authorization.
+The backend is owned and governed by PLUITS Official Indonesia. Customer identity and privileged workspace access remain separate authorization concerns. Any future identity federation or account linking requires explicit proof of account ownership, consent and separate authorization.
 
 Internal staff/service identities are distinct from customer identities. Staff access must use dedicated roles, MFA, audit and least privilege. A PLUITS customer must not automatically receive BDM operator access or Bagusin admin access.
 
