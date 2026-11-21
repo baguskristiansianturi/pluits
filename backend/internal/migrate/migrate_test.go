@@ -3,6 +3,7 @@ package migrate
 import (
 	"context"
 	"database/sql"
+	"io/fs"
 	"os"
 	"testing"
 	"testing/fstest"
@@ -47,7 +48,7 @@ func TestMigrationRunnerIsIdempotentAndProtectsHistory(t *testing.T) {
 		t.Fatal("expected changed applied migration to be rejected")
 	}
 
-	missing := fstest.MapFS{}
+	missing := fstest.MapFS{"migrations": &fstest.MapFile{Mode: fs.ModeDir}}
 	if err := UpFS(ctx, db, missing); err == nil {
 		t.Fatal("expected missing applied migration to be rejected")
 	}
