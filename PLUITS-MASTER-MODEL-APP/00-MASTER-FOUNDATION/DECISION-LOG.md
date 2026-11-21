@@ -212,3 +212,23 @@ Salin untuk keputusan berikutnya:
 - **Tanggal:** 15 November 2026
 - **Keputusan:** Circle is canonically `#/account/explore`. Human-readable aliases `#/circle` and `#/account/circle` must resolve to the same Circle feed, never Profile. Jelajah remains `#/search`, a distinct public discovery surface. Mobile navigation order remains Circle → Jelajah → Buat → Pesan → Profil.
 - **Implementasi:** PR #32 merged at `8e4fe58a6505575d2dfb2fb5c66ddd295d1588ac`; CI #2039 passed all automated checks and produced the Pages artifact. Live Pages deployment and authenticated Android walkthrough still require verification.
+
+
+## D-009 — PLUITS adopts an independent first-party backend
+
+- **Tanggal keputusan:** 21 November 2026
+- **Status:** DECIDED
+- **Founder approval:** eksplisit dalam arahan founder pada percakapan 21 November 2026 untuk membangun backend PLUITS sendiri yang mencakup kebutuhan platform berskala Indonesia dan internasional.
+- **Konteks dan masalah:** ketergantungan backend pada batas paket dan gangguan layanan pihak ketiga berisiko menghambat pengembangan Social Media, komunikasi realtime, media, dan ekosistem Marketplace PLUITS.
+- **Keputusan final:**
+  1. PLUITS membangun backend first-party yang kode, domain bisnis, API, database, dan kebijakan aksesnya dikendalikan oleh PLUITS.
+  2. Fondasi implementasi dimulai dengan Go dan PostgreSQL, menggunakan software open-source dan layanan gratis selama benar-benar tersedia. Tidak ada asumsi bahwa hosting publik gratis memiliki kapasitas atau SLA tanpa batas.
+  3. Cakupan target mencakup Identity, Social Media, Messaging, Realtime/Presence, Calls/Live, Media, GeoDirectory, Marketplace, Store, Restaurant & Café, Trips/Services, Blog, Entitlements, Trust/Safety, dan Audit.
+  4. Pembangunan dilakukan bertahap berdasarkan release gate produk; Social Media tetap prioritas P0 sesuai D-002.
+  5. Supabase tetap menjadi backend produksi dan sumber data aktif selama pengganti dibangun. Tidak ada pemutusan layanan, penghapusan proyek, perubahan schema produksi, atau migrasi data otomatis dari keputusan ini.
+  6. Migrasi akun/data hanya dilakukan setelah pemetaan identitas, keamanan, parity, backup, rollback, dan pengujian disetujui.
+- **Alternatif yang ditunda:** migrasi langsung seluruh produksi ke server baru; penggunaan vendor hosting/komunikasi/media berbayar sebelum kebutuhan dan kemampuan pembiayaan tersedia.
+- **Dampak frontend/backend/data/security/operasi:** modul backend baru dikembangkan terisolasi di `backend/`; frontend tetap memakai integrasi produksi saat ini sampai adapter dan capability pengganti lolos pengujian.
+- **Dokumen yang diperbarui:** `03-APPLICATION-MODULARIZATION/BACKEND-MODULE-MAP.md` dan `backend/README.md`.
+- **Supersedes:** tidak menghapus keputusan arsitektur Supabase historis; menetapkan arah transisi first-party backend.
+- **Status implementasi:** IN PROGRESS — Go service foundation dan CI telah dibuat di branch `backend/independent-foundation`; database schema, domain modules, hosting, migration, dan production cutover belum dimulai.
