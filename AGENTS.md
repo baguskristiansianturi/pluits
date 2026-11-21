@@ -47,9 +47,11 @@ The product owner explicitly authorized a clean replacement of the old frontend 
 
 - Remove the old frontend runtime source, page/component/CSS implementations, legacy frontend tests, and obsolete frontend-only verification scripts when replacing this runtime.
 - Build the new frontend in clear, isolated modules with one shared UI foundation. Do not merge old page/component/CSS implementations into the new runtime.
-- Preserve all Master Model documentation, Sharing Inbox records, Supabase migrations, backend contracts, database schema, Auth users, profiles, wallet records, media, messages, and all existing user data.
-- Frontend cleanup is not permission to reset, truncate, recreate, or otherwise modify production data or backend security.
-- Do not change Supabase Auth configuration, SMTP, password policy, RLS, triggers, functions, or migrations without a separate explicit scope and impact plan.
+- Preserve all Master Model documentation, Sharing Inbox records, backend contracts, database design, and existing PLUITS user data until an approved replacement and migration are verified.
+- Supabase is retired from the PLUITS target architecture. Do not add new Supabase dependencies, credentials, SDK imports, Auth, database, Storage, Realtime, Edge Functions, or deployment configuration.
+- Existing Supabase SQL migration files are historical schema/security reference material only until every domain has an equivalent PLUITS-owned PostgreSQL migration and passing regression tests. Never apply those files to a Supabase project or treat them as the active source of truth.
+- Do not discard unique schema/security rules before they have been translated into PLUITS-owned backend migrations.
+- The product owner has directed decommissioning of the PLUITS Supabase project. Do not touch other projects or organization resources.
 - Preserve tests that verify backend security, database migrations, repository governance, deployment behavior, and PWA assets. Replace only tests that are coupled to deleted frontend implementations.
 - The first authenticated destination is an internal development workspace for discussion and review. It is not the final Global Home or public Social Media experience, and it does not claim to provide an in-app chat system.
 - Build sequence: Registration → Global Home → Primary Profile → Social Media. Each stage requires user review and acceptance before moving on.
@@ -69,9 +71,17 @@ The product owner explicitly authorized a clean replacement of the old frontend 
 
 ## Registration and release gates
 
-- Existing-account login must use the same PLUITS Supabase project and existing Auth storage identity.
-- Signup must use Supabase Auth and must not duplicate profile or wallet rows created by database triggers.
-- Public signup remains disabled until SMTP/email delivery, allowed redirect URLs, final legal documents, and durable consent recording are verified.
+- All account registration and login must use the PLUITS first-party Go identity API. No provider fallback is permitted.
+- Public signup remains disabled until the PLUITS-owned API, PostgreSQL persistence, SMTP/email delivery, allowed redirect URLs, backups, restore validation, final legal documents, and durable consent recording are verified.
 - The current legal pages and design tokens are drafts; do not describe them as approved.
 - Keep the site noindex during internal testing.
 - Do not claim real-account login, email delivery, browser UAT, or deployment success until the relevant evidence has been checked.
+
+
+## PLUITS-owned infrastructure directive — 22 November 2026
+
+- PLUITS backend ownership belongs to the Go API and PostgreSQL platform under `backend/`; Supabase is not part of the target runtime.
+- The frontend uses only `first-party-auth-service.js`. If the API URL is not configured, guest pages may load but account actions must clearly report that the PLUITS backend is not connected. Never fall back to Supabase or synthetic accounts.
+- Migrate identity, profile, social/feed, Inbox/chat, media/storage, GeoDirectory, Marketplace, Store, Restaurant & Café and wallet into PLUITS-owned PostgreSQL schemas, Go APIs, workers and object storage with server-side authorization and regression tests.
+- Existing `supabase/` SQL is read-only legacy reference material. Remove it only after every unique schema, policy, trigger, RPC, storage rule and domain invariant has an equivalent reviewed PLUITS implementation and tests.
+- The Supabase project deletion is a provider-console operation unless an authorized deletion tool is available. Do not delete other projects in the same organization.
