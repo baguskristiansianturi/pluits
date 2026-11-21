@@ -106,6 +106,23 @@ func (s *Service) Register(ctx context.Context, input RegistrationInput) (Regist
 		VALUES ($1, $2, 'verify_email', $3, $4)
 	`, accountID, email.Original, encryptedPayload, s.keyVersion); err != nil { return RegistrationResult{}, ErrIdentityUnavailable }
 
+	// Every account receives its own personal workspace. No product access is
+	// granted implicitly; product modules must grant access explicitly.
+	var workspaceID string
+	if err = tx.QueryRowContext(ctx, `
+		INSERT INTO pluits.workspaces (workspace_type, display_name, created_by_account_id)
+		VALUES ('personal', $1, $2) RETURNING id
+	`, displayName, accountID).Scan(&workspaceID); err != nil { return RegistrationResult{}, ErrIdentityUnavailable }
+	var membershipID string
+	if err = tx.QueryRowContext(ctx, `
+		INSERT INTO pluits.workspace_memberships (workspace_id, account_id)
+		VALUES ($1, $2) RETURNING id
+	`, workspaceID, accountID).Scan(&membershipID); err != nil { return RegistrationResult{}, ErrIdentityUnavailable }
+	if _, err = tx.ExecContext(ctx, `
+		INSERT INTO pluits.membership_roles (membership_id, role_id, granted_by_account_id)
+		SELECT $1, id, $2 FROM pluits.authorization_roles WHERE role_key = 'personal_owner'
+	`, membershipID, accountID); err != nil { return RegistrationResult{}, ErrIdentityUnavailable }
+
 	if _, err = tx.ExecContext(ctx, `
 		INSERT INTO pluits.security_events (account_id, event_type)
 		VALUES ($1, 'account.registration_requested')
