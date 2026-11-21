@@ -6,17 +6,17 @@ import { renderIcon } from '../../design-system/icons.js';
 import './business-partners-page.css';
 
 const CATEGORIES = [
-  { id:'accommodation', name:'Akomodasi', icon:'bed', description:'Hotel, villa, homestay, dan pilihan tempat menginap.' },
-  { id:'transportation', name:'Transportasi', icon:'car', description:'Layanan perjalanan, kendaraan, dan transportasi lokal.' },
-  { id:'courier', name:'Kurir', icon:'package', description:'Pengiriman barang dan layanan logistik.' },
-  { id:'store', name:'Toko', icon:'shoppingBag', description:'Toko, produk, dan kebutuhan dari berbagai pelaku usaha.' },
-  { id:'restaurant', name:'Restoran & Café', icon:'utensils', description:'Temukan restoran, café, dan pengalaman kuliner.' },
-  { id:'health', name:'Kesehatan', icon:'heartPulse', description:'Dokter, dokter gigi, klinik, dan layanan kesehatan.' },
-  { id:'education', name:'Pendidikan & Kursus', icon:'graduationCap', description:'Kursus, pelatihan, bimbingan belajar, dan pendidikan.' },
+  { id:'accommodation', name:'Akomodasi', icon:'mapPin', description:'Hotel, villa, homestay, dan pilihan tempat menginap.' },
+  { id:'transportation', name:'Transportasi', icon:'mapPin', description:'Layanan perjalanan, kendaraan, dan transportasi lokal.' },
+  { id:'courier', name:'Kurir', icon:'store', description:'Pengiriman barang dan layanan logistik.' },
+  { id:'store', name:'Toko', icon:'store', description:'Toko, produk, dan kebutuhan dari berbagai pelaku usaha.' },
+  { id:'restaurant', name:'Restoran & Café', icon:'store', description:'Temukan restoran, café, dan pengalaman kuliner.' },
+  { id:'health', name:'Kesehatan', icon:'heart', description:'Dokter, dokter gigi, klinik, dan layanan kesehatan.' },
+  { id:'education', name:'Pendidikan & Kursus', icon:'book', description:'Kursus, pelatihan, bimbingan belajar, dan pendidikan.' },
   { id:'professional', name:'Jasa Profesional', icon:'briefcase', description:'Konsultan, jasa hukum, akuntansi, kreatif, dan profesional lainnya.' },
-  { id:'halal', name:'Layanan Halal', icon:'badgeCheck', description:'Konsultasi, pendampingan, dan layanan terkait kebutuhan halal.' },
-  { id:'general-services', name:'Layanan Umum', icon:'wrench', description:'Laundry, kebersihan, perawatan, dan berbagai layanan sehari-hari.' },
-  { id:'property', name:'Properti', icon:'building', description:'Informasi jual, beli, sewa, dan listing properti.' }
+  { id:'halal', name:'Layanan Halal', icon:'check', description:'Konsultasi, pendampingan, dan layanan terkait kebutuhan halal.' },
+  { id:'general-services', name:'Layanan Umum', icon:'settings', description:'Laundry, kebersihan, perawatan, dan berbagai layanan sehari-hari.' },
+  { id:'property', name:'Properti', icon:'grid', description:'Informasi jual, beli, sewa, dan listing properti.' }
 ];
 
 function categoryCard(category) {
@@ -33,6 +33,6 @@ export function mountBusinessPartnersPage({ root } = {}) {
     '<main class="pl-page-main business-partners-main">' +
       '<section class="business-partners-hero"><span class="business-eyebrow">PLUITS BUSINESS NETWORK</span><h1>Business Partners</h1><p>Temukan bisnis, penyedia layanan, dan mitra profesional dalam satu ekosistem. Kategori akan dibuka secara bertahap seiring kesiapan setiap layanan.</p></section>' +
       '<section class="business-partners-directory" aria-label="Kategori Business Partners"><div class="business-partners-directory-heading"><div><span class="business-eyebrow">JELAJAHI KATEGORI</span><h2>Temukan yang Anda butuhkan.</h2></div><span class="business-partners-count">11 kategori direncanakan</span></div><div class="business-partners-grid">' + CATEGORIES.map(categoryCard).join('') + '</div></section>' +
-      '<section class="business-partners-note"><span>' + renderIcon('info') + '</span><p>Kategori dan layanan akan tersedia secara bertahap. Status Coming Soon berarti modul terkait masih dalam persiapan.</p></section>' +
+      '<section class="business-partners-note"><span>' + renderIcon('eye') + '</span><p>Kategori dan layanan akan tersedia secara bertahap. Status Coming Soon berarti modul terkait masih dalam persiapan.</p></section>' +
     '</main>' + renderPublicFooter() + '</div>';
 }
