@@ -1,151 +1,132 @@
-# PLUITS Backend — Database Foundation and Migration Strategy
+# PLUITS Database Foundation and Domain Migration Strategy
 
-**Status:** technical implementation baseline for the independent backend.  
-**Production status:** isolated development branch only. The existing Supabase database remains production.
+**Authority:** PLUITS-owned Go services and PostgreSQL are the only backend runtime.  
+**Current implementation:** PostgreSQL migration runner and first-party identity domain are implemented. Other product domains remain in design/migration stages.
 
 ## 1. Purpose
 
-Establish a safe, repeatable PostgreSQL foundation before creating domain tables. PLUITS has a broad international product scope: social identity, content, messaging, realtime, media, calls/live, GeoDirectory, Marketplace, merchant operations, Trips, Blog, and future services. The database foundation must support transactional integrity, clear domain ownership, privacy, gradual growth and eventual data migration without locking the product to a hosted backend vendor.
+Build a durable, portable relational foundation for the PLUITS platform: identity, profiles, social content, messaging, media metadata, GeoDirectory, Marketplace, Store, Restaurant & Café, Trips, Trust & Safety and future services. The database must preserve domain ownership, privacy, transactional integrity and controlled growth without locking PLUITS to a hosted backend vendor.
 
-## 2. Current implementation
+## 2. Current database implementation
 
-Runtime source:
-- `internal/database/open.go`: connection pool setup and fail-fast connectivity check.
-- `internal/migrate/migrate.go`: embedded, ordered SQL migration runner.
-- `internal/migrate/migrations/000001_platform_namespace.sql`: creates only the isolated `pluits` schema.
-- `cmd/migrate/main.go`: explicit migration CLI.
-- `cmd/api/main.go`: API process connects to PostgreSQL when `DATABASE_URL` is configured.
+- PostgreSQL 17.
+- Go `database/sql` with pgx driver.
+- Explicit migration command under `cmd/migrate`.
+- Ordered SQL files embedded into the migration executable.
+- `pluits_meta.schema_migrations` stores version, filename, SHA-256 checksum and application time.
+- PostgreSQL advisory lock serializes migration runs.
+- Each migration and ledger update commit in one transaction.
+- Applied migrations are immutable; checksum drift fails safely.
+- API startup never runs DDL automatically.
+- CI runs unit tests, race tests and PostgreSQL integration tests against a disposable database.
 
-Migration metadata:
-- `pluits_meta.schema_migrations` records version, filename, SHA-256 checksum and application time.
-- A PostgreSQL advisory lock serializes migration runs.
-- Each migration body and its ledger row are committed in one transaction.
-- An already-applied migration cannot be edited or removed silently.
-- The API process never applies DDL automatically.
+The live Compose database uses a persistent Docker volume and is not published to a host port.
 
 ## 3. Domain ownership boundaries
 
-The database will be organized around domain ownership, not around frontend page names.
-
-| Domain | Owns | Important boundary |
+| Domain | Owns | Security boundary |
 |---|---|---|
-| Identity | Account identity, credentials, sessions, recovery and verification | One person has one PLUITS identity |
-| Profile | Public/private profile attributes and preferences | Exact address and sensitive data are private |
-| Authorization | Roles, permissions, workspace membership and ownership grants | Membership level alone never grants access |
-| Social | Posts, comments, reactions, follows, Stories and Reels metadata | Content visibility is enforced server-side |
-| Messaging | Conversations, participants, messages and delivery state | Every read/write checks conversation membership and blocks |
-| Media | Object metadata, ownership, access class and processing state | Bytes live in object storage, not large PostgreSQL rows |
-| Realtime | Presence, subscriptions and event outbox | Events are emitted only after authorized state changes |
-| Calls & Live | Rooms, participants, signaling and session lifecycle | Signaling authorization is separate from media transport |
-| GeoDirectory | Place/entity records, categories, locations, claims and source provenance | Directory entity is distinct from the merchant account |
-| Store | Merchant workspace, catalog, variants and inventory | Merchant operations belong to Store |
+| Identity | Account, credentials, verification, sessions and recovery | One person has one PLUITS identity; secrets never leave the server |
+| Profile | Personal/professional profile, preferences and privacy | Private fields are not part of public profile reads |
+| Authorization | Workspace, membership, roles, permissions and product grants | Explicit permission checks; frontend visibility is never authorization |
+| Social | Posts, comments, reactions, follows, Stories and Reels metadata | Visibility and interaction preferences enforced server-side |
+| Messaging | Conversations, participants, messages, receipts, deletion and blocks | Every operation checks conversation membership and account blocks |
+| Media | Object metadata, ownership, access class and processing state | Private by default; bytes are stored outside PostgreSQL |
+| Realtime | Event outbox, presence and authenticated subscriptions | Events emitted only after authorized committed changes |
+| Calls & Live | Rooms, participants, signaling and lifecycle | Separate signaling authorization and media transport |
+| GeoDirectory | Canonical places/entities, category, location, claims and source provenance | Directory entity is separate from merchant workspace |
+| Store | Merchant workspace, catalog, variants, inventory and staff permissions | Merchant operations belong to Store |
 | Restaurant & Café | Menus, tables, dine-in sessions, service calls and orders | Restaurant operations remain distinct from Marketplace |
-| Marketplace | Discovery eligibility, cart, checkout, orders and payment lifecycle | Marketplace aggregates merchant offers; it does not own merchant operations |
+| Marketplace | Discovery eligibility, cart, checkout, orders and payment lifecycle | Aggregates merchant offers; does not own merchant operations |
 | Trips & Services | Itineraries and bookable service requests | Provider ownership and fulfillment are explicit |
-| Trust & Safety | Reports, moderation cases, appeals and audit trails | Moderation actions are attributable and reviewable |
+| Trust & Safety | Reports, moderation cases, appeals and audit trails | Actions are attributable, reviewable and appealable |
+| Ledger | Financial entries, reconciliation and audit | No balances or financial actions without an approved ledger model |
 
-Schemas may be introduced incrementally. The initial `pluits` namespace is the root boundary. The first-party identity tables are introduced by migration `000002_first_party_identity.sql`; other domain schemas/tables follow their approved contracts and tests.
+## 4. Identity and account rules
 
-## 4. Identity and account design constraints
-
-The approved platform principle is one PLUITS identity across personal, professional, business, organization and community contexts. The account/membership master document currently marks detailed membership rules as PROPOSED. Therefore:
-- Do not encode Silver/Gold/Platinum/Priority entitlements into database constraints yet.
-- Keep verification state separate from membership level.
-- Workspace roles and explicit permissions control actions; membership does not replace authorization.
-- Do not merge personal profile and merchant storefront into one record.
-- Do not expose private addresses, exact coordinates, credential data, recovery tokens or private media through public profile APIs.
-- The new backend starts clean; existing Supabase data is reference-only and is not imported.
-- No Supabase credentials, passwords, sessions or profile rows are transferred. New accounts register directly against the Go API.
-- Authentication schema must include account lifecycle, email/phone verification, session revocation, recovery, abuse throttling and auditability before public registration is enabled.
-
-The first-party identity schema is now authored in migration `000002_first_party_identity.sql`: accounts, normalized email addresses, Argon2id credential metadata, personal profiles, one-time email-verification challenge hashes, opaque session-token hashes and security events. Registration/authentication handlers and delivery infrastructure are still the next implementation stage.
+- One PLUITS identity can own personal, professional, business, organization and community contexts.
+- Keep detailed membership entitlements out of constraints until the membership model is approved.
+- Verification state is separate from membership level.
+- Workspace roles and explicit permissions control actions.
+- Personal profile and merchant storefront are separate records.
+- Exact addresses, credentials, recovery tokens and private media are never public.
+- Passwords use versioned Argon2id parameters.
+- Refresh tokens are opaque, rotated and stored as hashes; reuse revokes the token family.
+- Email challenges are single-use, expiring and hash-at-rest.
+- Registration creates the pending account, email, credential, personal profile, consent, workspace, roles, product grant and encrypted outbox item in one transaction.
+- No fake or seeded customer account is permitted. The first real account is created through the registration journey.
 
 ## 5. Relational data rules
 
-Future domain migrations must follow these rules:
 1. Use stable primary keys and explicit foreign keys for ownership and relationships.
-2. Use database constraints for invariants that must hold under concurrent requests.
-3. Use transactions for multi-record business state changes, especially checkout, payment status and merchant fulfillment.
-4. Store timestamps as `TIMESTAMPTZ`; keep user-facing timezone preferences separate from canonical event timestamps.
-5. Store money as integer minor units plus ISO currency code; never use floating point for monetary values.
-6. Preserve source/provider references when importing records; do not silently collapse entities with uncertain identity.
-7. Add indexes based on query paths and measured plans; do not add speculative indexes to every column.
-8. Define deletion, retention, archival and legal-hold behavior before implementing destructive cascades.
-9. Use idempotency keys for retryable external requests and transaction-creating APIs.
-10. Keep an audit trail for privileged access, account security changes, moderation and financial state transitions.
+2. Enforce concurrent invariants with database constraints.
+3. Use transactions for multi-record state changes, especially checkout, payments and fulfillment.
+4. Store timestamps as `TIMESTAMPTZ`; user timezone is a separate preference.
+5. Store money as integer minor units plus ISO currency code; never use floating point.
+6. Preserve source provenance and do not silently merge uncertain entities.
+7. Add indexes for measured query paths.
+8. Define retention, deletion, archival and legal hold before destructive cascades.
+9. Use idempotency keys for retryable operations.
+10. Keep audit trails for privileged access, security changes, moderation and financial transitions.
 
 ## 6. Global readiness
 
-The schema must not assume Bali-only or Indonesia-only data:
-- Use ISO country, language and currency codes where applicable.
-- Keep display locale, timezone and currency preferences separate from canonical data.
-- Phone numbers are stored in normalized international form (E.164) with verification metadata.
-- Addresses use country-aware structured fields; do not assume one postal format.
-- Search and geospatial indexing will be introduced with a documented provider/extension choice and fallback plan.
-- Tenant/workspace ownership must be explicit for merchant and organization data.
-- Regional deployment, data residency and privacy-law requirements need legal/product decisions before multi-region replication or cross-border data transfer.
+- Use ISO country, language and currency codes.
+- Keep display locale, timezone and currency preferences separate from canonical values.
+- Normalize verified phone numbers to E.164.
+- Use country-aware structured address fields.
+- Explicitly model workspace ownership and regional data residency.
+- Decide geospatial extension/indexing and search architecture before implementing large directory workloads.
+- Roll out regions deliberately; global schema does not mean global operations are already available.
 
-Global support does not mean launching every region simultaneously. Region rollout is an operational release gate.
+## 7. Media, realtime and calls
 
-## 7. Media and realtime are separate capacity domains
-
-- PostgreSQL stores media metadata, ownership, policy, processing status and references; object storage stores the actual bytes.
-- Uploads use short-lived, scoped authorization. Private objects are private by default.
-- Media processing is asynchronous and idempotent; original files, derivatives and retention are tracked.
-- Video delivery requires adaptive renditions and a delivery strategy; a Go API server must not proxy every video byte.
-- WebSocket is suitable for authenticated messaging/presence events, not for carrying video streams.
-- WebRTC requires signaling plus STUN/TURN and, for scalable group calls/live, an SFU/media server. Those are separate deployable services.
-- Background jobs must have retries, bounded concurrency, dead-letter/error handling and observability.
+- PostgreSQL stores metadata, ownership, access policy and processing state, not large media bytes.
+- Uploads require short-lived scoped authorization; private objects are private by default.
+- Processing is asynchronous and idempotent.
+- Video requires adaptive renditions and a delivery strategy; the Go API must not proxy all video bytes.
+- Messaging/presence events use an authenticated realtime gateway, separate from relational writes.
+- WebRTC requires signaling plus STUN/TURN; group calls and live broadcasts require a dedicated SFU/media server.
+- Background jobs require bounded concurrency, retry policy, dead-letter handling and observability.
 
 ## 8. Migration operation
 
-Run only against the separately provisioned PLUITS-owned database:
+Run migrations only against the PLUITS-controlled PostgreSQL instance:
 
 ```sh
 cd backend
 DATABASE_URL='postgres://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require' go run ./cmd/migrate -command=up
 ```
 
-Never point this command at the production Supabase URL.
-
-Migration requirements:
+Requirements:
 - Numbered immutable SQL files.
-- Review schema impact and lock duration before applying.
-- Test against disposable PostgreSQL in CI.
-- Back up before any production data migration.
-- Use additive expand/contract changes when a running service must remain compatible.
-- Reconcile row counts, stable IDs, ownership, privacy, media references and transaction totals after import.
-- Keep a rollback plan; destructive rollback is not assumed to be safe or possible.
+- Review lock duration and impact before applying.
+- Test on disposable PostgreSQL in CI.
+- Back up before production changes.
+- Use expand/contract changes for live systems.
+- Reconcile row counts, ownership, privacy, media references and transaction totals after imports.
+- Destructive rollback is never assumed safe.
 
-## 9. Cost and mobile-only development
+## 9. Current implementation status
 
-- Go, PostgreSQL and the migration tooling are open-source.
-- GitHub Actions currently runs a disposable PostgreSQL service for CI; this does not create a paid persistent database.
-- The founder can continue product direction and review through the phone; code changes and automated checks are performed through GitHub.
-- A public always-on service still needs compute, database storage, bandwidth and backups. Free tiers have limits and must not be represented as unlimited or production-grade.
-- Do not create paid cloud resources, add billing commitments or provision external services without explicit authorization.
+Implemented:
+- Go API process, health/readiness endpoints, request IDs and security middleware.
+- PostgreSQL pool and explicit versioned migration runner.
+- Identity schema, registration, email verification, login, refresh, logout and password recovery.
+- Encrypted email outbox and SMTP STARTTLS worker.
+- Database-backed rate limiting and scoped workspace/product authorization.
+- Self-hosted Compose topology with HTTPS edge and encrypted local backups.
 
-## 10. Identity schema safety gates
+Not yet implemented:
+- Full profile and privacy APIs.
+- Social graph/feed/posts/comments/reactions/Stories/Reels.
+- Inbox/messaging APIs and realtime gateway.
+- Object storage, media upload/finalization and processing/transcoding workers.
+- Calls/live signaling, STUN/TURN and SFU.
+- GeoDirectory and claim/review services.
+- Marketplace, Store and Restaurant & Café domain APIs.
+- Trips, moderation workflows and ledger.
+- Off-host backup replication, production monitoring and restore acceptance.
+- Production host, DNS and SMTP configuration.
 
-The identity schema is additive and has not been applied to a persistent production database. Before enabling registration:
-- Complete the threat model for credential storage, sessions, email verification and abuse prevention.
-- Add fresh-database integration tests and negative authorization tests.
-- Implement encrypted, retryable email delivery without exposing challenge secrets.
-- Enforce database least privilege and application-level authorization.
-
-## 11. Current state
-
-Implemented in source:
-- Go 1.27 API foundation.
-- PostgreSQL connection pool and startup ping.
-- Explicit migration CLI.
-- Version/checksum migration ledger and advisory lock.
-- Initial isolated `pluits` schema migration.
-- First-party identity schema migration authored with account, credential, profile, verification, session and security-event tables.
-- PostgreSQL integration test expanded to assert identity migration and table creation.
-
-Not implemented:
-- Identity/account tables or auth endpoints.
-- Profile/social/messaging/marketplace domain schema.
-- Object storage, realtime, WebRTC, media processing or workers.
-- Public hosting, production data migration or frontend cutover.
+Do not describe the entire PLUITS platform as implemented until each domain has migrations, server-side authorization, API contracts, negative tests, observability and accepted UAT.
