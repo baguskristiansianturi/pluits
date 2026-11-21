@@ -13,5 +13,9 @@
     -Server
   }
 
-  reverse_proxy api:8080
+  reverse_proxy api:8080 {
+    health_uri /health/ready
+    health_interval 30s
+    health_timeout 5s
+  }
 }
