@@ -40,6 +40,7 @@ func main() {
 	mux := http.NewServeMux()
 	httpapi.NewHealthHandler(db).Register(mux)
 	var identityService *identity.Service
+	var identityLimiter *identity.RateLimiter
 	if encodedKey := os.Getenv("PLUITS_OUTBOX_ENCRYPTION_KEY"); encodedKey != "" {
 		if db == nil { log.Fatal("DATABASE_URL is required when identity encryption is configured") }
 		key, keyErr := identity.DecodeEncryptionKey(encodedKey)
@@ -52,7 +53,18 @@ func main() {
 		identityService, err = identity.NewService(db, key, int16(keyVersion))
 		if err != nil { log.Fatalf("configure identity service: %v", err) }
 	}
-	httpapi.NewIdentityHandler(identityService).Register(mux)
+	if encodedKey := os.Getenv("PLUITS_RATE_LIMIT_KEY"); encodedKey != "" {
+		if db == nil { log.Fatal("DATABASE_URL is required when identity rate limiting is configured") }
+		key, keyErr := identity.DecodeEncryptionKey(encodedKey)
+		if keyErr != nil { log.Fatal("PLUITS_RATE_LIMIT_KEY must be base64-encoded 32-byte key material") }
+		identityLimiter, err = identity.NewRateLimiter(db, key)
+		if err != nil { log.Fatalf("configure identity rate limiter: %v", err) }
+	}
+	if identityLimiter != nil {
+		httpapi.NewIdentityHandler(identityService, identityLimiter).Register(mux)
+	} else {
+		httpapi.NewIdentityHandler(identityService).Register(mux)
+	}
 
 	server := &http.Server{
 		Addr:              ":" + cfg.Port,
