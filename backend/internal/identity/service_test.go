@@ -68,7 +68,7 @@ func TestRegistrationVerificationLifecyclePostgres(t *testing.T) {
 	rotated, err := service.Refresh(ctx, login.RefreshToken)
 	if err != nil { t.Fatalf("refresh session: %v", err) }
 	if rotated.RefreshToken == login.RefreshToken { t.Fatal("refresh token must rotate") }
-	if err := service.Refresh(ctx, login.RefreshToken); err != ErrInvalidSession { t.Fatalf("expected replay detection, got %v", err) }
+	if _, err := service.Refresh(ctx, login.RefreshToken); err != ErrInvalidSession { t.Fatalf("expected replay detection, got %v", err) }
 	if _, err := service.Refresh(ctx, rotated.RefreshToken); err != ErrInvalidSession { t.Fatalf("replay must revoke the entire token family, got %v", err) }
 
 	secondLogin, err := service.Login(ctx, email, "strong-test-password-123")
