@@ -19,6 +19,9 @@ func NewIdentityHandler(service *identity.Service) *IdentityHandler {
 func (h *IdentityHandler) Register(mux *http.ServeMux) {
 	mux.HandleFunc("POST /v1/identity/register", h.register)
 	mux.HandleFunc("POST /v1/identity/verify-email", h.verifyEmail)
+	mux.HandleFunc("POST /v1/identity/login", h.login)
+	mux.HandleFunc("POST /v1/identity/refresh", h.refresh)
+	mux.HandleFunc("POST /v1/identity/logout", h.logout)
 }
 
 type registerRequest struct {
@@ -29,6 +32,15 @@ type registerRequest struct {
 
 type verifyEmailRequest struct {
 	Token string `json:"token"`
+}
+
+type loginRequest struct {
+	Email string `json:"email"`
+	Password string `json:"password"`
+}
+
+type refreshRequest struct {
+	RefreshToken string `json:"refresh_token"`
 }
 
 func decodeJSON(w http.ResponseWriter, r *http.Request, target any) error {
@@ -92,4 +104,36 @@ func (h *IdentityHandler) verifyEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]string{"status":"verified"})
+}
+
+func (h *IdentityHandler) login(w http.ResponseWriter, r *http.Request) {
+	if h.service == nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	var input loginRequest
+	if err := decodeJSON(w, r, &input); err != nil { writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"}); return }
+	tokens, err := h.service.Login(r.Context(), input.Email, input.Password)
+	if errors.Is(err, identity.ErrInvalidCredentials) { writeJSON(w, http.StatusUnauthorized, map[string]string{"error":"invalid_credentials"}); return }
+	if err != nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	writeJSON(w, http.StatusOK, tokens)
+}
+
+func (h *IdentityHandler) refresh(w http.ResponseWriter, r *http.Request) {
+	if h.service == nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	var input refreshRequest
+	if err := decodeJSON(w, r, &input); err != nil { writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"}); return }
+	tokens, err := h.service.Refresh(r.Context(), input.RefreshToken)
+	if errors.Is(err, identity.ErrInvalidSession) { writeJSON(w, http.StatusUnauthorized, map[string]string{"error":"invalid_session"}); return }
+	if err != nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	writeJSON(w, http.StatusOK, tokens)
+}
+
+func (h *IdentityHandler) logout(w http.ResponseWriter, r *http.Request) {
+	if h.service == nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	const prefix = "Bearer "
+	header := r.Header.Get("Authorization")
+	if !strings.HasPrefix(header, prefix) { writeJSON(w, http.StatusUnauthorized, map[string]string{"error":"invalid_session"}); return }
+	if err := h.service.Logout(r.Context(), strings.TrimSpace(strings.TrimPrefix(header, prefix))); err != nil {
+		writeJSON(w, http.StatusUnauthorized, map[string]string{"error":"invalid_session"})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]string{"status":"logged_out"})
 }
