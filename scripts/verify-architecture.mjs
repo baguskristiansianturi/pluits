@@ -13,8 +13,7 @@ const required = [
   'design-system/layouts.js',
   'features/auth/auth-page.js',
   'features/dashboard/dashboard-page.js',
-  'services/auth/auth-service.js',
-  'lib/supabase/client.js'
+  'services/auth/first-party-auth-service.js'
 ];
 
 for (const path of required) {
