@@ -60,7 +60,7 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - HTTP handlers exist for registration, verification, resend, login, refresh, logout, password recovery and current-account lookup. Identity routes remain disabled unless both encryption and rate-limit keys are configured.
 - PostgreSQL-backed shared rate limiting is applied by IP and canonical email for identity routes; access-token authentication middleware checks active account and session state on every protected request.
 - Password reset uses one-time hashed challenges, encrypted outbox delivery and revokes all active sessions after completion.
-- New accounts receive an isolated personal workspace and `personal_owner` role. Product access is not inherited; each product requires an explicit workspace grant and product-scoped role.
+- New accounts receive an isolated personal workspace, `personal_owner` role and baseline PLUITS member access. No access to other products is inherited; each future product requires its own explicit workspace grant and product-scoped role.
 - `GET /v1/identity/me` returns the authenticated account's verified primary email, personal profile, workspace and role assignments.
 - MFA, trusted-device controls, keyring-based outbox key rotation, account recovery support operations and broader abuse/fraud detection remain outstanding. Do not treat the identity module as production-ready until these release gates and deployment configuration are reviewed.
 
