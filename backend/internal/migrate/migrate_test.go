@@ -1,0 +1,54 @@
+package migrate
+
+import (
+	"context"
+	"database/sql"
+	"os"
+	"testing"
+	"testing/fstest"
+
+	_ "github.com/jackc/pgx/v5/stdlib"
+)
+
+func TestMigrationRunnerIsIdempotentAndProtectsHistory(t *testing.T) {
+	dsn := os.Getenv("DATABASE_TEST_URL")
+	if dsn == "" {
+		t.Skip("DATABASE_TEST_URL is not set; PostgreSQL integration test runs in CI")
+	}
+	ctx := context.Background()
+	db, err := sql.Open("pgx", dsn)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+	if err := db.PingContext(ctx); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := Up(ctx, db); err != nil {
+		t.Fatalf("first migration run: %v", err)
+	}
+	if err := Up(ctx, db); err != nil {
+		t.Fatalf("second migration run should be idempotent: %v", err)
+	}
+
+	var count int
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM pluits_meta.schema_migrations WHERE version = 1").Scan(&count); err != nil {
+		t.Fatal(err)
+	}
+	if count != 1 {
+		t.Fatalf("expected exactly one ledger record for migration 1, got %d", count)
+	}
+
+	changed := fstest.MapFS{
+		"migrations/000001_platform_namespace.sql": &fstest.MapFile{Data: []byte("CREATE SCHEMA IF NOT EXISTS pluits; -- changed\n")},
+	}
+	if err := UpFS(ctx, db, changed); err == nil {
+		t.Fatal("expected changed applied migration to be rejected")
+	}
+
+	missing := fstest.MapFS{}
+	if err := UpFS(ctx, db, missing); err == nil {
+		t.Fatal("expected missing applied migration to be rejected")
+	}
+}
