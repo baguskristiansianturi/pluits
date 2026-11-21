@@ -94,7 +94,7 @@ go build ./cmd/api
 go build ./cmd/migrate
 ```
 
-Detailed database ownership, global data, identity, privacy and migration rules are documented in [`docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`](docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md). The cross-platform domain contracts for profiles, dashboards, transport and accommodation are in [`docs/PLATFORM-DOMAIN-CONTRACTS.md`](docs/PLATFORM-DOMAIN-CONTRACTS.md).
+Detailed database ownership, global data, identity, privacy and migration rules are documented in [`docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`](docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md). The cross-platform domain contracts for profiles, dashboards, transport and accommodation are in [`docs/PLATFORM-DOMAIN-CONTRACTS.md`](docs/PLATFORM-DOMAIN-CONTRACTS.md). The existing Supabase identity mapping and safe first-party authentication transition are documented in [`docs/IDENTITY-AND-AUTH-BRIDGE.md`](docs/IDENTITY-AND-AUTH-BRIDGE.md).
 
 ## Data model and migration policy
 
@@ -121,7 +121,7 @@ Detailed database ownership, global data, identity, privacy and migration rules 
 | Migration checksum/lock/transaction | Implemented in source |
 | Initial isolated database namespace | Migration authored; CI integration test verifies application |
 | Unit and PostgreSQL integration tests | Added; CI run pending |
-| Identity/authentication and workspace authorization | Not started; existing Supabase identity mapping must be audited first |
+| Identity/authentication and workspace authorization | Existing schema and frontend flow audited; independent token verification and endpoints not started |
 | Profiles and permission-scoped dashboards | Target contract documented; API not started |
 | Transport operations | Target contract documented; schema/API not started |
 | Accommodation operations | Target contract documented; schema/API not started |
