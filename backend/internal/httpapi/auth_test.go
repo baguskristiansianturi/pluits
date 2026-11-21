@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -57,6 +58,15 @@ func TestRequireAccountAcceptsOnlyActiveUnrevokedSession(t *testing.T) {
 	response := httptest.NewRecorder()
 	protected.ServeHTTP(response, request)
 	if response.Code != http.StatusNoContent { t.Fatalf("expected authenticated request, got %d", response.Code) }
+
+	meRequest := httptest.NewRequest(http.MethodGet, "/v1/identity/me", nil)
+	meRequest.Header.Set("Authorization", "Bearer "+session.AccessToken)
+	meResponse := httptest.NewRecorder()
+	NewAccountMeHandler(db).ServeHTTP(meResponse, meRequest)
+	if meResponse.Code != http.StatusOK { t.Fatalf("expected current account endpoint success, got %d: %s", meResponse.Code, meResponse.Body.String()) }
+	if !strings.Contains(meResponse.Body.String(), "\"display_name\":\"Auth Test\"") || !strings.Contains(meResponse.Body.String(), "\"personal_owner\"") {
+		t.Fatalf("current account response missing profile or workspace role: %s", meResponse.Body.String())
+	}
 
 	if err := service.Logout(ctx, session.AccessToken); err != nil { t.Fatal(err) }
 	response = httptest.NewRecorder()
