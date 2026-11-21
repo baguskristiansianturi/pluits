@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"log"
 	"net/http"
@@ -14,6 +13,7 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/baguskristiansianturi/pluits/backend/internal/config"
+	"github.com/baguskristiansianturi/pluits/backend/internal/database"
 	"github.com/baguskristiansianturi/pluits/backend/internal/httpapi"
 )
 
@@ -25,9 +25,11 @@ func main() {
 
 	var db *sql.DB
 	if cfg.DatabaseURL != "" {
-		db, err = sql.Open("pgx", cfg.DatabaseURL)
+		startupCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		db, err = database.Open(startupCtx, "pgx", cfg.DatabaseURL, database.DefaultPoolConfig())
+		cancel()
 		if err != nil {
-			log.Fatalf("open database: %v", err)
+			log.Fatalf("connect database: %v", err)
 		}
 		defer db.Close()
 	}
