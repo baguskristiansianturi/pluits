@@ -88,6 +88,8 @@ go build ./cmd/api
 go build ./cmd/migrate
 ```
 
+Detailed database ownership, global data, identity, privacy and migration rules are documented in [`docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`](docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md).
+
 ## Data model and migration policy
 
 - Supabase remains the live production source of truth until a separately reviewed migration is completed.
