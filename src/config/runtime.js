@@ -9,4 +9,6 @@ export function assetUrl(path) {
 
 export const PASSWORD_RESET_URL = new URL('?auth=reset', APP_BASE_URL).toString();
 
-export const PUBLIC_SIGNUP_ENABLED = import.meta.env.VITE_PUBLIC_SIGNUP_ENABLED === 'true';
+export const AUTH_PROVIDER = import.meta.env.VITE_AUTH_PROVIDER || 'supabase-legacy';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+export const PUBLIC_SIGNUP_ENABLED = import.meta.env.VITE_PUBLIC_SIGNUP_ENABLED === 'true' && AUTH_PROVIDER === 'first-party' && Boolean(API_BASE_URL);
