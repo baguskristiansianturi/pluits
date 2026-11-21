@@ -13,7 +13,7 @@ Scope: Public Business Homepage, Accommodation Discovery, Hangout & Leisure, Mar
 | Icon registry | src/design-system/icons.js | design-system | All features |
 | Shared brand/header/footer | src/design-system/page-shell.js and page-shell.css | design-system | Business Homepage, Social Home, Jelajah, Auth, Legal and Ruang Kerja |
 | Accommodation Discovery and Property Detail Preview | src/features/accommodation/accommodation-home-page.js and accommodation-home-page.css | features/accommodation | #/accommodation; frontend-only discovery and editorial property detail preview |
-| Public Business Homepage | src/features/home/business-home-page.js and business-home.css | features/home | #/home; PLUITS brand destination |
+| Public PLUITS Homepage / ecosystem entrypoints | src/features/home/business-home-page.js and business-home.css | features/home | #/home; copy-led entry links to Accommodation, Restaurant & Café, Hangout, Places, Marketplace and Social; public brand destination |
 | Authenticated Social Home (former Global Home composition) | src/features/home/home-page.js and home-page.css | features/home | protected #/social after login |
 | Jelajah, Messages, redesigned Profile, Settings, and legacy Circle route | src/features/social/social-pages.js and social-pages.css | features/social | #/discover, #/messages, #/profile, #/settings; legacy #/circle redirects to #/social |
 | Ruang Kerja | src/features/dashboard/dashboard-page.js and dashboard-page.css | features/dashboard | Protected #/dashboard |
