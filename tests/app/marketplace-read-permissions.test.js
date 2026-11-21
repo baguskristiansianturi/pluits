@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-const migration = await readFile(new URL('../../supabase/migrations/20261115122348_enforce_marketplace_order_payment_read_permissions.sql', import.meta.url), 'utf8');
+const migration = await readFile(new URL('../../backend/legacy-schema-reference/sql/migrations/20261115122348_enforce_marketplace_order_payment_read_permissions.sql', import.meta.url), 'utf8');
 
 test('marketplace order reads require buyer ownership or order/payment permission', () => {
   assert.match(migration, /buyer_user_id = \(select auth\.uid\(\)\)/);
