@@ -20,6 +20,7 @@ const (
 type SessionTokens struct {
 	AccountID string `json:"account_id"`
 	Email string `json:"email"`
+	DisplayName string `json:"display_name"`
 	AccessToken string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 	AccessExpiresAt time.Time `json:"access_expires_at"`
@@ -37,14 +38,15 @@ func (s *Service) Login(ctx context.Context, emailInput, password string) (Sessi
 	if err != nil { return SessionTokens{}, ErrInvalidCredentials }
 	if len(password) > maxPasswordBytes { dummyPasswordWork(password); return SessionTokens{}, ErrInvalidCredentials }
 
-	var accountID, status, passwordHash string
+	var accountID, status, passwordHash, displayName string
 	err = s.db.QueryRowContext(ctx, `
-		SELECT a.id::text, a.status, c.password_hash
+		SELECT a.id::text, a.status, c.password_hash, p.display_name
 		FROM pluits.account_emails e
 		JOIN pluits.accounts a ON a.id = e.account_id
 		JOIN pluits.account_credentials c ON c.account_id = a.id
+		JOIN pluits.personal_profiles p ON p.account_id = a.id
 		WHERE e.email_normalized = $1
-	`, email.Canonical).Scan(&accountID, &status, &passwordHash)
+	`, email.Canonical).Scan(&accountID, &status, &passwordHash, &displayName)
 	if errors.Is(err, sql.ErrNoRows) {
 		dummyPasswordWork(password)
 		return SessionTokens{}, ErrInvalidCredentials
@@ -59,7 +61,7 @@ func (s *Service) Login(ctx context.Context, emailInput, password string) (Sessi
 	if err != nil { return SessionTokens{}, ErrIdentityUnavailable }
 	now := time.Now().UTC()
 	result := SessionTokens{
-		AccountID: accountID, Email: email.Canonical, AccessToken: access, RefreshToken: refresh,
+		AccountID: accountID, Email: email.Canonical, DisplayName: displayName, AccessToken: access, RefreshToken: refresh,
 		AccessExpiresAt: now.Add(accessTokenTTL), RefreshExpiresAt: now.Add(refreshTokenTTL),
 	}
 	tx, err := s.db.BeginTx(ctx, nil)
@@ -87,14 +89,15 @@ func (s *Service) Refresh(ctx context.Context, rawRefreshToken string) (SessionT
 	if err != nil { return SessionTokens{}, ErrIdentityUnavailable }
 	defer tx.Rollback()
 
-	var oldID, accountID, familyID, accountEmail string
+	var oldID, accountID, familyID, accountEmail, displayName string
 	var expiresAt time.Time
 	var revokedAt sql.NullTime
 	err = tx.QueryRowContext(ctx, `
-		SELECT s.id::text, s.account_id::text, s.token_family_id::text, s.refresh_expires_at, s.revoked_at, e.email_normalized
+		SELECT s.id::text, s.account_id::text, s.token_family_id::text, s.refresh_expires_at, s.revoked_at, e.email_normalized, p.display_name
 		FROM pluits.sessions s JOIN pluits.account_emails e ON e.account_id=s.account_id AND e.is_primary=TRUE
+		JOIN pluits.personal_profiles p ON p.account_id=s.account_id
 		WHERE s.refresh_token_hash = $1 FOR UPDATE OF s
-	`, hash[:]).Scan(&oldID, &accountID, &familyID, &expiresAt, &revokedAt, &accountEmail)
+	`, hash[:]).Scan(&oldID, &accountID, &familyID, &expiresAt, &revokedAt, &accountEmail, &displayName)
 	if errors.Is(err, sql.ErrNoRows) { return SessionTokens{}, ErrInvalidSession }
 	if err != nil { return SessionTokens{}, ErrIdentityUnavailable }
 
@@ -122,7 +125,7 @@ func (s *Service) Refresh(ctx context.Context, rawRefreshToken string) (SessionT
 	if err != nil { return SessionTokens{}, ErrIdentityUnavailable }
 	now := time.Now().UTC()
 	result := SessionTokens{
-		AccountID: accountID, Email: accountEmail, AccessToken: access, RefreshToken: refresh,
+		AccountID: accountID, Email: accountEmail, DisplayName: displayName, AccessToken: access, RefreshToken: refresh,
 		AccessExpiresAt: now.Add(accessTokenTTL), RefreshExpiresAt: expiresAt,
 	}
 	accessHash := TokenHash(access)
