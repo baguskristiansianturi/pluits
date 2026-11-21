@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-test('GitHub Pages production deploys from main after tests and build', async () => {
+test('GitHub Pages production deploys from main while development preview only validates', async () => {
   const production = await readFile(new URL('../../.github/workflows/deploy.yml', import.meta.url), 'utf8');
   const preview = await readFile(new URL('../../.github/workflows/pages.yml', import.meta.url), 'utf8');
   const vite = await readFile(new URL('../../vite.config.js', import.meta.url), 'utf8');
@@ -17,10 +17,14 @@ test('GitHub Pages production deploys from main after tests and build', async ()
   assert.match(vite, /base: '\/pluits\//);
 
   assert.match(preview, /push:\s*\n\s*branches:\s*\n\s*- development\/preview/);
-  assert.match(preview, /if: github\.ref == 'refs\/heads\/development\/preview'/);
+  assert.match(preview, /name: Validate PLUITS development preview/);
   assert.match(preview, /VITE_PLUITS_DEMO_MODE:\s*'true'/);
   assert.match(preview, /npm test/);
   assert.match(preview, /npm run build/);
-  assert.match(preview, /actions\/upload-pages-artifact/);
-  assert.match(preview, /actions\/deploy-pages/);
+  assert.doesNotMatch(preview, /pages:\s*write/);
+  assert.doesNotMatch(preview, /id-token:\s*write/);
+  assert.doesNotMatch(preview, /actions\/configure-pages/);
+  assert.doesNotMatch(preview, /actions\/upload-pages-artifact/);
+  assert.doesNotMatch(preview, /actions\/deploy-pages/);
+  assert.doesNotMatch(preview, /environment:/);
 });
