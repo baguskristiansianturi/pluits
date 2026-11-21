@@ -1,21 +1,19 @@
-# Internal Company Platform — Shared Backend Blueprint
+# PLUITS Official Indonesia — Internal Backend Platform
 
 **Status:** architecture decision for the company's own products. This is an internal platform, not a public backend-as-a-service offering.
 
 ## 1. Purpose
 
-Build and own a reusable backend foundation that can operate PLUITS and future company products such as BDM Transport, Bagusin and a future digital-payment product. The company owns the code, data model, APIs, operational policies and deployment decisions.
+Build and own a reusable backend foundation for the entire PLUITS platform and its future business capabilities. PLUITS Official Indonesia owns the code, data model, APIs, operational policies and deployment decisions.
 
-The platform may provide capabilities similar in spirit to a backend platform (identity, database access, storage, events, notifications, authorization and operations), but only to applications owned or explicitly approved by the company. We are not building a public Supabase competitor or selling backend infrastructure to third parties.
+The platform provides shared capabilities including identity, database access, storage, events, notifications, authorization and operations exclusively for PLUITS and its internally governed capabilities. It is not a public backend-as-a-service and is not sold or exposed as backend infrastructure to third parties.
 
 ## 2. Product and data boundaries
 
 - **PLUITS:** social identity and profiles, content, messaging, GeoDirectory, Marketplace, Store, Restaurant & Café, transport/accommodation listings and operations, trips and bookings.
-- **BDM Transport:** transport business operations, fleet, drivers, quotes, dispatch, trip records, customer booking and support.
-- **Bagusin:** service/project workflows, customer accounts, products/courses and member operations.
-- **Future Payments:** payment orchestration, ledger, reconciliation, refunds, settlement and provider integrations, subject to legal and regulatory approval.
+- **Future business capabilities:** transport, travel, commerce, communications and financial services remain domains within the PLUITS-owned platform, introduced only when their product contracts and operational controls are approved.
 
-Each product has a stable product ID, environment, API client identity, data ownership policy and permission boundary. A PLUITS user must not automatically gain access to BDM or Bagusin business data. Cross-product identity linking and SSO are explicit opt-in capabilities with consent, account-link proof and separate authorization.
+Each product has a stable product ID, environment, API client identity, data ownership policy and permission boundary. A PLUITS identity does not automatically grant access to privileged business workspaces or financial operations. Access is explicitly granted through verified membership, scoped roles and separate authorization.
 
 Shared infrastructure does not mean shared unrestricted data. Product-owned records are scoped by product/workspace and enforced server-side. High-risk financial data and credentials may require a separately isolated database/service as the payment product matures.
 
@@ -44,7 +42,7 @@ The control plane configures products; it does not become a universal superuser 
 - **Regional settings:** country, locale, language, currency, timezone and region policy.
 
 ### C. Product domain modules
-PLUITS social, marketplace, merchant, restaurant, transport, accommodation and trip modules; BDM transport operations; Bagusin service/store/course modules; and future payment domains. Domain modules own their business rules, records, lifecycle transitions and APIs.
+PLUITS social, marketplace, merchant, restaurant, transport, accommodation, trip, commerce and future financial domains. Domain modules own their business rules, records, lifecycle transitions and APIs.
 
 ### D. Infrastructure adapters
 PostgreSQL, object storage, email/SMS providers, payment gateways, maps/geocoding, search engines, realtime gateways and WebRTC/SFU. Each adapter is replaceable behind an internal interface. Provider secrets are stored in a secret manager/environment, never in Git or browser code.
@@ -64,9 +62,8 @@ Suggested code boundaries:
 - internal/platform/events
 - internal/platform/observability
 - internal/products/pluits/...
-- internal/products/bdm/...
-- internal/products/bagusin/...
-- internal/products/payments/... (future, gated)
+- internal/products/pluits/...
+- internal/products/financial/... (future, gated)
 
 Keep domain packages from reaching into one another's tables or repositories. Cross-domain changes use explicit application services/events and documented contracts. Shared IDs do not imply shared authorization.
 
@@ -82,7 +79,7 @@ Keep domain packages from reaching into one another's tables or repositories. Cr
 
 ## 6. Identity model
 
-The platform may have a company-wide identity directory for employees and service principals. Customer identities remain product-scoped by default. A person may link PLUITS, BDM or Bagusin accounts only through an explicit verified linking flow.
+The platform may have a company-wide identity directory for employees and service principals. Customer identities remain product-scoped by default. Any future identity federation or account linking requires an explicit verified linking flow and separate authorization.
 
 Authentication establishes who the actor is. Authorization separately checks which product the request targets, which workspace/resource is targeted, whether the actor belongs to it, whether the actor's role permits the requested operation, and whether resource state and verification conditions permit it.
 
@@ -113,7 +110,7 @@ Future digital payments must be a separately governed domain:
 
 ## 9. Cost and scaling principles
 
-Owing the backend avoids being structurally dependent on a hosted backend vendor, but does not remove hosting costs. Compute, database storage, backups, bandwidth, email/SMS, object storage, TURN/SFU, monitoring and payment-provider fees still exist.
+Owning and operating the backend gives PLUITS control over its technology and infrastructure design. Physical compute, storage, connectivity, power, redundancy and external delivery networks still have finite capacity and operational requirements.
 
 Scale in evidence-based stages: one deployable modular backend and PostgreSQL; independent background workers and object storage; caching/search/realtime components when required; separate services and databases for independently scaling or high-risk domains; and multi-region/data residency only when demand, legal obligations and operations justify it.
 
@@ -121,21 +118,20 @@ Never call a system unlimited. Build horizontal scaling, quotas, backpressure, o
 
 ## 10. Implementation sequence
 
-1. Complete PostgreSQL and API foundation; keep production Supabase untouched.
+1. Complete PostgreSQL and API foundation; keep the existing Supabase project untouched.
 2. Build first-party identity, registration, email verification, sessions, recovery and security.
-3. Build product/workspace authorization, audit and platform configuration.
-4. Build profile/context and permission-scoped dashboards.
+3. Build authorization, audit and platform configuration.
+4. Build profiles and permission-scoped dashboards.
 5. Build reusable notification, media, event/outbox and worker foundations.
-6. Build PLUITS product domains and frontend integration.
-7. Build BDM and Bagusin product workspaces on shared platform services.
-8. Design the payment ledger and compliance boundary; enable real payment only after approval.
-9. Add search, realtime, video/Live infrastructure and independent scaling as operationally justified.
+6. Build PLUITS social, communication, directory, commerce, travel and merchant domains in approved stages.
+7. Design the financial ledger and compliance boundary; enable real-money capabilities only after approval.
+8. Add search, realtime, video/Live infrastructure and independent scaling as operationally justified.
 
 ## 11. Explicit exclusions
 
-- No public third-party BaaS product.
+- No public third-party backend service or external customer tenancy.
 - No production Supabase data import, account linking or dependency for the new backend.
 - No deletion or modification of the existing Supabase project.
-- No paid resource provisioning without explicit approval.
+- No external resource commitment or paid provisioning without explicit approval.
 - No fake users, products, bookings, payments or seeded activity.
 - No real-money payment processing before compliance and reconciliation controls are ready.
