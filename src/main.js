@@ -1,6 +1,7 @@
 import './design-system/tokens.css';
 import './styles/global.css';
 import './features/home/home-page.css';
+import './features/home/business-partners-page.css';
 import './features/marketplace/marketplace-home-page.css';
 import './features/venue/venue-home-page.css';
 import './features/accommodation/accommodation-home-page.css';
