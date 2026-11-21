@@ -47,12 +47,18 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - Request bodies are capped at 2 MiB for the JSON API. Media uploads must use a separately authorized object-storage flow rather than the application API process.
 - This is a baseline only; distributed rate limiting, authentication, authorization, MFA, audit storage and edge protections remain future work.
 
-### First-party identity security primitives
+### First-party identity and email delivery
 - Argon2id password hashing with parameter encoding and bounded verification settings.
-- Cryptographically random opaque bearer tokens; only SHA-256 token hashes are intended for persistence.
-- AES-256-GCM encryption for short-lived secrets queued for email delivery.
-- PostgreSQL email outbox schema stores encrypted payloads and delivery/retry metadata, not plaintext verification tokens.
-- Registration, email delivery worker, verification, login/session rotation and recovery HTTP flows are not yet implemented; do not expose account creation in production until the complete flow is implemented and tested.
+- Normalized email validation and generic duplicate-registration responses.
+- Transactional registration creates a pending account, primary email, credentials, personal profile, one-time verification challenge and encrypted email-outbox item.
+- Email verification activates the account and consumes the challenge atomically.
+- Login issues opaque access/refresh tokens; only SHA-256 hashes are stored.
+- Refresh rotates tokens; reuse of a rotated refresh token revokes its complete token family.
+- Logout revokes the current session.
+- AES-256-GCM protects short-lived verification secrets in the email outbox.
+- A standalone worker claims queued messages with PostgreSQL row locking, sends through SMTP with mandatory STARTTLS, retries transient failures and marks terminal failures.
+- HTTP handlers exist for registration, verification, login, refresh and logout. Identity service is disabled unless its outbox encryption key is configured.
+- Shared/distributed rate limiting, MFA, password reset, account recovery, access-token authentication middleware and key-rotation keyrings remain outstanding. Do not expose these endpoints publicly until those release gates are implemented.
 
 ### Database migration system
 - Dedicated `pluits_meta.schema_migrations` ledger.
@@ -64,6 +70,21 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - Editing or deleting an already-applied migration is rejected.
 - Migrations are **not** run automatically by API startup; an explicit command is required.
 - Migration `000001` creates the isolated `pluits` namespace. Migration `000002` defines first-party accounts, email addresses, credential metadata, personal profiles, verification challenge hashes, session token hashes and security events. These migrations are authored but have not been applied to a persistent production database.
+
+### Identity API and email worker
+
+Identity routes:
+- POST /v1/identity/register
+- POST /v1/identity/verify-email
+- POST /v1/identity/login
+- POST /v1/identity/refresh
+- POST /v1/identity/logout (Bearer access token)
+
+The API only activates the identity service when PLUITS_OUTBOX_ENCRYPTION_KEY is configured. Supply a base64 raw-standard-encoded 32-byte key and keep it in the runtime secret manager, never in Git or PostgreSQL. PLUITS_OUTBOX_KEY_VERSION defaults to 1.
+
+The email worker is a separate process. Configure DATABASE_URL, PLUITS_OUTBOX_ENCRYPTION_KEY, PLUITS_OUTBOX_KEY_VERSION, PLUITS_PUBLIC_BASE_URL, PLUITS_SMTP_HOST, PLUITS_SMTP_PORT, PLUITS_SMTP_FROM, PLUITS_SMTP_USERNAME and PLUITS_SMTP_PASSWORD, then run: go run ./cmd/email-worker from the backend directory.
+
+SMTP STARTTLS is mandatory. The worker never logs verification tokens or email bodies. A real SMTP provider and HTTPS PLUITS verification page must be configured before public account registration is enabled. No provider credentials are committed or assumed.
 
 ### Current migration command
 
@@ -132,7 +153,7 @@ Detailed database ownership, global data, identity, privacy and migration rules 
 | AES-256-GCM outbox secret encryption | Implemented in source; CI validation pending |
 | Unit and PostgreSQL integration tests | Added; CI run pending |
 | Identity schema | Authored: accounts, email addresses, credentials, personal profiles, verification challenges, sessions and security events |
-| Registration/authentication endpoints | Not implemented; next stage |
+| Registration, verification, login, refresh and logout handlers/services | Implemented in source; CI integration validation pending |
 | Profiles and permission-scoped dashboards | Target contract documented; API not started |
 | Transport operations | Target contract documented; schema/API not started |
 | Accommodation operations | Target contract documented; schema/API not started |
