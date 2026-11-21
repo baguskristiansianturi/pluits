@@ -94,6 +94,22 @@ The email worker is a separate process. Configure DATABASE_URL, PLUITS_OUTBOX_EN
 
 SMTP STARTTLS is mandatory. The worker never logs verification tokens or email bodies. Verification and password-reset links resolve through the PLUITS auth route. A real SMTP provider, HTTPS PLUITS deployment, API deployment and exact CORS allowlist must be configured before public account registration is enabled. The frontend first-party API adapter is implemented but remains opt-in; the live frontend continues using its existing Supabase adapter until a reviewed backend cutover. No provider credentials are committed or assumed.
 
+### Self-hosted container stack
+
+The repository now includes a multi-stage, non-root Docker build for the API, migration command and email worker, plus a PostgreSQL 17 Compose stack. It is designed to run on infrastructure controlled by PLUITS; it does not provision a cloud account or purchase compute.
+
+From the backend directory:
+
+1. Copy .env.example to .env.
+2. Replace every placeholder. Generate two independent 32-byte keys with openssl rand -base64 32; never reuse the same key for outbox encryption and rate-limit HMAC.
+3. Set a long random hexadecimal PostgreSQL password, the exact allowed browser origin, the public PLUITS base URL and real SMTP STARTTLS credentials.
+4. Start the stack with docker compose --env-file .env -f compose.yaml up --build -d.
+5. Inspect service state with docker compose --env-file .env -f compose.yaml ps and logs with docker compose --env-file .env -f compose.yaml logs -f api email-worker.
+
+The database has a named persistent Docker volume and is not exposed on a host port. The API binds to loopback; place a TLS-terminating reverse proxy in front of it before public access. The email worker is a separate process. The migration container runs before API/worker startup. Apply later migrations with docker compose --env-file .env -f compose.yaml run --rm migrate.
+
+The .env file is ignored by Git. Never commit provider credentials, production keys or database passwords. This Compose setup is a self-hosting baseline, not a claim of high availability: production still needs independent backups and restore drills, monitoring/alerts, host hardening, TLS proxy configuration, capacity/load testing, and a multi-node/replicated database strategy when required. Do not expose the database directly to the internet.
+
 ### Current migration command
 
 From the `backend/` directory:
@@ -170,7 +186,8 @@ Detailed database ownership, global data, identity, privacy and migration rules 
 | Accommodation operations | Target contract documented; schema/API not started |
 | Social, messaging, media, calls/live | Not started |
 | Marketplace and merchant domains | Not started |
-| Public API hosting, persistent database and SMTP configuration | Not started; requires explicit infrastructure and provider setup |
+| Docker image and self-hosted Compose topology | Implemented in source; not deployed |
+| Public API hosting, persistent database and SMTP configuration | Not started; requires controlled host, DNS/TLS and provider configuration |
 | First-party frontend auth cutover | Adapter implemented; remains disabled until API deployment and verification |
 | Production data migration/cutover | Not started |
 
