@@ -61,3 +61,14 @@ func TestRetryDelayIsBounded(t *testing.T) {
 	if got := retryDelay(0); got != 2*time.Second { t.Fatalf("unexpected first retry delay %s", got) }
 	if got := retryDelay(99); got > time.Hour { t.Fatalf("retry delay exceeded cap: %s", got) }
 }
+
+func TestOutboxRendersVerificationAndRecoveryRoutes(t *testing.T) {
+	worker := &OutboxWorker{publicBaseURL:"https://baguskristiansianturi.github.io/pluits"}
+	verify, err := worker.render(queuedMessage{recipient:"user@example.test", template:"verify_email"}, "verify-token")
+	if err != nil { t.Fatal(err) }
+	if !strings.Contains(verify.Body, "/pluits/?auth=verify&token=verify-token") { t.Fatalf("verification link has wrong route: %s", verify.Body) }
+	reset, err := worker.render(queuedMessage{recipient:"user@example.test", template:"password_reset"}, "reset-token")
+	if err != nil { t.Fatal(err) }
+	if !strings.Contains(reset.Body, "/pluits/?auth=reset&token=reset-token") { t.Fatalf("password reset link has wrong route: %s", reset.Body) }
+	if _, err := worker.render(queuedMessage{template:"unsupported"}, "token"); err == nil { t.Fatal("unsupported template must be rejected") }
+}
