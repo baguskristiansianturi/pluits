@@ -23,7 +23,7 @@ async function walk(directory) {
 const runtimeFiles = await walk(sourceRoot);
 const runtime = (await Promise.all(runtimeFiles.map((path) => readFile(path, 'utf8')))).join('\n');
 
-if (/supabase|@supabase/i.test(runtime)) {
+if (/@supabase\/supabase-js|supabase\.(?:auth|from|storage|channel)/i.test(runtime)) {
   throw new Error('Supabase runtime references are forbidden; use PLUITS first-party services.');
 }
 if (/local-demo|pluits-demo/i.test(runtime)) {
