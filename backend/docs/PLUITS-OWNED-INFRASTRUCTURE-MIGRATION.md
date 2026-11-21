@@ -24,7 +24,7 @@ No host, object-storage, DNS or SMTP provider is assumed. Do not provision paid 
 
 - The frontend must not load a Supabase SDK/client, Auth adapter, project URL, publishable key or local synthetic login adapter.
 - All new browser data access must go through PLUITS-owned API contracts.
-- The old SQL files under `supabase/` are read-only reconstruction references, not an executable deployment target.
+- The old SQL files under `backend/legacy-schema-reference/sql/` are read-only reconstruction references, not an executable deployment target.
 - Do not delete those SQL files until every unique table, index, constraint, RLS rule, trigger, RPC, storage policy, scheduled task and domain invariant has an equivalent reviewed PLUITS implementation and regression test.
 - Decommission only the PLUITS project. Do not touch the separate Bagusin or BDM Trans projects or other organization resources.
 
