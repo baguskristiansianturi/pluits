@@ -94,7 +94,7 @@ func UpFS(ctx context.Context, db *sql.DB, source fs.FS) error {
 
 	known := make(map[int64]struct{}, len(migrations))
 	var highestApplied int64
-	for version, previous := range applied {
+	for version := range applied {
 		if version > highestApplied {
 			highestApplied = version
 		}
