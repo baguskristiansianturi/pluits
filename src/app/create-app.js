@@ -27,7 +27,7 @@ export function createApp({root,authService}) {
   const route=resolveAuthenticatedRoute(requested,Boolean(session));
   if(route!==requested){navigate(route);return;}
   if(route==='home'){mountBusinessHomePage({root,user:session?.user||null});attachPreviewTools();return;}
-  if(route==='businessPartners'){mountBusinessPartnersPage({root});attachPreviewTools();return;
+  if(route==='businessPartners'){mountBusinessPartnersPage({root});attachPreviewTools();return;}
   if(route==='venue'){mountVenueHomePage({root,user:session?.user||null});attachPreviewTools();return;}
   if(route==='accommodation'){cleanupPage=mountAccommodationHomePage({root,user:session?.user||null});attachPreviewTools();return;}
   if(route==='venueProvider'){mountVenueProviderPage({root,user:session?.user||null});attachPreviewTools();return;}
