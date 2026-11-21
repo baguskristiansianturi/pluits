@@ -33,8 +33,6 @@ jobs:
       - name: Run automated tests
         run: npm test
       - name: Build isolated development preview
-        env:
-          VITE_PLUITS_DEMO_MODE: 'true'
         run: npm run build -- --base=/pluits/
       - name: Verify build output
         run: test -f dist/index.html
