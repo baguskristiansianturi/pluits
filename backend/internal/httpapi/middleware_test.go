@@ -59,4 +59,7 @@ func TestRecoverPanics(t *testing.T) {
 	if rec.Code != http.StatusInternalServerError {
 		t.Fatalf("expected 500, got %d", rec.Code)
 	}
+	if strings.Contains(rec.Body.String(), "test panic") {
+		t.Fatal("panic details must not be exposed to clients")
+	}
 }
