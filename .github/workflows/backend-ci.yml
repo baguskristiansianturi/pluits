@@ -56,3 +56,8 @@ jobs:
         run: go build ./cmd/api
       - name: Build migration command
         run: go build ./cmd/migrate
+      - name: Build hardened container targets
+        run: |
+          docker build --target api -t pluits-api:ci .
+          docker build --target migrate -t pluits-migrate:ci .
+          docker build --target email-worker -t pluits-email-worker:ci .
