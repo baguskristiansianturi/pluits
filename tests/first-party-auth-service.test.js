@@ -30,13 +30,14 @@ test('first-party signup sends accepted legal consent to the Go API', async () =
 test('first-party login stores only the refresh token in tab-scoped storage', async () => {
   const storage = createStorage();
   globalThis.fetch = async () => new Response(JSON.stringify({
-    account_id: 'account-1', email: 'bagus@example.test', access_token: 'access-secret',
+    account_id: 'account-1', email: 'bagus@example.test', display_name: 'Bagus Test', access_token: 'access-secret',
     refresh_token: 'refresh-secret', access_expires_at: '2026-11-21T12:15:00Z'
   }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   const service = createFirstPartyAuthService({ apiBaseUrl: 'https://api.pluits.example', appUrl: 'https://pluits.example/', storage });
   const session = await service.signIn({ email: 'BAGUS@example.test', password: 'a-long-unique-password' });
   assert.equal(session.user.id, 'account-1');
   assert.equal(session.user.email, 'bagus@example.test');
+  assert.equal(session.user.user_metadata.full_name, 'Bagus Test');
   assert.equal(session.access_token, 'access-secret');
   assert.equal(storage.getItem('pluits-first-party-refresh-v1'), 'refresh-secret');
 });
