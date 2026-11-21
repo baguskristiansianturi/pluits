@@ -69,3 +69,17 @@ test('missing PLUITS API keeps guest access available and refuses account action
     /Backend akun PLUITS belum terhubung/
   );
 });
+
+test('retired Supabase host is never used as the PLUITS API origin', async () => {
+  const storage = createStorage();
+  const service = createFirstPartyAuthService({
+    apiBaseUrl: 'https://ytndswhqxayqpftszwfh.supabase.co',
+    appUrl: 'https://pluits.example/',
+    storage
+  });
+  assert.equal(await service.getSession(), null);
+  await assert.rejects(
+    service.signIn({ email: 'bagus@example.test', password: 'a-long-unique-password' }),
+    /Backend akun PLUITS belum terhubung/
+  );
+});
