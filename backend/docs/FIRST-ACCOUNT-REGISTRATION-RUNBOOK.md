@@ -67,7 +67,7 @@ In GitHub repository settings, open Settings → Secrets and variables → Actio
 - VITE_API_BASE_URL = https://api.<PLUITS-owned-domain>
 - VITE_PUBLIC_SIGNUP_ENABLED = false for the first deployment
 
-The Pages workflow reads these variables at build time. Deploy with signup disabled first and verify that the existing public site loads and the first-party API can be reached. The legacy Supabase adapter remains selected until the first-party provider variable is changed.
+The Pages workflow reads these variables at build time. Deploy with signup disabled first and verify that the existing public site loads and the first-party API can be reached. The first-party Go adapter is the only supported adapter; there is no Supabase or demo fallback.
 
 Only after the HTTPS API, CORS, SMTP verification, database persistence and backup checks pass, set VITE_PUBLIC_SIGNUP_ENABLED = true and run the Pages workflow again.
 
