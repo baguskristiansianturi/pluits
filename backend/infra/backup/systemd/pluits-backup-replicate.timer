@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily PLUITS encrypted backup replication
+
+[Timer]
+OnCalendar=*-*-* 04:20:00
+RandomizedDelaySec=15m
+Persistent=true
+Unit=pluits-backup-replicate.service
+
+[Install]
+WantedBy=timers.target
