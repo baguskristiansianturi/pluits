@@ -119,6 +119,22 @@ function demoContent(kind) {
   if(kind==='live')return '<article class="global-live-demo"><div class="global-live-art"><span class="global-live-indicator">LIVE · CONTOH</span><div class="global-live-orbit">PL</div><strong>Temukan siaran langsung</strong><small>Pratinjau tampilan ruang Live</small></div><div class="global-live-meta"><strong>Live bersama komunitas</strong><p>Contoh kartu siaran untuk menguji hierarki informasi dan tombol interaksi.</p><span>0 penonton · Tampilan demo</span></div></article>';
   return '<div class="global-blog-demo-grid"><article class="global-blog-demo"><div class="global-blog-art global-blog-art--one"><span>JURNAL PERJALANAN</span></div><div><small>CONTOH ARTIKEL · 6 MENIT BACA</small><strong>Menemukan sisi lain dari sebuah kota</strong><p>Pratinjau kartu artikel untuk menguji tampilan Blog di Global Home.</p></div></article><article class="global-blog-demo"><div class="global-blog-art global-blog-art--two"><span>CATATAN HARIAN</span></div><div><small>CONTOH ARTIKEL · 4 MENIT BACA</small><strong>Cerita kecil yang layak dibagikan</strong><p>Contoh visual sementara, bukan artikel yang sudah dipublikasikan.</p></div></article></div>';
 }
+function specialOffers() {
+  const offers = [
+    ['STAY & ESCAPE','Stay offers','Temukan penawaran menginap dari partner akomodasi.','accommodation','hotel','Akomodasi'],
+    ['FOOD & DRINK','Dining offers','Jelajahi promo menu dan pengalaman kuliner.','venue','utensils','Restoran & Café'],
+    ['GET AROUND','Transport deals','Penawaran perjalanan dan transportasi pilihan.','marketplace','car','Transportasi'],
+    ['LOCAL FINDS','Store offers','Temukan penawaran produk dari merchant PLUITS.','marketplace','shoppingBag','Toko & Produk']
+  ];
+  return '<section class="global-section global-special-offers" id="special-offers">' +
+    heading('Special Offers','Penawaran menarik dari berbagai merchant di PLUITS.','Jelajahi penawaran',routeHref('marketplace')) +
+    '<div class="global-offer-grid">' + offers.map(([eyebrow,title,copy,route,symbol,category],index) =>
+      '<article class="global-offer-card global-offer-card--' + (index+1) + '">' +
+        '<div class="global-offer-art"><span class="global-offer-index">0' + (index+1) + '</span><span class="global-offer-icon">' + renderIcon(symbol) + '</span><span class="global-offer-type">SPECIAL OFFER</span></div>' +
+        '<div class="global-offer-copy"><span class="global-offer-category">' + category + '</span><h3>' + title + '</h3><p>' + copy + '</p><div class="global-offer-foot"><span class="global-offer-status">Coming soon</span><a href="' + routeHref(route) + '">Explore <span aria-hidden="true">→</span></a></div></div>' +
+      '</article>'
+    ).join('') + '</div><p class="global-offer-note">Pratinjau area penawaran. Promo aktif akan ditampilkan setelah merchant dan data penawaran tersedia.</p></section>';
+}
 export function mountHomePage({root,user=null,onSignOut}={}) {
   const account = '<a class="global-icon-button" href="' + routeHref(user?'profile':'login') + '" aria-label="' + (user?'Akun':'Masuk') + '" title="' + (user?'Akun':'Masuk') + '">' + renderIcon('user') + '</a>';
   const actions = '<div class="global-header-actions">' + account + '<a class="global-icon-button" href="' + routeHref('discover') + '" aria-label="Cari" title="Cari">' + renderIcon('search') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Keranjang" title="Keranjang">' + renderIcon('cart') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Notifikasi" title="Notifikasi">' + renderIcon('bell') + '</a></div>';
@@ -139,6 +155,7 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
     pageHeaderMarkup +
     '<main class="pl-page-main home-main global-home-main"><section class="global-home-intro"><span class="global-kicker">PLUITS · INDONESIA</span><h1>Beranda Anda di PLUITS.</h1><p>Ikuti cerita, temukan orang, dan terhubung dengan komunitas dalam satu ruang sosial.</p></section>' +
     discovery +
+    specialOffers() +
     '<section class="global-section global-stories" id="stories">' + heading('Stories','Momen terbaru dari akun yang Anda ikuti.') + storyRail() + '</section>' +
     '<nav class="global-content-tabs" data-content-tabs aria-label="Kategori konten">' + contentTabs.map((tab,i)=>'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-controls="content-' + tab.id + '">' + tab.label + '</button>').join('') + '</nav>' +
     streams +
