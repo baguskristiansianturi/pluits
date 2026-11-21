@@ -45,7 +45,7 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - Every API response receives a cryptographically random request ID and security headers.
 - Panic recovery returns a generic server error while logging the correlation ID; panic details are not returned to clients.
 - Request bodies are capped at 2 MiB for the JSON API. Media uploads must use a separately authorized object-storage flow rather than the application API process.
-- This is a baseline only; distributed rate limiting, authentication, authorization, MFA, audit storage and edge protections remain future work.
+- This is a baseline only; rate limiting and authorization are being implemented in their dedicated modules. MFA, advanced abuse detection and edge protections remain future work.
 
 ### First-party identity and email delivery
 - Argon2id password hashing with parameter encoding and bounded verification settings.
@@ -57,7 +57,7 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - Logout revokes the current session.
 - AES-256-GCM protects short-lived verification secrets in the email outbox.
 - A standalone worker claims queued messages with PostgreSQL row locking, sends through SMTP with mandatory STARTTLS, retries transient failures and marks terminal failures.
-- HTTP handlers exist for registration, verification, login, refresh and logout. Identity service is disabled unless its outbox encryption key is configured.
+- HTTP handlers exist for registration, verification, resend, login, refresh, logout, password recovery and current-account lookup. Identity routes remain disabled unless both encryption and rate-limit keys are configured.
 - PostgreSQL-backed shared rate limiting is applied by IP and canonical email for identity routes; access-token authentication middleware checks active account and session state on every protected request.
 - Password reset uses one-time hashed challenges, encrypted outbox delivery and revokes all active sessions after completion.
 - New accounts receive an isolated personal workspace and `personal_owner` role. Product access is not inherited; each product requires an explicit workspace grant and product-scoped role.
@@ -73,7 +73,7 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - Re-running migrations is idempotent.
 - Editing or deleting an already-applied migration is rejected.
 - Migrations are **not** run automatically by API startup; an explicit command is required.
-- Migration `000001` creates the isolated `pluits` namespace. Migration `000002` defines first-party identity and session data; `000003` adds encrypted email delivery; `000004` adds shared rate limits; `000005` adds personal workspaces, scoped authorization, legal-consent records and password-reset challenges. These migrations are validated against disposable PostgreSQL CI, not applied to a persistent production database.
+- Migration `000001` creates the isolated `pluits` namespace. Migration `000002` defines first-party identity and session data; `000003` adds encrypted email delivery; `000004` adds shared rate limits; `000005` adds personal workspaces, scoped authorization, legal-consent records and password-reset challenges; `000006` adds the product registry and product-bound role constraints. These migrations are validated against disposable PostgreSQL CI, not applied to a persistent production database.
 
 ### Identity API and email worker
 
@@ -88,7 +88,7 @@ Identity routes:
 - POST /v1/identity/logout (Bearer access token)
 - GET /v1/identity/me (Bearer access token)
 
-The API only activates identity routes when both PLUITS_OUTBOX_ENCRYPTION_KEY and PLUITS_RATE_LIMIT_KEY are configured. Supply a base64 raw-standard-encoded 32-byte key and keep it in the runtime secret manager, never in Git or PostgreSQL. PLUITS_OUTBOX_KEY_VERSION defaults to 1. Identity routes also require PLUITS_RATE_LIMIT_KEY, a separate base64 raw-standard-encoded 32-byte HMAC key. Rate-limit buckets store HMAC identifiers rather than raw IP or email values.
+The API only activates identity routes when both PLUITS_OUTBOX_ENCRYPTION_KEY and PLUITS_RATE_LIMIT_KEY are configured. Browser calls require PLUITS_ALLOWED_ORIGINS to contain the exact HTTPS origin(s), such as https://baguskristiansianturi.github.io; wildcard origins are rejected. Supply a base64 raw-standard-encoded 32-byte key and keep it in the runtime secret manager, never in Git or PostgreSQL. PLUITS_OUTBOX_KEY_VERSION defaults to 1. Identity routes also require PLUITS_RATE_LIMIT_KEY, a separate base64 raw-standard-encoded 32-byte HMAC key. Rate-limit buckets store HMAC identifiers rather than raw IP or email values.
 
 The email worker is a separate process. Configure DATABASE_URL, PLUITS_OUTBOX_ENCRYPTION_KEY, PLUITS_OUTBOX_KEY_VERSION, PLUITS_PUBLIC_BASE_URL, PLUITS_SMTP_HOST, PLUITS_SMTP_PORT, PLUITS_SMTP_FROM, PLUITS_SMTP_USERNAME and PLUITS_SMTP_PASSWORD, then run: go run ./cmd/email-worker from the backend directory.
 
@@ -156,7 +156,7 @@ Detailed database ownership, global data, identity, privacy and migration rules 
 | Versioned migration runner | Implemented in source |
 | Migration checksum/lock/transaction | Implemented in source |
 | Initial isolated database namespace | Migration authored; CI integration test verifies application |
-| First-party identity schema, encrypted email outbox, rate limits, workspaces and authorization | Migrations authored; PostgreSQL CI integration tests run on each main push |
+| First-party identity, encrypted email outbox, rate limits, workspaces, scoped authorization and product registry | Migrations authored; PostgreSQL CI integration tests run on each main push |
 | Argon2id password hashing and opaque token primitives | Implemented in source; CI validation pending |
 | AES-256-GCM outbox secret encryption | Implemented in source; CI validation pending |
 | Unit and PostgreSQL integration tests | Added; CI run pending |
