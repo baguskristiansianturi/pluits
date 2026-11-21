@@ -45,11 +45,12 @@ func TestWorkspaceAndProductPermissionsAreExplicit(t *testing.T) {
 	if err != nil { t.Fatal(err) }
 	if allowed { t.Fatal("workspace owner must not receive implicit product access") }
 
+	if _, err := db.ExecContext(ctx, "INSERT INTO pluits.platform_products (product_key, display_name) VALUES ('store','Store')"); err != nil { t.Fatal(err) }
 	if _, err := db.ExecContext(ctx, "INSERT INTO pluits.authorization_permissions (permission_key, description) VALUES ('store.manage','Manage store operations')"); err != nil { t.Fatal(err) }
 	var permissionID string
 	if err := db.QueryRowContext(ctx, "SELECT id::text FROM pluits.authorization_permissions WHERE permission_key='store.manage'").Scan(&permissionID); err != nil { t.Fatal(err) }
 	var roleID string
-	if err := db.QueryRowContext(ctx, "INSERT INTO pluits.authorization_roles (role_key,scope_type,description) VALUES ('store_operator','product','Store operator') RETURNING id::text").Scan(&roleID); err != nil { t.Fatal(err) }
+	if err := db.QueryRowContext(ctx, "INSERT INTO pluits.authorization_roles (role_key,scope_type,description,product_key) VALUES ('store_operator','product','Store operator','store') RETURNING id::text").Scan(&roleID); err != nil { t.Fatal(err) }
 	if _, err := db.ExecContext(ctx, "INSERT INTO pluits.role_permissions (role_id,permission_id) VALUES ($1,$2)", roleID, permissionID); err != nil { t.Fatal(err) }
 	if _, err := db.ExecContext(ctx, "INSERT INTO pluits.membership_roles (membership_id,role_id,granted_by_account_id) VALUES ($1,$2,$3)", membershipID, roleID, accountID); err != nil { t.Fatal(err) }
 	if _, err := db.ExecContext(ctx, "INSERT INTO pluits.workspace_product_grants (workspace_id,product_key,granted_by_account_id) VALUES ($1,'store',$2)", workspaceID, accountID); err != nil { t.Fatal(err) }
