@@ -41,7 +41,7 @@ The scope is the platform target, not a claim that all capabilities are already 
 
 ## Company-owned shared backend platform
 
-PLUITS is the first product on a reusable internal backend platform intended to support BDM Transport, Bagusin and a future payments product. It is not a public BaaS. Shared platform services include identity, authorization, audit, notifications, media, events/jobs, search, observability and regional settings; product-owned data and permissions remain isolated. See [`backend/docs/INTERNAL-COMPANY-PLATFORM.md`](../../backend/docs/INTERNAL-COMPANY-PLATFORM.md).
+The backend is owned and operated by PLUITS Official Indonesia for the full PLUITS platform. It is not a public backend service. Shared platform services include identity, authorization, audit, notifications, media, events/jobs, search, observability and regional settings; domain-owned data and permissions remain isolated. See [`backend/docs/INTERNAL-COMPANY-PLATFORM.md`](../../backend/docs/INTERNAL-COMPANY-PLATFORM.md).
 
 ## Extended domain contracts
 
