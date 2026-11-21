@@ -26,7 +26,7 @@ func TestDecodeJSONRejectsUnknownFieldsAndTrailingValues(t *testing.T) {
 	} {
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(body))
 		req.Header.Set("Content-Type", "application/json")
-		var target map[string]any
+		var target struct { Email string `json:"email"` }
 		if err := decodeJSON(httptest.NewRecorder(), req, &target); err == nil {
 			t.Errorf("expected strict JSON rejection for %s", body)
 		}
