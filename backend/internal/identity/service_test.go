@@ -56,6 +56,7 @@ func TestRegistrationVerificationLifecyclePostgres(t *testing.T) {
 	if len(rawToken) == 0 { t.Fatal("expected verification token in encrypted outbox payload") }
 
 	if err := service.VerifyEmail(ctx, string(rawToken)); err != nil { t.Fatal(err) }
+	if _, err := db.ExecContext(ctx, "UPDATE pluits.email_outbox SET status='sent', sent_at=NOW() WHERE account_id=$1", accountID); err != nil { t.Fatal(err) }
 	if err := db.QueryRowContext(ctx, "SELECT status FROM pluits.accounts WHERE id = $1", accountID).Scan(&status); err != nil { t.Fatal(err) }
 	if status != "active" { t.Fatalf("expected active account after verification, got %s", status) }
 	if err := service.VerifyEmail(ctx, string(rawToken)); err != ErrInvalidVerification {
