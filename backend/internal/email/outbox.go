@@ -99,17 +99,27 @@ func (w *OutboxWorker) ProcessBatch(ctx context.Context) (int, error) {
 }
 
 func (w *OutboxWorker) render(item queuedMessage, token string) (Message, error) {
-	if item.template != "verify_email" { return Message{}, fmt.Errorf("unsupported email template") }
-	link, err := url.Parse(w.publicBaseURL + "/verify-email")
+	link, err := url.Parse(w.publicBaseURL + "/")
 	if err != nil { return Message{}, err }
 	query := link.Query()
+	subject := ""
+	body := ""
+	switch item.template {
+	case "verify_email":
+		query.Set("auth", "verify")
+		subject = "Verify your PLUITS account"
+		body = "Complete your PLUITS account verification using this one-time link:\n\n"
+	case "password_reset":
+		query.Set("auth", "reset")
+		subject = "Reset your PLUITS password"
+		body = "Use this one-time link to reset your PLUITS password:\n\n"
+	default:
+		return Message{}, fmt.Errorf("unsupported email template")
+	}
 	query.Set("token", token)
 	link.RawQuery = query.Encode()
-	return Message{
-		To:item.recipient,
-		Subject:"Verify your PLUITS account",
-		Body:"Complete your PLUITS account verification using this one-time link:\n\n"+link.String()+"\n\nThis link expires in 30 minutes. If you did not request this, you can ignore this email.\n",
-	}, nil
+	expiry := "This link expires in 30 minutes. If you did not request this, you can ignore this email.\n"
+	return Message{To:item.recipient, Subject:subject, Body:body + link.String() + "\n\n" + expiry}, nil
 }
 
 func (w *OutboxWorker) markFailed(ctx context.Context, id, code string) error {
