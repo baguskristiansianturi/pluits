@@ -10,3 +10,10 @@ test('public signup is disabled by default and requires an explicit build flag',
   assert.match(authPage, /if \(isRegister && !PUBLIC_SIGNUP_ENABLED\)/);
   assert.match(authPage, /Pendaftaran belum dibuka/);
 });
+
+test('public signup requires the first-party provider and a configured API origin', () => {
+  assert.match(runtime, /AUTH_PROVIDER === 'first-party'/);
+  assert.match(runtime, /Boolean\(API_BASE_URL\)/);
+  assert.match(runtime, /VITE_AUTH_PROVIDER/);
+  assert.match(runtime, /VITE_API_BASE_URL/);
+});
