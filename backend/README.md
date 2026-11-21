@@ -2,7 +2,7 @@
 
 **Status:** foundation and PostgreSQL migration tooling implemented in source; no public deployment and no production cutover.
 
-This is the first-party backend codebase for the PLUITS ecosystem and the first product on the company's reusable internal backend platform. It starts with a clean PostgreSQL database and has no runtime dependency on Supabase.
+This is the first-party backend platform owned and controlled by PLUITS Official Indonesia. It starts with a clean PostgreSQL database and has no runtime dependency on Supabase.
 
 ## Platform scope
 
@@ -94,7 +94,7 @@ go build ./cmd/api
 go build ./cmd/migrate
 ```
 
-Detailed database ownership, global data, identity, privacy and migration rules are documented in [`docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`](docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md). The cross-platform domain contracts for profiles, dashboards, transport and accommodation are in [`docs/PLATFORM-DOMAIN-CONTRACTS.md`](docs/PLATFORM-DOMAIN-CONTRACTS.md). The clean first-party account strategy is documented in [`docs/IDENTITY-AND-AUTH-BRIDGE.md`](docs/IDENTITY-AND-AUTH-BRIDGE.md). The reusable company-owned backend platform for PLUITS, BDM, Bagusin and future internal products is documented in [`docs/INTERNAL-COMPANY-PLATFORM.md`](docs/INTERNAL-COMPANY-PLATFORM.md).
+Detailed database ownership, global data, identity, privacy and migration rules are documented in [`docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`](docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md). The cross-platform domain contracts for profiles, dashboards, transport and accommodation are in [`docs/PLATFORM-DOMAIN-CONTRACTS.md`](docs/PLATFORM-DOMAIN-CONTRACTS.md). The clean first-party account strategy is documented in [`docs/IDENTITY-AND-AUTH-BRIDGE.md`](docs/IDENTITY-AND-AUTH-BRIDGE.md). The PLUITS-owned internal platform architecture is documented in [`docs/INTERNAL-COMPANY-PLATFORM.md`](docs/INTERNAL-COMPANY-PLATFORM.md).
 
 ## Data model and migration policy
 
