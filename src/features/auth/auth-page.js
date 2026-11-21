@@ -77,7 +77,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
         '</aside>' +
         '<section class="auth-card" aria-labelledby="auth-title">' +
           '<div class="auth-card-heading">' +
-            '<span class="auth-step-label">' + (isRegister ? 'REGISTRASI AKUN' : isForgot ? 'PEMULIHAN AKUN' : isReset ? 'KEAMANAN AKUN' : 'AKSES AKUN') + '</span>' +
+            '<span class="auth-step-label">' + (isRegister ? 'REGISTRASI AKUN' : isForgot ? 'PEMULIHAN AKUN' : isReset ? 'KEAMANAN AKUN' : isVerify ? 'VERIFIKASI EMAIL' : 'AKSES AKUN') + '</span>' +
             '<h2 id="auth-title">' + title + '</h2>' +
             '<p>' + intro + '</p>' +
             (isVerify ? '<p class="auth-status" data-verify-status role="status" aria-live="polite"></p>' : '') +
