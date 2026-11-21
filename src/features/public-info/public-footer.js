@@ -29,7 +29,13 @@ const GROUPS = [
     {label:'Pengiriman',route:'shippingPolicy'}
   ]},
   { title:'Partner', items:[
-    {label:'Kemitraan PLUITS',route:'contact'}
+    {label:'Akomodasi',route:'businessPartners'},
+    {label:'Transportasi',route:'businessPartners'},
+    {label:'Kurir',route:'businessPartners'},
+    {label:'Toko',route:'businessPartners'},
+    {label:'Restoran & Café',route:'businessPartners'},
+    {label:'Jasa Profesional',route:'businessPartners'},
+    {label:'Lihat Semua Business Partners',route:'businessPartners'}
   ]},
   { title:'Kebijakan', items:[
     {label:'Ketentuan Layanan',route:'terms'},
