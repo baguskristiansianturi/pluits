@@ -57,6 +57,8 @@ func (h *IdentityHandler) Register(mux *http.ServeMux) {
 	mux.HandleFunc("POST /v1/identity/login", h.login)
 	mux.HandleFunc("POST /v1/identity/refresh", h.refresh)
 	mux.HandleFunc("POST /v1/identity/logout", h.logout)
+	mux.HandleFunc("POST /v1/identity/password-reset/request", h.requestPasswordReset)
+	mux.HandleFunc("POST /v1/identity/password-reset/complete", h.completePasswordReset)
 }
 
 type registerRequest struct {
@@ -73,6 +75,9 @@ type loginRequest struct {
 	Email string `json:"email"`
 	Password string `json:"password"`
 }
+
+type passwordResetRequest struct { Email string `json:"email"` }
+type passwordResetCompleteRequest struct { Token string `json:"token"`; Password string `json:"password"` }
 
 type refreshRequest struct {
 	RefreshToken string `json:"refresh_token"`
@@ -182,4 +187,33 @@ func (h *IdentityHandler) logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]string{"status":"logged_out"})
+}
+
+func (h *IdentityHandler) requestPasswordReset(w http.ResponseWriter, r *http.Request) {
+	if h.service == nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	if !h.allowRequest(w, r, "identity.password_reset", 5, time.Hour) { return }
+	var input passwordResetRequest
+	if err := decodeJSON(w, r, &input); err != nil { writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"}); return }
+	if email, emailErr := identity.NormalizeEmail(input.Email); emailErr == nil {
+		if !h.allowIdentifier(w, r, "identity.password_reset.email", email.Canonical, 3, time.Hour) { return }
+	}
+	if err := h.service.RequestPasswordReset(r.Context(), input.Email); err != nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"})
+		return
+	}
+	writeJSON(w, http.StatusAccepted, map[string]string{"status":"accepted","message":"If the address is eligible, password recovery instructions will be sent."})
+}
+
+func (h *IdentityHandler) completePasswordReset(w http.ResponseWriter, r *http.Request) {
+	if h.service == nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	if !h.allowRequest(w, r, "identity.password_reset_complete", 10, time.Hour) { return }
+	var input passwordResetCompleteRequest
+	if err := decodeJSON(w, r, &input); err != nil { writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_request"}); return }
+	if err := h.service.ResetPassword(r.Context(), input.Token, input.Password); err != nil {
+		if errors.Is(err, identity.ErrInvalidVerification) { writeJSON(w, http.StatusBadRequest, map[string]string{"error":"reset_token_invalid_or_expired"}); return }
+		if strings.Contains(err.Error(), "password") { writeJSON(w, http.StatusBadRequest, map[string]string{"error":"invalid_password"}); return }
+		writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]string{"status":"password_updated"})
 }
