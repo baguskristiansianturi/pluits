@@ -110,6 +110,10 @@ The database has a named persistent Docker volume and is not exposed on a host p
 
 The .env file is ignored by Git. Never commit provider credentials, production keys or database passwords. This Compose setup is a self-hosting baseline, not a claim of high availability: production still needs independent backups and restore drills, monitoring/alerts, host hardening, TLS proxy configuration, capacity/load testing, and a multi-node/replicated database strategy when required. Do not expose the database directly to the internet.
 
+### Browser-based development with GitHub Codespaces
+
+For a temporary, browser-accessible Go + PostgreSQL development environment, follow [`docs/CODESPACES-DEVELOPMENT-RUNBOOK.md`](docs/CODESPACES-DEVELOPMENT-RUNBOOK.md). This setup is development-only: it is not persistent production hosting and must not be used for real user accounts or production data.
+
 ### Current migration command
 
 From the `backend/` directory:
