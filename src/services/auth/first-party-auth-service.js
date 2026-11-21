@@ -144,15 +144,15 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage } = {}
       const token = new URL(window.location.href).searchParams.get('token');
       if (!token) throw new Error('Token pemulihan tidak ditemukan. Minta tautan pemulihan baru.');
       await request('/v1/identity/password-reset/complete', { body: { token, password } });
-      storage?.removeItem(STORAGE_KEY);
+      sessionStore?.removeItem(STORAGE_KEY);
       session = null;
     },
     async signOut() {
       if (session?.access_token) {
         try { await request('/v1/identity/logout', { accessToken: session.access_token }); }
-        finally { storage?.removeItem(STORAGE_KEY); emit('SIGNED_OUT', null); }
+        finally { sessionStore?.removeItem(STORAGE_KEY); emit('SIGNED_OUT', null); }
       } else {
-        storage?.removeItem(STORAGE_KEY);
+        sessionStore?.removeItem(STORAGE_KEY);
         emit('SIGNED_OUT', null);
       }
     }
