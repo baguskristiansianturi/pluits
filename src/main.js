@@ -4,21 +4,14 @@ import './features/home/home-page.css';
 import './features/dashboard/dashboard-page.css';
 import './features/auth/auth-page.css';
 import './features/legal/policy-page.css';
-import { createAuthService } from './services/auth/auth-service.js';
 import { createFirstPartyAuthService } from './services/auth/first-party-auth-service.js';
-import { createLocalDemoAuthService } from './services/auth/local-demo-auth-service.js';
 import { createApp } from './app/create-app.js';
-import { APP_BASE_URL, API_BASE_URL, AUTH_PROVIDER } from './config/runtime.js';
-const localDemoRequested = new URLSearchParams(window.location.search).get('pluits-demo') === '1';
-let authService;
-if (localDemoRequested) {
-  authService = createLocalDemoAuthService();
-} else if (AUTH_PROVIDER === 'first-party') {
-  authService = createFirstPartyAuthService({ apiBaseUrl: API_BASE_URL, appUrl: APP_BASE_URL });
-} else {
-  const { supabase } = await import('./lib/supabase/client.js');
-  authService = createAuthService(supabase, { appUrl: APP_BASE_URL });
-}
+import { APP_BASE_URL, API_BASE_URL } from './config/runtime.js';
+
+const authService = createFirstPartyAuthService({
+  apiBaseUrl: API_BASE_URL,
+  appUrl: APP_BASE_URL
+});
 const root = document.querySelector('#app');
 if (!root) throw new Error('PLUITS app root (#app) is missing.');
 createApp({ root, authService });
