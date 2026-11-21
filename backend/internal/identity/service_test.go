@@ -45,6 +45,12 @@ func TestRegistrationVerificationLifecyclePostgres(t *testing.T) {
 	var ownerRoleCount int
 	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM pluits.membership_roles mr JOIN pluits.authorization_roles r ON r.id=mr.role_id WHERE mr.membership_id=$1 AND r.role_key='personal_owner'", membershipID).Scan(&ownerRoleCount); err != nil { t.Fatal(err) }
 	if ownerRoleCount != 1 { t.Fatalf("expected personal_owner role, got %d", ownerRoleCount) }
+	var productGrantCount int
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM pluits.workspace_product_grants WHERE workspace_id=$1 AND product_key='pluits'", workspaceID).Scan(&productGrantCount); err != nil { t.Fatal(err) }
+	if productGrantCount != 1 { t.Fatalf("expected baseline PLUITS product grant, got %d", productGrantCount) }
+	var memberRoleCount int
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM pluits.membership_roles mr JOIN pluits.authorization_roles r ON r.id=mr.role_id WHERE mr.membership_id=$1 AND r.role_key='pluits_member'", membershipID).Scan(&memberRoleCount); err != nil { t.Fatal(err) }
+	if memberRoleCount != 1 { t.Fatalf("expected pluits_member role, got %d", memberRoleCount) }
 	var consentCount int
 	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM pluits.account_consents WHERE account_id=$1", accountID).Scan(&consentCount); err != nil { t.Fatal(err) }
 	if consentCount != 2 { t.Fatalf("expected terms and privacy consent records, got %d", consentCount) }
