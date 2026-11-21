@@ -56,6 +56,8 @@ jobs:
         run: go build ./cmd/api
       - name: Build migration command
         run: go build ./cmd/migrate
+      - name: Validate self-hosted Compose configuration
+        run: docker compose --env-file .env.example -f compose.yaml config --quiet
       - name: Build hardened container targets
         run: |
           docker build --target api -t pluits-api:ci .
