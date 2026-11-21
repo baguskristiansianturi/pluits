@@ -89,9 +89,7 @@ export function createApp({ root, authService }) {
   const onRouteChange = () => render();
   window.addEventListener('popstate', onRouteChange);
 
-  const initialSession = authService.isLocalDemo
-    ? Promise.resolve(authService.demoSignIn())
-    : restoreInitialSession(authService);
+  const initialSession = restoreInitialSession(authService);
 
   initialSession.then((initial) => {
     session = initial;
