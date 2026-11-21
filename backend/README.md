@@ -56,7 +56,7 @@ Go 1.27 is selected because it is a currently supported stable release; CI uses 
 - Re-running migrations is idempotent.
 - Editing or deleting an already-applied migration is rejected.
 - Migrations are **not** run automatically by API startup; an explicit command is required.
-- Initial migration creates only the isolated `pluits` schema. No account, user, post, message or merchant tables are invented before the approved data model and migration mapping are complete.
+- Migration `000001` creates the isolated `pluits` namespace. Migration `000002` defines first-party accounts, email addresses, credential metadata, personal profiles, verification challenge hashes, session token hashes and security events. These migrations are authored but have not been applied to a persistent production database.
 
 ### Current migration command
 
@@ -120,8 +120,10 @@ Detailed database ownership, global data, identity, privacy and migration rules 
 | Versioned migration runner | Implemented in source |
 | Migration checksum/lock/transaction | Implemented in source |
 | Initial isolated database namespace | Migration authored; CI integration test verifies application |
+| First-party identity schema | Migration authored; PostgreSQL CI validation pending |
 | Unit and PostgreSQL integration tests | Added; CI run pending |
-| Identity/authentication and workspace authorization | Existing schema and frontend flow audited; independent token verification and endpoints not started |
+| Identity schema | Authored: accounts, email addresses, credentials, personal profiles, verification challenges, sessions and security events |
+| Registration/authentication endpoints | Not implemented; next stage |
 | Profiles and permission-scoped dashboards | Target contract documented; API not started |
 | Transport operations | Target contract documented; schema/API not started |
 | Accommodation operations | Target contract documented; schema/API not started |
