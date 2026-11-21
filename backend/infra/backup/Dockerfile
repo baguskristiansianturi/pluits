@@ -1,6 +1,6 @@
-FROM alpine:3.22
+FROM postgres:17-alpine
 
-RUN apk add --no-cache age bash postgresql17-client tzdata \
+RUN apk add --no-cache age bash tzdata \
     && addgroup -S backup \
     && adduser -S -D -H -u 10001 -G backup backup \
     && mkdir -p /backups \
