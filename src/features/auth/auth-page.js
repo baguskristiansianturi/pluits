@@ -21,14 +21,17 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
   const isRegister = mode === 'register';
   const isForgot = mode === 'forgot';
   const isReset = mode === 'reset';
-  const title = isRegister ? 'Buat akun PLUITS' : isForgot ? 'Pulihkan akses akun' : isReset ? 'Buat kata sandi baru' : 'Masuk ke PLUITS';
+  const isVerify = mode === 'verify';
+  const title = isRegister ? 'Buat akun PLUITS' : isForgot ? 'Pulihkan akses akun' : isReset ? 'Buat kata sandi baru' : isVerify ? 'Verifikasi email Anda' : 'Masuk ke PLUITS';
   const intro = isRegister
     ? 'Buat identitas PLUITS Anda untuk mulai terhubung dengan ekosistem kami.'
     : isForgot
       ? 'Masukkan alamat email yang terhubung dengan akun Anda. Kami akan mengirimkan petunjuk pemulihan.'
       : isReset
         ? 'Gunakan kata sandi baru untuk mengamankan kembali akun Anda.'
-        : 'Masuk untuk melanjutkan ke Dashboard PLUITS dan mengelola aktivitas Anda.';
+        : isVerify
+          ? 'Kami sedang memeriksa tautan verifikasi sekali pakai untuk mengaktifkan akun PLUITS Anda.'
+          : 'Masuk untuk melanjutkan ke Dashboard PLUITS dan mengelola aktivitas Anda.';
 
   let fields = '';
   if (isRegister) {
@@ -50,10 +53,10 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
   const switcher = isForgot || isReset ? '' :
     '<nav class="auth-tabs" aria-label="Jenis akses"><a href="' + routeHref('login') + '" class="' + (!isRegister ? 'is-active' : '') + '"' + (!isRegister ? ' aria-current="page"' : '') + '>Masuk</a><a href="' + routeHref('register') + '" class="' + (isRegister ? 'is-active' : '') + '"' + (isRegister ? ' aria-current="page"' : '') + '>Daftar</a></nav>';
 
-  const submitText = isRegister ? 'Buat akun' : isForgot ? 'Kirim tautan pemulihan' : isReset ? 'Simpan kata sandi baru' : 'Masuk';
+  const submitText = isRegister ? 'Buat akun' : isForgot ? 'Kirim tautan pemulihan' : isReset ? 'Simpan kata sandi baru' : isVerify ? 'Memverifikasi email…' : 'Masuk';
   const footLink = isRegister
     ? 'Sudah punya akun? <a href="' + routeHref('login') + '">Masuk</a>'
-    : isForgot || isReset
+    : isForgot || isReset || isVerify
       ? '<a href="' + routeHref('login') + '">Kembali ke Masuk</a>'
       : 'Belum punya akun? <a href="' + routeHref('register') + '">Daftar</a>';
 
@@ -77,6 +80,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
             '<span class="auth-step-label">' + (isRegister ? 'REGISTRASI AKUN' : isForgot ? 'PEMULIHAN AKUN' : isReset ? 'KEAMANAN AKUN' : 'AKSES AKUN') + '</span>' +
             '<h2 id="auth-title">' + title + '</h2>' +
             '<p>' + intro + '</p>' +
+            (isVerify ? '<p class="auth-status" data-verify-status role="status" aria-live="polite"></p>' : '') +
           '</div>' +
           switcher +
           (isRegister ? '<div class="auth-preview-notice">Pendaftaran akun baru belum tersedia. Untuk saat ini, akses PLUITS hanya dapat digunakan oleh akun yang telah terdaftar.</div>' : '') +
@@ -108,6 +112,7 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
   const form = root.querySelector('[data-auth-form]');
   const submit = form?.querySelector('[type="submit"]');
   const status = root.querySelector('[data-auth-status]');
+  const verifyStatus = root.querySelector('[data-verify-status]');
   const pending = root.querySelector('[data-auth-pending]');
   const resend = root.querySelector('[data-resend]');
   const resendStatus = root.querySelector('[data-resend-status]');
@@ -118,6 +123,21 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
     target.textContent = text;
     target.className = 'auth-status is-' + type;
   };
+
+  if (isVerify) {
+    form.hidden = true;
+    const token = new URLSearchParams(window.location.search).get('token');
+    if (!token) {
+      showStatus(verifyStatus, 'Token verifikasi tidak ditemukan. Buka tautan terbaru dari email PLUITS.');
+    } else {
+      showStatus(verifyStatus, 'Memverifikasi email…', 'info');
+      authService.verifyEmail(token).then(() => {
+        showStatus(verifyStatus, 'Email berhasil diverifikasi. Akun PLUITS Anda sekarang aktif. Silakan masuk.', 'success');
+      }).catch((error) => {
+        showStatus(verifyStatus, authService.getErrorMessage?.(error) || 'Tautan verifikasi tidak valid atau sudah kedaluwarsa.');
+      });
+    }
+  }
 
   if (isRegister && !PUBLIC_SIGNUP_ENABLED) {
     submit.disabled = true;
