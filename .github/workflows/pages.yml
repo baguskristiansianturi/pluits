@@ -1,26 +1,24 @@
-name: Deploy PLUITS development preview to GitHub Pages
+name: Validate PLUITS development preview
 
 on:
   push:
+    branches:
+      - development/preview
+  pull_request:
     branches:
       - development/preview
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pluits-development-preview
+  group: pluits-development-preview-validation
   cancel-in-progress: true
 
 jobs:
-  build:
-    if: github.ref == 'refs/heads/development/preview'
-    environment:
-      name: github-pages-preview
-      url: ${{ steps.deployment.outputs.page_url }}
+  validate:
+    if: github.ref == 'refs/heads/development/preview' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout development preview
@@ -32,7 +30,7 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Run automated tests before preview deployment
+      - name: Run automated tests
         run: npm test
       - name: Build isolated development preview
         env:
@@ -40,12 +38,3 @@ jobs:
         run: npm run build -- --base=/pluits/
       - name: Verify build output
         run: test -f dist/index.html
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Upload preview artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-      - name: Deploy development preview
-        id: deployment
-        uses: actions/deploy-pages@v4
