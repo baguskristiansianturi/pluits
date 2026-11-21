@@ -41,6 +41,32 @@ func TestMigrationRunnerIsIdempotentAndProtectsHistory(t *testing.T) {
 		t.Fatalf("expected exactly one ledger record for migration 1, got %d", count)
 	}
 
+	var identityMigrationCount int
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM pluits_meta.schema_migrations WHERE version = 2").Scan(&identityMigrationCount); err != nil {
+		t.Fatal(err)
+	}
+	if identityMigrationCount != 1 {
+		t.Fatalf("expected exactly one ledger record for migration 2, got %d", identityMigrationCount)
+	}
+
+	for _, table := range []string{
+		"pluits.accounts",
+		"pluits.account_emails",
+		"pluits.account_credentials",
+		"pluits.personal_profiles",
+		"pluits.email_verification_challenges",
+		"pluits.sessions",
+		"pluits.security_events",
+	} {
+		var actual sql.NullString
+		if err := db.QueryRowContext(ctx, "SELECT to_regclass($1)", table).Scan(&actual); err != nil {
+			t.Fatal(err)
+		}
+		if !actual.Valid {
+			t.Errorf("expected identity table %s to exist after migrations", table)
+		}
+	}
+
 	changed := fstest.MapFS{
 		"migrations/000001_platform_namespace.sql": &fstest.MapFile{Data: []byte("CREATE SCHEMA IF NOT EXISTS pluits; -- changed\n")},
 	}
