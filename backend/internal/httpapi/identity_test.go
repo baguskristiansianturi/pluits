@@ -5,8 +5,6 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
-
-	"github.com/baguskristiansianturi/pluits/backend/internal/identity"
 )
 
 func TestIdentityEndpointsAreUnavailableWithoutConfiguredService(t *testing.T) {
@@ -21,16 +19,16 @@ func TestIdentityEndpointsAreUnavailableWithoutConfiguredService(t *testing.T) {
 	}
 }
 
-func TestIdentityRegistrationRejectsUnknownFields(t *testing.T) {
-	mux := http.NewServeMux()
-	// A nil service still validates availability first; this test validates JSON
-	// strictness with a configured handler contract covered by the service tests.
-	NewIdentityHandler(nil).Register(mux)
-	req := httptest.NewRequest(http.MethodPost, "/v1/identity/register", strings.NewReader(`{"email":"a@b.com","unexpected":true}`))
-	req.Header.Set("Content-Type", "application/json")
-	rec := httptest.NewRecorder()
-	SecureHandler(mux).ServeHTTP(rec, req)
-	if rec.Code != http.StatusServiceUnavailable { t.Fatalf("expected service guard before parsing, got %d", rec.Code) }
+func TestDecodeJSONRejectsUnknownFieldsAndTrailingValues(t *testing.T) {
+	for _, body := range []string{
+		`{"email":"a@example.com","unexpected":true}`,
+		`{"email":"a@example.com"} {"second":true}`,
+	} {
+		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(body))
+		req.Header.Set("Content-Type", "application/json")
+		var target map[string]any
+		if err := decodeJSON(httptest.NewRecorder(), req, &target); err == nil {
+			t.Errorf("expected strict JSON rejection for %s", body)
+		}
+	}
 }
-
-var _ = identity.RegistrationInput{}
