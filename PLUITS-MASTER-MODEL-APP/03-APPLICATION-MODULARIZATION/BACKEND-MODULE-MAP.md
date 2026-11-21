@@ -73,9 +73,12 @@ Specific vendors and production hosting are not locked in by this baseline. Free
 
 ## Current implementation
 
-- `backend/` contains the initial Go HTTP service, PostgreSQL driver integration, liveness/readiness endpoints and Go tests.
-- GitHub Actions workflow `.github/workflows/backend-ci.yml` runs Go dependency resolution, tests and build.
-- No domain schema, account migration, production data copy, public API deployment or frontend integration has been performed yet.
+- `backend/` contains the Go 1.27 HTTP service, PostgreSQL connection pool, liveness/readiness endpoints and explicit migration CLI.
+- Migration runner records immutable version/checksum history, serializes runs with a PostgreSQL advisory lock, and commits each migration with its ledger row.
+- Initial migration creates only the isolated `pluits` namespace; it does not create account or domain tables before approved contracts and production mapping.
+- GitHub Actions provisions disposable PostgreSQL 17 and runs Go race tests, migration integration tests and builds both API and migration commands.
+- Detailed database rules: `backend/docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`.
+- No identity schema, domain tables, production data copy, public API deployment or frontend integration has been performed yet.
 
 ## Definition of ready
 
