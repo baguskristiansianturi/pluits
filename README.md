@@ -6,7 +6,7 @@ PLUITS is a live multi-application platform. The deployed application code remai
 
 ## Current frontend delivery
 
-The frontend is being replaced with a clean modular foundation. The current frontend includes account access, public Global Home, and one authenticated User Dashboard as the post-login control center. The new runtime is in src/. PLUITS is moving runtime infrastructure to its own Go + PostgreSQL backend. Legacy SQL reference material is retained temporarily while each domain is translated and tested.
+The frontend is being replaced with a clean modular foundation. The current frontend includes account access, public Global Home, and one authenticated User Dashboard as the post-login control center. The new runtime is in src/. PLUITS runs its backend on its own Go + PostgreSQL infrastructure. Each domain is implemented and tested in PLUITS-owned services before release.
 
 Public signup is disabled while SMTP, legal documents, and durable consent recording are reviewed. The site remains noindex during this internal stage. Workspace is an internal development term, not a separate user-facing page or route.
 
@@ -15,7 +15,6 @@ Public signup is disabled while SMTP, legal documents, and durable consent recor
 - [PLUITS Sharing Inbox](PLUITS-SHARING-INBOX/README.md) — raw notes and outcomes from each discussion session, waiting for review and sorting.
 - [Application source](src/) — current application implementation.
 - [PLUITS Backend](backend/) — first-party Go API, PostgreSQL migrations, identity and worker services.
-- [Legacy SQL reference](backend/legacy-schema-reference/) — historical schema/security definitions retained only for migration reconstruction; not connected to the frontend.
 - [Automated tests](tests/) and [engineering scripts](scripts/).
 
 ## Working principle
