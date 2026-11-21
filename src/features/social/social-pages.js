@@ -2,14 +2,10 @@ import { routeHref } from '../../config/paths.js';
 import '../../design-system/page-shell.css';
 import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
-import { supabase } from '../../lib/supabase/client.js';
-import { listDemoStores } from '../../services/store/local-demo-store-service.js';
 import './social-pages.css';
 
 // Short-lived in-memory cache prevents repeated profile navigation from
 // re-fetching the same business-presence data on every mount.
-const BUSINESS_PRESENCE_CACHE_TTL = 60_000;
-const businessPresenceCache = new Map();
 
 function bottomNav(active){
  return '<nav class="global-bottom-nav" aria-label="Navigasi aplikasi">'
@@ -43,7 +39,6 @@ export function mountProfilePage({root,user=null}={}) {
 
  let ownedStores=[];
  let professionalServices=[];
- let profileLoadController=new AbortController();
  const businessTabs=()=>{
   const tabs=[];
   if(ownedStores.length)tabs.push('<button type="button" role="tab" id="profile-tab-store" aria-controls="profile-panel-store" aria-selected="false" data-profile-tab="store">'+renderIcon('store')+'<span>Toko</span></button>');
@@ -54,7 +49,7 @@ export function mountProfilePage({root,user=null}={}) {
   const panels=[];
   if(ownedStores.length){
    const listClass=ownedStores.length>3?'social-profile-entity-list is-carousel':'social-profile-entity-list';
-   panels.push('<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-store" aria-labelledby="profile-tab-store" data-profile-panel="store" hidden><div class="'+listClass+'">'+ownedStores.map(store=>'<article class="social-profile-business-card"><span class="social-profile-business-icon">'+renderIcon('store')+'</span><div><strong>'+safe(store.name)+'</strong><p>'+safe([store.public_area,store.public_city].filter(Boolean).join(', '))+'</p><small>'+safe(store.demo_only?'Draft simulasi · hanya tersimpan di perangkat ini':(store.description||'Toko aktif dan terverifikasi di PLUITS'))+'</small></div></article>').join('')+'</div>'+emptyPanel('Produk unggulan belum dipilih','Bagian ini hanya menampilkan produk yang dipilih pemilik sebagai unggulan. Katalog lengkap tetap berada di homepage toko.')+'</section>');
+   panels.push('<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-store" aria-labelledby="profile-tab-store" data-profile-panel="store" hidden><div class="'+listClass+'">'+ownedStores.map(store=>'<article class="social-profile-business-card"><span class="social-profile-business-icon">'+renderIcon('store')+'</span><div><strong>'+safe(store.name)+'</strong><p>'+safe([store.public_area,store.public_city].filter(Boolean).join(', '))+'</p><small>'+safe(store.description||'Toko aktif dan terverifikasi di PLUITS')+'</small></div></article>').join('')+'</div>'+emptyPanel('Produk unggulan belum dipilih','Bagian ini hanya menampilkan produk yang dipilih pemilik sebagai unggulan. Katalog lengkap tetap berada di homepage toko.')+'</section>');
   }
   if(professionalServices.length){
    const listClass=professionalServices.length>3?'social-profile-entity-list is-carousel':'social-profile-entity-list';
@@ -90,35 +85,6 @@ export function mountProfilePage({root,user=null}={}) {
   +businessPanels()
   +'</section>';
  root.innerHTML='<div class="pl-page-shell social-shell"><header class="pl-page-header social-header"><div class="social-brand">'+renderBrand({href:routeHref('home'),label:'PLUITS'})+'<span>Profil</span></div><a href="'+routeHref('settings')+'">Pengaturan akun</a></header><main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
- const loadBusinessPresence=async()=>{
-  if(!user?.id)return;
-  if(user?.app_metadata?.provider==='local-demo'){
-   ownedStores=listDemoStores();
-   professionalServices=[];
-  }else{
-  const cached=businessPresenceCache.get(user.id);
-  if(cached&&Date.now()-cached.savedAt<BUSINESS_PRESENCE_CACHE_TTL){
-   ownedStores=cached.ownedStores;
-   professionalServices=cached.professionalServices;
-  }else{
-   const [storesResult,servicesResult]=await Promise.all([
-    supabase.from('stores').select('id,name,username,description,public_city,public_area').eq('owner_user_id',user.id).eq('store_status','active').eq('verification_status','verified').order('name').abortSignal(profileLoadController.signal),
-    supabase.from('professional_profiles').select('id,username,display_name,headline,bio,profession_category').eq('user_id',user.id).eq('profile_status','active').eq('visibility','public').order('created_at').abortSignal(profileLoadController.signal)
-   ]);
-   if(profileLoadController.signal.aborted)return;
-   if(storesResult.error||servicesResult.error)return;
-   ownedStores=storesResult.data||[];
-   professionalServices=servicesResult.data||[];
-   businessPresenceCache.set(user.id,{ownedStores,professionalServices,savedAt:Date.now()});
-  }
-  }
-  if(!profileLoadController.signal.aborted){
-   root.querySelector('.social-profile-tabs')?.insertAdjacentHTML('beforeend',businessTabs());
-   const panels=root.querySelectorAll('[data-profile-panel]');
-   panels[panels.length-1]?.insertAdjacentHTML('afterend',businessPanels());
-  }
- };
- loadBusinessPresence().catch(()=>{});
  root.addEventListener('click',event=>{
   const tab=event.target.closest('[data-profile-tab]');
   if(tab&&root.contains(tab)){
@@ -141,9 +107,9 @@ export function mountProfilePage({root,user=null}={}) {
   const expanded=quick.getAttribute('aria-expanded')==='true';
   quick.setAttribute('aria-expanded',String(!expanded));
   panel.hidden=expanded;
- },{signal:profileLoadController.signal});
+ });
 
- return ()=>profileLoadController.abort();
+ return ()=>{};
 
 }
 export function mountSettingsPage({root,user=null,onSignOut}={}) {
