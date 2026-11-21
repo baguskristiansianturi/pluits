@@ -1,0 +1,38 @@
+services:
+  workspace:
+    image: mcr.microsoft.com/devcontainers/go:1.27-bookworm
+    command: sleep infinity
+    volumes:
+      - ..:/workspaces/pluits:cached
+    working_dir: /workspaces/pluits
+    environment:
+      PORT: "8080"
+      DATABASE_URL: postgres://pluits:pluits_dev_only@database:5432/pluits?sslmode=disable
+      PLUITS_ALLOWED_ORIGINS: https://baguskristiansianturi.github.io
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - development
+
+  database:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: pluits
+      POSTGRES_USER: pluits
+      POSTGRES_PASSWORD: pluits_dev_only
+    volumes:
+      - pluits-codespaces-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pluits -d pluits"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - development
+
+networks:
+  development:
+
+volumes:
+  pluits-codespaces-postgres:
