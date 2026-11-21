@@ -9,7 +9,11 @@ function assertPassword(password) {
   if (String(password || '').length < 12) throw new Error('Password minimal 12 karakter.');
 }
 
-export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage = globalThis.sessionStorage } = {}) {
+export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage } = {}) {
+  let sessionStore = storage;
+  if (sessionStore === undefined) {
+    try { sessionStore = globalThis.sessionStorage; } catch { sessionStore = null; }
+  }
   if (!apiBaseUrl || !appUrl) throw new TypeError('API base URL and canonical app URL are required.');
   const parsed = new URL(apiBaseUrl);
   if (parsed.protocol !== 'https:' && parsed.hostname !== 'localhost' && parsed.hostname !== '127.0.0.1') {
@@ -55,7 +59,7 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage = glob
 
   function toSession(tokens, email = session?.user?.email || '') {
     if (!tokens?.access_token || !tokens?.refresh_token) throw new Error('Respons sesi dari server tidak lengkap.');
-    storage?.setItem(STORAGE_KEY, tokens.refresh_token);
+    sessionStore?.setItem(STORAGE_KEY, tokens.refresh_token);
     return {
       access_token: tokens.access_token,
       refresh_token: tokens.refresh_token,
@@ -83,15 +87,15 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage = glob
       return error?.message || 'Permintaan belum berhasil. Periksa koneksi lalu coba lagi.';
     },
     async getSession() {
-      const refreshToken = storage?.getItem(STORAGE_KEY);
+      const refreshToken = sessionStore?.getItem(STORAGE_KEY);
       if (!refreshToken) return null;
       try {
         const tokens = await request('/v1/identity/refresh', { body: { refresh_token: refreshToken } });
         const nextSession = toSession(tokens, tokens.email);
         emit('TOKEN_REFRESHED', nextSession);
         return nextSession;
-      } catch {
-        storage?.removeItem(STORAGE_KEY);
+      } catch (error) {
+        if (error?.status === 400 || error?.status === 401) sessionStore?.removeItem(STORAGE_KEY);
         session = null;
         return null;
       }
