@@ -76,7 +76,7 @@ Only after the HTTPS API, CORS, SMTP verification, database persistence and back
 Once the first-party build is deployed:
 1. Open the PLUITS registration page.
 2. Enter the real account details and accept the current Terms of Service and Privacy Policy.
-3. Submit registration. The API should return a generic accepted response and create one pending account, profile, personal workspace, owner membership, consent records and encrypted outbox item.
+3. Submit registration. The API should return a generic accepted response and create one pending account, profile, personal workspace, owner membership, baseline PLUITS product membership, consent records and encrypted outbox item. No other product access is granted.
 4. Open the verification email and follow its one-time link.
 5. Return to PLUITS and sign in with the same email and password.
 6. Verify the account profile and personal workspace through GET /v1/identity/me.
