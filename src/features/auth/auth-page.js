@@ -103,7 +103,6 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
             '<a class="auth-text-link" href="' + routeHref('login') + '">Kembali ke Masuk</a>' +
           '</section>' +
           (isReset ? '<p class="auth-recovery-note">' + (hasRecoverySession ? 'Sesi pemulihan terdeteksi.' : 'Buka halaman ini melalui tautan pemulihan yang dikirim ke email akun.') + '</p>' : '') +
-          (authService.isLocalDemo && !isRegister && !isForgot && !isReset ? '<div class="auth-preview-notice auth-local-demo"><p>Mode pengujian lokal aktif. Akun dan data simulasi hanya tersimpan di perangkat ini.</p><button class="auth-secondary" type="button" data-demo-login>Masuk untuk menguji PLUITS</button></div>' : '') +
           '<p class="auth-switch-copy">' + footLink + '</p>' +
           '<p class="auth-security-note">' + renderIcon('lock') + '<span>Jaga kerahasiaan kata sandi dan jangan bagikan tautan pemulihan akun kepada siapa pun.</span></p>' +
         '</section>' +
@@ -172,11 +171,6 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
       resend.disabled = false;
       resend.textContent = 'Coba kirim ulang';
     }
-  });
-
-  root.querySelector('[data-demo-login]')?.addEventListener('click', () => {
-    const nextSession = authService.demoSignIn?.();
-    if (nextSession) onAuthenticated?.(nextSession);
   });
 
   form?.addEventListener('submit', async (event) => {
