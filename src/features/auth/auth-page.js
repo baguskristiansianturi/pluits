@@ -22,6 +22,8 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
   const isForgot = mode === 'forgot';
   const isReset = mode === 'reset';
   const isVerify = mode === 'verify';
+  const passwordMinLength = authService.isFirstParty ? 12 : 8;
+  const passwordMinimumLabel = 'Minimal ' + passwordMinLength + ' karakter';
   const title = isRegister ? 'Buat akun PLUITS' : isForgot ? 'Pulihkan akses akun' : isReset ? 'Buat kata sandi baru' : isVerify ? 'Verifikasi email Anda' : 'Masuk ke PLUITS';
   const intro = isRegister
     ? 'Buat identitas PLUITS Anda untuk mulai terhubung dengan ekosistem kami.'
@@ -38,12 +40,12 @@ export function mountAuthPage({ root, mode, authService, hasRecoverySession, onA
     fields =
       '<div class="auth-field"><label for="auth-name">Nama tampilan</label><input id="auth-name" name="full_name" type="text" autocomplete="name" minlength="2" maxlength="80" placeholder="Nama yang akan ditampilkan" required></div>' +
       '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>' +
-      passwordField({ id: 'auth-password', label: 'Kata sandi', autocomplete: 'new-password', minLength: 8, placeholder: 'Minimal 8 karakter', help: 'Gunakan kata sandi yang kuat dan berbeda dari akun lain.' }) +
+      passwordField({ id: 'auth-password', label: 'Kata sandi', autocomplete: 'new-password', minLength: passwordMinLength, placeholder: passwordMinimumLabel, help: 'Gunakan kata sandi yang kuat dan berbeda dari akun lain.' }) +
       '<label class="auth-consent"><input name="terms" type="checkbox" required><span>Saya menyetujui <a href="' + routeHref('terms') + '">Ketentuan Layanan</a> dan telah membaca <a href="' + routeHref('privacy') + '">Kebijakan Privasi</a>.</span></label>';
   } else if (isForgot) {
     fields = '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>';
   } else if (isReset) {
-    fields = passwordField({ id: 'auth-password', label: 'Kata sandi baru', autocomplete: 'new-password', minLength: 8, placeholder: 'Minimal 8 karakter', help: 'Pilih kata sandi baru yang belum pernah digunakan pada akun ini.' });
+    fields = passwordField({ id: 'auth-password', label: 'Kata sandi baru', autocomplete: 'new-password', minLength: passwordMinLength, placeholder: passwordMinimumLabel, help: 'Pilih kata sandi baru yang belum pernah digunakan pada akun ini.' });
   } else {
     fields =
       '<div class="auth-field"><label for="auth-email">Alamat email</label><input id="auth-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="nama@email.com" required></div>' +
