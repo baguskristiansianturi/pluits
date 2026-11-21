@@ -2,7 +2,6 @@ package identity
 
 import (
 	"context"
-	"crypto/rand"
 	"database/sql"
 	"errors"
 	"time"
@@ -65,11 +64,13 @@ func (s *Service) Login(ctx context.Context, emailInput, password string) (Sessi
 	tx, err := s.db.BeginTx(ctx, nil)
 	if err != nil { return SessionTokens{}, ErrIdentityUnavailable }
 	defer tx.Rollback()
+	accessHash := TokenHash(access)
+	refreshHash := TokenHash(refresh)
 	_, err = tx.ExecContext(ctx, `
 		INSERT INTO pluits.sessions
 		(account_id, token_family_id, access_token_hash, refresh_token_hash, access_expires_at, refresh_expires_at)
 		VALUES ($1, gen_random_uuid(), $2, $3, $4, $5)
-	`, accountID, TokenHash(access)[:], TokenHash(refresh)[:], result.AccessExpiresAt, result.RefreshExpiresAt)
+	`, accountID, accessHash[:], refreshHash[:], result.AccessExpiresAt, result.RefreshExpiresAt)
 	if err != nil { return SessionTokens{}, ErrIdentityUnavailable }
 	if _, err := tx.ExecContext(ctx, "INSERT INTO pluits.security_events (account_id, event_type) VALUES ($1, 'account.login_succeeded')", accountID); err != nil {
 		return SessionTokens{}, ErrIdentityUnavailable
@@ -122,12 +123,14 @@ func (s *Service) Refresh(ctx context.Context, rawRefreshToken string) (SessionT
 		AccountID: accountID, AccessToken: access, RefreshToken: refresh,
 		AccessExpiresAt: now.Add(accessTokenTTL), RefreshExpiresAt: expiresAt,
 	}
+	accessHash := TokenHash(access)
+	refreshHash := TokenHash(refresh)
 	var newID string
 	if err := tx.QueryRowContext(ctx, `
 		INSERT INTO pluits.sessions
 		(account_id, token_family_id, access_token_hash, refresh_token_hash, access_expires_at, refresh_expires_at)
 		VALUES ($1, $2, $3, $4, $5, $6) RETURNING id::text
-	`, accountID, familyID, TokenHash(access)[:], TokenHash(refresh)[:], result.AccessExpiresAt, result.RefreshExpiresAt).Scan(&newID); err != nil {
+	`, accountID, familyID, accessHash[:], refreshHash[:], result.AccessExpiresAt, result.RefreshExpiresAt).Scan(&newID); err != nil {
 		return SessionTokens{}, ErrIdentityUnavailable
 	}
 	if _, err := tx.ExecContext(ctx, `
@@ -155,8 +158,3 @@ func (s *Service) Logout(ctx context.Context, rawAccessToken string) error {
 	return nil
 }
 
-func newSessionFamilyID() ([16]byte, error) {
-	var id [16]byte
-	_, err := rand.Read(id[:])
-	return id, err
-}
