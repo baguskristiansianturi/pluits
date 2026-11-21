@@ -39,6 +39,10 @@ The scope is the platform target, not a claim that all capabilities are already 
 | Entitlements & Wallet | Entitlements and wallet account/request scaffolding; regulated financial flows require separate controls | Future gated UI |
 | Trust, Safety & Audit | Reports, moderation cases, appeals, audit events and policy enforcement | Safety Center, Admin |
 
+## Company-owned shared backend platform
+
+PLUITS is the first product on a reusable internal backend platform intended to support BDM Transport, Bagusin and a future payments product. It is not a public BaaS. Shared platform services include identity, authorization, audit, notifications, media, events/jobs, search, observability and regional settings; product-owned data and permissions remain isolated. See [`backend/docs/INTERNAL-COMPANY-PLATFORM.md`](../../backend/docs/INTERNAL-COMPANY-PLATFORM.md).
+
 ## Extended domain contracts
 
 - Global identity, profile contexts and permission-scoped Personal, Professional, Business and platform-operations dashboards.
