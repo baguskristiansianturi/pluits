@@ -47,7 +47,7 @@ func decodeJSON(w http.ResponseWriter, r *http.Request, target any) error {
 	if r.Header.Get("Content-Type") != "application/json" {
 		return errors.New("content type must be application/json")
 	}
-	decoder := json.NewDecoder(io.LimitReader(r.Body, maxJSONRequestBody))
+	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
 	if err := decoder.Decode(target); err != nil { return err }
 	var extra any
