@@ -1,0 +1,17 @@
+{
+  "name": "PLUITS Backend Development",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "workspace",
+  "workspaceFolder": "/workspaces/pluits",
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "PLUITS API (temporary development)",
+      "onAutoForward": "notify",
+      "visibility": "private"
+    }
+  },
+  "postCreateCommand": "cd backend && go test ./...",
+  "remoteUser": "vscode",
+  "shutdownAction": "stopCompose"
+}
