@@ -801,41 +801,6 @@
 }
 
 
-/* Explicit apply/cancel row for profile cover menu settings. */
-.social-profile-cover-menu-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 7px;
-  margin-top: 5px;
-  padding: 9px 3px 2px;
-  border-top: 1px solid var(--pl-color-border);
-}
-.social-profile-cover-menu-footer button {
-  min-height: 30px;
-  padding: 0 10px;
-  border: 1px solid var(--pl-color-border);
-  border-radius: 7px;
-  background: transparent;
-  color: var(--pl-color-muted);
-  font: inherit;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.social-profile-cover-menu-footer [data-cover-save-settings] {
-  border-color: #238b58;
-  background: #238b58;
-  color: #fff;
-}
-.social-profile-cover-menu-footer button:hover,
-.social-profile-cover-menu-footer button:focus-visible {
-  filter: brightness(.96);
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-}
-
-
 /* Profile cover spacing follows the cover state: full-bleed when active, breathing room when off. */
 .social-profile-card > .social-profile-cover-menu-wrap { top: 14px; right: 0; }
 .social-profile-cover-menu-trigger { width: 40px; height: 40px; }
@@ -849,4 +814,34 @@
 @media (max-width: 767px) {
   .social-profile-card > .social-profile-cover-menu-wrap { top: 14px; right: 0; }
   .social-profile-cover-menu-trigger { width: 40px; height: 40px; }
+}
+
+
+/* Compact close affordance and gentle menu motion. */
+.social-profile-cover-menu {
+  padding-top: 38px;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity .15s ease, transform .15s ease;
+}
+.social-profile-cover-menu.is-open { opacity: 1; transform: translateY(0); }
+.social-profile-cover-menu.is-closing { opacity: 0; transform: translateY(-4px); pointer-events: none; }
+.social-profile-cover-menu-close {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  display: grid !important;
+  width: 28px;
+  min-height: 28px !important;
+  place-items: center;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  color: var(--pl-color-muted) !important;
+  font-size: 19px !important;
+  font-weight: 400 !important;
+  line-height: 1;
+}
+.social-profile-cover-menu-close:hover { background: var(--pl-color-canvas) !important; }
+@media (prefers-reduced-motion: reduce) {
+  .social-profile-cover-menu { transition: none; }
 }
