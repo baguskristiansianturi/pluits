@@ -45,7 +45,9 @@ test('cover editor opens the native media picker from an explicit mobile-friendl
 test('cover editor accepts image or video media and limits video duration to ten seconds', () => {
   assert.match(moduleSource, /data-cover-image-crop/);
   assert.match(moduleSource, /data-cover-video-preview/);
-  assert.ok(moduleSource.includes('video/mp4,video/webm'));
+  assert.ok(moduleSource.includes('image/gif,video/mp4,video/webm'));
+  assert.match(moduleSource, /jpeg\\|png\\|webp\\|gif/);
+  assert.match(moduleSource, /GIF maksimal 10 MB/);
   assert.ok(moduleSource.includes('videoPreview.duration > 10'));
   assert.ok(moduleSource.includes('saveButton.disabled = true'));
   assert.match(moduleSource, /URL\.createObjectURL/);
@@ -109,4 +111,17 @@ test('cover editor is centered on mobile and closes when the backdrop is tapped'
   assert.ok(styles.includes('@media(max-width:767px){\n .social-profile-cover-dialog{place-items:center'));
   assert.ok(styles.includes('pointer-events:auto!important'));
   assert.doesNotMatch(moduleSource, /Sinkronisasi ke akun dan perangkat lain memerlukan layanan media PLUITS/);
+});
+
+
+test('cover editor presents supported image, GIF, and video formats in a spacious glass dialog', () => {
+  assert.match(moduleSource, /Tambahkan media sampul/);
+  assert.match(moduleSource, /Pilih foto, video, atau GIF untuk tampilan profil Anda/);
+  assert.match(moduleSource, /Foto\/GIF: JPG, PNG, WebP, GIF · maks\. 10 MB\. Video: MP4\/WebM · maks\. 10 detik/);
+  assert.match(moduleSource, /data-cover-save>Simpan/);
+  assert.match(styles, /backdrop-filter: blur\(9px\)/);
+  assert.match(styles, /background: rgba\(244, 248, 247, \.76\)/);
+  assert.match(styles, /min-height: 390px/);
+  assert.match(styles, /social-profile-cover-format-note/);
+  assert.match(styles, /background: transparent/);
 });
