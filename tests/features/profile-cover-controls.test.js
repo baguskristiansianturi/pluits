@@ -11,7 +11,7 @@ test('profile setup notice is rendered before the cover, not inside the identity
   const cover = pageSource.indexOf('social-profile-cover-region');
   assert.ok(notice >= 0 && cover >= 0 && notice < cover);
   assert.doesNotMatch(pageSource, /social-profile-bio[\\s\\S]{0,250}social-profile-preview-label/);
-  assert.match(styles, /\\.social-profile-preview-label\\{[^}]*margin:0 0 10px/);
+  assert.match(styles, /\.social-profile-preview-label\{[^}]*margin:0 0 10px/);
 });
 
 test('profile cover menu contains only the three requested controls', () => {
