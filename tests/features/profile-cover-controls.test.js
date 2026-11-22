@@ -42,7 +42,7 @@ test('cover editor opens the native media picker from an explicit mobile-friendl
 });
 
 test('cover editor accepts image or video media and limits video duration to ten seconds', () => {
-  assert.match(moduleSource, /data-cover-file-preview/);
+  assert.match(moduleSource, /data-cover-image-crop/);
   assert.match(moduleSource, /data-cover-video-preview/);
   assert.ok(moduleSource.includes('video/mp4,video/webm'));
   assert.ok(moduleSource.includes('videoPreview.duration > 10'));
@@ -73,7 +73,7 @@ test('profile cover visibility and selected media persist locally across reloads
   assert.match(moduleSource, /objectStore\(COVER_STORE\)\.put\(/);
   assert.match(moduleSource, /objectStore\(COVER_STORE\)\.get\(profileKey\)/);
   assert.match(moduleSource, /await getCover\(stableProfileKey\)/);
-  assert.match(moduleSource, /await putCover\\(stableProfileKey, file, cropPosition\\)/);
+  assert.match(moduleSource, /await putCover\(stableProfileKey, file, cropPosition\)/);
   assert.match(moduleSource, /await removeCover\(stableProfileKey\)/);
   assert.match(moduleSource, /let coverEnabled = true/);
   assert.match(moduleSource, /data-cover-remove/);
