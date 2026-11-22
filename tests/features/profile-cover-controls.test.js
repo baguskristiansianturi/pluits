@@ -6,21 +6,33 @@ const moduleSource = await readFile(new URL('../../src/features/social/profile-c
 const pageSource = await readFile(new URL('../../src/features/social/social-pages.js', import.meta.url), 'utf8');
 const styles = await readFile(new URL('../../src/features/social/social-pages.css', import.meta.url), 'utf8');
 
-test('profile hero exposes isolated cover actions and a real no-cover layout state', () => {
-  for (const action of ['toggle', 'edit', 'text', 'library']) {
+test('profile cover menu contains only the three requested controls', () => {
+  for (const action of ['toggle', 'edit', 'library']) {
     assert.ok(moduleSource.includes('data-cover-action="' + action + '"'));
   }
+  assert.equal((moduleSource.match(/data-cover-action="/g) || []).length, 3);
+  assert.match(moduleSource, /Aktifkan sampul/);
+  assert.match(moduleSource, /Edit sampul/);
+  assert.match(moduleSource, /Pustaka sampul/);
+  assert.doesNotMatch(moduleSource, /data-cover-action="text"/);
   assert.match(pageSource, /mountProfileCoverControls\(\{root\}\)/);
-  assert.match(styles, /\.social-profile-card\.is-cover-hidden > \.social-profile-cover\s*\{\s*display:\s*none;/);
-  assert.match(styles, /\.social-profile-card\.is-cover-hidden > \.social-profile-identity-row/);
 });
 
-test('cover editor previews member images and does not invent curated library artwork', () => {
+test('cover switch is compact, accessible, and gates editing without collapsing the cover slot', () => {
+  assert.match(moduleSource, /role="menuitemcheckbox"/);
+  assert.match(moduleSource, /aria-checked="false"/);
+  assert.match(moduleSource, /editAction\.disabled = !coverEnabled/);
+  assert.match(moduleSource, /selected === 'edit' && coverEnabled/);
+  assert.match(styles, /\.social-profile-cover-switch/);
+  assert.match(styles, /background: #2fa66a/);
+  assert.match(styles, /\.social-profile-card\.is-cover-disabled \.social-profile-cover-image/);
+  assert.doesNotMatch(styles, /\.social-profile-card\.is-cover-hidden > \.social-profile-cover\s*\{\s*display:\s*none;/);
+});
+
+test('cover editor previews uploaded images and the library is reserved for approved animations', () => {
   assert.match(moduleSource, /data-cover-file-preview/);
   assert.match(moduleSource, /URL\.createObjectURL/);
-  assert.match(moduleSource, /Belum ada sampul pustaka yang diterbitkan/);
-  assert.match(moduleSource, /Foto/);
-  assert.match(moduleSource, /Video/);
-  assert.match(moduleSource, /Fluvara/);
+  assert.match(moduleSource, /Animasi sampul sedang disiapkan/);
+  assert.match(moduleSource, /Ukuran dan posisi sampul tetap sama/);
   assert.match(moduleSource, /Penyimpanan ke akun akan tersedia/);
 });
