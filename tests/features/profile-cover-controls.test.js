@@ -182,3 +182,16 @@ test('Android browser Back closes the cover editor through the unsaved-changes g
   assert.match(moduleSource, /window\.removeEventListener\('popstate', onCoverHistoryPop\)/);
   assert.match(moduleSource, /requestCloseDialog\(\);\s*handlingCoverHistoryPop = false/);
 });
+
+
+test('cover crop is performed on the profile-shaped frame with avatar alignment preview and top actions', () => {
+  assert.match(moduleSource, /social-profile-cover-dialog-toolbar[\s\S]*data-cover-dismiss>Batalkan[\s\S]*data-cover-save>Simpan/);
+  assert.match(moduleSource, /social-profile-cover-crop-viewport[\s\S]*data-cover-image-crop/);
+  assert.match(moduleSource, /data-cover-avatar-preview/);
+  assert.match(moduleSource, /profileAvatar\.cloneNode\(true\)/);
+  assert.match(moduleSource, /coverUpload\.classList\.add\('is-cropping'\)/);
+  assert.match(styles, /\.social-profile-cover-crop-viewport\s*\{[\s\S]*position: absolute[\s\S]*overflow: hidden/);
+  assert.match(styles, /\.social-profile-cover-crop-avatar\s*\{[\s\S]*bottom: -40px[\s\S]*border-radius: 50%/);
+  assert.match(styles, /\.social-profile-cover-dialog-toolbar\s*\{/);
+  assert.match(styles, /\.social-profile-cover-upload\.is-cropping\s*\{/);
+});
