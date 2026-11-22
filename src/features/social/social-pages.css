@@ -834,3 +834,27 @@
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
+
+
+/* Profile cover controls: deliberate safe-area spacing and precise edge alignment. */
+@media (max-width: 767px) {
+  .social-profile-shell > .social-main { padding-block-start: clamp(40px, 9vw, 50px); }
+}
+.social-profile-card > .social-profile-cover-menu-wrap { top: 14px; right: 8px; }
+.social-profile-cover-menu-trigger { width: 40px; height: 40px; }
+.social-profile-cover-menu-trigger .ui-icon { width: 22px; height: 22px; }
+.social-profile-card.is-cover-disabled > .social-profile-cover {
+  background: transparent;
+  border-color: transparent;
+}
+.social-profile-card.is-cover-disabled > .social-profile-cover::before,
+.social-profile-card.is-cover-disabled > .social-profile-cover::after,
+.social-profile-card.is-cover-disabled > .social-profile-cover .social-profile-cover-label,
+.social-profile-card.is-cover-disabled > .social-profile-cover .social-profile-cover-glow {
+  display: none;
+}
+.social-profile-card.is-cover-disabled .social-profile-cover-image { display: none; }
+@media (max-width: 767px) {
+  .social-profile-card > .social-profile-cover-menu-wrap { top: 14px; right: 8px; }
+  .social-profile-cover-menu-trigger { width: 40px; height: 40px; }
+}
