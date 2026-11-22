@@ -1793,7 +1793,7 @@
 }
 
 
-/* Profile avatar shortcut: compact dark plus that interrupts the avatar ring. */
+/* Profile avatar shortcut: compact badge centered on the avatar ring. */
 .social-profile-avatar-story-link {
   position: relative;
   display: block;
@@ -1806,18 +1806,18 @@
 .social-profile-story-plus {
   position: absolute;
   z-index: 5;
-  top: -1px;
-  right: -1px;
+  top: 4%;
+  right: 4%;
   display: grid;
-  width: 23px;
-  height: 23px;
+  width: 25px;
+  height: 25px;
   place-items: center;
-  border: 0;
+  border: 2px solid var(--pl-color-surface);
   border-radius: 50%;
   background: rgba(0, 0, 0, .72);
   color: #fff;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 21px;
+  font-weight: 600;
   line-height: 1;
   box-shadow: none;
 }
