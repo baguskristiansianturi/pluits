@@ -553,23 +553,29 @@
 /* Profile cover controls — isolated to the profile hero. */
 .social-profile-card > .social-profile-cover-menu-wrap {
   position: absolute;
-  top: 14px;
-  right: 16px;
+  top: 12px;
+  right: 0;
   z-index: 8;
 }
 .social-profile-cover-menu-trigger {
   display: grid;
-  width: 40px;
-  height: 40px;
+  width: 28px;
+  height: 32px;
   place-items: center;
-  border: 1px solid rgba(255,255,255,.28);
-  border-radius: 50%;
-  background: rgba(18,42,62,.28);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   color: #fff;
-  backdrop-filter: blur(10px);
   cursor: pointer;
 }
-.social-profile-cover-menu-trigger .ui-icon { width: 21px; height: 21px; }
+.social-profile-cover-menu-trigger:hover,
+.social-profile-cover-menu-trigger:focus-visible {
+  background: transparent;
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+.social-profile-cover-menu-trigger .ui-icon { width: 22px; height: 22px; }
 .social-profile-cover-menu {
   position: absolute;
   top: calc(100% + 8px);
@@ -610,8 +616,8 @@
 }
 .social-profile-card.is-cover-hidden .social-profile-identity { padding-top: 0 !important; }
 .social-profile-card.is-cover-hidden > .social-profile-cover-menu-wrap .social-profile-cover-menu-trigger {
-  border-color: var(--pl-color-border);
-  background: var(--pl-color-canvas);
+  border: 0;
+  background: transparent;
   color: var(--pl-color-ink);
   backdrop-filter: none;
 }
