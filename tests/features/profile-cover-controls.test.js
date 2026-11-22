@@ -14,6 +14,14 @@ test('profile setup notice is rendered before the cover, not inside the identity
   assert.match(styles, /\.social-profile-preview-label\{[^}]*margin:0 0 10px/);
 });
 
+test('profile cover spans the top of the profile card, identity overlays its lower edge, and tabs follow below', () => {
+  assert.match(pageSource, /<div class="social-profile-cover-region">[\\s\\S]*<div class="social-profile-identity-row">[\\s\\S]*<\\/section>'[\\s\\S]*<div class="social-profile-tabs"/);
+  assert.match(styles, /\\.social-profile-cover-region\\s*\\{[^}]*grid-column:\\s*1\\s*\\/\\s*-1;[^}]*grid-row:\\s*1;/);
+  assert.match(styles, /\\.social-profile-identity-row\\s*\\{[^}]*grid-column:\\s*1\\s*\\/\\s*-1;[^}]*grid-row:\\s*2;/);
+  assert.match(styles, /\\.social-profile-cover-region\\s*\\{[^}]*z-index:\\s*1;/);
+  assert.match(styles, /\\.social-profile-identity-row\\s*\\{[^}]*z-index:\\s*2;/);
+});
+
 test('profile cover menu contains only the three requested controls', () => {
   assert.match(pageSource, /import \{[^}]*renderProfileCoverMenuTrigger[^}]*\} from '\.\/profile-cover-controls\.js'/);
   for (const action of ['toggle', 'edit', 'library']) {
