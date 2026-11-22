@@ -861,3 +861,18 @@
 .social-profile-cover-dialog-actions [data-cover-remove]:hover {
   background: rgba(161,61,61,.07);
 }
+
+
+/* Keep the file input programmatically pickable on Android browsers while visually hidden. */
+.social-profile-cover-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
