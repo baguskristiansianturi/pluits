@@ -44,7 +44,7 @@ export function createApp({ root, authService }) {
     if (route === 'social') { cleanupPage = mountHomePage({ root, user: session?.user || null, accessToken: session?.access_token || null, onSignOut: () => authService.signOut() }); return; }
     if (route === 'circle') { navigate('social'); return; }
     if (route === 'messages') { mountMessagesPage({ root, user: session?.user || null }); return; }
-    if (route === 'profile') { cleanupPage = mountProfilePage({ root, user: session?.user || null }); return; }
+    if (route === 'profile') { cleanupPage = mountProfilePage({ root, user: session?.user || null, accessToken: session?.access_token || null }); return; }
     if (route === 'settings') { mountSettingsPage({ root, user: session?.user || null, onSignOut: () => authService.signOut() }); return; }
     if (route === 'discover') { mountDiscoverPage({ root, user: session?.user || null }); return; }
     if (route === 'dashboard') { mountDashboardPage({ root, user: session.user, onSignOut: () => authService.signOut() }); return; }

@@ -20,3 +20,14 @@ Blueprint teknis khusus Social Media: module boundaries, frontend routes/pages/c
 - Creation is rate-limited per account and captions are validated (1–5,000 Unicode characters).
 - Media, Reels, Stories, Blog, comments, reactions, follower-only audience, moderation, and realtime are explicitly out of scope until their own contracts and implementations exist.
 - Runtime implementation: `backend/internal/httpapi/social.go`, registered by `backend/cmd/api/main.go`.
+
+
+## Authenticated Profile Feed — first integration slice
+
+- Profile Feed reads only the signed-in owner's posts from `GET /v1/social/posts/me`.
+- The access token is passed from the active first-party session and sent as a Bearer token; no client-side identity or ownership filter is trusted.
+- Public and private posts are rendered with an explicit visibility label. Caption text is HTML-escaped.
+- The request is aborted when the profile page is unmounted.
+- This slice is text-post only because the current Go API contract is text-only. Media grid, reactions, comments, follower counts and public-profile routing remain unavailable until their own APIs and contracts are implemented.
+- Runtime owners: `src/app/create-app.js`, `src/features/social/social-pages.js`, `src/features/social/social-pages.css`.
+- Validation: `tests/features/social-composer.test.js` covers the authenticated endpoint, token forwarding, visibility labeling and request cleanup.

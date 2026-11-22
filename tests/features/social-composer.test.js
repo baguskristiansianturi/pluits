@@ -15,3 +15,14 @@ test('authenticated session token is passed only to the social home feature', as
   const source = await readFile(new URL('../../src/app/create-app.js', import.meta.url), 'utf8');
   assert.match(source, /mountHomePage\(\{\s*root,\s*user:\s*session\?\.user\s*\|\|\s*null,\s*accessToken:\s*session\?\.access_token/);
 });
+
+
+test('authenticated profile loads only the current account posts from the Go API', async () => {
+  const profile = await readFile(new URL('../../src/features/social/social-pages.js', import.meta.url), 'utf8');
+  const app = await readFile(new URL('../../src/app/create-app.js', import.meta.url), 'utf8');
+  assert.match(profile, /API_BASE_URL\s*\+\s*'\/v1\/social\/posts\/me'/);
+  assert.match(profile, /Authorization:\s*'Bearer '\s*\+\s*accessToken/);
+  assert.match(profile, /post\.visibility\s*===\s*'private'/);
+  assert.match(profile, /controller\.abort\(\)/);
+  assert.match(app, /mountProfilePage\(\{\s*root,\s*user:\s*session\?\.user\s*\|\|\s*null,\s*accessToken:\s*session\?\.access_token/);
+});

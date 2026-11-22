@@ -222,3 +222,10 @@
 .social-settings-panel[role="tabpanel"] {
   min-width: 0;
 }
+
+
+/* Profile Feed — text posts from the authenticated owner's API response. */
+.social-profile-post{padding:16px 0;border-bottom:1px solid var(--pl-color-border)}
+.social-profile-post-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--pl-color-muted);font-size:10px}
+.social-profile-post-meta>span{font-weight:750;text-transform:uppercase;letter-spacing:.06em}
+.social-profile-post p{margin:10px 0 2px;color:var(--pl-color-ink);font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
