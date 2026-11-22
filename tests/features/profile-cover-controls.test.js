@@ -25,16 +25,20 @@ test('profile cover spans the top of the profile card, identity overlays its low
   assert.ok(styles.includes('.social-profile-identity-row {\n  position: relative;\n  z-index: 2;'));
 });
 
-test('profile cover menu contains only the three requested controls', () => {
+test('profile cover menu contains the cover controls and edit profile photo', () => {
   assert.match(pageSource, /import \{[^}]*renderProfileCoverMenuTrigger[^}]*\} from '\.\/profile-cover-controls\.js'/);
-  for (const action of ['toggle', 'edit', 'library']) {
+  for (const action of ['toggle', 'edit', 'library', 'avatar']) {
     assert.ok(moduleSource.includes('data-cover-action="' + action + '"'));
   }
   const menuMarkup = moduleSource.slice(moduleSource.indexOf('export function renderProfileCoverMenu()'), moduleSource.indexOf('export function mountProfileCoverControls'));
-  assert.equal((menuMarkup.match(/data-cover-action="/g) || []).length, 3);
+  assert.equal((menuMarkup.match(/data-cover-action="/g) || []).length, 4);
   assert.match(moduleSource, /Aktifkan sampul/);
   assert.match(moduleSource, /Edit sampul/);
   assert.match(moduleSource, /Pustaka sampul/);
+  assert.match(moduleSource, /Edit foto profil/);
+  assert.match(moduleSource, /data-cover-action="avatar"/);
+  assert.match(moduleSource, /putAvatar\(stableProfileKey, file\)/);
+  assert.match(moduleSource, /data-profile-avatar-image/);
   assert.doesNotMatch(moduleSource, /data-cover-action="text"/);
   assert.match(pageSource, /mountProfileCoverControls\(\{root,profileKey:user\?\.id\|\|username\}\)/);
 });
@@ -103,7 +107,7 @@ test('cover switch applies immediately and menu closes only through its X contro
 test('profile cover visibility and selected media persist locally across reloads', () => {
   assert.match(moduleSource, /localStorage\.getItem\(enabledStorageKey\)/);
   assert.match(moduleSource, /localStorage\.setItem\(enabledStorageKey, String\(coverEnabled\)\)/);
-  assert.match(moduleSource, /indexedDB\.open\(COVER_DB, 1\)/);
+  assert.match(moduleSource, /indexedDB\.open\(COVER_DB, 2\)/);
   assert.match(moduleSource, /objectStore\(COVER_STORE\)\.put\(/);
   assert.match(moduleSource, /objectStore\(COVER_STORE\)\.get\(profileKey\)/);
   assert.match(moduleSource, /await getCover\(stableProfileKey\)/);
