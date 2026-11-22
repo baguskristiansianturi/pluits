@@ -1856,8 +1856,25 @@
   .social-profile-stats { margin-top: 12px; padding: 0 4px; }
 }
 @media (max-width: 380px) {
-  .social-profile-meta-row { flex-wrap: wrap; }
-  .social-profile-follow-stats { margin-left: auto; }
+  .social-profile-meta-row {
+    flex-wrap: nowrap;
+    gap: 4px;
+    justify-content: space-between;
+  }
+  .social-profile-meta-row .social-profile-location {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .social-profile-follow-stats {
+    flex: 0 0 auto;
+    margin-left: auto;
+    gap: 6px;
+  }
+  .social-profile-follow-stats > span { gap: 2px; }
+  .social-profile-follow-stats strong { font-size: 10px; }
+  .social-profile-follow-stats small { font-size: 8px; }
 }
 
 
