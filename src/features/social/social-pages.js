@@ -78,13 +78,7 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
   +'<div class="social-profile-identity-row"><div class="social-profile-avatar-wrap"><a class="social-profile-avatar-story-link" href="'+routeHref('dashboard')+'" aria-label="Buat Story melalui Create" title="Buat Story"><div class="social-profile-avatar" role="img" aria-label="Avatar placeholder laki-laki"><svg class="social-profile-avatar-placeholder" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><circle cx="60" cy="39" r="21" fill="currentColor"/><path d="M19 111c2-25 18-41 41-41s39 16 41 41" fill="currentColor"/></svg></div><span class="social-profile-story-plus" aria-hidden="true">+</span></a></div>'
   +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p><div class="social-profile-meta-row"><span class="social-profile-location"><span class="social-profile-country-flag" role="img" aria-label="Bendera Indonesia">🇮🇩</span><span>'+location+'</span></span><div class="social-profile-follow-stats"><span><strong>'+followers.toLocaleString('id-ID')+'</strong><small>Followers</small></span><span><strong>'+following.toLocaleString('id-ID')+'</strong><small>Following</small></span></div></div><div class="social-account-line"><span class="social-account-badge is-'+accountLevel+'">'+badgeLabel+'</span>'+(accountLevel==='regular'&&verified?'<span class="social-account-verified" role="img" aria-label="Terverifikasi" title="Terverifikasi"><svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 1.4 12 3l2.6-.1 1 2.4 2.2 1.4-.7 2.5.7 2.5-2.2 1.4-1 2.4-2.6-.1-2 1.6-2-1.6-2.6.1-1-2.4-2.2-1.4.7-2.5-.7-2.5 2.2-1.4 1-2.4 2.6.1L10 1.4Z"/><path d="m6.5 10 2.2 2.2 4.8-4.8" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>':'')+(accountLevel==='regular'?'<a class="social-account-upgrade" href="'+routeHref('settings')+'">Upgrade</a>':'')+'</div><p class="social-profile-bio">'+bio+'</p>'+'</div></div>'
   +'<div class="social-profile-stats"><div><strong>'+postsCount.toLocaleString('id-ID')+'</strong><span>Postingan</span></div></div>'
-  +(guestPreview?'<div class="social-profile-actions"><button type="button" class="social-profile-primary" disabled aria-disabled="true" title="Fitur mengikuti akan aktif setelah backend PLUITS tersedia">Ikuti · segera tersedia</button><button type="button" class="social-profile-secondary" data-profile-share>Bagikan profil</button></div>':'<div class="social-profile-actions"><a class="social-profile-primary" href="'+routeHref('settings')+'">Edit profil</a><a class="social-profile-secondary" href="'+routeHref('dashboard')+'">Akun Bisnis</a><button type="button" class="social-profile-secondary" data-profile-quick aria-expanded="false">Pengaturan Profil Cepat</button></div>')
-  +'<section class="social-profile-quick-panel" data-profile-quick-panel hidden><div class="social-profile-quick-heading"><strong>Pengaturan Profil Cepat</strong><span>Kelola informasi dan visibilitas profil Anda</span></div>'
-  +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('image')+'Foto profil</span><b>Kelola →</b></a>'
-  +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('book')+'Bio</span><b>Kelola →</b></a>'
-  +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('mapPin')+'Alamat</span><b>Kelola →</b></a>'
-  +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('mail')+'Kontak</span><b>Kelola →</b></a>'
-  +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('lock')+'Privasi profil · Publik / Privat</span><b>Kelola →</b></a></section>'
+  +(guestPreview?'<div class="social-profile-actions"><button type="button" class="social-profile-primary" disabled aria-disabled="true" title="Fitur mengikuti akan aktif setelah backend PLUITS tersedia">Ikuti · segera tersedia</button><button type="button" class="social-profile-secondary" data-profile-share>Bagikan profil</button></div>':'')
   +'</section>'
   +'<div class="social-profile-tabs" role="tablist" aria-label="Konten profil">'
   +'<button type="button" class="is-active is-icon-only" role="tab" id="profile-tab-feed" aria-label="Feed" aria-controls="profile-panel-feed" aria-selected="true" data-profile-tab="feed">'+renderIcon('grid')+'</button>'
@@ -126,12 +120,6 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
    else {share.textContent='Tautan: '+shareUrl;}
    return;
   }
-  const quick=event.target.closest('[data-profile-quick]');
-  if(!quick||!root.contains(quick))return;
-  const panel=root.querySelector('[data-profile-quick-panel]');
-  const expanded=quick.getAttribute('aria-expanded')==='true';
-  quick.setAttribute('aria-expanded',String(!expanded));
-  panel.hidden=expanded;
  });
 
  const feedPanel=root.querySelector('[data-profile-panel="feed"]');
