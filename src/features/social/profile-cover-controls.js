@@ -45,6 +45,7 @@ export function mountProfileCoverControls({ root } = {}) {
   const editAction = menu.querySelector('[data-cover-action="edit"]');
   let coverEnabled = !card.classList.contains('is-cover-disabled') && Boolean(cover.querySelector('.social-profile-cover-image'));
   let draftCoverEnabled = coverEnabled;
+  card.classList.toggle('is-cover-disabled', !coverEnabled);
   const syncCoverState = () => {
     toggleAction.setAttribute('aria-checked', String(draftCoverEnabled));
     editAction.disabled = !draftCoverEnabled;
