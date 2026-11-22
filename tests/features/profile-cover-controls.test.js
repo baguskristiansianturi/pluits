@@ -32,14 +32,13 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
 });
 
 test('cover editor opens the native media picker from an explicit mobile-friendly button', () => {
-  assert.match(moduleSource, /data-cover-browse/);
-  assert.match(moduleSource, /class="social-profile-cover-file-input" type="file"/);
+  assert.match(moduleSource, /<label class="social-profile-cover-browse" data-cover-browse>Pilih foto atau video<input class="social-profile-cover-file-input" type="file"/);
   assert.doesNotMatch(moduleSource, /data-cover-file hidden/);
-  assert.match(moduleSource, /browseButton\.addEventListener\('click', onBrowse\)/);
-  assert.match(moduleSource, /fileInput\.showPicker\(\)/);
-  assert.match(moduleSource, /fileInput\.click\(\)/);
-  assert.match(styles, /\.social-profile-cover-file-input[\s\S]*clip-path: inset\(50%\)/);
-  assert.match(styles, /\.social-profile-cover-browse/);
+  assert.doesNotMatch(moduleSource, /fileInput\.showPicker|fileInput\.click\(\)/);
+  assert.match(moduleSource, /dialog\.addEventListener\('change', onChange\)/);
+  assert.match(styles, /\.social-profile-cover-browse[\s\S]*position: relative/);
+  assert.match(styles, /\.social-profile-cover-file-input[\s\S]*opacity: 0/);
+  assert.match(styles, /\.social-profile-cover-file-input[\s\S]*inset: 0/);
 });
 
 test('cover editor accepts image or video media and limits video duration to ten seconds', () => {
