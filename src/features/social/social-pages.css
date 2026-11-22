@@ -548,7 +548,7 @@
 /* The cover region owns its controls; the menu panel remains outside the clipped media surface. */
 .social-profile-cover-region {
   position: relative;
-  z-index: 8;
+  z-index: 1;
 }
 .social-profile-cover-region > .social-profile-cover-menu-trigger {
   position: absolute;
