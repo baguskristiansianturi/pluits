@@ -8,6 +8,10 @@ on:
       - "backend/**"
       - ".github/workflows/deploy-backend.yml"
   workflow_dispatch:
+  pull_request:
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
 
 permissions:
   contents: read
@@ -17,7 +21,17 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  validate-deployment-scripts:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check deployment shell scripts
+        run: bash -n backend/scripts/bootstrap-ubuntu-24.04.sh backend/scripts/deploy.sh
+
   deploy:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Check deployment settings
