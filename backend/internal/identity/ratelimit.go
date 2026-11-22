@@ -20,7 +20,7 @@ func NewRateLimiter(db *sql.DB, key []byte) (*RateLimiter, error) {
 }
 
 // Allow atomically increments a fixed-window bucket shared by all API instances.
-// The supplied identifier should be the network peer address, not an untrusted proxy header.
+// Use a trusted server-side identifier (such as a resolved network peer or authenticated account ID), never a raw untrusted proxy header.
 func (l *RateLimiter) Allow(ctx context.Context, scope, identifier string, limit int, window time.Duration) (bool, error) {
 	if scope == "" || identifier == "" || limit < 1 || window < time.Second { return false, errors.New("invalid rate-limit parameters") }
 	mac := hmac.New(sha256.New, l.key)
