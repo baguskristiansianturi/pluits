@@ -30,10 +30,12 @@ export function mountMessagesPage({root}={}) {
 export function mountProfilePage({root,user=null,accessToken=null}={}) {
  const safe=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  const metadata=user?.user_metadata||{};
+ let localAccountSettings={};
+ try{localAccountSettings=JSON.parse(localStorage.getItem('pluits:account-settings:v1')||'{}')||{};}catch{}
  const profileSetupMode=!user;
  const guestPreview=false;
- const name=safe(metadata.display_name||metadata.full_name||metadata.name||(profileSetupMode?'Profil Anda':'Pengguna PLUITS'));
- const username=safe(metadata.username||(profileSetupMode?'atur_nama_pengguna':'nama_pengguna'));
+ const name=safe(localAccountSettings.displayName||metadata.display_name||metadata.full_name||metadata.name||(profileSetupMode?'Profil Anda':'Pengguna PLUITS'));
+ const username=safe(localAccountSettings.username||metadata.username||(profileSetupMode?'atur_nama_pengguna':'nama_pengguna'));
  const level=String(metadata.account_level||'regular').toLowerCase();
  const allowedLevels=['regular','silver','gold','platinum','priority'];
  const accountLevel=allowedLevels.includes(level)?level:'regular';
@@ -163,7 +165,7 @@ export function mountSettingsPage({root,user=null,onSignOut}={}) {
  const sections=[
   {id:'privacy',label:'Privasi',icon:'lock',title:'Privasi profil',desc:'Tentukan siapa yang dapat melihat profil dan aktivitas publik Anda.'},
   {id:'displayName',label:'Nama Profil',icon:'user',title:'Atur nama profil',desc:'Nama yang akan ditampilkan pada halaman profil Anda.'},
-  {id:'username',label:'Nama Pengguna',icon:'atSign',title:'Atur nama pengguna',desc:'Nama unik yang digunakan sebagai identitas @username Anda.'},
+  {id:'username',label:'Nama Pengguna',icon:'user',title:'Atur nama pengguna',desc:'Nama unik yang digunakan sebagai identitas @username Anda.'},
   {id:'account',label:'Akun',icon:'mail',title:'Akun & keamanan',desc:'Informasi akun yang digunakan untuk masuk ke PLUITS.'},
   {id:'notifications',label:'Notifikasi',icon:'bell',title:'Notifikasi',desc:'Preferensi pemberitahuan dari aktivitas PLUITS.'},
   {id:'cover',label:'Tema Profil',icon:'image',title:'Tema & sampul profil',desc:'Pengaturan tampilan dan sampul profil Anda.'},
