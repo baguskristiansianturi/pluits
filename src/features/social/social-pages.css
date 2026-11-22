@@ -512,3 +512,14 @@
     border-radius: 0;
   }
 }
+
+
+/* Keep the portrait anchored to the cover edge so the circle visibly overlaps it. */
+.social-profile-identity-row { align-items: start; }
+.social-profile-avatar-wrap { align-self: start; }
+.social-profile-identity { align-self: start; }
+@media (max-width: 767px) {
+  .social-profile-identity-row { align-items: start; }
+  .social-profile-avatar-wrap { align-self: start; }
+  .social-profile-identity { align-self: start; }
+}
