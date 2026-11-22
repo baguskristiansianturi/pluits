@@ -1809,8 +1809,8 @@
   top: 4%;
   right: 4%;
   display: grid;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   place-items: center;
   border: 1px solid var(--pl-color-surface);
   border-radius: 50%;
@@ -1818,9 +1818,11 @@
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   color: #fff;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1;
+  font-family: Arial, sans-serif;
+  font-size: 31px;
+  font-weight: 700;
+  line-height: .8;
+  padding: 0 0 2px;
   box-shadow: none;
 }
 .social-profile-avatar-story-link:focus-visible {
