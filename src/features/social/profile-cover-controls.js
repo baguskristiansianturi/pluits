@@ -284,6 +284,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
         if (!Number.isFinite(videoPreview.duration) || videoPreview.duration > 10) {
           URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = '';
           videoPreview.removeAttribute('src'); videoPreview.load(); videoPreview.hidden = true;
+          coverPicker.hidden = false;
           fileInput.value = '';
           subtitle.textContent = 'Durasi video melebihi batas 10 detik. Pilih video yang lebih singkat.';
           return;
@@ -291,7 +292,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
         saveButton.disabled = false;
         subtitle.textContent = 'Video siap disimpan.';
       };
-      videoPreview.onerror = () => { saveButton.disabled = true; subtitle.textContent = 'Video tidak dapat dibaca. Pilih file MP4 atau WebM yang valid.'; };
+      videoPreview.onerror = () => { saveButton.disabled = true; coverPicker.hidden = false; subtitle.textContent = 'Video tidak dapat dibaca. Pilih file MP4 atau WebM yang valid.'; };
       videoPreview.load();
     } else {
       cropPosition = { x: 50, y: 50 };
