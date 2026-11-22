@@ -67,7 +67,7 @@ Specific vendors and production hosting are not locked in by this baseline. Free
 ## Repository boundaries
 
 - `backend/`: independent Go API and its own tests/configuration.
-- `backend/migrations/`: future additive schema migrations for the new backend only; do not copy/replay Supabase migrations blindly.
+- `backend/internal/migrate/migrations/`: ordered, checksummed, immutable PostgreSQL schema migrations.
 - `backend/internal/migrate/migrations/`: immutable, additive PostgreSQL migrations owned by the Go backend.
 - `src/services/`: frontend service adapters only; never put server secrets or backend implementation here.
 
@@ -89,7 +89,7 @@ Specific vendors and production hosting are not locked in by this baseline. Free
 - Migrations `000001`–`000007` establish the PLUITS namespace, first-party identity, email outbox, rate limits, workspace authorization/recovery, product registry, and product baseline. The Go API exposes registration, verification, login, refresh, logout, password recovery, and account-read routes.
 - GitHub Actions provisions disposable PostgreSQL 17 and runs Go race tests, migration integration tests and builds both API and migration commands.
 - Detailed database rules: `backend/docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`.
-- The first-party identity schema is authored. No registration endpoint, production data copy, public API deployment or frontend integration has been performed yet.
+- The first-party identity schema and identity API routes are implemented. The browser uses the first-party Go API adapter. Production host provisioning, external HTTPS verification, SMTP delivery, off-host backup replication and restore acceptance remain outstanding.
 
 ## Definition of ready
 
