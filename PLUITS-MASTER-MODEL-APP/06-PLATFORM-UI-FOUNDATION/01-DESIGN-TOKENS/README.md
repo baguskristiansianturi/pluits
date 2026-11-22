@@ -42,3 +42,8 @@ The distance from the bottom edge of the shared navbar/header to the start of pa
 - Enforcement: `src/design-system/page-shell.css`, using `.pl-page-shell > .pl-page-main` so page-specific layout classes cannot silently override the shared top gap.
 - All pages using the shared shell must place their main content as a direct `.pl-page-main` child of `.pl-page-shell`.
 - A different gap is not allowed as a local CSS override; any future exception must be explicitly reviewed and documented.
+
+
+## CSS ownership and cascade governance
+
+See [CSS-OWNERSHIP-AND-CASCADE-CONTRACT-001.md](./CSS-OWNERSHIP-AND-CASCADE-CONTRACT-001.md) for the authoritative split between HTML structure, CSS presentation, token ownership, component/feature styles, JavaScript behavior, and the required cascade-safe change procedure. Do not add override layers or change provisional values merely to force visual consistency.
