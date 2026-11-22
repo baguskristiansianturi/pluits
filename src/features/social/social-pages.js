@@ -110,6 +110,14 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
    });
    return;
   }
+  const share=event.target.closest('[data-profile-share]');
+  if(share&&root.contains(share)){
+   const shareUrl=window.location.href;
+   if(navigator.share){navigator.share({title:name+' · PLUITS',text:'Lihat profil '+name+' di PLUITS',url:shareUrl}).catch(()=>{});}
+   else if(navigator.clipboard?.writeText){navigator.clipboard.writeText(shareUrl).then(()=>{share.textContent='Tautan tersalin';}).catch(()=>{share.textContent='Salin tautan: '+shareUrl;});}
+   else {share.textContent='Tautan: '+shareUrl;}
+   return;
+  }
   const quick=event.target.closest('[data-profile-quick]');
   if(!quick||!root.contains(quick))return;
   const panel=root.querySelector('[data-profile-quick-panel]');
