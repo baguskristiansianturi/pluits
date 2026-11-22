@@ -595,14 +595,19 @@
 /* Profile cover controls — isolated to the profile hero. */
 .social-profile-card > .social-profile-cover-menu-wrap {
   position: absolute;
-  top: 12px;
-  right: 0;
+  top: 5px;
+  right: 5px;
   z-index: 8;
+}
+@media (max-width: 767px) {
+  .social-profile-card > .social-profile-cover-menu-wrap {
+    right: calc(5px - var(--pl-page-gutter));
+  }
 }
 .social-profile-cover-menu-trigger {
   display: grid;
-  width: 28px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   place-items: center;
   padding: 0;
   border: 0;
@@ -820,8 +825,6 @@
 .social-profile-cover-dialog button:focus-visible,
 .social-profile-cover-dialog input:focus-visible { outline: 2px solid var(--pl-color-brand); outline-offset: 2px; }
 @media (max-width: 767px) {
-  .social-profile-card > .social-profile-cover-menu-wrap { top: 10px; right: 10px; }
-  .social-profile-cover-menu-trigger { width: 37px; height: 37px; }
   .social-profile-cover-dialog { align-items: end; padding: 0; }
   .social-profile-cover-dialog-panel { width: 100%; max-height: 88vh; padding: 20px 17px calc(20px + env(safe-area-inset-bottom,0px)); border-radius: 20px 20px 0 0; }
 }
@@ -845,9 +848,7 @@
 }
 
 
-/* Profile cover spacing follows the cover state: full-bleed when active, breathing room when off. */
-.social-profile-card > .social-profile-cover-menu-wrap { top: 14px; right: 0; }
-.social-profile-cover-menu-trigger { width: 40px; height: 40px; }
+/* The menu's position and touch target are defined with the cover controls above. */
 .social-profile-cover-menu-trigger .ui-icon { width: 22px; height: 22px; }
 .social-profile-card.is-cover-disabled > .social-profile-cover { display: none; }
 .social-profile-card.is-cover-disabled > .social-profile-identity-row {
@@ -855,10 +856,7 @@
   padding-top: clamp(40px, 9vw, 50px);
 }
 .social-profile-card.is-cover-disabled .social-profile-cover-image { display: none; }
-@media (max-width: 767px) {
-  .social-profile-card > .social-profile-cover-menu-wrap { top: 14px; right: 0; }
-  .social-profile-cover-menu-trigger { width: 40px; height: 40px; }
-}
+
 
 
 /* Compact close affordance and gentle menu motion. */
@@ -1939,25 +1937,13 @@
 .social-profile-card > .social-profile-gear {
   right: 10px;
 }
-.social-profile-card > .social-profile-cover-menu-wrap {
-  top: 5px;
-  right: 5px;
-}
 @media (max-width: 767px) {
   .social-profile-card > .social-profile-gear {
-    right: 5px;
-  }
-  .social-profile-card > .social-profile-cover-menu-wrap {
-    top: 5px;
     right: 5px;
   }
 }
 @media (max-width: 380px) {
   .social-profile-card > .social-profile-gear {
-    right: 5px;
-  }
-  .social-profile-card > .social-profile-cover-menu-wrap {
-    top: 5px;
     right: 5px;
   }
 }
