@@ -1,7 +1,4 @@
 import { routeHref } from '../../config/paths.js';
-import '../../design-system/page-shell.css';
-import { renderPageHeader } from '../../design-system/page-shell.js';
-import { renderPublicFooter } from '../public-info/public-footer.js';
 import { renderIcon } from '../../design-system/icons.js';
 import './marketplace-home.css';
 
