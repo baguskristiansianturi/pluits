@@ -1749,8 +1749,8 @@
 
 /* Account settings shortcut: quiet grey, aligned with the profile identity below the cover. */
 .social-profile-card > .social-profile-gear {
-  top: calc(clamp(132px, 24vw, 190px) + 10px);
-  right: 12px;
+  top: calc(clamp(170px, 24vw, 230px) + 10px);
+  right: 5px;
   width: 40px;
   height: 40px;
   border: 0;
@@ -1984,18 +1984,8 @@
 
 
 
-/* Profile action controls: preserve the gear's existing vertical position.
-   Only adjust its horizontal spacing on mobile. */
+/* Profile settings gear: align its top edge with the profile name,
+   10px below the cover, and keep the same 5px right inset as the cover menu. */
 .social-profile-card > .social-profile-gear {
-  right: 10px;
-}
-@media (max-width: 767px) {
-  .social-profile-card > .social-profile-gear {
-    right: 5px;
-  }
-}
-@media (max-width: 380px) {
-  .social-profile-card > .social-profile-gear {
-    right: 5px;
-  }
+  right: 5px;
 }
