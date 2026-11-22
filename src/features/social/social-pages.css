@@ -331,3 +331,173 @@
   .social-profile-identity h1 { font-size: 17px; }
   .social-profile-actions { gap: 8px; }
 }
+
+
+/* Profile cover + identity composition: avatar overlaps the cover by ~30%. */
+.social-profile-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto auto auto;
+  align-items: start;
+  gap: 0;
+}
+.social-profile-card > .social-profile-gear {
+  top: 14px;
+  right: 16px;
+  z-index: 5;
+  color: #fff;
+  background: rgba(18, 42, 62, .22);
+  backdrop-filter: blur(10px);
+}
+.social-profile-cover {
+  grid-column: 1;
+  grid-row: 1;
+  height: clamp(170px, 24vw, 230px);
+  min-height: 0;
+  border: 0;
+  border-radius: var(--pl-radius-lg);
+  background:
+    radial-gradient(ellipse at 78% 18%, rgba(255,255,255,.28), transparent 28%),
+    radial-gradient(ellipse at 18% 88%, rgba(8,173,158,.5), transparent 38%),
+    linear-gradient(118deg, #17334d 0%, #245b69 48%, #0d8d83 100%);
+}
+.social-profile-cover::before {
+  background:
+    radial-gradient(ellipse at 82% 22%, rgba(255,255,255,.2), transparent 32%),
+    linear-gradient(132deg, transparent 38%, rgba(255,255,255,.10) 38.2%, transparent 62%);
+}
+.social-profile-cover::after {
+  background: linear-gradient(180deg, rgba(9,28,47,.02), rgba(9,28,47,.22));
+}
+.social-profile-cover-label {
+  top: 18px;
+  left: 20px;
+  color: rgba(255,255,255,.82);
+  font-size: 10px;
+}
+.social-profile-cover-glow {
+  right: 8%;
+  bottom: -82px;
+  width: 50%;
+  height: 150px;
+  background: rgba(208,255,246,.26);
+  filter: blur(30px);
+}
+.social-profile-identity-row {
+  position: relative;
+  z-index: 2;
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: 124px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 20px;
+  min-width: 0;
+  margin-top: -66px;
+  padding: 0 22px;
+}
+.social-profile-avatar-wrap {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+.social-profile-avatar {
+  width: 116px;
+  height: 116px;
+  border: 5px solid var(--pl-color-surface);
+  box-shadow: 0 8px 24px rgba(15, 38, 55, .18);
+  font-size: 38px;
+}
+.social-profile-identity {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  min-width: 0;
+  min-height: 0;
+  padding: 70px 42px 0 0;
+}
+.social-profile-identity h1 {
+  margin: 0 0 4px;
+  font-size: clamp(20px, 2.4vw, 27px);
+  line-height: 1.18;
+}
+.social-profile-identity > p:not(.social-profile-bio) {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.social-profile-identity .social-account-line {
+  justify-content: flex-start;
+  margin-top: 8px;
+}
+.social-profile-bio { margin-top: 8px; }
+.social-profile-preview-label { margin-top: 8px; }
+.social-profile-stats {
+  grid-column: 1;
+  grid-row: 3;
+  margin-top: 24px;
+  padding: 0 12px;
+}
+.social-profile-actions {
+  grid-column: 1;
+  grid-row: 4;
+  margin: 20px 0 0;
+  padding: 0 12px;
+}
+.social-profile-quick-panel { grid-column: 1; grid-row: 5; margin: 18px 12px 0; }
+.social-profile-page .social-profile-tabs { margin-top: 28px; }
+
+@media (max-width: 767px) {
+  .social-profile-cover {
+    height: 158px;
+    min-height: 0;
+    border-radius: 17px;
+  }
+  .social-profile-cover-label { top: 16px; left: 16px; }
+  .social-profile-card > .social-profile-gear {
+    top: 11px;
+    right: 11px;
+  }
+  .social-profile-identity-row {
+    grid-template-columns: 104px minmax(0, 1fr);
+    column-gap: 14px;
+    margin-top: -49px;
+    padding: 0 12px;
+  }
+  .social-profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-width: 4px;
+    font-size: 34px;
+  }
+  .social-profile-identity {
+    padding: 49px 28px 0 0;
+  }
+  .social-profile-identity h1 { font-size: 19px; }
+  .social-profile-identity > p:not(.social-profile-bio) { font-size: 12px; }
+  .social-profile-identity .social-account-line { margin-top: 6px; }
+  .social-profile-bio { margin-top: 6px; font-size: 11px; line-height: 1.4; }
+  .social-profile-preview-label { margin-top: 7px; font-size: 9px; }
+  .social-profile-stats { margin-top: 22px; padding: 0 4px; }
+  .social-profile-actions { margin-top: 16px; padding: 0; }
+  .social-profile-quick-panel { margin-inline: 0; }
+  .social-profile-page .social-profile-tabs { margin-top: 24px; }
+}
+@media (max-width: 380px) {
+  .social-profile-cover { height: 142px; }
+  .social-profile-identity-row {
+    grid-template-columns: 88px minmax(0, 1fr);
+    column-gap: 10px;
+    margin-top: -44px;
+    padding-inline: 8px;
+  }
+  .social-profile-avatar { width: 86px; height: 86px; font-size: 30px; }
+  .social-profile-identity { padding: 44px 24px 0 0; }
+  .social-profile-identity h1 { font-size: 17px; }
+  .social-profile-identity > p:not(.social-profile-bio) { font-size: 11px; }
+}
