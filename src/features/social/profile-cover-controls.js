@@ -73,7 +73,8 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
     + '</div>'
-    + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-remove hidden>Hapus sampul</button><button type="button" data-cover-dismiss>Batal</button><button type="button" data-cover-save>Simpan</button></footer></section>';
+    + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-remove hidden>Hapus sampul</button><div class="social-profile-cover-dialog-actions-main"><button type="button" data-cover-dismiss>Batalkan</button><button type="button" data-cover-save>Simpan</button></div></footer>'
+    + '<div class="social-profile-cover-unsaved" data-cover-unsaved hidden><section role="alertdialog" aria-modal="true" aria-labelledby="cover-unsaved-title"><h3 id="cover-unsaved-title">Perubahan belum disimpan</h3><p>Apakah Anda ingin menyimpan perubahan sampul sebelum keluar?</p><div><button type="button" data-cover-keep-editing>Lanjut edit</button><button type="button" data-cover-discard>Buang perubahan</button><button type="button" data-cover-save-pending>Simpan perubahan</button></div></section></div></section>;
   card.append(dialog);
 
   const editorView = dialog.querySelector('[data-cover-editor-view]');
@@ -85,8 +86,12 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   const coverPicker = dialog.querySelector('[data-cover-picker]');
   const cropImage = dialog.querySelector('[data-cover-image-crop]');
   const videoPreview = dialog.querySelector('[data-cover-video-preview]');
-  let cropPosition = { x: 50, y: 50 };
+  let cropPosition = { x: 50, y: 50, zoom: 1 };
   let cropPointer = null;
+  const cropPointers = new Map();
+  let pinchStart = null;
+  let hasUnsavedChanges = false;
+  const unsavedConfirm = dialog.querySelector('[data-cover-unsaved]');
   const saveButton = dialog.querySelector('[data-cover-save]');
   const removeButton = dialog.querySelector('[data-cover-remove]');
   const toggleAction = menu.querySelector('[data-cover-action="toggle"]');
@@ -124,6 +129,8 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     const media = document.createElement(isVideo ? 'video' : 'img');
     media.className = 'social-profile-cover-image';
     media.style.objectPosition = `${crop.x ?? 50}% ${crop.y ?? 50}%`;
+    media.style.transform = `scale(${crop.zoom || 1})`;
+    media.style.transformOrigin = 'center';
     if (isVideo) {
       media.muted = true; media.loop = true; media.autoplay = true; media.playsInline = true;
       media.setAttribute('aria-label', 'Video sampul profil');
@@ -147,6 +154,9 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
 
   const closeDialog = () => {
     dialog.hidden = true;
+    unsavedConfirm.hidden = true;
+    hasUnsavedChanges = false;
+    cropPointers.clear(); pinchStart = null;
     if (pendingObjectUrl) { URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = ''; }
     fileInput.value = '';
     cropStage.hidden = true;
@@ -193,29 +203,65 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     dialog.querySelector('[data-cover-dismiss]').focus();
   };
 
-  const updateCropPosition = () => { cropImage.style.objectPosition = `${cropPosition.x}% ${cropPosition.y}%`; };
+  const updateCropPosition = () => {
+    cropImage.style.objectPosition = `${cropPosition.x}% ${cropPosition.y}%`;
+    cropImage.style.transform = `scale(${cropPosition.zoom || 1})`;
+  };
+  const pointerDistance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+  const requestCloseDialog = () => {
+    if (hasUnsavedChanges) {
+      unsavedConfirm.hidden = false;
+      unsavedConfirm.querySelector('[data-cover-save-pending]').focus();
+      return;
+    }
+    closeDialog();
+  };
   const onCropPointerDown = event => {
     if (cropStage.hidden || !cropImage.src) return;
-    const rect = cropStage.getBoundingClientRect();
-    const naturalWidth = cropImage.naturalWidth || rect.width;
-    const naturalHeight = cropImage.naturalHeight || rect.height;
-    const scale = Math.max(rect.width / naturalWidth, rect.height / naturalHeight);
-    cropPointer = { id: event.pointerId, x: event.clientX, y: event.clientY, cropX: cropPosition.x, cropY: cropPosition.y, overflowX: rect.width - naturalWidth * scale, overflowY: rect.height - naturalHeight * scale };
-    cropStage.classList.add('is-dragging');
+    cropPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     cropStage.setPointerCapture?.(event.pointerId);
+    cropStage.classList.add('is-dragging');
+    if (cropPointers.size === 2) {
+      const points = [...cropPointers.values()];
+      pinchStart = { distance: pointerDistance(points[0], points[1]), zoom: cropPosition.zoom || 1 };
+      cropPointer = null;
+    } else if (cropPointers.size === 1) {
+      const rect = cropStage.getBoundingClientRect();
+      const naturalWidth = cropImage.naturalWidth || rect.width;
+      const naturalHeight = cropImage.naturalHeight || rect.height;
+      const fit = Math.max(rect.width / naturalWidth, rect.height / naturalHeight) * (cropPosition.zoom || 1);
+      cropPointer = { id: event.pointerId, x: event.clientX, y: event.clientY, cropX: cropPosition.x, cropY: cropPosition.y, overflowX: rect.width - naturalWidth * fit, overflowY: rect.height - naturalHeight * fit };
+    }
     event.preventDefault();
   };
   const onCropPointerMove = event => {
-    if (!cropPointer || cropPointer.id !== event.pointerId) return;
-    if (cropPointer.overflowX) cropPosition.x = Math.max(0, Math.min(100, cropPointer.cropX + ((event.clientX - cropPointer.x) / cropPointer.overflowX) * 100));
-    if (cropPointer.overflowY) cropPosition.y = Math.max(0, Math.min(100, cropPointer.cropY + ((event.clientY - cropPointer.y) / cropPointer.overflowY) * 100));
-    updateCropPosition();
+    if (!cropPointers.has(event.pointerId)) return;
+    cropPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    if (cropPointers.size >= 2 && pinchStart) {
+      const points = [...cropPointers.values()];
+      cropPosition.zoom = Math.max(1, Math.min(4, pinchStart.zoom * (pointerDistance(points[0], points[1]) / Math.max(1, pinchStart.distance))));
+      updateCropPosition();
+      hasUnsavedChanges = true;
+    } else if (cropPointer && cropPointer.id === event.pointerId) {
+      if (cropPointer.overflowX) cropPosition.x = Math.max(0, Math.min(100, cropPointer.cropX + ((event.clientX - cropPointer.x) / cropPointer.overflowX) * 100));
+      if (cropPointer.overflowY) cropPosition.y = Math.max(0, Math.min(100, cropPointer.cropY + ((event.clientY - cropPointer.y) / cropPointer.overflowY) * 100));
+      updateCropPosition();
+      hasUnsavedChanges = true;
+    }
     event.preventDefault();
   };
   const onCropPointerUp = event => {
-    if (!cropPointer || cropPointer.id !== event.pointerId) return;
-    cropPointer = null;
-    cropStage.classList.remove('is-dragging');
+    cropPointers.delete(event.pointerId);
+    if (cropPointers.size < 2) pinchStart = null;
+    if (cropPointers.size === 1) {
+      const [id, point] = [...cropPointers.entries()][0];
+      const rect = cropStage.getBoundingClientRect();
+      const naturalWidth = cropImage.naturalWidth || rect.width;
+      const naturalHeight = cropImage.naturalHeight || rect.height;
+      const fit = Math.max(rect.width / naturalWidth, rect.height / naturalHeight) * (cropPosition.zoom || 1);
+      cropPointer = { id, x: point.x, y: point.y, cropX: cropPosition.x, cropY: cropPosition.y, overflowX: rect.width - naturalWidth * fit, overflowY: rect.height - naturalHeight * fit };
+    } else cropPointer = null;
+    if (!cropPointers.size) cropStage.classList.remove('is-dragging');
   };
 
   const onClick = event => {
@@ -248,8 +294,11 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       return;
     }
     if (event.target.closest('[data-cover-menu-close]')) { closeMenu(); return; }
-    if (event.target.closest('[data-cover-dismiss]')) { closeDialog(); return; }
-    if (event.target === dialog) { closeDialog(); return; }
+    if (event.target.closest('[data-cover-dismiss]')) { requestCloseDialog(); return; }
+    if (event.target === dialog) { requestCloseDialog(); return; }
+    if (event.target.closest('[data-cover-keep-editing]')) { unsavedConfirm.hidden = true; return; }
+    if (event.target.closest('[data-cover-discard]')) { hasUnsavedChanges = false; closeDialog(); return; }
+    if (event.target.closest('[data-cover-save-pending]')) { saveButton.click(); return; }
     const tab = event.target.closest('[data-cover-library-tab]');
     if (tab && dialog.contains(tab)) {
       dialog.querySelectorAll('[data-cover-library-tab]').forEach(item => {
@@ -295,7 +344,8 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       videoPreview.onerror = () => { saveButton.disabled = true; coverPicker.hidden = false; subtitle.textContent = 'Video tidak dapat dibaca. Pilih file MP4 atau WebM yang valid.'; };
       videoPreview.load();
     } else {
-      cropPosition = { x: 50, y: 50 };
+      cropPosition = { x: 50, y: 50, zoom: 1 };
+      hasUnsavedChanges = true;
       coverPicker.hidden = true;
       videoPreview.hidden = true; videoPreview.removeAttribute('src');
       cropImage.src = pendingObjectUrl;
@@ -304,7 +354,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       cropStage.hidden = false;
       
       saveButton.disabled = false;
-      subtitle.textContent = 'Geser foto untuk mengatur posisinya.';
+      subtitle.textContent = 'Geser foto dengan satu jari. Cubit dengan dua jari untuk memperbesar atau memperkecil.';
     }
   };
   const onSave = async event => {
@@ -358,7 +408,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   };
   const onKeydown = event => {
     if (event.key === 'Escape') {
-      if (!dialog.hidden) closeDialog();
+      if (!dialog.hidden) requestCloseDialog();
       else {
         closeMenu();
       }
