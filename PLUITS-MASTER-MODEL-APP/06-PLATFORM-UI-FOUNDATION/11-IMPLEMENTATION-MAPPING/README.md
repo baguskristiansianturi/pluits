@@ -85,3 +85,11 @@ Feature pages must not define or override navbar-to-content spacing. New pages u
 | Public presentation | `src/features/public-info/public-footer.js` | Only customer-facing heading and payment category labels | No implementation status, activation disclaimer, or internal roadmap copy in the public footer |
 
 The footer uses real brand marks rather than pictograms. Keep assets small, preserve aspect ratios, and retain descriptive alt text. The demo presentation is separate from provider selection, activation, and transaction capability, which remain internal product decisions. Do not represent any provider as integrated in product behavior until the corresponding payment capability is implemented and verified.
+
+
+## SOCIAL-PROFILE-COVER-EDITOR-001 — Profile cover media editor
+
+| Specification | Runtime source | API/token | Consumer |
+|---|---|---|---|
+| `02-PRODUCT-DESIGN/01-SOCIAL-MEDIA/PLUITS-VISUAL-ASSET-LIBRARIES-001.md` — profile-cover controls and editor presentation | `src/features/social/profile-cover-controls.js`, `src/features/social/social-pages.css` | `mountProfileCoverControls()`, `.social-profile-cover-dialog`, `.social-profile-cover-upload` | Social Profile cover menu and editor |
+| Regression coverage | `tests/features/profile-cover-controls.test.js` | Format validation, native picker, crop interaction, modal layout and dismissal | Profile cover editor |
