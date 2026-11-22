@@ -514,13 +514,13 @@
 }
 
 
-/* Profile hero: the avatar circle physically overlaps the lower edge of the cover. */
+/* Profile hero: keep the avatar overlap to roughly 40% of its diameter. */
 .social-profile-cover { position: relative; z-index: 1; }
 .social-profile-identity-row {
   position: relative;
   z-index: 2;
   align-items: start;
-  margin-top: -66px;
+  margin-top: -46px;
 }
 .social-profile-avatar-wrap {
   position: relative;
@@ -537,14 +537,14 @@
   position: relative;
   z-index: 2;
   align-self: start;
-  padding-top: 66px;
+  padding-top: 46px;
 }
 @media (max-width: 767px) {
-  .social-profile-identity-row { margin-top: -50px; }
+  .social-profile-identity-row { margin-top: -39px; }
   .social-profile-avatar-wrap { align-self: start; }
-  .social-profile-identity { padding-top: 50px; }
+  .social-profile-identity { padding-top: 39px; }
 }
 @media (max-width: 380px) {
-  .social-profile-identity-row { margin-top: -43px; }
-  .social-profile-identity { padding-top: 43px; }
+  .social-profile-identity-row { margin-top: -34px; }
+  .social-profile-identity { padding-top: 34px; }
 }
