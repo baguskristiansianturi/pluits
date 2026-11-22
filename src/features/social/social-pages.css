@@ -1801,6 +1801,7 @@
   margin: 0;
   color: var(--pl-color-muted);
   font-size: 11px;
+  line-height: 1.2;
   white-space: nowrap;
 }
 .social-profile-country-flag {
@@ -1812,14 +1813,13 @@
 }
 .social-profile-follow-stats {
   position: absolute;
-  top: 50%;
   right: 0;
+  bottom: 0;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  transform: translateY(-50%);
 }
 .social-profile-follow-stats > span {
   display: inline-flex;
@@ -1839,6 +1839,7 @@
 .social-profile-follow-stats small {
   color: var(--pl-color-muted);
   font-size: 10px;
+  line-height: 1.2;
 }
 .social-profile-stats {
   display: flex;
