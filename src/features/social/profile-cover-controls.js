@@ -66,14 +66,14 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   dialog.className = 'social-profile-cover-dialog';
   dialog.hidden = true;
   dialog.innerHTML = '<section class="social-profile-cover-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="profile-cover-dialog-title">'
-    + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Edit sampul</h2><p data-cover-dialog-subtitle>Pilih foto atau video.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
+    + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Edit sampul</h2><p data-cover-dialog-subtitle>Pilih foto, video, atau GIF.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
     + '<div data-cover-editor-view><div class="social-profile-cover-editor">'
-    + '<div class="social-profile-cover-upload"><label class="social-profile-cover-browse" data-cover-browse>Pilih foto atau video<input class="social-profile-cover-file-input" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.mp4,.webm" aria-label="Pilih foto atau video sampul" data-cover-file></label><div class="social-profile-cover-crop-stage" data-cover-crop-stage hidden><img data-cover-image-crop alt="Pratinjau posisi foto sampul" draggable="false"></div><video data-cover-video-preview muted playsinline controls hidden></video></div>'
+    + '<div class="social-profile-cover-upload"><div class="social-profile-cover-upload-copy"><strong>Tambahkan media sampul</strong><small>Pilih foto, video, atau GIF untuk tampilan profil Anda.</small></div><label class="social-profile-cover-browse" data-cover-browse>Pilih media<input class="social-profile-cover-file-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.gif,.mp4,.webm" aria-label="Pilih foto, video, atau GIF untuk sampul" data-cover-file></label><small class="social-profile-cover-format-note">Foto/GIF: JPG, PNG, WebP, GIF · maks. 10 MB. Video: MP4/WebM · maks. 10 detik.</small><div class="social-profile-cover-crop-stage" data-cover-crop-stage hidden><img data-cover-image-crop alt="Pratinjau posisi foto sampul" draggable="false"></div><video data-cover-video-preview muted playsinline controls hidden></video></div>'
     + '</div></div>'
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
     + '</div>'
-    + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-remove hidden>Hapus sampul</button><button type="button" data-cover-dismiss>Batal</button><button type="button" data-cover-save>Simpan sampul</button></footer></section>';
+    + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-remove hidden>Hapus sampul</button><button type="button" data-cover-dismiss>Batal</button><button type="button" data-cover-save>Simpan</button></footer></section>';
   card.append(dialog);
 
   const editorView = dialog.querySelector('[data-cover-editor-view]');
@@ -166,7 +166,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     editorView.hidden = library;
     libraryView.hidden = !library;
     title.textContent = library ? 'Pustaka sampul' : 'Edit sampul';
-    subtitle.textContent = library ? 'Koleksi sampul PLUITS.' : 'Pilih foto atau video.';
+    subtitle.textContent = library ? 'Koleksi sampul PLUITS.' : 'Pilih foto, video, atau GIF.';
     const currentMedia = cover.querySelector('.social-profile-cover-image');
     removeButton.hidden = library || !currentMedia;
     saveButton.disabled = false;
@@ -261,11 +261,11 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     if (event.target !== fileInput) return;
     const file = fileInput.files?.[0];
     if (!file) return;
-    const isImage = /^image\/(jpeg|png|webp)$/.test(file.type);
+    const isImage = /^image\/(jpeg|png|webp|gif)$/.test(file.type);
     const isVideo = /^video\/(mp4|webm)$/.test(file.type);
     if ((!isImage && !isVideo) || (isImage && file.size > 10 * 1024 * 1024)) {
       fileInput.value = '';
-      subtitle.textContent = 'File tidak sesuai. Gunakan JPG, PNG, WebP maksimal 10 MB, atau video MP4/WebM maksimal 10 detik.';
+      subtitle.textContent = 'File tidak sesuai. Gunakan JPG, PNG, WebP, atau GIF maksimal 10 MB; video MP4/WebM maksimal 10 detik.';
       return;
     }
     if (menuCloseTimer) clearTimeout(menuCloseTimer);
