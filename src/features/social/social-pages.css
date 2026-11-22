@@ -1934,8 +1934,35 @@
 
 
 
-/* Profile action controls: 10px desktop clearance; mobile gear uses 5px right clearance.
+/* Profile action controls: mobile gear sits 5px below the cover and 5px from the right edge.
    Cover menu keeps 10px spacing from the top and right edges. */
+.social-profile-card > .social-profile-gear {
+  right: 10px;
+}
+.social-profile-card > .social-profile-cover-menu-wrap {
+  top: 10px;
+  right: 10px;
+}
+@media (max-width: 767px) {
+  .social-profile-card > .social-profile-gear {
+    top: 163px;
+    right: 5px;
+  }
+  .social-profile-card > .social-profile-cover-menu-wrap {
+    top: 10px;
+    right: 10px;
+  }
+}
+@media (max-width: 380px) {
+  .social-profile-card > .social-profile-gear {
+    top: 163px;
+    right: 5px;
+  }
+  .social-profile-card > .social-profile-cover-menu-wrap {
+    top: 10px;
+    right: 10px;
+  }
+}
 .social-profile-card > .social-profile-gear {
   right: 10px;
 }
