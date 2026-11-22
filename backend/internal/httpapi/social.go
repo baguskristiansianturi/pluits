@@ -140,11 +140,14 @@ func (h *SocialHandler) createPost(w http.ResponseWriter, r *http.Request) {
 		FROM pluits.accounts a
 		JOIN pluits.personal_profiles profile ON profile.account_id = a.id
 		WHERE a.id = $1 AND a.status = 'active'
-		RETURNING id::text, account_id::text, (SELECT display_name FROM pluits.personal_profiles WHERE account_id = $1),
-		          (SELECT COALESCE(username, '') FROM pluits.personal_profiles WHERE account_id = $1),
-		          caption, content_kind, visibility, created_at
-	`, accountID, input.Caption, input.Visibility).Scan(&post.ID, &post.AccountID, &post.AuthorName, &post.Username, &post.Caption, &post.ContentKind, &post.Visibility, &post.CreatedAt)
+		RETURNING id::text, account_id::text, caption, content_kind, visibility, created_at
+	`, accountID, input.Caption, input.Visibility).Scan(&post.ID, &post.AccountID, &post.Caption, &post.ContentKind, &post.Visibility, &post.CreatedAt)
 	if errors.Is(err, sql.ErrNoRows) { writeJSON(w, http.StatusForbidden, map[string]string{"error":"account_not_active"}); return }
+	if err != nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
+	err = h.db.QueryRowContext(r.Context(),
+		"SELECT display_name, COALESCE(username, '') FROM pluits.personal_profiles WHERE account_id = $1",
+		accountID,
+	).Scan(&post.AuthorName, &post.Username)
 	if err != nil { writeJSON(w, http.StatusServiceUnavailable, map[string]string{"status":"unavailable"}); return }
 	writeJSON(w, http.StatusCreated, post)
 }
