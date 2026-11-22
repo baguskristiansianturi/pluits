@@ -19,10 +19,10 @@ export function resolveRoute(pathname = window.location.pathname, search = windo
   return ROUTE_KEYS_BY_PATH.get(path) || 'register';
 }
 
-// Frontend preview mode: every page remains directly browsable without a
-// session. Authentication is intentionally not a navigation prerequisite.
-// Login, registration and recovery routes remain available as UI pages.
-export function resolveAuthenticatedRoute(route) {
+// Public pages remain directly accessible without an account session.
+// Signed-in visitors are directed away from account-entry pages.
+export function resolveAuthenticatedRoute(route, hasSession) {
   if (route === 'circle') return 'social';
+  if (hasSession && ['register', 'login', 'forgot'].includes(route)) return 'social';
   return route;
 }
