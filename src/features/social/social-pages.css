@@ -514,12 +514,37 @@
 }
 
 
-/* Keep the portrait anchored to the cover edge so the circle visibly overlaps it. */
-.social-profile-identity-row { align-items: start; }
-.social-profile-avatar-wrap { align-self: start; }
-.social-profile-identity { align-self: start; }
+/* Profile hero: the avatar circle physically overlaps the lower edge of the cover. */
+.social-profile-cover { position: relative; z-index: 1; }
+.social-profile-identity-row {
+  position: relative;
+  z-index: 2;
+  align-items: start;
+  margin-top: -66px;
+}
+.social-profile-avatar-wrap {
+  position: relative;
+  z-index: 3;
+  align-self: start;
+  margin: 0;
+  padding: 0;
+}
+.social-profile-avatar {
+  position: relative;
+  z-index: 3;
+}
+.social-profile-identity {
+  position: relative;
+  z-index: 2;
+  align-self: start;
+  padding-top: 66px;
+}
 @media (max-width: 767px) {
-  .social-profile-identity-row { align-items: start; }
+  .social-profile-identity-row { margin-top: -50px; }
   .social-profile-avatar-wrap { align-self: start; }
-  .social-profile-identity { align-self: start; }
+  .social-profile-identity { padding-top: 50px; }
+}
+@media (max-width: 380px) {
+  .social-profile-identity-row { margin-top: -43px; }
+  .social-profile-identity { padding-top: 43px; }
 }
