@@ -1791,3 +1791,45 @@
   .social-profile-meta-row { flex-wrap: wrap; }
   .social-profile-follow-stats { margin-left: auto; }
 }
+
+
+/* Profile avatar shortcut: isolated from the hero grid and existing icon controls. */
+.social-profile-avatar-story-link {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  color: inherit;
+  line-height: 0;
+  text-decoration: none;
+}
+.social-profile-story-plus {
+  position: absolute;
+  z-index: 5;
+  top: -1px;
+  right: -1px;
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 3px solid var(--pl-color-surface);
+  border-radius: 50%;
+  background: var(--pl-color-brand);
+  color: #fff;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1;
+  box-shadow: 0 2px 7px rgba(15, 38, 55, .2);
+}
+.social-profile-avatar-story-link:focus-visible {
+  outline: 2px solid var(--pl-color-brand);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .social-profile-avatar-story-link .social-profile-story-plus {
+    transition: transform .16s ease;
+  }
+  .social-profile-avatar-story-link:hover .social-profile-story-plus {
+    transform: scale(1.06);
+  }
+}
