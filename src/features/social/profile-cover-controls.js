@@ -24,8 +24,7 @@ export function mountProfileCoverControls({ root } = {}) {
   dialog.innerHTML = '<section class="social-profile-cover-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="profile-cover-dialog-title">'
     + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Atur sampul profil</h2><p data-cover-dialog-subtitle>Sesuaikan tampilan sampul profil Anda.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
     + '<div data-cover-editor-view><div class="social-profile-cover-editor">'
-    + '<label class="social-profile-cover-upload">'+renderIcon('image')+'<strong>Pilih gambar sampul</strong><small>Format JPG, PNG, atau WebP · maksimal 10 MB</small><img data-cover-file-preview alt="" hidden><input type="file" accept="image/jpeg,image/png,image/webp" data-cover-file></label>'
-    + '<div class="social-profile-cover-field"><label for="profile-cover-text">Tulisan pada sampul</label><input id="profile-cover-text" type="text" maxlength="48" data-cover-text placeholder="Contoh: PLUITS · PROFILE"></div>'
+    + '<label class="social-profile-cover-upload">'+renderIcon('image')+'<strong>Pilih gambar atau video sampul</strong><small>Gambar maksimal 10 MB · video maksimal 10 detik</small><img data-cover-file-preview alt="" hidden><video data-cover-video-preview muted playsinline controls hidden></video><input type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" data-cover-file></label>'
     + '</div><p class="social-profile-cover-dialog-note">Perubahan ini tampil sebagai pratinjau di perangkat ini. Penyimpanan ke akun akan tersedia setelah layanan media profil aktif.</p></div>'
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
@@ -37,9 +36,9 @@ export function mountProfileCoverControls({ root } = {}) {
   const libraryView = dialog.querySelector('[data-cover-library-view]');
   const title = dialog.querySelector('#profile-cover-dialog-title');
   const subtitle = dialog.querySelector('[data-cover-dialog-subtitle]');
-  const textInput = dialog.querySelector('[data-cover-text]');
   const fileInput = dialog.querySelector('[data-cover-file]');
   const filePreview = dialog.querySelector('[data-cover-file-preview]');
+  const videoPreview = dialog.querySelector('[data-cover-video-preview]');
   const saveButton = dialog.querySelector('[data-cover-save]');
   const toggleAction = menu.querySelector('[data-cover-action="toggle"]');
   const editAction = menu.querySelector('[data-cover-action="edit"]');
@@ -80,14 +79,15 @@ export function mountProfileCoverControls({ root } = {}) {
     editorView.hidden = library;
     libraryView.hidden = !library;
     title.textContent = library ? 'Pustaka sampul' : 'Atur sampul profil';
-    subtitle.textContent = library ? 'Pilih koleksi sampul yang disediakan PLUITS.' : 'Tambah gambar dan atur tulisan yang tampil pada sampul.';
-    textInput.value = cover.querySelector('.social-profile-cover-label')?.textContent || '';
-    const currentImage = cover.querySelector('.social-profile-cover-image');
-    filePreview.hidden = !currentImage;
-    if (currentImage) filePreview.src = currentImage.src;
+    subtitle.textContent = library ? 'Pilih koleksi sampul yang disediakan PLUITS.' : 'Ganti media sampul dengan gambar atau video.';
+    const currentMedia = cover.querySelector('.social-profile-cover-image');
+    const currentIsVideo = currentMedia?.tagName === 'VIDEO';
+    filePreview.hidden = !currentMedia || currentIsVideo;
+    videoPreview.hidden = !currentMedia || !currentIsVideo;
+    if (currentMedia && currentIsVideo) videoPreview.src = currentMedia.currentSrc || currentMedia.src;
+    else if (currentMedia) filePreview.src = currentMedia.src;
     saveButton.hidden = library;
-    if (focusText && !library) textInput.focus();
-    else dialog.querySelector('[data-cover-dismiss]').focus();
+    dialog.querySelector('[data-cover-dismiss]').focus();
   };
 
   const onClick = event => {
@@ -136,34 +136,52 @@ export function mountProfileCoverControls({ root } = {}) {
     if (event.target !== fileInput) return;
     const file = fileInput.files?.[0];
     if (!file) return;
-    if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size > 10 * 1024 * 1024) {
+    const isImage = /^image\/(jpeg|png|webp)$/.test(file.type);
+    const isVideo = /^video\/(mp4|webm)$/.test(file.type);
+    if ((!isImage && !isVideo) || (isImage && file.size > 10 * 1024 * 1024)) {
       fileInput.value = '';
-      subtitle.textContent = 'File tidak sesuai. Gunakan JPG, PNG, atau WebP maksimal 10 MB.';
+      subtitle.textContent = 'File tidak sesuai. Gunakan JPG, PNG, WebP maksimal 10 MB, atau video MP4/WebM maksimal 10 detik.';
       return;
     }
     if (menuCloseTimer) clearTimeout(menuCloseTimer);
     if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
     pendingObjectUrl = URL.createObjectURL(file);
-    filePreview.src = pendingObjectUrl;
-    filePreview.hidden = false;
-    subtitle.textContent = 'Pratinjau gambar siap. Tekan Simpan pratinjau untuk menerapkan.';
+    if (isVideo) {
+      filePreview.hidden = true; videoPreview.hidden = false; videoPreview.src = pendingObjectUrl;
+      videoPreview.onloadedmetadata = () => {
+        if (videoPreview.duration > 10) {
+          URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = '';
+          videoPreview.removeAttribute('src'); videoPreview.load(); videoPreview.hidden = true;
+          fileInput.value = '';
+          subtitle.textContent = 'Durasi video melebihi batas 10 detik. Pilih video yang lebih singkat.';
+          return;
+        }
+        subtitle.textContent = 'Pratinjau video siap. Tekan Simpan pratinjau untuk menerapkan.';
+      };
+      videoPreview.onerror = () => { subtitle.textContent = 'Video tidak dapat dibaca. Pilih file MP4 atau WebM yang valid.'; };
+      videoPreview.load();
+    } else {
+      videoPreview.hidden = true; videoPreview.removeAttribute('src');
+      filePreview.src = pendingObjectUrl; filePreview.hidden = false;
+      subtitle.textContent = 'Pratinjau gambar siap. Tekan Simpan pratinjau untuk menerapkan.';
+    }
   };
   const onSave = event => {
     if (!event.target.closest('[data-cover-save]')) return;
-    const label = cover.querySelector('.social-profile-cover-label');
-    if (label) label.textContent = textInput.value.trim() || 'PLUITS · PROFILE';
     if (pendingObjectUrl) {
       if (selectedObjectUrl) URL.revokeObjectURL(selectedObjectUrl);
       selectedObjectUrl = pendingObjectUrl;
       pendingObjectUrl = '';
-      let image = cover.querySelector('.social-profile-cover-image');
-      if (!image) {
-        image = document.createElement('img');
-        image.className = 'social-profile-cover-image';
-        image.alt = '';
-        cover.prepend(image);
-      }
-      image.src = selectedObjectUrl;
+      cover.querySelector('.social-profile-cover-image')?.remove();
+      const file = fileInput.files?.[0];
+      const isVideo = /^video\//.test(file?.type || '');
+      const media = document.createElement(isVideo ? 'video' : 'img');
+      media.className = 'social-profile-cover-image';
+      if (isVideo) { media.muted = true; media.loop = true; media.autoplay = true; media.playsInline = true; media.setAttribute('aria-label', 'Video sampul profil'); }
+      else media.alt = '';
+      media.src = selectedObjectUrl;
+      cover.prepend(media);
+      if (isVideo) media.play().catch(() => {});
       coverEnabled = true;
       card.classList.remove('is-cover-disabled');
       syncCoverState();
