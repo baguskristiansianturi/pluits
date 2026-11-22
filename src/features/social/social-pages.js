@@ -36,18 +36,9 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
  const guestPreview=false;
  const name=safe(localAccountSettings.displayName||metadata.display_name||metadata.full_name||metadata.name||(profileSetupMode?'Profil Anda':'Pengguna PLUITS'));
  const username=safe(localAccountSettings.username||metadata.username||(profileSetupMode?'atur_nama_pengguna':'nama_pengguna'));
- const level=String(metadata.account_level||'regular').toLowerCase();
- const allowedLevels=['regular','silver','gold','platinum','priority'];
- const accountLevel=allowedLevels.includes(level)?level:'regular';
- const verified=Boolean(metadata.is_verified||metadata.verified||user?.email_confirmed_at);
- const badgeLabel=accountLevel==='regular'?'Regular':accountLevel.charAt(0).toUpperCase()+accountLevel.slice(1);
- const initial=name.trim().charAt(0).toUpperCase()||'P';
-
- const bio=safe(metadata.bio||metadata.about||'Cerita, aktivitas, dan koneksi saya di PLUITS.');
  const location=safe(metadata.location||metadata.city||'Bali, Indonesia');
  const followers=Number(metadata.followers_count||0);
  const following=Number(metadata.following_count||0);
- const postsCount=Number(metadata.posts_count||0);
 
  let ownedStores=[];
  let professionalServices=[];
@@ -76,9 +67,9 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
   +'<div class="social-profile-cover-region"><div class="social-profile-cover"><span class="social-profile-cover-label">PLUITS · PROFILE</span><span class="social-profile-cover-glow" aria-hidden="true"></span></div>'+renderProfileCoverMenuTrigger()+'</div>'
   +renderProfileCoverMenu()
   +'<div class="social-profile-identity-row"><div class="social-profile-avatar-wrap"><a class="social-profile-avatar-story-link" href="'+routeHref('dashboard')+'" aria-label="Buat Story melalui Create" title="Buat Story"><div class="social-profile-avatar" role="img" aria-label="Avatar placeholder laki-laki"><svg class="social-profile-avatar-placeholder" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><circle cx="60" cy="39" r="21" fill="currentColor"/><path d="M19 111c2-25 18-41 41-41s39 16 41 41" fill="currentColor"/></svg></div><span class="social-profile-story-plus" aria-hidden="true">+</span></a></div>'
-  +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p><div class="social-profile-meta-row"><span class="social-profile-location"><span class="social-profile-country-flag" role="img" aria-label="Bendera Indonesia">🇮🇩</span><span>'+location+'</span></span><div class="social-profile-follow-stats"><span><strong>'+followers.toLocaleString('id-ID')+'</strong><small>Followers</small></span><span><strong>'+following.toLocaleString('id-ID')+'</strong><small>Following</small></span></div></div><div class="social-account-line"><span class="social-account-badge is-'+accountLevel+'">'+badgeLabel+'</span>'+(accountLevel==='regular'&&verified?'<span class="social-account-verified" role="img" aria-label="Terverifikasi" title="Terverifikasi"><svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 1.4 12 3l2.6-.1 1 2.4 2.2 1.4-.7 2.5.7 2.5-2.2 1.4-1 2.4-2.6-.1-2 1.6-2-1.6-2.6.1-1-2.4-2.2-1.4.7-2.5-.7-2.5 2.2-1.4 1-2.4 2.6.1L10 1.4Z"/><path d="m6.5 10 2.2 2.2 4.8-4.8" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>':'')+(accountLevel==='regular'?'<a class="social-account-upgrade" href="'+routeHref('settings')+'">Upgrade</a>':'')+'</div><p class="social-profile-bio">'+bio+'</p>'+'</div></div>'
-  +'<div class="social-profile-stats"><div><strong>'+postsCount.toLocaleString('id-ID')+'</strong><span>Postingan</span></div></div>'
-  +(guestPreview?'<div class="social-profile-actions"><button type="button" class="social-profile-primary" disabled aria-disabled="true" title="Fitur mengikuti akan aktif setelah backend PLUITS tersedia">Ikuti · segera tersedia</button><button type="button" class="social-profile-secondary" data-profile-share>Bagikan profil</button></div>':'')
+  +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p><div class="social-profile-meta-row"><span class="social-profile-location"><span class="social-profile-country-flag" role="img" aria-label="Bendera Indonesia">🇮🇩</span><span>'+location+'</span></span><div class="social-profile-follow-stats"><span><strong>'+followers.toLocaleString('id-ID')+'</strong><small>Followers</small></span><span><strong>'+following.toLocaleString('id-ID')+'</strong><small>Following</small></span></div></div></div></div>
+
+
   +'</section>'
   +'<div class="social-profile-tabs" role="tablist" aria-label="Konten profil">'
   +'<button type="button" class="is-active is-icon-only" role="tab" id="profile-tab-feed" aria-label="Feed" aria-controls="profile-panel-feed" aria-selected="true" data-profile-tab="feed">'+renderIcon('grid')+'</button>'
