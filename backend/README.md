@@ -39,7 +39,7 @@ Identity endpoints:
 - `POST /v1/identity/password-reset/complete`
 - `GET /v1/identity/me`
 
-Identity routes are enabled only when the required encryption and rate-limit secrets are configured. Never put runtime secrets in Git, Vite variables or browser bundles.
+Identity routes are enabled only when the required encryption and rate-limit secrets are configured. Never put runtime secrets in Git, Vite variables or browser bundles.\n\n## Social posts — first vertical slice\n\n- `POST /v1/social/posts` creates an authenticated text-only Feed post with `public` or `private` visibility.\n- `GET /v1/social/feed` returns only published public posts from active accounts with public profiles.\n- `GET /v1/social/posts/me` returns the authenticated account's own posts, including private posts.\n- Creation is database-rate-limited per authenticated account; captions are trimmed and limited to 5,000 Unicode characters.\n- Media upload, Reels, comments, reactions, follower-only visibility, moderation workflows, and realtime delivery are not included in this slice. The API does not claim those capabilities are live.
 
 ## Self-hosted deployment
 
@@ -78,7 +78,7 @@ See [Self-Hosted Operations](docs/SELF-HOSTED-OPERATIONS.md) and [First Real Acc
 
 ## Domain implementation status
 
-The backend foundation is not the complete PLUITS platform. Identity is the first implemented domain. Profile, Social, Inbox, media/object storage, realtime, calls/live, GeoDirectory, Marketplace, Store, Restaurant & Café, Trips, moderation and ledger still require PLUITS-owned schemas, APIs, workers and authorization tests. Follow the domain register in [PLUITS-Owned Infrastructure Migration](docs/PLUITS-OWNED-INFRASTRUCTURE-MIGRATION.md).
+The backend foundation is not the complete PLUITS platform. Identity is the first implemented domain. Profile editing, Stories, Blog publishing, Inbox, media/object storage, comments, reactions, realtime, calls/live, GeoDirectory, Marketplace, Store, Restaurant & Café, Trips, moderation and ledger still require PLUITS-owned schemas, APIs, workers and authorization tests. Social text Feed posts are the first additional domain slice. Follow the domain register in [PLUITS-Owned Infrastructure Migration](docs/PLUITS-OWNED-INFRASTRUCTURE-MIGRATION.md).
 
 ## Local development
 
