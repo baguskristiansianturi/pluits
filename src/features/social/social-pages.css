@@ -2038,12 +2038,17 @@
 }
 
 
-/* Profile avatar and cover edge: quiet, neutral finish that blends into the page. */
+/* Profile avatar: remove the decorative ring; soften the photo edge instead. */
+.social-profile-page .social-profile-card .social-profile-avatar {
+  border: 0;
+  box-shadow: 0 3px 12px rgba(15, 28, 42, .10);
+}
 .social-profile-page .social-profile-card .social-profile-avatar::after {
-  inset: -1px;
-  border: 1px solid rgba(24, 39, 54, .14);
-  background: none;
-  box-shadow: 0 1px 5px rgba(15, 28, 42, .08);
+  display: none;
+}
+.social-profile-page .social-profile-card .social-profile-avatar-image {
+  -webkit-mask-image: radial-gradient(circle, #000 92%, transparent 100%);
+  mask-image: radial-gradient(circle, #000 92%, transparent 100%);
 }
 
 .social-profile-page .social-profile-card > .social-profile-cover-region > .social-profile-cover::after {
