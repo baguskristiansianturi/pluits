@@ -1,6 +1,7 @@
 import { resolveAuthenticatedRoute, resolveRoute } from './routes.js';
 import { restoreInitialSession } from './restore-initial-session.js';
 import { routeHref } from '../config/paths.js';
+import { renderBottomNavigation } from '../design-system/page-shell.js';
 import { mountHomePage } from '../features/home/home-page.js';
 import { mountBusinessHomePage } from '../features/home/business-home-page.js';
 import { mountMarketplaceHomePage } from '../features/marketplace/marketplace-home-page.js';
@@ -25,6 +26,13 @@ export function createApp({ root, authService }) {
     render();
   };
 
+  function mountWithNavigation(active, mount) {
+    const cleanup = mount();
+    root.querySelectorAll('.global-bottom-nav').forEach((nav) => nav.remove());
+    root.insertAdjacentHTML('beforeend', renderBottomNavigation(active));
+    return cleanup;
+  }
+
   function render() {
     cleanupPage?.();
     cleanupPage = null;
@@ -39,7 +47,7 @@ export function createApp({ root, authService }) {
     // Public profile is intentionally mounted before auth routing. A visitor
     // must be able to inspect a profile even while backend/auth is unavailable.
     if (requested === 'profile') {
-      cleanupPage = mountProfilePage({ root, user: session?.user || null, accessToken: session?.access_token || null });
+      cleanupPage = mountWithNavigation('profile', () => mountProfilePage({ root, user: session?.user || null, accessToken: session?.access_token || null }));
       return;
     }
 
@@ -49,15 +57,15 @@ export function createApp({ root, authService }) {
       return;
     }
 
-    if (route === 'home') { mountBusinessHomePage({ root, user: session?.user || null }); return; }
-    if (route === 'marketplace') { mountMarketplaceHomePage({ root }); return; }
-    if (route === 'social') { cleanupPage = mountHomePage({ root, user: session?.user || null, accessToken: session?.access_token || null, onSignOut: () => authService.signOut() }); return; }
+    if (route === 'home') { mountWithNavigation('', () => mountBusinessHomePage({ root, user: session?.user || null })); return; }
+    if (route === 'marketplace') { mountWithNavigation('discover', () => mountMarketplaceHomePage({ root })); return; }
+    if (route === 'social') { cleanupPage = mountWithNavigation('social', () => mountHomePage({ root, user: session?.user || null, accessToken: session?.access_token || null, onSignOut: () => authService.signOut() })); return; }
     if (route === 'circle') { navigate('social'); return; }
-    if (route === 'messages') { mountMessagesPage({ root, user: session?.user || null }); return; }
-    if (route === 'settings') { mountSettingsPage({ root, user: session?.user || null, onSignOut: () => authService.signOut() }); return; }
-    if (route === 'discover') { mountDiscoverPage({ root, user: session?.user || null }); return; }
-    if (route === 'dashboard') { mountDashboardPage({ root, user: session.user, onSignOut: () => authService.signOut() }); return; }
-    if (route === 'terms' || route === 'privacy') { mountPolicyPage({ root, type: route }); return; }
+    if (route === 'messages') { mountWithNavigation('messages', () => mountMessagesPage({ root, user: session?.user || null })); return; }
+    if (route === 'settings') { mountWithNavigation('', () => mountSettingsPage({ root, user: session?.user || null, onSignOut: () => authService.signOut() })); return; }
+    if (route === 'discover') { mountWithNavigation('discover', () => mountDiscoverPage({ root, user: session?.user || null })); return; }
+    if (route === 'dashboard') { mountWithNavigation('', () => mountDashboardPage({ root, user: session?.user || null, onSignOut: () => authService.signOut() })); return; }
+    if (route === 'terms' || route === 'privacy') { mountWithNavigation('', () => mountPolicyPage({ root, type: route })); return; }
 
     if ([
       'about', 'help', 'faq', 'contact', 'guidelines', 'marketplaceInfo',
@@ -65,11 +73,11 @@ export function createApp({ root, authService }) {
       'accountDeletion', 'safety', 'cookies', 'privacyChoices', 'complaints',
       'prohibitedItems'
     ].includes(route)) {
-      mountPublicInfoPage({ root, type: route });
+      mountWithNavigation('', () => mountPublicInfoPage({ root, type: route }));
       return;
     }
 
-    mountAuthPage({
+    mountWithNavigation('', () => mountAuthPage({
       root,
       mode: route,
       authService,
@@ -78,7 +86,7 @@ export function createApp({ root, authService }) {
         session = nextSession;
         navigate('social');
       }
-    });
+    }));
   }
 
   const unsubscribe = authService.subscribe((event, nextSession) => {
