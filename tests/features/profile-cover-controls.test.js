@@ -42,6 +42,7 @@ test('profile cover menu contains only the three requested controls', () => {
 test('cover menu trigger stays above the identity row when the cover is disabled', () => {
   assert.match(styles, /\.social-profile-card\.is-cover-disabled > \.social-profile-cover-region \{\s*z-index: 4;\s*\}/);
   assert.match(styles, /\.social-profile-identity-row \{\s*position: relative;\s*z-index: 2;/);
+  assert.match(styles, /\.social-profile-cover-region > \.social-profile-cover-menu-trigger \{\s*position: absolute;\s*top: 10px;\s*right: 10px;\s*z-index: 8;/);
 });
 
 test('cover switch is compact, accessible, and gates editing without collapsing the cover slot', () => {
