@@ -38,6 +38,11 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
  const badgeLabel=accountLevel==='regular'?'Regular':accountLevel.charAt(0).toUpperCase()+accountLevel.slice(1);
  const initial=name.trim().charAt(0).toUpperCase()||'P';
  const guestPreview=!user;
+ const bio=safe(metadata.bio||metadata.about||'Cerita, aktivitas, dan koneksi saya di PLUITS.');
+ const location=safe(metadata.location||metadata.city||'');
+ const followers=Number(metadata.followers_count||0);
+ const following=Number(metadata.following_count||0);
+ const postsCount=Number(metadata.posts_count||0);
 
  let ownedStores=[];
  let professionalServices=[];
@@ -64,9 +69,9 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
   +'<a class="social-profile-gear" href="'+routeHref('settings')+'" aria-label="Pusat pengaturan akun" title="Pusat pengaturan akun">'+renderIcon('settings')+'</a>'
   +'<div class="social-profile-cover"><span class="social-profile-cover-label">PLUITS · PROFILE</span><span class="social-profile-cover-glow" aria-hidden="true"></span></div>'
   +'<div class="social-profile-avatar-wrap"><div class="social-profile-avatar">'+initial+'</div><div class="social-account-line"><span class="social-account-badge is-'+accountLevel+'">'+badgeLabel+'</span>'+(accountLevel==='regular'&&verified?'<span class="social-account-verified" role="img" aria-label="Terverifikasi" title="Terverifikasi"><svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 1.4 12 3l2.6-.1 1 2.4 2.2 1.4-.7 2.5.7 2.5-2.2 1.4-1 2.4-2.6-.1-2 1.6-2-1.6-2.6.1-1-2.4-2.2-1.4.7-2.5-.7-2.5 2.2-1.4 1-2.4 2.6.1L10 1.4Z"/><path d="m6.5 10 2.2 2.2 4.8-4.8" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>':'')+(accountLevel==='regular'?'<a class="social-account-upgrade" href="'+routeHref('settings')+'">Upgrade</a>':'')+'</div></div>'
-  +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p>'+(guestPreview?'<span class="social-profile-preview-label">Pratinjau halaman profil · tanpa login</span>':'')+'</div>'
-  +'<div class="social-profile-stats"><div><strong>—</strong><span>Pengikut</span></div><div><strong>—</strong><span>Mengikuti</span></div><div><strong>—</strong><span>Diikuti</span></div></div>'
-  +'<div class="social-profile-actions"><a class="social-profile-primary" href="'+routeHref('settings')+'">Upgrade / Langganan</a><a class="social-profile-secondary" href="'+routeHref('dashboard')+'">Akun Bisnis</a><button type="button" class="social-profile-secondary" data-profile-quick aria-expanded="false">Pengaturan Profil Cepat</button></div>'
+  +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p><p class="social-profile-bio">'+bio+'</p>'+(location?'<span class="social-profile-location">'+renderIcon('mapPin')+location+'</span>':'')+(guestPreview?'<span class="social-profile-preview-label">Pratinjau profil publik · tanpa login</span>':'')+'</div>'
+  +'<div class="social-profile-stats"><div><strong>'+postsCount.toLocaleString('id-ID')+'</strong><span>Postingan</span></div><div><strong>'+followers.toLocaleString('id-ID')+'</strong><span>Pengikut</span></div><div><strong>'+following.toLocaleString('id-ID')+'</strong><span>Mengikuti</span></div></div>'
+  +(guestPreview?'<div class="social-profile-actions"><a class="social-profile-primary" href="'+routeHref('login')+'">Ikuti profil</a><button type="button" class="social-profile-secondary" data-profile-share>Bagikan profil</button></div>':'<div class="social-profile-actions"><a class="social-profile-primary" href="'+routeHref('settings')+'">Edit profil</a><a class="social-profile-secondary" href="'+routeHref('dashboard')+'">Akun Bisnis</a><button type="button" class="social-profile-secondary" data-profile-quick aria-expanded="false">Pengaturan Profil Cepat</button></div>')
   +'<section class="social-profile-quick-panel" data-profile-quick-panel hidden><div class="social-profile-quick-heading"><strong>Pengaturan Profil Cepat</strong><span>Kelola informasi dan visibilitas profil Anda</span></div>'
   +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('image')+'Foto profil</span><b>Kelola →</b></a>'
   +'<a href="'+routeHref('settings')+'"><span>'+renderIcon('book')+'Bio</span><b>Kelola →</b></a>'
