@@ -1677,3 +1677,38 @@
   .social-settings-choice { padding: 13px; }
   .social-settings-save { width: 100%; }
 }
+
+
+/* Account settings shortcut: quiet grey, aligned with the profile identity below the cover. */
+.social-profile-card > .social-profile-gear {
+  top: calc(clamp(132px, 24vw, 190px) + 10px);
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--pl-color-muted);
+  backdrop-filter: none;
+}
+.social-profile-card > .social-profile-gear:hover {
+  background: var(--pl-color-canvas);
+  color: var(--pl-color-text);
+}
+.social-profile-card > .social-profile-gear .ui-icon {
+  width: 19px;
+  height: 19px;
+}
+@media (max-width: 767px) {
+  .social-profile-card > .social-profile-gear {
+    top: 168px;
+    right: 8px;
+    width: 36px;
+    height: 36px;
+  }
+}
+@media (max-width: 380px) {
+  .social-profile-card > .social-profile-gear {
+    top: 152px;
+    right: 8px;
+  }
+}
