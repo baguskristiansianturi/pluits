@@ -1567,3 +1567,27 @@
   .social-profile-cover-dialog-toolbar button { padding-inline: 8px; font-size: 10px; }
   .social-profile-cover-dialog-header > div:first-child p { max-width: 120px; }
 }
+
+
+.social-profile-cover-upload.is-cropping {
+  display: block;
+  min-height: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.social-profile-cover-upload.is-cropping .social-profile-cover-format-note {
+  display: block;
+  margin-top: 48px;
+  text-align: left;
+}
+.social-profile-cover-dialog-panel:has(.social-profile-cover-upload.is-cropping) {
+  overflow: visible;
+}
+@media (max-width: 767px) {
+  .social-profile-cover-dialog-panel:has(.social-profile-cover-upload.is-cropping) {
+    overflow-y: auto;
+  }
+}
