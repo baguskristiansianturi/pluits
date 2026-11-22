@@ -91,6 +91,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   const cropPointers = new Map();
   let pinchStart = null;
   let hasUnsavedChanges = false;
+  let editingFile = null;
   const unsavedConfirm = dialog.querySelector('[data-cover-unsaved]');
   const saveButton = dialog.querySelector('[data-cover-save]');
   const removeButton = dialog.querySelector('[data-cover-remove]');
@@ -180,6 +181,8 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     title.textContent = library ? 'Pustaka sampul' : 'Edit sampul';
     subtitle.textContent = library ? 'Koleksi sampul PLUITS.' : 'Pilih foto, video, atau GIF.';
     const currentMedia = cover.querySelector('.social-profile-cover-image');
+    editingFile = null;
+    if (currentMedia && currentMedia.tagName !== 'VIDEO') getCover(stableProfileKey).then(saved => { editingFile = saved?.blob || null; }).catch(() => {});
     removeButton.hidden = library || !currentMedia;
     saveButton.disabled = false;
     const currentIsVideo = currentMedia?.tagName === 'VIDEO';
@@ -360,9 +363,12 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     }
   };
   const onSave = async event => {
-    if (!event.target.closest('[data-cover-save]') || !pendingObjectUrl) return;
-    const file = fileInput.files?.[0];
-    if (!file) return;
+    if (!event.target.closest('[data-cover-save]') || (!pendingObjectUrl && !hasUnsavedChanges)) return;
+    let file = fileInput.files?.[0] || editingFile;
+    if (!file) {
+      try { file = (await getCover(stableProfileKey))?.blob || null; } catch { file = null; }
+    }
+    if (!file) { subtitle.textContent = 'Foto sampul tidak dapat dibaca untuk disimpan ulang.'; return; }
     saveButton.disabled = true;
     subtitle.textContent = 'Menyimpan…';
     try {
@@ -371,6 +377,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       selectedObjectUrl = URL.createObjectURL(file);
       if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
       pendingObjectUrl = '';
+      editingFile = file;
       applyCoverMedia(file, selectedObjectUrl, cropPosition);
       fileInput.value = '';
       cropStage.hidden = true;
