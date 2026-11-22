@@ -640,7 +640,7 @@
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
-.social-profile-cover-menu-trigger .ui-icon { width: 22px; height: 22px; }
+.social-profile-cover-menu-trigger .ui-icon { width: 22px; height: 22px; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .72)); }
 .social-profile-cover-menu {
   position: absolute;
   top: calc(100% + 8px);
@@ -715,12 +715,12 @@
   visibility: hidden;
 }
 .social-profile-card.is-cover-disabled .social-profile-cover-menu-trigger {
-  color: var(--pl-color-ink);
+  color: #fff;
 }
 .social-profile-card.is-cover-hidden .social-profile-cover-menu-trigger {
   border: 0;
   background: transparent;
-  color: var(--pl-color-ink);
+  color: #fff;
   backdrop-filter: none;
 }
 .social-profile-cover-dialog[hidden] { display: none; }
