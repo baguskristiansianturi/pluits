@@ -66,14 +66,14 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   dialog.className = 'social-profile-cover-dialog';
   dialog.hidden = true;
   dialog.innerHTML = '<section class="social-profile-cover-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="profile-cover-dialog-title">'
-    + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Edit sampul</h2><p data-cover-dialog-subtitle>Pilih foto, video, atau GIF.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
+    + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Edit sampul</h2><p data-cover-dialog-subtitle>Pilih foto, video, atau GIF.</p></div><div class="social-profile-cover-dialog-toolbar"><button type="button" data-cover-dismiss>Batalkan</button><button type="button" data-cover-save>Simpan</button></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
     + '<div data-cover-editor-view><div class="social-profile-cover-editor">'
-    + '<div class="social-profile-cover-upload"><div class="social-profile-cover-picker" data-cover-picker><div class="social-profile-cover-picker-art" aria-hidden="true"><svg viewBox="0 0 64 48" fill="none"><rect x="2" y="2" width="60" height="44" rx="8" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="21" cy="17" r="4" stroke="currentColor" stroke-width="1.5"/><path d="m7 39 17-15 10 9 8-7 15 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M48 8v12M42 14h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><strong>Tambahkan sampul profil</strong><small>Sentuh area ini untuk memilih foto, video, atau GIF</small></div><input id="profile-cover-media-input" class="social-profile-cover-file-input" type="file" accept="image/*,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.gif,.mp4,.webm" aria-label="Pilih foto, video, atau GIF untuk sampul" data-cover-file></div><div class="social-profile-cover-crop-stage" data-cover-crop-stage hidden><img data-cover-image-crop alt="Pratinjau posisi foto sampul" draggable="false"></div><video data-cover-video-preview muted playsinline controls hidden></video><small class="social-profile-cover-format-note">Foto/GIF: JPG, PNG, WebP, GIF · maks. 10 MB. Video: MP4/WebM · maks. 10 detik.</small></div>'
+    + '<div class="social-profile-cover-upload"><div class="social-profile-cover-picker" data-cover-picker><div class="social-profile-cover-picker-art" aria-hidden="true"><svg viewBox="0 0 64 48" fill="none"><rect x="2" y="2" width="60" height="44" rx="8" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="21" cy="17" r="4" stroke="currentColor" stroke-width="1.5"/><path d="m7 39 17-15 10 9 8-7 15 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M48 8v12M42 14h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><strong>Tambahkan sampul profil</strong><small>Sentuh area ini untuk memilih foto, video, atau GIF</small></div><input id="profile-cover-media-input" class="social-profile-cover-file-input" type="file" accept="image/*,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.gif,.mp4,.webm" aria-label="Pilih foto, video, atau GIF untuk sampul" data-cover-file></div><div class="social-profile-cover-crop-stage" data-cover-crop-stage hidden><div class="social-profile-cover-crop-viewport"><img data-cover-image-crop alt="Pratinjau posisi foto sampul" draggable="false"></div><div class="social-profile-cover-crop-avatar" data-cover-avatar-preview aria-hidden="true"></div></div><video data-cover-video-preview muted playsinline controls hidden></video><small class="social-profile-cover-format-note">Foto/GIF: JPG, PNG, WebP, GIF · maks. 10 MB. Video: MP4/WebM · maks. 10 detik.</small></div>'
     + '</div></div>'
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
     + '</div>'
-    + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-remove hidden>Hapus sampul</button><div class="social-profile-cover-dialog-actions-main"><button type="button" data-cover-dismiss>Batalkan</button><button type="button" data-cover-save>Simpan</button></div></footer>'
+    + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-remove hidden>Hapus sampul</button></footer>'
     + '<div class="social-profile-cover-unsaved" data-cover-unsaved hidden><section role="alertdialog" aria-modal="true" aria-labelledby="cover-unsaved-title"><h3 id="cover-unsaved-title">Perubahan belum disimpan</h3><p>Apakah Anda ingin menyimpan perubahan sampul sebelum keluar?</p><div><button type="button" data-cover-keep-editing>Lanjut edit</button><button type="button" data-cover-discard>Buang perubahan</button><button type="button" data-cover-save-pending>Simpan perubahan</button></div></section></div></section>';
   card.append(dialog);
 
@@ -85,6 +85,14 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   const cropStage = dialog.querySelector('[data-cover-crop-stage]');
   const coverPicker = dialog.querySelector('[data-cover-picker]');
   const cropImage = dialog.querySelector('[data-cover-image-crop]');
+  const cropAvatarPreview = dialog.querySelector('[data-cover-avatar-preview]');
+  const profileAvatar = card.querySelector('.social-profile-avatar');
+  if (profileAvatar) {
+    const avatarClone = profileAvatar.cloneNode(true);
+    avatarClone.removeAttribute('id');
+    avatarClone.setAttribute('aria-hidden', 'true');
+    cropAvatarPreview.append(avatarClone);
+  }
   const videoPreview = dialog.querySelector('[data-cover-video-preview]');
   let cropPosition = { x: 50, y: 50, zoom: 1 };
   let cropPointer = null;
@@ -93,7 +101,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   let hasUnsavedChanges = false;
   let editingFile = null;
   const unsavedConfirm = dialog.querySelector('[data-cover-unsaved]');
-  const saveButton = dialog.querySelector('[data-cover-save]');
+  const saveButton = dialog.querySelector('.social-profile-cover-dialog-toolbar [data-cover-save]');
   const removeButton = dialog.querySelector('[data-cover-remove]');
   const toggleAction = menu.querySelector('[data-cover-action="toggle"]');
   const editAction = menu.querySelector('[data-cover-action="edit"]');
