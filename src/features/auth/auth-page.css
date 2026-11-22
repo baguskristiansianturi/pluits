@@ -11,12 +11,14 @@
   width: min(100%, var(--pl-container-auth));
   margin-inline: auto;
   display: grid;
+  grid-template-areas: "intro form";
   grid-template-columns: minmax(0, 1fr) minmax(360px, var(--pl-form-width));
   align-items: stretch;
   gap: clamp(28px, 5vw, 72px);
 }
 
 .auth-intro-panel {
+  grid-area: intro;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -135,6 +137,7 @@
 }
 
 .auth-card {
+  grid-area: form;
   align-self: center;
   width: 100%;
   padding: clamp(26px, 3vw, 40px);
@@ -441,6 +444,18 @@
   font-size: 11px;
 }
 
+.auth-page :is(a, button, input):focus-visible {
+  outline: 3px solid var(--pl-color-brand-bright);
+  outline-offset: 3px;
+}
+
+.auth-submit:disabled,
+.auth-secondary:disabled,
+.auth-password-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
 @media (max-width: 1023px) {
   .auth-main {
     grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1fr);
@@ -459,8 +474,9 @@
 
 @media (max-width: 767px) {
   .auth-main {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-areas: "form" "intro";
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
     margin-inline: auto;
   }

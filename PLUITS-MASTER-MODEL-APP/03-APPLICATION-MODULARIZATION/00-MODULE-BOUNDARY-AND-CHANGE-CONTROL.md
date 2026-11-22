@@ -25,12 +25,12 @@ Buat daftar file yang memang perlu disentuh sebelum melakukan perubahan.
 
 ## 3. Prinsip pemisahan source code saat ini
 Ikuti pemilik dan kontrak yang sudah ada di repository:
-- `src/pages/`: komposisi halaman dan pemilik route.
+- `src/app/`: bootstrap, routing, auth guards, dan lifecycle.
 - `src/features/`: perilaku dan UI domain/fitur.
-- `src/components/`: komponen yang benar-benar dipakai bersama.
-- `src/services/`: integrasi backend dan repository data.
-- `src/styles/` dan `styles/`: aturan gaya bersama; jangan menambah selector global untuk kebutuhan satu fitur.
-- `supabase/migrations/`: perubahan database yang harus aman, berurutan, dan tidak menghapus migrasi yang sudah diterapkan.
+- `src/design-system/`: tokens, icon registry, dan layout/interaction patterns.
+- `src/services/`: integrasi API dan orkestrasi akses data.
+- `src/styles/`: reset dan base styles global; feature styles tetap scoped.
+- `backend/internal/migrate/migrations/`: migrasi PostgreSQL aditif dan immutable milik PLUITS.
 - `tests/` dan `scripts/`: pengujian serta pemeriksaan batas modul.
 
 Folder target atau README placeholder tidak membuktikan bahwa sebuah modul sudah aktif. Verifikasi route, import, runtime, database, dan test.

@@ -1,8 +1,8 @@
 # PLUITS Backend Module Map
 
 **Target backend:** PLUITS-owned Go API + PostgreSQL, with independently replaceable realtime, media, and communication services.  
-**Current production backend:** Supabase (PostgreSQL, Auth, RLS, SQL functions/RPC, Realtime and Storage).  
-**Transition status:** custom backend foundation started on `backend/independent-foundation`; Supabase remains the production source of truth. No frontend cutover or production data migration has occurred.
+**Production backend:** PLUITS-owned Go API + PostgreSQL. This is the only supported backend for development, deployment, and production.  
+**Operational status:** the Go identity API and PostgreSQL schema are implemented in source. Production hosting, public HTTPS, SMTP credentials, independent secrets, off-host backup replication, and restore verification remain deployment gates.
 
 ## Platform scope
 
@@ -67,30 +67,29 @@ Specific vendors and production hosting are not locked in by this baseline. Free
 ## Repository boundaries
 
 - `backend/`: independent Go API and its own tests/configuration.
-- `backend/migrations/`: future additive schema migrations for the new backend only; do not copy/replay Supabase migrations blindly.
-- `supabase/migrations/`: historical and current Supabase migration history; preserve it.
-- `supabase/functions/`: existing Supabase Edge Function boundary; no production function changes are implied by adopting the custom backend.
+- `backend/internal/migrate/migrations/`: ordered, checksummed, immutable PostgreSQL schema migrations.
+- `backend/internal/migrate/migrations/`: immutable, additive PostgreSQL migrations owned by the Go backend.
 - `src/services/`: frontend service adapters only; never put server secrets or backend implementation here.
 
-## Transition and production safety
+## Production operation and release safety
 
-1. Supabase remains live production until each replacement capability passes parity, security and recovery tests.
-2. Do not pause, delete, reset or rewrite the Supabase project as part of backend construction.
-3. Do not migrate Auth users by exporting plaintext passwords. Use verified account linking, secure credential reset or another reviewed migration strategy.
-4. Preserve user IDs/ownership mappings, privacy rules, role permissions, existing media paths and transaction history.
-5. Every data migration needs inventory, reconciliation, repeatable dry-run, backup, rollback and owner acceptance.
-6. Do not introduce fake users, sample posts, fake products, orders, reviews, balances or engagement.
-7. Do not switch frontend traffic to the new API until the affected capability has passed positive and negative authorization tests.
-8. No public deployment is claimed until a host and database are provisioned, secrets are configured securely, health checks pass and external access is verified.
+1. Go API + PostgreSQL is the sole production architecture for PLUITS.
+2. Do not introduce hosted-backend SDKs, remote auth adapters, provider-specific SQL, or vendor-bound runtime code.
+3. Preserve user IDs, ownership mappings, privacy rules, role permissions, media paths, and transaction history during any approved data operation.
+4. Every data migration needs inventory, reconciliation, repeatable dry-run, backup, rollback, and owner acceptance.
+5. Do not introduce fake users, sample posts, fake products, orders, reviews, balances, or engagement.
+6. Every API capability must pass positive and negative authorization tests before it is exposed to users.
+7. No public deployment is claimed until a PLUITS-controlled host and persistent database are provisioned, secrets are configured securely, health checks pass, and external access is verified.
+8. Public signup remains disabled until HTTPS, SMTP delivery, encrypted backups, off-host replication, restore validation, and monitoring are verified.
 
 ## Current implementation
 
 - `backend/` contains the Go 1.27 HTTP service, PostgreSQL connection pool, liveness/readiness endpoints, baseline API security middleware and explicit migration CLI.
 - Migration runner records immutable version/checksum history, serializes runs with a PostgreSQL advisory lock, and commits each migration with its ledger row.
-- Migration `000001` creates the isolated `pluits` namespace. Migration `000002` now defines the first-party identity schema; registration endpoints and frontend integration remain pending.
+- Migrations `000001`–`000007` establish the PLUITS namespace, first-party identity, email outbox, rate limits, workspace authorization/recovery, product registry, and product baseline. The Go API exposes registration, verification, login, refresh, logout, password recovery, and account-read routes.
 - GitHub Actions provisions disposable PostgreSQL 17 and runs Go race tests, migration integration tests and builds both API and migration commands.
 - Detailed database rules: `backend/docs/DATABASE-FOUNDATION-AND-MIGRATION-STRATEGY.md`.
-- The first-party identity schema is authored. No registration endpoint, production data copy, public API deployment or frontend integration has been performed yet.
+- The first-party identity schema and identity API routes are implemented. The browser uses the first-party Go API adapter. Production host provisioning, external HTTPS verification, SMTP delivery, off-host backup replication and restore acceptance remain outstanding.
 
 ## Definition of ready
 

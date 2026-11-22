@@ -1,6 +1,6 @@
 # PLUITS Master Model App — Start Here
 
-Gunakan folder ini sebagai pusat dokumentasi rancangan. Source code aplikasi yang sedang berjalan tetap berada di `src/`, `public/`, `styles/`, `supabase/`, dan konfigurasi/build repository.
+Gunakan folder ini sebagai pusat dokumentasi rancangan. Source code aplikasi berada di `src/`, aset di `public/`, backend Go dan migrasi PostgreSQL di `backend/`, serta konfigurasi/build repository di root.
 
 ## Urutan membaca
 1. Master Foundation.
