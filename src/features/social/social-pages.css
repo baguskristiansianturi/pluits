@@ -1806,8 +1806,9 @@
 .social-profile-story-plus {
   position: absolute;
   z-index: 5;
-  top: 4%;
-  right: 4%;
+  top: auto;
+  right: -4%;
+  bottom: -4%;
   display: grid;
   width: 28px;
   height: 28px;
@@ -1819,7 +1820,7 @@
   backdrop-filter: none;
   color: #fff;
   font-family: Arial, sans-serif;
-  font-size: 38px;
+  font-size: 48px;
   font-weight: 700;
   line-height: 1;
   padding: 0;
