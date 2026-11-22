@@ -1691,11 +1691,11 @@
   }
 }
 
-/* Profile hero identity rhythm: keep the avatar overlap, then place the name 10px below the cover edge. */
+/* Profile hero identity rhythm: add 10px breathing room below the cover edge while preserving avatar overlap. */
 @media (max-width: 767px) {
   .social-profile-page .social-profile-card .social-profile-identity-row .social-profile-identity {
     margin-top: 0;
-    padding-top: 49px;
+    padding-top: 59px;
   }
   .social-profile-page .social-profile-card .social-profile-identity h1 {
     margin-bottom: 5px;
@@ -1703,7 +1703,7 @@
 }
 @media (max-width: 380px) {
   .social-profile-page .social-profile-card .social-profile-identity-row .social-profile-identity {
-    padding-top: 44px;
+    padding-top: 54px;
   }
 }
 
