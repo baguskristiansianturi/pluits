@@ -42,9 +42,12 @@ async function removeCover(profileKey) {
   });
 }
 
+export function renderProfileCoverMenuTrigger() {
+  return '<button type="button" class="social-profile-cover-menu-trigger" data-cover-menu-trigger aria-label="Pengaturan sampul profil" aria-haspopup="menu" aria-expanded="false" title="Pengaturan sampul profil">'+renderIcon('moreVertical')+'</button>';
+}
+
 export function renderProfileCoverMenu() {
   return '<div class="social-profile-cover-menu-wrap">'
-    + '<button type="button" class="social-profile-cover-menu-trigger" data-cover-menu-trigger aria-label="Pengaturan sampul profil" aria-haspopup="menu" aria-expanded="false" title="Pengaturan sampul profil">'+renderIcon('moreVertical')+'</button>'
     + '<div class="social-profile-cover-menu" data-cover-menu role="menu" hidden>'
     + '<button type="button" class="social-profile-cover-menu-close" data-cover-menu-close aria-label="Tutup menu">×</button>'
     + '<button type="button" role="menuitemcheckbox" data-cover-action="toggle" aria-checked="false"><span class="social-profile-cover-switch" aria-hidden="true"><span></span></span><span>Aktifkan sampul</span></button>'
