@@ -81,7 +81,7 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
   +'<button type="button" role="tab" id="profile-tab-blog" aria-controls="profile-panel-blog" aria-selected="false" data-profile-tab="blog">'+renderIcon('fileText')+'<span>Blog</span></button>'
   +businessTabs()
   +'</div>'
-  +'<section class="social-profile-tab-panel is-active" role="tabpanel" id="profile-panel-feed" aria-labelledby="profile-tab-feed" data-profile-panel="feed">'+emptyPanel('Memuat postingan Anda','Profil sedang mengambil Feed dari server PLUITS.',true)+'</section>'
+  +'<section class="social-profile-tab-panel is-active" role="tabpanel" id="profile-panel-feed" aria-labelledby="profile-tab-feed" data-profile-panel="feed">'+(guestPreview?emptyPanel('Belum ada postingan','Postingan publik profil akan tampil di sini setelah konten tersedia.'):emptyPanel('Memuat postingan Anda','Profil sedang mengambil Feed dari server PLUITS.',true))+'</section>'
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-reels" aria-labelledby="profile-tab-reels" data-profile-panel="reels" hidden>'+emptyPanel('Belum ada Reels','Video pendek yang dipublikasikan akan tampil di sini.')+'</section>'
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-trips" aria-labelledby="profile-tab-trips" data-profile-panel="trips" hidden>'+emptyPanel('Belum ada Trips','Perjalanan dan cerita perjalanan yang dipublikasikan akan tampil di sini.')+'</section>'
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-blog" aria-labelledby="profile-tab-blog" data-profile-panel="blog" hidden>'+emptyPanel('Belum ada Blog','Artikel blog yang dipublikasikan akan tampil di sini.')+'</section>'
