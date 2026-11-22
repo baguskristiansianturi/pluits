@@ -206,3 +206,19 @@
 .social-profile-bubble:nth-child(4) .social-profile-bubble-avatar svg{filter:hue-rotate(28deg)}
 .social-profile-bubble:nth-child(5) .social-profile-bubble-avatar svg{filter:hue-rotate(-32deg)}
 @media(prefers-reduced-motion:reduce){.social-profile-bubble,.social-profile-bubble.is-contacting{transition:none}}
+
+
+/* Settings accessibility: selected category and keyboard focus remain clear. */
+.social-settings-menu button:focus-visible,
+.social-signout-button:focus-visible,
+.social-settings-back:focus-visible {
+  outline: 3px solid var(--pl-color-brand-bright);
+  outline-offset: 3px;
+}
+.social-settings-menu button[aria-selected="true"] {
+  background: var(--pl-color-brand-soft);
+  color: var(--pl-color-ink);
+}
+.social-settings-panel[role="tabpanel"] {
+  min-width: 0;
+}
