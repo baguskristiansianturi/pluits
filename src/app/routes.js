@@ -20,7 +20,7 @@ export function resolveRoute(pathname = window.location.pathname, search = windo
 }
 
 export function resolveAuthenticatedRoute(route, hasSession) {
-  if (['dashboard', 'social', 'messages', 'profile', 'settings'].includes(route) && !hasSession) return 'login';
+  if (['dashboard', 'social', 'messages', 'settings'].includes(route) && !hasSession) return 'login';
   if (route === 'circle') return 'social';
   if (hasSession && ['register', 'login', 'forgot'].includes(route)) return 'social';
   return route;
