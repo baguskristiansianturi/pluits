@@ -69,11 +69,11 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Atur sampul profil</h2><p data-cover-dialog-subtitle>Sesuaikan tampilan sampul profil Anda.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
     + '<div data-cover-editor-view><div class="social-profile-cover-editor">'
     + '<label class="social-profile-cover-upload">'+renderIcon('image')+'<strong>Pilih gambar atau video sampul</strong><small>Gambar maksimal 10 MB · video maksimal 10 detik</small><img data-cover-file-preview alt="" hidden><video data-cover-video-preview muted playsinline controls hidden></video><input type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" data-cover-file></label>'
-    + '</div><p class="social-profile-cover-dialog-note">Perubahan ini tampil sebagai pratinjau di perangkat ini. Penyimpanan ke akun akan tersedia setelah layanan media profil aktif.</p></div>'
+    + '</div><p class="social-profile-cover-dialog-note">Sampul disimpan di perangkat ini. Sinkronisasi ke akun dan perangkat lain memerlukan layanan media PLUITS.</p></div>'
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
     + '</div>'
-    + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-remove hidden>Hapus sampul</button><button type="button" data-cover-dismiss>Batal</button><button type="button" data-cover-save>Simpan pratinjau</button></footer></section>';
+    + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-remove hidden>Hapus sampul</button><button type="button" data-cover-dismiss>Batal</button><button type="button" data-cover-save>Simpan sampul</button></footer></section>';
   card.append(dialog);
 
   const editorView = dialog.querySelector('[data-cover-editor-view]');
@@ -155,7 +155,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     title.textContent = library ? 'Pustaka sampul' : 'Atur sampul profil';
     subtitle.textContent = library ? 'Pilih koleksi sampul yang disediakan PLUITS.' : 'Ganti media sampul dengan gambar atau video.';
     const currentMedia = cover.querySelector('.social-profile-cover-image');
-    removeButton.hidden = !currentMedia;
+    removeButton.hidden = library || !currentMedia;
     saveButton.disabled = false;
     const currentIsVideo = currentMedia?.tagName === 'VIDEO';
     filePreview.hidden = !currentMedia || currentIsVideo;
@@ -259,6 +259,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
       pendingObjectUrl = '';
       applyCoverMedia(file, selectedObjectUrl);
+      fileInput.value = '';
       removeButton.hidden = false;
       coverEnabled = true;
       try { localStorage.setItem(enabledStorageKey, 'true'); } catch { /* Current session still reflects the active state. */ }
