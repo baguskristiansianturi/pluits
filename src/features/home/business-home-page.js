@@ -64,10 +64,10 @@ export function mountBusinessHomePage({root,user=null}={}) {
   const footerMarkup = renderPublicFooter();
 
   root.innerHTML = '<div class="pl-page-shell business-home">' +
-    renderPageHeader({variant:'business-home',brandHref:routeHref('home'),label:'PLUITS — Beranda',rightContent:'<nav class="business-home-nav" aria-label="Navigasi homepage"><a href="#untuk-pengguna">Untuk Pengguna</a><a href="#untuk-bisnis">Untuk Bisnis</a><a href="#ekosistem">Jelajahi</a></nav>'+headerAction}) +
+    renderPageHeader({variant:'business-home',brandHref:routeHref('home'),label:'PLUITS — Beranda',rightContent:'<nav class="business-home-nav" aria-label="Navigasi homepage"><a href="' + routeHref('marketplace') + '`">Marketplace</a><a href="#untuk-pengguna">Untuk Pengguna</a><a href="#ekosistem">Jelajahi</a></nav>'+headerAction}) +
     '<main class="pl-page-main business-home-main">' +
       '<section class="business-home-hero">' +
-        '<div class="business-home-hero-copy"><span class="business-eyebrow">LEBIH DEKAT. LEBIH TERHUBUNG.</span><h1>Satu tempat untuk <em>terhubung</em>, menemukan, dan berkembang.</h1><p>Temukan cerita, orang, komunitas, bisnis, dan berbagai hal menarik di sekitar Anda. Semua berawal dari satu ruang yang menghubungkan banyak kemungkinan.</p><div class="business-home-cta"><a class="business-primary-cta" href="' + primaryHref + '">' + primaryLabel + ' <span aria-hidden="true">→</span></a><a class="business-secondary-cta" href="#ekosistem">Kenali PLUITS</a></div><div class="business-home-trustline"><span>' + icon('check') + '</span><small>Satu identitas untuk menjelajahi ekosistem PLUITS.</small></div></div>' +
+        '<div class="business-home-hero-copy"><span class="business-eyebrow">LEBIH DEKAT. LEBIH TERHUBUNG.</span><h1>Satu tempat untuk <em>terhubung</em>, menemukan, dan berkembang.</h1><p>Temukan cerita, orang, komunitas, bisnis, dan berbagai hal menarik di sekitar Anda. Semua berawal dari satu ruang yang menghubungkan banyak kemungkinan.</p><div class="business-home-cta"><a class="business-primary-cta" href="' + primaryHref + '">' + primaryLabel + ' <span aria-hidden="true">→</span></a><a class="business-secondary-cta" href="' + routeHref('marketplace') + '`">Jelajahi Marketplace</a></div><div class="business-home-trustline"><span>' + icon('check') + '</span><small>Satu identitas untuk menjelajahi ekosistem PLUITS.</small></div></div>' +
         '<div class="business-home-hero-visual">' + heroVisual() + '</div>' +
       '</section>' +
       '<section class="business-home-intro-strip"><span>BUKAN HANYA TENTANG APA YANG ANDA TEMUKAN.</span><strong>Tetapi juga tentang siapa yang Anda temui dan peluang yang bisa tumbuh.</strong></section>' +
@@ -76,11 +76,6 @@ export function mountBusinessHomePage({root,user=null}={}) {
         userExperience() +
         '<div class="business-section-action"><a href="' + routeHref('discover') + '">Mulai menjelajahi <span aria-hidden="true">→</span></a></div>' +
       '</section>' +
-      '<section class="business-home-business-band" id="untuk-bisnis"><div class="business-home-business-inner">' +
-        '<div class="business-home-business-copy">' + sectionIntro('UNTUK PELAKU USAHA','Bawa bisnis Anda lebih dekat kepada pelanggan.','Bangun kehadiran digital yang lebih mudah ditemukan. Perkenalkan apa yang Anda tawarkan, ceritakan nilai bisnis Anda, dan buka jalan untuk hubungan yang lebih bermakna.') +
-          '<a class="business-primary-cta" href="' + primaryHref + '">' + (user ? 'Buka Dashboard' : 'Mulai bersama PLUITS') + ' <span aria-hidden="true">→</span></a></div>' +
-        '<div class="business-home-business-visual"><div class="business-owner-photo">' + photo('business','') + '<div><span>UNTUK PELAKU USAHA</span><strong>Bisnis Anda punya cerita. Biarkan lebih banyak orang menemukannya.</strong></div></div></div>' +
-      '</div><div class="business-owner-grid-wrap">' + businessExperience() + '</div></section>' +
       '<section class="business-home-section business-discovery-section" id="ekosistem">' +
         sectionIntro('LEBIH BANYAK UNTUK DIJELAJAHI','Dari cerita sehari-hari hingga kebutuhan lokal.','PLUITS membuka ruang untuk menemukan hal-hal yang dekat dengan kehidupan: tempat, produk, usaha, komunitas, dan layanan.') +
         discoveryShowcase() +
