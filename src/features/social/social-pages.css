@@ -848,3 +848,14 @@
 
 .social-profile-cover-upload [data-cover-video-preview] { display: block; width: min(100%, 260px); max-height: 118px; object-fit: contain; border-radius: 8px; }
 .social-profile-cover-upload [data-cover-video-preview][hidden] { display: none; }
+
+
+/* Explicit media removal is separate from temporarily disabling the cover. */
+.social-profile-cover-dialog-actions [data-cover-remove] {
+  margin-right: auto;
+  border-color: transparent;
+  color: #a13d3d;
+}
+.social-profile-cover-dialog-actions [data-cover-remove]:hover {
+  background: rgba(161,61,61,.07);
+}
