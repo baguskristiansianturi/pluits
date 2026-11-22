@@ -28,7 +28,9 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
   assert.match(styles, /background: #2fa66a/);
   assert.match(styles, /\.social-profile-card\.is-cover-disabled > \.social-profile-cover \{ display: none; \}/);
   assert.match(styles, /\.social-profile-card\.is-cover-disabled > \.social-profile-identity-row \{\s*margin-top: 0;\s*padding-top: clamp\(40px, 9vw, 50px\)/);
-  assert.match(styles, /social-profile-cover-menu-wrap \{ top: 14px; right: 0; \}/);
+  assert.match(styles, /\.social-profile-card > \.social-profile-cover-menu-wrap \{\s*position: absolute;\s*top: 5px;\s*right: 5px;/);
+  assert.match(styles, /@media \(max-width: 767px\) \{\s*\.social-profile-card > \.social-profile-cover-menu-wrap \{\s*right: calc\(5px - var\(--pl-page-gutter\)\);/);
+  assert.equal((styles.match(/\.social-profile-card > \.social-profile-cover-menu-wrap\s*\{/g) || []).length, 2);
 });
 
 test('cover editor uses a large cover canvas with the real file input as the direct tap target', () => {
