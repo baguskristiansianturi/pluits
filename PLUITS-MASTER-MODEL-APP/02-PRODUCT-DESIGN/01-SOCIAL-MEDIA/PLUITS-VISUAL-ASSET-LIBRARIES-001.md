@@ -101,12 +101,11 @@ Any new asset family, change to ownership/licensing rules, or use outside the ap
 
 ## 2.1 Profile-cover controls and selection experience
 
-The profile hero exposes a three-dot cover menu in its upper-right corner. The menu is scoped to cover presentation and contains:
-- **Without cover:** hide the cover region and reflow the identity row so no empty cover-sized gap remains; avatar and identity return to the compact no-cover composition.
-- **Add or change cover:** accept a member-selected image and show a preview before applying it. The initial browser-only UI accepts JPG, PNG, and WebP files up to 10 MB; final server-side limits and media processing remain subject to the media-service design.
-- **Edit cover text:** edit the short text overlay independently from the cover image.
-- **Cover library:** open the curated PLUITS collection with separate Foto, Video, and Fluvara categories. The picker must not show fabricated artwork. Until approved assets and provenance records exist, each category displays a clear not-yet-published state.
+The profile hero exposes a compact three-dot cover menu in its upper-right corner. The menu contains exactly three controls:
+- **Activate cover:** a small, accessible switch. Its off state is neutral grey and its on state is green. The cover slot keeps the same dimensions and position in either state; switching off hides the selected cover media without collapsing the slot.
+- **Edit cover:** opens the cover editor only while the cover switch is on. This control is visibly disabled and cannot be activated while the cover is off. The editor accepts a member-selected image and shows a preview before applying it. The initial browser-only UI accepts JPG, PNG, and WebP files up to 10 MB; final server-side limits and media processing remain subject to the media-service design.
+- **Cover library:** opens the curated PLUITS library, intended for approved animated cover assets. Until approved animations and provenance records exist, the library displays a clear not-yet-published state rather than fabricated artwork.
 
-The cover editor is preview-first. Applying changes in the current frontend-only stage updates the in-page presentation for the current session; it does not claim permanent account persistence or upload media to a server. Permanent save, media storage, licensing metadata, and entitlement checks require the future profile-media service.
+The cover editor is preview-first. Applying changes in the current frontend-only stage updates the in-page presentation for the current session; it does not claim permanent account persistence or upload media to a server. Permanent save, media storage, animation delivery, licensing metadata, and entitlement checks require the future profile-media service.
 
-The cover menu and editor must remain in the Social Profile feature module, reuse the existing icon registry and design tokens, work with keyboard/touch input, and preserve the profile's responsive layout. Selecting “Without cover” must remove the cover row's vertical space and reset overlap offsets at desktop and mobile breakpoints.
+The cover menu and editor must remain in the Social Profile feature module, reuse the existing icon registry and design tokens, work with keyboard/touch input, and preserve the cover slot's established dimensions across desktop and mobile breakpoints. Cover animations must be cropped/scaled inside that same slot and must never change its dimensions or the profile identity overlap.
