@@ -1819,10 +1819,10 @@
   backdrop-filter: blur(3px);
   color: #fff;
   font-family: Arial, sans-serif;
-  font-size: 31px;
+  font-size: 38px;
   font-weight: 700;
-  line-height: .8;
-  padding: 0 0 2px;
+  line-height: 1;
+  padding: 0;
   box-shadow: none;
 }
 .social-profile-avatar-story-link:focus-visible {
