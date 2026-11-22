@@ -3,6 +3,7 @@ import { restoreInitialSession } from './restore-initial-session.js';
 import { routeHref } from '../config/paths.js';
 import { mountHomePage } from '../features/home/home-page.js';
 import { mountBusinessHomePage } from '../features/home/business-home-page.js';
+import { mountMarketplaceHomePage } from '../features/marketplace/marketplace-home-page.js';
 import { mountDiscoverPage, mountMessagesPage, mountProfilePage, mountSettingsPage } from '../features/social/social-pages.js';
 import { mountDashboardPage } from '../features/dashboard/dashboard-page.js';
 import { mountAuthPage } from '../features/auth/auth-page.js';
@@ -41,6 +42,7 @@ export function createApp({ root, authService }) {
     }
 
     if (route === 'home') { mountBusinessHomePage({ root, user: session?.user || null }); return; }
+    if (route === 'marketplace') { mountMarketplaceHomePage({ root }); return; }
     if (route === 'social') { cleanupPage = mountHomePage({ root, user: session?.user || null, accessToken: session?.access_token || null, onSignOut: () => authService.signOut() }); return; }
     if (route === 'circle') { navigate('social'); return; }
     if (route === 'messages') { mountMessagesPage({ root, user: session?.user || null }); return; }

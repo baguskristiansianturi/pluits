@@ -4,6 +4,7 @@ const GROUPS = [
   { title:'PLUITS', items:[
     {label:'Tentang PLUITS',route:'about'},
     {label:'Hubungi Kami',route:'contact'},
+    {label:'Partner',route:'contact'},
     {label:'Masuk',route:'login'},
     {label:'Daftar',route:'register'}
   ]},
@@ -18,7 +19,7 @@ const GROUPS = [
     {label:'Beranda',route:'home'},
     {label:'Social',route:'social'},
     {label:'Discover',route:'discover'},
-    {label:'Marketplace',route:'marketplaceInfo'}
+    {label:'Marketplace',route:'marketplace'}
   ]},
   { title:'Marketplace', items:[
     {label:'Cara Kerja Marketplace',route:'marketplaceInfo'},
