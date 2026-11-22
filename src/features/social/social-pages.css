@@ -1784,6 +1784,7 @@
 
 /* Profile identity meta row: location on the left, social counts on the right. */
 .social-profile-meta-row {
+  position: relative;
   display: flex;
   width: 100%;
   min-width: 0;
@@ -1810,17 +1811,24 @@
   line-height: 1;
 }
 .social-profile-follow-stats {
+  position: absolute;
+  top: 50%;
+  right: 0;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 12px;
+  transform: translateY(-50%);
 }
 .social-profile-follow-stats > span {
   display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
   white-space: nowrap;
+  text-align: center;
 }
 .social-profile-follow-stats strong {
   color: var(--pl-color-ink);
@@ -1868,8 +1876,7 @@
     text-overflow: ellipsis;
   }
   .social-profile-follow-stats {
-    flex: 0 0 auto;
-    margin-left: auto;
+    right: 0;
     gap: 6px;
   }
   .social-profile-follow-stats > span { gap: 2px; }
