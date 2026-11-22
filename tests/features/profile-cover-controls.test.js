@@ -63,7 +63,7 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
 
 test('cover editor uses a large cover canvas with the real file input as the direct tap target', () => {
   assert.ok(moduleSource.includes('label for="profile-cover-media-input" class="social-profile-cover-picker" data-cover-picker'));
-  assert.ok(moduleSource.includes('data-cover-file><button type="button" class="social-profile-cover-replace" data-cover-replace hidden>Pilih media lain</button>'));
+  assert.ok(moduleSource.includes('data-cover-file><label for="profile-cover-media-input" class="social-profile-cover-replace" data-cover-replace hidden>Pilih media lain</label>'));
   assert.doesNotMatch(moduleSource, /fileInput\\.click\\(\\)/);
   assert.doesNotMatch(moduleSource, /data-cover-file tabindex=/);
   assert.ok(moduleSource.includes("fileInput.addEventListener('change', onChange)"));
