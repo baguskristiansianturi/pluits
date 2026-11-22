@@ -4,7 +4,7 @@ import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
 import { API_BASE_URL } from '../../config/runtime.js';
 import './social-pages.css';
-import { renderProfileCoverMenu, mountProfileCoverControls } from './profile-cover-controls.js';
+import { renderProfileCoverMenu, renderProfileCoverMenuTrigger, mountProfileCoverControls } from './profile-cover-controls.js';
 
 // Short-lived in-memory cache prevents repeated profile navigation from
 // re-fetching the same business-presence data on every mount.
