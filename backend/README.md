@@ -39,7 +39,15 @@ Identity endpoints:
 - `POST /v1/identity/password-reset/complete`
 - `GET /v1/identity/me`
 
-Identity routes are enabled only when the required encryption and rate-limit secrets are configured. Never put runtime secrets in Git, Vite variables or browser bundles.\n\n## Social posts — first vertical slice\n\n- `POST /v1/social/posts` creates an authenticated text-only Feed post with `public` or `private` visibility.\n- `GET /v1/social/feed` returns only published public posts from active accounts with public profiles.\n- `GET /v1/social/posts/me` returns the authenticated account's own posts, including private posts.\n- Creation is database-rate-limited per authenticated account; captions are trimmed and limited to 5,000 Unicode characters.\n- Media upload, Reels, comments, reactions, follower-only visibility, moderation workflows, and realtime delivery are not included in this slice. The API does not claim those capabilities are live.
+Identity routes are enabled only when the required encryption and rate-limit secrets are configured. Never put runtime secrets in Git, Vite variables or browser bundles.
+
+## Social posts — first vertical slice
+
+- `POST /v1/social/posts` creates an authenticated text-only Feed post with `public` or `private` visibility.
+- `GET /v1/social/feed` returns only published public posts from active accounts with public profiles.
+- `GET /v1/social/posts/me` returns the authenticated account's own posts, including private posts.
+- Creation is database-rate-limited per authenticated account; captions are trimmed and limited to 5,000 Unicode characters.
+- Media upload, Reels, comments, reactions, follower-only visibility, moderation workflows, and realtime delivery are not included in this slice. The API does not claim those capabilities are live.
 
 ## Self-hosted deployment
 
