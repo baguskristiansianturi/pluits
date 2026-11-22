@@ -1793,7 +1793,7 @@
 }
 
 
-/* Profile avatar shortcut: large white plus centered directly on the avatar's circular white border. */
+/* Profile avatar shortcut: oversized white plus, with its center aligned to the avatar ring. */
 .social-profile-avatar-story-link {
   position: relative;
   display: block;
@@ -1806,24 +1806,27 @@
 .social-profile-story-plus {
   position: absolute;
   z-index: 5;
-  top: 15%;
-  right: 15%;
+  top: 16%;
+  right: 16%;
   bottom: auto;
   display: grid;
-  width: 36px;
-  height: 36px;
+  width: 54px !important;
+  height: 54px !important;
+  min-width: 54px !important;
+  min-height: 54px !important;
   place-items: center;
+  box-sizing: border-box;
   border: 0;
   border-radius: 0;
-  background: transparent;
+  background: transparent !important;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
-  color: #fff;
+  color: #fff !important;
   font-family: Arial, sans-serif;
-  font-size: 60px;
+  font-size: 88px !important;
   font-weight: 700;
-  line-height: 1;
-  padding: 0;
+  line-height: 1 !important;
+  padding: 0 !important;
   text-shadow: 0 1px 3px rgba(0, 0, 0, .34);
   transform: translate(50%, -50%);
 }
