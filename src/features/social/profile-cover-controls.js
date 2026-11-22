@@ -124,6 +124,14 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   let pendingObjectUrl = '';
   let selectedObjectUrl = '';
   let previousFocus = null;
+  let coverHistoryActive = false;
+  let handlingCoverHistoryPop = false;
+  const pushCoverHistoryState = () => {
+    if (coverHistoryActive) return;
+    const currentState = history.state && typeof history.state === 'object' ? history.state : {};
+    history.pushState({ ...currentState, pluitsCoverDialog: stableProfileKey }, '', location.href);
+    coverHistoryActive = true;
+  };
   const applyCoverMedia = (file, objectUrl, crop = { x: 50, y: 50 }) => {
     cover.querySelector('.social-profile-cover-image')?.remove();
     const isVideo = /^video\//.test(file?.type || '');
@@ -156,6 +164,12 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   const closeDialog = () => {
     dialog.hidden = true;
     unsavedConfirm.hidden = true;
+    if (coverHistoryActive && !handlingCoverHistoryPop) {
+      coverHistoryActive = false;
+      history.back();
+    } else {
+      coverHistoryActive = false;
+    }
     hasUnsavedChanges = false;
     cropPointers.clear(); pinchStart = null;
     if (pendingObjectUrl) { URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = ''; }
@@ -175,6 +189,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     menu.hidden = true;
     trigger.setAttribute('aria-expanded', 'false');
     dialog.hidden = false;
+    pushCoverHistoryState();
     const library = view === 'library';
     editorView.hidden = library;
     libraryView.hidden = !library;
@@ -421,6 +436,17 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       subtitle.textContent = 'Sampul belum dapat dihapus. Silakan coba lagi.';
     }
   };
+  const onCoverHistoryPop = () => {
+    if (dialog.hidden) {
+      coverHistoryActive = false;
+      return;
+    }
+    handlingCoverHistoryPop = true;
+    coverHistoryActive = false;
+    requestCloseDialog();
+    handlingCoverHistoryPop = false;
+    if (!dialog.hidden) pushCoverHistoryState();
+  };
   const onKeydown = event => {
     if (event.key === 'Escape') {
       if (!dialog.hidden && !unsavedConfirm.hidden) { unsavedConfirm.hidden = true; return; }
@@ -440,6 +466,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   dialog.addEventListener('click', onSave);
   dialog.addEventListener('click', onRemove);
   root.addEventListener('keydown', onKeydown);
+  window.addEventListener('popstate', onCoverHistoryPop);
   return () => {
     root.removeEventListener('click', onClick);
     cropStage.removeEventListener('pointerdown', onCropPointerDown);
@@ -451,6 +478,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     dialog.removeEventListener('click', onRemove);
     isMounted = false;
     root.removeEventListener('keydown', onKeydown);
+    window.removeEventListener('popstate', onCoverHistoryPop);
     if (menuCloseTimer) clearTimeout(menuCloseTimer);
     if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
     if (selectedObjectUrl) URL.revokeObjectURL(selectedObjectUrl);
