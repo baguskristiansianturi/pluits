@@ -92,7 +92,7 @@ test('turning the cover off preserves the saved media; only explicit removal del
 test('selecting a photo opens a draggable crop frame matching the live cover ratio', () => {
   assert.match(moduleSource, /data-cover-crop-stage/);
   assert.match(moduleSource, /data-cover-image-crop/);
-  assert.match(moduleSource, /Geser foto di dalam bingkai/);
+  assert.match(moduleSource, /Geser foto untuk mengatur posisinya/);
   assert.match(moduleSource, /cropStage\.addEventListener\('pointerdown', onCropPointerDown\)/);
   assert.match(moduleSource, /cropStage\.addEventListener\('pointermove', onCropPointerMove\)/);
   assert.match(moduleSource, /cropPosition\.x = Math\.max\(0, Math\.min\(100/);
