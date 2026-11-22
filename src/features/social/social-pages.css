@@ -1179,3 +1179,20 @@
     font-size: 16px !important;
   }
 }
+
+/* Keep the associated label quiet; the visible native input is the picker control. */
+.social-profile-cover-upload .social-profile-cover-browse {
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 4px;
+  border: 0 !important;
+  border-radius: 8px;
+  background: transparent !important;
+  color: var(--pl-color-brand) !important;
+  font-size: 12px;
+  box-shadow: none !important;
+}
+.social-profile-cover-upload .social-profile-cover-browse:hover {
+  background: rgba(8, 173, 158, .07) !important;
+  transform: none;
+}
