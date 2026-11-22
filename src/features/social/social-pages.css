@@ -1793,7 +1793,7 @@
 }
 
 
-/* Profile avatar shortcut: standalone white plus, with a soft shadow for contrast. */
+/* Profile avatar shortcut: large white plus centered directly on the avatar's circular white border. */
 .social-profile-avatar-story-link {
   position: relative;
   display: block;
@@ -1806,12 +1806,12 @@
 .social-profile-story-plus {
   position: absolute;
   z-index: 5;
-  top: -4%;
-  right: -4%;
+  top: 15%;
+  right: 15%;
   bottom: auto;
   display: grid;
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   place-items: center;
   border: 0;
   border-radius: 0;
@@ -1820,11 +1820,12 @@
   backdrop-filter: none;
   color: #fff;
   font-family: Arial, sans-serif;
-  font-size: 48px;
+  font-size: 60px;
   font-weight: 700;
   line-height: 1;
   padding: 0;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, .78), 0 0 7px rgba(0, 0, 0, .38);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .34);
+  transform: translate(50%, -50%);
 }
 .social-profile-avatar-story-link:focus-visible {
   outline: 2px solid var(--pl-color-brand);
@@ -1832,9 +1833,10 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .social-profile-avatar-story-link .social-profile-story-plus {
-    transition: transform .16s ease;
+    transition: transform .16s ease, filter .16s ease;
   }
   .social-profile-avatar-story-link:hover .social-profile-story-plus {
-    transform: scale(1.06);
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .62));
+    transform: translate(50%, -50%) scale(1.08);
   }
 }
