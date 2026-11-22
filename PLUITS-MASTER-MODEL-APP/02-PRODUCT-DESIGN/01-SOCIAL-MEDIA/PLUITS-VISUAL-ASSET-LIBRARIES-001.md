@@ -89,7 +89,7 @@ No specific frame rate, duration, dimensions, codec, file size, or animation tec
 - [ ] Fluvara trademark search and legal review.
 - [ ] Original/licensed asset production and provenance records.
 - [ ] Asset schema and catalogue/manifest approval.
-- [ ] Profile-cover picker and preview UX specification.
+- [x] Profile-cover picker and preview UX specification.
 - [ ] Social reaction picker and comment integration specification.
 - [ ] Mobile performance, accessibility, and reduced-motion validation.
 - [ ] Entitlement and licensing rules for free/premium assets.
@@ -97,3 +97,16 @@ No specific frame rate, duration, dimensions, codec, file size, or animation tec
 ## 8. Change control
 
 Any new asset family, change to ownership/licensing rules, or use outside the approved surfaces must update this document and the relevant asset registry before implementation.
+
+
+## 2.1 Profile-cover controls and selection experience
+
+The profile hero exposes a three-dot cover menu in its upper-right corner. The menu is scoped to cover presentation and contains:
+- **Without cover:** hide the cover region and reflow the identity row so no empty cover-sized gap remains; avatar and identity return to the compact no-cover composition.
+- **Add or change cover:** accept a member-selected image and show a preview before applying it. The initial browser-only UI accepts JPG, PNG, and WebP files up to 10 MB; final server-side limits and media processing remain subject to the media-service design.
+- **Edit cover text:** edit the short text overlay independently from the cover image.
+- **Cover library:** open the curated PLUITS collection with separate Foto, Video, and Fluvara categories. The picker must not show fabricated artwork. Until approved assets and provenance records exist, each category displays a clear not-yet-published state.
+
+The cover editor is preview-first. Applying changes in the current frontend-only stage updates the in-page presentation for the current session; it does not claim permanent account persistence or upload media to a server. Permanent save, media storage, licensing metadata, and entitlement checks require the future profile-media service.
+
+The cover menu and editor must remain in the Social Profile feature module, reuse the existing icon registry and design tokens, work with keyboard/touch input, and preserve the profile's responsive layout. Selecting “Without cover” must remove the cover row's vertical space and reset overlap offsets at desktop and mobile breakpoints.
