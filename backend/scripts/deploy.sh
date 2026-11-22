@@ -27,6 +27,7 @@ required_keys=(
   PLUITS_ALLOWED_ORIGINS
   PLUITS_SMTP_HOST
   PLUITS_SMTP_FROM
+  PLUITS_PUBLIC_BASE_URL
   PLUITS_BACKUP_AGE_RECIPIENT
 )
 for key in "${required_keys[@]}"; do
