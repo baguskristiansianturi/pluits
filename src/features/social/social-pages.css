@@ -877,6 +877,8 @@
 /* The menu's position and touch target are defined with the cover controls above. */
 .social-profile-cover-menu-trigger .ui-icon { width: 22px; height: 22px; }
 .social-profile-card.is-cover-disabled > .social-profile-cover-region > .social-profile-cover { display: none; }
+/* When the cover is disabled, its row collapses. Keep the menu trigger above the identity row so it remains tappable. */
+.social-profile-card.is-cover-disabled > .social-profile-cover-region { z-index: 4; }
 .social-profile-card.is-cover-disabled > .social-profile-identity-row {
   margin-top: 0;
   padding-top: clamp(40px, 9vw, 50px);
