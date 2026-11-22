@@ -2026,3 +2026,13 @@
   -webkit-tap-highlight-color: transparent;
 }
 .social-profile-cover-replace[hidden] { display: none !important; }
+
+
+/* User-selected profile photo fills the existing avatar frame without changing its dimensions. */
+.social-profile-page .social-profile-card .social-profile-avatar-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
