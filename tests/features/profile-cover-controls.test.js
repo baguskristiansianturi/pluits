@@ -7,6 +7,7 @@ const pageSource = await readFile(new URL('../../src/features/social/social-page
 const styles = await readFile(new URL('../../src/features/social/social-pages.css', import.meta.url), 'utf8');
 
 test('profile cover menu contains only the three requested controls', () => {
+  assert.match(pageSource, /import \{[^}]*renderProfileCoverMenuTrigger[^}]*\} from '\.\/profile-cover-controls\.js'/);
   for (const action of ['toggle', 'edit', 'library']) {
     assert.ok(moduleSource.includes('data-cover-action="' + action + '"'));
   }
