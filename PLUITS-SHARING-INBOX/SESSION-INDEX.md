@@ -2,6 +2,7 @@
 
 | Tanggal | Sesi | Topik | Status | Hasil sortir |
 |---|---|---|---|---|
+| 2026-11-22 | Profile Cover — Local Persistence and Visibility Behavior | Pisahkan status ON/OFF dari media; simpan media terakhir lokal dan hapus hanya atas tindakan eksplisit | ACCEPTED | Social Product Design: PLUITS-VISUAL-ASSET-LIBRARIES-001.md; src/features/social/profile-cover-controls.js; tests/features/profile-cover-controls.test.js |
 | 2026-11-18 | User Dashboard flexible workspace | Layout tiga panel, tab halaman terbuka, identitas personal/bisnis, transaksi, dan panel sosial | UNDER-REVIEW | PAGE-USER-DASHBOARD.md, LAY-USER-DASHBOARD-001, src/features/dashboard/, src/CHANGE-MAP.md; prototype visual menunggu review |
 | 2026-11-17 | Repository cleanup & modular work method | Struktur kerja dan batas perubahan | ACCEPTED | README Master Model App, AGENTS.md, struktur Sharing Inbox |
 | 2026-11-17 | Marketplace module placement correction | Memindahkan baseline Store dan Restaurant & Café ke struktur Marketplace kanonis | SORTED / ACCEPTED | Ecosystem Models, Product Design, Application Modularization; catatan sesi disimpan di SESSIONS/ |
