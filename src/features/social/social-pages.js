@@ -74,7 +74,7 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
   +renderProfileCoverMenu()
   +'<a class="social-profile-gear" href="'+routeHref('settings')+'" aria-label="Buka Pusat Pengaturan Akun" title="Pusat Pengaturan Akun"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/><path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg></a>'
   +'<div class="social-profile-cover"><span class="social-profile-cover-label">PLUITS · PROFILE</span><span class="social-profile-cover-glow" aria-hidden="true"></span></div>'
-  +'<div class="social-profile-identity-row"><div class="social-profile-avatar-wrap"><div class="social-profile-avatar">'+initial+'</div></div>'
+  +'<div class="social-profile-identity-row"><div class="social-profile-avatar-wrap"><div class="social-profile-avatar">'+initial+'</div><button type="button" class="social-profile-story-add" data-profile-story-create aria-label="Buat Story" title="Buat Story"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><input class="social-profile-story-file" data-profile-story-file type="file" accept="image/*,video/*" hidden></div></div>'
   +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p><div class="social-profile-meta-row"><span class="social-profile-location"><span class="social-profile-country-flag" role="img" aria-label="Bendera Indonesia">🇮🇩</span><span>'+location+'</span></span><div class="social-profile-follow-stats"><span><strong>'+followers.toLocaleString('id-ID')+'</strong><small>Followers</small></span><span><strong>'+following.toLocaleString('id-ID')+'</strong><small>Following</small></span></div></div><div class="social-account-line"><span class="social-account-badge is-'+accountLevel+'">'+badgeLabel+'</span>'+(accountLevel==='regular'&&verified?'<span class="social-account-verified" role="img" aria-label="Terverifikasi" title="Terverifikasi"><svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 1.4 12 3l2.6-.1 1 2.4 2.2 1.4-.7 2.5.7 2.5-2.2 1.4-1 2.4-2.6-.1-2 1.6-2-1.6-2.6.1-1-2.4-2.2-1.4.7-2.5-.7-2.5 2.2-1.4 1-2.4 2.6.1L10 1.4Z"/><path d="m6.5 10 2.2 2.2 4.8-4.8" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>':'')+(accountLevel==='regular'?'<a class="social-account-upgrade" href="'+routeHref('settings')+'">Upgrade</a>':'')+'</div><p class="social-profile-bio">'+bio+'</p>'+(profileSetupMode?'<span class="social-profile-preview-label">Penyiapan profil pribadi · perubahan tampilan belum tersimpan ke akun</span>':'')+'</div></div>'
   +'<div class="social-profile-stats"><div><strong>'+postsCount.toLocaleString('id-ID')+'</strong><span>Postingan</span></div></div>'
   +(guestPreview?'<div class="social-profile-actions"><button type="button" class="social-profile-primary" disabled aria-disabled="true" title="Fitur mengikuti akan aktif setelah backend PLUITS tersedia">Ikuti · segera tersedia</button><button type="button" class="social-profile-secondary" data-profile-share>Bagikan profil</button></div>':'<div class="social-profile-actions"><a class="social-profile-primary" href="'+routeHref('settings')+'">Edit profil</a><a class="social-profile-secondary" href="'+routeHref('dashboard')+'">Akun Bisnis</a><button type="button" class="social-profile-secondary" data-profile-quick aria-expanded="false">Pengaturan Profil Cepat</button></div>')
@@ -117,6 +117,11 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
    });
    return;
   }
+  const storyCreate=event.target.closest('[data-profile-story-create]');
+  if(storyCreate&&root.contains(storyCreate)){
+   root.querySelector('[data-profile-story-file]')?.click();
+   return;
+  }
   const share=event.target.closest('[data-profile-share]');
   if(share&&root.contains(share)){
    const shareUrl=window.location.href;
@@ -133,6 +138,26 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
   panel.hidden=expanded;
  });
 
+ const storyFileInput=root.querySelector('[data-profile-story-file]');
+ storyFileInput?.addEventListener('change',()=>{
+  const file=storyFileInput.files?.[0];
+  if(!file)return;
+  const previewUrl=URL.createObjectURL(file);
+  const overlay=document.createElement('div');
+  overlay.className='social-story-preview-overlay';
+  overlay.innerHTML='<section class="social-story-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="social-story-preview-title"><button type="button" class="social-story-preview-close" data-story-preview-close aria-label="Tutup">×</button><h2 id="social-story-preview-title">Buat Story</h2><div class="social-story-preview-media" data-story-preview-media></div><p>Pratinjau Story tersimpan sementara di perangkat ini. Publikasi Story akan diaktifkan setelah backend PLUITS tersedia.</p><button type="button" class="social-story-preview-done" data-story-preview-close>Tutup pratinjau</button></section>';
+  const media=overlay.querySelector('[data-story-preview-media]');
+  const preview=file.type.startsWith('video/')?document.createElement('video'):document.createElement('img');
+  preview.src=previewUrl;
+  if(preview.tagName==='VIDEO'){preview.controls=true;preview.playsInline=true;}
+  else preview.alt='Pratinjau media Story';
+  media.append(preview);
+  const close=()=>{URL.revokeObjectURL(previewUrl);overlay.remove();storyFileInput.value='';};
+  overlay.querySelectorAll('[data-story-preview-close]').forEach(button=>button.addEventListener('click',close));
+  overlay.addEventListener('click',event=>{if(event.target===overlay)close();});
+  root.append(overlay);
+  overlay.querySelector('[data-story-preview-close]')?.focus();
+ });
  const feedPanel=root.querySelector('[data-profile-panel="feed"]');
  const renderPost=post=>'<article class="social-profile-post"><div class="social-profile-post-meta"><span>'+safe(post.visibility==='private'?'Privat':'Publik')+'</span><time>'+safe(post.created_at?new Date(post.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}):'')+'</time></div><p>'+safe(post.caption)+'</p></article>';
  const showFeedState=(title,description)=>emptyPanel(title,description);
