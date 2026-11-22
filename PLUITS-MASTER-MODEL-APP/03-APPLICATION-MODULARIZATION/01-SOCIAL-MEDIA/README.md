@@ -6,6 +6,6 @@ Blueprint teknis khusus Social Media: module boundaries, frontend routes/pages/c
 ## Account settings runtime contract
 
 - Settings categories are rendered as an accessible tablist; every tab exposes its selected state and controls one labelled panel.
-- The active category remains visible and keyboard-focusable on desktop and mobile.
+- The active category remains visible and keyboard-focusable on desktop and mobile. Arrow keys move between categories; Home and End move to the first and last category.
 - Account, privacy, notification, and profile-theme sections report unavailable server capabilities honestly. They must not imply that an unsaved UI-only toggle changed account data.
 - Runtime ownership: `src/features/social/social-pages.js` and `src/features/social/social-pages.css`.
