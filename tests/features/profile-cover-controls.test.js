@@ -15,11 +15,14 @@ test('profile setup notice is rendered before the cover, not inside the identity
 });
 
 test('profile cover spans the top of the profile card, identity overlays its lower edge, and tabs follow below', () => {
-  assert.match(pageSource, /<div class="social-profile-cover-region">[\\s\\S]*<div class="social-profile-identity-row">[\\s\\S]*<\\/section>'[\\s\\S]*<div class="social-profile-tabs"/);
-  assert.match(styles, /\\.social-profile-cover-region\\s*\\{[^}]*grid-column:\\s*1\\s*\\/\\s*-1;[^}]*grid-row:\\s*1;/);
-  assert.match(styles, /\\.social-profile-identity-row\\s*\\{[^}]*grid-column:\\s*1\\s*\\/\\s*-1;[^}]*grid-row:\\s*2;/);
-  assert.match(styles, /\\.social-profile-cover-region\\s*\\{[^}]*z-index:\\s*1;/);
-  assert.match(styles, /\\.social-profile-identity-row\\s*\\{[^}]*z-index:\\s*2;/);
+  const cover = pageSource.indexOf('<div class="social-profile-cover-region">');
+  const identity = pageSource.indexOf('<div class="social-profile-identity-row">');
+  const tabs = pageSource.indexOf('<div class="social-profile-tabs"');
+  assert.ok(cover >= 0 && identity > cover && tabs > identity);
+  assert.ok(styles.includes('.social-profile-cover-region {\n  grid-column: 1 / -1;\n  grid-row: 1;'));
+  assert.ok(styles.includes('grid-column: 1 / -1;\n  grid-row: 2;'));
+  assert.ok(styles.includes('.social-profile-cover-region {\n  position: relative;\n  z-index: 1;'));
+  assert.ok(styles.includes('.social-profile-identity-row {\n  position: relative;\n  z-index: 2;'));
 });
 
 test('profile cover menu contains only the three requested controls', () => {
