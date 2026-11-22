@@ -2,6 +2,7 @@ import { routeHref } from '../../config/paths.js';
 import '../../design-system/page-shell.css';
 import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
+import { API_BASE_URL } from '../../config/runtime.js';
 import './home-page.css';
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
@@ -35,7 +36,7 @@ function renderPostCard(post) {
     ? (post.media_type === 'video'
       ? '<video class="global-post-media" src="' + escapeHtml(post.mediaUrl) + '" controls playsinline preload="none"></video>'
       : '<img class="global-post-media" src="' + escapeHtml(post.mediaUrl) + '" alt="Konten dari ' + escapeHtml(post.authorName) + '" loading="lazy">')
-    : '<div class="global-post-media-fallback">' + renderIcon(post.media_type === 'video' ? 'play' : 'image') + '<span>Media tidak dapat dimuat</span></div>';
+    : '';
   const avatar = post.avatarUrl
     ? '<img src="' + escapeHtml(post.avatarUrl) + '" alt="" loading="lazy">'
     : '<span>' + escapeHtml((post.authorName || 'P').slice(0,1).toUpperCase()) + '</span>';
@@ -51,7 +52,7 @@ function demoContent(kind) {
   if(kind==='live')return '<article class="global-live-demo"><div class="global-live-art"><span class="global-live-indicator">LIVE · CONTOH</span><div class="global-live-orbit">PL</div><strong>Temukan siaran langsung</strong><small>Pratinjau tampilan ruang Live</small></div><div class="global-live-meta"><strong>Live bersama komunitas</strong><p>Contoh kartu siaran untuk menguji hierarki informasi dan tombol interaksi.</p><span>0 penonton · Tampilan demo</span></div></article>';
   return '<div class="global-blog-demo-grid"><article class="global-blog-demo"><div class="global-blog-art global-blog-art--one"><span>JURNAL PERJALANAN</span></div><div><small>CONTOH ARTIKEL · 6 MENIT BACA</small><strong>Menemukan sisi lain dari sebuah kota</strong><p>Pratinjau kartu artikel untuk menguji tampilan Blog di Global Home.</p></div></article><article class="global-blog-demo"><div class="global-blog-art global-blog-art--two"><span>CATATAN HARIAN</span></div><div><small>CONTOH ARTIKEL · 4 MENIT BACA</small><strong>Cerita kecil yang layak dibagikan</strong><p>Contoh visual sementara, bukan artikel yang sudah dipublikasikan.</p></div></article></div>';
 }
-export function mountHomePage({root,user=null,onSignOut}={}) {
+export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   const account = '<a class="global-icon-button" href="' + routeHref(user?'profile':'login') + '" aria-label="' + (user?'Akun':'Masuk') + '" title="' + (user?'Akun':'Masuk') + '">' + renderIcon('user') + '</a>';
   const actions = '<div class="global-header-actions">' + account + '<a class="global-icon-button" href="' + routeHref('discover') + '" aria-label="Cari" title="Cari">' + renderIcon('search') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Keranjang" title="Keranjang">' + renderIcon('cart') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Notifikasi" title="Notifikasi">' + renderIcon('bell') + '</a></div>';
   const discovery = [
@@ -66,10 +67,15 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
     const note=tab.id==='feed'?'Postingan publik dari seluruh akun PLUITS.':tab.id==='reels'?'Video pendek dari kreator PLUITS.':tab.id==='live'?'Siaran dan percakapan langsung.':'Artikel dan cerita dari penulis PLUITS.';
     return '<section class="global-content-section" id="content-' + tab.id + '" data-content-section="' + tab.id + '"><div class="global-content-intro"><span class="global-kicker">' + String(index+1).padStart(2,'0') + ' / SOCIAL CONTENT</span><h2>' + tab.label + '</h2><p>' + note + '</p></div>' + body + '</section>';
   }).join('');
+  const composerMarkup = user
+    ? (API_BASE_URL
+      ? '<section class="global-composer" aria-labelledby="global-composer-title"><div class="global-composer-heading"><span class="global-composer-avatar">' + escapeHtml((user.user_metadata?.display_name || user.user_metadata?.full_name || 'P').slice(0,1).toUpperCase()) + '</span><div><strong id="global-composer-title">Bagikan cerita Anda</strong><small>Mulai percakapan dengan komunitas PLUITS</small></div></div><form data-social-composer><label class="global-composer-label" for="global-post-caption">Apa yang ingin Anda ceritakan?</label><textarea id="global-post-caption" name="caption" maxlength="5000" rows="3" required placeholder="Tulis sesuatu yang bermakna…"></textarea><div class="global-composer-footer"><label class="global-composer-visibility"><span>Visibilitas</span><select name="visibility"><option value="public">Publik</option><option value="private">Hanya saya</option></select></label><span data-composer-count>0 / 5.000</span><button type="submit" data-composer-submit>Terbitkan</button></div><p class="global-composer-status" data-composer-status role="status" aria-live="polite"></p></form></section>'
+      : '<section class="global-composer is-unavailable"><strong>Bagikan cerita Anda</strong><p>Layanan posting belum terhubung ke server PLUITS.</p></section>')
+    : '<section class="global-composer is-guest"><strong>Setiap cerita punya ruang.</strong><p>Masuk atau buat akun untuk mulai membagikan cerita Anda.</p><a href="' + routeHref('login') + '">Masuk ke PLUITS →</a></section>';
   const pageHeaderMarkup=renderPageHeader({brandHref:routeHref('home'),rightContent:'<div class="global-header-tools"><a class="global-icon-button global-favorite-link" href="' + routeHref('dashboard') + '" aria-label="Favorit" title="Favorit">' + renderIcon('heart') + '</a>' + actions + '</div>',className:'global-header',dataGlobalHeader:true});
   root.innerHTML = '<div class="pl-page-shell home-page global-home-page">' +
     pageHeaderMarkup +
-    '<main class="pl-page-main home-main global-home-main"><section class="global-home-intro"><span class="global-kicker">PLUITS · INDONESIA</span><h1>Beranda Anda di PLUITS.</h1><p>Ikuti cerita, temukan orang, dan terhubung dengan komunitas dalam satu ruang sosial.</p></section>' +
+    '<main class="pl-page-main home-main global-home-main"><section class="global-home-intro"><span class="global-kicker">PLUITS · INDONESIA</span><h1>Beranda Anda di PLUITS.</h1><p>Ikuti cerita, temukan orang, dan terhubung dengan komunitas dalam satu ruang sosial.</p></section>' + composerMarkup +
     discovery +
     '<section class="global-section global-stories" id="stories">' + heading('Stories','Momen terbaru dari akun yang Anda ikuti.') + storyRail() + '</section>' +
     '<nav class="global-content-tabs" data-content-tabs aria-label="Kategori konten">' + contentTabs.map((tab,i)=>'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-controls="content-' + tab.id + '">' + tab.label + '</button>').join('') + '</nav>' +
@@ -91,7 +97,47 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
   const controller=new AbortController();
   const feedTarget=root.querySelector('[data-live-feed]');
   const reelsTarget=root.querySelector('[data-live-reels]');
-  if(feedTarget)feedTarget.innerHTML=renderFeedState('Feed menunggu layanan backend PLUITS');
-  if(reelsTarget)reelsTarget.innerHTML=renderFeedState('Reels menunggu layanan backend PLUITS');
+  const loadFeed = async () => {
+    if (!feedTarget) return;
+    if (!API_BASE_URL) { feedTarget.innerHTML=renderFeedState('Feed menunggu layanan backend PLUITS'); return; }
+    feedTarget.innerHTML=renderFeedState('Memuat postingan publik…',true);
+    try {
+      const response=await fetch(API_BASE_URL+'/v1/social/feed?limit=20',{headers:{Accept:'application/json'},mode:'cors',credentials:'omit',cache:'no-store',signal:controller.signal});
+      if(!response.ok)throw new Error('Feed belum dapat dimuat.');
+      const payload=await response.json();
+      const posts=Array.isArray(payload.posts)?payload.posts:[];
+      feedTarget.innerHTML=posts.length?posts.map(post=>renderPostCard({authorName:post.author_name,username:post.username,caption:post.caption,content_kind:post.content_kind,created_at:post.created_at})).join(''):renderFeedState('Belum ada postingan publik');
+    } catch(error) {
+      if(error.name!=='AbortError')feedTarget.innerHTML=renderFeedState('Feed belum dapat dimuat. Coba lagi nanti.');
+    }
+  };
+  const composer=root.querySelector('[data-social-composer]');
+  if(composer){
+    const captionField=composer.querySelector('[name="caption"]');
+    const count=composer.querySelector('[data-composer-count]');
+    const status=composer.querySelector('[data-composer-status]');
+    const submit=composer.querySelector('[data-composer-submit]');
+    captionField?.addEventListener('input',()=>{if(count)count.textContent=Array.from(captionField.value).length.toLocaleString('id-ID')+' / 5.000';});
+    composer.addEventListener('submit',async event=>{
+      event.preventDefault();
+      const caption=captionField.value.trim();
+      if(!caption){status.textContent='Tuliskan cerita terlebih dahulu.';captionField.focus();return;}
+      if(!accessToken){status.textContent='Sesi akun tidak tersedia. Silakan masuk kembali.';return;}
+      submit.disabled=true;status.textContent='Menerbitkan postingan…';
+      try{
+        const response=await fetch(API_BASE_URL+'/v1/social/posts',{method:'POST',headers:{Accept:'application/json','Content-Type':'application/json',Authorization:'Bearer '+accessToken},body:JSON.stringify({caption,visibility:composer.elements.visibility.value}),mode:'cors',credentials:'omit',cache:'no-store',signal:controller.signal});
+        const payload=await response.json().catch(()=>({}));
+        if(!response.ok)throw new Error(payload.error==='rate_limit_exceeded'?'Terlalu sering menerbitkan postingan. Coba lagi nanti.':'Postingan belum berhasil diterbitkan.');
+        const post=payload;
+        const card=renderPostCard({authorName:post.author_name,username:post.username,caption:post.caption,content_kind:post.content_kind,created_at:post.created_at});
+        feedTarget?.insertAdjacentHTML('afterbegin',card);
+        captionField.value='';if(count)count.textContent='0 / 5.000';
+        status.textContent=post.visibility==='private'?'Postingan privat tersimpan dan hanya terlihat oleh Anda.':'Postingan berhasil diterbitkan.';
+      }catch(error){if(error.name!=='AbortError')status.textContent=error.message||'Postingan belum berhasil diterbitkan.';}
+      finally{submit.disabled=false;}
+    });
+  }
+  loadFeed();
+  if(reelsTarget)reelsTarget.innerHTML=renderFeedState('Reels belum tersedia di layanan PLUITS');
   return ()=>{controller.abort();window.removeEventListener('scroll',updateSticky);observer?.disconnect();};
 }
