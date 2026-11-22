@@ -749,3 +749,16 @@
 .social-profile-cover-label { z-index: 2; }
 .social-profile-cover-upload [data-cover-file-preview] { display: block; width: min(100%, 260px); max-height: 118px; object-fit: cover; border-radius: 8px; }
 .social-profile-cover-upload [data-cover-file-preview][hidden] { display: none; }
+
+
+/* Empty profile cover is an intentionally blank transparent image slot. */
+.social-profile-cover {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+.social-profile-cover::before,
+.social-profile-cover::after,
+.social-profile-cover-label,
+.social-profile-cover-glow {
+  display: none !important;
+}
