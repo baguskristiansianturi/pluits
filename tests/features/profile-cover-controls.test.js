@@ -73,7 +73,7 @@ test('profile cover visibility and selected media persist locally across reloads
   assert.match(moduleSource, /objectStore\(COVER_STORE\)\.put\(/);
   assert.match(moduleSource, /objectStore\(COVER_STORE\)\.get\(profileKey\)/);
   assert.match(moduleSource, /await getCover\(stableProfileKey\)/);
-  assert.match(moduleSource, /await putCover\(stableProfileKey, file\)/);
+  assert.match(moduleSource, /await putCover\\(stableProfileKey, file, cropPosition\\)/);
   assert.match(moduleSource, /await removeCover\(stableProfileKey\)/);
   assert.match(moduleSource, /let coverEnabled = true/);
   assert.match(moduleSource, /data-cover-remove/);
@@ -97,7 +97,7 @@ test('selecting a photo opens a draggable crop frame matching the live cover rat
   assert.match(moduleSource, /cropPosition\.x = Math\.max\(0, Math\.min\(100/);
   assert.match(moduleSource, /cropPosition\.y = Math\.max\(0, Math\.min\(100/);
   assert.match(moduleSource, /putCover\(stableProfileKey, file, cropPosition\)/);
-  assert.match(moduleSource, /crop: saved\.crop/);
+  assert.match(moduleSource, /cropPosition = saved\\.crop/);
   assert.match(styles, /\.social-profile-cover-crop-stage\{[\s\S]*touch-action:none/);
   assert.match(styles, /object-fit:cover/);
 });
