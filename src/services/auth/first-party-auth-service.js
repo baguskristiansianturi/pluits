@@ -19,8 +19,7 @@ export function createFirstPartyAuthService({ apiBaseUrl, appUrl, storage } = {}
   if (parsed && parsed.protocol !== 'https:' && parsed.hostname !== 'localhost' && parsed.hostname !== '127.0.0.1') {
     throw new TypeError('The first-party API must use HTTPS.');
   }
-  const retiredProviderHost = parsed?.hostname.toLowerCase().endsWith('.supabase.co');
-  const base = parsed && !retiredProviderHost ? parsed.toString().replace(/\/$/, '') : null;
+  const base = parsed ? parsed.toString().replace(/\/$/, '') : null;
   const listeners = new Set();
   let session = null;
 
