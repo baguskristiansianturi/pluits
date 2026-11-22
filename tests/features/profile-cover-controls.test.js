@@ -34,8 +34,9 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
 test('cover editor accepts image or video media and limits video duration to ten seconds', () => {
   assert.match(moduleSource, /data-cover-file-preview/);
   assert.match(moduleSource, /data-cover-video-preview/);
-  assert.match(moduleSource, /video\\/mp4,video\\/webm/);
-  assert.match(moduleSource, /videoPreview\\.duration > 10/);
+  assert.ok(moduleSource.includes('video/mp4,video/webm'));
+  assert.ok(moduleSource.includes('videoPreview.duration > 10'));
+  assert.match(moduleSource, /saveButton\\.disabled = true/);
   assert.match(moduleSource, /URL\.createObjectURL/);
   assert.doesNotMatch(moduleSource, /data-cover-text|Tulisan pada sampul|profile-cover-text/);
   assert.match(moduleSource, /Animasi sampul sedang disiapkan/);
