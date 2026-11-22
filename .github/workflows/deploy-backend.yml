@@ -31,7 +31,7 @@ jobs:
         run: bash -n backend/scripts/bootstrap-ubuntu-24.04.sh backend/scripts/deploy.sh
 
   deploy:
-    if: github.event_name != 'pull_request'
+    if: github.event_name == 'workflow_dispatch' || vars.PLUITS_BACKEND_DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Check deployment settings

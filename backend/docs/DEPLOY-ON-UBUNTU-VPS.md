@@ -98,7 +98,7 @@ After the first manual deployment works, add these GitHub Actions repository sec
 | `PLUITS_DEPLOY_PORT` | Optional; defaults to `22` |
 | `PLUITS_DEPLOY_PATH` | Optional; defaults to `/opt/pluits` |
 
-The workflow `.github/workflows/deploy-backend.yml` deploys only when backend files change on `main`, or when manually started. It uses strict SSH host-key checking. It does not store the VPS password, application secrets, SMTP password or database password in GitHub.
+The workflow `.github/workflows/deploy-backend.yml` deploys when backend files change on `main` only after the repository Actions variable `PLUITS_BACKEND_DEPLOY_ENABLED` is set to `true`. It can also be started manually with **workflow_dispatch**. Leave the variable unset/false until the VPS and all SSH secrets are ready. It uses strict SSH host-key checking. It does not store the VPS password, application secrets, SMTP password or database password in GitHub.
 
 ## 5. Production release gates
 
