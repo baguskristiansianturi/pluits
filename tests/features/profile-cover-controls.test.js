@@ -6,6 +6,14 @@ const moduleSource = await readFile(new URL('../../src/features/social/profile-c
 const pageSource = await readFile(new URL('../../src/features/social/social-pages.js', import.meta.url), 'utf8');
 const styles = await readFile(new URL('../../src/features/social/social-pages.css', import.meta.url), 'utf8');
 
+test('profile setup notice is rendered before the cover, not inside the identity bio', () => {
+  const notice = pageSource.indexOf('social-profile-preview-label');
+  const cover = pageSource.indexOf('social-profile-cover-region');
+  assert.ok(notice >= 0 && cover >= 0 && notice < cover);
+  assert.doesNotMatch(pageSource, /social-profile-bio[\\s\\S]{0,250}social-profile-preview-label/);
+  assert.match(styles, /\\.social-profile-preview-label\\{[^}]*margin:0 0 10px/);
+});
+
 test('profile cover menu contains only the three requested controls', () => {
   assert.match(pageSource, /import \{[^}]*renderProfileCoverMenuTrigger[^}]*\} from '\.\/profile-cover-controls\.js'/);
   for (const action of ['toggle', 'edit', 'library']) {
