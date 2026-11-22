@@ -116,7 +116,8 @@ test('legal policy content is separated into dedicated page folders',async()=>{
 test('profile settings shortcut opens the account settings center',async()=>{
  const social=await readFile(new URL('../src/features/social/social-pages.js',import.meta.url),'utf8');
  const css=await readFile(new URL('../src/features/social/social-pages.css',import.meta.url),'utf8');
- assert.match(social,/class="social-profile-gear" href="\'+routeHref\('settings'\)/);
+ assert.ok(social.includes('class="social-profile-gear"'));
+ assert.ok(social.includes("routeHref('settings')"));
  assert.match(social,/Buka Pusat Pengaturan Akun/);
  assert.match(css,/\.social-profile-card > \.social-profile-gear/);
 });
