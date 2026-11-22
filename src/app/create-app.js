@@ -35,6 +35,14 @@ export function createApp({ root, authService }) {
     }
 
     const requested = resolveRoute(window.location.pathname, window.location.search);
+
+    // Public profile is intentionally mounted before auth routing. A visitor
+    // must be able to inspect a profile even while backend/auth is unavailable.
+    if (requested === 'profile') {
+      cleanupPage = mountProfilePage({ root, user: session?.user || null, accessToken: session?.access_token || null });
+      return;
+    }
+
     const route = resolveAuthenticatedRoute(requested, Boolean(session));
     if (route !== requested) {
       navigate(route);
@@ -46,7 +54,6 @@ export function createApp({ root, authService }) {
     if (route === 'social') { cleanupPage = mountHomePage({ root, user: session?.user || null, accessToken: session?.access_token || null, onSignOut: () => authService.signOut() }); return; }
     if (route === 'circle') { navigate('social'); return; }
     if (route === 'messages') { mountMessagesPage({ root, user: session?.user || null }); return; }
-    if (route === 'profile') { cleanupPage = mountProfilePage({ root, user: session?.user || null, accessToken: session?.access_token || null }); return; }
     if (route === 'settings') { mountSettingsPage({ root, user: session?.user || null, onSignOut: () => authService.signOut() }); return; }
     if (route === 'discover') { mountDiscoverPage({ root, user: session?.user || null }); return; }
     if (route === 'dashboard') { mountDashboardPage({ root, user: session.user, onSignOut: () => authService.signOut() }); return; }
