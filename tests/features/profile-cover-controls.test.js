@@ -31,12 +31,15 @@ test('profile cover menu contains the cover controls and edit profile photo', ()
     assert.ok(moduleSource.includes('data-cover-action="' + action + '"'));
   }
   const menuMarkup = moduleSource.slice(moduleSource.indexOf('export function renderProfileCoverMenu()'), moduleSource.indexOf('export function mountProfileCoverControls'));
-  assert.equal((menuMarkup.match(/data-cover-action="/g) || []).length, 4);
+  assert.equal((menuMarkup.match(/data-cover-action="/g) || []).length, 5);
   assert.match(moduleSource, /Aktifkan sampul/);
   assert.match(moduleSource, /Edit sampul/);
   assert.match(moduleSource, /Pustaka sampul/);
   assert.match(moduleSource, /Edit foto profil/);
   assert.match(moduleSource, /data-cover-action="avatar"/);
+  assert.match(moduleSource, /data-cover-action="remove-avatar"/);
+  assert.match(moduleSource, /removeAvatar\(stableProfileKey\)/);
+  assert.match(moduleSource, /Hapus foto profil/);
   assert.match(moduleSource, /putAvatar\(stableProfileKey, file\)/);
   assert.match(moduleSource, /data-profile-avatar-image/);
   assert.doesNotMatch(moduleSource, /data-cover-action="text"/);
