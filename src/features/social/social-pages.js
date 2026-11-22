@@ -135,12 +135,27 @@ export function mountSettingsPage({root,user=null,onSignOut}={}) {
    ? '<div class="social-settings-detail-row"><span>Desain sampul profil</span><strong>Tetap tersimpan</strong></div><p class="social-settings-note">Desain sampul profil yang sudah tersedia tetap dipertahankan. Pratinjau Bubble Connections merupakan demo sementara dan saat ini tidak ditampilkan pada profil.</p>'
    : '<div class="social-settings-detail-row"><span>Pengalaman aplikasi</span><strong>Versi aplikasi web</strong></div><div class="social-settings-note">PLUITS menggunakan tampilan aplikasi yang responsif. Pengaturan bahasa dan tampilan lanjutan belum diaktifkan.</div>';
   root.innerHTML=shell('Pengaturan','Pusat pengaturan akun dan pengalaman aplikasi Anda.','profile',
-   '<section class="social-settings-layout"><nav class="social-settings-menu" role="tablist" aria-label="Kategori pengaturan">'+sections.map(item=>'<button type="button" role="tab" id="settings-tab-'+item.id+'" aria-controls="settings-panel-'+item.id+'" aria-selected="'+(active===item.id?'true':'false')+'" data-settings-tab="'+item.id+'" class="'+(active===item.id?'is-active':'')+'">'+renderIcon(item.icon)+'<span>'+item.label+'</span><b aria-hidden="true">›</b></button>').join('')+'</nav>'
+   '<section class="social-settings-layout"><nav class="social-settings-menu" role="tablist" aria-label="Kategori pengaturan">'+sections.map(item=>'<button type="button" role="tab" id="settings-tab-'+item.id+'" aria-controls="settings-panel-'+item.id+'" aria-selected="'+(active===item.id?'true':'false')+'" tabindex="'+(active===item.id?'0':'-1')+'" data-settings-tab="'+item.id+'" class="'+(active===item.id?'is-active':'')+'">'+renderIcon(item.icon)+'<span>'+item.label+'</span><b aria-hidden="true">›</b></button>').join('')+'</nav>'
    +'<section class="social-settings-panel" role="tabpanel" id="settings-panel-'+selected.id+'" aria-labelledby="settings-tab-'+selected.id+'"><div class="social-settings-panel-heading"><span class="social-kicker">PENGATURAN PLUITS</span><h2>'+selected.title+'</h2><p>'+selected.desc+'</p></div>'+detail+'</section>'
    +'<section class="social-settings-account"><div><strong>Keluar dari PLUITS</strong><p>Akhiri sesi akun pada perangkat ini.</p></div><button type="button" class="social-signout-button" data-sign-out>'+renderIcon('logout')+'<span>Keluar</span></button></section>'
    +'<a class="social-settings-back" href="'+routeHref('profile')+'">← Kembali ke Profil</a></section>');
  };
  render();
+ root.addEventListener('keydown',event=>{
+  const tab=event.target.closest('[data-settings-tab]');
+  if(!tab||!root.contains(tab))return;
+  const current=sections.findIndex(item=>item.id===tab.dataset.settingsTab);
+  let next=current;
+  if(event.key==='ArrowDown'||event.key==='ArrowRight')next=(current+1)%sections.length;
+  else if(event.key==='ArrowUp'||event.key==='ArrowLeft')next=(current-1+sections.length)%sections.length;
+  else if(event.key==='Home')next=0;
+  else if(event.key==='End')next=sections.length-1;
+  else return;
+  event.preventDefault();
+  active=sections[next].id;
+  render();
+  root.querySelector('[data-settings-tab="'+active+'"]')?.focus();
+ });
  root.addEventListener('click',async event=>{
   const tab=event.target.closest('[data-settings-tab]');
   if(tab&&root.contains(tab)){active=tab.dataset.settingsTab;render();return;}
