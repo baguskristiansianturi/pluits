@@ -548,3 +548,193 @@
   .social-profile-identity-row { margin-top: -34px; }
   .social-profile-identity { padding-top: 34px; }
 }
+
+
+/* Profile cover controls — isolated to the profile hero. */
+.social-profile-card > .social-profile-cover-menu-wrap {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 8;
+}
+.social-profile-cover-menu-trigger {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 50%;
+  background: rgba(18,42,62,.28);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+.social-profile-cover-menu-trigger .ui-icon { width: 21px; height: 21px; }
+.social-profile-cover-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  display: grid;
+  width: min(248px, calc(100vw - 40px));
+  gap: 3px;
+  padding: 7px;
+  border: 1px solid var(--pl-color-border);
+  border-radius: 14px;
+  background: var(--pl-color-surface);
+  box-shadow: 0 16px 40px rgba(15,38,55,.18);
+}
+.social-profile-cover-menu[hidden] { display: none; }
+.social-profile-cover-menu button {
+  display: flex;
+  min-height: 43px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--pl-color-ink);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+}
+.social-profile-cover-menu button:hover,
+.social-profile-cover-menu button:focus-visible { background: var(--pl-color-canvas); outline: none; }
+.social-profile-cover-menu button .ui-icon { width: 17px; height: 17px; color: var(--pl-color-muted); }
+.social-profile-cover-menu .is-danger { color: #a13d3d; }
+.social-profile-card.is-cover-hidden > .social-profile-cover { display: none; }
+.social-profile-card.is-cover-hidden > .social-profile-identity-row {
+  margin-top: 0 !important;
+}
+.social-profile-card.is-cover-hidden .social-profile-identity { padding-top: 0 !important; }
+.social-profile-card.is-cover-hidden > .social-profile-cover-menu-wrap .social-profile-cover-menu-trigger {
+  border-color: var(--pl-color-border);
+  background: var(--pl-color-canvas);
+  color: var(--pl-color-ink);
+  backdrop-filter: none;
+}
+.social-profile-cover-dialog[hidden] { display: none; }
+.social-profile-cover-dialog {
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(12,25,38,.48);
+}
+.social-profile-cover-dialog-panel {
+  width: min(100%, 520px);
+  max-height: min(84vh, 720px);
+  overflow: auto;
+  padding: 22px;
+  border: 1px solid var(--pl-color-border);
+  border-radius: 18px;
+  background: var(--pl-color-surface);
+  box-shadow: 0 24px 70px rgba(10,25,38,.24);
+}
+.social-profile-cover-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.social-profile-cover-dialog-header h2 { margin: 0; color: var(--pl-color-ink); font-size: 19px; }
+.social-profile-cover-dialog-header p { margin: 5px 0 0; color: var(--pl-color-muted); font-size: 11px; line-height: 1.55; }
+.social-profile-cover-dialog-close {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  place-items: center;
+  border: 1px solid var(--pl-color-border);
+  border-radius: 50%;
+  background: var(--pl-color-surface);
+  color: var(--pl-color-ink);
+  font-size: 20px;
+  cursor: pointer;
+}
+.social-profile-cover-editor { display: grid; gap: 15px; }
+.social-profile-cover-upload {
+  display: grid;
+  min-height: 108px;
+  place-items: center;
+  gap: 7px;
+  padding: 18px;
+  border: 1px dashed var(--pl-color-border);
+  border-radius: 13px;
+  background: var(--pl-color-canvas);
+  color: var(--pl-color-ink);
+  text-align: center;
+  cursor: pointer;
+}
+.social-profile-cover-upload .ui-icon { width: 25px; height: 25px; color: var(--pl-color-brand); }
+.social-profile-cover-upload strong { font-size: 12px; }
+.social-profile-cover-upload small { color: var(--pl-color-muted); font-size: 10px; }
+.social-profile-cover-upload input { max-width: 100%; font-size: 11px; }
+.social-profile-cover-field { display: grid; gap: 7px; }
+.social-profile-cover-field label { color: var(--pl-color-ink); font-size: 11px; font-weight: 750; }
+.social-profile-cover-field input[type="text"] {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border: 1px solid var(--pl-color-border);
+  border-radius: 10px;
+  background: var(--pl-color-surface);
+  color: var(--pl-color-ink);
+  font: inherit;
+  font-size: 13px;
+}
+.social-profile-cover-dialog-note { margin: 0; color: var(--pl-color-muted); font-size: 10px; line-height: 1.6; }
+.social-profile-cover-dialog-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 18px; }
+.social-profile-cover-dialog-actions button {
+  min-height: 42px;
+  padding: 0 15px;
+  border: 1px solid var(--pl-color-border);
+  border-radius: 10px;
+  background: var(--pl-color-surface);
+  color: var(--pl-color-ink);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.social-profile-cover-dialog-actions button[data-cover-save] { border-color: var(--pl-color-ink); background: var(--pl-color-ink); color: #fff; }
+.social-profile-cover-library-tabs { display: flex; gap: 7px; margin-bottom: 14px; }
+.social-profile-cover-library-tabs button {
+  min-height: 36px;
+  padding: 0 13px;
+  border: 1px solid var(--pl-color-border);
+  border-radius: 999px;
+  background: var(--pl-color-surface);
+  color: var(--pl-color-muted);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+}
+.social-profile-cover-library-tabs button.is-active { border-color: var(--pl-color-brand); background: var(--pl-color-brand-soft); color: var(--pl-color-ink); }
+.social-profile-cover-library-empty {
+  display: grid;
+  min-height: 160px;
+  place-items: center;
+  padding: 20px;
+  border: 1px dashed var(--pl-color-border);
+  border-radius: 13px;
+  background: var(--pl-color-canvas);
+  text-align: center;
+}
+.social-profile-cover-library-empty .ui-icon { width: 28px; height: 28px; color: var(--pl-color-brand); }
+.social-profile-cover-library-empty strong { margin-top: 9px; color: var(--pl-color-ink); font-size: 12px; }
+.social-profile-cover-library-empty p { max-width: 340px; margin: 5px 0 0; color: var(--pl-color-muted); font-size: 10px; line-height: 1.6; }
+.social-profile-cover-dialog button:focus-visible,
+.social-profile-cover-dialog input:focus-visible { outline: 2px solid var(--pl-color-brand); outline-offset: 2px; }
+@media (max-width: 767px) {
+  .social-profile-card > .social-profile-cover-menu-wrap { top: 10px; right: 10px; }
+  .social-profile-cover-menu-trigger { width: 37px; height: 37px; }
+  .social-profile-cover-dialog { align-items: end; padding: 0; }
+  .social-profile-cover-dialog-panel { width: 100%; max-height: 88vh; padding: 20px 17px calc(20px + env(safe-area-inset-bottom,0px)); border-radius: 20px 20px 0 0; }
+}
