@@ -845,3 +845,6 @@
 @media (prefers-reduced-motion: reduce) {
   .social-profile-cover-menu { transition: none; }
 }
+
+.social-profile-cover-upload [data-cover-video-preview] { display: block; width: min(100%, 260px); max-height: 118px; object-fit: contain; border-radius: 8px; }
+.social-profile-cover-upload [data-cover-video-preview][hidden] { display: none; }
