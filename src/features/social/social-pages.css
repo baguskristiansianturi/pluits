@@ -2092,3 +2092,75 @@
   mask-image: none !important;
   box-shadow: none !important;
 }
+
+
+/* Profile finishing pass: seamless cover-to-content transition and clean avatar. */
+.social-profile-page .social-profile-card {
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+.social-profile-page .social-profile-card > .social-profile-cover-region > .social-profile-cover {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #fff;
+}
+.social-profile-page .social-profile-card > .social-profile-cover-region > .social-profile-cover::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0) 48%,
+    rgba(255,255,255,.08) 62%,
+    rgba(255,255,255,.28) 76%,
+    rgba(255,255,255,.66) 90%,
+    #fff 100%
+  ) !important;
+}
+.social-profile-page .social-profile-card > .social-profile-cover-region > .social-profile-cover .social-profile-cover-image {
+  z-index: 0;
+}
+.social-profile-page .social-profile-card .social-profile-avatar {
+  width: 116px;
+  height: 116px;
+  box-sizing: border-box;
+  padding: 0 !important;
+  overflow: hidden;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 50%;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+.social-profile-page .social-profile-card .social-profile-avatar::before,
+.social-profile-page .social-profile-card .social-profile-avatar::after {
+  display: none !important;
+  content: none !important;
+}
+.social-profile-page .social-profile-card .social-profile-avatar-image {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100%;
+  min-height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  object-fit: cover;
+  -webkit-mask: none !important;
+  mask: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+@media (max-width: 560px) {
+  .social-profile-page .social-profile-card .social-profile-avatar {
+    width: 86px;
+    height: 86px;
+  }
+}
