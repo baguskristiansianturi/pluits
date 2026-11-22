@@ -1623,9 +1623,13 @@
   }
 }
 
-/* Profile hero identity: add breathing room below the cover without changing cover geometry. */
+/* Profile hero identity rhythm: measured gap below cover and between name and handle. */
 @media (max-width: 767px) {
   .social-profile-page .social-profile-card > .social-profile-identity {
-    padding-top: 18px;
+    margin-top: 10px;
+    padding-top: 0;
+  }
+  .social-profile-page .social-profile-card > .social-profile-identity h1 {
+    margin-bottom: 5px;
   }
 }
