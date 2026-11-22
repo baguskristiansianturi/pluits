@@ -30,15 +30,17 @@ export function mountMessagesPage({root}={}) {
 export function mountProfilePage({root,user=null,accessToken=null}={}) {
  const safe=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  const metadata=user?.user_metadata||{};
- const name=safe(metadata.display_name||metadata.full_name||metadata.name||'Pengguna PLUITS');
- const username=safe(metadata.username||'nama_pengguna');
+ const profileSetupMode=!user;
+ const guestPreview=false;
+ const name=safe(metadata.display_name||metadata.full_name||metadata.name||(profileSetupMode?'Profil Anda':'Pengguna PLUITS'));
+ const username=safe(metadata.username||(profileSetupMode?'atur_nama_pengguna':'nama_pengguna'));
  const level=String(metadata.account_level||'regular').toLowerCase();
  const allowedLevels=['regular','silver','gold','platinum','priority'];
  const accountLevel=allowedLevels.includes(level)?level:'regular';
  const verified=Boolean(metadata.is_verified||metadata.verified||user?.email_confirmed_at);
  const badgeLabel=accountLevel==='regular'?'Regular':accountLevel.charAt(0).toUpperCase()+accountLevel.slice(1);
  const initial=name.trim().charAt(0).toUpperCase()||'P';
- const guestPreview=!user;
+
  const bio=safe(metadata.bio||metadata.about||'Cerita, aktivitas, dan koneksi saya di PLUITS.');
  const location=safe(metadata.location||metadata.city||'');
  const followers=Number(metadata.followers_count||0);
@@ -67,10 +69,10 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
  };
  const profileContent='<section class="social-profile-page">'
   +'<section class="social-profile-card" aria-label="Identitas profil">'
-  +(guestPreview?'':renderProfileCoverMenu())
+  +renderProfileCoverMenu()
   +'<div class="social-profile-cover"><span class="social-profile-cover-label">PLUITS · PROFILE</span><span class="social-profile-cover-glow" aria-hidden="true"></span></div>'
   +'<div class="social-profile-identity-row"><div class="social-profile-avatar-wrap"><div class="social-profile-avatar">'+initial+'</div></div>'
-  +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p><div class="social-account-line"><span class="social-account-badge is-'+accountLevel+'">'+badgeLabel+'</span>'+(accountLevel==='regular'&&verified?'<span class="social-account-verified" role="img" aria-label="Terverifikasi" title="Terverifikasi"><svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 1.4 12 3l2.6-.1 1 2.4 2.2 1.4-.7 2.5.7 2.5-2.2 1.4-1 2.4-2.6-.1-2 1.6-2-1.6-2.6.1-1-2.4-2.2-1.4.7-2.5-.7-2.5 2.2-1.4 1-2.4 2.6.1L10 1.4Z"/><path d="m6.5 10 2.2 2.2 4.8-4.8" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>':'')+(accountLevel==='regular'?'<a class="social-account-upgrade" href="'+routeHref('settings')+'">Upgrade</a>':'')+'</div><p class="social-profile-bio">'+bio+'</p>'+(location?'<span class="social-profile-location">'+renderIcon('mapPin')+location+'</span>':'')+(guestPreview?'<span class="social-profile-preview-label">Pratinjau profil publik · tanpa login</span>':'')+'</div></div>'
+  +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p><div class="social-account-line"><span class="social-account-badge is-'+accountLevel+'">'+badgeLabel+'</span>'+(accountLevel==='regular'&&verified?'<span class="social-account-verified" role="img" aria-label="Terverifikasi" title="Terverifikasi"><svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 1.4 12 3l2.6-.1 1 2.4 2.2 1.4-.7 2.5.7 2.5-2.2 1.4-1 2.4-2.6-.1-2 1.6-2-1.6-2.6.1-1-2.4-2.2-1.4.7-2.5-.7-2.5 2.2-1.4 1-2.4 2.6.1L10 1.4Z"/><path d="m6.5 10 2.2 2.2 4.8-4.8" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>':'')+(accountLevel==='regular'?'<a class="social-account-upgrade" href="'+routeHref('settings')+'">Upgrade</a>':'')+'</div><p class="social-profile-bio">'+bio+'</p>'+(location?'<span class="social-profile-location">'+renderIcon('mapPin')+location+'</span>':'')+(profileSetupMode?'<span class="social-profile-preview-label">Penyiapan profil pribadi · perubahan tampilan belum tersimpan ke akun</span>':'')+'</div></div>'
   +'<div class="social-profile-stats"><div><strong>'+postsCount.toLocaleString('id-ID')+'</strong><span>Postingan</span></div><div><strong>'+followers.toLocaleString('id-ID')+'</strong><span>Pengikut</span></div><div><strong>'+following.toLocaleString('id-ID')+'</strong><span>Mengikuti</span></div></div>'
   +(guestPreview?'<div class="social-profile-actions"><button type="button" class="social-profile-primary" disabled aria-disabled="true" title="Fitur mengikuti akan aktif setelah backend PLUITS tersedia">Ikuti · segera tersedia</button><button type="button" class="social-profile-secondary" data-profile-share>Bagikan profil</button></div>':'<div class="social-profile-actions"><a class="social-profile-primary" href="'+routeHref('settings')+'">Edit profil</a><a class="social-profile-secondary" href="'+routeHref('dashboard')+'">Akun Bisnis</a><button type="button" class="social-profile-secondary" data-profile-quick aria-expanded="false">Pengaturan Profil Cepat</button></div>')
   +'<section class="social-profile-quick-panel" data-profile-quick-panel hidden><div class="social-profile-quick-heading"><strong>Pengaturan Profil Cepat</strong><span>Kelola informasi dan visibilitas profil Anda</span></div>'
@@ -93,8 +95,8 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-blog" aria-labelledby="profile-tab-blog" data-profile-panel="blog" hidden>'+emptyPanel('Belum ada Blog','Artikel blog yang dipublikasikan akan tampil di sini.')+'</section>'
   +businessPanels()
   +'</section>';
- root.innerHTML='<div class="pl-page-shell social-shell social-profile-shell">'+renderPageHeader({brandHref:routeHref('home'),label:'PLUITS — Profil',rightContent:'<div class="social-header-tools"><span>Profil</span>'+(guestPreview?'<a href="'+routeHref('login')+'">Masuk</a>':'<a href="'+routeHref('settings')+'">Pengaturan</a>')+'</div>',className:'social-header'})+'<main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
- const unmountCoverControls=guestPreview?()=>{}:mountProfileCoverControls({root});
+ root.innerHTML='<div class="pl-page-shell social-shell social-profile-shell">'+renderPageHeader({brandHref:routeHref('home'),label:'PLUITS — Profil',rightContent:'<div class="social-header-tools"><span>'+(profileSetupMode?'Profil Saya':'Profil')+'</span><a href="'+routeHref('settings')+'">Pengaturan</a></div>',className:'social-header'})+'<main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
+ const unmountCoverControls=mountProfileCoverControls({root});
  const controller=new AbortController();
  root.addEventListener('click',event=>{
   const tab=event.target.closest('[data-profile-tab]');
