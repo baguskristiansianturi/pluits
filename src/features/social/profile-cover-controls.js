@@ -147,20 +147,23 @@ export function mountProfileCoverControls({ root } = {}) {
     if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
     pendingObjectUrl = URL.createObjectURL(file);
     if (isVideo) {
+      saveButton.disabled = true;
       filePreview.hidden = true; videoPreview.hidden = false; videoPreview.src = pendingObjectUrl;
       videoPreview.onloadedmetadata = () => {
-        if (videoPreview.duration > 10) {
+        if (!Number.isFinite(videoPreview.duration) || videoPreview.duration > 10) {
           URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = '';
           videoPreview.removeAttribute('src'); videoPreview.load(); videoPreview.hidden = true;
           fileInput.value = '';
           subtitle.textContent = 'Durasi video melebihi batas 10 detik. Pilih video yang lebih singkat.';
           return;
         }
+        saveButton.disabled = false;
         subtitle.textContent = 'Pratinjau video siap. Tekan Simpan pratinjau untuk menerapkan.';
       };
-      videoPreview.onerror = () => { subtitle.textContent = 'Video tidak dapat dibaca. Pilih file MP4 atau WebM yang valid.'; };
+      videoPreview.onerror = () => { saveButton.disabled = true; subtitle.textContent = 'Video tidak dapat dibaca. Pilih file MP4 atau WebM yang valid.'; };
       videoPreview.load();
     } else {
+      saveButton.disabled = false;
       videoPreview.hidden = true; videoPreview.removeAttribute('src');
       filePreview.src = pendingObjectUrl; filePreview.hidden = false;
       subtitle.textContent = 'Pratinjau gambar siap. Tekan Simpan pratinjau untuk menerapkan.';
