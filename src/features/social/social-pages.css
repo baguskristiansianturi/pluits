@@ -1934,35 +1934,8 @@
 
 
 
-/* Profile action controls: mobile gear sits 5px below the cover and 5px from the right edge.
-   Cover menu keeps 10px spacing from the top and right edges. */
-.social-profile-card > .social-profile-gear {
-  right: 10px;
-}
-.social-profile-card > .social-profile-cover-menu-wrap {
-  top: 10px;
-  right: 10px;
-}
-@media (max-width: 767px) {
-  .social-profile-card > .social-profile-gear {
-    top: 163px;
-    right: 5px;
-  }
-  .social-profile-card > .social-profile-cover-menu-wrap {
-    top: 10px;
-    right: 10px;
-  }
-}
-@media (max-width: 380px) {
-  .social-profile-card > .social-profile-gear {
-    top: 163px;
-    right: 5px;
-  }
-  .social-profile-card > .social-profile-cover-menu-wrap {
-    top: 10px;
-    right: 10px;
-  }
-}
+/* Profile action controls: preserve the gear's existing vertical position.
+   Only adjust its horizontal spacing on mobile. */
 .social-profile-card > .social-profile-gear {
   right: 10px;
 }
