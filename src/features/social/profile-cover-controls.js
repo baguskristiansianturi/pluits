@@ -1,5 +1,47 @@
 import { renderIcon } from '../../design-system/icons.js';
 
+const COVER_DB = 'pluits-profile-media';
+const COVER_STORE = 'covers';
+function openCoverDb() {
+  return new Promise((resolve, reject) => {
+    if (!globalThis.indexedDB) return reject(new Error('IndexedDB unavailable'));
+    const request = indexedDB.open(COVER_DB, 1);
+    request.onupgradeneeded = () => {
+      if (!request.result.objectStoreNames.contains(COVER_STORE)) request.result.createObjectStore(COVER_STORE, { keyPath: 'profileKey' });
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+async function getCover(profileKey) {
+  const db = await openCoverDb();
+  return new Promise((resolve, reject) => {
+    const request = db.transaction(COVER_STORE, 'readonly').objectStore(COVER_STORE).get(profileKey);
+    request.onsuccess = () => { db.close(); resolve(request.result || null); };
+    request.onerror = () => { db.close(); reject(request.error); };
+  });
+}
+async function putCover(profileKey, file) {
+  const db = await openCoverDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(COVER_STORE, 'readwrite');
+    tx.objectStore(COVER_STORE).put({ profileKey, blob: file, type: file.type, name: file.name, updatedAt: Date.now() });
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onerror = () => { db.close(); reject(tx.error); };
+    tx.onabort = () => { db.close(); reject(tx.error); };
+  });
+}
+async function removeCover(profileKey) {
+  const db = await openCoverDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(COVER_STORE, 'readwrite');
+    tx.objectStore(COVER_STORE).delete(profileKey);
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onerror = () => { db.close(); reject(tx.error); };
+    tx.onabort = () => { db.close(); reject(tx.error); };
+  });
+}
+
 export function renderProfileCoverMenu() {
   return '<div class="social-profile-cover-menu-wrap">'
     + '<button type="button" class="social-profile-cover-menu-trigger" data-cover-menu-trigger aria-label="Pengaturan sampul profil" aria-haspopup="menu" aria-expanded="false" title="Pengaturan sampul profil">'+renderIcon('moreVertical')+'</button>'
@@ -11,13 +53,15 @@ export function renderProfileCoverMenu() {
     + '</div></div>';
 }
 
-export function mountProfileCoverControls({ root } = {}) {
+export function mountProfileCoverControls({ root, profileKey = 'profile' } = {}) {
   const card = root?.querySelector('.social-profile-card');
   const cover = card?.querySelector('.social-profile-cover');
   const menu = card?.querySelector('[data-cover-menu]');
   const trigger = card?.querySelector('[data-cover-menu-trigger]');
   if (!card || !cover || !menu || !trigger) return () => {};
 
+  const stableProfileKey = String(profileKey || 'profile').replace(/[^a-zA-Z0-9_-]/g, '_');
+  const enabledStorageKey = 'pluits:profile-cover:' + stableProfileKey + ':enabled';
   const dialog = document.createElement('div');
   dialog.className = 'social-profile-cover-dialog';
   dialog.hidden = true;
@@ -29,7 +73,7 @@ export function mountProfileCoverControls({ root } = {}) {
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
     + '</div>'
-    + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-dismiss>Batal</button><button type="button" data-cover-save>Simpan pratinjau</button></footer></section>';
+    + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-remove hidden>Hapus sampul</button><button type="button" data-cover-dismiss>Batal</button><button type="button" data-cover-save>Simpan pratinjau</button></footer></section>';
   card.append(dialog);
 
   const editorView = dialog.querySelector('[data-cover-editor-view]');
@@ -40,9 +84,15 @@ export function mountProfileCoverControls({ root } = {}) {
   const filePreview = dialog.querySelector('[data-cover-file-preview]');
   const videoPreview = dialog.querySelector('[data-cover-video-preview]');
   const saveButton = dialog.querySelector('[data-cover-save]');
+  const removeButton = dialog.querySelector('[data-cover-remove]');
   const toggleAction = menu.querySelector('[data-cover-action="toggle"]');
   const editAction = menu.querySelector('[data-cover-action="edit"]');
-  let coverEnabled = !card.classList.contains('is-cover-disabled') && Boolean(cover.querySelector('.social-profile-cover-image'));
+  let coverEnabled = true;
+  try {
+    const savedEnabled = localStorage.getItem(enabledStorageKey);
+    if (savedEnabled !== null) coverEnabled = savedEnabled === 'true';
+  } catch { /* Keep the default active state when browser preferences are unavailable. */ }
+  let isMounted = true;
   card.classList.toggle('is-cover-disabled', !coverEnabled);
   const syncCoverState = () => {
     toggleAction.setAttribute('aria-checked', String(coverEnabled));
@@ -64,6 +114,30 @@ export function mountProfileCoverControls({ root } = {}) {
   let pendingObjectUrl = '';
   let selectedObjectUrl = '';
   let previousFocus = null;
+  const applyCoverMedia = (file, objectUrl) => {
+    cover.querySelector('.social-profile-cover-image')?.remove();
+    const isVideo = /^video\//.test(file?.type || '');
+    const media = document.createElement(isVideo ? 'video' : 'img');
+    media.className = 'social-profile-cover-image';
+    if (isVideo) {
+      media.muted = true; media.loop = true; media.autoplay = true; media.playsInline = true;
+      media.setAttribute('aria-label', 'Video sampul profil');
+    } else media.alt = '';
+    media.src = objectUrl;
+    cover.prepend(media);
+    if (isVideo) media.play().catch(() => {});
+  };
+  const restoreSavedCover = async () => {
+    try {
+      const saved = await getCover(stableProfileKey);
+      if (!isMounted || !saved?.blob) return;
+      selectedObjectUrl = URL.createObjectURL(saved.blob);
+      applyCoverMedia(saved.blob, selectedObjectUrl);
+    } catch {
+      if (isMounted) subtitle.textContent = 'Media sampul tersimpan di perangkat ini belum dapat dibaca.';
+    }
+  };
+  restoreSavedCover();
 
   const closeDialog = () => {
     dialog.hidden = true;
@@ -81,6 +155,8 @@ export function mountProfileCoverControls({ root } = {}) {
     title.textContent = library ? 'Pustaka sampul' : 'Atur sampul profil';
     subtitle.textContent = library ? 'Pilih koleksi sampul yang disediakan PLUITS.' : 'Ganti media sampul dengan gambar atau video.';
     const currentMedia = cover.querySelector('.social-profile-cover-image');
+    removeButton.hidden = !currentMedia;
+    saveButton.disabled = false;
     const currentIsVideo = currentMedia?.tagName === 'VIDEO';
     filePreview.hidden = !currentMedia || currentIsVideo;
     videoPreview.hidden = !currentMedia || !currentIsVideo;
@@ -107,6 +183,7 @@ export function mountProfileCoverControls({ root } = {}) {
       const selected = action.dataset.coverAction;
       if (selected === 'toggle') {
         coverEnabled = !coverEnabled;
+        try { localStorage.setItem(enabledStorageKey, String(coverEnabled)); } catch { /* The switch remains usable for this session. */ }
         card.classList.toggle('is-cover-disabled', !coverEnabled);
         syncCoverState();
       } else if (selected === 'edit' && coverEnabled) {
@@ -169,27 +246,50 @@ export function mountProfileCoverControls({ root } = {}) {
       subtitle.textContent = 'Pratinjau gambar siap. Tekan Simpan pratinjau untuk menerapkan.';
     }
   };
-  const onSave = event => {
-    if (!event.target.closest('[data-cover-save]')) return;
-    if (pendingObjectUrl) {
+  const onSave = async event => {
+    if (!event.target.closest('[data-cover-save]') || !pendingObjectUrl) return;
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    saveButton.disabled = true;
+    subtitle.textContent = 'Menyimpan media di perangkat ini…';
+    try {
+      await putCover(stableProfileKey, file);
       if (selectedObjectUrl) URL.revokeObjectURL(selectedObjectUrl);
-      selectedObjectUrl = pendingObjectUrl;
+      selectedObjectUrl = URL.createObjectURL(file);
+      if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
       pendingObjectUrl = '';
-      cover.querySelector('.social-profile-cover-image')?.remove();
-      const file = fileInput.files?.[0];
-      const isVideo = /^video\//.test(file?.type || '');
-      const media = document.createElement(isVideo ? 'video' : 'img');
-      media.className = 'social-profile-cover-image';
-      if (isVideo) { media.muted = true; media.loop = true; media.autoplay = true; media.playsInline = true; media.setAttribute('aria-label', 'Video sampul profil'); }
-      else media.alt = '';
-      media.src = selectedObjectUrl;
-      cover.prepend(media);
-      if (isVideo) media.play().catch(() => {});
+      applyCoverMedia(file, selectedObjectUrl);
+      removeButton.hidden = false;
       coverEnabled = true;
+      try { localStorage.setItem(enabledStorageKey, 'true'); } catch { /* Current session still reflects the active state. */ }
       card.classList.remove('is-cover-disabled');
       syncCoverState();
+      closeDialog();
+    } catch {
+      saveButton.disabled = false;
+      subtitle.textContent = 'Media belum dapat disimpan di perangkat ini. Periksa ruang penyimpanan browser lalu coba lagi.';
     }
-    closeDialog();
+  };
+
+  const onRemove = async event => {
+    if (!event.target.closest('[data-cover-remove]')) return;
+    removeButton.disabled = true;
+    try {
+      await removeCover(stableProfileKey);
+      cover.querySelector('.social-profile-cover-image')?.remove();
+      if (selectedObjectUrl) { URL.revokeObjectURL(selectedObjectUrl); selectedObjectUrl = ''; }
+      if (pendingObjectUrl) { URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = ''; }
+      fileInput.value = '';
+      filePreview.removeAttribute('src'); filePreview.hidden = true;
+      videoPreview.pause(); videoPreview.removeAttribute('src'); videoPreview.load(); videoPreview.hidden = true;
+      removeButton.hidden = true;
+      removeButton.disabled = false;
+      saveButton.disabled = false;
+      subtitle.textContent = 'Sampul telah dihapus dari perangkat ini.';
+    } catch {
+      removeButton.disabled = false;
+      subtitle.textContent = 'Sampul belum dapat dihapus. Silakan coba lagi.';
+    }
   };
   const onKeydown = event => {
     if (event.key === 'Escape') {
@@ -203,11 +303,14 @@ export function mountProfileCoverControls({ root } = {}) {
   root.addEventListener('click', onClick);
   dialog.addEventListener('change', onChange);
   dialog.addEventListener('click', onSave);
+  dialog.addEventListener('click', onRemove);
   root.addEventListener('keydown', onKeydown);
   return () => {
     root.removeEventListener('click', onClick);
     dialog.removeEventListener('change', onChange);
     dialog.removeEventListener('click', onSave);
+    dialog.removeEventListener('click', onRemove);
+    isMounted = false;
     root.removeEventListener('keydown', onKeydown);
     if (menuCloseTimer) clearTimeout(menuCloseTimer);
     if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
