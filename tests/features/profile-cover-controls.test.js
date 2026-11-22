@@ -31,15 +31,16 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
   assert.match(styles, /social-profile-cover-menu-wrap \{ top: 14px; right: 0; \}/);
 });
 
-test('cover editor opens the native media picker from an explicit mobile-friendly button', () => {
-  assert.match(moduleSource, /<label class="social-profile-cover-browse" for="profile-cover-media-input" data-cover-browse>Pilih media dari perangkat<\/label><input id="profile-cover-media-input" class="social-profile-cover-file-input" type="file"/);
-  assert.doesNotMatch(moduleSource, /data-cover-file hidden/);
-  assert.doesNotMatch(moduleSource, /fileInput\.showPicker|fileInput\.click\(\)/);
-  assert.match(moduleSource, /fileInput\.addEventListener\('change', onChange\)/);
-  assert.match(moduleSource, /fileInput\.removeEventListener\('change', onChange\)/);
-  assert.match(styles, /\.social-profile-cover-file-input[\s\S]*opacity: 1 !important/);
-  assert.match(styles, /\.social-profile-cover-file-input[\s\S]*visibility: visible !important/);
-  assert.match(styles, /\.social-profile-cover-file-input::file-selector-button/);
+test('cover editor uses a centered icon-only picker button and opens the native media picker on tap', () => {
+  assert.match(moduleSource, /<button type="button" class="social-profile-cover-browse" data-cover-browse aria-label="Pilih media sampul"/);
+  assert.match(moduleSource, /fileInput\\.click\\(\\)/);
+  assert.match(moduleSource, /browseButton && dialog\\.contains\\(browseButton\\)/);
+  assert.match(moduleSource, /fileInput\\.addEventListener\\('change', onChange\\)/);
+  assert.match(moduleSource, /fileInput\\.removeEventListener\\('change', onChange\\)/);
+  assert.match(styles, /\\.social-profile-cover-picker[\\s\\S]*justify-content: center/);
+  assert.match(styles, /\\.social-profile-cover-picker \\.social-profile-cover-browse[\\s\\S]*border-radius:50%/);
+  assert.match(styles, /\\.social-profile-cover-picker \\.social-profile-cover-file-input[\\s\\S]*clip-path:inset\\(50%\\)/);
+  assert.doesNotMatch(moduleSource, /<label class="social-profile-cover-browse"/);
 });
 
 test('cover editor accepts image or video media and limits video duration to ten seconds', () => {
