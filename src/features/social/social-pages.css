@@ -1888,18 +1888,18 @@
 
 /* PLUITS profile avatar preview refinement. */
 
-/* Profile avatar: 120px outer circle, image scales with it, 2px gradient ring.
+/* Profile avatar: 110px outer circle, image scales with it, 2px gradient ring.
    On mobile the outer ring sits exactly 5px from the viewport's left edge. */
 .social-profile-page .social-profile-card .social-profile-identity-row {
-  grid-template-columns: 120px minmax(0, 1fr);
+  grid-template-columns: 110px minmax(0, 1fr);
 }
 .social-profile-page .social-profile-card .social-profile-avatar-wrap {
   justify-content: center;
 }
 .social-profile-page .social-profile-card .social-profile-avatar {
   box-sizing: border-box;
-  width: 114px;
-  height: 114px;
+  width: 104px;
+  height: 104px;
   border-radius: 50%;
 }
 .social-profile-page .social-profile-card .social-profile-avatar::after {
@@ -1909,7 +1909,7 @@
 }
 @media (max-width: 767px) {
   .social-profile-page .social-profile-card .social-profile-identity-row {
-    grid-template-columns: 120px minmax(0, 1fr);
+    grid-template-columns: 110px minmax(0, 1fr);
     margin-left: -5px;
     padding-left: 3px;
   }
@@ -1917,18 +1917,18 @@
     justify-content: flex-start;
   }
   .social-profile-page .social-profile-card .social-profile-avatar {
-    width: 114px;
-    height: 114px;
+    width: 104px;
+    height: 104px;
   }
 }
 @media (max-width: 380px) {
   .social-profile-page .social-profile-card .social-profile-identity-row {
-    grid-template-columns: 120px minmax(0, 1fr);
+    grid-template-columns: 110px minmax(0, 1fr);
     padding-left: 3px;
   }
   .social-profile-page .social-profile-card .social-profile-avatar {
-    width: 114px;
-    height: 114px;
+    width: 104px;
+    height: 104px;
   }
 }
 
