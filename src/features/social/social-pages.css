@@ -545,12 +545,25 @@
 }
 
 
+/* The cover region owns its controls; the menu panel remains outside the clipped media surface. */
+.social-profile-cover-region {
+  position: relative;
+  z-index: 8;
+}
+.social-profile-cover-region > .social-profile-cover-menu-trigger {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 8;
+}
 /* Mobile profile hero spans the full viewport edge to edge. */
 @media (max-width: 767px) {
-  .social-profile-card > .social-profile-cover {
+  .social-profile-card > .social-profile-cover-region {
     width: calc(100% + 2 * var(--pl-page-gutter));
     max-width: none;
     margin-inline: calc(-1 * var(--pl-page-gutter));
+  }
+  .social-profile-cover-region > .social-profile-cover {
     border-radius: 0;
   }
 }
@@ -592,12 +605,12 @@
 }
 
 
-/* Profile cover controls — isolated to the profile hero. */
+/* The menu panel is a sibling of the clipped cover region so it can open outside the hero. */
 .social-profile-card > .social-profile-cover-menu-wrap {
   position: absolute;
-  top: 5px;
+  top: 45px;
   right: 5px;
-  z-index: 8;
+  z-index: 9;
 }
 @media (max-width: 767px) {
   .social-profile-card > .social-profile-cover-menu-wrap {
@@ -608,7 +621,7 @@
   display: grid;
   width: 40px;
   height: 40px;
-  place-items: center;
+  place-items: start end;
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -696,10 +709,10 @@
 .social-profile-card.is-cover-disabled .social-profile-cover-image {
   visibility: hidden;
 }
-.social-profile-card.is-cover-disabled > .social-profile-cover-menu-wrap .social-profile-cover-menu-trigger {
+.social-profile-card.is-cover-disabled .social-profile-cover-menu-trigger {
   color: var(--pl-color-ink);
 }
-.social-profile-card.is-cover-hidden > .social-profile-cover-menu-wrap .social-profile-cover-menu-trigger {
+.social-profile-card.is-cover-hidden .social-profile-cover-menu-trigger {
   border: 0;
   background: transparent;
   color: var(--pl-color-ink);
@@ -850,7 +863,7 @@
 
 /* The menu's position and touch target are defined with the cover controls above. */
 .social-profile-cover-menu-trigger .ui-icon { width: 22px; height: 22px; }
-.social-profile-card.is-cover-disabled > .social-profile-cover { display: none; }
+.social-profile-card.is-cover-disabled > .social-profile-cover-region > .social-profile-cover { display: none; }
 .social-profile-card.is-cover-disabled > .social-profile-identity-row {
   margin-top: 0;
   padding-top: clamp(40px, 9vw, 50px);
