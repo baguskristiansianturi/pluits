@@ -119,7 +119,9 @@
   width: 19px;
   height: 19px;
   color: currentColor;
-}* Canonical reusable chrome: brand, navigation, page header, and footer. Feature CSS must not redefine these contracts. */
+}
+
+/* Canonical reusable chrome: brand, navigation, page header, and footer. Feature CSS must not redefine these contracts. */
 .pl-page-shell {
   min-height: 100vh;
   display: flex;
