@@ -273,3 +273,15 @@
 .social-profile-preview-label{display:inline-flex;align-items:center;margin-top:9px;padding:5px 9px;border:1px solid var(--pl-color-border);border-radius:999px;background:var(--pl-color-canvas);color:var(--pl-color-muted);font-size:10px}
 .social-profile-actions [data-profile-share]{cursor:pointer}
 @media(max-width:767px){.social-profile-bio{font-size:12px}.social-profile-location{font-size:10px}}
+
+
+/* Profile page mobile composition: the cover is the first visible element. */
+@media (max-width: 767px) {
+  .social-profile-shell > .social-header {
+    display: none;
+  }
+
+  .social-profile-shell > .social-main {
+    padding-block-start: 0;
+  }
+}
