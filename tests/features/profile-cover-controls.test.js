@@ -39,6 +39,11 @@ test('profile cover menu contains only the three requested controls', () => {
   assert.match(pageSource, /mountProfileCoverControls\(\{root,profileKey:user\?\.id\|\|username\}\)/);
 });
 
+test('cover menu trigger stays above the identity row when the cover is disabled', () => {
+  assert.match(styles, /\.social-profile-card\.is-cover-disabled > \.social-profile-cover-region \{\s*z-index: 4;\s*\}/);
+  assert.match(styles, /\.social-profile-identity-row \{\s*position: relative;\s*z-index: 2;/);
+});
+
 test('cover switch is compact, accessible, and gates editing without collapsing the cover slot', () => {
   assert.match(moduleSource, /role="menuitemcheckbox"/);
   assert.match(moduleSource, /aria-checked="false"/);
