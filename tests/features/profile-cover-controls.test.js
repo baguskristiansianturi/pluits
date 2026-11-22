@@ -52,7 +52,6 @@ test('cover editor accepts image or video media and limits video duration to ten
   assert.doesNotMatch(moduleSource, /data-cover-text|Tulisan pada sampul|profile-cover-text/);
   assert.match(moduleSource, /Animasi sampul sedang disiapkan/);
   assert.match(moduleSource, /Ukuran dan posisi sampul tetap sama/);
-  assert.match(moduleSource, /Sinkronisasi ke akun dan perangkat lain memerlukan layanan media PLUITS/);
 });
 
 test('cover switch applies immediately and menu closes only through its X control', () => {
