@@ -38,7 +38,7 @@ test('cover editor uses a centered icon-only picker with the real file input as 
   assert.doesNotMatch(moduleSource, /data-cover-file tabindex=/);
   assert.ok(moduleSource.includes("fileInput.addEventListener('change', onChange)"));
   assert.ok(styles.includes('justify-content:center'));
-  assert.ok(styles.includes('inset:0!important; z-index:2!important'));
+  assert.ok(styles.includes('top:50%!important; left:50%!important; right:auto!important; bottom:auto!important; z-index:2!important'));
   assert.ok(styles.includes('clip-path:none!important'));
   assert.ok(styles.includes('pointer-events:auto!important; touch-action:manipulation'));
   assert.ok(styles.includes('opacity:0!important'));
