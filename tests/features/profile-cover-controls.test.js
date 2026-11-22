@@ -134,3 +134,16 @@ test('cover dialog keeps the page visible with a subtle dark scrim and reduced b
   assert.match(styles, /backdrop-filter: blur\(3px\) saturate\(92%\)/);
   assert.match(styles, /background: rgba\(244, 248, 247, \.90\)/);
 });
+
+
+test('cover picker is a large cover-shaped canvas and switches to the crop preview after selection', () => {
+  assert.match(moduleSource, /data-cover-picker/);
+  assert.match(moduleSource, /Tambahkan sampul profil/);
+  assert.match(moduleSource, /Sentuh area ini untuk memilih foto, video, atau GIF/);
+  assert.match(moduleSource, /const coverPicker = dialog\.querySelector\('\[data-cover-picker\]'\)/);
+  assert.match(moduleSource, /coverPicker\.hidden = Boolean\(currentMedia\)/);
+  assert.match(moduleSource, /coverPicker\.hidden = true/);
+  assert.match(styles, /\.social-profile-cover-picker \{[\s\S]*aspect-ratio: 4 \/ 1/);
+  assert.match(styles, /\.social-profile-cover-picker \.social-profile-cover-file-input[\s\S]*inset: 0 !important/);
+  assert.match(styles, /\.social-profile-cover-crop-stage \{[\s\S]*min-height: 150px/);
+});
