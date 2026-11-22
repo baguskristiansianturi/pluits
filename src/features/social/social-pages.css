@@ -1078,3 +1078,104 @@
   .social-profile-cover-upload .social-profile-cover-browse,
   .social-profile-cover-dialog-actions button { transition: none; }
 }
+
+
+/* Profile cover dialog: light blur with a dark translucent scrim. */
+.social-profile-cover-dialog {
+  background: rgba(5, 12, 22, .42);
+  -webkit-backdrop-filter: blur(3px) saturate(92%);
+  backdrop-filter: blur(3px) saturate(92%);
+}
+.social-profile-cover-dialog-panel {
+  background: rgba(244, 248, 247, .90);
+  -webkit-backdrop-filter: blur(8px) saturate(112%);
+  backdrop-filter: blur(8px) saturate(112%);
+  border-color: rgba(255, 255, 255, .66);
+}
+
+/* Keep the actual file input visible: Android can open its system picker directly. */
+.social-profile-cover-browse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  width: fit-content;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--pl-color-brand);
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.social-profile-cover-browse:hover {
+  background: rgba(8, 173, 158, .07);
+}
+.social-profile-cover-file-input {
+  display: block !important;
+  position: static !important;
+  inset: auto !important;
+  z-index: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 46px;
+  margin: 0 !important;
+  padding: 5px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  overflow: visible;
+  border: 1px solid rgba(23, 43, 69, .18);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .68);
+  color: var(--pl-color-ink);
+  font: inherit;
+  font-size: 13px !important;
+  cursor: pointer !important;
+  touch-action: manipulation;
+}
+.social-profile-cover-file-input::file-selector-button {
+  min-height: 34px;
+  margin: 0 10px 0 0;
+  padding: 0 14px;
+  border: 1px solid rgba(8, 173, 158, .42);
+  border-radius: 8px;
+  background: rgba(8, 173, 158, .08);
+  color: var(--pl-color-brand);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.social-profile-cover-file-input::-webkit-file-upload-button {
+  min-height: 34px;
+  margin: 0 10px 0 0;
+  padding: 0 14px;
+  border: 1px solid rgba(8, 173, 158, .42);
+  border-radius: 8px;
+  background: rgba(8, 173, 158, .08);
+  color: var(--pl-color-brand);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 750;
+}
+@media (max-width: 767px) {
+  .social-profile-cover-dialog {
+    background: rgba(5, 12, 22, .42);
+    -webkit-backdrop-filter: blur(3px) saturate(92%);
+    backdrop-filter: blur(3px) saturate(92%);
+  }
+  .social-profile-cover-dialog-panel {
+    background: rgba(244, 248, 247, .90);
+    -webkit-backdrop-filter: blur(8px) saturate(112%);
+    backdrop-filter: blur(8px) saturate(112%);
+  }
+  .social-profile-cover-file-input {
+    min-height: 48px;
+    font-size: 16px !important;
+  }
+}
