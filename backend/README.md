@@ -82,7 +82,7 @@ The Compose stack contains PostgreSQL, the migration job, Go API, email worker, 
 
 The backup worker runs a full PostgreSQL dump every 24 hours, compresses it, encrypts it to the configured age public key and retains 14 days by default. The private key is never placed on the server. The local backup volume is on the same host; it is not an off-site disaster-recovery copy. Before accepting real user data, replicate encrypted backups to a separately controlled location and test restoration from that copy.
 
-See [Self-Hosted Operations](docs/SELF-HOSTED-OPERATIONS.md) and [First Real Account Runbook](docs/FIRST-ACCOUNT-REGISTRATION-RUNBOOK.md).
+See [Deploy on Ubuntu VPS](docs/DEPLOY-ON-UBUNTU-VPS.md), [Self-Hosted Operations](docs/SELF-HOSTED-OPERATIONS.md) and [First Real Account Runbook](docs/FIRST-ACCOUNT-REGISTRATION-RUNBOOK.md).
 
 ## Domain implementation status
 

@@ -1,0 +1,78 @@
+name: Deploy PLUITS Go Backend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pluits-self-hosted-backend-production
+  cancel-in-progress: false
+
+jobs:
+  validate-deployment-scripts:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check deployment shell scripts
+        run: bash -n backend/scripts/bootstrap-ubuntu-24.04.sh backend/scripts/deploy.sh
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check deployment settings
+        env:
+          DEPLOY_HOST: ${{ secrets.PLUITS_DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.PLUITS_DEPLOY_USER }}
+          DEPLOY_SSH_KEY: ${{ secrets.PLUITS_DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.PLUITS_DEPLOY_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          for name in DEPLOY_HOST DEPLOY_USER DEPLOY_SSH_KEY DEPLOY_KNOWN_HOSTS; do
+            if [[ -z "${!name}" ]]; then
+              echo "::error::Missing GitHub Actions secret: PLUITS_${name}"
+              exit 1
+            fi
+          done
+
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.PLUITS_DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.PLUITS_DEPLOY_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -d -m 0700 "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$HOME/.ssh/pluits_deploy"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 0600 "$HOME/.ssh/pluits_deploy" "$HOME/.ssh/known_hosts"
+          ssh-keygen -y -f "$HOME/.ssh/pluits_deploy" >/dev/null
+
+      - name: Deploy backend on PLUITS server
+        env:
+          DEPLOY_HOST: ${{ secrets.PLUITS_DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.PLUITS_DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.PLUITS_DEPLOY_PORT || '22' }}
+          DEPLOY_PATH: ${{ secrets.PLUITS_DEPLOY_PATH || '/opt/pluits' }}
+        run: |
+          set -euo pipefail
+          printf -v remote_command 'PLUITS_REPO_ROOT=%q PLUITS_DEPLOY_BRANCH=main bash %q/backend/scripts/deploy.sh' "$DEPLOY_PATH" "$DEPLOY_PATH"
+          ssh -p "$DEPLOY_PORT" \
+            -i "$HOME/.ssh/pluits_deploy" \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" "$remote_command"
