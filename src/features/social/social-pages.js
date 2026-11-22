@@ -13,7 +13,7 @@ function bottomNav(active){
  return '<nav class="global-bottom-nav" aria-label="Navigasi aplikasi">'
  + '<a href="'+routeHref('social')+'" class="'+(active==='social'?'is-active':'')+'">'+renderIcon('book')+'<span>Beranda</span></a>'
  + '<a href="'+routeHref('discover')+'" class="'+(active==='discover'?'is-active':'')+'">'+renderIcon('eye')+'<span>Jelajah</span></a>'
- + '<a class="social-plus" href="'+routeHref('dashboard')+'" aria-label="Buka Ruang Kerja"><span>+</span></a>'
+ + '<a class="social-plus" href="'+routeHref('dashboard')+'" aria-label="Buka Ruang Kerja"><span class="social-plus-disc">'+renderIcon('plus')+'</span></a>'
  + '<a href="'+routeHref('messages')+'" class="'+(active==='messages'?'is-active':'')+'">'+renderIcon('message')+'<span>Pesan</span></a>'
  + '<a href="'+routeHref('profile')+'" class="'+(active==='profile'?'is-active':'')+'">'+renderIcon('user')+'<span>Profil</span></a></nav>';
 }
