@@ -31,8 +31,8 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
   assert.match(styles, /social-profile-cover-menu-wrap \{ top: 14px; right: 0; \}/);
 });
 
-test('cover editor uses a centered icon-only picker with the real file input as the direct tap target', () => {
-  assert.ok(moduleSource.includes('class="social-profile-cover-browse" data-cover-browse aria-label="Pilih media sampul"'));
+test('cover editor uses a large cover canvas with the real file input as the direct tap target', () => {
+  assert.ok(moduleSource.includes('class="social-profile-cover-picker" data-cover-picker'));
   assert.ok(moduleSource.includes('data-cover-file></div>'));
   assert.doesNotMatch(moduleSource, /fileInput\\.click\\(\\)/);
   assert.doesNotMatch(moduleSource, /data-cover-file tabindex=/);
@@ -117,8 +117,8 @@ test('cover editor is centered on mobile and closes when the backdrop is tapped'
 
 
 test('cover editor presents supported image, GIF, and video formats in a spacious glass dialog', () => {
-  assert.match(moduleSource, /Tambahkan media sampul/);
-  assert.match(moduleSource, /Pilih foto, video, atau GIF untuk tampilan profil Anda/);
+  assert.match(moduleSource, /Tambahkan sampul profil/);
+  assert.match(moduleSource, /Sentuh area ini untuk memilih foto, video, atau GIF/);
   assert.match(moduleSource, /Foto\/GIF: JPG, PNG, WebP, GIF · maks\. 10 MB\. Video: MP4\/WebM · maks\. 10 detik/);
   assert.match(moduleSource, /data-cover-save>Simpan/);
   assert.match(styles, /backdrop-filter: blur\(9px\)/);
