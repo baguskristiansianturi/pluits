@@ -229,3 +229,38 @@
 .social-profile-post-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--pl-color-muted);font-size:10px}
 .social-profile-post-meta>span{font-weight:750;text-transform:uppercase;letter-spacing:.06em}
 .social-profile-post p{margin:10px 0 2px;color:var(--pl-color-ink);font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+
+
+/* Profile foundation: cover, identity and preview layout. */
+.social-profile-card{grid-template-rows:auto auto auto auto;row-gap:0;padding-top:0}
+.social-profile-cover{grid-column:1/-1;grid-row:1;position:relative;min-height:clamp(132px,24vw,190px);margin:0 0 0;overflow:hidden;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-lg);background:linear-gradient(115deg,#e5efec 0%,#dce8ef 48%,#f0ede5 100%)}
+.social-profile-cover::before{position:absolute;inset:0;background:radial-gradient(ellipse at 18% 28%,rgba(255,255,255,.9),transparent 42%),radial-gradient(ellipse at 82% 76%,rgba(8,173,158,.17),transparent 40%);content:""}
+.social-profile-cover-label{position:absolute;top:15px;left:17px;color:rgba(23,43,69,.58);font-size:9px;font-weight:850;letter-spacing:.15em}
+.social-profile-cover-glow{position:absolute;right:10%;bottom:-54px;width:42%;height:100px;border-radius:50%;background:rgba(255,255,255,.45);filter:blur(22px)}
+.social-profile-avatar-wrap{grid-row:2;margin-top:-54px;padding-left:14px;z-index:2}
+.social-profile-avatar{border:4px solid var(--pl-color-surface);box-shadow:0 3px 14px rgba(23,43,69,.08)}
+.social-profile-identity{grid-row:2;align-self:end;padding-bottom:10px}
+.social-profile-preview-label{display:inline-flex;align-items:center;margin-top:10px;padding:5px 8px;border-radius:var(--pl-radius-pill);background:var(--pl-color-canvas);color:var(--pl-color-muted);font-size:10px;line-height:1.4}
+.social-profile-stats{grid-row:3;margin-top:16px}
+.social-profile-actions{grid-row:4;margin-top:18px}
+.social-profile-quick-panel{grid-row:5}
+.social-profile-page .social-profile-tabs{margin-top:24px}
+.social-profile-tab-panel .social-empty-panel{min-height:190px}
+@media(max-width:767px){
+ .social-profile-cover{min-height:clamp(112px,30vw,150px);border-radius:var(--pl-radius-md)}
+ .social-profile-avatar-wrap{margin-top:-48px;padding-left:8px}
+ .social-profile-avatar{border-width:3px}
+ .social-profile-identity{padding-right:36px;padding-bottom:8px}
+ .social-profile-preview-label{font-size:9px}
+ .social-profile-stats{margin-top:12px}
+ .social-profile-actions{margin-top:14px}
+ .social-profile-page .social-profile-tabs{margin-top:20px}
+}
+@media(max-width:360px){
+ .social-profile-cover{min-height:104px}
+ .social-profile-avatar-wrap{margin-top:-42px;padding-left:4px}
+ .social-profile-avatar{width:78px;height:78px}
+ .social-profile-identity{padding-right:30px}
+ .social-profile-identity h1{font-size:17px}
+ .social-profile-actions{grid-template-columns:minmax(0,1fr);gap:8px}
+}
