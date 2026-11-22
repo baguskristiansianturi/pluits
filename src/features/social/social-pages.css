@@ -1813,9 +1813,7 @@
   line-height: 1;
 }
 .social-profile-follow-stats {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+  position: relative;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
