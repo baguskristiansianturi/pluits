@@ -1793,7 +1793,7 @@
 }
 
 
-/* Profile avatar shortcut: a minimal plus glyph, without a badge or backing shape. */
+/* Profile avatar shortcut: compact dark plus that interrupts the avatar ring. */
 .social-profile-avatar-story-link {
   position: relative;
   display: block;
@@ -1806,14 +1806,17 @@
 .social-profile-story-plus {
   position: absolute;
   z-index: 5;
-  top: -9px;
-  right: -7px;
-  display: block;
+  top: -1px;
+  right: -1px;
+  display: grid;
+  width: 23px;
+  height: 23px;
+  place-items: center;
   border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: var(--pl-color-brand);
-  font-size: 27px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .72);
+  color: #fff;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1;
   box-shadow: none;
