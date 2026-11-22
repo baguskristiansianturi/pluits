@@ -54,3 +54,25 @@ test('cover switch applies immediately and menu closes only through its X contro
   assert.match(styles, /\.social-profile-cover-menu\.is-open/);
   assert.match(styles, /\.social-profile-cover-menu-close/);
 });
+
+
+test('profile cover visibility and selected media persist locally across reloads', () => {
+  assert.match(moduleSource, /localStorage\.getItem\(enabledStorageKey\)/);
+  assert.match(moduleSource, /localStorage\.setItem\(enabledStorageKey, String\(coverEnabled\)\)/);
+  assert.match(moduleSource, /indexedDB\.open\(COVER_DB, 1\)/);
+  assert.match(moduleSource, /objectStore\(COVER_STORE\)\.put\(/);
+  assert.match(moduleSource, /objectStore\(COVER_STORE\)\.get\(profileKey\)/);
+  assert.match(moduleSource, /await getCover\(stableProfileKey\)/);
+  assert.match(moduleSource, /await putCover\(stableProfileKey, file\)/);
+  assert.match(moduleSource, /await removeCover\(stableProfileKey\)/);
+  assert.match(moduleSource, /let coverEnabled = true/);
+  assert.match(moduleSource, /data-cover-remove/);
+  assert.match(pageSource, /profileKey:user\?\.id\|\|username/);
+});
+
+test('turning the cover off preserves the saved media; only explicit removal deletes it', () => {
+  assert.match(moduleSource, /card\.classList\.toggle\('is-cover-disabled', !coverEnabled\)/);
+  assert.match(moduleSource, /if \(selectedObjectUrl\) \{ URL\.revokeObjectURL\(selectedObjectUrl\); selectedObjectUrl = ''; \}/);
+  assert.match(moduleSource, /objectStore\(COVER_STORE\)\.delete\(profileKey\)/);
+  assert.match(moduleSource, /cover\.querySelector\('\.social-profile-cover-image'\)\?\.remove\(\)/);
+});
