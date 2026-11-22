@@ -62,6 +62,16 @@ async function putAvatar(profileKey, blob) {
     tx.onabort = () => { db.close(); reject(tx.error); };
   });
 }
+async function removeAvatar(profileKey) {
+  const db = await openCoverDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(AVATAR_STORE, 'readwrite');
+    tx.objectStore(AVATAR_STORE).delete(profileKey);
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onerror = () => { db.close(); reject(tx.error); };
+    tx.onabort = () => { db.close(); reject(tx.error); };
+  });
+}
 
 export function renderProfileCoverMenuTrigger() {
   return '<button type="button" class="social-profile-cover-menu-trigger" data-cover-menu-trigger aria-label="Pengaturan sampul profil" aria-haspopup="menu" aria-expanded="false" title="Pengaturan sampul profil">'+renderIcon('moreVertical')+'</button>';
@@ -75,6 +85,7 @@ export function renderProfileCoverMenu() {
     + '<button type="button" role="menuitem" data-cover-action="edit" disabled>'+renderIcon('image')+'<span>Edit sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="library">'+renderIcon('film')+'<span>Pustaka sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="avatar">'+renderIcon('user')+'<span>Edit foto profil</span></button>'
+    + '<button type="button" role="menuitem" data-cover-action="remove-avatar" disabled>'+renderIcon('trash')+'<span>Hapus foto profil</span></button>'
     + '</div></div>';
 }
 
@@ -125,8 +136,30 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     }
     image.src = avatarObjectUrl;
   };
+  const removeAvatarAction = menu.querySelector('[data-cover-action="remove-avatar"]');
+  const clearAvatarDisplay = () => {
+    if (avatarObjectUrl) URL.revokeObjectURL(avatarObjectUrl);
+    avatarObjectUrl = '';
+    const avatar = card.querySelector('.social-profile-avatar');
+    if (!avatar) return;
+    avatar.querySelector('[data-profile-avatar-image]')?.remove();
+    if (!avatar.querySelector('.social-profile-avatar-placeholder')) {
+      const placeholder = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      placeholder.setAttribute('class', 'social-profile-avatar-placeholder');
+      placeholder.setAttribute('viewBox', '0 0 120 120');
+      placeholder.setAttribute('aria-hidden', 'true');
+      placeholder.setAttribute('focusable', 'false');
+      placeholder.innerHTML = '<circle cx="60" cy="39" r="21" fill="currentColor"/><path d="M19 111c2-25 18-41 41-41s39 16 41 41" fill="currentColor"/>';
+      avatar.append(placeholder);
+    }
+    removeAvatarAction.disabled = true;
+  };
   getAvatar(stableProfileKey).then(saved => {
-    if (isMounted && saved?.blob) applyAvatar(saved.blob);
+    if (!isMounted) return;
+    if (saved?.blob) {
+      applyAvatar(saved.blob);
+      removeAvatarAction.disabled = false;
+    }
   }).catch(() => {});
 
   const editorView = dialog.querySelector('[data-cover-editor-view]');
@@ -382,6 +415,11 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       } else if (selected === 'avatar') {
         closeMenu();
         avatarInput.click();
+      } else if (selected === 'remove-avatar') {
+        closeMenu();
+        removeAvatar(stableProfileKey).then(clearAvatarDisplay).catch(() => {
+          subtitle.textContent = 'Foto profil belum dapat dihapus. Coba lagi.';
+        });
       }
       return;
     }
@@ -516,6 +554,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     try {
       await putAvatar(stableProfileKey, file);
       applyAvatar(file);
+      removeAvatarAction.disabled = false;
       avatarInput.value = '';
     } catch {
       subtitle.textContent = 'Foto profil belum dapat disimpan di perangkat ini. Coba lagi.';
