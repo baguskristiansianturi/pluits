@@ -97,7 +97,7 @@ test('selecting a photo opens a draggable crop frame matching the live cover rat
   assert.match(moduleSource, /cropPosition\.x = Math\.max\(0, Math\.min\(100/);
   assert.match(moduleSource, /cropPosition\.y = Math\.max\(0, Math\.min\(100/);
   assert.match(moduleSource, /putCover\(stableProfileKey, file, cropPosition\)/);
-  assert.match(moduleSource, /cropPosition = saved\\.crop/);
+  assert.match(moduleSource, /cropPosition = saved\.crop/);
   assert.match(styles, /\.social-profile-cover-crop-stage\{[\s\S]*touch-action:none/);
   assert.match(styles, /object-fit:cover/);
 });
