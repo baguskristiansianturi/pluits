@@ -1591,3 +1591,34 @@
     overflow-y: auto;
   }
 }
+
+
+/* Give the mobile cover-cropping stage more vertical room and breathing space. */
+@media (max-width: 767px) {
+  .social-profile-cover-dialog-panel:has(.social-profile-cover-upload.is-cropping) {
+    padding-top: 20px;
+    padding-bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+  }
+  .social-profile-cover-upload.is-cropping .social-profile-cover-dialog-header {
+    margin-bottom: 26px;
+  }
+  .social-profile-cover-upload.is-cropping .social-profile-cover-crop-stage {
+    height: clamp(154px, 43vw, 184px);
+    min-height: 154px;
+    aspect-ratio: auto;
+    margin-top: 4px;
+    border-radius: 18px;
+  }
+  .social-profile-cover-upload.is-cropping .social-profile-cover-format-note {
+    margin-top: 58px;
+  }
+  .social-profile-cover-upload.is-cropping ~ .social-profile-cover-dialog-actions {
+    margin-top: 38px;
+  }
+}
+@media (max-width: 380px) {
+  .social-profile-cover-upload.is-cropping .social-profile-cover-crop-stage {
+    height: 154px;
+    min-height: 154px;
+  }
+}
