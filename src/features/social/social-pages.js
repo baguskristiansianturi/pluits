@@ -2,6 +2,7 @@ import { routeHref } from '../../config/paths.js';
 import '../../design-system/page-shell.css';
 import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
+import { API_BASE_URL } from '../../config/runtime.js';
 import './social-pages.css';
 
 // Short-lived in-memory cache prevents repeated profile navigation from
@@ -25,7 +26,7 @@ export function mountDiscoverPage({root}={}){root.innerHTML=shell('Jelajah','Tem
 export function mountMessagesPage({root}={}) {
  root.innerHTML=shell('Pesan','Pusat percakapan dan komunikasi Anda di PLUITS.','messages','<section class="social-home-section"><div class="social-section-heading"><h2>Kotak masuk</h2></div>'+emptyPanel('Belum ada percakapan','Pesan dari pengguna dan aktivitas komunikasi akan tampil di sini setelah layanan pesan diaktifkan.')+'</section>');
 }
-export function mountProfilePage({root,user=null}={}) {
+export function mountProfilePage({root,user=null,accessToken=null}={}) {
  const safe=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  const metadata=user?.user_metadata||{};
  const name=safe(metadata.display_name||metadata.full_name||metadata.name||'Pengguna PLUITS');
@@ -78,13 +79,14 @@ export function mountProfilePage({root,user=null}={}) {
   +'<button type="button" role="tab" id="profile-tab-blog" aria-controls="profile-panel-blog" aria-selected="false" data-profile-tab="blog">'+renderIcon('fileText')+'<span>Blog</span></button>'
   +businessTabs()
   +'</div>'
-  +'<section class="social-profile-tab-panel is-active" role="tabpanel" id="profile-panel-feed" aria-labelledby="profile-tab-feed" data-profile-panel="feed">'+emptyPanel('Belum ada postingan','Postingan foto dan konten Feed yang dipublikasikan akan tampil di sini.')+'</section>'
+  +'<section class="social-profile-tab-panel is-active" role="tabpanel" id="profile-panel-feed" aria-labelledby="profile-tab-feed" data-profile-panel="feed">'+emptyPanel('Memuat postingan Anda','Profil sedang mengambil Feed dari server PLUITS.',true)+'</section>'
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-reels" aria-labelledby="profile-tab-reels" data-profile-panel="reels" hidden>'+emptyPanel('Belum ada Reels','Video pendek yang dipublikasikan akan tampil di sini.')+'</section>'
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-trips" aria-labelledby="profile-tab-trips" data-profile-panel="trips" hidden>'+emptyPanel('Belum ada Trips','Perjalanan dan cerita perjalanan yang dipublikasikan akan tampil di sini.')+'</section>'
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-blog" aria-labelledby="profile-tab-blog" data-profile-panel="blog" hidden>'+emptyPanel('Belum ada Blog','Artikel blog yang dipublikasikan akan tampil di sini.')+'</section>'
   +businessPanels()
   +'</section>';
  root.innerHTML='<div class="pl-page-shell social-shell"><header class="pl-page-header social-header"><div class="social-brand">'+renderBrand({href:routeHref('home'),label:'PLUITS'})+'<span>Profil</span></div><a href="'+routeHref('settings')+'">Pengaturan akun</a></header><main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
+ const controller=new AbortController();
  root.addEventListener('click',event=>{
   const tab=event.target.closest('[data-profile-tab]');
   if(tab&&root.contains(tab)){
@@ -109,7 +111,22 @@ export function mountProfilePage({root,user=null}={}) {
   panel.hidden=expanded;
  });
 
- return ()=>{};
+ const feedPanel=root.querySelector('[data-profile-panel="feed"]');
+ const renderPost=post=>'<article class="social-profile-post"><div class="social-profile-post-meta"><span>'+safe(post.visibility==='private'?'Privat':'Publik')+'</span><time>'+safe(post.created_at?new Date(post.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}):'')+'</time></div><p>'+safe(post.caption)+'</p></article>';
+ const showFeedState=(title,description)=>emptyPanel(title,description);
+ const loadOwnFeed=async()=>{
+  if(!feedPanel)return;
+  if(!API_BASE_URL||!accessToken){feedPanel.innerHTML=showFeedState('Feed belum terhubung','Sesi akun atau layanan backend PLUITS belum tersedia.');return;}
+  try{
+   const response=await fetch(API_BASE_URL+'/v1/social/posts/me',{headers:{Accept:'application/json',Authorization:'Bearer '+accessToken},mode:'cors',credentials:'omit',cache:'no-store',signal:controller.signal});
+   if(!response.ok)throw new Error('Feed pribadi belum dapat dimuat.');
+   const payload=await response.json();
+   const posts=Array.isArray(payload.posts)?payload.posts:[];
+   feedPanel.innerHTML=posts.length?posts.map(renderPost).join(''):showFeedState('Belum ada postingan','Postingan yang Anda terbitkan akan tampil di sini.');
+  }catch(error){if(error.name!=='AbortError')feedPanel.innerHTML=showFeedState('Feed belum dapat dimuat','Periksa koneksi lalu buka kembali halaman Profil.');}
+ };
+ loadOwnFeed();
+ return ()=>controller.abort();
 
 }
 export function mountSettingsPage({root,user=null,onSignOut}={}) {
