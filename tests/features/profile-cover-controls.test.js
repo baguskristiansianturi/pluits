@@ -37,3 +37,12 @@ test('cover editor previews uploaded images and the library is reserved for appr
   assert.match(moduleSource, /Ukuran dan posisi sampul tetap sama/);
   assert.match(moduleSource, /Penyimpanan ke akun akan tersedia/);
 });
+
+test('cover switch stays open as a draft until the user saves or cancels', () => {
+  assert.match(moduleSource, /data-cover-save-settings/);
+  assert.match(moduleSource, /data-cover-cancel/);
+  assert.match(moduleSource, /draftCoverEnabled = !draftCoverEnabled/);
+  assert.match(moduleSource, /coverEnabled = draftCoverEnabled/);
+  assert.match(moduleSource, /if \(selected === 'toggle'\)[\s\S]*?draftCoverEnabled = !draftCoverEnabled;[\s\S]*?syncCoverState\(\);/);
+  assert.doesNotMatch(moduleSource, /if \(selected === 'toggle'\)[\s\S]{0,180}menu\.hidden = true/);
+});
