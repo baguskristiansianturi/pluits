@@ -282,7 +282,7 @@
 }
 
 .social-profile-identity{grid-row:2;align-self:end;padding-bottom:10px}
-.social-profile-preview-label{display:inline-flex;align-items:center;margin-top:10px;padding:5px 8px;border-radius:var(--pl-radius-pill);background:var(--pl-color-canvas);color:var(--pl-color-muted);font-size:10px;line-height:1.4}
+.social-profile-preview-label{display:inline-flex;align-items:center;margin:0 0 10px;padding:5px 8px;border-radius:var(--pl-radius-pill);background:var(--pl-color-canvas);color:var(--pl-color-muted);font-size:10px;line-height:1.4}
 .social-profile-stats{grid-row:3;margin-top:16px}
 .social-profile-actions{grid-row:4;margin-top:18px}
 .social-profile-quick-panel{grid-row:5}
