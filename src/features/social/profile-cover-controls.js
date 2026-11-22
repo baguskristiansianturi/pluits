@@ -136,9 +136,9 @@ export function mountProfileCoverControls({ root } = {}) {
         cover.prepend(image);
       }
       image.src = selectedObjectUrl;
+      card.classList.remove('is-cover-hidden');
+      toggleLabel.textContent = 'Tampilkan tanpa sampul';
     }
-    card.classList.remove('is-cover-hidden');
-    toggleLabel.textContent = 'Tampilkan tanpa sampul';
     closeDialog();
   };
   const onKeydown = event => {
