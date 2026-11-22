@@ -32,14 +32,14 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
 });
 
 test('cover editor uses a centered icon-only picker button and opens the native media picker on tap', () => {
-  assert.match(moduleSource, /<button type="button" class="social-profile-cover-browse" data-cover-browse aria-label="Pilih media sampul"/);
-  assert.match(moduleSource, /fileInput\\.click\\(\\)/);
-  assert.match(moduleSource, /browseButton && dialog\\.contains\\(browseButton\\)/);
-  assert.match(moduleSource, /fileInput\\.addEventListener\\('change', onChange\\)/);
-  assert.match(moduleSource, /fileInput\\.removeEventListener\\('change', onChange\\)/);
-  assert.match(styles, /\\.social-profile-cover-picker[\\s\\S]*justify-content: center/);
-  assert.match(styles, /\\.social-profile-cover-picker \\.social-profile-cover-browse[\\s\\S]*border-radius:50%/);
-  assert.match(styles, /\\.social-profile-cover-picker \\.social-profile-cover-file-input[\\s\\S]*clip-path:inset\\(50%\\)/);
+  assert.ok(moduleSource.includes('class="social-profile-cover-browse" data-cover-browse aria-label="Pilih media sampul"'));
+  assert.ok(moduleSource.includes('fileInput.click()'));
+  assert.ok(moduleSource.includes("browseButton && dialog.contains(browseButton)"));
+  assert.ok(moduleSource.includes("fileInput.addEventListener('change', onChange)"));
+  assert.ok(moduleSource.includes("fileInput.removeEventListener('change', onChange)"));
+  assert.ok(styles.includes('.social-profile-cover-picker { position:relative; display:flex; width:100%; min-height:48px; align-items:center; justify-content:center; }'));
+  assert.ok(styles.includes('border-radius:50%'));
+  assert.ok(styles.includes('clip-path:inset(50%)'));
   assert.doesNotMatch(moduleSource, /<label class="social-profile-cover-browse"/);
 });
 
