@@ -84,6 +84,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   const fileInput = dialog.querySelector('[data-cover-file]');
   const cropStage = dialog.querySelector('[data-cover-crop-stage]');
   const coverPicker = dialog.querySelector('[data-cover-picker]');
+  const coverUpload = dialog.querySelector('.social-profile-cover-upload');
   const cropImage = dialog.querySelector('[data-cover-image-crop]');
   const cropAvatarPreview = dialog.querySelector('[data-cover-avatar-preview]');
   const profileAvatar = card.querySelector('.social-profile-avatar');
@@ -183,6 +184,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     if (pendingObjectUrl) { URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = ''; }
     fileInput.value = '';
     cropStage.hidden = true;
+    coverUpload.classList.remove('is-cropping');
     coverPicker.hidden = false;
     cropImage.removeAttribute('src');
     videoPreview.pause();
@@ -386,7 +388,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       cropImage.style.objectPosition = '50% 50%';
       cropStage.style.aspectRatio = `${cover.clientWidth} / ${cover.clientHeight}`;
       cropStage.hidden = false;
-      
+      coverUpload.classList.add('is-cropping');
       saveButton.disabled = false;
       subtitle.textContent = 'Geser foto dengan satu jari. Cubit dengan dua jari untuk memperbesar atau memperkecil.';
     }
@@ -433,7 +435,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       if (selectedObjectUrl) { URL.revokeObjectURL(selectedObjectUrl); selectedObjectUrl = ''; }
       if (pendingObjectUrl) { URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = ''; }
       fileInput.value = '';
-      cropStage.hidden = true; coverPicker.hidden = false; cropImage.removeAttribute('src');
+      cropStage.hidden = true; coverUpload.classList.remove('is-cropping'); coverPicker.hidden = false; cropImage.removeAttribute('src');
       videoPreview.pause(); videoPreview.removeAttribute('src'); videoPreview.load(); videoPreview.hidden = true;
       removeButton.hidden = true;
       removeButton.disabled = false;
