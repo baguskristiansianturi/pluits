@@ -85,7 +85,7 @@ export function renderProfileCoverMenu() {
     + '<button type="button" role="menuitem" data-cover-action="edit" disabled>'+renderIcon('image')+'<span>Edit sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="library">'+renderIcon('film')+'<span>Pustaka sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="avatar">'+renderIcon('user')+'<span>Edit foto profil</span></button>'
-    + '<button type="button" role="menuitem" data-cover-action="remove-avatar" disabled>'+renderIcon('trash')+'<span>Hapus foto profil</span></button>'
+    + '<button type="button" role="menuitem" data-cover-action="remove-avatar" disabled>'+renderIcon('image')+'<span>Hapus foto profil</span></button>'
     + '</div></div>';
 }
 
