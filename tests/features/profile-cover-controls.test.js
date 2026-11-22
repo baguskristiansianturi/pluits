@@ -107,7 +107,7 @@ test('cover editor is centered on mobile and closes when the backdrop is tapped'
   assert.match(moduleSource, /if \(event\.target === dialog\) \{ closeDialog\(\); return; \}/);
   assert.match(moduleSource, /fileInput\.value = ''/);
   assert.match(styles, /\.social-profile-cover-dialog\{place-items:center/);
-  assert.match(styles, /@media\(max-width:767px\)\{[\\s\\S]*\.social-profile-cover-dialog\{place-items:center/);
+  assert.ok(styles.includes('@media(max-width:767px){\n .social-profile-cover-dialog{place-items:center'));
   assert.match(styles, /\.social-profile-cover-file-input\{[\\s\\S]*pointer-events:auto/);
   assert.doesNotMatch(moduleSource, /Sinkronisasi ke akun dan perangkat lain memerlukan layanan media PLUITS/);
 });
