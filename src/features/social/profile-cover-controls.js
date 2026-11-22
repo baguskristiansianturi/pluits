@@ -219,6 +219,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     const currentIsVideo = currentMedia?.tagName === 'VIDEO';
     coverPicker.hidden = Boolean(currentMedia);
     cropStage.hidden = !currentMedia || currentIsVideo;
+    coverUpload.classList.toggle('is-cropping', Boolean(currentMedia && !currentIsVideo));
     coverPicker.style.aspectRatio = `${cover.clientWidth} / ${cover.clientHeight}`;
     if (currentMedia && currentIsVideo) {
       videoPreview.hidden = false;
