@@ -1712,3 +1712,82 @@
     right: 8px;
   }
 }
+
+
+/* Profile identity meta row: location on the left, social counts on the right. */
+.social-profile-meta-row {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 7px;
+}
+.social-profile-meta-row .social-profile-location {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--pl-color-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.social-profile-country-flag {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  font-size: 14px;
+  line-height: 1;
+}
+.social-profile-follow-stats {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.social-profile-follow-stats > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+}
+.social-profile-follow-stats strong {
+  color: var(--pl-color-ink);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.social-profile-follow-stats small {
+  color: var(--pl-color-muted);
+  font-size: 10px;
+}
+.social-profile-stats {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 14px;
+  padding: 0 12px;
+}
+.social-profile-stats > div {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 6px;
+}
+.social-profile-stats strong { font-size: 14px; }
+.social-profile-stats span { font-size: 11px; }
+@media (max-width: 767px) {
+  .social-profile-meta-row { gap: 6px; margin-top: 6px; }
+  .social-profile-meta-row .social-profile-location { gap: 4px; font-size: 10px; }
+  .social-profile-country-flag { font-size: 13px; }
+  .social-profile-follow-stats { gap: 8px; }
+  .social-profile-follow-stats > span { gap: 3px; }
+  .social-profile-follow-stats strong { font-size: 11px; }
+  .social-profile-follow-stats small { font-size: 9px; }
+  .social-profile-stats { margin-top: 12px; padding: 0 4px; }
+}
+@media (max-width: 380px) {
+  .social-profile-meta-row { flex-wrap: wrap; }
+  .social-profile-follow-stats { margin-left: auto; }
+}
