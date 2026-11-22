@@ -1806,9 +1806,9 @@
 .social-profile-story-plus {
   position: absolute;
   z-index: 5;
-  top: auto;
+  top: -4%;
   right: -4%;
-  bottom: -4%;
+  bottom: auto;
   display: grid;
   width: 28px;
   height: 28px;
