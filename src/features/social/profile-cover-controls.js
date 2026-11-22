@@ -2,12 +2,14 @@ import { renderIcon } from '../../design-system/icons.js';
 
 const COVER_DB = 'pluits-profile-media';
 const COVER_STORE = 'covers';
+const AVATAR_STORE = 'avatars';
 function openCoverDb() {
   return new Promise((resolve, reject) => {
     if (!globalThis.indexedDB) return reject(new Error('IndexedDB unavailable'));
-    const request = indexedDB.open(COVER_DB, 1);
+    const request = indexedDB.open(COVER_DB, 2);
     request.onupgradeneeded = () => {
       if (!request.result.objectStoreNames.contains(COVER_STORE)) request.result.createObjectStore(COVER_STORE, { keyPath: 'profileKey' });
+      if (!request.result.objectStoreNames.contains(AVATAR_STORE)) request.result.createObjectStore(AVATAR_STORE, { keyPath: 'profileKey' });
     };
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
@@ -42,6 +44,25 @@ async function removeCover(profileKey) {
   });
 }
 
+async function getAvatar(profileKey) {
+  const db = await openCoverDb();
+  return new Promise((resolve, reject) => {
+    const request = db.transaction(AVATAR_STORE, 'readonly').objectStore(AVATAR_STORE).get(profileKey);
+    request.onsuccess = () => { db.close(); resolve(request.result || null); };
+    request.onerror = () => { db.close(); reject(request.error); };
+  });
+}
+async function putAvatar(profileKey, blob) {
+  const db = await openCoverDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(AVATAR_STORE, 'readwrite');
+    tx.objectStore(AVATAR_STORE).put({ profileKey, blob, type: blob.type, updatedAt: Date.now() });
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onerror = () => { db.close(); reject(tx.error); };
+    tx.onabort = () => { db.close(); reject(tx.error); };
+  });
+}
+
 export function renderProfileCoverMenuTrigger() {
   return '<button type="button" class="social-profile-cover-menu-trigger" data-cover-menu-trigger aria-label="Pengaturan sampul profil" aria-haspopup="menu" aria-expanded="false" title="Pengaturan sampul profil">'+renderIcon('moreVertical')+'</button>';
 }
@@ -53,6 +74,7 @@ export function renderProfileCoverMenu() {
     + '<button type="button" role="menuitemcheckbox" data-cover-action="toggle" aria-checked="false"><span class="social-profile-cover-switch" aria-hidden="true"><span></span></span><span>Aktifkan sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="edit" disabled>'+renderIcon('image')+'<span>Edit sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="library">'+renderIcon('film')+'<span>Pustaka sampul</span></button>'
+    + '<button type="button" role="menuitem" data-cover-action="avatar">'+renderIcon('user')+'<span>Edit foto profil</span></button>'
     + '</div></div>';
 }
 
@@ -78,7 +100,34 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     + '</div>'
     + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-remove hidden>Hapus sampul</button></footer>'
     + '<div class="social-profile-cover-unsaved" data-cover-unsaved hidden><section role="alertdialog" aria-modal="true" aria-labelledby="cover-unsaved-title"><h3 id="cover-unsaved-title">Perubahan belum disimpan</h3><p>Apakah Anda ingin menyimpan perubahan sampul sebelum keluar?</p><div><button type="button" data-cover-keep-editing>Lanjut edit</button><button type="button" data-cover-discard>Buang perubahan</button><button type="button" data-cover-save-pending>Simpan perubahan</button></div></section></div></section>';
+  const avatarInput = document.createElement('input');
+  avatarInput.type = 'file';
+  avatarInput.accept = 'image/jpeg,image/png,image/webp,image/gif';
+  avatarInput.setAttribute('aria-label', 'Pilih foto profil');
+  avatarInput.hidden = true;
+  avatarInput.dataset.profileAvatarFile = '';
+  card.append(avatarInput);
   card.append(dialog);
+  let avatarObjectUrl = '';
+  const applyAvatar = blob => {
+    if (avatarObjectUrl) URL.revokeObjectURL(avatarObjectUrl);
+    avatarObjectUrl = URL.createObjectURL(blob);
+    const avatar = card.querySelector('.social-profile-avatar');
+    if (!avatar) return;
+    avatar.querySelector('.social-profile-avatar-placeholder')?.remove();
+    let image = avatar.querySelector('[data-profile-avatar-image]');
+    if (!image) {
+      image = document.createElement('img');
+      image.dataset.profileAvatarImage = '';
+      image.alt = 'Foto profil';
+      image.className = 'social-profile-avatar-image';
+      avatar.append(image);
+    }
+    image.src = avatarObjectUrl;
+  };
+  getAvatar(stableProfileKey).then(saved => {
+    if (isMounted && saved?.blob) applyAvatar(saved.blob);
+  }).catch(() => {});
 
   const editorView = dialog.querySelector('[data-cover-editor-view]');
   const libraryView = dialog.querySelector('[data-cover-library-view]');
@@ -330,6 +379,9 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       } else if (selected === 'library') {
         closeMenu();
         openDialog('library');
+      } else if (selected === 'avatar') {
+        closeMenu();
+        avatarInput.click();
       }
       return;
     }
@@ -453,6 +505,23 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       subtitle.textContent = 'Sampul belum dapat dihapus. Silakan coba lagi.';
     }
   };
+  const onAvatarChange = async () => {
+    const file = avatarInput.files?.[0];
+    if (!file) return;
+    if (!/^image\/(jpeg|png|webp|gif)$/.test(file.type) || file.size > 10 * 1024 * 1024) {
+      avatarInput.value = '';
+      subtitle.textContent = 'Pilih foto JPG, PNG, WebP, atau GIF maksimal 10 MB.';
+      return;
+    }
+    try {
+      await putAvatar(stableProfileKey, file);
+      applyAvatar(file);
+      avatarInput.value = '';
+    } catch {
+      subtitle.textContent = 'Foto profil belum dapat disimpan di perangkat ini. Coba lagi.';
+    }
+  };
+
   const onCoverHistoryPop = () => {
     if (dialog.hidden) {
       coverHistoryActive = false;
@@ -480,6 +549,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   cropStage.addEventListener('pointerup', onCropPointerUp);
   cropStage.addEventListener('pointercancel', onCropPointerUp);
   fileInput.addEventListener('change', onChange);
+  avatarInput.addEventListener('change', onAvatarChange);
   dialog.addEventListener('click', onSave);
   dialog.addEventListener('click', onRemove);
   root.addEventListener('keydown', onKeydown);
@@ -491,6 +561,8 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     cropStage.removeEventListener('pointerup', onCropPointerUp);
     cropStage.removeEventListener('pointercancel', onCropPointerUp);
     fileInput.removeEventListener('change', onChange);
+    avatarInput.removeEventListener('change', onAvatarChange);
+    if (avatarObjectUrl) URL.revokeObjectURL(avatarObjectUrl);
     dialog.removeEventListener('click', onSave);
     dialog.removeEventListener('click', onRemove);
     isMounted = false;
