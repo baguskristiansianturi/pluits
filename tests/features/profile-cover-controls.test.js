@@ -31,6 +31,13 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
   assert.match(styles, /social-profile-cover-menu-wrap \{ top: 14px; right: 0; \}/);
 });
 
+test('cover editor opens the native media picker from an explicit mobile-friendly button', () => {
+  assert.match(moduleSource, /data-cover-browse/);
+  assert.match(moduleSource, /data-cover-file hidden/);
+  assert.match(moduleSource, /browseButton && dialog\.contains\(browseButton\)\) \{ fileInput\.click\(\); return; \}/);
+  assert.match(styles, /\.social-profile-cover-browse/);
+});
+
 test('cover editor accepts image or video media and limits video duration to ten seconds', () => {
   assert.match(moduleSource, /data-cover-file-preview/);
   assert.match(moduleSource, /data-cover-video-preview/);
