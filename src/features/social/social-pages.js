@@ -92,7 +92,7 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-blog" aria-labelledby="profile-tab-blog" data-profile-panel="blog" hidden>'+emptyPanel('Belum ada Blog','Artikel blog yang dipublikasikan akan tampil di sini.')+'</section>'
   +businessPanels()
   +'</section>';
- root.innerHTML='<div class="pl-page-shell social-shell">'+renderPageHeader({brandHref:routeHref('home'),label:'PLUITS — Profil',rightContent:'<div class="social-header-tools"><span>Profil</span>'+(guestPreview?'<a href="'+routeHref('login')+'">Masuk</a>':'<a href="'+routeHref('settings')+'">Pengaturan</a>')+'</div>',className:'social-header'})+'<main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
+ root.innerHTML='<div class="pl-page-shell social-shell social-profile-shell">'+renderPageHeader({brandHref:routeHref('home'),label:'PLUITS — Profil',rightContent:'<div class="social-header-tools"><span>Profil</span>'+(guestPreview?'<a href="'+routeHref('login')+'">Masuk</a>':'<a href="'+routeHref('settings')+'">Pengaturan</a>')+'</div>',className:'social-header'})+'<main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
  const controller=new AbortController();
  root.addEventListener('click',event=>{
   const tab=event.target.closest('[data-profile-tab]');
