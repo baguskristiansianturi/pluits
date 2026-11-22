@@ -426,10 +426,15 @@
   background: rgba(208,255,246,.26);
   filter: blur(30px);
 }
+.social-profile-cover-region {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  min-width: 0;
+}
 .social-profile-identity-row {
   position: relative;
   z-index: 2;
-  grid-column: 1;
+  grid-column: 1 / -1;
   grid-row: 2;
   display: grid;
   grid-template-columns: 124px minmax(0, 1fr);
