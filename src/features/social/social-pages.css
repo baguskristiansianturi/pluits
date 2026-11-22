@@ -2036,3 +2036,22 @@
   object-fit: cover;
   border-radius: inherit;
 }
+
+
+/* Profile avatar and cover edge: quiet, neutral finish that blends into the page. */
+.social-profile-page .social-profile-card .social-profile-avatar::after {
+  inset: -1px;
+  border: 1px solid rgba(24, 39, 54, .14);
+  background: none;
+  box-shadow: 0 1px 5px rgba(15, 28, 42, .08);
+}
+
+.social-profile-page .social-profile-card > .social-profile-cover-region > .social-profile-cover::after {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 48%,
+    rgba(0, 0, 0, .12) 72%,
+    rgba(255, 255, 255, .42) 91%,
+    #fff 100%
+  );
+}
