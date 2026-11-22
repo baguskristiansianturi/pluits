@@ -10,7 +10,8 @@ test('profile cover menu contains only the three requested controls', () => {
   for (const action of ['toggle', 'edit', 'library']) {
     assert.ok(moduleSource.includes('data-cover-action="' + action + '"'));
   }
-  assert.equal((moduleSource.match(/data-cover-action="/g) || []).length, 3);
+  const menuMarkup = moduleSource.slice(moduleSource.indexOf('export function renderProfileCoverMenu()'), moduleSource.indexOf('export function mountProfileCoverControls'));
+  assert.equal((menuMarkup.match(/data-cover-action="/g) || []).length, 3);
   assert.match(moduleSource, /Aktifkan sampul/);
   assert.match(moduleSource, /Edit sampul/);
   assert.match(moduleSource, /Pustaka sampul/);
