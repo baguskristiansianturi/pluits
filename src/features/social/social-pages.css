@@ -906,3 +906,18 @@
 .social-profile-cover-file-input{position:absolute;inset:0;width:100%;height:100%;max-width:none!important;opacity:0;cursor:pointer}
 .social-profile-cover-crop-stage:focus-visible{outline:2px solid var(--pl-color-brand);outline-offset:3px}
 @media(max-width:560px){.social-profile-cover-dialog{padding:10px}.social-profile-cover-dialog-panel{padding:16px}.social-profile-cover-crop-stage{border-radius:9px}}
+
+/* Cover editor: centered modal on every viewport, with a reliably tappable native picker. */
+.social-profile-cover-dialog{place-items:center;align-items:center;justify-items:center;overflow-y:auto;padding:16px;box-sizing:border-box}
+.social-profile-cover-dialog-panel{width:min(100%,440px);max-height:min(86vh,720px);max-height:min(86dvh,720px);overflow-y:auto;border-radius:18px}
+.social-profile-cover-browse{z-index:1;min-width:180px;min-height:44px}
+.social-profile-cover-file-input{position:absolute!important;inset:0!important;z-index:2!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;margin:0!important;padding:0!important;opacity:.001!important;font-size:16px!important;cursor:pointer!important;pointer-events:auto!important}
+.social-profile-cover-upload{gap:12px;padding:14px;cursor:default}
+.social-profile-cover-crop-stage{width:100%;aspect-ratio:4/1}
+.social-profile-cover-dialog-header{margin-bottom:14px}
+.social-profile-cover-dialog-header p{margin-top:3px;font-size:11px}
+.social-profile-cover-dialog-actions{margin-top:14px}
+@media(max-width:767px){
+ .social-profile-cover-dialog{place-items:center;align-items:center;justify-items:center;padding:14px}
+ .social-profile-cover-dialog-panel{width:min(100%,440px);max-height:84vh;max-height:84dvh;padding:16px;border-radius:18px}
+}
