@@ -162,7 +162,7 @@
 
 
 /* SOCIAL-FEED-COMPOSER-001 — first-party text post creation. */
-.global-composer{margin:0 0 26px;padding:16px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-lg);background:var(--pl-color-surface);box-shadow:var(--pl-shadow-soft)}
+.global-composer{margin:0 0 26px;padding:16px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-lg);background:var(--pl-color-surface);box-shadow:var(--pl-shadow-card)}
 .global-composer-heading{display:flex;align-items:center;gap:11px;margin-bottom:14px}
 .global-composer-avatar{display:grid;width:40px;height:40px;flex:0 0 40px;place-items:center;border-radius:50%;background:var(--pl-color-brand-soft);color:var(--pl-color-brand);font-weight:800}
 .global-composer-heading>div{display:grid;gap:3px}
