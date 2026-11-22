@@ -112,3 +112,22 @@ test('legal policy content is separated into dedicated page folders',async()=>{
  assert.match(terms,/export const TERMS_POLICY/);
  assert.match(privacy,/export const PRIVACY_POLICY/);
 });
+
+test('profile settings shortcut opens the account settings center',async()=>{
+ const social=await readFile(new URL('../src/features/social/social-pages.js',import.meta.url),'utf8');
+ const css=await readFile(new URL('../src/features/social/social-pages.css',import.meta.url),'utf8');
+ assert.match(social,/class="social-profile-gear" href="\'+routeHref\('settings'\)/);
+ assert.match(social,/Buka Pusat Pengaturan Akun/);
+ assert.match(css,/\.social-profile-card > \.social-profile-gear/);
+});
+test('account settings include privacy, display name and username controls',async()=>{
+ const social=await readFile(new URL('../src/features/social/social-pages.js',import.meta.url),'utf8');
+ assert.match(social,/id:'privacy',label:'Privasi'/);
+ assert.match(social,/value="public"/);
+ assert.match(social,/value="private"/);
+ assert.match(social,/value="friends"/);
+ assert.match(social,/id:'displayName',label:'Nama Profil'/);
+ assert.match(social,/id:'username',label:'Nama Pengguna'/);
+ assert.match(social,/pluits:account-settings:v1/);
+ assert.match(social,/\^\[a-z0-9\.\_\]\{3,30\}\$/);
+});
