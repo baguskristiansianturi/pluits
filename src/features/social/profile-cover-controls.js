@@ -68,8 +68,8 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   dialog.innerHTML = '<section class="social-profile-cover-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="profile-cover-dialog-title">'
     + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Edit sampul</h2><p data-cover-dialog-subtitle>Pilih foto atau video.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
     + '<div data-cover-editor-view><div class="social-profile-cover-editor">'
-    + '<div class="social-profile-cover-upload"><div data-cover-upload-prompt>'+renderIcon('image')+'<strong>Pilih foto atau video</strong></div><label class="social-profile-cover-browse" data-cover-browse>Pilih foto atau video<input class="social-profile-cover-file-input" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.mp4,.webm" aria-label="Pilih foto atau video sampul" data-cover-file></label><div class="social-profile-cover-crop-stage" data-cover-crop-stage hidden><img data-cover-image-crop alt="Pratinjau posisi foto sampul" draggable="false"></div><video data-cover-video-preview muted playsinline controls hidden></video></div>'
-    + '</div><p class="social-profile-cover-dialog-note"></p></div>'
+    + '<div class="social-profile-cover-upload"><label class="social-profile-cover-browse" data-cover-browse>Pilih foto atau video<input class="social-profile-cover-file-input" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.mp4,.webm" aria-label="Pilih foto atau video sampul" data-cover-file></label><div class="social-profile-cover-crop-stage" data-cover-crop-stage hidden><img data-cover-image-crop alt="Pratinjau posisi foto sampul" draggable="false"></div><video data-cover-video-preview muted playsinline controls hidden></video></div>'
+    + '</div></div>'
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
     + '</div>'
@@ -81,7 +81,6 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   const title = dialog.querySelector('#profile-cover-dialog-title');
   const subtitle = dialog.querySelector('[data-cover-dialog-subtitle]');
   const fileInput = dialog.querySelector('[data-cover-file]');
-  const uploadPrompt = dialog.querySelector('[data-cover-upload-prompt]');
   const cropStage = dialog.querySelector('[data-cover-crop-stage]');
   const cropImage = dialog.querySelector('[data-cover-image-crop]');
   const videoPreview = dialog.querySelector('[data-cover-video-preview]');
@@ -173,7 +172,6 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     saveButton.disabled = false;
     const currentIsVideo = currentMedia?.tagName === 'VIDEO';
     cropStage.hidden = !currentMedia || currentIsVideo;
-    uploadPrompt.hidden = !!currentMedia;
     if (currentMedia && currentIsVideo) {
       videoPreview.hidden = false;
       videoPreview.src = currentMedia.currentSrc || currentMedia.src;
@@ -340,7 +338,6 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       if (pendingObjectUrl) { URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = ''; }
       fileInput.value = '';
       cropStage.hidden = true; cropImage.removeAttribute('src');
-      uploadPrompt.hidden = false;
       videoPreview.pause(); videoPreview.removeAttribute('src'); videoPreview.load(); videoPreview.hidden = true;
       removeButton.hidden = true;
       removeButton.disabled = false;
