@@ -2164,3 +2164,11 @@
     height: 86px;
   }
 }
+
+
+/* Profile identity alignment: move name, username, and location 5px left on mobile. */
+@media (max-width: 767px) {
+  .social-profile-page .social-profile-card .social-profile-identity-row .social-profile-identity {
+    transform: translateX(-5px);
+  }
+}
