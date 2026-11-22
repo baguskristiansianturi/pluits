@@ -68,7 +68,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   dialog.innerHTML = '<section class="social-profile-cover-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="profile-cover-dialog-title">'
     + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Atur sampul profil</h2><p data-cover-dialog-subtitle>Sesuaikan tampilan sampul profil Anda.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
     + '<div data-cover-editor-view><div class="social-profile-cover-editor">'
-    + '<label class="social-profile-cover-upload">'+renderIcon('image')+'<strong>Pilih gambar atau video sampul</strong><small>Gambar maksimal 10 MB · video maksimal 10 detik</small><img data-cover-file-preview alt="" hidden><video data-cover-video-preview muted playsinline controls hidden></video><input type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" data-cover-file></label>'
+    + '<div class="social-profile-cover-upload">'+renderIcon('image')+'<strong>Pilih gambar atau video sampul</strong><small>JPG, PNG, WebP · MP4/WebM</small><button type="button" class="social-profile-cover-browse" data-cover-browse>Pilih foto atau video</button><img data-cover-file-preview alt="" hidden><video data-cover-video-preview muted playsinline controls hidden></video><input type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" data-cover-file hidden></div>'
     + '</div><p class="social-profile-cover-dialog-note">Sampul disimpan di perangkat ini. Sinkronisasi ke akun dan perangkat lain memerlukan layanan media PLUITS.</p></div>'
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
@@ -167,6 +167,8 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   };
 
   const onClick = event => {
+    const browseButton = event.target.closest('[data-cover-browse]');
+    if (browseButton && dialog.contains(browseButton)) { fileInput.click(); return; }
     const menuTrigger = event.target.closest('[data-cover-menu-trigger]');
     if (menuTrigger && card.contains(menuTrigger)) {
       const expanded = trigger.getAttribute('aria-expanded') === 'true';
