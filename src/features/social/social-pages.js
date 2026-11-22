@@ -70,6 +70,7 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
  const profileContent='<section class="social-profile-page">'
   +'<section class="social-profile-card" aria-label="Identitas profil">'
   +renderProfileCoverMenu()
+  +'<a class="social-profile-gear" href="'+routeHref('settings')+'" aria-label="Buka Pusat Pengaturan Akun" title="Pusat Pengaturan Akun">'+renderIcon('settings')+'</a>'
   +'<div class="social-profile-cover"><span class="social-profile-cover-label">PLUITS · PROFILE</span><span class="social-profile-cover-glow" aria-hidden="true"></span></div>'
   +'<div class="social-profile-identity-row"><div class="social-profile-avatar-wrap"><div class="social-profile-avatar">'+initial+'</div></div>'
   +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p><div class="social-account-line"><span class="social-account-badge is-'+accountLevel+'">'+badgeLabel+'</span>'+(accountLevel==='regular'&&verified?'<span class="social-account-verified" role="img" aria-label="Terverifikasi" title="Terverifikasi"><svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 1.4 12 3l2.6-.1 1 2.4 2.2 1.4-.7 2.5.7 2.5-2.2 1.4-1 2.4-2.6-.1-2 1.6-2-1.6-2.6.1-1-2.4-2.2-1.4.7-2.5-.7-2.5 2.2-1.4 1-2.4 2.6.1L10 1.4Z"/><path d="m6.5 10 2.2 2.2 4.8-4.8" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>':'')+(accountLevel==='regular'?'<a class="social-account-upgrade" href="'+routeHref('settings')+'">Upgrade</a>':'')+'</div><p class="social-profile-bio">'+bio+'</p>'+(location?'<span class="social-profile-location">'+renderIcon('mapPin')+location+'</span>':'')+(profileSetupMode?'<span class="social-profile-preview-label">Penyiapan profil pribadi · perubahan tampilan belum tersimpan ke akun</span>':'')+'</div></div>'
@@ -151,46 +152,97 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
 export function mountSettingsPage({root,user=null,onSignOut}={}) {
  const safe=value=>String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  const email=safe(user?.email||'Email tidak tersedia');
+ const storageKey='pluits:account-settings:v1';
+ const readSettings=()=>{
+  try{return JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch{return {};}
+ };
+ const saved=readSettings();
+ const initialName=String(saved.displayName||user?.user_metadata?.display_name||user?.user_metadata?.full_name||user?.user_metadata?.name||'');
+ const initialUsername=String(saved.username||user?.user_metadata?.username||'');
+ const initialPrivacy=['public','private','friends'].includes(saved.privacy)?saved.privacy:'public';
  const sections=[
-  {id:'account',label:'Akun',icon:'user',title:'Akun & keamanan',desc:'Informasi akun yang digunakan untuk masuk ke PLUITS.'},
-  {id:'privacy',label:'Privasi',icon:'lock',title:'Privasi & visibilitas',desc:'Kontrol profil publik dan bagaimana orang menemukan Anda.'},
+  {id:'privacy',label:'Privasi',icon:'lock',title:'Privasi profil',desc:'Tentukan siapa yang dapat melihat profil dan aktivitas publik Anda.'},
+  {id:'displayName',label:'Nama Profil',icon:'user',title:'Atur nama profil',desc:'Nama yang akan ditampilkan pada halaman profil Anda.'},
+  {id:'username',label:'Nama Pengguna',icon:'atSign',title:'Atur nama pengguna',desc:'Nama unik yang digunakan sebagai identitas @username Anda.'},
+  {id:'account',label:'Akun',icon:'mail',title:'Akun & keamanan',desc:'Informasi akun yang digunakan untuk masuk ke PLUITS.'},
   {id:'notifications',label:'Notifikasi',icon:'bell',title:'Notifikasi',desc:'Preferensi pemberitahuan dari aktivitas PLUITS.'},
-  {id:'cover',label:'Tema Profil',icon:'image',title:'Tema & sampul profil',desc:'Pratinjau pilihan tampilan profil dan efek visual.'},
+  {id:'cover',label:'Tema Profil',icon:'image',title:'Tema & sampul profil',desc:'Pengaturan tampilan dan sampul profil Anda.'},
   {id:'app',label:'Aplikasi',icon:'book',title:'Preferensi aplikasi',desc:'Pengaturan pengalaman penggunaan aplikasi PLUITS.'}
  ];
- let active='account';
+ let active='privacy';
+ const renderField=(label,id,value,hint,maxlength=40)=>'<label class="social-settings-field" for="'+id+'"><span>'+label+'</span><input id="'+id+'" name="'+id+'" type="text" value="'+safe(value)+'" maxlength="'+maxlength+'" autocomplete="off" /><small>'+hint+'</small></label>';
+ const localNote='<div class="social-settings-note">Mode pratinjau frontend: perubahan saat ini disimpan di browser/perangkat ini. Pengaturan belum disinkronkan ke server dan belum menjadi aturan akses privasi lintas pengguna.</div>';
  const render=()=>{
   const selected=sections.find(item=>item.id===active)||sections[0];
-  const detail=active==='account'
-   ? '<div class="social-settings-detail-row"><span>Email akun</span><strong>'+email+'</strong></div><div class="social-settings-detail-row"><span>Metode masuk</span><strong>Email & kata sandi</strong></div><div class="social-settings-note">Perubahan email dan kata sandi dikelola melalui alur keamanan akun. Kami tidak menampilkan atau menyimpan kata sandi di halaman ini.</div>'
-   : active==='privacy'
-   ? '<div class="social-settings-detail-row"><span>Visibilitas profil</span><strong>Pengaturan server belum tersedia</strong></div><div class="social-settings-note">Kontrol publik / privat belum diaktifkan karena belum ada penyimpanan preferensi privasi yang terhubung. Status profil tidak akan diubah hanya dari tampilan ini.</div>'
-   : active==='notifications'
-   ? '<div class="social-settings-detail-row"><span>Notifikasi aplikasi</span><strong>Belum terhubung</strong></div><div class="social-settings-note">Preferensi notifikasi akan tersedia setelah layanan notifikasi PLUITS diaktifkan.</div>'
-   : active==='cover'
-   ? '<div class="social-settings-detail-row"><span>Desain sampul profil</span><strong>Tetap tersimpan</strong></div><p class="social-settings-note">Desain sampul profil yang sudah tersedia tetap dipertahankan. Pratinjau Bubble Connections merupakan demo sementara dan saat ini tidak ditampilkan pada profil.</p>'
-   : '<div class="social-settings-detail-row"><span>Pengalaman aplikasi</span><strong>Versi aplikasi web</strong></div><div class="social-settings-note">PLUITS menggunakan tampilan aplikasi yang responsif. Pengaturan bahasa dan tampilan lanjutan belum diaktifkan.</div>';
-  root.innerHTML=shell('Pengaturan','Pusat pengaturan akun dan pengalaman aplikasi Anda.','profile',
-   '<section class="social-settings-layout"><nav class="social-settings-menu" role="tablist" aria-label="Kategori pengaturan">'+sections.map(item=>'<button type="button" role="tab" id="settings-tab-'+item.id+'" aria-controls="settings-panel-'+item.id+'" aria-selected="'+(active===item.id?'true':'false')+'" tabindex="'+(active===item.id?'0':'-1')+'" data-settings-tab="'+item.id+'" class="'+(active===item.id?'is-active':'')+'">'+renderIcon(item.icon)+'<span>'+item.label+'</span><b aria-hidden="true">›</b></button>').join('')+'</nav>'
-   +'<section class="social-settings-panel" role="tabpanel" id="settings-panel-'+selected.id+'" aria-labelledby="settings-tab-'+selected.id+'"><div class="social-settings-panel-heading"><span class="social-kicker">PENGATURAN PLUITS</span><h2>'+selected.title+'</h2><p>'+selected.desc+'</p></div>'+detail+'</section>'
+  let detail='';
+  if(active==='privacy'){
+   detail='<form class="social-settings-form" data-settings-form="privacy"><fieldset class="social-settings-choice-group"><legend>Siapa yang dapat melihat profil Anda?</legend>'
+    +'<label class="social-settings-choice"><input type="radio" name="privacy" value="public" '+(saved.privacy==='public'||!saved.privacy?'checked':'')+' /><span><strong>Publik</strong><small>Semua orang dapat melihat profil dan konten yang Anda bagikan secara publik.</small></span></label>'
+    +'<label class="social-settings-choice"><input type="radio" name="privacy" value="private" '+(saved.privacy==='private'?'checked':'')+' /><span><strong>Privat</strong><small>Profil dibatasi; orang lain perlu mendapatkan persetujuan untuk mengikuti Anda.</small></span></label>'
+    +'<label class="social-settings-choice"><input type="radio" name="privacy" value="friends" '+(saved.privacy==='friends'?'checked':'')+' /><span><strong>Hanya Teman</strong><small>Profil dan konten dibatasi untuk akun yang sudah menjadi teman Anda.</small></span></label>'
+    +'</fieldset><button class="social-settings-save" type="submit">Simpan pengaturan privasi</button></form>'+localNote;
+  }else if(active==='displayName'){
+   detail='<form class="social-settings-form" data-settings-form="displayName">'+renderField('Nama profil','settings-display-name',initialName,'Nama ini tampil sebagai nama utama di profil.',60)+'<button class="social-settings-save" type="submit">Simpan nama profil</button></form>'+localNote;
+  }else if(active==='username'){
+   detail='<form class="social-settings-form" data-settings-form="username">'+renderField('Nama pengguna','settings-username',initialUsername,'Gunakan huruf kecil, angka, titik, atau garis bawah. Tanpa simbol @.',30)+'<div class="social-settings-username-preview">PLUITS / <strong>@<span data-username-preview>'+safe(initialUsername||'nama_pengguna')+'</span></strong></div><button class="social-settings-save" type="submit">Simpan nama pengguna</button></form>'+localNote;
+  }else if(active==='account'){
+   detail='<div class="social-settings-detail-row"><span>Email akun</span><strong>'+email+'</strong></div><div class="social-settings-detail-row"><span>Metode masuk</span><strong>Email & kata sandi</strong></div><div class="social-settings-note">Perubahan email dan kata sandi dikelola melalui alur keamanan akun. Kata sandi tidak ditampilkan di halaman ini.</div>';
+  }else if(active==='notifications'){
+   detail='<div class="social-settings-detail-row"><span>Notifikasi aplikasi</span><strong>Belum terhubung</strong></div><div class="social-settings-note">Preferensi notifikasi akan tersedia setelah layanan notifikasi PLUITS diaktifkan.</div>';
+  }else if(active==='cover'){
+   detail='<div class="social-settings-detail-row"><span>Desain sampul profil</span><strong>Tetap tersedia</strong></div><div class="social-settings-note">Pengaturan sampul tetap dikelola melalui kontrol sampul pada halaman profil.</div>';
+  }else{
+   detail='<div class="social-settings-detail-row"><span>Pengalaman aplikasi</span><strong>Versi aplikasi web</strong></div><div class="social-settings-note">Pengaturan bahasa dan tampilan lanjutan belum diaktifkan.</div>';
+  }
+  root.innerHTML=shell('Pengaturan','Pusat pengaturan akun dan pengalaman Anda di PLUITS.','profile',
+   '<section class="social-settings-layout"><nav class="social-settings-menu" role="tablist" aria-label="Pusat Pengaturan Akun">'+sections.map(item=>'<button type="button" role="tab" id="settings-tab-'+item.id+'" aria-controls="settings-panel-'+item.id+'" aria-selected="'+(active===item.id?'true':'false')+'" tabindex="'+(active===item.id?'0':'-1')+'" data-settings-tab="'+item.id+'" class="'+(active===item.id?'is-active':'')+'">'+renderIcon(item.icon)+'<span>'+item.label+'</span><b aria-hidden="true">›</b></button>').join('')+'</nav>'
+   +'<section class="social-settings-panel" role="tabpanel" id="settings-panel-'+selected.id+'" aria-labelledby="settings-tab-'+selected.id+'"><div class="social-settings-panel-heading"><span class="social-kicker">PUSAT PENGATURAN AKUN</span><h2>'+selected.title+'</h2><p>'+selected.desc+'</p></div>'+detail+'</section>'
    +'<section class="social-settings-account"><div><strong>Keluar dari PLUITS</strong><p>Akhiri sesi akun pada perangkat ini.</p></div><button type="button" class="social-signout-button" data-sign-out>'+renderIcon('logout')+'<span>Keluar</span></button></section>'
-   +'<a class="social-settings-back" href="'+routeHref('profile')+'">Lihat profil saya</a></section>');
+   +'<a class="social-settings-back" href="'+routeHref('profile')+'">Kembali ke profil</a></section>');
  };
+ const persist=()=>{try{localStorage.setItem(storageKey,JSON.stringify(saved));return true;}catch{return false;}};
  render();
  root.addEventListener('keydown',event=>{
   const tab=event.target.closest('[data-settings-tab]');
-  if(!tab||!root.contains(tab))return;
-  const current=sections.findIndex(item=>item.id===tab.dataset.settingsTab);
-  let next=current;
-  if(event.key==='ArrowDown'||event.key==='ArrowRight')next=(current+1)%sections.length;
-  else if(event.key==='ArrowUp'||event.key==='ArrowLeft')next=(current-1+sections.length)%sections.length;
-  else if(event.key==='Home')next=0;
-  else if(event.key==='End')next=sections.length-1;
-  else return;
+  if(tab&&root.contains(tab)){
+   const current=sections.findIndex(item=>item.id===tab.dataset.settingsTab);
+   let next=current;
+   if(event.key==='ArrowDown'||event.key==='ArrowRight')next=(current+1)%sections.length;
+   else if(event.key==='ArrowUp'||event.key==='ArrowLeft')next=(current-1+sections.length)%sections.length;
+   else if(event.key==='Home')next=0;
+   else if(event.key==='End')next=sections.length-1;
+   else return;
+   event.preventDefault();active=sections[next].id;render();root.querySelector('[data-settings-tab="'+active+'"]')?.focus();
+   return;
+  }
+  if(event.target?.id==='settings-username'&&event.target.matches('input')){
+   const preview=root.querySelector('[data-username-preview]');if(preview)preview.textContent=event.target.value.toLowerCase().replace(/[^a-z0-9._]/g,'');
+  }
+ });
+ root.addEventListener('input',event=>{
+  if(event.target?.id==='settings-username'){
+   const preview=root.querySelector('[data-username-preview]');if(preview)preview.textContent=event.target.value.toLowerCase().replace(/[^a-z0-9._]/g,'');
+  }
+ });
+ root.addEventListener('submit',event=>{
+  const form=event.target.closest('[data-settings-form]');
+  if(!form||!root.contains(form))return;
   event.preventDefault();
-  active=sections[next].id;
-  render();
-  root.querySelector('[data-settings-tab="'+active+'"]')?.focus();
+  const type=form.dataset.settingsForm;
+  if(type==='privacy'){
+   saved.privacy=form.querySelector('input[name="privacy"]:checked')?.value||'public';
+  }else if(type==='displayName'){
+   const value=form.querySelector('#settings-display-name')?.value.trim()||'';
+   if(!value){window.alert('Masukkan nama profil terlebih dahulu.');return;}
+   saved.displayName=value;
+  }else if(type==='username'){
+   const value=(form.querySelector('#settings-username')?.value||'').trim().toLowerCase();
+   if(!/^[a-z0-9._]{3,30}$/.test(value)){window.alert('Nama pengguna harus 3–30 karakter dan hanya boleh berisi huruf kecil, angka, titik, atau garis bawah.');return;}
+   saved.username=value;
+  }
+  if(!persist()){window.alert('Pengaturan tidak dapat disimpan di browser ini.');return;}
+  const button=form.querySelector('button[type="submit"]');
+  if(button){const original=button.textContent;button.textContent='Tersimpan di perangkat ini';button.disabled=true;window.setTimeout(()=>{if(button.isConnected){button.textContent=original;button.disabled=false;}},1800);}
  });
  root.addEventListener('click',async event=>{
   const tab=event.target.closest('[data-settings-tab]');
