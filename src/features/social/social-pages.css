@@ -1208,3 +1208,91 @@
 .social-profile-cover-picker .social-profile-cover-browse { position:relative; z-index:1; pointer-events:none; }
 .social-profile-cover-picker .social-profile-cover-file-input { position:absolute!important; top:50%!important; left:50%!important; right:auto!important; bottom:auto!important; z-index:2!important; display:block!important; width:44px!important; height:44px!important; min-height:44px!important; max-width:44px!important; margin:0!important; padding:0!important; opacity:0!important; visibility:visible!important; clip:auto!important; clip-path:none!important; overflow:hidden!important; border:0!important; border-radius:50%!important; background:transparent!important; transform:translate(-50%,-50%)!important; cursor:pointer!important; pointer-events:auto!important; touch-action:manipulation; }
 .social-profile-cover-picker .social-profile-cover-file-input:focus-visible { outline:2px solid var(--pl-color-brand)!important; outline-offset:4px!important; opacity:0!important; }
+
+
+/* Large cover-first picker: the whole cover canvas is the native file-input target. */
+.social-profile-cover-upload {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.social-profile-cover-picker {
+  position: relative !important;
+  display: grid;
+  width: 100%;
+  min-height: 150px;
+  aspect-ratio: 4 / 1;
+  place-items: center;
+  overflow: hidden;
+  border: 1px dashed rgba(8, 173, 158, .48);
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at 18% 20%, rgba(255,255,255,.96), transparent 42%),
+    linear-gradient(120deg, rgba(220,239,235,.92), rgba(216,229,237,.92) 55%, rgba(233,231,223,.92));
+  color: var(--pl-color-brand);
+  cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.social-profile-cover-picker:hover {
+  border-color: var(--pl-color-brand);
+  box-shadow: 0 8px 26px rgba(8, 92, 100, .10);
+}
+.social-profile-cover-picker:active { transform: scale(.995); }
+.social-profile-cover-picker-art {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  padding: 18px;
+  color: rgba(23, 67, 76, .76);
+  text-align: center;
+  pointer-events: none;
+}
+.social-profile-cover-picker-art svg { width: 54px; height: 42px; }
+.social-profile-cover-picker-art strong {
+  color: var(--pl-color-ink);
+  font-size: 13px;
+  font-weight: 750;
+}
+.social-profile-cover-picker-art small {
+  color: var(--pl-color-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.social-profile-cover-picker .social-profile-cover-file-input {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  visibility: visible !important;
+  border: 0 !important;
+  border-radius: inherit !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+}
+.social-profile-cover-picker[hidden] { display: none !important; }
+.social-profile-cover-crop-stage {
+  width: 100%;
+  min-height: 150px;
+  aspect-ratio: 4 / 1;
+  border-radius: 16px;
+}
+.social-profile-cover-format-note {
+  max-width: none;
+  margin: 0;
+  text-align: center;
+}
+@media (max-width: 767px) {
+  .social-profile-cover-picker { min-height: 142px; border-radius: 14px; }
+  .social-profile-cover-crop-stage { min-height: 142px; border-radius: 14px; }
+  .social-profile-cover-picker-art svg { width: 48px; height: 36px; }
+}
