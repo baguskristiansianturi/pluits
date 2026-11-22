@@ -23,7 +23,7 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
   assert.match(moduleSource, /role="menuitemcheckbox"/);
   assert.match(moduleSource, /aria-checked="false"/);
   assert.match(moduleSource, /editAction\.disabled = !coverEnabled/);
-  assert.match(moduleSource, /selected === 'edit' && coverEnabled/);
+  assert.match(moduleSource, /selected === 'edit' && draftCoverEnabled/);
   assert.match(styles, /\.social-profile-cover-switch/);
   assert.match(styles, /background: #2fa66a/);
   assert.match(styles, /\.social-profile-card\.is-cover-disabled \.social-profile-cover-image/);
