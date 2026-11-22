@@ -188,6 +188,7 @@ export function mountProfileCoverControls({ root } = {}) {
     dialog.removeEventListener('change', onChange);
     dialog.removeEventListener('click', onSave);
     root.removeEventListener('keydown', onKeydown);
+    if (menuCloseTimer) clearTimeout(menuCloseTimer);
     if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
     if (selectedObjectUrl) URL.revokeObjectURL(selectedObjectUrl);
     dialog.remove();
