@@ -1791,3 +1791,22 @@
   .social-profile-meta-row { flex-wrap: wrap; }
   .social-profile-follow-stats { margin-left: auto; }
 }
+
+
+/* Story creation shortcut integrated into the profile avatar ring. */
+.social-profile-avatar-wrap{position:relative;width:max-content;isolation:isolate}
+.social-profile-avatar-wrap .social-profile-avatar{position:relative;z-index:1;border:3px solid #fff;box-sizing:border-box}
+.social-profile-story-add{position:absolute;z-index:3;top:-1px;right:-2px;display:grid;width:29px;height:29px;place-items:center;padding:0;border:3px solid var(--pl-color-surface);border-radius:50%;background:var(--pl-color-brand);color:#fff;box-shadow:0 1px 5px rgba(18,42,62,.18);cursor:pointer}
+.social-profile-story-add::before{position:absolute;inset:-7px;z-index:-1;border:2px solid #fff;border-left-color:transparent;border-bottom-color:transparent;border-radius:50%;content:"";transform:rotate(12deg)}
+.social-profile-story-add svg{display:block;width:17px;height:17px}
+.social-profile-story-add:focus-visible{outline:2px solid var(--pl-color-brand);outline-offset:3px}
+.social-profile-story-file{display:none!important}
+.social-story-preview-overlay{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:18px;background:rgba(12,25,38,.66);backdrop-filter:blur(8px)}
+.social-story-preview-dialog{position:relative;width:min(100%,390px);max-height:min(88dvh,720px);overflow:auto;padding:22px;border:1px solid rgba(255,255,255,.7);border-radius:22px;background:var(--pl-color-surface);box-shadow:0 24px 80px rgba(0,0,0,.25)}
+.social-story-preview-dialog h2{margin:0 42px 16px 0;color:var(--pl-color-ink);font-size:19px}
+.social-story-preview-dialog p{margin:14px 0;color:var(--pl-color-muted);font-size:11px;line-height:1.6}
+.social-story-preview-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border:0;border-radius:50%;background:var(--pl-color-canvas);color:var(--pl-color-ink);font-size:23px;cursor:pointer}
+.social-story-preview-media{display:grid;min-height:180px;max-height:54dvh;place-items:center;overflow:hidden;border-radius:14px;background:#111}
+.social-story-preview-media img,.social-story-preview-media video{display:block;max-width:100%;max-height:54dvh;object-fit:contain}
+.social-story-preview-done{width:100%;min-height:44px;border:0;border-radius:11px;background:var(--pl-color-ink);color:#fff;font:inherit;font-size:12px;font-weight:750;cursor:pointer}
+@media(prefers-reduced-motion:no-preference){.social-profile-story-add{transition:transform .18s ease,background .18s ease}.social-profile-story-add:hover{transform:scale(1.06);background:var(--pl-color-ink)}}
