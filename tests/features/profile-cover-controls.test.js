@@ -35,7 +35,8 @@ test('cover editor opens the native media picker from an explicit mobile-friendl
   assert.match(moduleSource, /<label class="social-profile-cover-browse" data-cover-browse>Pilih foto atau video<input class="social-profile-cover-file-input" type="file"/);
   assert.doesNotMatch(moduleSource, /data-cover-file hidden/);
   assert.doesNotMatch(moduleSource, /fileInput\.showPicker|fileInput\.click\(\)/);
-  assert.match(moduleSource, /dialog\.addEventListener\('change', onChange\)/);
+  assert.match(moduleSource, /fileInput\.addEventListener\('change', onChange\)/);
+  assert.match(moduleSource, /fileInput\.removeEventListener\('change', onChange\)/);
   assert.match(styles, /\.social-profile-cover-browse[\s\S]*position: relative/);
   assert.match(styles, /\.social-profile-cover-file-input[\s\S]*opacity: 0/);
   assert.match(styles, /\.social-profile-cover-file-input[\s\S]*inset: 0/);
@@ -100,4 +101,13 @@ test('selecting a photo opens a draggable crop frame matching the live cover rat
   assert.match(moduleSource, /cropPosition = saved\.crop/);
   assert.match(styles, /\.social-profile-cover-crop-stage\{[\s\S]*touch-action:none/);
   assert.match(styles, /object-fit:cover/);
+});
+
+test('cover editor is centered on mobile and closes when the backdrop is tapped', () => {
+  assert.match(moduleSource, /if \(event\.target === dialog\) \{ closeDialog\(\); return; \}/);
+  assert.match(moduleSource, /fileInput\.value = ''/);
+  assert.match(styles, /\.social-profile-cover-dialog\{place-items:center/);
+  assert.match(styles, /@media\(max-width:767px\)\{[\\s\\S]*\.social-profile-cover-dialog\{place-items:center/);
+  assert.match(styles, /\.social-profile-cover-file-input\{[\\s\\S]*pointer-events:auto/);
+  assert.doesNotMatch(moduleSource, /Sinkronisasi ke akun dan perangkat lain memerlukan layanan media PLUITS/);
 });
