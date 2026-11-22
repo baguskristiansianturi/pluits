@@ -22,12 +22,12 @@ test('profile cover menu contains only the three requested controls', () => {
 test('cover switch is compact, accessible, and gates editing without collapsing the cover slot', () => {
   assert.match(moduleSource, /role="menuitemcheckbox"/);
   assert.match(moduleSource, /aria-checked="false"/);
-  assert.match(moduleSource, /editAction\.disabled = !coverEnabled/);
+  assert.match(moduleSource, /editAction\.disabled = !draftCoverEnabled/);
   assert.match(moduleSource, /selected === 'edit' && draftCoverEnabled/);
   assert.match(styles, /\.social-profile-cover-switch/);
   assert.match(styles, /background: #2fa66a/);
-  assert.match(styles, /\.social-profile-card\.is-cover-disabled \.social-profile-cover-image/);
-  assert.doesNotMatch(styles, /\.social-profile-card\.is-cover-hidden > \.social-profile-cover\s*\{\s*display:\s*none;/);
+  assert.match(styles, /\.social-profile-card\.is-cover-disabled \.social-profile-cover-image \{ display: none; \}/);
+  assert.match(styles, /padding-block-start: clamp\(40px, 9vw, 50px\)/);\n  assert.match(styles, /social-profile-cover-menu-wrap \{ top: 14px; right: 8px; \}/);\n  assert.match(styles, /background: transparent;\\s*border-color: transparent/);
 });
 
 test('cover editor previews uploaded images and the library is reserved for approved animations', () => {
