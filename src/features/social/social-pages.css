@@ -285,3 +285,49 @@
     padding-block-start: 0;
   }
 }
+
+
+/* Mobile profile rhythm: compact identity, balanced controls and clear section spacing. */
+@media (max-width: 767px) {
+  .social-profile-page { padding-top: 0; }
+  .social-profile-card {
+    grid-template-columns: 84px minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+    column-gap: 14px; row-gap: 0; padding: 0;
+  }
+  .social-profile-cover { min-height: 124px; border-radius: 16px; }
+  .social-profile-avatar-wrap {
+    align-items: flex-start; gap: 0; margin-top: -40px; padding-left: 7px;
+  }
+  .social-profile-avatar { width: 82px; height: 82px; font-size: 29px; }
+  .social-profile-identity {
+    align-self: start; min-width: 0; min-height: 0; padding: 7px 30px 0 0;
+  }
+  .social-profile-identity h1 { margin: 0 0 3px; font-size: 19px; line-height: 1.2; }
+  .social-profile-identity > p:not(.social-profile-bio) { font-size: 12px; line-height: 1.35; }
+  .social-profile-identity .social-account-line {
+    justify-content: flex-start; min-height: 18px; margin-top: 7px;
+  }
+  .social-profile-identity .social-account-badge { padding: 4px 8px; font-size: 10px; }
+  .social-profile-identity .social-account-upgrade { font-size: 10px; }
+  .social-profile-bio { margin-top: 6px; font-size: 12px; line-height: 1.45; }
+  .social-profile-preview-label { margin-top: 8px; padding: 5px 8px; font-size: 9px; }
+  .social-profile-stats { margin-top: 20px; padding: 0; gap: 8px; }
+  .social-profile-stats > div { gap: 5px; }
+  .social-profile-stats strong { font-size: 18px; }
+  .social-profile-stats span { font-size: 11px; }
+  .social-profile-actions { margin-top: 16px; gap: 10px; }
+  .social-profile-primary, .social-profile-secondary {
+    min-height: 44px; padding-inline: 10px; border-radius: 11px; font-size: 12px;
+  }
+  .social-profile-page .social-profile-tabs { margin-top: 22px; margin-bottom: 14px; }
+  .social-profile-tabs button { min-height: 50px; }
+  .social-profile-tab-panel .social-empty-panel { min-height: 148px; padding: 18px; }
+}
+@media (max-width: 380px) {
+  .social-profile-card { grid-template-columns: 76px minmax(0, 1fr); column-gap: 11px; }
+  .social-profile-avatar { width: 74px; height: 74px; font-size: 26px; }
+  .social-profile-identity { padding-right: 27px; }
+  .social-profile-identity h1 { font-size: 17px; }
+  .social-profile-actions { gap: 8px; }
+}
