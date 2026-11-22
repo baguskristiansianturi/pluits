@@ -21,11 +21,11 @@ async function getCover(profileKey) {
     request.onerror = () => { db.close(); reject(request.error); };
   });
 }
-async function putCover(profileKey, file) {
+async function putCover(profileKey, file, crop = { x: 50, y: 50 }) {
   const db = await openCoverDb();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(COVER_STORE, 'readwrite');
-    tx.objectStore(COVER_STORE).put({ profileKey, blob: file, type: file.type, name: file.name, updatedAt: Date.now() });
+    tx.objectStore(COVER_STORE).put({ profileKey, blob: file, type: file.type, name: file.name, crop, updatedAt: Date.now() });
     tx.oncomplete = () => { db.close(); resolve(); };
     tx.onerror = () => { db.close(); reject(tx.error); };
     tx.onabort = () => { db.close(); reject(tx.error); };
@@ -68,7 +68,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   dialog.innerHTML = '<section class="social-profile-cover-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="profile-cover-dialog-title">'
     + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Atur sampul profil</h2><p data-cover-dialog-subtitle>Sesuaikan tampilan sampul profil Anda.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
     + '<div data-cover-editor-view><div class="social-profile-cover-editor">'
-    + '<div class="social-profile-cover-upload">'+renderIcon('image')+'<strong>Pilih gambar atau video sampul</strong><small>JPG, PNG, WebP · MP4/WebM</small><label class="social-profile-cover-browse" data-cover-browse>Pilih foto atau video<input class="social-profile-cover-file-input" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.mp4,.webm" aria-label="Pilih foto atau video sampul" data-cover-file></label><img data-cover-file-preview alt="" hidden><video data-cover-video-preview muted playsinline controls hidden></video></div>'
+    + '<div class="social-profile-cover-upload"><div data-cover-upload-prompt>'+renderIcon('image')+'<strong>Pilih gambar atau video sampul</strong><small>JPG, PNG, WebP · MP4/WebM</small></div><label class="social-profile-cover-browse" data-cover-browse>Pilih foto atau video<input class="social-profile-cover-file-input" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.mp4,.webm" aria-label="Pilih foto atau video sampul" data-cover-file></label><div class="social-profile-cover-crop-stage" data-cover-crop-stage hidden><img data-cover-image-crop alt="Pratinjau posisi foto sampul" draggable="false"></div><video data-cover-video-preview muted playsinline controls hidden></video></div>'
     + '</div><p class="social-profile-cover-dialog-note">Sampul disimpan di perangkat ini. Sinkronisasi ke akun dan perangkat lain memerlukan layanan media PLUITS.</p></div>'
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
@@ -81,8 +81,12 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   const title = dialog.querySelector('#profile-cover-dialog-title');
   const subtitle = dialog.querySelector('[data-cover-dialog-subtitle]');
   const fileInput = dialog.querySelector('[data-cover-file]');
-  const filePreview = dialog.querySelector('[data-cover-file-preview]');
+  const uploadPrompt = dialog.querySelector('[data-cover-upload-prompt]');
+  const cropStage = dialog.querySelector('[data-cover-crop-stage]');
+  const cropImage = dialog.querySelector('[data-cover-image-crop]');
   const videoPreview = dialog.querySelector('[data-cover-video-preview]');
+  let cropPosition = { x: 50, y: 50 };
+  let cropPointer = null;
   const saveButton = dialog.querySelector('[data-cover-save]');
   const removeButton = dialog.querySelector('[data-cover-remove]');
   const toggleAction = menu.querySelector('[data-cover-action="toggle"]');
@@ -114,11 +118,12 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   let pendingObjectUrl = '';
   let selectedObjectUrl = '';
   let previousFocus = null;
-  const applyCoverMedia = (file, objectUrl) => {
+  const applyCoverMedia = (file, objectUrl, crop = { x: 50, y: 50 }) => {
     cover.querySelector('.social-profile-cover-image')?.remove();
     const isVideo = /^video\//.test(file?.type || '');
     const media = document.createElement(isVideo ? 'video' : 'img');
     media.className = 'social-profile-cover-image';
+    media.style.objectPosition = `${crop.x ?? 50}% ${crop.y ?? 50}%`;
     if (isVideo) {
       media.muted = true; media.loop = true; media.autoplay = true; media.playsInline = true;
       media.setAttribute('aria-label', 'Video sampul profil');
@@ -132,7 +137,8 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       const saved = await getCover(stableProfileKey);
       if (!isMounted || !saved?.blob) return;
       selectedObjectUrl = URL.createObjectURL(saved.blob);
-      applyCoverMedia(saved.blob, selectedObjectUrl);
+      cropPosition = saved.crop || { x: 50, y: 50 };
+      applyCoverMedia(saved.blob, selectedObjectUrl, cropPosition);
     } catch {
       if (isMounted) subtitle.textContent = 'Media sampul tersimpan di perangkat ini belum dapat dibaca.';
     }
@@ -158,12 +164,48 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     removeButton.hidden = library || !currentMedia;
     saveButton.disabled = false;
     const currentIsVideo = currentMedia?.tagName === 'VIDEO';
-    filePreview.hidden = !currentMedia || currentIsVideo;
-    videoPreview.hidden = !currentMedia || !currentIsVideo;
-    if (currentMedia && currentIsVideo) videoPreview.src = currentMedia.currentSrc || currentMedia.src;
-    else if (currentMedia) filePreview.src = currentMedia.src;
+    cropStage.hidden = !currentMedia || currentIsVideo;
+    uploadPrompt.hidden = !!currentMedia;
+    if (currentMedia && currentIsVideo) {
+      videoPreview.hidden = false;
+      videoPreview.src = currentMedia.currentSrc || currentMedia.src;
+    } else {
+      videoPreview.hidden = true;
+      videoPreview.removeAttribute('src');
+      if (currentMedia) {
+        cropPosition = { ...cropPosition };
+        cropImage.src = currentMedia.currentSrc || currentMedia.src;
+        cropImage.style.objectPosition = `${cropPosition.x}% ${cropPosition.y}%`;
+        cropStage.style.aspectRatio = `${cover.clientWidth} / ${cover.clientHeight}`;
+      }
+    }
     saveButton.hidden = library;
     dialog.querySelector('[data-cover-dismiss]').focus();
+  };
+
+  const updateCropPosition = () => { cropImage.style.objectPosition = `${cropPosition.x}% ${cropPosition.y}%`; };
+  const onCropPointerDown = event => {
+    if (cropStage.hidden || !cropImage.src) return;
+    const rect = cropStage.getBoundingClientRect();
+    const naturalWidth = cropImage.naturalWidth || rect.width;
+    const naturalHeight = cropImage.naturalHeight || rect.height;
+    const scale = Math.max(rect.width / naturalWidth, rect.height / naturalHeight);
+    cropPointer = { id: event.pointerId, x: event.clientX, y: event.clientY, cropX: cropPosition.x, cropY: cropPosition.y, overflowX: rect.width - naturalWidth * scale, overflowY: rect.height - naturalHeight * scale };
+    cropStage.classList.add('is-dragging');
+    cropStage.setPointerCapture?.(event.pointerId);
+    event.preventDefault();
+  };
+  const onCropPointerMove = event => {
+    if (!cropPointer || cropPointer.id !== event.pointerId) return;
+    if (cropPointer.overflowX) cropPosition.x = Math.max(0, Math.min(100, cropPointer.cropX + ((event.clientX - cropPointer.x) / cropPointer.overflowX) * 100));
+    if (cropPointer.overflowY) cropPosition.y = Math.max(0, Math.min(100, cropPointer.cropY + ((event.clientY - cropPointer.y) / cropPointer.overflowY) * 100));
+    updateCropPosition();
+    event.preventDefault();
+  };
+  const onCropPointerUp = event => {
+    if (!cropPointer || cropPointer.id !== event.pointerId) return;
+    cropPointer = null;
+    cropStage.classList.remove('is-dragging');
   };
 
   const onClick = event => {
@@ -224,8 +266,9 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
     pendingObjectUrl = URL.createObjectURL(file);
     if (isVideo) {
+      cropStage.hidden = true; uploadPrompt.hidden = false;
       saveButton.disabled = true;
-      filePreview.hidden = true; videoPreview.hidden = false; videoPreview.src = pendingObjectUrl;
+      videoPreview.hidden = false; videoPreview.src = pendingObjectUrl;
       videoPreview.onloadedmetadata = () => {
         if (!Number.isFinite(videoPreview.duration) || videoPreview.duration > 10) {
           URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = '';
@@ -240,10 +283,15 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       videoPreview.onerror = () => { saveButton.disabled = true; subtitle.textContent = 'Video tidak dapat dibaca. Pilih file MP4 atau WebM yang valid.'; };
       videoPreview.load();
     } else {
-      saveButton.disabled = false;
+      cropPosition = { x: 50, y: 50 };
       videoPreview.hidden = true; videoPreview.removeAttribute('src');
-      filePreview.src = pendingObjectUrl; filePreview.hidden = false;
-      subtitle.textContent = 'Pratinjau gambar siap. Tekan Simpan pratinjau untuk menerapkan.';
+      cropImage.src = pendingObjectUrl;
+      cropImage.style.objectPosition = '50% 50%';
+      cropStage.style.aspectRatio = `${cover.clientWidth} / ${cover.clientHeight}`;
+      cropStage.hidden = false;
+      uploadPrompt.hidden = true;
+      saveButton.disabled = false;
+      subtitle.textContent = 'Geser foto di dalam bingkai untuk mengatur bagian yang terlihat.';
     }
   };
   const onSave = async event => {
@@ -253,13 +301,15 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     saveButton.disabled = true;
     subtitle.textContent = 'Menyimpan media di perangkat ini…';
     try {
-      await putCover(stableProfileKey, file);
+      await putCover(stableProfileKey, file, cropPosition);
       if (selectedObjectUrl) URL.revokeObjectURL(selectedObjectUrl);
       selectedObjectUrl = URL.createObjectURL(file);
       if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
       pendingObjectUrl = '';
-      applyCoverMedia(file, selectedObjectUrl);
+      applyCoverMedia(file, selectedObjectUrl, cropPosition);
       fileInput.value = '';
+      cropStage.hidden = true;
+      uploadPrompt.hidden = false;
       removeButton.hidden = false;
       coverEnabled = true;
       try { localStorage.setItem(enabledStorageKey, 'true'); } catch { /* Current session still reflects the active state. */ }
@@ -281,7 +331,8 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       if (selectedObjectUrl) { URL.revokeObjectURL(selectedObjectUrl); selectedObjectUrl = ''; }
       if (pendingObjectUrl) { URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = ''; }
       fileInput.value = '';
-      filePreview.removeAttribute('src'); filePreview.hidden = true;
+      cropStage.hidden = true; cropImage.removeAttribute('src');
+      uploadPrompt.hidden = false;
       videoPreview.pause(); videoPreview.removeAttribute('src'); videoPreview.load(); videoPreview.hidden = true;
       removeButton.hidden = true;
       removeButton.disabled = false;
@@ -302,12 +353,20 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   };
 
   root.addEventListener('click', onClick);
+  cropStage.addEventListener('pointerdown', onCropPointerDown);
+  cropStage.addEventListener('pointermove', onCropPointerMove);
+  cropStage.addEventListener('pointerup', onCropPointerUp);
+  cropStage.addEventListener('pointercancel', onCropPointerUp);
   dialog.addEventListener('change', onChange);
   dialog.addEventListener('click', onSave);
   dialog.addEventListener('click', onRemove);
   root.addEventListener('keydown', onKeydown);
   return () => {
     root.removeEventListener('click', onClick);
+    cropStage.removeEventListener('pointerdown', onCropPointerDown);
+    cropStage.removeEventListener('pointermove', onCropPointerMove);
+    cropStage.removeEventListener('pointerup', onCropPointerUp);
+    cropStage.removeEventListener('pointercancel', onCropPointerUp);
     dialog.removeEventListener('change', onChange);
     dialog.removeEventListener('click', onSave);
     dialog.removeEventListener('click', onRemove);
