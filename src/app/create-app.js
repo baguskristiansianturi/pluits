@@ -81,7 +81,7 @@ export function createApp({ root, authService }) {
       url.searchParams.set('auth', 'reset');
       window.history.replaceState(null, '', url);
     }
-    if (event === 'SIGNED_OUT' && ready && ['dashboard', 'social', 'messages', 'profile', 'settings'].includes(resolveRoute())) {
+    if (event === 'SIGNED_OUT' && ready && ['dashboard', 'social', 'messages', 'settings'].includes(resolveRoute())) {
       navigate('home');
       return;
     }
