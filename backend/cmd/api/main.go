@@ -62,6 +62,8 @@ func main() {
 		identityLimiter, err = identity.NewRateLimiter(db, key)
 		if err != nil { log.Fatalf("configure identity rate limiter: %v", err) }
 	}
+	httpapi.NewSocialHandler(db, identityLimiter).Register(mux)
+
 	var identityHandler *httpapi.IdentityHandler
   if identityLimiter != nil {
     identityHandler = httpapi.NewIdentityHandler(identityService, identityLimiter)
