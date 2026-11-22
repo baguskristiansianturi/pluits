@@ -1638,3 +1638,42 @@
     padding-top: 44px;
   }
 }
+
+
+/* Account settings center — first usable frontend settings surfaces. */
+.social-profile-card > .social-profile-gear {
+  top: 60px;
+  right: 12px;
+  z-index: 7;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,.48);
+  background: rgba(18,42,62,.24);
+  color: #fff;
+  backdrop-filter: blur(10px);
+}
+.social-profile-card > .social-profile-gear:hover { background: rgba(18,42,62,.42); }
+.social-settings-panel-heading { margin-bottom: 22px; }
+.social-settings-form { display: grid; gap: 18px; margin-top: 22px; }
+.social-settings-choice-group { display: grid; gap: 10px; margin: 0; padding: 0; border: 0; }
+.social-settings-choice-group legend { margin-bottom: 8px; color: var(--pl-color-ink); font-size: 13px; font-weight: 750; }
+.social-settings-choice { display: flex; align-items: flex-start; gap: 12px; padding: 15px; border: 1px solid var(--pl-color-border); border-radius: var(--pl-radius-md); background: var(--pl-color-surface); cursor: pointer; }
+.social-settings-choice:has(input:checked) { border-color: var(--pl-color-brand); background: var(--pl-color-brand-soft); }
+.social-settings-choice input { width: 18px; height: 18px; flex: 0 0 18px; margin: 2px 0 0; accent-color: var(--pl-color-brand); }
+.social-settings-choice span { display: grid; gap: 5px; }
+.social-settings-choice strong { color: var(--pl-color-ink); font-size: 13px; }
+.social-settings-choice small { color: var(--pl-color-muted); font-size: 11px; line-height: 1.55; }
+.social-settings-field { display: grid; gap: 8px; color: var(--pl-color-ink); font-size: 12px; font-weight: 750; }
+.social-settings-field input { width: 100%; min-height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid var(--pl-color-border); border-radius: var(--pl-radius-md); background: var(--pl-color-surface); color: var(--pl-color-ink); font: inherit; font-size: 14px; }
+.social-settings-field input:focus { outline: 2px solid var(--pl-color-brand); outline-offset: 2px; }
+.social-settings-field small { color: var(--pl-color-muted); font-size: 10px; font-weight: 500; line-height: 1.5; }
+.social-settings-save { justify-self: start; min-height: 46px; padding: 0 18px; border: 0; border-radius: var(--pl-radius-md); background: var(--pl-color-ink); color: #fff; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
+.social-settings-save:disabled { opacity: .7; }
+.social-settings-username-preview { color: var(--pl-color-muted); font-size: 11px; }
+.social-settings-username-preview strong { color: var(--pl-color-ink); }
+@media (max-width: 767px) {
+  .social-profile-card > .social-profile-gear { top: 58px; right: 10px; width: 37px; height: 37px; }
+  .social-settings-panel-heading { margin-bottom: 18px; }
+  .social-settings-choice { padding: 13px; }
+  .social-settings-save { width: 100%; }
+}
