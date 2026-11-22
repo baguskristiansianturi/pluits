@@ -1932,3 +1932,31 @@
   }
 }
 
+
+
+/* Profile action controls: consistent 10px clearance from the right and cover edges. */
+.social-profile-card > .social-profile-gear {
+  right: 10px;
+}
+.social-profile-card > .social-profile-cover-menu-wrap {
+  top: 10px;
+  right: 10px;
+}
+@media (max-width: 767px) {
+  .social-profile-card > .social-profile-gear {
+    right: 10px;
+  }
+  .social-profile-card > .social-profile-cover-menu-wrap {
+    top: 10px;
+    right: 10px;
+  }
+}
+@media (max-width: 380px) {
+  .social-profile-card > .social-profile-gear {
+    right: 10px;
+  }
+  .social-profile-card > .social-profile-cover-menu-wrap {
+    top: 10px;
+    right: 10px;
+  }
+}
