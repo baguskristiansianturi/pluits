@@ -67,7 +67,7 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
  };
  const profileContent='<section class="social-profile-page">'
   +'<section class="social-profile-card" aria-label="Identitas profil">'
-  +(guestPreview?'':renderProfileCoverMenu())
+  +renderProfileCoverMenu()
   +'<div class="social-profile-cover"><span class="social-profile-cover-label">PLUITS · PROFILE</span><span class="social-profile-cover-glow" aria-hidden="true"></span></div>'
   +'<div class="social-profile-identity-row"><div class="social-profile-avatar-wrap"><div class="social-profile-avatar">'+initial+'</div></div>'
   +'<div class="social-profile-identity"><h1>'+name+'</h1><p>@'+username+'</p><div class="social-account-line"><span class="social-account-badge is-'+accountLevel+'">'+badgeLabel+'</span>'+(accountLevel==='regular'&&verified?'<span class="social-account-verified" role="img" aria-label="Terverifikasi" title="Terverifikasi"><svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 1.4 12 3l2.6-.1 1 2.4 2.2 1.4-.7 2.5.7 2.5-2.2 1.4-1 2.4-2.6-.1-2 1.6-2-1.6-2.6.1-1-2.4-2.2-1.4.7-2.5-.7-2.5 2.2-1.4 1-2.4 2.6.1L10 1.4Z"/><path d="m6.5 10 2.2 2.2 4.8-4.8" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>':'')+(accountLevel==='regular'?'<a class="social-account-upgrade" href="'+routeHref('settings')+'">Upgrade</a>':'')+'</div><p class="social-profile-bio">'+bio+'</p>'+(location?'<span class="social-profile-location">'+renderIcon('mapPin')+location+'</span>':'')+(guestPreview?'<span class="social-profile-preview-label">Pratinjau profil publik · tanpa login</span>':'')+'</div></div>'
@@ -94,7 +94,7 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
   +businessPanels()
   +'</section>';
  root.innerHTML='<div class="pl-page-shell social-shell social-profile-shell">'+renderPageHeader({brandHref:routeHref('home'),label:'PLUITS — Profil',rightContent:'<div class="social-header-tools"><span>Profil</span>'+(guestPreview?'<a href="'+routeHref('login')+'">Masuk</a>':'<a href="'+routeHref('settings')+'">Pengaturan</a>')+'</div>',className:'social-header'})+'<main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
- const unmountCoverControls=guestPreview?()=>{}:mountProfileCoverControls({root});
+ const unmountCoverControls=mountProfileCoverControls({root});
  const controller=new AbortController();
  root.addEventListener('click',event=>{
   const tab=event.target.closest('[data-profile-tab]');
