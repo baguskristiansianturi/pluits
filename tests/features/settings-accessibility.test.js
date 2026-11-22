@@ -8,6 +8,10 @@ test('account settings categories expose accessible tab and panel relationships'
   assert.match(source, /role="tab" id="settings-tab-/);
   assert.match(source, /aria-controls="settings-panel-/);
   assert.match(source, /aria-selected="/);
+  assert.match(source, /tabindex="\'+\(active===item\.id\?'0':'-1'\)\+'"/);
+  assert.match(source, /event\.key==='ArrowDown'\|\|event\.key==='ArrowRight'/);
+  assert.match(source, /event\.key==='Home'/);
+  assert.match(source, /event\.key==='End'/);
   assert.match(source, /role="tabpanel" id="settings-panel-/);
   assert.match(source, /aria-labelledby="settings-tab-/);
 });
