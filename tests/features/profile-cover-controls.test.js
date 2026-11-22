@@ -16,7 +16,7 @@ test('profile cover menu contains only the three requested controls', () => {
   assert.match(moduleSource, /Edit sampul/);
   assert.match(moduleSource, /Pustaka sampul/);
   assert.doesNotMatch(moduleSource, /data-cover-action="text"/);
-  assert.match(pageSource, /mountProfileCoverControls\(\{root\}\)/);
+  assert.match(pageSource, /mountProfileCoverControls\(\{root,profileKey:user\?\.id\|\|username\}\)/);
 });
 
 test('cover switch is compact, accessible, and gates editing without collapsing the cover slot', () => {
