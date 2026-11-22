@@ -1793,7 +1793,7 @@
 }
 
 
-/* Profile avatar shortcut: oversized white plus, with its center aligned to the avatar ring. */
+/* Profile avatar shortcut: balanced white plus, centered on the avatar ring. */
 .social-profile-avatar-story-link {
   position: relative;
   display: block;
@@ -1810,10 +1810,10 @@
   right: 16%;
   bottom: auto;
   display: grid;
-  width: 54px !important;
-  height: 54px !important;
-  min-width: 54px !important;
-  min-height: 54px !important;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
   place-items: center;
   box-sizing: border-box;
   border: 0;
@@ -1823,7 +1823,7 @@
   backdrop-filter: none;
   color: #fff !important;
   font-family: Arial, sans-serif;
-  font-size: 88px !important;
+  font-size: 44px !important;
   font-weight: 700;
   line-height: 1 !important;
   padding: 0 !important;
