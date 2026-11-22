@@ -264,3 +264,12 @@
  .social-profile-identity h1{font-size:17px}
  .social-profile-actions{grid-template-columns:minmax(0,1fr);gap:8px}
 }
+
+
+/* Public profile identity details and guest actions. */
+.social-profile-bio{max-width:620px;margin:9px 0 0;color:var(--pl-color-ink);font-size:13px;line-height:1.65;overflow-wrap:anywhere}
+.social-profile-location{display:inline-flex;align-items:center;gap:6px;margin-top:8px;color:var(--pl-color-muted);font-size:11px}
+.social-profile-location .ui-icon{width:14px;height:14px}
+.social-profile-preview-label{display:inline-flex;align-items:center;margin-top:9px;padding:5px 9px;border:1px solid var(--pl-color-border);border-radius:999px;background:var(--pl-color-canvas);color:var(--pl-color-muted);font-size:10px}
+.social-profile-actions [data-profile-share]{cursor:pointer}
+@media(max-width:767px){.social-profile-bio{font-size:12px}.social-profile-location{font-size:10px}}
