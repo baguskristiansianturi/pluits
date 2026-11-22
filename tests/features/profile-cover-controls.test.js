@@ -147,3 +147,23 @@ test('cover picker is a large cover-shaped canvas and switches to the crop previ
   assert.match(styles, /\.social-profile-cover-picker \.social-profile-cover-file-input[\s\S]*inset: 0 !important/);
   assert.match(styles, /\.social-profile-cover-crop-stage \{[\s\S]*min-height: 150px/);
 });
+
+
+test('cover crop supports one-finger panning and two-finger pinch zoom with bounded scale', () => {
+  assert.match(moduleSource, /const cropPointers = new Map\(\)/);
+  assert.match(moduleSource, /pointerDistance\(points\[0\], points\[1\]\)/);
+  assert.match(moduleSource, /Math\.max\(1, Math\.min\(4,/);
+  assert.match(moduleSource, /cropPosition\.zoom =/);
+  assert.match(moduleSource, /media\.style\.transform = `scale\(\$\{crop\.zoom \|\| 1\}\)`/);
+  assert.match(styles, /touch-action: none/);
+});
+test('unsaved cover changes require an explicit save, discard, or continue-editing choice', () => {
+  assert.match(moduleSource, /Perubahan belum disimpan/);
+  assert.match(moduleSource, /requestCloseDialog/);
+  assert.match(moduleSource, /data-cover-save-pending/);
+  assert.match(moduleSource, /data-cover-discard/);
+  assert.match(moduleSource, /data-cover-keep-editing/);
+  assert.match(moduleSource, /if \(hasUnsavedChanges\)/);
+  assert.match(styles, /\.social-profile-cover-unsaved[\s\S]*place-items: center/);
+  assert.match(styles, /\.social-profile-cover-dialog-actions-main/);
+});
