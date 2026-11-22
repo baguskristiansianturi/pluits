@@ -167,3 +167,18 @@ test('unsaved cover changes require an explicit save, discard, or continue-editi
   assert.match(styles, /\.social-profile-cover-unsaved[\s\S]*place-items: center/);
   assert.match(styles, /\.social-profile-cover-dialog-actions-main/);
 });
+
+
+test('entire profile cover picker canvas opens the native file selector', () => {
+  assert.match(styles, /\.social-profile-cover-picker \.social-profile-cover-file-input\s*\{[\s\S]*inset: 0 !important[\s\S]*width: 100% !important[\s\S]*height: 100% !important[\s\S]*pointer-events: auto !important/);
+  assert.match(styles, /\.social-profile-cover-picker\s*\{[\s\S]*min-height: 150px !important[\s\S]*aspect-ratio: 4 \/ 1 !important/);
+});
+
+test('Android browser Back closes the cover editor through the unsaved-changes guard', () => {
+  assert.match(moduleSource, /const pushCoverHistoryState = \(\) =>/);
+  assert.match(moduleSource, /history\.pushState\(/);
+  assert.match(moduleSource, /const onCoverHistoryPop = \(\) =>/);
+  assert.match(moduleSource, /window\.addEventListener\('popstate', onCoverHistoryPop\)/);
+  assert.match(moduleSource, /window\.removeEventListener\('popstate', onCoverHistoryPop\)/);
+  assert.match(moduleSource, /requestCloseDialog\(\);\s*handlingCoverHistoryPop = false/);
+});
