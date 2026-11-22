@@ -1940,16 +1940,16 @@
   right: 10px;
 }
 .social-profile-card > .social-profile-cover-menu-wrap {
-  top: 10px;
-  right: 10px;
+  top: 5px;
+  right: 5px;
 }
 @media (max-width: 767px) {
   .social-profile-card > .social-profile-gear {
     right: 5px;
   }
   .social-profile-card > .social-profile-cover-menu-wrap {
-    top: 10px;
-    right: 10px;
+    top: 5px;
+    right: 5px;
   }
 }
 @media (max-width: 380px) {
@@ -1957,7 +1957,7 @@
     right: 5px;
   }
   .social-profile-card > .social-profile-cover-menu-wrap {
-    top: 10px;
-    right: 10px;
+    top: 5px;
+    right: 5px;
   }
 }
