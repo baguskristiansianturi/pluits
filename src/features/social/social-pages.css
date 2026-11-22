@@ -717,6 +717,8 @@
 .social-profile-cover-upload .ui-icon { width: 25px; height: 25px; color: var(--pl-color-brand); }
 .social-profile-cover-upload strong { font-size: 12px; }
 .social-profile-cover-upload small { color: var(--pl-color-muted); font-size: 10px; }
+.social-profile-cover-browse { min-height: 40px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--pl-color-ink); color: #fff; font: inherit; font-size: 11px; font-weight: 750; cursor: pointer; }
+.social-profile-cover-browse:focus-visible { outline: 2px solid var(--pl-color-brand); outline-offset: 3px; }
 .social-profile-cover-upload input { max-width: 100%; font-size: 11px; }
 .social-profile-cover-field { display: grid; gap: 7px; }
 .social-profile-cover-field label { color: var(--pl-color-ink); font-size: 11px; font-weight: 750; }
