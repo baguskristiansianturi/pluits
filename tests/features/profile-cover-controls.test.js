@@ -26,10 +26,9 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
   assert.match(moduleSource, /selected === 'edit' && draftCoverEnabled/);
   assert.match(styles, /\.social-profile-cover-switch/);
   assert.match(styles, /background: #2fa66a/);
-  assert.match(styles, /\.social-profile-card\.is-cover-disabled \.social-profile-cover-image \{ display: none; \}/);
-  assert.match(styles, /padding-block-start: clamp\(40px, 9vw, 50px\)/);
-  assert.match(styles, /social-profile-cover-menu-wrap \{ top: 14px; right: 8px; \}/);
-  assert.match(styles, /background: transparent;\s*border-color: transparent/);
+  assert.match(styles, /\.social-profile-card\.is-cover-disabled > \.social-profile-cover \{ display: none; \}/);
+  assert.match(styles, /\.social-profile-card\.is-cover-disabled > \.social-profile-identity-row \{\s*margin-top: 0;\s*padding-top: clamp\(40px, 9vw, 50px\)/);
+  assert.match(styles, /social-profile-cover-menu-wrap \{ top: 14px; right: 0; \}/);
 });
 
 test('cover editor previews uploaded images and the library is reserved for approved animations', () => {
