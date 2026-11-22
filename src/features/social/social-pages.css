@@ -610,11 +610,48 @@
 .social-profile-cover-menu button:focus-visible { background: var(--pl-color-canvas); outline: none; }
 .social-profile-cover-menu button .ui-icon { width: 17px; height: 17px; color: var(--pl-color-muted); }
 .social-profile-cover-menu .is-danger { color: #a13d3d; }
-.social-profile-card.is-cover-hidden > .social-profile-cover { display: none; }
-.social-profile-card.is-cover-hidden > .social-profile-identity-row {
-  margin-top: 0 !important;
+.social-profile-cover-menu button[disabled] {
+  opacity: .38;
+  cursor: not-allowed;
 }
-.social-profile-card.is-cover-hidden .social-profile-identity { padding-top: 0 !important; }
+.social-profile-cover-menu button[disabled]:hover {
+  background: transparent;
+}
+.social-profile-cover-switch {
+  position: relative;
+  display: inline-flex;
+  width: 31px;
+  height: 18px;
+  flex: 0 0 31px;
+  align-items: center;
+  padding: 2px;
+  border: 1px solid #cbd1d8;
+  border-radius: 999px;
+  background: #e5e8ec;
+  transition: background .18s ease, border-color .18s ease;
+}
+.social-profile-cover-switch > span {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(20,30,40,.22);
+  transition: transform .18s ease;
+}
+.social-profile-cover-menu [data-cover-action="toggle"][aria-checked="true"] .social-profile-cover-switch {
+  border-color: #238b58;
+  background: #2fa66a;
+}
+.social-profile-cover-menu [data-cover-action="toggle"][aria-checked="true"] .social-profile-cover-switch > span {
+  transform: translateX(13px);
+}
+.social-profile-card.is-cover-disabled .social-profile-cover-image {
+  visibility: hidden;
+}
+.social-profile-card.is-cover-disabled > .social-profile-cover-menu-wrap .social-profile-cover-menu-trigger {
+  color: var(--pl-color-ink);
+}
 .social-profile-card.is-cover-hidden > .social-profile-cover-menu-wrap .social-profile-cover-menu-trigger {
   border: 0;
   background: transparent;
