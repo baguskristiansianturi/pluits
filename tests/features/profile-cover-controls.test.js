@@ -32,14 +32,14 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
 });
 
 test('cover editor opens the native media picker from an explicit mobile-friendly button', () => {
-  assert.match(moduleSource, /<label class="social-profile-cover-browse" data-cover-browse>Pilih media<input class="social-profile-cover-file-input" type="file"/);
+  assert.match(moduleSource, /<label class="social-profile-cover-browse" for="profile-cover-media-input" data-cover-browse>Pilih media dari perangkat<\/label><input id="profile-cover-media-input" class="social-profile-cover-file-input" type="file"/);
   assert.doesNotMatch(moduleSource, /data-cover-file hidden/);
   assert.doesNotMatch(moduleSource, /fileInput\.showPicker|fileInput\.click\(\)/);
   assert.match(moduleSource, /fileInput\.addEventListener\('change', onChange\)/);
   assert.match(moduleSource, /fileInput\.removeEventListener\('change', onChange\)/);
-  assert.match(styles, /\.social-profile-cover-browse[\s\S]*position: relative/);
-  assert.match(styles, /\.social-profile-cover-file-input[\s\S]*opacity: 0/);
-  assert.match(styles, /\.social-profile-cover-file-input[\s\S]*inset: 0/);
+  assert.match(styles, /\.social-profile-cover-file-input[\s\S]*opacity: 1 !important/);
+  assert.match(styles, /\.social-profile-cover-file-input[\s\S]*visibility: visible !important/);
+  assert.match(styles, /\.social-profile-cover-file-input::file-selector-button/);
 });
 
 test('cover editor accepts image or video media and limits video duration to ten seconds', () => {
@@ -124,4 +124,11 @@ test('cover editor presents supported image, GIF, and video formats in a spaciou
   assert.match(styles, /min-height: 390px/);
   assert.match(styles, /social-profile-cover-format-note/);
   assert.match(styles, /background: transparent/);
+});
+
+
+test('cover dialog keeps the page visible with a subtle dark scrim and reduced blur', () => {
+  assert.match(styles, /background: rgba\(5, 12, 22, \.42\)/);
+  assert.match(styles, /backdrop-filter: blur\(3px\) saturate\(92%\)/);
+  assert.match(styles, /background: rgba\(244, 248, 247, \.90\)/);
 });
