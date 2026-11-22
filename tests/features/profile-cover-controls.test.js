@@ -95,7 +95,7 @@ test('turning the cover off preserves the saved media; only explicit removal del
 test('selecting a photo opens a draggable crop frame matching the live cover ratio', () => {
   assert.match(moduleSource, /data-cover-crop-stage/);
   assert.match(moduleSource, /data-cover-image-crop/);
-  assert.match(moduleSource, /Geser foto untuk mengatur posisinya/);
+  assert.match(moduleSource, /Geser foto dengan satu jari\. Cubit dengan dua jari untuk memperbesar atau memperkecil/);
   assert.match(moduleSource, /cropStage\.addEventListener\('pointerdown', onCropPointerDown\)/);
   assert.match(moduleSource, /cropStage\.addEventListener\('pointermove', onCropPointerMove\)/);
   assert.match(moduleSource, /cropPosition\.x = Math\.max\(0, Math\.min\(100/);
@@ -107,7 +107,7 @@ test('selecting a photo opens a draggable crop frame matching the live cover rat
 });
 
 test('cover editor is centered on mobile and closes when the backdrop is tapped', () => {
-  assert.match(moduleSource, /if \(event\.target === dialog\) \{ closeDialog\(\); return; \}/);
+  assert.match(moduleSource, /if \(event\.target === dialog\) \{ requestCloseDialog\(\); return; \}/);
   assert.match(moduleSource, /fileInput\.value = ''/);
   assert.match(styles, /\.social-profile-cover-dialog\{place-items:center/);
   assert.ok(styles.includes('@media(max-width:767px){\n .social-profile-cover-dialog{place-items:center'));
