@@ -9,6 +9,7 @@ const serviceWorker = await readFile('public/sw.js', 'utf8');
 const routeConfig = await readFile('src/config/paths.js', 'utf8');
 const routeGenerator = await readFile('scripts/generate-pages-routes.mjs', 'utf8');
 const appRouter = await readFile('src/app/routes.js', 'utf8');
+const authPage = await readFile('src/features/auth/auth-page.js', 'utf8');
 
 async function walk(directory) {
   const output = [];
@@ -47,7 +48,7 @@ if (runtimeFiles.some((path) => /pages\/account|components\/social|style\.css/.t
 if (!runtime.includes("VITE_PUBLIC_SIGNUP_ENABLED === 'true'")) {
   throw new Error('Public signup must remain disabled unless explicitly enabled after readiness review.');
 }
-if (!runtime.includes('Pendaftaran belum dibuka')) {
+if (!authPage.includes('Pendaftaran akun baru belum tersedia') || !runtime.includes("VITE_PUBLIC_SIGNUP_ENABLED === 'true'")) {
   throw new Error('The registration screen must communicate the public signup release gate.');
 }
 if (!routeConfig.includes("home: ''") || !appRouter.includes('window.location.pathname') || appRouter.includes('window.location.hash')) {
