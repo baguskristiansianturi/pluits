@@ -68,7 +68,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   dialog.innerHTML = '<section class="social-profile-cover-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="profile-cover-dialog-title">'
     + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Atur sampul profil</h2><p data-cover-dialog-subtitle>Sesuaikan tampilan sampul profil Anda.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
     + '<div data-cover-editor-view><div class="social-profile-cover-editor">'
-    + '<div class="social-profile-cover-upload">'+renderIcon('image')+'<strong>Pilih gambar atau video sampul</strong><small>JPG, PNG, WebP · MP4/WebM</small><button type="button" class="social-profile-cover-browse" data-cover-browse>Pilih foto atau video</button><img data-cover-file-preview alt="" hidden><video data-cover-video-preview muted playsinline controls hidden></video><input type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" data-cover-file hidden></div>'
+    + '<div class="social-profile-cover-upload">'+renderIcon('image')+'<strong>Pilih gambar atau video sampul</strong><small>JPG, PNG, WebP · MP4/WebM</small><button type="button" class="social-profile-cover-browse" data-cover-browse>Pilih foto atau video</button><img data-cover-file-preview alt="" hidden><video data-cover-video-preview muted playsinline controls hidden></video><input class="social-profile-cover-file-input" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.mp4,.webm" aria-label="Pilih foto atau video sampul" data-cover-file></div>'
     + '</div><p class="social-profile-cover-dialog-note">Sampul disimpan di perangkat ini. Sinkronisasi ke akun dan perangkat lain memerlukan layanan media PLUITS.</p></div>'
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
@@ -81,6 +81,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   const title = dialog.querySelector('#profile-cover-dialog-title');
   const subtitle = dialog.querySelector('[data-cover-dialog-subtitle]');
   const fileInput = dialog.querySelector('[data-cover-file]');
+  const browseButton = dialog.querySelector('[data-cover-browse]');
   const filePreview = dialog.querySelector('[data-cover-file-preview]');
   const videoPreview = dialog.querySelector('[data-cover-video-preview]');
   const saveButton = dialog.querySelector('[data-cover-save]');
@@ -167,8 +168,6 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   };
 
   const onClick = event => {
-    const browseButton = event.target.closest('[data-cover-browse]');
-    if (browseButton && dialog.contains(browseButton)) { fileInput.click(); return; }
     const menuTrigger = event.target.closest('[data-cover-menu-trigger]');
     if (menuTrigger && card.contains(menuTrigger)) {
       const expanded = trigger.getAttribute('aria-expanded') === 'true';
@@ -303,12 +302,24 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     }
   };
 
+  const onBrowse = event => {
+    event.preventDefault();
+    try {
+      if (typeof fileInput.showPicker === 'function') {
+        fileInput.showPicker();
+        return;
+      }
+    } catch { /* Fall back to the broadly supported file-input click path. */ }
+    fileInput.click();
+  };
+  browseButton.addEventListener('click', onBrowse);
   root.addEventListener('click', onClick);
   dialog.addEventListener('change', onChange);
   dialog.addEventListener('click', onSave);
   dialog.addEventListener('click', onRemove);
   root.addEventListener('keydown', onKeydown);
   return () => {
+    browseButton.removeEventListener('click', onBrowse);
     root.removeEventListener('click', onClick);
     dialog.removeEventListener('change', onChange);
     dialog.removeEventListener('click', onSave);
