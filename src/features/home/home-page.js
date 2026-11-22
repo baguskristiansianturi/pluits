@@ -41,7 +41,7 @@ function renderPostCard(post) {
     ? '<img src="' + escapeHtml(post.avatarUrl) + '" alt="" loading="lazy">'
     : '<span>' + escapeHtml((post.authorName || 'P').slice(0,1).toUpperCase()) + '</span>';
   const caption = post.caption ? '<p class="global-post-caption">' + escapeHtml(post.caption) + '</p>' : '';
-  const kind = post.content_kind === 'reel' ? 'REELS' : 'FEED';
+  const kind = (post.visibility === 'private' ? 'PRIVAT · ' : '') + (post.content_kind === 'reel' ? 'REELS' : 'FEED');
   const date = post.created_at ? new Date(post.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'}) : '';
   return '<article class="global-post-card"><header class="global-post-author"><span class="global-post-avatar">' + avatar + '</span><span class="global-post-author-copy"><strong>' + escapeHtml(post.authorName) + '</strong><small>@' + escapeHtml(post.username || 'pengguna') + ' · ' + date + '</small></span><span class="global-post-kind">' + kind + '</span></header>' + media + caption + '<footer class="global-post-actions"><span>' + renderIcon('heart') + ' Suka</span><span>' + renderIcon('message') + ' Komentar</span><span>' + renderIcon('arrow') + ' Bagikan</span></footer></article>';
 }
