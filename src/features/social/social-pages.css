@@ -501,3 +501,14 @@
   .social-profile-identity h1 { font-size: 17px; }
   .social-profile-identity > p:not(.social-profile-bio) { font-size: 11px; }
 }
+
+
+/* Mobile profile hero spans the full viewport edge to edge. */
+@media (max-width: 767px) {
+  .social-profile-card > .social-profile-cover {
+    width: calc(100% + 2 * var(--pl-page-gutter));
+    max-width: none;
+    margin-inline: calc(-1 * var(--pl-page-gutter));
+    border-radius: 0;
+  }
+}
