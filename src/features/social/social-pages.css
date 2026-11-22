@@ -1445,3 +1445,125 @@
   pointer-events: auto !important;
   touch-action: manipulation !important;
 }
+
+
+/* Cover crop is performed on the real cover-shaped frame, with the avatar overlap as a live alignment guide. */
+.social-profile-cover-dialog-header {
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.social-profile-cover-dialog-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.social-profile-cover-dialog-toolbar button {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--pl-color-border);
+  border-radius: 10px;
+  background: var(--pl-color-surface);
+  color: var(--pl-color-ink);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.social-profile-cover-dialog-toolbar [data-cover-save] {
+  border-color: var(--pl-color-ink);
+  background: var(--pl-color-ink);
+  color: #fff;
+}
+.social-profile-cover-dialog-toolbar button:disabled { opacity: .55; cursor: wait; }
+.social-profile-cover-crop-stage {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  overflow: visible;
+  border-radius: 16px;
+  background: var(--pl-color-canvas);
+  touch-action: none;
+}
+.social-profile-cover-crop-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background: #dfe6e9;
+  pointer-events: none;
+}
+.social-profile-cover-crop-viewport img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform, object-position;
+  transform-origin: center;
+}
+.social-profile-cover-crop-avatar {
+  position: absolute;
+  z-index: 3;
+  left: 8px;
+  bottom: -40px;
+  display: grid;
+  width: 82px;
+  height: 82px;
+  place-items: center;
+  overflow: hidden;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--pl-color-surface);
+  box-shadow: 0 2px 8px rgba(10,25,35,.2);
+  pointer-events: none;
+}
+.social-profile-cover-crop-avatar > * {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+.social-profile-cover-crop-avatar .social-profile-avatar {
+  width: 100%;
+  height: 100%;
+  border-width: 0;
+}
+.social-profile-cover-dialog-actions {
+  justify-content: flex-start;
+  margin-top: 58px;
+}
+.social-profile-cover-dialog-actions-main { display: none !important; }
+.social-profile-cover-dialog-header > div:first-child { min-width: 0; }
+.social-profile-cover-dialog-header > div:first-child p { max-width: 260px; }
+@media (max-width: 767px) {
+  .social-profile-cover-dialog-header {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    align-items: center;
+    margin: -24px -20px 18px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(30,50,65,.10);
+    background: rgba(248,250,250,.96);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  .social-profile-cover-dialog-header h2 { font-size: 15px; }
+  .social-profile-cover-dialog-header p { font-size: 10px; }
+  .social-profile-cover-dialog-toolbar { gap: 6px; }
+  .social-profile-cover-dialog-toolbar button { min-height: 38px; padding-inline: 11px; }
+  .social-profile-cover-dialog-close { display: none; }
+  .social-profile-cover-crop-avatar {
+    left: 7px;
+    bottom: -40px;
+    width: 82px;
+    height: 82px;
+  }
+}
+@media (max-width: 380px) {
+  .social-profile-cover-dialog-header { gap: 6px; }
+  .social-profile-cover-dialog-toolbar button { padding-inline: 8px; font-size: 10px; }
+  .social-profile-cover-dialog-header > div:first-child p { max-width: 120px; }
+}
