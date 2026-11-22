@@ -1793,7 +1793,7 @@
 }
 
 
-/* Profile avatar shortcut: compact badge centered on the avatar ring. */
+/* Profile avatar shortcut: light, translucent badge over the avatar ring. */
 .social-profile-avatar-story-link {
   position: relative;
   display: block;
@@ -1809,14 +1809,16 @@
   top: 4%;
   right: 4%;
   display: grid;
-  width: 25px;
-  height: 25px;
+  width: 26px;
+  height: 26px;
   place-items: center;
-  border: 2px solid var(--pl-color-surface);
+  border: 1px solid var(--pl-color-surface);
   border-radius: 50%;
-  background: rgba(0, 0, 0, .72);
+  background: rgba(0, 0, 0, .42);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
   color: #fff;
-  font-size: 21px;
+  font-size: 24px;
   font-weight: 600;
   line-height: 1;
   box-shadow: none;
