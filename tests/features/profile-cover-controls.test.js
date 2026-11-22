@@ -31,9 +31,13 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
   assert.match(styles, /social-profile-cover-menu-wrap \{ top: 14px; right: 0; \}/);
 });
 
-test('cover editor previews uploaded images and the library is reserved for approved animations', () => {
+test('cover editor accepts image or video media and limits video duration to ten seconds', () => {
   assert.match(moduleSource, /data-cover-file-preview/);
+  assert.match(moduleSource, /data-cover-video-preview/);
+  assert.match(moduleSource, /video\\/mp4,video\\/webm/);
+  assert.match(moduleSource, /videoPreview\\.duration > 10/);
   assert.match(moduleSource, /URL\.createObjectURL/);
+  assert.doesNotMatch(moduleSource, /data-cover-text|Tulisan pada sampul|profile-cover-text/);
   assert.match(moduleSource, /Animasi sampul sedang disiapkan/);
   assert.match(moduleSource, /Ukuran dan posisi sampul tetap sama/);
   assert.match(moduleSource, /Penyimpanan ke akun akan tersedia/);
