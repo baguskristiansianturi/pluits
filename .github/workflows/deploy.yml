@@ -47,6 +47,9 @@ jobs:
           VITE_PUBLIC_SIGNUP_ENABLED: ${{ vars.VITE_PUBLIC_SIGNUP_ENABLED || 'false' }}
         run: npm run build
 
+      - name: Configure GitHub Pages SPA fallback
+        run: cp dist/index.html dist/404.html
+
       - name: Verify build output
         run: |
           test -f dist/index.html
