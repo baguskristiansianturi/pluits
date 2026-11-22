@@ -21,3 +21,10 @@ The Go API accepts display_name and legal consent, creates the personal profile 
 - Configure `VITE_AUTH_PROVIDER=first-party` and `VITE_API_BASE_URL`.
 - Keep public signup disabled until end-to-end registration, email verification, persistence and backup/restore tests pass.
 - Never use local synthetic accounts for account or authorization acceptance testing.
+
+## Responsive composition
+
+- Desktop and tablet retain the two-column introduction and account form composition.
+- On mobile, the account form is presented before the introductory panel so the primary account task is immediately reachable without scrolling past promotional copy.
+- Keyboard focus remains visibly indicated on interactive account controls.
+- The existing shared page shell, tokens, and icon registry remain the source of shared UI behavior; this feature does not introduce new global tokens or dependencies.
