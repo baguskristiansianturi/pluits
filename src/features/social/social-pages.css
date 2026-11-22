@@ -1622,3 +1622,10 @@
     min-height: 154px;
   }
 }
+
+/* Profile hero identity: add breathing room below the cover without changing cover geometry. */
+@media (max-width: 767px) {
+  .social-profile-page .social-profile-card > .social-profile-identity {
+    padding-top: 18px;
+  }
+}
