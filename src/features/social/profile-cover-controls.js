@@ -182,7 +182,13 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     subtitle.textContent = library ? 'Koleksi sampul PLUITS.' : 'Pilih foto, video, atau GIF.';
     const currentMedia = cover.querySelector('.social-profile-cover-image');
     editingFile = null;
-    if (currentMedia && currentMedia.tagName !== 'VIDEO') getCover(stableProfileKey).then(saved => { editingFile = saved?.blob || null; }).catch(() => {});
+    if (currentMedia && currentMedia.tagName !== 'VIDEO') getCover(stableProfileKey).then(saved => {
+      editingFile = saved?.blob || null;
+      if (saved?.crop && !dialog.hidden && !cropStage.hidden) {
+        cropPosition = { x: saved.crop.x ?? 50, y: saved.crop.y ?? 50, zoom: saved.crop.zoom || 1 };
+        updateCropPosition();
+      }
+    }).catch(() => {});
     removeButton.hidden = library || !currentMedia;
     saveButton.disabled = false;
     const currentIsVideo = currentMedia?.tagName === 'VIDEO';
