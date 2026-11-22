@@ -85,3 +85,8 @@ The shared page header has one fixed runtime height at each viewport class, rath
 - `className` and `dataGlobalHeader` are integration hooks for scoped behavior and lifecycle observation. They do not create a second header implementation.
 - Social's bottom app navigation remains a separate navigation pattern from the page header. It must be documented and governed as its own component/variant; it is not a substitute for the shared header.
 - Validation status: runtime adoption updated; full visual regression across all listed routes and viewports remains pending until browser verification is completed.
+
+
+## CSS ownership and cascade contract
+
+The authoritative rule for which layer owns dimensions, spacing, layout, responsive behavior and interaction is [CSS-OWNERSHIP-AND-CASCADE-CONTRACT-001.md](../../PLUITS-MASTER-MODEL-APP/06-PLATFORM-UI-FOUNDATION/01-DESIGN-TOKENS/CSS-OWNERSHIP-AND-CASCADE-CONTRACT-001.md). HTML owns structure; CSS owns all visual presentation; design tokens own reusable platform values; component/feature CSS owns its scoped geometry; JavaScript owns behavior and state. Do not add late overrides to bypass the cascade. Preserve the current visual baseline and verify computed styles in a browser before consolidating repeated selectors.
