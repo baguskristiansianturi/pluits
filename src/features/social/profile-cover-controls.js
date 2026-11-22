@@ -51,10 +51,11 @@ export function mountProfileCoverControls({ root } = {}) {
 
   const closeDialog = () => {
     dialog.hidden = true;
+    if (pendingObjectUrl) { URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = ''; }
     if (previousFocus?.isConnected) previousFocus.focus();
   };
   const openDialog = (view, focusText = false) => {
-    previousFocus = document.activeElement;
+    previousFocus = trigger;
     menu.hidden = true;
     trigger.setAttribute('aria-expanded', 'false');
     dialog.hidden = false;
