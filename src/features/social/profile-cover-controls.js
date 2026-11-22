@@ -324,6 +324,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     if (menuCloseTimer) clearTimeout(menuCloseTimer);
     if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
     pendingObjectUrl = URL.createObjectURL(file);
+    hasUnsavedChanges = true;
     if (isVideo) {
       coverPicker.hidden = true;
       cropStage.hidden = true;
@@ -334,6 +335,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
           URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = '';
           videoPreview.removeAttribute('src'); videoPreview.load(); videoPreview.hidden = true;
           coverPicker.hidden = false;
+          hasUnsavedChanges = false;
           fileInput.value = '';
           subtitle.textContent = 'Durasi video melebihi batas 10 detik. Pilih video yang lebih singkat.';
           return;
@@ -408,6 +410,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   };
   const onKeydown = event => {
     if (event.key === 'Escape') {
+      if (!dialog.hidden && !unsavedConfirm.hidden) { unsavedConfirm.hidden = true; return; }
       if (!dialog.hidden) requestCloseDialog();
       else {
         closeMenu();
