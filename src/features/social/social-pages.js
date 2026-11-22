@@ -96,7 +96,7 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
   +businessPanels()
   +'</section>';
  root.innerHTML='<div class="pl-page-shell social-shell social-profile-shell">'+renderPageHeader({brandHref:routeHref('home'),label:'PLUITS — Profil',rightContent:'<div class="social-header-tools"><span>'+(profileSetupMode?'Profil Saya':'Profil')+'</span><a href="'+routeHref('settings')+'">Pengaturan</a></div>',className:'social-header'})+'<main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
- const unmountCoverControls=mountProfileCoverControls({root});
+ const unmountCoverControls=mountProfileCoverControls({root,profileKey:user?.id||username});
  const controller=new AbortController();
  root.addEventListener('click',event=>{
   const tab=event.target.closest('[data-profile-tab]');
