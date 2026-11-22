@@ -62,8 +62,8 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
 });
 
 test('cover editor uses a large cover canvas with the real file input as the direct tap target', () => {
-  assert.ok(moduleSource.includes('class="social-profile-cover-picker" data-cover-picker'));
-  assert.ok(moduleSource.includes('data-cover-file></div>'));
+  assert.ok(moduleSource.includes('label for="profile-cover-media-input" class="social-profile-cover-picker" data-cover-picker'));
+  assert.ok(moduleSource.includes('data-cover-file><button type="button" class="social-profile-cover-replace" data-cover-replace hidden>Pilih media lain</button>'));
   assert.doesNotMatch(moduleSource, /fileInput\\.click\\(\\)/);
   assert.doesNotMatch(moduleSource, /data-cover-file tabindex=/);
   assert.ok(moduleSource.includes("fileInput.addEventListener('change', onChange)"));
@@ -174,7 +174,10 @@ test('cover picker is a large cover-shaped canvas and switches to the crop previ
   assert.match(moduleSource, /coverPicker\.hidden = Boolean\(currentMedia\)/);
   assert.match(moduleSource, /coverPicker\.hidden = true/);
   assert.match(styles, /\.social-profile-cover-picker \{[\s\S]*aspect-ratio: 4 \/ 1/);
-  assert.match(styles, /\.social-profile-cover-picker \.social-profile-cover-file-input[\s\S]*inset: 0 !important/);
+  assert.match(moduleSource, /replaceButton\.hidden = !currentMedia/);
+  assert.match(moduleSource, /replaceButton\.hidden = false/);
+  assert.match(styles, /\.social-profile-cover-file-input \{[\s\S]*clip-path: inset\(50%\) !important[\s\S]*pointer-events: none !important/);
+  assert.match(styles, /\.social-profile-cover-replace\[hidden\] \{ display: none !important; \}/);
   assert.match(styles, /\.social-profile-cover-crop-stage \{[\s\S]*min-height: 150px/);
 });
 
@@ -200,7 +203,9 @@ test('unsaved cover changes require an explicit save, discard, or continue-editi
 
 
 test('entire profile cover picker canvas opens the native file selector', () => {
-  assert.match(styles, /\.social-profile-cover-picker \.social-profile-cover-file-input\s*\{[\s\S]*inset: 0 !important[\s\S]*width: 100% !important[\s\S]*height: 100% !important[\s\S]*pointer-events: auto !important/);
+  assert.match(moduleSource, /label for="profile-cover-media-input" class="social-profile-cover-picker"/);
+  assert.match(moduleSource, /data-cover-replace hidden>Pilih media lain/);
+  assert.match(styles, /\.social-profile-cover-file-input \{[\s\S]*clip-path: inset\(50%\) !important/);
   assert.match(styles, /\.social-profile-cover-picker\s*\{[\s\S]*min-height: 150px !important[\s\S]*aspect-ratio: 4 \/ 1 !important/);
 });
 
