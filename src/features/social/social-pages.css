@@ -1989,3 +1989,40 @@
 .social-profile-card > .social-profile-gear {
   right: 5px;
 }
+
+
+/* Keep the native input outside hidden preview panels so replacement remains available on mobile. */
+.social-profile-cover-file-input {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  min-height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+.social-profile-cover-picker { display: flex; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+.social-profile-cover-replace {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+  padding: 0 15px;
+  border: 1px solid var(--pl-color-border);
+  border-radius: 10px;
+  background: var(--pl-color-surface);
+  color: var(--pl-color-ink);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.social-profile-cover-replace[hidden] { display: none !important; }
