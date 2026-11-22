@@ -24,7 +24,7 @@ export function mountProfileCoverControls({ root } = {}) {
   dialog.innerHTML = '<section class="social-profile-cover-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="profile-cover-dialog-title">'
     + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Atur sampul profil</h2><p data-cover-dialog-subtitle>Sesuaikan tampilan sampul profil Anda.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
     + '<div data-cover-editor-view><div class="social-profile-cover-editor">'
-    + '<label class="social-profile-cover-upload">'+renderIcon('image')+'<strong>Pilih gambar sampul</strong><small>Format JPG, PNG, atau WebP · maksimal 10 MB</small><input type="file" accept="image/jpeg,image/png,image/webp" data-cover-file></label>'
+    + '<label class="social-profile-cover-upload">'+renderIcon('image')+'<strong>Pilih gambar sampul</strong><small>Format JPG, PNG, atau WebP · maksimal 10 MB</small><img data-cover-file-preview alt="" hidden><input type="file" accept="image/jpeg,image/png,image/webp" data-cover-file></label>'
     + '<div class="social-profile-cover-field"><label for="profile-cover-text">Tulisan pada sampul</label><input id="profile-cover-text" type="text" maxlength="48" data-cover-text placeholder="Contoh: PLUITS · PROFILE"></div>'
     + '</div><p class="social-profile-cover-dialog-note">Perubahan ini tampil sebagai pratinjau di perangkat ini. Penyimpanan ke akun akan tersedia setelah layanan media profil aktif.</p></div>'
     + '<div data-cover-library-view hidden><div class="social-profile-cover-library-tabs" role="tablist" aria-label="Kategori pustaka sampul">'
@@ -42,6 +42,7 @@ export function mountProfileCoverControls({ root } = {}) {
   const subtitle = dialog.querySelector('[data-cover-dialog-subtitle]');
   const textInput = dialog.querySelector('[data-cover-text]');
   const fileInput = dialog.querySelector('[data-cover-file]');
+  const filePreview = dialog.querySelector('[data-cover-file-preview]');
   const saveButton = dialog.querySelector('[data-cover-save]');
   const toggleLabel = menu.querySelector('[data-cover-toggle-label]');
   let pendingObjectUrl = '';
@@ -63,6 +64,9 @@ export function mountProfileCoverControls({ root } = {}) {
     title.textContent = library ? 'Pustaka sampul' : 'Atur sampul profil';
     subtitle.textContent = library ? 'Pilih koleksi sampul yang disediakan PLUITS.' : 'Tambah gambar dan atur tulisan yang tampil pada sampul.';
     textInput.value = cover.querySelector('.social-profile-cover-label')?.textContent || '';
+    const currentImage = cover.querySelector('.social-profile-cover-image');
+    filePreview.hidden = !currentImage;
+    if (currentImage) filePreview.src = currentImage.src;
     saveButton.hidden = library;
     if (focusText && !library) textInput.focus();
     else dialog.querySelector('[data-cover-dismiss]').focus();
@@ -111,7 +115,9 @@ export function mountProfileCoverControls({ root } = {}) {
     }
     if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
     pendingObjectUrl = URL.createObjectURL(file);
-    subtitle.textContent = 'Gambar siap dipratinjau. Tekan Simpan pratinjau untuk menerapkan.';
+    filePreview.src = pendingObjectUrl;
+    filePreview.hidden = false;
+    subtitle.textContent = 'Pratinjau gambar siap. Tekan Simpan pratinjau untuk menerapkan.';
   };
   const onSave = event => {
     if (!event.target.closest('[data-cover-save]')) return;
@@ -145,10 +151,6 @@ export function mountProfileCoverControls({ root } = {}) {
   dialog.addEventListener('change', onChange);
   dialog.addEventListener('click', onSave);
   root.addEventListener('keydown', onKeydown);
-  const imageStyle = document.createElement('style');
-  imageStyle.textContent = '.social-profile-cover-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}.social-profile-cover-label{z-index:2}';
-  dialog.append(imageStyle);
-
   return () => {
     root.removeEventListener('click', onClick);
     dialog.removeEventListener('change', onChange);
