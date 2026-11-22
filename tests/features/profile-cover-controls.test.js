@@ -33,8 +33,12 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
 
 test('cover editor opens the native media picker from an explicit mobile-friendly button', () => {
   assert.match(moduleSource, /data-cover-browse/);
-  assert.match(moduleSource, /data-cover-file hidden/);
-  assert.match(moduleSource, /browseButton && dialog\.contains\(browseButton\)\) \{ fileInput\.click\(\); return; \}/);
+  assert.match(moduleSource, /class="social-profile-cover-file-input" type="file"/);
+  assert.doesNotMatch(moduleSource, /data-cover-file hidden/);
+  assert.match(moduleSource, /browseButton\.addEventListener\('click', onBrowse\)/);
+  assert.match(moduleSource, /fileInput\.showPicker\(\)/);
+  assert.match(moduleSource, /fileInput\.click\(\)/);
+  assert.match(styles, /\.social-profile-cover-file-input[\s\S]*clip-path: inset\(50%\)/);
   assert.match(styles, /\.social-profile-cover-browse/);
 });
 
