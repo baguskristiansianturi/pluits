@@ -118,3 +118,11 @@ The cover menu and editor must remain in the Social Profile feature module, reus
 - The media picker and Save/Cancel actions use refined transparent/outline treatments with clear hover, pressed, focus, and disabled states rather than heavy filled button backgrounds.
 - Keep the native file input activation path intact for Android/mobile reliability. GIF uses the existing image preview/crop path and retains animation when applied as an image.
 - Runtime mapping: `src/features/social/profile-cover-controls.js`, `src/features/social/social-pages.css`; regression coverage: `tests/features/profile-cover-controls.test.js`.
+
+
+### Android native picker and modal backdrop refinement — 22 November 2026
+- Keep the actual `input[type=file]` visibly rendered and touchable. Do not hide it behind an opacity overlay or depend on synthetic `.click()` / `showPicker()` activation.
+- Associate the visible explanatory label with the file input through an explicit `for` / `id` pair. The native input remains independently tappable.
+- Style the browser file-selector button without hiding the browser-provided file control.
+- The modal scrim uses a restrained dark tint and a low blur radius so the active page remains recognizable behind the editor.
+- Runtime: `src/features/social/profile-cover-controls.js`, `src/features/social/social-pages.css`; regression: `tests/features/profile-cover-controls.test.js`.
