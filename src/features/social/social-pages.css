@@ -1793,7 +1793,7 @@
 }
 
 
-/* Profile avatar shortcut: light, translucent badge over the avatar ring. */
+/* Profile avatar shortcut: standalone white plus, with a soft shadow for contrast. */
 .social-profile-avatar-story-link {
   position: relative;
   display: block;
@@ -1812,18 +1812,18 @@
   width: 28px;
   height: 28px;
   place-items: center;
-  border: 1px solid var(--pl-color-surface);
-  border-radius: 50%;
-  background: rgba(0, 0, 0, .42);
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(3px);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   color: #fff;
   font-family: Arial, sans-serif;
   font-size: 38px;
   font-weight: 700;
   line-height: 1;
   padding: 0;
-  box-shadow: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .78), 0 0 7px rgba(0, 0, 0, .38);
 }
 .social-profile-avatar-story-link:focus-visible {
   outline: 2px solid var(--pl-color-brand);
