@@ -18,13 +18,14 @@ A public HTTPS API hostname is required because the frontend is served over HTTP
 
 ## 1. Prepare the server
 
-Connect to the VPS over SSH using its normal non-root account, then run:
+Connect to the VPS over SSH using its normal non-root account. Download the bootstrap script from the public repository, then run it:
 
 ```sh
-sudo bash backend/scripts/bootstrap-ubuntu-24.04.sh
+git clone --depth 1 https://github.com/baguskristiansianturi/pluits.git /tmp/pluits-bootstrap
+sudo bash /tmp/pluits-bootstrap/backend/scripts/bootstrap-ubuntu-24.04.sh
 ```
 
-If the repository is not already present on the VPS, the script clones the public PLUITS repository into `/opt/pluits`. It installs Docker Engine and Compose v2, prepares the backup directory and copies the environment template without replacing an existing `.env`.
+The script installs Docker Engine and Compose v2, clones the repository into `/opt/pluits`, prepares the backup directory and copies the environment template without replacing an existing `.env`.
 
 Disconnect and reconnect SSH after bootstrap so the account receives Docker group membership.
 
@@ -52,7 +53,7 @@ Set these values in `.env`:
 - `PLUITS_BACKUP_AGE_RECIPIENT`: the public recipient printed by `age-keygen`.
 - Keep `PLUITS_TRUSTED_PROXY_CIDRS` aligned with `PLUITS_EDGE_PROXY_IP` and the Compose data subnet. Do not expose database or API ports.
 
-Keep `VITE_PUBLIC_SIGNUP_ENABLED=false` in the GitHub Pages repository variable until all release gates are complete.
+Keep `VITE_PUBLIC_SIGNUP_ENABLED=false` in the GitHub Pages repository variable until all release gates are complete. After the API passes its HTTPS health checks, set the GitHub repository Actions variable `VITE_API_BASE_URL` to `https://<PLUITS_API_DOMAIN>`, then run the existing **Build and deploy PLUITS to GitHub Pages** workflow once. This rebuilds the frontend with the real API address; it does not enable public signup.
 
 ## 3. First deployment
 
@@ -63,7 +64,7 @@ cd /opt/pluits
 bash backend/scripts/deploy.sh
 ```
 
-The script fetches the selected branch, validates required configuration, validates the Compose model, builds the existing container targets, runs the migration job and starts the stack.
+The script fetches the selected branch, validates required configuration, validates the Compose model, builds the existing container targets, runs the migration job and starts the stack. It refuses to deploy while required `.env` values still contain template placeholders.
 
 Caddy obtains and renews HTTPS certificates automatically once DNS and firewall routing are correct.
 
