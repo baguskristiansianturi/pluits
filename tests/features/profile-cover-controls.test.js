@@ -45,7 +45,7 @@ test('cover editor opens the native media picker from an explicit mobile-friendl
 test('cover editor accepts image or video media and limits video duration to ten seconds', () => {
   assert.match(moduleSource, /data-cover-image-crop/);
   assert.match(moduleSource, /data-cover-video-preview/);
-  assert.ok(moduleSource.includes('image/gif,video/mp4,video/webm'));
+  assert.ok(moduleSource.includes('accept=\"image/*,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.gif,.mp4,.webm\"'));
   assert.match(moduleSource, /jpeg\\|png\\|webp\\|gif/);
   assert.match(moduleSource, /GIF maksimal 10 MB/);
   assert.ok(moduleSource.includes('videoPreview.duration > 10'));
