@@ -68,7 +68,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   dialog.innerHTML = '<section class="social-profile-cover-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="profile-cover-dialog-title">'
     + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Edit sampul</h2><p data-cover-dialog-subtitle>Pilih foto, video, atau GIF.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
     + '<div data-cover-editor-view><div class="social-profile-cover-editor">'
-    + '<div class="social-profile-cover-upload"><div class="social-profile-cover-upload-copy"><strong>Tambahkan media sampul</strong><small>Pilih foto, video, atau GIF untuk tampilan profil Anda.</small></div><div class="social-profile-cover-picker"><button type="button" class="social-profile-cover-browse" data-cover-browse aria-label="Pilih media sampul" title="Pilih media sampul"><span class="ui-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></span></button><input id="profile-cover-media-input" class="social-profile-cover-file-input" type="file" accept="image/*,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.gif,.mp4,.webm" aria-label="Pilih foto, video, atau GIF untuk sampul" data-cover-file></div><small class="social-profile-cover-format-note">Foto/GIF: JPG, PNG, WebP, GIF · maks. 10 MB. Video: MP4/WebM · maks. 10 detik.</small><div class="social-profile-cover-crop-stage" data-cover-crop-stage hidden><img data-cover-image-crop alt="Pratinjau posisi foto sampul" draggable="false"></div><video data-cover-video-preview muted playsinline controls hidden></video></div>'
+    + '<div class="social-profile-cover-upload"><div class="social-profile-cover-picker" data-cover-picker><div class="social-profile-cover-picker-art" aria-hidden="true"><svg viewBox="0 0 64 48" fill="none"><rect x="2" y="2" width="60" height="44" rx="8" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="21" cy="17" r="4" stroke="currentColor" stroke-width="1.5"/><path d="m7 39 17-15 10 9 8-7 15 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M48 8v12M42 14h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><strong>Tambahkan sampul profil</strong><small>Sentuh area ini untuk memilih foto, video, atau GIF</small></div><input id="profile-cover-media-input" class="social-profile-cover-file-input" type="file" accept="image/*,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.gif,.mp4,.webm" aria-label="Pilih foto, video, atau GIF untuk sampul" data-cover-file></div><div class="social-profile-cover-crop-stage" data-cover-crop-stage hidden><img data-cover-image-crop alt="Pratinjau posisi foto sampul" draggable="false></div><video data-cover-video-preview muted playsinline controls hidden></video><small class="social-profile-cover-format-note">Foto/GIF: JPG, PNG, WebP, GIF · maks. 10 MB. Video: MP4/WebM · maks. 10 detik.</small></div>'
     + '</div></div>'
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
@@ -82,6 +82,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   const subtitle = dialog.querySelector('[data-cover-dialog-subtitle]');
   const fileInput = dialog.querySelector('[data-cover-file]');
   const cropStage = dialog.querySelector('[data-cover-crop-stage]');
+  const coverPicker = dialog.querySelector('[data-cover-picker]');
   const cropImage = dialog.querySelector('[data-cover-image-crop]');
   const videoPreview = dialog.querySelector('[data-cover-video-preview]');
   let cropPosition = { x: 50, y: 50 };
@@ -149,6 +150,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     if (pendingObjectUrl) { URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = ''; }
     fileInput.value = '';
     cropStage.hidden = true;
+    coverPicker.hidden = false;
     cropImage.removeAttribute('src');
     videoPreview.pause();
     videoPreview.removeAttribute('src');
@@ -171,7 +173,9 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     removeButton.hidden = library || !currentMedia;
     saveButton.disabled = false;
     const currentIsVideo = currentMedia?.tagName === 'VIDEO';
+    coverPicker.hidden = Boolean(currentMedia);
     cropStage.hidden = !currentMedia || currentIsVideo;
+    coverPicker.style.aspectRatio = `${cover.clientWidth} / ${cover.clientHeight}`;
     if (currentMedia && currentIsVideo) {
       videoPreview.hidden = false;
       videoPreview.src = currentMedia.currentSrc || currentMedia.src;
@@ -272,6 +276,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
     pendingObjectUrl = URL.createObjectURL(file);
     if (isVideo) {
+      coverPicker.hidden = true;
       cropStage.hidden = true;
       saveButton.disabled = true;
       videoPreview.hidden = false; videoPreview.src = pendingObjectUrl;
@@ -290,6 +295,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       videoPreview.load();
     } else {
       cropPosition = { x: 50, y: 50 };
+      coverPicker.hidden = true;
       videoPreview.hidden = true; videoPreview.removeAttribute('src');
       cropImage.src = pendingObjectUrl;
       cropImage.style.objectPosition = '50% 50%';
@@ -315,6 +321,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       applyCoverMedia(file, selectedObjectUrl, cropPosition);
       fileInput.value = '';
       cropStage.hidden = true;
+      coverPicker.hidden = true;
       
       removeButton.hidden = false;
       coverEnabled = true;
@@ -337,7 +344,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       if (selectedObjectUrl) { URL.revokeObjectURL(selectedObjectUrl); selectedObjectUrl = ''; }
       if (pendingObjectUrl) { URL.revokeObjectURL(pendingObjectUrl); pendingObjectUrl = ''; }
       fileInput.value = '';
-      cropStage.hidden = true; cropImage.removeAttribute('src');
+      cropStage.hidden = true; coverPicker.hidden = false; cropImage.removeAttribute('src');
       videoPreview.pause(); videoPreview.removeAttribute('src'); videoPreview.load(); videoPreview.hidden = true;
       removeButton.hidden = true;
       removeButton.disabled = false;
