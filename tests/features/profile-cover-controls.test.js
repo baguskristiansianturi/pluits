@@ -31,16 +31,17 @@ test('cover switch is compact, accessible, and gates editing without collapsing 
   assert.match(styles, /social-profile-cover-menu-wrap \{ top: 14px; right: 0; \}/);
 });
 
-test('cover editor uses a centered icon-only picker button and opens the native media picker on tap', () => {
+test('cover editor uses a centered icon-only picker with the real file input as the direct tap target', () => {
   assert.ok(moduleSource.includes('class="social-profile-cover-browse" data-cover-browse aria-label="Pilih media sampul"'));
-  assert.ok(moduleSource.includes('fileInput.click()'));
-  assert.ok(moduleSource.includes("browseButton && dialog.contains(browseButton)"));
+  assert.ok(moduleSource.includes('data-cover-file></div>'));
+  assert.doesNotMatch(moduleSource, /fileInput\\.click\\(\\)/);
+  assert.doesNotMatch(moduleSource, /data-cover-file tabindex=/);
   assert.ok(moduleSource.includes("fileInput.addEventListener('change', onChange)"));
-  assert.ok(moduleSource.includes("fileInput.removeEventListener('change', onChange)"));
-  assert.ok(styles.includes('.social-profile-cover-picker { position:relative; display:flex; width:100%; min-height:48px; align-items:center; justify-content:center; }'));
-  assert.ok(styles.includes('border-radius:50%'));
-  assert.ok(styles.includes('clip-path:inset(50%)'));
-  assert.doesNotMatch(moduleSource, /<label class="social-profile-cover-browse"/);
+  assert.ok(styles.includes('justify-content:center'));
+  assert.ok(styles.includes('inset:0!important; z-index:2!important'));
+  assert.ok(styles.includes('clip-path:none!important'));
+  assert.ok(styles.includes('pointer-events:auto!important; touch-action:manipulation'));
+  assert.ok(styles.includes('opacity:0!important'));
 });
 
 test('cover editor accepts image or video media and limits video duration to ten seconds', () => {
