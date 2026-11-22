@@ -7,6 +7,7 @@ export function renderProfileCoverMenu() {
     + '<button type="button" role="menuitemcheckbox" data-cover-action="toggle" aria-checked="false"><span class="social-profile-cover-switch" aria-hidden="true"><span></span></span><span>Aktifkan sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="edit" disabled>'+renderIcon('image')+'<span>Edit sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="library">'+renderIcon('film')+'<span>Pustaka sampul</span></button>'
+    + '<div class="social-profile-cover-menu-footer"><button type="button" data-cover-cancel>Batal</button><button type="button" data-cover-save-settings>Simpan pengaturan</button></div>'
     + '</div></div>';
 }
 
@@ -42,11 +43,15 @@ export function mountProfileCoverControls({ root } = {}) {
   const saveButton = dialog.querySelector('[data-cover-save]');
   const toggleAction = menu.querySelector('[data-cover-action="toggle"]');
   const editAction = menu.querySelector('[data-cover-action="edit"]');
-  let coverEnabled = Boolean(cover.querySelector('.social-profile-cover-image'));
+  let coverEnabled = !card.classList.contains('is-cover-disabled') && Boolean(cover.querySelector('.social-profile-cover-image'));
+  let draftCoverEnabled = coverEnabled;
   const syncCoverState = () => {
-    card.classList.toggle('is-cover-disabled', !coverEnabled);
-    toggleAction.setAttribute('aria-checked', String(coverEnabled));
-    editAction.disabled = !coverEnabled;
+    toggleAction.setAttribute('aria-checked', String(draftCoverEnabled));
+    editAction.disabled = !draftCoverEnabled;
+  };
+  const closeMenu = () => {
+    menu.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
   };
   syncCoverState();
   let pendingObjectUrl = '';
@@ -83,21 +88,37 @@ export function mountProfileCoverControls({ root } = {}) {
       const expanded = trigger.getAttribute('aria-expanded') === 'true';
       trigger.setAttribute('aria-expanded', String(!expanded));
       menu.hidden = expanded;
+      if (!expanded) {
+        draftCoverEnabled = coverEnabled;
+        syncCoverState();
+      }
       return;
     }
     const action = event.target.closest('[data-cover-action]');
     if (action && card.contains(action)) {
       const selected = action.dataset.coverAction;
-      menu.hidden = true;
-      trigger.setAttribute('aria-expanded', 'false');
       if (selected === 'toggle') {
-        coverEnabled = !coverEnabled;
+        draftCoverEnabled = !draftCoverEnabled;
         syncCoverState();
-      } else if (selected === 'edit' && coverEnabled) {
+      } else if (selected === 'edit' && draftCoverEnabled) {
+        closeMenu();
         openDialog('editor');
       } else if (selected === 'library') {
+        closeMenu();
         openDialog('library');
       }
+      return;
+    }
+    if (event.target.closest('[data-cover-save-settings]')) {
+      coverEnabled = draftCoverEnabled;
+      card.classList.toggle('is-cover-disabled', !coverEnabled);
+      closeMenu();
+      return;
+    }
+    if (event.target.closest('[data-cover-cancel]')) {
+      draftCoverEnabled = coverEnabled;
+      syncCoverState();
+      closeMenu();
       return;
     }
     if (event.target.closest('[data-cover-dismiss]')) { closeDialog(); return; }
@@ -145,6 +166,8 @@ export function mountProfileCoverControls({ root } = {}) {
       }
       image.src = selectedObjectUrl;
       coverEnabled = true;
+      draftCoverEnabled = true;
+      card.classList.remove('is-cover-disabled');
       syncCoverState();
     }
     closeDialog();
@@ -152,7 +175,11 @@ export function mountProfileCoverControls({ root } = {}) {
   const onKeydown = event => {
     if (event.key === 'Escape') {
       if (!dialog.hidden) closeDialog();
-      else { menu.hidden = true; trigger.setAttribute('aria-expanded', 'false'); }
+      else {
+        draftCoverEnabled = coverEnabled;
+        syncCoverState();
+        closeMenu();
+      }
     }
   };
 
