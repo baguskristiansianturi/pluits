@@ -68,7 +68,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   dialog.innerHTML = '<section class="social-profile-cover-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="profile-cover-dialog-title">'
     + '<header class="social-profile-cover-dialog-header"><div><h2 id="profile-cover-dialog-title">Edit sampul</h2><p data-cover-dialog-subtitle>Pilih foto, video, atau GIF.</p></div><button type="button" class="social-profile-cover-dialog-close" data-cover-dismiss aria-label="Tutup">×</button></header>'
     + '<div data-cover-editor-view><div class="social-profile-cover-editor">'
-    + '<div class="social-profile-cover-upload"><div class="social-profile-cover-upload-copy"><strong>Tambahkan media sampul</strong><small>Pilih foto, video, atau GIF untuk tampilan profil Anda.</small></div><label class="social-profile-cover-browse" for="profile-cover-media-input" data-cover-browse>Pilih media dari perangkat</label><input id="profile-cover-media-input" class="social-profile-cover-file-input" type="file" accept="image/*,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.gif,.mp4,.webm" aria-label="Pilih foto, video, atau GIF untuk sampul" data-cover-file><small class="social-profile-cover-format-note">Foto/GIF: JPG, PNG, WebP, GIF · maks. 10 MB. Video: MP4/WebM · maks. 10 detik.</small><div class="social-profile-cover-crop-stage" data-cover-crop-stage hidden><img data-cover-image-crop alt="Pratinjau posisi foto sampul" draggable="false"></div><video data-cover-video-preview muted playsinline controls hidden></video></div>'
+    + '<div class="social-profile-cover-upload"><div class="social-profile-cover-upload-copy"><strong>Tambahkan media sampul</strong><small>Pilih foto, video, atau GIF untuk tampilan profil Anda.</small></div><div class="social-profile-cover-picker"><button type="button" class="social-profile-cover-browse" data-cover-browse aria-label="Pilih media sampul" title="Pilih media sampul"><span class="ui-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></span></button><input id="profile-cover-media-input" class="social-profile-cover-file-input" type="file" accept="image/*,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.gif,.mp4,.webm" aria-label="Pilih foto, video, atau GIF untuk sampul" data-cover-file tabindex="-1"></div><small class="social-profile-cover-format-note">Foto/GIF: JPG, PNG, WebP, GIF · maks. 10 MB. Video: MP4/WebM · maks. 10 detik.</small><div class="social-profile-cover-crop-stage" data-cover-crop-stage hidden><img data-cover-image-crop alt="Pratinjau posisi foto sampul" draggable="false"></div><video data-cover-video-preview muted playsinline controls hidden></video></div>'
     + '</div></div>'
     + '<div data-cover-library-view hidden>'
     + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
@@ -215,6 +215,12 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   };
 
   const onClick = event => {
+    const browseButton = event.target.closest('[data-cover-browse]');
+    if (browseButton && dialog.contains(browseButton)) {
+      event.preventDefault();
+      fileInput.click();
+      return;
+    }
     const menuTrigger = event.target.closest('[data-cover-menu-trigger]');
     if (menuTrigger && card.contains(menuTrigger)) {
       const expanded = trigger.getAttribute('aria-expanded') === 'true';
