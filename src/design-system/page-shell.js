@@ -38,13 +38,13 @@ export function renderBottomNavigation(active = '') {
   const items = [
     { id: 'social', route: 'social', label: 'Beranda', icon: 'book' },
     { id: 'discover', route: 'discover', label: 'Jelajah', icon: 'eye' },
-    { id: 'create', route: 'dashboard', label: '', icon: '' },
+    { id: 'create', route: 'dashboard', label: '', icon: 'plus' },
     { id: 'messages', route: 'messages', label: 'Pesan', icon: 'message' },
     { id: 'profile', route: 'profile', label: 'Profil', icon: 'user' }
   ];
   return '<nav class="global-bottom-nav pl-global-bottom-nav" aria-label="Navigasi utama">' +
     items.map((item) => item.id === 'create'
-      ? '<a class="global-create-button" href="' + routeHref(item.route) + '" aria-label="Buka Ruang Kerja" title="Ruang Kerja"><span aria-hidden="true">+</span></a>'
+      ? '<a class="global-create-button" href="' + routeHref(item.route) + '" aria-label="Buka Ruang Kerja" title="Ruang Kerja">' + renderIcon(item.icon) + '</a>'
       : '<a href="' + routeHref(item.route) + '" class="' + (active === item.id ? 'is-active' : '') + '"' + (active === item.id ? ' aria-current="page"' : '') + '>' + renderIcon(item.icon) + '<span>' + item.label + '</span></a>'
     ).join('') + '</nav>';
 }
