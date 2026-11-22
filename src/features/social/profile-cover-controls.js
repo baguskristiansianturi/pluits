@@ -4,10 +4,10 @@ export function renderProfileCoverMenu() {
   return '<div class="social-profile-cover-menu-wrap">'
     + '<button type="button" class="social-profile-cover-menu-trigger" data-cover-menu-trigger aria-label="Pengaturan sampul profil" aria-haspopup="menu" aria-expanded="false" title="Pengaturan sampul profil">'+renderIcon('moreVertical')+'</button>'
     + '<div class="social-profile-cover-menu" data-cover-menu role="menu" hidden>'
+    + '<button type="button" class="social-profile-cover-menu-close" data-cover-menu-close aria-label="Tutup menu">×</button>'
     + '<button type="button" role="menuitemcheckbox" data-cover-action="toggle" aria-checked="false"><span class="social-profile-cover-switch" aria-hidden="true"><span></span></span><span>Aktifkan sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="edit" disabled>'+renderIcon('image')+'<span>Edit sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="library">'+renderIcon('film')+'<span>Pustaka sampul</span></button>'
-    + '<div class="social-profile-cover-menu-footer"><button type="button" data-cover-cancel>Batal</button><button type="button" data-cover-save-settings>Simpan pengaturan</button></div>'
     + '</div></div>';
 }
 
@@ -44,15 +44,22 @@ export function mountProfileCoverControls({ root } = {}) {
   const toggleAction = menu.querySelector('[data-cover-action="toggle"]');
   const editAction = menu.querySelector('[data-cover-action="edit"]');
   let coverEnabled = !card.classList.contains('is-cover-disabled') && Boolean(cover.querySelector('.social-profile-cover-image'));
-  let draftCoverEnabled = coverEnabled;
   card.classList.toggle('is-cover-disabled', !coverEnabled);
   const syncCoverState = () => {
-    toggleAction.setAttribute('aria-checked', String(draftCoverEnabled));
-    editAction.disabled = !draftCoverEnabled;
+    toggleAction.setAttribute('aria-checked', String(coverEnabled));
+    editAction.disabled = !coverEnabled;
   };
+  let menuCloseTimer = null;
   const closeMenu = () => {
-    menu.hidden = true;
     trigger.setAttribute('aria-expanded', 'false');
+    menu.classList.remove('is-open');
+    menu.classList.add('is-closing');
+    if (menuCloseTimer) clearTimeout(menuCloseTimer);
+    menuCloseTimer = setTimeout(() => {
+      menu.hidden = true;
+      menu.classList.remove('is-closing');
+      menuCloseTimer = null;
+    }, 150);
   };
   syncCoverState();
   let pendingObjectUrl = '';
@@ -88,20 +95,21 @@ export function mountProfileCoverControls({ root } = {}) {
     if (menuTrigger && card.contains(menuTrigger)) {
       const expanded = trigger.getAttribute('aria-expanded') === 'true';
       trigger.setAttribute('aria-expanded', String(!expanded));
+      if (menuCloseTimer) { clearTimeout(menuCloseTimer); menuCloseTimer = null; }
+      menu.classList.remove('is-closing');
       menu.hidden = expanded;
-      if (!expanded) {
-        draftCoverEnabled = coverEnabled;
-        syncCoverState();
-      }
+      if (!expanded) requestAnimationFrame(() => menu.classList.add('is-open'));
+      else menu.classList.remove('is-open');
       return;
     }
     const action = event.target.closest('[data-cover-action]');
     if (action && card.contains(action)) {
       const selected = action.dataset.coverAction;
       if (selected === 'toggle') {
-        draftCoverEnabled = !draftCoverEnabled;
+        coverEnabled = !coverEnabled;
+        card.classList.toggle('is-cover-disabled', !coverEnabled);
         syncCoverState();
-      } else if (selected === 'edit' && draftCoverEnabled) {
+      } else if (selected === 'edit' && coverEnabled) {
         closeMenu();
         openDialog('editor');
       } else if (selected === 'library') {
@@ -110,18 +118,7 @@ export function mountProfileCoverControls({ root } = {}) {
       }
       return;
     }
-    if (event.target.closest('[data-cover-save-settings]')) {
-      coverEnabled = draftCoverEnabled;
-      card.classList.toggle('is-cover-disabled', !coverEnabled);
-      closeMenu();
-      return;
-    }
-    if (event.target.closest('[data-cover-cancel]')) {
-      draftCoverEnabled = coverEnabled;
-      syncCoverState();
-      closeMenu();
-      return;
-    }
+    if (event.target.closest('[data-cover-menu-close]')) { closeMenu(); return; }
     if (event.target.closest('[data-cover-dismiss]')) { closeDialog(); return; }
     if (event.target === dialog) { closeDialog(); return; }
     const tab = event.target.closest('[data-cover-library-tab]');
@@ -144,6 +141,7 @@ export function mountProfileCoverControls({ root } = {}) {
       subtitle.textContent = 'File tidak sesuai. Gunakan JPG, PNG, atau WebP maksimal 10 MB.';
       return;
     }
+    if (menuCloseTimer) clearTimeout(menuCloseTimer);
     if (pendingObjectUrl) URL.revokeObjectURL(pendingObjectUrl);
     pendingObjectUrl = URL.createObjectURL(file);
     filePreview.src = pendingObjectUrl;
@@ -167,7 +165,6 @@ export function mountProfileCoverControls({ root } = {}) {
       }
       image.src = selectedObjectUrl;
       coverEnabled = true;
-      draftCoverEnabled = true;
       card.classList.remove('is-cover-disabled');
       syncCoverState();
     }
@@ -177,8 +174,6 @@ export function mountProfileCoverControls({ root } = {}) {
     if (event.key === 'Escape') {
       if (!dialog.hidden) closeDialog();
       else {
-        draftCoverEnabled = coverEnabled;
-        syncCoverState();
         closeMenu();
       }
     }
