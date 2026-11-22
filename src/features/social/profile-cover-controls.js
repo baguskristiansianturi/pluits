@@ -4,10 +4,9 @@ export function renderProfileCoverMenu() {
   return '<div class="social-profile-cover-menu-wrap">'
     + '<button type="button" class="social-profile-cover-menu-trigger" data-cover-menu-trigger aria-label="Pengaturan sampul profil" aria-haspopup="menu" aria-expanded="false" title="Pengaturan sampul profil">'+renderIcon('moreVertical')+'</button>'
     + '<div class="social-profile-cover-menu" data-cover-menu role="menu" hidden>'
-    + '<button type="button" role="menuitem" data-cover-action="toggle">'+renderIcon('eyeOff')+'<span data-cover-toggle-label>Tampilkan tanpa sampul</span></button>'
-    + '<button type="button" role="menuitem" data-cover-action="edit">'+renderIcon('image')+'<span>Tambah atau ubah sampul</span></button>'
-    + '<button type="button" role="menuitem" data-cover-action="text">'+renderIcon('fileText')+'<span>Edit tulisan sampul</span></button>'
-    + '<button type="button" role="menuitem" data-cover-action="library">'+renderIcon('book')+'<span>Pustaka sampul</span></button>'
+    + '<button type="button" role="menuitemcheckbox" data-cover-action="toggle" aria-checked="false"><span class="social-profile-cover-switch" aria-hidden="true"><span></span></span><span>Aktifkan sampul</span></button>'
+    + '<button type="button" role="menuitem" data-cover-action="edit" disabled>'+renderIcon('image')+'<span>Edit sampul</span></button>'
+    + '<button type="button" role="menuitem" data-cover-action="library">'+renderIcon('film')+'<span>Pustaka sampul</span></button>'
     + '</div></div>';
 }
 
@@ -27,11 +26,8 @@ export function mountProfileCoverControls({ root } = {}) {
     + '<label class="social-profile-cover-upload">'+renderIcon('image')+'<strong>Pilih gambar sampul</strong><small>Format JPG, PNG, atau WebP · maksimal 10 MB</small><img data-cover-file-preview alt="" hidden><input type="file" accept="image/jpeg,image/png,image/webp" data-cover-file></label>'
     + '<div class="social-profile-cover-field"><label for="profile-cover-text">Tulisan pada sampul</label><input id="profile-cover-text" type="text" maxlength="48" data-cover-text placeholder="Contoh: PLUITS · PROFILE"></div>'
     + '</div><p class="social-profile-cover-dialog-note">Perubahan ini tampil sebagai pratinjau di perangkat ini. Penyimpanan ke akun akan tersedia setelah layanan media profil aktif.</p></div>'
-    + '<div data-cover-library-view hidden><div class="social-profile-cover-library-tabs" role="tablist" aria-label="Kategori pustaka sampul">'
-    + '<button type="button" class="is-active" data-cover-library-tab="photo" role="tab" aria-selected="true">Foto</button>'
-    + '<button type="button" data-cover-library-tab="video" role="tab" aria-selected="false">Video</button>'
-    + '<button type="button" data-cover-library-tab="fluvara" role="tab" aria-selected="false">Fluvara</button></div>'
-    + '<div class="social-profile-cover-library-empty">'+renderIcon('image')+'<strong data-cover-library-title>Koleksi foto sedang disiapkan</strong><p>Koleksi resmi PLUITS akan ditampilkan di sini setelah desain, lisensi, dan asetnya disetujui. Belum ada sampul pustaka yang diterbitkan.</p></div>'
+    + '<div data-cover-library-view hidden>'
+    + '<div class="social-profile-cover-library-empty">'+renderIcon('film')+'<strong>Animasi sampul sedang disiapkan</strong><p>Pustaka ini akan berisi animasi pilihan PLUITS yang dapat dipasang pada area sampul. Ukuran dan posisi sampul tetap sama. Belum ada animasi resmi yang diterbitkan.</p></div>'
     + '</div>'
     + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-dismiss>Batal</button><button type="button" data-cover-save>Simpan pratinjau</button></footer></section>';
   card.append(dialog);
@@ -44,7 +40,15 @@ export function mountProfileCoverControls({ root } = {}) {
   const fileInput = dialog.querySelector('[data-cover-file]');
   const filePreview = dialog.querySelector('[data-cover-file-preview]');
   const saveButton = dialog.querySelector('[data-cover-save]');
-  const toggleLabel = menu.querySelector('[data-cover-toggle-label]');
+  const toggleAction = menu.querySelector('[data-cover-action="toggle"]');
+  const editAction = menu.querySelector('[data-cover-action="edit"]');
+  let coverEnabled = Boolean(cover.querySelector('.social-profile-cover-image'));
+  const syncCoverState = () => {
+    card.classList.toggle('is-cover-disabled', !coverEnabled);
+    toggleAction.setAttribute('aria-checked', String(coverEnabled));
+    editAction.disabled = !coverEnabled;
+  };
+  syncCoverState();
   let pendingObjectUrl = '';
   let selectedObjectUrl = '';
   let previousFocus = null;
@@ -87,9 +91,13 @@ export function mountProfileCoverControls({ root } = {}) {
       menu.hidden = true;
       trigger.setAttribute('aria-expanded', 'false');
       if (selected === 'toggle') {
-        const hidden = card.classList.toggle('is-cover-hidden');
-        toggleLabel.textContent = hidden ? 'Tampilkan sampul' : 'Tampilkan tanpa sampul';
-      } else openDialog(selected === 'library' ? 'library' : 'editor', selected === 'text');
+        coverEnabled = !coverEnabled;
+        syncCoverState();
+      } else if (selected === 'edit' && coverEnabled) {
+        openDialog('editor');
+      } else if (selected === 'library') {
+        openDialog('library');
+      }
       return;
     }
     if (event.target.closest('[data-cover-dismiss]')) { closeDialog(); return; }
@@ -136,8 +144,8 @@ export function mountProfileCoverControls({ root } = {}) {
         cover.prepend(image);
       }
       image.src = selectedObjectUrl;
-      card.classList.remove('is-cover-hidden');
-      toggleLabel.textContent = 'Tampilkan tanpa sampul';
+      coverEnabled = true;
+      syncCoverState();
     }
     closeDialog();
   };
