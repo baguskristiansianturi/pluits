@@ -86,3 +86,18 @@ test('turning the cover off preserves the saved media; only explicit removal del
   assert.match(moduleSource, /objectStore\(COVER_STORE\)\.delete\(profileKey\)/);
   assert.match(moduleSource, /cover\.querySelector\('\.social-profile-cover-image'\)\?\.remove\(\)/);
 });
+
+
+test('selecting a photo opens a draggable crop frame matching the live cover ratio', () => {
+  assert.match(moduleSource, /data-cover-crop-stage/);
+  assert.match(moduleSource, /data-cover-image-crop/);
+  assert.match(moduleSource, /Geser foto di dalam bingkai/);
+  assert.match(moduleSource, /cropStage\.addEventListener\('pointerdown', onCropPointerDown\)/);
+  assert.match(moduleSource, /cropStage\.addEventListener\('pointermove', onCropPointerMove\)/);
+  assert.match(moduleSource, /cropPosition\.x = Math\.max\(0, Math\.min\(100/);
+  assert.match(moduleSource, /cropPosition\.y = Math\.max\(0, Math\.min\(100/);
+  assert.match(moduleSource, /putCover\(stableProfileKey, file, cropPosition\)/);
+  assert.match(moduleSource, /crop: saved\.crop/);
+  assert.match(styles, /\.social-profile-cover-crop-stage\{[\s\S]*touch-action:none/);
+  assert.match(styles, /object-fit:cover/);
+});
