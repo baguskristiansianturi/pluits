@@ -18,15 +18,15 @@
 
 ## Mobile-first content hierarchy
 1. Shared PLUITS header with compact account, search, cart, and notification actions.
-2. Compact introduction and one unified discovery/search entry point for people, places, products, and services.
-3. **Orang yang mungkin Anda kenal** — horizontal profile-suggestion carousel.
-4. **Cerita dari circle Anda** — horizontal story carousel, including the user's own add-story entry.
-5. Social content tabs in this order: **Feed, Reels, Live, Blog**. Tabs belong only to the social area, scroll with the page, and are not sticky.
-6. Sequential, vertically scrollable social content. Feed cards use full-width, Instagram-like media presentation on mobile. Existing published Feed/Reels data integration is retained; Live, Stories, and Blog remain prototype surfaces until their services are connected.
-7. **Jelajahi di sekitar Anda** — horizontal local discovery carousel for places, food, activities, and services.
-8. **Produk lokal pilihan** — horizontal product/category preview leading to Marketplace. Marketplace should start from the user's current/selected location and allow the user to change scope to another city or global. Location-aware product data and location selection remain pending Marketplace/service integration; current home cards are visibly demo-only.
-9. **Layanan PLUITS** — horizontal shortcuts for Transportasi, Kurir, Tiket, Sewa Mobil, Akomodasi, and Kuliner.
-10. Compact **Tentang PLUITS** summary before the persistent app navigation.
+2. Compact location-scope row and welcome hero with one unified discovery/search entry point for people, places, products, and services. Location selection remains explicit until the location service is connected; do not imply GPS detection is active.
+3. Compact horizontal service-shortcut carousel: Transportasi, Tiket, Sewa Mobil, Akomodasi, Kurir, and Kuliner. These are entry shortcuts only; each service keeps its own module and search/transaction flow.
+4. **Orang yang mungkin Anda kenal** — horizontal profile-suggestion carousel.
+5. **Cerita dari circle Anda** — horizontal story carousel, including the user's own add-story entry.
+6. Social content tabs in this order: **Feed, Reels, Live, Blog**. Tabs belong only to the social area, scroll with the page, and are not sticky.
+7. Sequential, vertically scrollable social content. Feed cards use full-width, Instagram-like media presentation on mobile. Existing published Feed/Reels data integration is retained; Live, Stories, and Blog remain prototype surfaces until their services are connected.
+8. **Jelajahi di sekitar Anda** — horizontal local discovery carousel for places, food, activities, and services.
+9. **Produk lokal pilihan** — horizontal product/category preview leading to Marketplace, followed by a clear Marketplace CTA. Marketplace should start from the user's current/selected location and allow the user to change scope to another city or global. Location-aware product data and location selection remain pending Marketplace/service integration; current home cards are visibly demo-only.
+10. Compact dark **Tentang PLUITS** summary before the persistent app navigation.
 
 ## Layout and interaction rules
 - Preserve shared page shell, logo, header geometry, tokens, registered icons, and standard content gutters.
@@ -35,7 +35,7 @@
 - Social posts are full-width on mobile; desktop/tablet may retain a readable constrained feed width.
 - Tabs navigate to their corresponding content sections and update the active visual state as the user scrolls. They do not pin to the viewport.
 - Bottom navigation remains fixed and safe-area aware.
-- The mobile app home does not add a marketing-site copyright footer; the compact About summary is the final content section before persistent navigation.
+- Keep the authenticated home distinct from the public marketing homepage. The compact dark About summary is the final content section before persistent app navigation; do not import business-owner marketing sections.
 
 ## Data integrity and availability
 - Real Feed/Reels content must come only from the first-party PLUITS social API and existing authorization rules.
@@ -46,6 +46,8 @@
 ## Implementation mapping
 - Route/auth redirect: `src/app/create-app.js`, `src/app/routes.js`.
 - Social Home and its scoped styles: `src/features/home/home-page.js`, `src/features/home/home-page.css`.
+- Mobile welcome hero, location-scope prompt, and service shortcuts are page-local composition; no global tokens or shared shell geometry are changed.
+- Marketplace CTA links to the existing Marketplace route. Product preview cards remain labelled illustrative until real location-aware catalogue data is connected.
 - This page specification: `src/features/home/PAGE-SOCIAL-HOME-001.md`.
 - Shared shell/icons/tokens: `src/design-system/`.
 - Ruang Kerja remains `src/features/dashboard/dashboard-page.js`.
