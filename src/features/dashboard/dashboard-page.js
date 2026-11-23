@@ -215,7 +215,8 @@ function renderMobileCreate(displayName, partnerExpanded = false) {
     { id:'live', label:'Live', icon:'play', description:'Mulai siaran langsung' },
     { id:'blog', label:'Blog', icon:'fileText', description:'Tulis dan publikasikan artikel' }
   ];
-  const businessEntries = BUSINESS_ENTRIES;  return '<section class="dashboard-mobile-create" aria-labelledby="mobile-create-title">' +
+  const businessEntries = BUSINESS_ENTRIES;
+  return '<section class="dashboard-mobile-create" aria-labelledby="mobile-create-title">' +
     '<div class="dashboard-mobile-create-heading"><span class="dashboard-kicker">CREATE</span><h1 id="mobile-create-title">' + greeting + ', ' + firstName + '</h1><p>Apa yang ingin Anda bagikan hari ini?</p></div>' +
     '<section class="dashboard-mobile-social" aria-label="Buat konten sosial">' +
       '<div class="dashboard-mobile-create-list">' +
