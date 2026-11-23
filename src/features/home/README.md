@@ -55,3 +55,11 @@ Run `npm test` and `npm run build`. Verify `#/home` for guest and authenticated 
 - Location detection, location-aware catalogue filtering, people suggestions, Stories, Live, Blog, and nearby inventory are not claimed as connected until their PLUITS services/data contracts exist.
 - The page uses existing shared shell and icon registry; no global token, route, authentication, backend, database, or merchant-operation changes were made.
 - Validation: architecture checks and Vite production build passed on commit cb1d6dd1402841a24b50420163af929f6e95f6aa. Pages deploy was blocked by duplicate/missing github-pages artifact metadata during a workflow rerun; a fresh push is required for a clean artifact/deploy run. Android UAT remains pending.
+
+
+## Responsive UI and demo-content QA — 23 November 2026
+- Social Home responsive rules explicitly cover narrow phones (<=359px), mobile (<=767px), tablet (768–1023px), and desktop (>=1024px); carousels keep horizontal scrolling and inset first-card gutters while normal content remains inside the viewport.
+- Feed and Reels have image-backed demo posts whenever the API is unavailable or returns no public posts. Live, Blog, Stories, nearby discovery, and local product cards also use illustrative photography. Product cards include sample prices and discounts to exercise the card hierarchy.
+- Every illustrative post/product/category/live element is marked DEMO or otherwise labelled as a preview. These samples are not real user content, inventory, prices, transactions, or engagement metrics.
+- Regression coverage: `tests/features/home-responsive-visuals.test.js` checks responsive breakpoint contracts, horizontal rail behavior, complete demo fallbacks, and people-distance options.
+- Automated architecture checks and production build pass on commit 99c63b65babaee52cb2b8c34a3e7af7531dffdf2. Browser-based visual checks at 320, 360, 390, 430, 768, 1024, and 1440 CSS pixels and Android device acceptance are not available through the current repository toolchain; do not treat CSS contract tests as proof of pixel-perfect rendering.
