@@ -55,10 +55,11 @@ test('social home mobile layout keeps recommendation inset, feed full-bleed, and
   const css = await readFile(homeCss, 'utf8');
   assert.equal((source.match(/class="global-social-area"/g) || []).length, 1,
     'social content must have one parent wrapper (no accidental nested duplicate)');
-  assert.match(css, /global-home-page > \.global-home-main\s*\{\s*padding-block-start:\s*30px/);
-  assert.match(css, /global-people-rail\s*\{[^}]*padding-inline:\s*5px/s);
-  assert.match(css, /global-post-list\s*\{[^}]*width:\s*calc\(100% \+ 2 \* var\(--pl-page-gutter\)\)[^}]*margin-inline:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
+  assert.match(css, /global-location-row\s*\{\s*margin:\s*30px 5px 8px/);
+  assert.match(css, /global-people-rail\s*\{[^}]*padding:\s*0 5px 9px/s);
+  assert.match(css, /global-content-section\s*\{[^}]*width:\s*100vw[^}]*margin-inline:\s*calc\(50% - 50vw\)/s);
+  assert.match(css, /global-post-list\s*\{[^}]*width:\s*100%[^}]*max-width:\s*none/s);
   assert.match(css, /global-post-card\s*\{[^}]*width:\s*100%[^}]*max-width:\s*none/s);
-  assert.match(css, /global-quick-search\s*\{[^}]*background:\s*transparent/s);
-  assert.match(css, /global-quick-search > a\s*\{[^}]*min-height:\s*36px[^}]*background:\s*#fff/s);
+  assert.match(css, /global-quick-search\s*\{[^}]*width:\s*100%[^}]*background:\s*transparent/s);
+  assert.match(css, /global-quick-search > a\s*\{[^}]*min-height:\s*34px[^}]*background:\s*#fff/s);
 });
