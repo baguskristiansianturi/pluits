@@ -48,7 +48,7 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - The mobile heading uses a time-aware greeting (morning, afternoon, evening, or night) with the signed-in user's first display-name token, followed by: "Apa yang ingin Anda bagikan hari ini?"
 - The five social-first actions are Story, Post, Reel, Live, and Blog. They appear as full-width navigation rows with compact monochrome icons, supporting descriptions, restrained separators, and a directional affordance. Blog opens the existing Blog Studio entry; no publishing success is implied.
 - A subtle divider separates social publishing from a dedicated "Ruang Bisnis" section.
-- The business section contains four entry concepts: Buat Toko, Buat Layanan, Klaim Tempat, and Tambahkan Bisnis.
+- The business section contains four entry concepts: Buat Toko, Buat Layanan Profesional, Klaim Tempat, and Bisnis dan Layanan Anda.
 - Store and Service labels are state-driven in the future: after creation, "Buat Toko"/"Buat Layanan" must become "Kelola Toko"/"Kelola Layanan". A claimed Geo Directory place becomes "Kelola Tempat". These labels must be derived from authorized server records, never guessed or simulated.
 - A Store with a physical address should link to its corresponding Geo Directory place record when available; the store and place are related but distinct records. Do not create duplicate place listings automatically.
 - "Tambahkan Bisnis" is the extensible entry for industries/categories not yet represented. If no suitable module exists, the user can submit a category request to Plugins for evaluation; accepted requests may lead to a new PLUITS module. The request/review/provisioning flow is future work.
@@ -93,3 +93,11 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - The action label sits directly below the tile with a very small gap (approximately 2px); use a compact, readable label size.
 - Keep the action surface itself visually light and avoid a second enclosing card, descriptions, arrows, or oversized padding.
 - Teal is limited to the icon accent; white remains dominant and grey remains the border/separator color.
+
+
+## Mobile business entry cards — interaction and hierarchy
+- Ruang Bisnis presents four concise, tappable cards: Toko, Layanan Profesional, Tempat, and Bisnis dan Layanan Anda.
+- Each card uses a prominent icon, a short title, and one compact action label; remove explanatory paragraphs that make the cards feel crowded.
+- Cards are semantic buttons with keyboard focus, a soft neutral hover/pressed surface, subtle press feedback, and reduced-motion support.
+- Toko and Layanan Profesional open the existing Akun Bisnis view with the corresponding type selected; Tempat opens the Geo Directory module placeholder; Bisnis dan Layanan Anda opens Akun Bisnis.
+- These interactions are navigation and selection only. They do not create businesses, claim places, or imply backend ownership. Those actions remain pending their authorized workflows.
