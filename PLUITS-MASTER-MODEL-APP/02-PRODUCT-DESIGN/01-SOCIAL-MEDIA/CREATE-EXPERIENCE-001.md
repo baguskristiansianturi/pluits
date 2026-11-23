@@ -86,3 +86,9 @@ The mobile Create visual language uses a restrained editorial composition, not a
 - Translucent neutral/canvas treatment may be used selectively behind secondary sections, especially Ruang Bisnis, while entry cards remain the clear foreground surfaces.
 - Keep card borders and shadows subtle; use a softly fading divider rather than a strong separator.
 - Scope these surface treatments to the mobile Create view only. Desktop Dashboard and other views remain unchanged.
+
+
+## Mobile Create — clarified white-first visual direction
+The dominant surface is white. Use one consistent soft neutral grey for borders and separators, and a matching very light grey for secondary backgrounds such as the Ruang Bisnis container. Avoid green-tinted neutral surfaces. PLUITS teal from the logo is reserved for restrained accents such as icon highlights or selected states; it is not a dominant background color.
+
+On phone widths, Story, Post, Artikel, and Live are four compact cards in a single horizontal row. Their icons and labels stay centered and legible; supporting descriptions are hidden at this compact size. Ruang Bisnis remains a two-column grid so each business card has room for its explanatory copy. Desktop Create and Dashboard composition remain unchanged.
