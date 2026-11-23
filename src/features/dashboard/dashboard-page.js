@@ -98,16 +98,6 @@ const PARTNER_CATEGORIES = Object.freeze([
     ['event-venues','Ruang Acara','Ballroom, aula, dan venue.'],
     ['commercial-space','Ruang Komersial','Ruko, kios, dan ruang usaha.']
   ]},
-  { id:'classifieds-jobs',label:'Iklan Baris & Lowongan',icon:'grid',subcategories:[
-    ['job-vacancies','Lowongan Kerja','Full-time, part-time, kontrak, dan freelance.'],
-    ['job-seekers','Pencari Kerja','Profil kandidat dan pencarian pekerjaan.'],
-    ['classified-property','Iklan Properti','Jual dan sewa properti.'],
-    ['classified-vehicles','Iklan Kendaraan','Jual dan sewa kendaraan.'],
-    ['used-goods','Barang Bekas','Elektronik, furnitur, dan barang lainnya.'],
-    ['classified-services','Penawaran Jasa','Jasa dan kebutuhan tenaga profesional.'],
-    ['business-opportunities','Bisnis & Peluang Kemitraan','Jual beli usaha dan peluang kerja sama.'],
-    ['other-classifieds','Iklan Lainnya','Iklan yang belum masuk kategori lain.']
-  ]},
   { id:'other-partners',label:'Mitra Lainnya',icon:'moreVertical',subcategories:[
     ['event-organizers','Event Organizer','Penyelenggara acara.'],
     ['staffing-providers','Penyedia Tenaga Kerja','Penyedia dan penyalur tenaga kerja.'],
@@ -115,6 +105,17 @@ const PARTNER_CATEGORIES = Object.freeze([
     ['communities','Komunitas & Organisasi','Komunitas dan organisasi mitra.'],
     ['other-partner-types','Bidang Lainnya','Bidang mitra yang belum tercakup.']
   ]}
+]);
+
+const CLASSIFIED_CATEGORIES = Object.freeze([
+  ['job-vacancies','Lowongan Kerja','Full-time, part-time, kontrak, dan freelance.'],
+  ['job-seekers','Pencari Kerja','Profil kandidat dan pencarian pekerjaan.'],
+  ['classified-property','Iklan Properti','Jual dan sewa properti.'],
+  ['classified-vehicles','Iklan Kendaraan','Jual dan sewa kendaraan.'],
+  ['used-goods','Barang Bekas','Elektronik, furnitur, dan barang lainnya.'],
+  ['classified-services','Penawaran Jasa','Jasa dan kebutuhan tenaga profesional.'],
+  ['business-opportunities','Bisnis & Peluang Kemitraan','Jual beli usaha dan peluang kerja sama.'],
+  ['other-classifieds','Iklan Lainnya','Iklan yang belum masuk kategori lain.']
 ]);
 
 
@@ -225,7 +226,6 @@ function renderMobileCreate(displayName, state) {
 }
 
 function renderPartnerLayers(state) {
-  const category = PARTNER_CATEGORIES.find((item) => item.id === 'classifieds-jobs');
   const parents = ['parents','subcategories'].includes(state.partnerLayer)
     ? '<div class="dashboard-layer-backdrop" data-layer-backdrop><section class="dashboard-layer-panel" role="dialog" aria-modal="true" aria-labelledby="partner-layer-title"><div class="dashboard-layer-grabber"></div><header class="dashboard-layer-header"><div><span class="dashboard-kicker">FLUID PARTNER</span><h2 id="partner-layer-title">Buat partner</h2><p>Pilih kategori utama usaha atau layanan Anda.</p></div><button type="button" class="dashboard-layer-close" data-close-layer aria-label="Tutup">×</button></header><div class="dashboard-layer-content"><div class="dashboard-parent-category-list">' +
       PARTNER_CATEGORIES.map((item) => '<button type="button" class="dashboard-parent-category" data-partner-parent="' + item.id + '"><span class="dashboard-parent-category-icon">' + renderIcon(item.icon) + '</span><span><strong>' + item.label + '</strong><small>' + item.subcategories.length + ' kategori tersedia</small></span><span class="dashboard-parent-category-arrow">' + renderIcon('arrow') + '</span></button>').join('') +
@@ -235,9 +235,9 @@ function renderPartnerLayers(state) {
     ? '<div class="dashboard-layer-backdrop dashboard-layer-backdrop--nested" data-layer-backdrop><section class="dashboard-layer-panel dashboard-layer-panel--nested" role="dialog" aria-modal="true" aria-labelledby="partner-subcategory-title"><div class="dashboard-layer-grabber"></div><header class="dashboard-layer-header"><button type="button" class="dashboard-layer-back" data-layer-back>‹ <span>Kategori utama</span></button><button type="button" class="dashboard-layer-close" data-close-layer aria-label="Tutup">×</button></header><div class="dashboard-layer-subheading"><span class="dashboard-kicker">FLUID PARTNER / ' + selected.label.toUpperCase() + '</span><h2 id="partner-subcategory-title">' + selected.label + '</h2><p>Subkategori yang belum dirilis tetap ditampilkan dengan tanda kunci.</p></div><div class="dashboard-layer-content"><div class="dashboard-partner-subcategory-grid">' +
       selected.subcategories.map((item) => '<article class="dashboard-partner-subcategory-card" aria-label="' + item[1] + ', terkunci"><span class="dashboard-partner-lock" aria-label="Terkunci">' + renderIcon('lock') + '</span><strong>' + item[1] + '</strong><small>' + item[2] + '</small></article>').join('') +
     '</div><p class="dashboard-partner-catalog-note">Kategori dibuka secara bertahap setelah modul terkait selesai disiapkan dan disetujui.</p></div></section></div>' : '';
-  const classified = state.partnerLayer === 'classifieds' && category
+  const classified = state.partnerLayer === 'classifieds'
     ? '<div class="dashboard-layer-backdrop" data-layer-backdrop><section class="dashboard-layer-panel" role="dialog" aria-modal="true" aria-labelledby="classified-layer-title"><div class="dashboard-layer-grabber"></div><header class="dashboard-layer-header"><div><span class="dashboard-kicker">IKLAN BARIS</span><h2 id="classified-layer-title">Apa yang ingin Anda buat?</h2><p>Pilih jenis iklan yang paling sesuai.</p></div><button type="button" class="dashboard-layer-close" data-close-layer aria-label="Tutup">×</button></header><div class="dashboard-layer-content"><div class="dashboard-classified-category-list">' +
-      category.subcategories.map((item) => '<button type="button" class="dashboard-classified-category' + (state.selectedClassifiedCategory === item[0] ? ' is-selected' : '') + '" data-classified-category="' + item[0] + '" aria-pressed="' + (state.selectedClassifiedCategory === item[0]) + '"><strong>' + item[1] + '</strong><small>' + item[2] + '</small></button>').join('') +
+      CLASSIFIED_CATEGORIES.map((item) => '<button type="button" class="dashboard-classified-category' + (state.selectedClassifiedCategory === item[0] ? ' is-selected' : '') + '" data-classified-category="' + item[0] + '" aria-pressed="' + (state.selectedClassifiedCategory === item[0]) + '"><strong>' + item[1] + '</strong><small>' + item[2] + '</small></button>').join('') +
     '</div>' + (state.selectedClassifiedCategory ? '<p class="dashboard-classified-note" role="status">Kategori dipilih. Alur penerbitan iklan dan penyimpanan masih menunggu modul Iklan Baris.</p>' : '') + '</div></section></div>' : '';
   return parents + subs + classified;
 }
