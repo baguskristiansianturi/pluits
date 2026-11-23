@@ -34,3 +34,11 @@ The current prototype is presentation-only for creation actions. Story/Post/Reel
 
 ## Validation
 Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-first action hierarchy, Blog entry, no desktop management panels or horizontal overflow, visible keyboard focus, and desktop workspace panels/tabs/resizers. Real-device UAT, deployment verification, backend integration, and founder visual acceptance remain separate checks.
+
+
+## Create header utilities
+- Mobile Create header shows three compact utility icons in left-to-right order: Wishlist, Shopping Cart, Notifications. Therefore Notifications is the rightmost icon.
+- These are visual navigation affordances only at this stage; no click behavior, unread counts, cart data, saved items, or notification events are fabricated.
+- Recently Viewed is a separate future discovery/history concept, not a synonym for Wishlist. It is intentionally not displayed until its scope and placement are approved.
+- Future notification aggregation may include comments, comment replies, social interactions, and events from other PLUITS modules. Delivery rules and interaction flows are deferred to the notification service design.
+- Desktop workspace header actions remain unchanged.
