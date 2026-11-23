@@ -122,8 +122,9 @@ function renderMobileCreate(displayName) {
   const actions = [
     { id:'story', label:'Story', icon:'plus', description:'Bagikan momen yang sedang berlangsung' },
     { id:'post', label:'Post', icon:'image', description:'Bagikan foto, video, atau cerita' },
-    { id:'blog', label:'Artikel', icon:'fileText', description:'Tulis dan publikasikan artikel' },
-    { id:'live', label:'Live', icon:'play', description:'Mulai siaran langsung' }
+    { id:'reel', label:'Reel', icon:'film', description:'Bagikan video pendek vertikal' },
+    { id:'live', label:'Live', icon:'play', description:'Mulai siaran langsung' },
+    { id:'blog', label:'Blog', icon:'fileText', description:'Tulis dan publikasikan artikel' }
   ];
   const businessEntries = [
     { label:'Toko', action:'Buat Toko', icon:'store', description:'Kelola produk dan penjualan' },
