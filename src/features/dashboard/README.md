@@ -61,3 +61,10 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - Business entry points use a separate, similarly structured list with the action label at the trailing edge.
 - Existing PLUITS typography, color, spacing, and border tokens remain the source of truth; no new global tokens or icon assets are introduced.
 - Desktop Dashboard / Ruang Kerja and its panels, tabs, and navigation are unchanged.
+
+
+## Mobile Create compact layout
+- Social creation actions and business entry points use a balanced two-column grid on mobile to reduce excessive vertical scrolling.
+- Compact bordered surfaces retain the professional, restrained visual language; icons remain secondary to labels and descriptions.
+- Very narrow devices receive tighter spacing while retaining the two-column layout.
+- Desktop dashboard remains unchanged.

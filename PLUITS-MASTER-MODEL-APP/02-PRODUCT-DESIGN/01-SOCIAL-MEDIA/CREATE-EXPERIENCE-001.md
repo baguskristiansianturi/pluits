@@ -70,3 +70,11 @@ The mobile Create visual language uses a restrained editorial composition, not a
 - Use the existing PLUITS design tokens and icon registry. Do not add new global tokens, icon packages, gradients, decorative illustrations, or oversized rounded cards.
 - The business rows remain informational until the relevant creation, claim, and management flows are connected to authorized backend records.
 - Desktop composition remains unchanged.
+
+
+## Mobile compact grid composition
+- Arrange Story, Post, Artikel, and Live in a balanced two-column grid to reduce vertical page length.
+- Arrange the four Ruang Bisnis entries in a matching two-column grid, with their action labels below the description.
+- Use compact, restrained bordered surfaces, small monochrome icons, and clear text hierarchy; avoid oversized playful tiles.
+- Preserve two columns on narrow devices with reduced internal spacing and readable wrapping.
+- Desktop Create remains unchanged.
