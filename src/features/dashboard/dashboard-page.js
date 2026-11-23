@@ -211,7 +211,7 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
       '<div class="pl-page-shell dashboard-page">' +
         renderPageHeader({ label:'PLUITS Dashboard', brandHref:routeHref('home'), note:'PUSAT KENDALI PENGGUNA', rightContent:headerActions, variant:'workspace' }) +
         '<main class="pl-page-main dashboard-main">' +
-          '<div class="dashboard-toolbar"><div class="dashboard-toolbar-title"><span class="dashboard-kicker">RUANG KERJA PERSONAL</span><strong>Dashboard</strong></div>' +
+          '<div class="dashboard-toolbar"><div class="dashboard-toolbar-title"><span class="dashboard-kicker">RUANG KERJA PERSONAL</span><strong><span class="dashboard-desktop-title">Dashboard</span><span class="dashboard-mobile-title">Create</span></strong></div>' +
             '<div class="dashboard-toolbar-controls"><button type="button" data-toggle-left aria-expanded="' + state.leftOpen + '">' + (state.leftOpen ? 'Sembunyikan modul' : 'Tampilkan modul') + '</button><button type="button" data-toggle-right aria-expanded="' + state.rightOpen + '">' + (state.rightOpen ? 'Sembunyikan sosial' : 'Tampilkan sosial') + '</button></div></div>' +
           '<div class="dashboard-tabs" role="tablist" aria-label="Halaman yang sedang terbuka">' + tabMarkup + '</div>' +
           renderMobileCreate() +
