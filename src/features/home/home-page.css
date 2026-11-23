@@ -485,3 +485,53 @@
 @media(prefers-reduced-motion:reduce){
  .global-home-page *{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* Final viewport QA overrides — 320px phones through wide desktop. */
+.global-home-page{box-sizing:border-box}
+.global-post-card.is-reel .global-post-media{display:block;width:min(100%,420px);max-height:620px;aspect-ratio:9/16;margin-inline:auto;object-fit:cover}
+.global-post-card.is-reel .global-post-caption{max-width:420px;margin-inline:auto}
+.global-post-card.is-reel .global-demo-disclaimer,.global-post-card.is-reel .global-post-actions{max-width:420px;margin-inline:auto}
+.global-live-demo-grid .global-live-demo{height:100%}
+.global-live-meta{min-height:112px}
+.global-product-demo{min-width:0}
+.global-feature-card{min-width:0}
+@media(max-width:767px){
+ .global-header-tools{min-width:0;max-width:65%}
+ .global-header-actions{min-width:0;gap:1px}
+ .global-header .global-icon-button{width:clamp(29px,8.5vw,35px);height:clamp(29px,8.5vw,35px)}
+ .global-home-main{padding-inline:16px}
+ .global-content-tabs{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding-inline:12px}
+ .global-content-tabs button{min-width:0;padding-inline:2px;font-size:clamp(9px,2.7vw,11px)}
+ .global-post-card.is-reel .global-post-media{width:min(100%,420px);max-height:68vh}
+ .global-live-demo-grid{grid-template-columns:minmax(0,1fr)}
+ .global-live-meta{min-height:0}
+ .global-blog-demo{grid-template-columns:minmax(96px,35%) minmax(0,1fr)}
+ .global-marketplace-cta{display:grid;grid-template-columns:36px minmax(0,1fr);align-items:center}
+ .global-marketplace-cta>b{grid-column:1/-1;justify-self:stretch;justify-content:center;margin:3px 0 0}
+}
+@media(max-width:359px){
+ .global-home-main{padding-inline:12px}
+ .global-header-tools{max-width:62%}
+ .global-header .global-icon-button{width:28px;height:28px}
+ .global-header .global-icon-button .ui-icon{width:16px;height:16px}
+ .global-content-tabs{padding-inline:8px}
+ .global-content-tabs button{font-size:9px}
+ .global-post-author{padding-inline:9px}
+ .global-post-actions{justify-content:space-between;gap:6px;padding-inline:9px;font-size:8px}
+ .global-post-actions>span{gap:4px}
+ .global-blog-demo{grid-template-columns:88px minmax(0,1fr)}
+ .global-blog-demo>div:last-child{padding:8px}
+ .global-blog-demo strong{font-size:10px}
+ .global-blog-demo p{font-size:8px}
+ .global-product-demo{flex-basis:132px}
+}
+@media(min-width:768px) and (max-width:1023px){
+ .global-home-main{padding-inline:22px}
+ .global-social-area{max-width:760px;margin-inline:auto}
+ .global-post-list{max-width:680px}
+}
+@media(min-width:1024px){
+ .global-home-main{max-width:var(--pl-container-wide);padding-inline:24px}
+ .global-social-area{max-width:860px;margin-inline:auto}
+}
