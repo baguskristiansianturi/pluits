@@ -4,7 +4,7 @@ Status: **INITIAL PRODUCT DESIGN — taxonomy review and operational contracts p
 
 ## Purpose
 
-Fluid Partner is the partner-facing discovery and category catalogue surface within the PLUITS ecosystem. It helps users discover businesses, providers, services, accommodation, transport, tickets, and classified opportunities. It is not a replacement for the operational systems owned by Store, Restaurant & Café, Logistics & Transportation, Tickets & Accommodation, Geo Directory, or other domain modules.
+Fluid Partner is the partner-facing discovery and category catalogue surface within the PLUITS ecosystem. It helps users discover businesses, providers, services, accommodation, transport, and ticketing partners. Classified listings are a separate creation surface. It is not a replacement for the operational systems owned by Store, Restaurant & Café, Logistics & Transportation, Tickets & Accommodation, Geo Directory, or other domain modules.
 
 ## Information architecture
 
@@ -28,7 +28,6 @@ Do not promote every specific business type to a parent category. Keep related t
 | Layanan Profesional | Desain & Kreatif; Teknologi; Pemasaran; Penulisan; Konsultan; Pendidikan & Pelatihan; Perawatan & Pemeliharaan; Jasa Personal |
 | Makanan & Minuman | Kafe & Coffee Shop; Restoran; Katering; Bakery & Pastry; Kedai & Warung; Produsen Makanan; Penyedia Minuman |
 | Properti & Ruang | Jual Properti; Sewa Properti; Ruang Kantor; Co-working Space; Ruang Acara; Ruang Komersial |
-| Iklan Baris & Lowongan | Lowongan Kerja; Pencari Kerja; Iklan Properti; Iklan Kendaraan; Barang Bekas; Penawaran Jasa; Bisnis & Peluang Kemitraan; Iklan Lainnya |
 | Mitra Lainnya | Event Organizer; Penyedia Tenaga Kerja; Kesehatan & Kebugaran; Komunitas & Organisasi; Bidang Lainnya |
 
 This is an initial working taxonomy, not a claim that every vertical is implemented or approved for launch. The catalogue should be refined through module audit and founder review.
@@ -42,7 +41,22 @@ This is an initial working taxonomy, not a claim that every vertical is implemen
 - Transport providers, car/motorcycle rental, courier, and freight are distinct service types even though they share the Transportasi parent.
 - Ticketing and accommodation remain separate from vehicle/transport provision because their inventory, booking, and fulfillment models differ.
 - Fashion subtypes such as boutique, clothing shop, and outlet belong under Toko & Perdagangan → Fashion.
-- Classifieds and job listings require their own future listing, candidate/company, application, moderation, and trust flows; they must not be represented as active job services before those flows exist.
+- Classified ads and job listings are separate from Fluid Partner. They require their own listing, candidate/company, application, moderation, and trust flows; they must not be represented as active job services before those flows exist.
+
+## Separate Iklan Baris taxonomy
+
+Iklan Baris is a distinct Create surface below Fluid Partner and the location section. Its **+ Buat iklan** action opens a floating panel asking what the user wants to create, then offers these initial listing types:
+
+- Lowongan Kerja
+- Pencari Kerja
+- Iklan Properti
+- Iklan Kendaraan
+- Barang Bekas
+- Penawaran Jasa
+- Bisnis & Peluang Kemitraan
+- Iklan Lainnya
+
+This list is a category-selection prototype only. Publishing, applications, candidate/company profiles, moderation, trust, and persistence require dedicated product and backend contracts.
 
 ## Existing module boundaries and duplication control
 
