@@ -92,3 +92,7 @@ The mobile Create visual language uses a restrained editorial composition, not a
 The dominant surface is white. Use one consistent soft neutral grey for borders and separators, and a matching very light grey for secondary backgrounds such as the Ruang Bisnis container. Avoid green-tinted neutral surfaces. PLUITS teal from the logo is reserved for restrained accents such as icon highlights or selected states; it is not a dominant background color.
 
 On phone widths, Story, Post, Artikel, and Live are four compact cards in a single horizontal row. Their icons and labels stay centered and legible; supporting descriptions are hidden at this compact size. Ruang Bisnis remains a two-column grid so each business card has room for its explanatory copy. Desktop Create and Dashboard composition remain unchanged.
+
+
+## Mobile social action icon tiles — detailed treatment
+At phone widths, the four social actions stay in a single horizontal row. Each action is composed as a larger white icon tile (approximately 56–62px square) with a soft grey border and a prominent 27–30px icon. The small action label sits immediately beneath the tile with an approximately 2px visual gap. Do not wrap the tile and label in another bordered card, and do not show supporting descriptions or arrows at this width. Use PLUITS teal only for the icon accent; preserve the white-first canvas and soft-grey border system.
