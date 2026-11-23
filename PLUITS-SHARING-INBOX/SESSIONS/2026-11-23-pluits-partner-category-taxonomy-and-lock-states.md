@@ -78,10 +78,19 @@ RAW
 
 ## Implementasi awal (2026-11-23)
 
-- Mobile Ruang Bisnis sekarang menampilkan satu entri PLUITS Partner bersama Toko, Kafe, Restoran, dan Tempat.
+- Koreksi struktur mobile Ruang Bisnis: hanya ada dua entri tingkat atas, yaitu PLUITS Partner dan Tempat.
+- Toko, Kafe, Restoran, dan seluruh jenis usaha/layanan lainnya berada di dalam katalog PLUITS Partner, bukan sebagai kartu terpisah di Ruang Bisnis.
 - Memilih PLUITS Partner membuka katalog kategori induk dan kartu subkategori secara inline.
 - Katalog awal berisi 9 kategori induk dan 63 kartu subkategori; setiap kartu subkategori menampilkan ikon gembok dan tidak dapat diklik.
 - Perubahan runtime berada di `src/features/dashboard/dashboard-page.js` dan `dashboard-page.css`.
 - Spesifikasi produk berada di `PLUITS-MASTER-MODEL-APP/02-PRODUCT-DESIGN/02-MARKETPLACE/PLUITS-PARTNER-CATEGORY-CATALOGUE.md`.
 - Status kategori masih presentational; admin unlock dan state backend belum dibuat.
 - Taxonomy masih perlu audit final dan acceptance founder.
+
+
+## Koreksi struktur Ruang Bisnis — 2026-11-23
+
+- Disepakati bahwa Ruang Bisnis hanya menampilkan dua entry: **PLUITS Partner** dan **Tempat**.
+- PLUITS Partner adalah pintu masuk untuk semua kategori usaha/mitra, termasuk Toko, Kafe, Restoran, dan layanan lainnya.
+- Tempat tetap terpisah dan mengarah ke Geo Directory; record tempat fisik tidak disamakan dengan profil partner.
+- Implementasi mobile dan dokumentasi produk harus mengikuti struktur dua entry ini. Modul operasional dan halaman Akun Bisnis yang sudah ada tidak dihapus oleh perubahan komposisi Ruang Bisnis.
