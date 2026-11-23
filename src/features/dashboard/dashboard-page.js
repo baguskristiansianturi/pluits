@@ -127,10 +127,10 @@ function renderMobileCreate(displayName) {
     { id:'blog', label:'Blog', icon:'fileText', description:'Tulis dan publikasikan artikel' }
   ];
   const businessEntries = [
-    { label:'Toko', action:'Buat Toko', icon:'store', description:'Kelola produk dan penjualan' },
-    { label:'Layanan', action:'Buat Layanan', icon:'briefcase', description:'Tawarkan jasa dan keahlian profesional' },
-    { label:'Tempat', action:'Klaim Tempat', icon:'mapPin', description:'Kelola kehadiran bisnis di direktori' },
-    { label:'Bisnis lainnya', action:'Tambahkan Bisnis', icon:'grid', description:'Ajukan kategori bisnis lain ke PLUITS' }
+    { id:'store', label:'Toko', action:'Buat Toko', icon:'store', tab:'business', type:'store' },
+    { id:'service', label:'Layanan Profesional', action:'Buat Layanan', icon:'briefcase', tab:'business', type:'service' },
+    { id:'place', label:'Tempat', action:'Klaim Tempat', icon:'mapPin', tab:'geo' },
+    { id:'business', label:'Bisnis dan Layanan Anda', action:'Buka akun bisnis', icon:'grid', tab:'business' }
   ];
   return '<section class="dashboard-mobile-create" aria-labelledby="mobile-create-title">' +
     '<div class="dashboard-mobile-create-heading"><span class="dashboard-kicker">CREATE</span><h1 id="mobile-create-title">' + greeting + ', ' + firstName + '</h1><p>Apa yang ingin Anda bagikan hari ini?</p></div>' +
@@ -144,7 +144,7 @@ function renderMobileCreate(displayName) {
     '<section class="dashboard-mobile-business" aria-labelledby="mobile-business-title">' +
       '<div class="dashboard-mobile-business-heading"><div><span class="dashboard-kicker">BUSINESS</span><h2 id="mobile-business-title">Ruang Bisnis</h2><p>Mulai dan kelola aktivitas bisnis Anda di PLUITS.</p></div></div>' +
       '<div class="dashboard-mobile-business-list">' +
-        businessEntries.map((item) => '<article class="dashboard-mobile-business-entry"><span class="dashboard-mobile-business-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-business-copy"><strong>' + item.label + '</strong><small>' + item.description + '</small><em>' + item.action + '</em></span></article>').join('') +
+        businessEntries.map((item) => '<button type="button" class="dashboard-mobile-business-entry" data-business-entry="' + item.id + '" aria-label="' + item.action + ': ' + item.label + '"><span class="dashboard-mobile-business-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-business-copy"><strong>' + item.label + '</strong><em>' + item.action + '</em></span></button>').join('') +
       '</div>' +
     '</section>' +
   '</section>';
@@ -256,6 +256,13 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
     if (!target || !root.contains(target)) return;
     if (target.matches('[data-create-action]')) {
       openTab(target.dataset.createAction === 'blog' ? 'blog' : 'social');
+      return;
+    }
+    if (target.matches('[data-business-entry]')) {
+      const entry = target.dataset.businessEntry;
+      const businessType = entry === 'store' ? 'store' : entry === 'service' ? 'service' : '';
+      if (businessType) state.selectedBusinessType = businessType;
+      openTab(entry === 'place' ? 'geo' : 'business');
       return;
     }
     if (target.matches('[data-open-tab]')) { openTab(target.dataset.openTab); return; }
