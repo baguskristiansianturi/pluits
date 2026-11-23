@@ -118,7 +118,7 @@ function renderTabContent(tab, context) {
 function renderMobileCreate(displayName) {
   const hour = new Date().getHours();
   const greeting = hour < 11 ? 'Selamat pagi' : hour < 15 ? 'Selamat siang' : hour < 18 ? 'Selamat sore' : 'Selamat malam';
-  const firstName = escapeHtml(String(displayName || 'Pengguna').trim().split(/\\s+/)[0]);
+  const firstName = escapeHtml(String(displayName || 'Pengguna').trim().split(/\s+/)[0]);
   const actions = [
     { id:'story', label:'Story', icon:'plus', description:'Bagikan momen yang sedang berlangsung' },
     { id:'post', label:'Post', icon:'image', description:'Bagikan foto, video, atau cerita' },
