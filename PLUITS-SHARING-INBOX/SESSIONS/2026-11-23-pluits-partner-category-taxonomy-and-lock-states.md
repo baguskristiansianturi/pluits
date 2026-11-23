@@ -80,7 +80,7 @@ RAW
 
 - Mobile Ruang Bisnis sekarang menampilkan satu entri PLUITS Partner bersama Toko, Kafe, Restoran, dan Tempat.
 - Memilih PLUITS Partner membuka katalog kategori induk dan kartu subkategori secara inline.
-- Katalog awal berisi 9 kategori induk dan 64 kartu subkategori; setiap kartu subkategori menampilkan ikon gembok dan tidak dapat diklik.
+- Katalog awal berisi 9 kategori induk dan 63 kartu subkategori; setiap kartu subkategori menampilkan ikon gembok dan tidak dapat diklik.
 - Perubahan runtime berada di `src/features/dashboard/dashboard-page.js` dan `dashboard-page.css`.
 - Spesifikasi produk berada di `PLUITS-MASTER-MODEL-APP/02-PRODUCT-DESIGN/02-MARKETPLACE/PLUITS-PARTNER-CATEGORY-CATALOGUE.md`.
 - Status kategori masih presentational; admin unlock dan state backend belum dibuat.
