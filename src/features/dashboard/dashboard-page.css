@@ -549,3 +549,64 @@
  }
  .dashboard-mobile-create{background:transparent}
 }
+
+
+/* Mobile Create — professional business entry cards with clear touch feedback. */
+@media(max-width:767px){
+ .dashboard-mobile-business-list{gap:9px}
+ .dashboard-mobile-business-entry{
+  display:flex;
+  min-width:0;
+  min-height:116px;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding:13px;
+  border:1px solid #e2e5e5;
+  border-radius:12px;
+  background:#fff;
+  color:var(--pl-color-text);
+  text-align:left;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:background-color .16s ease,border-color .16s ease,transform .16s ease,box-shadow .16s ease;
+ }
+ .dashboard-mobile-business-entry:hover{
+  border-color:#d5dada;
+  background:#f4f5f5
+ }
+ .dashboard-mobile-business-entry:active{
+  border-color:#cbd0d0;
+  background:#ecefef;
+  transform:scale(.985)
+ }
+ .dashboard-mobile-business-entry:focus-visible{
+  outline:2px solid var(--pl-color-brand);
+  outline-offset:3px
+ }
+ .dashboard-mobile-business-icon{
+  display:grid;
+  width:40px;
+  height:40px;
+  flex:0 0 auto;
+  place-items:center;
+  border:1px solid #e4e7e7;
+  border-radius:10px;
+  background:#f5f6f6;
+  color:var(--pl-color-brand)
+ }
+ .dashboard-mobile-business-icon .ui-icon{width:22px;height:22px}
+ .dashboard-mobile-business-copy{display:flex;min-width:0;flex-direction:column;gap:5px}
+ .dashboard-mobile-business-copy strong{font-size:11px;font-weight:680;line-height:1.25}
+ .dashboard-mobile-business-copy em{margin:0;color:#596262;font-size:9px;font-style:normal;font-weight:600;line-height:1.25}
+}
+@media(max-width:380px){
+ .dashboard-mobile-business-entry{min-height:110px;padding:11px}
+ .dashboard-mobile-business-icon{width:36px;height:36px}
+ .dashboard-mobile-business-icon .ui-icon{width:20px;height:20px}
+ .dashboard-mobile-business-copy strong{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ .dashboard-mobile-business-entry{transition:none}
+}
