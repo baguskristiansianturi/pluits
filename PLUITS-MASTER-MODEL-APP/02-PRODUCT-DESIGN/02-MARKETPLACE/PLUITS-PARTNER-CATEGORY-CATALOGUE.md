@@ -1,16 +1,16 @@
-# PLUITS Partner — Category Catalogue and Locked Subcategory States
+# Fluid Partner — Category Catalogue and Layered Mobile Creation
 
 Status: **INITIAL PRODUCT DESIGN — taxonomy review and operational contracts pending**
 
 ## Purpose
 
-PLUITS Partner is the partner-facing discovery and category catalogue surface within the PLUITS ecosystem. It helps users discover businesses, providers, services, accommodation, transport, tickets, and classified opportunities. It is not a replacement for the operational systems owned by Store, Restaurant & Café, Logistics & Transportation, Tickets & Accommodation, Geo Directory, or other domain modules.
+Fluid Partner is the partner-facing discovery and category catalogue surface within the PLUITS ecosystem. It helps users discover businesses, providers, services, accommodation, transport, tickets, and classified opportunities. It is not a replacement for the operational systems owned by Store, Restaurant & Café, Logistics & Transportation, Tickets & Accommodation, Geo Directory, or other domain modules.
 
 ## Information architecture
 
 The catalogue follows this hierarchy:
 
-1. PLUITS Partner
+1. Fluid Partner
 2. Parent category
 3. Subcategory
 4. Partner listing/profile (future; backed by the owning module and verified records)
@@ -49,9 +49,9 @@ This is an initial working taxonomy, not a claim that every vertical is implemen
 - Store remains the operational owner for merchant stores, product catalogues, variants, inventory, Seller Center, and store orders. Toko & Perdagangan is the discovery taxonomy, not a second Store module.
 - Restaurant & Café remains the operational owner for restaurant/café branches, tables, reservations, visits, menus, kitchen, service, cashier, and restaurant orders. Makanan & Minuman is a discovery taxonomy and must route supported merchant listings to the existing module rather than duplicating restaurant operations.
 - Geo Directory owns place records, location discovery, claim, and verification. A store and its physical place are related but distinct records.
-- Logistics & Transportation owns its transport/courier operational contracts. PLUITS Partner only classifies/discovers providers.
-- Tickets & Accommodation owns ticket and accommodation inventory/booking contracts. PLUITS Partner does not own inventory or booking state.
-- Marketplace remains the customer discovery, aggregation, and transaction layer across merchant verticals. PLUITS Partner must not become a competing checkout or merchant operations system.
+- Logistics & Transportation owns its transport/courier operational contracts. Fluid Partner only classifies/discovers providers.
+- Tickets & Accommodation owns ticket and accommodation inventory/booking contracts. Fluid Partner does not own inventory or booking state.
+- Marketplace remains the customer discovery, aggregation, and transaction layer across merchant verticals. Fluid Partner must not become a competing checkout or merchant operations system.
 
 ## Locked subcategory card behavior
 
@@ -64,13 +64,16 @@ This is an initial working taxonomy, not a claim that every vertical is implemen
 - Lock/unlock state should eventually be controlled by server-backed category configuration/feature release metadata. A frontend-only flag is not a security boundary.
 - The current dashboard prototype uses a presentation-only lock state. No admin unlock control or backend category state is implemented.
 
-## Mobile Create entry point
+## Mobile Create entry point and layered flow
 
-- Ruang Bisnis contains exactly two top-level entries, in this order: PLUITS Partner and Tempat.
-- PLUITS Partner expands the category catalogue inline on mobile. Toko, Kafe, Restoran, and other business/service types belong inside this Partner catalogue, not as separate Ruang Bisnis cards.
-- Toko & Perdagangan groups store and retail types; Makanan & Minuman groups Kafe, Restoran, and related food/beverage providers.
-- Tempat remains a separate Geo Directory entry because a physical place record is distinct from a partner/business profile.
-- The desktop workspace and other module entry points remain unchanged.
+- The section title is **Fluid Partner**, with a single **+ Buat** action card.
+- Pressing + Buat opens a near-full-width floating panel over the current Create screen. This is an overlay layer, not a route change, new page, or inline expansion.
+- The first layer lists parent categories. Selecting a parent opens a second near-full-width floating panel above it, containing the parent's subcategory cards. The parent layer remains visible beneath the child layer; the child layer provides a back action.
+- Toko, Kafe, Restoran, and other business/service types remain within the relevant Fluid Partner parent/subcategory taxonomy, not as separate top-level cards.
+- Unreleased subcategories remain visible as locked, non-interactive cards until the owning module is ready and manually released.
+- Beneath Fluid Partner, a location section provides search-before-create/claim for Geo Directory and shows only verified account-linked place records. A place and a partner profile remain distinct entities.
+- Beneath locations, Iklan Baris provides a + Buat iklan action. Its overlay asks what kind of listing the user wants to create and then displays the classifieds/job categories.
+- Desktop workspace and other desktop module entry points remain unchanged.
 
 ## Release readiness checklist
 
