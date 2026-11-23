@@ -2175,9 +2175,6 @@
 
 
 /* Profile cover menu — refined, compact surface with explicit close control. */
-.social-profile-card > .social-profile-cover-menu-wrap {
-  top: 46px;
-}
 .social-profile-cover-menu {
   width: min(264px, calc(100vw - 32px));
   gap: 4px;
