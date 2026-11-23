@@ -34,3 +34,10 @@ Keduanya adalah vertikal merchant di dalam Marketplace, bukan model ekosistem ya
 - [Application Modularization Marketplace](../../03-APPLICATION-MODULARIZATION/02-MARKETPLACE/README.md)
 
 Folder model ekosistem lain boleh tetap menjadi dasar sampai sharing dan perancangannya dilakukan. Folder kosong bukan bukti bahwa modul telah dibuat.
+
+
+## PLUITS Partner discovery catalogue
+
+PLUITS Partner is the partner discovery/category-catalogue surface associated with Marketplace. It organizes providers through parent categories and subcategories; it does not replace merchant or service operations. The category catalogue and locked-card behavior are specified in [PLUITS Partner Product Design](../../../02-PRODUCT-DESIGN/02-MARKETPLACE/PLUITS-PARTNER-CATEGORY-CATALOGUE.md).
+
+The existing Store and Restaurant & Café verticals remain the operational source of truth. Partner listings must reference their verified records and contracts instead of creating parallel operational modules.
