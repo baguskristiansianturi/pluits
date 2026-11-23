@@ -94,3 +94,13 @@ RAW
 - PLUITS Partner adalah pintu masuk untuk semua kategori usaha/mitra, termasuk Toko, Kafe, Restoran, dan layanan lainnya.
 - Tempat tetap terpisah dan mengarah ke Geo Directory; record tempat fisik tidak disamakan dengan profil partner.
 - Implementasi mobile dan dokumentasi produk harus mengikuti struktur dua entry ini. Modul operasional dan halaman Akun Bisnis yang sudah ada tidak dihapus oleh perubahan komposisi Ruang Bisnis.
+
+
+## Koreksi UX Mobile Create: Fluid Partner, lokasi, dan iklan baris — 2026-11-23
+
+- Nama bagian bisnis diubah menjadi **Fluid Partner**; tidak lagi memakai judul Ruang Bisnis.
+- Fluid Partner hanya menampilkan kartu **+ Buat**. Ketika ditekan, panel mengambang hampir selebar layar muncul di atas halaman Create yang tetap terlihat.
+- Panel pertama menampilkan kategori induk. Memilih kategori induk memunculkan panel kedua di atas panel pertama untuk menampilkan subkategori. Panel induk tetap menjadi layer di belakang; panel kedua memiliki navigasi kembali. Kategori sub tetap menggunakan kartu bergembok sampai modul siap dirilis.
+- Di bawah Fluid Partner ada bagian **Tambahkan dan klaim lokasi** dengan search bar untuk memeriksa Geo Directory sebelum membuat lokasi. Lokasi yang sudah terhubung ke akun akan ditampilkan sebagai kartu-kartu di samping aksi tambah, hanya berdasarkan data server yang sah.
+- Di bawah lokasi ada bagian **Iklan Baris** dengan kartu **+ Buat iklan**. Aksi ini membuka panel pertanyaan jenis iklan dan menampilkan daftar kategori.
+- Implementasi frontend saat ini merupakan prototype interaksi. Pencarian lokasi belum terhubung ke Geo Directory; pembuatan/klaim lokasi, data lokasi milik pengguna, pembuatan iklan, dan penyimpanan masih memerlukan backend serta otorisasi server. UI tidak boleh menampilkan hasil pencarian atau kepemilikan palsu.
