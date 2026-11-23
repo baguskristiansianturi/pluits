@@ -22,11 +22,11 @@ Do not promote every specific business type to a parent category. Keep related t
 | Parent category | Subcategories (initial catalogue) |
 |---|---|
 | Transportasi | Sewa Mobil; Sewa Motor; Kurir & Pengiriman; Transportasi Penumpang; Transportasi Barang; Transportasi Umum |
-| Toko & Perdagangan | Fashion (butik, toko pakaian, outlet); Elektronik & Gadget; Kecantikan; Rumah & Perlengkapan; Kebutuhan Harian; Otomotif; Olahraga; Kerajinan & Suvenir; Toko Lainnya |
+| Toko & Perdagangan | Toko Umum & Retail; Fashion (butik, toko pakaian, outlet); Elektronik & Gadget; Kecantikan; Rumah & Perlengkapan; Kebutuhan Harian; Otomotif; Olahraga; Kerajinan & Suvenir; Toko Lainnya |
 | Akomodasi | Hotel; Villa; Homestay; Guest House; Hostel; Apartemen; Resort; Camping & Glamping |
 | Ticketing & Perjalanan | Tiket Pesawat; Tiket Kapal; Tiket Bus; Tiket Kereta; Tiket Atraksi; Tiket Aktivitas; Paket Perjalanan |
 | Layanan Profesional | Desain & Kreatif; Teknologi; Pemasaran; Penulisan; Konsultan; Pendidikan & Pelatihan; Perawatan & Pemeliharaan; Jasa Personal |
-| Makanan & Minuman | Katering; Bakery & Pastry; Kedai & Warung; Coffee Shop; Produsen Makanan; Penyedia Minuman |
+| Makanan & Minuman | Kafe & Coffee Shop; Restoran; Katering; Bakery & Pastry; Kedai & Warung; Produsen Makanan; Penyedia Minuman |
 | Properti & Ruang | Jual Properti; Sewa Properti; Ruang Kantor; Co-working Space; Ruang Acara; Ruang Komersial |
 | Iklan Baris & Lowongan | Lowongan Kerja; Pencari Kerja; Iklan Properti; Iklan Kendaraan; Barang Bekas; Penawaran Jasa; Bisnis & Peluang Kemitraan; Iklan Lainnya |
 | Mitra Lainnya | Event Organizer; Penyedia Tenaga Kerja; Kesehatan & Kebugaran; Komunitas & Organisasi; Bidang Lainnya |
@@ -66,8 +66,10 @@ This is an initial working taxonomy, not a claim that every vertical is implemen
 
 ## Mobile Create entry point
 
-- Ruang Bisnis contains Toko, Kafe, Restoran, Tempat, and one PLUITS Partner entry.
-- PLUITS Partner expands the category catalogue inline on mobile.
+- Ruang Bisnis contains exactly two top-level entries, in this order: PLUITS Partner and Tempat.
+- PLUITS Partner expands the category catalogue inline on mobile. Toko, Kafe, Restoran, and other business/service types belong inside this Partner catalogue, not as separate Ruang Bisnis cards.
+- Toko & Perdagangan groups store and retail types; Makanan & Minuman groups Kafe, Restoran, and related food/beverage providers.
+- Tempat remains a separate Geo Directory entry because a physical place record is distinct from a partner/business profile.
 - The desktop workspace and other module entry points remain unchanged.
 
 ## Release readiness checklist
