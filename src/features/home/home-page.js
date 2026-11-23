@@ -1,6 +1,6 @@
 import { routeHref } from '../../config/paths.js';
 import '../../design-system/page-shell.css';
-import { renderPageHeader } from '../../design-system/page-shell.js';
+import { renderPageHeader, renderAppHeaderActions } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
 import './home-page.css';
 
@@ -136,8 +136,7 @@ function specialOffers() {
     ).join('') + '</div><p class="global-offer-note">Pratinjau area penawaran. Promo aktif akan ditampilkan setelah merchant dan data penawaran tersedia.</p></section>';
 }
 export function mountHomePage({root,user=null,onSignOut}={}) {
-  const account = '<a class="global-icon-button" href="' + routeHref(user?'profile':'login') + '" aria-label="' + (user?'Akun':'Masuk') + '" title="' + (user?'Akun':'Masuk') + '">' + renderIcon('user') + '</a>';
-  const actions = '<div class="global-header-actions">' + account + '<a class="global-icon-button" href="' + routeHref('discover') + '" aria-label="Cari" title="Cari">' + renderIcon('search') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Keranjang" title="Keranjang">' + renderIcon('cart') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Notifikasi" title="Notifikasi">' + renderIcon('bell') + '</a></div>';
+  const actions = renderAppHeaderActions();
   const discovery = [
     ['top-global','Top Global','Sorotan aktivitas dari seluruh Indonesia.','Lihat Semua',demoCards.global],
     ['nearby','Di Sekitar Anda','Temukan hal menarik berdasarkan lokasi Anda.','Lihat Semua',demoCards.nearby],
@@ -150,7 +149,7 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
     const note=tab.id==='feed'?'Postingan publik dari seluruh akun PLUITS.':tab.id==='reels'?'Video pendek dari kreator PLUITS.':tab.id==='live'?'Siaran dan percakapan langsung.':'Artikel dan cerita dari penulis PLUITS.';
     return '<section class="global-content-section" id="content-' + tab.id + '" data-content-section="' + tab.id + '"><div class="global-content-intro"><span class="global-kicker">' + String(index+1).padStart(2,'0') + ' / SOCIAL CONTENT</span><h2>' + tab.label + '</h2><p>' + note + '</p></div>' + body + '</section>';
   }).join('');
-  const pageHeaderMarkup=renderPageHeader({brandHref:routeHref('home'),rightContent:'<div class="global-header-tools"><a class="global-icon-button global-favorite-link" href="' + routeHref('dashboard') + '" aria-label="Favorit" title="Favorit">' + renderIcon('heart') + '</a>' + actions + '</div>',className:'global-header',dataGlobalHeader:true});
+  const pageHeaderMarkup=renderPageHeader({brandHref:routeHref('home'),rightContent:actions,className:'global-header pl-app-header',dataGlobalHeader:true});
   root.innerHTML = '<div class="pl-page-shell home-page global-home-page">' +
     pageHeaderMarkup +
     '<main class="pl-page-main home-main global-home-main"><section class="global-home-intro"><span class="global-kicker">PLUITS · INDONESIA</span><h1>Beranda Anda di PLUITS.</h1><p>Ikuti cerita, temukan orang, dan terhubung dengan komunitas dalam satu ruang sosial.</p></section>' +
@@ -162,10 +161,7 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
     '<section class="global-section global-products" id="local-products">' + heading('Produk Lokal','Temukan produk dari pelaku usaha di berbagai daerah.','Kunjungi Marketplace',routeHref('discover')) + '<div class="global-product-demo-rail">' + [['GADGET','Audio personal','product-a'],['FASHION','Gaya harian','product-b'],['HOME','Ruang nyaman','product-c'],['CREATIVE','Karya lokal','product-d']].map((item,i)=>'<article class="global-product-demo"><div class="global-product-art global-product-art--' + (i+1) + '"><span>' + item[0] + '</span></div><small>CONTOH PRODUK</small><strong>' + item[1] + '</strong><span>Pratinjau katalog</span></article>').join('') + '</div></section>' +
     '<section class="global-section global-features" id="all-features">' + heading('Semua Fitur','Jelajahi layanan dan ruang yang terhubung di PLUITS.') + '<div class="global-feature-grid">' + [['Social & Community','message'],['Marketplace','cart'],['Restaurant & Café','book'],['Tickets & Accommodation','image'],['Geo Directory','mapPin'],['Logistics & Transportation','arrow'],['Digital Wallet','lock'],['More services','sparkles']].map(([label,icon])=>'<a href="' + routeHref('discover') + '">' + renderIcon(icon) + '<strong>' + label + '</strong></a>').join('') + '</div></section></main>' +
     bottomNav() + '</div>';
-  const header=root.querySelector('[data-global-header]');
   const tabs=root.querySelector('[data-content-tabs]');
-  const updateSticky=()=>{if(header&&tabs)header.classList.toggle('is-released',tabs.getBoundingClientRect().top<=header.offsetHeight);};
-  window.addEventListener('scroll',updateSticky,{passive:true}); updateSticky();
   const buttons=[...root.querySelectorAll('[data-content-tab]')];
   buttons.forEach(button=>button.addEventListener('click',()=>{root.querySelector('#content-'+button.dataset.contentTab)?.scrollIntoView({behavior:'smooth',block:'start'});buttons.forEach(item=>item.classList.toggle('is-active',item===button));}));
   let observer=null;
@@ -175,5 +171,5 @@ export function mountHomePage({root,user=null,onSignOut}={}) {
   }
   const controller=new AbortController();
   loadPublicFeed(root,controller.signal,user?.app_metadata?.provider==='local-demo').catch(()=>{const target=root.querySelector('[data-live-feed]');if(target)target.innerHTML=renderFeedState('Feed belum dapat dimuat');});
-  return ()=>{controller.abort();window.removeEventListener('scroll',updateSticky);observer?.disconnect();};
+  return ()=>{controller.abort();observer?.disconnect();};
 }
