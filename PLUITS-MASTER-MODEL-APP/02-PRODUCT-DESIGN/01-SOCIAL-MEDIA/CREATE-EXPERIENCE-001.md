@@ -73,8 +73,9 @@ The mobile Create visual language uses a restrained editorial composition, not a
 
 
 ## Mobile compact grid composition
-- Arrange Story, Post, Artikel, and Live in a balanced two-column grid to reduce vertical page length.
-- Arrange the four Ruang Bisnis entries in a matching two-column grid, with their action labels below the description.
-- Use compact, restrained bordered surfaces, small monochrome icons, and clear text hierarchy; avoid oversized playful tiles.
-- Preserve two columns on narrow devices with reduced internal spacing and readable wrapping.
+- Arrange Story, Post, Artikel, and Live in a balanced two-column card grid.
+- Arrange the four Ruang Bisnis entry concepts in a matching two-column grid.
+- Keep card proportions consistent, with a compact icon above a clear title and concise supporting copy; business cards also show the intended action label.
+- Remove redundant directional arrows. Social action cards are fully clickable surfaces; business cards remain informational until their authorized workflows exist.
+- Preserve two columns on narrow devices with adjusted spacing and readable wrapping.
 - Desktop Create remains unchanged.
