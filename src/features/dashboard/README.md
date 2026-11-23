@@ -76,3 +76,12 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - Keep the entry cards as the foreground surfaces with subtle borders and minimal shadow, avoiding heavy panels, strong gradients, or stacked opaque boxes.
 - Use a soft fading divider to separate social publishing from business entry points.
 - Scope all background treatment to the mobile Create view; desktop Dashboard and other mobile views remain unchanged.
+
+
+## Mobile Create — clarified visual system
+- White is the dominant canvas and card surface.
+- Use soft neutral grey consistently for borders, dividers, and the secondary Ruang Bisnis background; avoid green-tinted grey surfaces.
+- PLUITS logo teal is an accent only, used sparingly on small icon treatments or selected highlights rather than as a dominant card/background color.
+- On phone layouts, Story, Post, Artikel, and Live must appear as four compact cards in one horizontal row. Hide their supporting descriptions at this width so labels remain legible.
+- Ruang Bisnis remains a two-column card grid with enough room for its descriptions.
+- Desktop Dashboard remains unchanged.
