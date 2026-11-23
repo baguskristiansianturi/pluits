@@ -2311,7 +2311,6 @@
 
 
 /* PEOPLE-DISCOVERY-RESPONSIVE-QA-002 — complete discovery category art and fluid narrow layout. */
-.social-shell,.social-shell *{box-sizing:border-box}
 .social-main{width:100%;max-width:var(--pl-container-wide);min-width:0}
 .social-main>*{min-width:0;max-width:100%}
 .social-people-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
