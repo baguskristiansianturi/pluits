@@ -1,10 +1,18 @@
 import { assetUrl } from '../config/runtime.js';
 import { routeHref } from '../config/paths.js';
+import { renderIcon } from './icons.js';
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const resolveHref = (href, route) => href || (route ? routeHref(route) : routeHref('home'));
 export function renderBrand({ href, label = 'PLUITS' } = {}) {
   return '<a class="pluits-brand" href="' + escapeHtml(resolveHref(href)) + '" aria-label="' + escapeHtml(label) + '">' +
     '<img src="' + assetUrl('assets/brand/pluits-logo.svg') + '" alt=""><span>PLUITS</span></a>';
+}
+export function renderAppHeaderActions() {
+  return '<nav class="pl-app-header-actions" aria-label="Akses cepat">' +
+    '<a class="pl-app-header-action" href="' + routeHref('dashboard') + '" aria-label="Notifikasi" title="Notifikasi">' + renderIcon('bell') + '</a>' +
+    '<a class="pl-app-header-action" href="' + routeHref('marketplace') + '" aria-label="Keranjang belanja" title="Keranjang belanja">' + renderIcon('cart') + '</a>' +
+    '<a class="pl-app-header-action" href="' + routeHref('marketplace') + '" aria-label="Wishlist" title="Wishlist">' + renderIcon('heart') + '</a>' +
+    '</nav>';
 }
 export function renderNavbar({ items = [], active = '', ariaLabel = 'Navigasi utama', className = '' } = {}) {
   const links = items.map((item) => {
