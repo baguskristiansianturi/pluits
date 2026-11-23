@@ -96,11 +96,10 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 
 
 ## Mobile business entry cards — interaction and hierarchy
-- Ruang Bisnis presents four concise, tappable cards: Toko, Layanan Profesional, Tempat, and Bisnis dan Layanan Anda.
-- Each card uses a prominent icon, a short title, and one compact action label; remove explanatory paragraphs that make the cards feel crowded.
-- Cards are semantic buttons with keyboard focus, a soft neutral hover/pressed surface, subtle press feedback, and reduced-motion support.
-- Toko and Layanan Profesional open the existing Akun Bisnis view with the corresponding type selected; Tempat opens the Geo Directory module placeholder; Bisnis dan Layanan Anda opens Akun Bisnis.
-- These interactions are navigation and selection only. They do not create businesses, claim places, or imply backend ownership. Those actions remain pending their authorized workflows.
+- Keputusan entry Ruang Bisnis yang berlaku saat ini menggantikan susunan kartu pada iterasi terdahulu: hanya PLUITS Partner dan Tempat.
+- Kedua kartu menggunakan ikon yang jelas, judul singkat, label tindakan ringkas, keyboard focus, soft neutral hover/pressed state, dan reduced-motion support.
+- PLUITS Partner membuka katalog kategori usaha dan layanan. Tempat membuka Geo Directory.
+- Interaksi tersebut hanya navigasi dan pembukaan katalog. Tidak membuat bisnis, mengklaim tempat, atau menyatakan kepemilikan backend.
 
 
 ## Expanded mobile Ruang Bisnis categories
