@@ -48,7 +48,7 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - The mobile heading uses a time-aware greeting (morning, afternoon, evening, or night) with the signed-in user's first display-name token, followed by: "Apa yang ingin Anda bagikan hari ini?"
 - The five social-first actions are Story, Post, Reel, Live, and Blog. They appear as full-width navigation rows with compact monochrome icons, supporting descriptions, restrained separators, and a directional affordance. Blog opens the existing Blog Studio entry; no publishing success is implied.
 - A subtle divider separates social publishing from a dedicated "Ruang Bisnis" section.
-- The business section contains four entry concepts: Buat Toko, Buat Layanan Profesional, Klaim Tempat, and Bisnis dan Layanan Anda.
+- The business section presents five entry concepts: Toko, Kafe, Restoran, Tempat, and PLUITS Partner. PLUITS Partner expands into a grouped category catalogue; its subcategories remain visibly locked until each module is deliberately released.
 - Store and Service labels are state-driven in the future: after creation, "Buat Toko"/"Buat Layanan" must become "Kelola Toko"/"Kelola Layanan". A claimed Geo Directory place becomes "Kelola Tempat". These labels must be derived from authorized server records, never guessed or simulated.
 - A Store with a physical address should link to its corresponding Geo Directory place record when available; the store and place are related but distinct records. Do not create duplicate place listings automatically.
 - "Tambahkan Bisnis" is the extensible entry for industries/categories not yet represented. If no suitable module exists, the user can submit a category request to Plugins for evaluation; accepted requests may lead to a new PLUITS module. The request/review/provisioning flow is future work.
@@ -108,3 +108,14 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - Toko, Kafe, and Restoran open Akun Bisnis with their matching type selected. Tempat opens Geo Directory. Bisnis, Layanan & Tempat Lainnya opens Akun Bisnis with the other-category option selected. Bisnis dan Layanan Anda Lainnya opens the general Akun Bisnis view.
 - The Akun Bisnis type selector includes Toko, Kafe, Restoran, Layanan Profesional, and kategori lainnya. Cafe and restaurant icons are added to the existing local icon registry and reused here.
 - These are navigational entry points and temporary selections only. They do not create accounts, claim places, or represent verified business ownership; server-side workflows and authorization are still required.
+
+
+## PLUITS Partner — mobile category catalogue
+- The mobile Ruang Bisnis entry list includes one PLUITS Partner card (not duplicate generic-business cards).
+- Selecting PLUITS Partner expands the catalogue inline on the mobile Create page; it does not claim or create a business account.
+- The catalogue uses parent categories with subcategory cards. Current parent groups: Transportasi; Toko & Perdagangan; Akomodasi; Ticketing & Perjalanan; Layanan Profesional; Makanan & Minuman; Properti & Ruang; Iklan Baris & Lowongan; and Mitra Lainnya.
+- Every subcategory card displays a lock icon and a short scope description. Locked cards are informational articles, not active buttons.
+- The taxonomy is an initial planning catalogue and must be reviewed against existing module boundaries before operational work begins.
+- Existing Store and Restaurant & Café modules retain their operational ownership. Partner discovery/listings must link to those modules through contracts instead of cloning their operational systems.
+- Unlocking is a future manual admin-controlled release action after the relevant module passes its readiness criteria. The current lock state is presentation-only and is not a security/authorization control.
+- Desktop Dashboard / Ruang Kerja is unchanged.
