@@ -136,14 +136,14 @@ function renderMobileCreate(displayName) {
     '<section class="dashboard-mobile-social" aria-label="Buat konten sosial">' +
       '<div class="dashboard-mobile-create-list">' +
         actions.map((item) => '<button type="button" class="dashboard-mobile-create-action" data-create-action="' + item.id + '" aria-label="' + (item.id === 'blog' ? 'Tulis artikel untuk Blog' : 'Buat ' + item.label) + '">' +
-          '<span class="dashboard-mobile-create-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-create-copy"><strong>' + item.label + '</strong><small>' + item.description + '</small></span><span class="dashboard-mobile-create-arrow" aria-hidden="true">' + renderIcon('arrow') + '</span></button>').join('') +
+          '<span class="dashboard-mobile-create-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-create-copy"><strong>' + item.label + '</strong><small>' + item.description + '</small></span></button>').join('') +
       '</div>' +
     '</section>' +
     '<div class="dashboard-mobile-create-divider" role="separator"></div>' +
     '<section class="dashboard-mobile-business" aria-labelledby="mobile-business-title">' +
       '<div class="dashboard-mobile-business-heading"><div><span class="dashboard-kicker">BUSINESS</span><h2 id="mobile-business-title">Ruang Bisnis</h2><p>Mulai dan kelola aktivitas bisnis Anda di PLUITS.</p></div></div>' +
       '<div class="dashboard-mobile-business-list">' +
-        businessEntries.map((item) => '<article class="dashboard-mobile-business-entry"><span class="dashboard-mobile-business-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-business-copy"><strong>' + item.label + '</strong><small>' + item.description + '</small><em>' + item.action + '</em></span><span class="dashboard-mobile-business-arrow" aria-hidden="true">' + renderIcon('arrow') + '</span></article>').join('') +
+        businessEntries.map((item) => '<article class="dashboard-mobile-business-entry"><span class="dashboard-mobile-business-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-business-copy"><strong>' + item.label + '</strong><small>' + item.description + '</small><em>' + item.action + '</em></span></article>').join('') +
       '</div>' +
     '</section>' +
   '</section>';
