@@ -23,3 +23,8 @@ Marketplace harus menampilkan **Store** dan **Restaurant & Café** sebagai dua v
 - Profil publik, katalog, ketersediaan, dan status transaksi mengikuti kontrak modul merchant.
 - Alur checkout pelanggan tidak mengambil alih pengelolaan stok toko atau operasi restoran/kitchen.
 - Setiap modul memiliki sitemap, page inventory, flows, states, dan acceptance criteria sendiri.
+
+
+## PLUITS Partner
+
+- [PLUITS Partner category catalogue and locked subcategory states](PLUITS-PARTNER-CATEGORY-CATALOGUE.md)
