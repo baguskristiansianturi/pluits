@@ -95,6 +95,46 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     '<section class="global-section global-products" id="local-products">' + heading('Produk lokal pilihan','Temukan pilihan dari sekitar Anda. Katalog dan cakupan lokasi diatur di Marketplace.','Lihat semua',routeHref('marketplace')) + '<div class="global-product-location"><span>' + renderIcon('mapPin') + '</span><div><strong>Jelajahi berdasarkan lokasi</strong><small>Marketplace dimulai dari cakupan lokasi pilihan; kota lain dan global dapat dipilih di sana.</small></div></div><div class="global-product-demo-rail">' + [['TAS ANYAMAN BALI','Tas Anyaman Bali','Rp159.000','Rp199.000','-20%'],['AKSESORI','Kacamata Vintage','Rp254.000','Rp299.000','-15%'],['KARYA LOKAL','Kalung Bali','Rp120.000','',''],['FASHION','Sandal Santai','Rp149.000','Rp199.000','-25%']].map((item,i)=>'<article class="global-product-demo"><div class="global-product-art global-product-art--' + (i+1) + '">' + (item[4]?'<b class="global-product-discount">' + item[4] + '</b>':'') + '</div><small>' + item[0] + '</small><strong>' + item[1] + '</strong><div class="global-product-price"><b>' + item[2] + '</b>' + (item[3]?'<del>' + item[3] + '</del>':'') + '</div><span>Pilihan dari pelaku usaha lokal</span></article>').join('') + '</div><a class="global-marketplace-cta" href="' + routeHref('marketplace') + '"><span class="global-marketplace-mark">' + renderIcon('store') + '</span><span><strong>Jelajahi Marketplace PLUITS</strong><small>Produk lokal, toko, kafe, restoran, dan lainnya</small></span><b>Belanja sekarang ' + renderIcon('arrow') + '</b></a></section>' +
     '<section class="global-section global-features" id="all-features">' + heading('Layanan PLUITS','Akses cepat ke layanan yang saling terhubung.','Jelajahi semua',routeHref('discover')) + '<div class="global-feature-rail">' + [['Transportasi','arrow'],['Kurir','briefcase'],['Tiket','fileText'],['Sewa Mobil','map'],['Akomodasi','image'],['Kuliner','book']].map(([label,icon])=>'<a class="global-feature-card" href="' + routeHref('discover') + '">' + renderIcon(icon) + '<strong>' + label + '</strong><span>Jelajahi layanan</span></a>').join('') + '</div></section>' + '<section class="global-about" aria-labelledby="global-about-title"><span class="global-kicker">SATU RUANG UNTUK BANYAK KEMUNGKINAN</span><h2 id="global-about-title">Terhubung, menemukan, dan bertransaksi bersama PLUITS.</h2><p>Mulai dari cerita teman, tempat menarik, produk lokal, hingga layanan sehari-hari—semuanya terhubung dalam satu ekosistem.</p><a href="' + routeHref('about') + '">Kenali PLUITS <span aria-hidden="true">→</span></a></section></main>' +
     bottomNav() + '</div>';
+  const searchServices=[...root.querySelectorAll('[data-search-service]')];
+  const quickServices=[...root.querySelectorAll('[data-service]')];
+  const modeButtons=[...root.querySelectorAll('[data-search-mode]')];
+  const searchFields=root.querySelector('.global-search-fields');
+  let activeService='transport',searchMode='now';
+  const serviceConfig={
+    transport:{label:'Mobil',pickup:true,destination:true,now:true,hint:'Antar-jemput langsung sesuai kebutuhan Anda.'},
+    motor:{label:'Motor',pickup:true,destination:true,now:true,hint:'Perjalanan praktis untuk kebutuhan saat ini.'},
+    courier:{label:'Kurir',pickup:true,destination:true,goods:true,now:true,hint:'Kirim dokumen atau barang ke alamat penerima.'},
+    food:{label:'Makanan',pickup:false,destination:true,now:true,hint:'Temukan makanan dan restoran di sekitar Anda.'},
+    flight:{label:'Tiket',pickup:false,destination:true,date:true,return:true,guests:true,hint:'Pilih rute, tanggal perjalanan, dan penumpang.'},
+    attraction:{label:'Atraksi',pickup:false,destination:true,date:true,guests:true,hint:'Cari tiket atraksi berdasarkan tanggal kunjungan.'},
+    rental:{label:'Sewa Mobil',pickup:false,destination:true,date:true,return:true,hint:'Tentukan lokasi dan periode sewa kendaraan.'},
+    stay:{label:'Akomodasi',pickup:false,destination:true,date:true,return:true,guests:true,hint:'Pilih tujuan, tanggal menginap, dan jumlah tamu.'}
+  };
+  const updateSearch=()=>{
+    const config=serviceConfig[activeService];
+    const scheduled=searchMode==='schedule';
+    const visible={pickup:config.pickup,destination:true,date:scheduled||config.date,return:scheduled||config.return,guests:scheduled||config.guests,goods:config.goods};
+    Object.entries(visible).forEach(([key,show])=>{const field=searchFields?.querySelector('[data-field="'+key+'"]');if(field)field.hidden=!show;});
+    const destinationLabel=searchFields?.querySelector('[data-field="destination"] span');
+    const destinationInput=searchFields?.querySelector('[name="destination"]');
+    const pickupLabel=searchFields?.querySelector('[data-field="pickup"] span');
+    if(destinationLabel)destinationLabel.textContent=activeService==='courier'?'Alamat penerima':activeService==='food'?'Antar ke':activeService==='stay'?'Kota atau area menginap':'Tujuan';
+    if(destinationInput)destinationInput.placeholder=activeService==='courier'?'Masukkan alamat penerima':activeService==='food'?'Alamat pengantaran':'Masukkan tujuan';
+    if(pickupLabel)pickupLabel.textContent=activeService==='courier'?'Alamat penjemputan':'Lokasi jemput';
+    const hint=root.querySelector('[data-search-hint]');if(hint)hint.textContent=config.hint;
+    const submit=root.querySelector('[data-search-submit] span');if(submit)submit.textContent=searchMode==='now'&&config.now?'Cari sekarang':'Cari ketersediaan';
+    searchServices.forEach(button=>button.classList.toggle('is-active',button.dataset.searchService===activeService));
+    modeButtons.forEach(button=>button.classList.toggle('is-active',button.dataset.searchMode===searchMode));
+  };
+  searchServices.forEach(button=>button.addEventListener('click',()=>{activeService=button.dataset.searchService;updateSearch();}));
+  quickServices.forEach(button=>button.addEventListener('click',()=>{const key=button.dataset.service;if(serviceConfig[key])activeService=key;else if(key==='transport')activeService='transport';updateSearch();root.querySelector('#quick-search')?.scrollIntoView({behavior:'smooth',block:'center'});}));
+  modeButtons.forEach(button=>button.addEventListener('click',()=>{searchMode=button.dataset.searchMode;updateSearch();}));
+  root.querySelector('[data-search-submit]')?.addEventListener('click',()=>{
+    const params=new URLSearchParams({service:activeService,mode:searchMode});
+    searchFields?.querySelectorAll('input,select').forEach(field=>{if(field.value)params.set(field.name,field.value);});
+    window.location.href=routeHref('discover')+'?'+params.toString();
+  });
+  updateSearch();
   const buttons=[...root.querySelectorAll('[data-content-tab]')];
   buttons.forEach(button=>button.addEventListener('click',()=>{root.querySelector('#content-'+button.dataset.contentTab)?.scrollIntoView({behavior:'smooth',block:'start'});buttons.forEach(item=>item.classList.toggle('is-active',item===button));}));
   let observer=null;
