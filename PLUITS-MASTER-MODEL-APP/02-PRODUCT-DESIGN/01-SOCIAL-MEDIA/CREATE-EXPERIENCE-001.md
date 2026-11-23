@@ -96,3 +96,7 @@ On phone widths, Story, Post, Reel, Live, and Blog are five compact actions in a
 
 ## Mobile social action icon tiles — detailed treatment
 At phone widths, the five social actions stay in a single horizontal row. Each action is composed as a larger white icon tile (approximately 56–62px square) with a soft grey border and a prominent 27–30px icon. The small action label sits immediately beneath the tile with an approximately 2px visual gap. Do not wrap the tile and label in another bordered card, and do not show supporting descriptions or arrows at this width. Use PLUITS teal only for the icon accent; preserve the white-first canvas and soft-grey border system.
+
+
+## Mobile Ruang Bisnis — professional cards and touch behavior
+The four mobile entry cards are Toko, Layanan Profesional, Tempat, and Bisnis dan Layanan Anda. Use a prominent approximately 36–40px icon tile, short title, and one concise action label without a paragraph description. Cards are semantic buttons. Provide a restrained light-grey hover and pressed surface, subtle pressed scale feedback, clear keyboard focus, and reduced-motion support. Toko and Layanan Profesional route to the existing Akun Bisnis selection view; Tempat routes to the Geo Directory placeholder; Bisnis dan Layanan Anda routes to Akun Bisnis. Routing does not create records or claim ownership; backend authorization and workflows remain prerequisites.
