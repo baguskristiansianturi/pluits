@@ -44,16 +44,16 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - Desktop workspace header actions remain unchanged.
 
 
-## Mobile Create: social and business entry points
-- The mobile heading uses a time-aware greeting (morning, afternoon, evening, or night) with the signed-in user's first display-name token, followed by: "Apa yang ingin Anda bagikan hari ini?"
-- The five social-first actions are Story, Post, Reel, Live, and Blog. They appear as full-width navigation rows with compact monochrome icons, supporting descriptions, restrained separators, and a directional affordance. Blog opens the existing Blog Studio entry; no publishing success is implied.
-- A subtle divider separates social publishing from a dedicated "Ruang Bisnis" section.
-- Ruang Bisnis presents exactly two entry points: PLUITS Partner and Tempat. PLUITS Partner expands into the grouped catalogue for all business, merchant, and service categories—including Toko, Kafe, and Restoran. Tempat opens Geo Directory. Toko, Kafe, and Restoran are not separate top-level Ruang Bisnis cards.
-- Store and Service labels are state-driven in the future: after creation, "Buat Toko"/"Buat Layanan" must become "Kelola Toko"/"Kelola Layanan". A claimed Geo Directory place becomes "Kelola Tempat". These labels must be derived from authorized server records, never guessed or simulated.
-- A Store with a physical address should link to its corresponding Geo Directory place record when available; the store and place are related but distinct records. Do not create duplicate place listings automatically.
-- "Tambahkan Bisnis" is the extensible entry for industries/categories not yet represented. If no suitable module exists, the user can submit a category request to Plugins for evaluation; accepted requests may lead to a new PLUITS module. The request/review/provisioning flow is future work.
-- The four business cards are currently informational presentation only. Creation, claiming, management, category requests, and ownership checks require their dedicated flows, APIs, and server-side authorization.
-
+## Mobile Create: social, Fluid Partner, locations, and classifieds
+- The mobile heading uses a time-aware greeting with the signed-in user's first display-name token, followed by: "Apa yang ingin Anda bagikan hari ini?"
+- The five social-first actions are Story, Post, Reel, Live, and Blog. Blog opens the existing Blog Studio entry; no publishing success is implied.
+- A subtle divider separates social publishing from the business and location tools.
+- The business creation area is titled **Fluid Partner** and contains one prominent **+ Buat** card. Pressing it opens a near-full-width floating panel over the existing Create screen; it does not navigate to another route or expand inline.
+- The first Fluid Partner layer lists parent categories. Selecting a parent opens a second near-full-width layer above the first, showing its subcategory cards. The parent layer remains visible beneath the child layer, and the child layer has a back action. Unreleased subcategories remain visible with lock icons and are non-interactive.
+- Beneath Fluid Partner, **Tambahkan dan klaim lokasi** provides a search field to check Geo Directory before creating a new place. A create/add action leads into the existing Geo Directory module. Authorized places linked to the account should appear as separate location cards beside the add action; never fabricate location ownership or sample places.
+- Below locations, **Iklan Baris** has a **+ Buat iklan** action. It opens a floating panel asking what kind of listing the user wants to create, then presents the classifieds/job categories.
+- Store and Service labels, partner profiles, claimed places, and owned-location cards must be derived from authorized server records, never guessed or simulated. A Store and its physical place remain distinct records.
+- Search, create, claim, persistence, category release, and ownership checks require their dedicated APIs and server-side authorization. The current frontend must clearly indicate where these integrations are still pending.
 
 ## Professional mobile visual refinement
 - Mobile Create uses a restrained editorial hierarchy rather than a grid of large action cards.
@@ -95,11 +95,11 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - Teal is limited to the icon accent; white remains dominant and grey remains the border/separator color.
 
 
-## Mobile business entry cards — interaction and hierarchy
-- Keputusan entry Ruang Bisnis yang berlaku saat ini menggantikan susunan kartu pada iterasi terdahulu: hanya PLUITS Partner dan Tempat.
-- Kedua kartu menggunakan ikon yang jelas, judul singkat, label tindakan ringkas, keyboard focus, soft neutral hover/pressed state, dan reduced-motion support.
-- PLUITS Partner membuka katalog kategori usaha dan layanan. Tempat membuka Geo Directory.
-- Interaksi tersebut hanya navigasi dan pembukaan katalog. Tidak membuat bisnis, mengklaim tempat, atau menyatakan kepemilikan backend.
+## Fluid Partner, location, and classifieds — mobile interaction hierarchy
+- Fluid Partner uses a single + Buat tile and a two-layer parent → subcategory flow. The second panel floats above the first; it is not a new route or inline expansion.
+- Location tools include a Geo Directory search field, an add/create action, and a future list of account-linked places. Only verified server records may populate owned-place cards.
+- Classifieds uses a + Buat iklan tile that opens a panel asking what kind of listing to create, followed by category choices.
+- All surfaces are mobile-first, keyboard accessible, and use existing design tokens. Backend search, create, claim, persistence, and authorization remain pending.
 
 
 ## Expanded mobile Ruang Bisnis categories
