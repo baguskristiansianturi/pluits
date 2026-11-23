@@ -17,8 +17,8 @@ function demoRail(items,label) {
   return '<div class="global-bleed-wrap"><div class="global-demo-rail" aria-label="' + label + '">' + items.map((item,index)=>'<article class="global-demo-card global-demo-card--' + item[3] + '"><div class="global-demo-art"><span>' + item[0] + '</span><i>' + (index+1).toString().padStart(2,'0') + '</i></div><div class="global-demo-copy"><strong>' + item[1] + '</strong><p>' + item[2] + '</p></div></article>').join('') + '</div></div>';
 }
 function storyRail() {
-  const items=[['+','Cerita Anda','story-own'],['A','Ayu','story-b'],['R','Raka','story-c'],['N','Nadia','story-d'],['D','Dimas','story-e'],['S','Sinta','story-f']];
-  return '<div class="global-bleed-wrap"><div class="global-story-rail" aria-label="Stories contoh">' + items.map((item,index)=>'<div class="global-story-item"><span class="global-story-ring global-story-ring--' + item[2] + '">' + item[0] + '</span><small>' + item[1] + '</small></div>').join('') + '</div></div>';
+  const items=[['+','Cerita Anda','story-own',''],['Ayu','Ayu','story-b','photo-1534528741775-53994a69daeb'],['Raka','Raka','story-c','photo-1500648767791-00dcc994a43e'],['Nadia','Nadia','story-d','photo-1531123897727-8f129e1688ce'],['Dimas','Dimas','story-e','photo-1506794778202-cad84cf45f1d'],['Sinta','Sinta','story-f','photo-1544005313-94ddf0286df2']];
+  return '<div class="global-bleed-wrap"><div class="global-story-rail" aria-label="Stories contoh">' + items.map((item,index)=>'<div class="global-story-item"><span class="global-story-ring global-story-ring--' + item[2] + '">' + (item[3]?'<img src="https://images.unsplash.com/' + item[3] + '?auto=format&fit=crop&w=160&h=160&q=75" alt="" loading="lazy">':'<b>+</b>') + '</span><small>' + item[1] + '</small></div>').join('') + '</div></div>';
 }
 function bottomNav() {
   return '<nav class="global-bottom-nav" aria-label="Navigasi utama">' +
@@ -41,15 +41,28 @@ function renderPostCard(post) {
     ? '<img src="' + escapeHtml(post.avatarUrl) + '" alt="" loading="lazy">'
     : '<span>' + escapeHtml((post.authorName || 'P').slice(0,1).toUpperCase()) + '</span>';
   const caption = post.caption ? '<p class="global-post-caption">' + escapeHtml(post.caption) + '</p>' : '';
-  const kind = (post.visibility === 'private' ? 'PRIVAT · ' : '') + (post.content_kind === 'reel' ? 'REELS' : 'FEED');
-  const date = post.created_at ? new Date(post.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'}) : '';
-  return '<article class="global-post-card"><header class="global-post-author"><span class="global-post-avatar">' + avatar + '</span><span class="global-post-author-copy"><strong>' + escapeHtml(post.authorName) + '</strong><small>@' + escapeHtml(post.username || 'pengguna') + ' · ' + date + '</small></span><span class="global-post-kind">' + kind + '</span></header>' + media + caption + '<footer class="global-post-actions"><span>' + renderIcon('heart') + ' Suka</span><span>' + renderIcon('message') + ' Komentar</span><span>' + renderIcon('arrow') + ' Bagikan</span></footer></article>';
+  const kind = post.isDemo ? 'DEMO · ' + (post.content_kind === 'reel' ? 'REELS' : 'FEED') : (post.visibility === 'private' ? 'PRIVAT · ' : '') + (post.content_kind === 'reel' ? 'REELS' : 'FEED');
+  const date = post.created_at ? new Date(post.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'}) : (post.isDemo?'Contoh hari ini':'');
+  return '<article class="global-post-card' + (post.isDemo?' is-demo':'') + '"><header class="global-post-author"><span class="global-post-avatar">' + avatar + '</span><span class="global-post-author-copy"><strong>' + escapeHtml(post.authorName) + '</strong><small>@' + escapeHtml(post.username || 'pengguna') + ' · ' + date + '</small></span><span class="global-post-kind">' + kind + '</span></header>' + media + caption + (post.isDemo?'<div class="global-demo-disclaimer">Konten ilustrasi untuk pengujian tampilan, bukan postingan pengguna.</div>':'') + '<footer class="global-post-actions"><span>' + renderIcon('heart') + ' ' + (post.isDemo?post.likes+' suka':'Suka') + '</span><span>' + renderIcon('message') + ' ' + (post.isDemo?post.comments+' komentar':'Komentar') + '</span><span>' + renderIcon('arrow') + ' Bagikan</span></footer></article>';
+}
+const demoFeedPosts = [
+  {authorName:'Ayu Pratiwi',username:'ayu.pratiwi',avatarUrl:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=75',caption:'Senja di pesisir Bali selalu punya cara sendiri untuk membuat kita berhenti sejenak. 🌅\n\nSudut favorit untuk menikmati sore dan cerita baru.',mediaUrl:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=85',created_at:'',likes:245,comments:48,isDemo:true},
+  {authorName:'Raka Mahendra',username:'raka.visual',avatarUrl:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=75',caption:'Mencari detail kecil di tengah hiruk pikuk kota. Kadang perspektif baru datang dari berjalan lebih pelan. 📷',mediaUrl:'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1100&q=85',created_at:'',likes:182,comments:23,isDemo:true},
+  {authorName:'Nadia Putri',username:'nadia.tastes',avatarUrl:'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=120&h=120&q=75',caption:'Akhir pekan, secangkir kopi, dan tempat nyaman untuk bertukar cerita. Ada rekomendasi tempat serupa?',mediaUrl:'https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=1100&q=85',created_at:'',likes:136,comments:19,isDemo:true}
+];
+const demoReels = [
+  {authorName:'Dimas Saputra',username:'dimas.moves',avatarUrl:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=75',caption:'Potongan suasana pagi di Ubud. 🌿',mediaUrl:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=700&h=1000&q=85',content_kind:'reel',likes:324,comments:31,isDemo:true},
+  {authorName:'Sinta Maharani',username:'sinta.explores',avatarUrl:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&h=1000&q=85',caption:'Warna-warni pasar lokal yang selalu menarik untuk dijelajahi.',mediaUrl:'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=700&h=1000&q=85',content_kind:'reel',likes:291,comments:27,isDemo:true}
+];
+function renderDemoFeed(kind='feed') {
+  const posts=kind==='reels'?demoReels:demoFeedPosts;
+  return posts.map(renderPostCard).join('');
 }
 function renderFeedState(message,loading=false) {
   return '<div class="global-feed-state' + (loading?' is-loading':'') + '">' + (loading?'<span class="global-feed-spinner" aria-hidden="true"></span>':'<span class="global-feed-state-icon">' + renderIcon('image') + '</span>') + '<strong>' + message + '</strong>' + (!loading?'<p>Konten publik yang sudah diterbitkan akan muncul di sini.</p>':'') + '</div>';
 }
 function demoContent(kind) {
-  if(kind==='live')return '<article class="global-live-demo"><div class="global-live-art"><span class="global-live-indicator">LIVE · CONTOH</span><div class="global-live-orbit">PL</div><strong>Temukan siaran langsung</strong><small>Pratinjau tampilan ruang Live</small></div><div class="global-live-meta"><strong>Live bersama komunitas</strong><p>Contoh kartu siaran untuk menguji hierarki informasi dan tombol interaksi.</p><span>0 penonton · Tampilan demo</span></div></article>';
+  if(kind==='live')return '<div class="global-live-demo-grid"><article class="global-live-demo"><div class="global-live-art global-live-art--one"><span class="global-live-indicator">LIVE · DEMO</span><div class="global-live-orbit">PL</div><strong>Suasana sore di Bali</strong><small>Pratinjau siaran komunitas</small></div><div class="global-live-meta"><strong>Ngobrol santai menjelang senja</strong><p>Ruang obrolan terbuka untuk berbagi cerita dan rekomendasi.</p><span>128 penonton · Simulasi</span></div></article><article class="global-live-demo"><div class="global-live-art global-live-art--two"><span class="global-live-indicator">LIVE · DEMO</span><div class="global-live-orbit">PL</div><strong>Eksplorasi kuliner lokal</strong><small>Pratinjau siaran kreator</small></div><div class="global-live-meta"><strong>Jelajah rasa Nusantara</strong><p>Tur singkat mengenal hidangan dan ruang lokal.</p><span>86 penonton · Simulasi</span></div></article></div>';
   return '<div class="global-blog-demo-grid"><article class="global-blog-demo"><div class="global-blog-art global-blog-art--one"><span>JURNAL PERJALANAN</span></div><div><small>CONTOH ARTIKEL · 6 MENIT BACA</small><strong>Menemukan sisi lain dari sebuah kota</strong><p>Pratinjau kartu artikel untuk menguji tampilan Blog di Global Home.</p></div></article><article class="global-blog-demo"><div class="global-blog-art global-blog-art--two"><span>CATATAN HARIAN</span></div><div><small>CONTOH ARTIKEL · 4 MENIT BACA</small><strong>Cerita kecil yang layak dibagikan</strong><p>Contoh visual sementara, bukan artikel yang sudah dipublikasikan.</p></div></article></div>';
 }
 export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
@@ -58,8 +71,8 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   const discovery = '<section class="global-section global-people-section" id="people"><div class="global-section-heading"><div><h2>Orang yang mungkin Anda kenal</h2><p>Temukan kenalan baru dari sekitar Anda.</p></div><a href="' + routeHref('discover') + '?mode=people">Lihat semua <span aria-hidden="true">→</span></a></div><div class="global-bleed-wrap"><div class="global-people-rail" aria-label="Rekomendasi orang">' + [['Ayu Pratiwi','Bali','photo-1534528741775-53994a69daeb'],['Raka Mahendra','Jakarta','photo-1500648767791-00dcc994a43e'],['Nadia Putri','Bandung','photo-1531123897727-8f129e1688ce'],['Dimas Saputra','Yogyakarta','photo-1506794778202-cad84cf45f1d'],['Sinta Maharani','Surabaya','photo-1544005313-94ddf0286df2']].map((person,i)=>'<a class="global-person-card" href="' + routeHref('discover') + '?mode=people"><img src="https://images.unsplash.com/' + person[2] + '?auto=format&fit=crop&w=480&q=80" alt="Foto profil contoh ' + person[0] + '" loading="lazy"><span class="global-person-overlay"><strong>' + person[0] + '</strong><small>' + person[1] + ' · Contoh profil</small></span><span class="global-person-add" aria-hidden="true">+</span></a>').join('') + '</div></div></section>';
   const nearby = '<section class="global-section global-nearby" id="nearby">' + heading('Jelajahi di sekitar Anda','Temukan tempat, kuliner, aktivitas, dan layanan berdasarkan lokasi pilihan Anda.','Jelajahi peta',routeHref('discover')) + demoRail(demoCards.nearby,'Kategori sekitar · pratinjau') + '</section>';
   const streams = contentTabs.map((tab,index) => {
-    const body=tab.id==='feed'?'<div class="global-post-list" data-live-feed>' + renderFeedState('Memuat postingan publik…',true) + '</div>'
-      :tab.id==='reels'?'<div class="global-post-list global-reels-list" data-live-reels>' + renderFeedState('Memuat Reels…',true) + '</div>'
+    const body=tab.id==='feed'?'<div class="global-post-list" data-live-feed>' + renderDemoFeed('feed') + '</div>'
+      :tab.id==='reels'?'<div class="global-post-list global-reels-list" data-live-reels>' + renderDemoFeed('reels') + '</div>'
       :demoContent(tab.id);
     const note=tab.id==='feed'?'Postingan publik dari seluruh akun PLUITS.':tab.id==='reels'?'Video pendek dari kreator PLUITS.':tab.id==='live'?'Siaran dan percakapan langsung.':'Artikel dan cerita dari penulis PLUITS.';
     return '<section class="global-content-section" id="content-' + tab.id + '" data-content-section="' + tab.id + '"><div class="global-content-intro"><span class="global-kicker">' + String(index+1).padStart(2,'0') + ' / SOCIAL CONTENT</span><h2>' + tab.label + '</h2><p>' + note + '</p></div>' + body + '</section>';
@@ -94,16 +107,16 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   const reelsTarget=root.querySelector('[data-live-reels]');
   const loadFeed = async () => {
     if (!feedTarget) return;
-    if (!API_BASE_URL) { feedTarget.innerHTML=renderFeedState('Feed menunggu layanan backend PLUITS'); return; }
+    if (!API_BASE_URL) { feedTarget.innerHTML=renderDemoFeed('feed'); return; }
     feedTarget.innerHTML=renderFeedState('Memuat postingan publik…',true);
     try {
       const response=await fetch(API_BASE_URL+'/v1/social/feed?limit=20',{headers:{Accept:'application/json'},mode:'cors',credentials:'omit',cache:'no-store',signal:controller.signal});
       if(!response.ok)throw new Error('Feed belum dapat dimuat.');
       const payload=await response.json();
       const posts=Array.isArray(payload.posts)?payload.posts:[];
-      feedTarget.innerHTML=posts.length?posts.map(post=>renderPostCard({authorName:post.author_name,username:post.username,caption:post.caption,content_kind:post.content_kind,created_at:post.created_at})).join(''):renderFeedState('Belum ada postingan publik');
+      feedTarget.innerHTML=posts.length?posts.map(post=>renderPostCard({authorName:post.author_name,username:post.username,caption:post.caption,content_kind:post.content_kind,created_at:post.created_at})).join(''):renderDemoFeed('feed');
     } catch(error) {
-      if(error.name!=='AbortError')feedTarget.innerHTML=renderFeedState('Feed belum dapat dimuat. Coba lagi nanti.');
+      if(error.name!=='AbortError')feedTarget.innerHTML=renderDemoFeed('feed');
     }
   };
   const composer=root.querySelector('[data-social-composer]');
@@ -133,6 +146,6 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     });
   }
   loadFeed();
-  if(reelsTarget)reelsTarget.innerHTML=renderFeedState('Reels belum tersedia di layanan PLUITS');
+  if(reelsTarget)reelsTarget.innerHTML=renderDemoFeed('reels');
   return ()=>{controller.abort();observer?.disconnect();};
 }
