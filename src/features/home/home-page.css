@@ -349,3 +349,14 @@
  .global-quick-search{justify-content:center}
  .global-people-rail{padding-inline:clamp(18px,2vw,30px)}
 }
+
+/* Keep primary home cards comfortably inset while rails still bleed to viewport edges. */
+@media(max-width:767px){
+ .global-home-main{padding-inline:16px}
+ .global-home-hero{margin-inline:0}
+ .global-section-heading{padding-inline:0}
+ .global-content-tabs{padding-inline:16px}
+}
+@media(max-width:380px){
+ .global-home-main{padding-inline:14px}
+}
