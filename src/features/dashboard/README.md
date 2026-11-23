@@ -42,3 +42,14 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - Recently Viewed is a separate future discovery/history concept, not a synonym for Wishlist. It is intentionally not displayed until its scope and placement are approved.
 - Future notification aggregation may include comments, comment replies, social interactions, and events from other PLUITS modules. Delivery rules and interaction flows are deferred to the notification service design.
 - Desktop workspace header actions remain unchanged.
+
+
+## Mobile Create: social and business entry points
+- The mobile heading uses a time-aware greeting (morning, afternoon, evening, or night) with the signed-in user's first display-name token, followed by: "Apa yang ingin Anda bagikan hari ini?"
+- The four social-first actions are Story, Post, Artikel (Blog), and Live. Artikel opens the existing Blog Studio entry; no publishing success is implied.
+- A subtle divider separates social publishing from a dedicated "Ruang Bisnis" section.
+- The business section contains four entry concepts: Buat Toko, Buat Layanan, Klaim Tempat, and Tambahkan Bisnis.
+- Store and Service labels are state-driven in the future: after creation, "Buat Toko"/"Buat Layanan" must become "Kelola Toko"/"Kelola Layanan". A claimed Geo Directory place becomes "Kelola Tempat". These labels must be derived from authorized server records, never guessed or simulated.
+- A Store with a physical address should link to its corresponding Geo Directory place record when available; the store and place are related but distinct records. Do not create duplicate place listings automatically.
+- "Tambahkan Bisnis" is the extensible entry for industries/categories not yet represented. If no suitable module exists, the user can submit a category request to Plugins for evaluation; accepted requests may lead to a new PLUITS module. The request/review/provisioning flow is future work.
+- The four business cards are currently informational presentation only. Creation, claiming, management, category requests, and ownership checks require their dedicated flows, APIs, and server-side authorization.
