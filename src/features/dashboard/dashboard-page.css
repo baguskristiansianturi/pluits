@@ -274,3 +274,16 @@
  .dashboard-mobile-utility-item{width:27px}
  .dashboard-mobile-utility-item .ui-icon{width:18px;height:18px}
 }
+
+
+/* Refined mobile utility sizing: clearer icons, balanced spacing, comfortable hit areas. */
+@media(max-width:767px){
+ .dashboard-mobile-utility-nav{gap:2px}
+ .dashboard-mobile-utility-item{width:38px;height:40px}
+ .dashboard-mobile-utility-item .ui-icon{width:22px;height:22px}
+}
+@media(max-width:380px){
+ .dashboard-mobile-utility-nav{gap:1px}
+ .dashboard-mobile-utility-item{width:36px;height:38px}
+ .dashboard-mobile-utility-item .ui-icon{width:20px;height:20px}
+}
