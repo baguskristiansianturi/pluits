@@ -46,7 +46,7 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 
 ## Mobile Create: social and business entry points
 - The mobile heading uses a time-aware greeting (morning, afternoon, evening, or night) with the signed-in user's first display-name token, followed by: "Apa yang ingin Anda bagikan hari ini?"
-- The four social-first actions are Story, Post, Reel, Live, and Blog. They appear as full-width navigation rows with compact monochrome icons, supporting descriptions, restrained separators, and a directional affordance. Artikel opens the existing Blog Studio entry; no publishing success is implied.
+- The five social-first actions are Story, Post, Reel, Live, and Blog. They appear as full-width navigation rows with compact monochrome icons, supporting descriptions, restrained separators, and a directional affordance. Blog opens the existing Blog Studio entry; no publishing success is implied.
 - A subtle divider separates social publishing from a dedicated "Ruang Bisnis" section.
 - The business section contains four entry concepts: Buat Toko, Buat Layanan, Klaim Tempat, and Tambahkan Bisnis.
 - Store and Service labels are state-driven in the future: after creation, "Buat Toko"/"Buat Layanan" must become "Kelola Toko"/"Kelola Layanan". A claimed Geo Directory place becomes "Kelola Tempat". These labels must be derived from authorized server records, never guessed or simulated.
@@ -82,13 +82,13 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - White is the dominant canvas and card surface.
 - Use soft neutral grey consistently for borders, dividers, and the secondary Ruang Bisnis background; avoid green-tinted grey surfaces.
 - PLUITS logo teal is an accent only, used sparingly on small icon treatments or selected highlights rather than as a dominant card/background color.
-- On phone layouts, Story, Post, Artikel, and Live must appear as four compact cards in one horizontal row. Hide their supporting descriptions at this width so labels remain legible.
+- On phone layouts, Story, Post, Reel, Live, and Blog must appear as five compact icon tiles in one horizontal row. Hide their supporting descriptions at this width so labels remain legible.
 - Ruang Bisnis remains a two-column card grid with enough room for its descriptions.
 - Desktop Dashboard remains unchanged.
 
 
 ## Mobile Create — social icon tile treatment
-- Story, Post, Artikel, and Live remain in one four-column row on phone widths.
+- Story, Post, Reel, Live, and Blog remain in one five-column row on phone widths.
 - Each action uses a visibly larger, centered social icon inside its own white square tile with a soft grey border.
 - The action label sits directly below the tile with a very small gap (approximately 2px); use a compact, readable label size.
 - Keep the action surface itself visually light and avoid a second enclosing card, descriptions, arrows, or oversized padding.
