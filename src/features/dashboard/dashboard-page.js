@@ -43,6 +43,7 @@ const PARTNER_CATEGORIES = Object.freeze([
     ['public-transport','Transportasi Umum','Layanan bus dan transportasi publik.']
   ]},
   { id:'commerce', label:'Toko & Perdagangan', icon:'store', subcategories:[
+    ['general-retail','Toko Umum & Retail','Toko umum, retail, minimarket, dan toko khusus.'],
     ['fashion','Fashion','Butik, toko pakaian, outlet, pakaian muslim, dan aksesori.'],
     ['electronics','Elektronik & Gadget','HP, komputer, perangkat elektronik, dan aksesori.'],
     ['beauty','Kecantikan','Kosmetik, skincare, dan perlengkapan kecantikan.'],
@@ -83,10 +84,11 @@ const PARTNER_CATEGORIES = Object.freeze([
     ['personal-services','Jasa Personal','Makeup artist, stylist, dan layanan personal.']
   ]},
   { id:'food-beverage',label:'Makanan & Minuman',icon:'coffee',subcategories:[
+    ['cafes','Kafe & Coffee Shop','Kafe, coffee shop, dan tempat penyajian minuman.'],
+    ['restaurants','Restoran','Restoran, rumah makan, dan penyedia hidangan.'],
     ['catering','Katering','Katering acara dan makanan harian.'],
     ['bakery','Bakery & Pastry','Roti, kue, dan pastry.'],
     ['food-stalls','Kedai & Warung','Penyedia makanan dan minuman.'],
-    ['coffee-shops','Coffee Shop','Kedai kopi dan minuman racikan.'],
     ['food-producers','Produsen Makanan','Dapur produksi dan makanan siap saji.'],
     ['beverage-providers','Penyedia Minuman','Jus dan minuman kemasan atau racikan.']
   ]},
