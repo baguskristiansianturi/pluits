@@ -7,13 +7,12 @@ const homeCss = new URL('../../src/features/home/home-page.css', import.meta.url
 const discoverJs = new URL('../../src/features/social/social-pages.js', import.meta.url);
 const discoverCss = new URL('../../src/features/social/social-pages.css', import.meta.url);
 
-test('social home has complete, explicitly labelled demo content when backend data is unavailable', async () => {
+test('social home keeps rich test content visually clean without technical demo labels', async () => {
   const source = await readFile(homeJs, 'utf8');
   assert.match(source, /const demoFeedPosts\s*=\s*\[/);
   assert.match(source, /const demoReels\s*=\s*\[/);
   assert.match(source, /function renderDemoFeed/);
-  assert.match(source, /DEMO · /);
-  assert.match(source, /Konten ilustrasi untuk pengujian tampilan/);
+  assert.doesNotMatch(source, /DEMO · |LIVE · DEMO|Konten ilustrasi|Contoh profil|Foto profil contoh|Simulasi|Pratinjau/);
   assert.match(source, /function storyRail\(\)/);
   assert.match(source, /global-live-demo-grid/);
   assert.match(source, /global-blog-demo-grid/);
@@ -32,6 +31,10 @@ test('social home responsive styles cover narrow mobile, tablet, desktop and hor
   assert.match(css, /\.global-content-tabs[\s\S]*?grid-template-columns:\s*repeat\(4,minmax\(0,1fr\)\)/);
   assert.match(css, /\.global-post-card\.is-reel[\s\S]*?aspect-ratio:\s*9\/16/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
+  assert.match(css, /padding:\s*0 0 8px 5px/);
+  assert.match(css, /font-family:-apple-system,BlinkMacSystemFont/);
+  assert.match(css, /\.global-post-list\{display:grid;gap:20px;width:100%;max-width:none;margin:0\}/);
+  assert.match(css, /\.global-person-card[\s\S]*?aspect-ratio:3\/4\.15/);
 });
 
 test('people discovery has responsive portrait cards and all distance scopes', async () => {
