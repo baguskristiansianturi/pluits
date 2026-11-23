@@ -73,3 +73,10 @@ Run `npm test` and `npm run build`. Verify `#/home` for guest and authenticated 
 - Home sequence below search: nearby local places carousel → people suggestions → Circle Stories → non-sticky Feed/Reels/Live/Blog tabs and full-width social stream → local product carousel → all eight Fluid Partner parent categories → calendar/activity block → about/footer.
 - Local discovery cards and product cards are visual catalogue content for layout evaluation; no claim of real-time business inventory, merchant verification, prices, or distance-based ranking is made.
 - No backend, database, authentication, shared design tokens, global header/footer, or service-module workflows were changed.
+
+## PLUITS Social Home visual refinement — 23 November 2026
+- Search uses the service quick-navigation strip directly beneath the navbar as the single service selector; duplicate service chips inside the search panel are removed.
+- Feature-local colors use the PLUITS brand token (logo teal), white, soft grey, and navy. No generic blue action palette is introduced.
+- Mobile content gutters use 10px for readable section/content edges and 5px for compact full-width navigation/tab rails. Horizontal carousels begin with a 10px inset while remaining horizontally scrollable.
+- Feed post media remains full viewport width on mobile and uses a consistent 4:5 display frame with cover cropping. CSS cropping affects presentation only; it does not rewrite or downsample uploaded source files. Original media storage/processing remains the responsibility of the upload pipeline.
+- Browser-based visual acceptance is still required on Android; build checks do not establish pixel-perfect device rendering.
