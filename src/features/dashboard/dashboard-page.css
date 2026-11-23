@@ -610,3 +610,33 @@
 @media(prefers-reduced-motion:reduce){
  .dashboard-mobile-business-entry{transition:none}
 }
+
+/* PLUITS Partner category catalogue — locked subcategory roadmap cards. */
+@media(max-width:767px){
+ .dashboard-mobile-business-entry.is-expanded{border-color:var(--pl-color-brand);background:var(--pl-color-brand-soft)}
+ .dashboard-mobile-partner-toggle-icon{display:grid;width:22px;height:22px;flex:0 0 auto;place-items:center;margin-left:auto;color:var(--pl-color-muted)}
+ .dashboard-mobile-partner-toggle-icon .ui-icon{width:15px;height:15px}
+ .dashboard-partner-catalog{display:grid;gap:17px;margin-top:17px;padding-top:17px;border-top:1px solid #e2e5e5}
+ .dashboard-partner-catalog-heading{display:grid;gap:5px}
+ .dashboard-partner-catalog-heading h3{margin:0;color:var(--pl-color-ink);font-size:16px;line-height:1.25;letter-spacing:-.025em}
+ .dashboard-partner-catalog-heading p{margin:0;color:var(--pl-color-muted);font-size:10px;line-height:1.5}
+ .dashboard-partner-category{display:grid;gap:9px}
+ .dashboard-partner-category-heading{display:flex;align-items:center;gap:8px}
+ .dashboard-partner-category-icon{display:grid;width:28px;height:28px;flex:0 0 auto;place-items:center;border-radius:8px;background:#fff;color:var(--pl-color-brand)}
+ .dashboard-partner-category-icon .ui-icon{width:16px;height:16px}
+ .dashboard-partner-category-heading h4{margin:0;color:var(--pl-color-ink);font-size:12px;font-weight:730;line-height:1.3}
+ .dashboard-partner-subcategory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .dashboard-partner-subcategory-card{position:relative;display:flex;min-width:0;min-height:92px;flex-direction:column;justify-content:center;gap:5px;padding:12px 30px 11px 11px;border:1px solid #e0e4e4;border-radius:11px;background:#fff}
+ .dashboard-partner-subcategory-card strong{color:var(--pl-color-ink);font-size:10px;font-weight:700;line-height:1.3}
+ .dashboard-partner-subcategory-card small{color:var(--pl-color-muted);font-size:8px;line-height:1.4}
+ .dashboard-partner-lock{position:absolute;top:10px;right:9px;display:grid;width:19px;height:19px;place-items:center;border-radius:6px;background:#f0f2f2;color:#687171}
+ .dashboard-partner-lock .ui-icon{width:12px;height:12px}
+ .dashboard-partner-catalog-note{margin:0;padding:10px 11px;border-radius:9px;background:#eef0f0;color:#596262;font-size:9px;line-height:1.5}
+}
+@media(max-width:380px){
+ .dashboard-partner-subcategory-grid{gap:7px}
+ .dashboard-partner-subcategory-card{min-height:88px;padding:10px 27px 9px 9px}
+ .dashboard-partner-subcategory-card strong{font-size:9px}
+ .dashboard-partner-subcategory-card small{font-size:7px}
+ .dashboard-partner-lock{top:8px;right:7px}
+}
