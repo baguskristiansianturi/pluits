@@ -3,7 +3,7 @@
 - Tanggal: 2026-11-23
 - Topik: Struktur kategori PLUITS Partner dan penanda kesiapan subkategori
 - Model/aplikasi terkait: PLUITS Partner, Marketplace, merchant/service directory
-- Status: RAW
+- Status: UNDER-REVIEW
 
 ## Catatan sharing
 
@@ -74,3 +74,14 @@ Semua subkategori yang sudah masuk rencana harus tetap terlihat di antarmuka aga
 ## Status akhir
 
 RAW
+
+
+## Implementasi awal (2026-11-23)
+
+- Mobile Ruang Bisnis sekarang menampilkan satu entri PLUITS Partner bersama Toko, Kafe, Restoran, dan Tempat.
+- Memilih PLUITS Partner membuka katalog kategori induk dan kartu subkategori secara inline.
+- Katalog awal berisi 9 kategori induk dan 64 kartu subkategori; setiap kartu subkategori menampilkan ikon gembok dan tidak dapat diklik.
+- Perubahan runtime berada di `src/features/dashboard/dashboard-page.js` dan `dashboard-page.css`.
+- Spesifikasi produk berada di `PLUITS-MASTER-MODEL-APP/02-PRODUCT-DESIGN/02-MARKETPLACE/PLUITS-PARTNER-CATEGORY-CATALOGUE.md`.
+- Status kategori masih presentational; admin unlock dan state backend belum dibuat.
+- Taxonomy masih perlu audit final dan acceptance founder.
