@@ -193,8 +193,13 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
   function render() {
     const headerActions =
       '<div class="dashboard-header-actions">' +
-        '<button type="button" class="dashboard-header-action" data-notifications aria-expanded="' + state.notificationsOpen + '">' + renderIcon('mail') + '<span>Notifikasi</span></button>' +
-        '<button type="button" class="dashboard-header-action" data-open-inbox>' + renderIcon('message') + '<span>Inbox</span></button>' +
+        '<button type="button" class="dashboard-header-action dashboard-desktop-notification" data-notifications aria-expanded="' + state.notificationsOpen + '">' + renderIcon('mail') + '<span>Notifikasi</span></button>' +
+        '<button type="button" class="dashboard-header-action dashboard-desktop-inbox" data-open-inbox>' + renderIcon('message') + '<span>Inbox</span></button>' +
+        '<nav class="dashboard-mobile-utility-nav" aria-label="Akses cepat akun">' +
+          '<span class="dashboard-mobile-utility-item" role="img" aria-label="Wishlist" title="Wishlist">' + renderIcon('heart') + '</span>' +
+          '<span class="dashboard-mobile-utility-item" role="img" aria-label="Keranjang belanja" title="Keranjang belanja">' + renderIcon('cart') + '</span>' +
+          '<span class="dashboard-mobile-utility-item" role="img" aria-label="Notifikasi" title="Notifikasi">' + renderIcon('bell') + '</span>' +
+        '</nav>' +
         '<span class="dashboard-header-user"><span class="dashboard-header-avatar">' + initial + '</span><span class="dashboard-header-name">' + name + '</span></span>' +
         '<button class="dashboard-signout" type="button" data-sign-out>' + renderIcon('logout') + '<span>Keluar</span></button>' +
       '</div>';
