@@ -532,3 +532,20 @@
  .dashboard-mobile-create-icon .ui-icon{width:27px;height:27px}
  .dashboard-mobile-create-copy strong{font-size:8px}
 }
+
+
+/* Mobile Create — one edge-to-edge white base, without an inset panel frame. */
+@media(max-width:767px){
+ .dashboard-center:has(.dashboard-mobile-create){
+  width:100%;
+  border:0;
+  border-radius:0;
+  background:#fff
+ }
+ .dashboard-center-scroll:has(.dashboard-mobile-create){
+  width:100%;
+  padding:var(--pl-space-5) var(--pl-space-4) var(--pl-space-7);
+  background:#fff
+ }
+ .dashboard-mobile-create{background:transparent}
+}
