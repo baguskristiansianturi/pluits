@@ -46,3 +46,12 @@ Run `npm test` and `npm run build`. Verify `#/home` for guest and authenticated 
 - Never expose a development-workspace or demo-session entry in the public homepage navigation or other visitor-facing UI.
 - The current `?pluits-demo=1` query switch is a frontend simulation convenience, not secure owner authentication. Anyone who knows or discovers the switch can invoke it; it grants no production role and must never expose real user, merchant, or customer data.
 - Replace the simulation switch with a genuinely private owner/developer access mechanism before connecting privileged development workflows or production data. Supabase availability must not be a prerequisite for local frontend development.
+
+
+## Social Home mobile composition update — 23 November 2026
+- The authenticated Social Home now starts with a compact location-scope prompt, welcome/search hero, and horizontally scrollable service shortcuts before the social discovery area.
+- The social sequence remains people suggestions → Circle Stories → non-sticky Feed/Reels/Live/Blog tabs → vertically scrolling full-width post stream.
+- Local discovery and product preview remain below the social stream. Product previews are explicitly illustrative; the Marketplace CTA links to the existing Marketplace route.
+- Location detection, location-aware catalogue filtering, people suggestions, Stories, Live, Blog, and nearby inventory are not claimed as connected until their PLUITS services/data contracts exist.
+- The page uses existing shared shell and icon registry; no global token, route, authentication, backend, database, or merchant-operation changes were made.
+- Validation: architecture checks and Vite production build passed on commit cb1d6dd1402841a24b50420163af929f6e95f6aa. Pages deploy was blocked by duplicate/missing github-pages artifact metadata during a workflow rerun; a fresh push is required for a clean artifact/deploy run. Android UAT remains pending.
