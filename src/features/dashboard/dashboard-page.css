@@ -257,3 +257,20 @@
  .dashboard-mobile-create-action{padding-inline:3px}
  .dashboard-mobile-create-icon{width:38px;height:38px}
 }
+
+
+/* Create mobile utility icons: wishlist, cart, notifications (left to right). */
+.dashboard-mobile-utility-nav{display:none}
+@media(max-width:767px){
+ .dashboard-page .pl-page-header{gap:8px}
+ .dashboard-header-actions{gap:0}
+ .dashboard-desktop-notification,.dashboard-desktop-inbox,.dashboard-header-user,.dashboard-signout{display:none!important}
+ .dashboard-mobile-utility-nav{display:flex;align-items:center;justify-content:flex-end;gap:clamp(13px,4vw,19px);margin-left:auto}
+ .dashboard-mobile-utility-item{display:grid;width:30px;height:36px;flex:0 0 auto;place-items:center;color:var(--pl-color-ink)}
+ .dashboard-mobile-utility-item .ui-icon{width:19px;height:19px}
+}
+@media(max-width:380px){
+ .dashboard-mobile-utility-nav{gap:11px}
+ .dashboard-mobile-utility-item{width:27px}
+ .dashboard-mobile-utility-item .ui-icon{width:18px;height:18px}
+}
