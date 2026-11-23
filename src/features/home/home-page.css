@@ -535,3 +535,21 @@
  .global-home-main{max-width:var(--pl-container-wide);padding-inline:24px}
  .global-social-area{max-width:860px;margin-inline:auto}
 }
+
+
+/* Rich visual treatment for the UI test dataset. */
+.global-home-hero{background-image:linear-gradient(90deg,rgba(7,31,65,.78),rgba(13,70,120,.48) 54%,rgba(8,32,56,.12)),url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1600&q=88');background-size:cover;background-position:center 48%}
+.global-home-hero:after{border-color:rgba(255,255,255,.16)}
+.global-demo-art em{position:absolute;right:48px;bottom:12px;z-index:1;padding:4px 6px;border-radius:4px;background:rgba(255,255,255,.88);color:#263e4c;font-size:7px;font-style:normal;font-weight:850;letter-spacing:.08em}
+.global-demo-art span{padding:4px 6px;border-radius:4px;background:rgba(255,255,255,.88)}
+.global-product-art{position:relative;overflow:hidden}
+.global-product-discount{position:absolute;top:8px;left:8px;padding:4px 6px;border-radius:4px;background:#d83e50;color:#fff;font-size:9px}
+.global-product-price{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap}
+.global-product-price b{color:#d34252;font-size:11px}
+.global-product-price del{color:var(--pl-color-muted);font-size:8px}
+.global-product-demo>span{line-height:1.35}
+@media(max-width:767px){
+ .global-home-hero{background-position:57% center}
+ .global-product-discount{top:6px;left:6px;font-size:8px}
+ .global-product-price b{font-size:10px}
+}
