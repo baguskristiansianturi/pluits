@@ -89,12 +89,14 @@ test('cover editor accepts image or video media and limits video duration to ten
   assert.match(moduleSource, /Ukuran dan posisi sampul tetap sama/);
 });
 
-test('cover switch applies immediately and menu closes only through its X control', () => {
+test('cover switch applies immediately and menu closes through outside click or X', () => {
   assert.match(moduleSource, /data-cover-menu-close/);
   assert.doesNotMatch(moduleSource, /data-cover-save-settings|data-cover-cancel|Simpan pengaturan/);
   assert.match(moduleSource, /coverEnabled = !coverEnabled/);
   assert.match(moduleSource, /card\.classList\.toggle\('is-cover-disabled', !coverEnabled\)/);
-  assert.match(moduleSource, /if \(event\.target\.closest\('\[data-cover-menu-close\]'\)\) \{ closeMenu\(\); return; \}/);\n  assert.match(moduleSource, /document\.addEventListener\('pointerdown', onOutsidePointerDown\)/);\n  assert.match(moduleSource, /document\.removeEventListener\('pointerdown', onOutsidePointerDown\)/);
+  assert.match(moduleSource, /if \(event\.target\.closest\('\[data-cover-menu-close\]'\)\) \{ closeMenu\(\); return; \}/);
+  assert.match(moduleSource, /document\.addEventListener\('pointerdown', onOutsidePointerDown\)/);
+  assert.match(moduleSource, /document\.removeEventListener\('pointerdown', onOutsidePointerDown\)/);
   assert.match(moduleSource, /setTimeout\(\(\) => \{\s*menu\.hidden = true/);
   assert.match(styles, /\.social-profile-cover-menu\.is-open/);
   assert.match(styles, /\.social-profile-cover-menu-close/);
