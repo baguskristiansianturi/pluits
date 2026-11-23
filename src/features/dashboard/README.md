@@ -101,3 +101,10 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - Cards are semantic buttons with keyboard focus, a soft neutral hover/pressed surface, subtle press feedback, and reduced-motion support.
 - Toko and Layanan Profesional open the existing Akun Bisnis view with the corresponding type selected; Tempat opens the Geo Directory module placeholder; Bisnis dan Layanan Anda opens Akun Bisnis.
 - These interactions are navigation and selection only. They do not create businesses, claim places, or imply backend ownership. Those actions remain pending their authorized workflows.
+
+
+## Expanded mobile Ruang Bisnis categories
+- The mobile Ruang Bisnis grid contains six entry cards in this order: Toko, Kafe, Restoran, Tempat, Bisnis, Layanan & Tempat Lainnya, and Bisnis dan Layanan Anda Lainnya.
+- Toko, Kafe, and Restoran open Akun Bisnis with their matching type selected. Tempat opens Geo Directory. Bisnis, Layanan & Tempat Lainnya opens Akun Bisnis with the other-category option selected. Bisnis dan Layanan Anda Lainnya opens the general Akun Bisnis view.
+- The Akun Bisnis type selector includes Toko, Kafe, Restoran, Layanan Profesional, and kategori lainnya. Cafe and restaurant icons are added to the existing local icon registry and reused here.
+- These are navigational entry points and temporary selections only. They do not create accounts, claim places, or represent verified business ownership; server-side workflows and authorization are still required.
