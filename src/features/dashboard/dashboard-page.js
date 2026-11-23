@@ -33,6 +33,96 @@ const MODULE_GROUPS = [
   ] }
 ];
 const BLOG_TEMPLATES = ['AURELIA','STAVERO','BREWNOX','ROVANTA','LUNELLE'];
+const PARTNER_CATEGORIES = Object.freeze([
+  { id:'transportation', label:'Transportasi', icon:'arrow', subcategories:[
+    ['car-rental','Sewa Mobil','Harian, mingguan, bulanan; dengan atau tanpa pengemudi.'],
+    ['motorcycle-rental','Sewa Motor','Penyewaan motor untuk kebutuhan perjalanan.'],
+    ['courier','Kurir & Pengiriman','Dokumen, paket, dan pengiriman barang.'],
+    ['passenger-transport','Transportasi Penumpang','Antar-jemput, shuttle, travel, dan transfer.'],
+    ['freight-transport','Transportasi Barang','Angkutan barang, pindahan, dan logistik.'],
+    ['public-transport','Transportasi Umum','Layanan bus dan transportasi publik.']
+  ]},
+  { id:'commerce', label:'Toko & Perdagangan', icon:'store', subcategories:[
+    ['fashion','Fashion','Butik, toko pakaian, outlet, pakaian muslim, dan aksesori.'],
+    ['electronics','Elektronik & Gadget','HP, komputer, perangkat elektronik, dan aksesori.'],
+    ['beauty','Kecantikan','Kosmetik, skincare, dan perlengkapan kecantikan.'],
+    ['home-living','Rumah & Perlengkapan','Furnitur, dekorasi, dan kebutuhan rumah.'],
+    ['daily-needs','Kebutuhan Harian','Sembako, minimarket, dan toko kelontong.'],
+    ['automotive','Otomotif','Suku cadang dan perlengkapan kendaraan.'],
+    ['sports','Olahraga','Pakaian, sepatu, dan peralatan olahraga.'],
+    ['crafts','Kerajinan & Suvenir','Produk handmade dan kerajinan lokal.'],
+    ['other-stores','Toko Lainnya','Jenis perdagangan yang belum tercakup.']
+  ]},
+  { id:'accommodation', label:'Akomodasi', icon:'mapPin', subcategories:[
+    ['hotel','Hotel','Hotel berbintang maupun nonbintang.'],
+    ['villa','Villa','Private villa dan akomodasi keluarga.'],
+    ['homestay','Homestay','Penginapan rumahan.'],
+    ['guest-house','Guest House','Penginapan skala kecil.'],
+    ['hostel','Hostel','Dormitory dan penginapan bersama.'],
+    ['apartment','Apartemen','Sewa harian maupun jangka panjang.'],
+    ['resort','Resort','Resort dan properti liburan.'],
+    ['camping','Camping & Glamping','Area camping dan glamping.']
+  ]},
+  { id:'ticketing-travel','label':'Ticketing & Perjalanan',icon:'fileText',subcategories:[
+    ['flight-tickets','Tiket Pesawat','Penerbangan domestik dan internasional.'],
+    ['ship-tickets','Tiket Kapal','Ferry dan kapal penumpang.'],
+    ['bus-tickets','Tiket Bus','Antarkota dan antarprovinsi.'],
+    ['train-tickets','Tiket Kereta','Perjalanan kereta.'],
+    ['attraction-tickets','Tiket Atraksi','Tempat wisata dan rekreasi.'],
+    ['activity-tickets','Tiket Aktivitas','Aktivitas wisata dan rekreasi.'],
+    ['tour-packages','Paket Perjalanan','Paket tour dan perjalanan.']
+  ]},
+  { id:'professional-services',label:'Layanan Profesional',icon:'briefcase',subcategories:[
+    ['creative-design','Desain & Kreatif','Desain grafis, UI/UX, fotografi, dan video.'],
+    ['technology-services','Teknologi','Website, aplikasi, dan sistem digital.'],
+    ['marketing-services','Pemasaran','Digital marketing, iklan, dan SEO.'],
+    ['writing-services','Penulisan','Copywriting, penerjemahan, dan konten.'],
+    ['consulting','Konsultan','Bisnis, manajemen, dan konsultasi profesional.'],
+    ['education','Pendidikan & Pelatihan','Kursus, les privat, dan pelatihan.'],
+    ['maintenance','Perawatan & Pemeliharaan','Kebersihan, perawatan rumah, dan gedung.'],
+    ['personal-services','Jasa Personal','Makeup artist, stylist, dan layanan personal.']
+  ]},
+  { id:'food-beverage',label:'Makanan & Minuman',icon:'coffee',subcategories:[
+    ['catering','Katering','Katering acara dan makanan harian.'],
+    ['bakery','Bakery & Pastry','Roti, kue, dan pastry.'],
+    ['food-stalls','Kedai & Warung','Penyedia makanan dan minuman.'],
+    ['coffee-shops','Coffee Shop','Kedai kopi dan minuman racikan.'],
+    ['food-producers','Produsen Makanan','Dapur produksi dan makanan siap saji.'],
+    ['beverage-providers','Penyedia Minuman','Jus dan minuman kemasan atau racikan.']
+  ]},
+  { id:'property-space',label:'Properti & Ruang',icon:'map',subcategories:[
+    ['property-sale','Jual Properti','Rumah, tanah, dan apartemen.'],
+    ['property-rent','Sewa Properti','Rumah, apartemen, dan properti sewa.'],
+    ['office-space','Ruang Kantor','Kantor dan ruang kerja.'],
+    ['coworking','Co-working Space','Ruang kerja bersama.'],
+    ['event-venues','Ruang Acara','Ballroom, aula, dan venue.'],
+    ['commercial-space','Ruang Komersial','Ruko, kios, dan ruang usaha.']
+  ]},
+  { id:'classifieds-jobs',label:'Iklan Baris & Lowongan',icon:'grid',subcategories:[
+    ['job-vacancies','Lowongan Kerja','Full-time, part-time, kontrak, dan freelance.'],
+    ['job-seekers','Pencari Kerja','Profil kandidat dan pencarian pekerjaan.'],
+    ['classified-property','Iklan Properti','Jual dan sewa properti.'],
+    ['classified-vehicles','Iklan Kendaraan','Jual dan sewa kendaraan.'],
+    ['used-goods','Barang Bekas','Elektronik, furnitur, dan barang lainnya.'],
+    ['classified-services','Penawaran Jasa','Jasa dan kebutuhan tenaga profesional.'],
+    ['business-opportunities','Bisnis & Peluang Kemitraan','Jual beli usaha dan peluang kerja sama.'],
+    ['other-classifieds','Iklan Lainnya','Iklan yang belum masuk kategori lain.']
+  ]},
+  { id:'other-partners',label:'Mitra Lainnya',icon:'moreVertical',subcategories:[
+    ['event-organizers','Event Organizer','Penyelenggara acara.'],
+    ['staffing-providers','Penyedia Tenaga Kerja','Penyedia dan penyalur tenaga kerja.'],
+    ['wellness-services','Kesehatan & Kebugaran','Layanan kebugaran dan wellness.'],
+    ['communities','Komunitas & Organisasi','Komunitas dan organisasi mitra.'],
+    ['other-partner-types','Bidang Lainnya','Bidang mitra yang belum tercakup.']
+  ]}
+]);
+const BUSINESS_ENTRIES = Object.freeze([
+  { id:'store', label:'Toko', action:'Buat Toko', icon:'store', type:'store' },
+  { id:'cafe', label:'Kafe', action:'Buat Kafe', icon:'coffee', type:'cafe' },
+  { id:'restaurant', label:'Restoran', action:'Buat Restoran', icon:'utensils', type:'restaurant' },
+  { id:'place', label:'Tempat', action:'Klaim Tempat', icon:'mapPin', tab:'geo' },
+  { id:'partner', label:'PLUITS Partner', action:'Lihat kategori mitra', icon:'briefcase', partner:true }
+]);
 
 function readLayout() {
   try {
@@ -114,7 +204,7 @@ function renderTabContent(tab, context) {
     '<section class="dashboard-panel dashboard-applications"><div class="dashboard-panel-heading"><div><span class="dashboard-kicker">EKOSISTEM PLUITS</span><h2>Modul aplikasi</h2><p>Pilih modul untuk membuka ruang pengelolaannya.</p></div></div><div class="dashboard-application-list">' + ecosystem.map((item) => '<button type="button" data-open-tab="' + item.id + '" class="dashboard-application-item"><span class="dashboard-application-icon">' + renderIcon(item.icon) + '</span><span><strong>' + item.label + '</strong><small>' + item.status + '</small></span><span class="dashboard-application-arrow">›</span></button>').join('') + '</div></section></section>';
 }
 
-function renderMobileCreate(displayName) {
+function renderMobileCreate(displayName, partnerExpanded = false) {
   const hour = new Date().getHours();
   const greeting = hour < 11 ? 'Selamat pagi' : hour < 15 ? 'Selamat siang' : hour < 18 ? 'Selamat sore' : 'Selamat malam';
   const firstName = escapeHtml(String(displayName || 'Pengguna').trim().split(/\s+/)[0]);
@@ -125,15 +215,7 @@ function renderMobileCreate(displayName) {
     { id:'live', label:'Live', icon:'play', description:'Mulai siaran langsung' },
     { id:'blog', label:'Blog', icon:'fileText', description:'Tulis dan publikasikan artikel' }
   ];
-  const businessEntries = [
-    { id:'store', label:'Toko', action:'Buat Toko', icon:'store', type:'store' },
-    { id:'cafe', label:'Kafe', action:'Buat Kafe', icon:'coffee', type:'cafe' },
-    { id:'restaurant', label:'Restoran', action:'Buat Restoran', icon:'utensils', type:'restaurant' },
-    { id:'place', label:'Tempat', action:'Klaim Tempat', icon:'mapPin', tab:'geo' },
-    { id:'other', label:'Bisnis, Layanan & Tempat Lainnya', action:'Tambahkan kategori', icon:'grid', type:'other' },
-    { id:'my-businesses', label:'Bisnis dan Layanan Anda Lainnya', action:'Tambahkan bisnis lainnya', icon:'briefcase', tab:'business' }
-  ];
-  return '<section class="dashboard-mobile-create" aria-labelledby="mobile-create-title">' +
+  const businessEntries = BUSINESS_ENTRIES;  return '<section class="dashboard-mobile-create" aria-labelledby="mobile-create-title">' +
     '<div class="dashboard-mobile-create-heading"><span class="dashboard-kicker">CREATE</span><h1 id="mobile-create-title">' + greeting + ', ' + firstName + '</h1><p>Apa yang ingin Anda bagikan hari ini?</p></div>' +
     '<section class="dashboard-mobile-social" aria-label="Buat konten sosial">' +
       '<div class="dashboard-mobile-create-list">' +
@@ -145,8 +227,13 @@ function renderMobileCreate(displayName) {
     '<section class="dashboard-mobile-business" aria-labelledby="mobile-business-title">' +
       '<div class="dashboard-mobile-business-heading"><div><span class="dashboard-kicker">BUSINESS</span><h2 id="mobile-business-title">Ruang Bisnis</h2><p>Mulai dan kelola aktivitas bisnis Anda di PLUITS.</p></div></div>' +
       '<div class="dashboard-mobile-business-list">' +
-        businessEntries.map((item) => '<button type="button" class="dashboard-mobile-business-entry" data-business-entry="' + item.id + '" aria-label="' + item.action + ': ' + item.label + '"><span class="dashboard-mobile-business-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-business-copy"><strong>' + item.label + '</strong><em>' + item.action + '</em></span></button>').join('') +
+        businessEntries.map((item) => '<button type="button" class="dashboard-mobile-business-entry' + (item.partner && partnerExpanded ? ' is-expanded' : '') + '" data-business-entry="' + item.id + '"' + (item.partner ? ' aria-expanded="' + partnerExpanded + '"' : '') + ' aria-label="' + item.action + ': ' + item.label + '"><span class="dashboard-mobile-business-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-business-copy"><strong>' + item.label + '</strong><em>' + (item.partner && partnerExpanded ? 'Sembunyikan kategori' : item.action) + '</em></span>' + (item.partner ? '<span class="dashboard-mobile-partner-toggle-icon">' + renderIcon(partnerExpanded ? 'eyeOff' : 'arrow') + '</span>' : '') + '</button>').join('') +
       '</div>' +
+      (partnerExpanded ? '<section class="dashboard-partner-catalog" aria-labelledby="partner-catalog-title"><div class="dashboard-partner-catalog-heading"><span class="dashboard-kicker">KATALOG MITRA</span><h3 id="partner-catalog-title">Kategori PLUITS Partner</h3><p>Seluruh kategori dicatat sejak awal. Ikon gembok menandakan subkategori belum dibuka.</p></div>' +
+        PARTNER_CATEGORIES.map((category) => '<section class="dashboard-partner-category" aria-labelledby="partner-category-' + category.id + '"><div class="dashboard-partner-category-heading"><span class="dashboard-partner-category-icon">' + renderIcon(category.icon) + '</span><h4 id="partner-category-' + category.id + '">' + category.label + '</h4></div><div class="dashboard-partner-subcategory-grid">' +
+          category.subcategories.map((item) => '<article class="dashboard-partner-subcategory-card" aria-label="' + item[1] + ', terkunci"><span class="dashboard-partner-lock" aria-label="Terkunci">' + renderIcon('lock') + '</span><strong>' + item[1] + '</strong><small>' + item[2] + '</small></article>').join('') +
+        '</div></section>').join('') +
+        '<p class="dashboard-partner-catalog-note">Status gembok saat ini adalah penanda perencanaan antarmuka. Pembukaan kategori akan dikendalikan secara manual setelah modul terkait selesai disiapkan.</p></section>' : '') +
     '</section>' +
   '</section>';
 }
@@ -183,7 +270,8 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
     selectedTemplate:'AURELIA',
     transactionMode:'purchase',
     transactionStatus:'all',
-    settingsSection:'account'
+    settingsSection:'account',
+    partnerExpanded:false
   };
 
   const saveLayout = () => {
@@ -237,7 +325,7 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
           '<div class="dashboard-toolbar"><div class="dashboard-toolbar-title"><span class="dashboard-kicker">RUANG KERJA PERSONAL</span><strong><span class="dashboard-desktop-title">Dashboard</span><span class="dashboard-mobile-title">Create</span></strong></div>' +
             '<div class="dashboard-toolbar-controls"><button type="button" data-toggle-left aria-expanded="' + state.leftOpen + '">' + (state.leftOpen ? 'Sembunyikan modul' : 'Tampilkan modul') + '</button><button type="button" data-toggle-right aria-expanded="' + state.rightOpen + '">' + (state.rightOpen ? 'Sembunyikan sosial' : 'Tampilkan sosial') + '</button></div></div>' +
           '<div class="dashboard-tabs" role="tablist" aria-label="Halaman yang sedang terbuka">' + tabMarkup + '</div>' +
-          renderMobileCreate(displayName) +
+          renderMobileCreate(displayName, state.partnerExpanded) +
           '<div class="dashboard-layout' + (state.leftOpen ? '' : ' is-left-hidden') + (state.rightOpen ? '' : ' is-right-hidden') + '" style="--dashboard-left-width:' + state.leftWidth + 'px;--dashboard-right-width:' + state.rightWidth + 'px">' +
             '<aside class="dashboard-sidebar" aria-label="Daftar modul"><div class="dashboard-sidebar-heading"><strong>Modul PLUITS</strong><span>Semua akses dalam satu akun</span></div>' + moduleMarkup + '<div class="dashboard-sidebar-footer"><span class="dashboard-sidebar-avatar">' + initial + '</span><span><strong>' + name + '</strong><small>Akun personal</small></span></div></aside>' +
             '<div class="dashboard-resizer dashboard-resizer--left" data-resize="left" role="separator" aria-label="Ubah lebar daftar modul" aria-orientation="vertical" tabindex="0"></div>' +
@@ -261,7 +349,8 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
     }
     if (target.matches('[data-business-entry]')) {
       const entry = target.dataset.businessEntry;
-      const businessItem = businessEntries.find((item) => item.id === entry);
+      const businessItem = BUSINESS_ENTRIES.find((item) => item.id === entry);
+      if (businessItem?.partner) { state.partnerExpanded = !state.partnerExpanded; render(); return; }
       if (businessItem?.type) state.selectedBusinessType = businessItem.type;
       openTab(entry === 'place' ? 'geo' : 'business');
       return;
