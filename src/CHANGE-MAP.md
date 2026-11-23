@@ -15,7 +15,7 @@ Scope: Public Business Homepage, authenticated Social App, Jelajah, Ruang Kerja,
 | Public Business Homepage | src/features/home/business-home-page.js and business-home.css | features/home | `/pluits/`; PLUITS brand destination |
 | Authenticated Social Home (former Global Home composition) | src/features/home/home-page.js and home-page.css | features/home | protected `/pluits/social/` after login |
 | Jelajah, Messages, redesigned Profile, Settings, and legacy Circle route | src/features/social/social-pages.js, profile-cover-controls.js, and social-pages.css | features/social | `/pluits/discover/`, `/pluits/messages/`, `/pluits/profile/`, `/pluits/settings/`; legacy `/pluits/circle/` redirects to `/pluits/social/` |
-| Ruang Kerja | src/features/dashboard/dashboard-page.js and dashboard-page.css | features/dashboard | Protected `/pluits/dashboard/` |
+| Create / Ruang Kerja | src/features/dashboard/dashboard-page.js and dashboard-page.css | features/dashboard | Protected `/pluits/dashboard/`; mobile is a social-first Create launcher, desktop remains professional Dashboard / Ruang Kerja |
 | Auth UI | src/features/auth/auth-page.js and auth-page.css | features/auth | App router |
 | Legal draft screens | src/features/legal/policy-page.js and policy-page.css | features/legal | App router |
 | Public footer information pages | src/features/public-info/pages/ grouped by company, support, community, marketplace and privacy; shared frame in public-info-page.js | features/public-info | Public homepage, Auth, legal and footer destinations |
