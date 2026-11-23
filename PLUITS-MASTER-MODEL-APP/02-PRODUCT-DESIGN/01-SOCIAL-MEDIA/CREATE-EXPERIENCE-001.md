@@ -12,9 +12,8 @@ Provide one Create destination with two intentional responsive experiences. Mobi
 2. Primary social actions, placed first and given the strongest visual priority:
    - Story
    - Post
-   - Reel
+   - Artikel (Blog)
    - Live
-3. Blog remains a first-class social publishing entry directly below the four quick actions.
 4. Other productivity tools and ecosystem modules are not displayed in the initial mobile experience. Add them incrementally only when their modules are ready and approved.
 
 The initial mobile screen must remain simple, complete for its current scope, visually polished, touch-friendly, and free from desktop management panels, tabs, resize controls, and broad module navigation.
@@ -25,7 +24,7 @@ Desktop Create remains the professional **Dashboard / Ruang Kerja**. It may use 
 ## Identity and behavior
 - One PLUITS account and identity across mobile and desktop.
 - Responsive composition may differ; route, authentication, permissions, and data ownership remain shared.
-- Mobile Story/Post/Reel/Live and Blog controls are entry points only. They must not imply live publishing while composer and backend services are unavailable.
+- Mobile Story/Post/Artikel/Live controls are entry points only. They must not imply live publishing while composer and backend services are unavailable.
 - Existing modules, data, routes, and backend contracts must not be deleted to simplify the mobile presentation.
 
 ## Visual foundation
@@ -41,8 +40,22 @@ Use existing PLUITS design tokens, page shell, and local icon registry. Do not a
 Uses existing `src/design-system/tokens.css`, `page-shell.js`, `page-shell.css`, and `icons.js`. Does not change shared tokens, icons, routes, auth, backend, database, or sibling features.
 
 ## Validation
-- Mobile: verify 360px, 390px, 420px widths; four social actions in the first row; Blog entry below; no desktop module sidebar/tabs/resizers/social side panel; no horizontal overflow.
+- Mobile: verify 360px, 390px, 420px widths; four social actions in the first row; no desktop module sidebar/tabs/resizers/social side panel; no horizontal overflow.
 - Desktop: verify Dashboard work area, module navigation, tabs, resizers, and social panel remain available.
 - Keyboard: all visible actions focusable with visible focus.
 - Reduced-motion and safe-area behavior must remain consistent with the shared foundation.
 - Run `npm test` and `npm run build`; verify GitHub Pages deployment.
+
+
+## Mobile Create refresh — social + business hub
+The mobile greeting is time-aware and personal: "Selamat pagi/siang/sore/malam, [nama depan]" followed by "Apa yang ingin Anda bagikan hari ini?" The primary social actions are Story, Post, Artikel (Blog), and Live. A subtle horizontal divider closes this publishing area.
+
+Below the divider, show a separate **Ruang Bisnis** section with four entry concepts:
+1. **Buat Toko** → after a Store exists, the label/action becomes **Kelola Toko**.
+2. **Buat Layanan** → after a Service exists, it becomes **Kelola Layanan**.
+3. **Klaim Tempat** → once a Geo Directory place is claimed/verified for the account, it becomes **Kelola Tempat**.
+4. **Tambahkan Bisnis** → the extensible route for other business categories and industries.
+
+A physical Store location should be associated with its Geo Directory place record where one exists. Store and Place remain separate domain records with a relationship; do not assume every Store automatically owns or claims a Place. If a user requests an industry/category without an available module, provide a future request-to-Plugins workflow for evaluation. Approved requests may be scheduled for a new module. Category catalog, plugin review, provisioning, and the entity-state-driven create/manage transitions require backend contracts and are not implemented by this visual update.
+
+No sample ownership state may be fabricated. "Kelola" labels must only appear when verified account/business/place records authorize them. Desktop Create remains unchanged.
