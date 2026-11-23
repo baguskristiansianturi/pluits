@@ -100,3 +100,7 @@ At phone widths, the five social actions stay in a single horizontal row. Each a
 
 ## Mobile Ruang Bisnis — professional cards and touch behavior
 The four mobile entry cards are Toko, Layanan Profesional, Tempat, and Bisnis dan Layanan Anda. Use a prominent approximately 36–40px icon tile, short title, and one concise action label without a paragraph description. Cards are semantic buttons. Provide a restrained light-grey hover and pressed surface, subtle pressed scale feedback, clear keyboard focus, and reduced-motion support. Toko and Layanan Profesional route to the existing Akun Bisnis selection view; Tempat routes to the Geo Directory placeholder; Bisnis dan Layanan Anda routes to Akun Bisnis. Routing does not create records or claim ownership; backend authorization and workflows remain prerequisites.
+
+
+## Mobile Ruang Bisnis — expanded business categories
+The two-column mobile Ruang Bisnis grid contains six entries in this order: **Toko**, **Kafe**, **Restoran**, **Tempat**, **Bisnis, Layanan & Tempat Lainnya**, and **Bisnis dan Layanan Anda Lainnya**. The first three open Akun Bisnis with the matching type selected; Tempat opens Geo Directory; the other-category entry opens Akun Bisnis with the other category selected; and the final entry opens the general business-account view. The Akun Bisnis selector includes Toko, Kafe, Restoran, Layanan Profesional, and kategori lainnya. These interactions are navigation and temporary selection only, not account creation or ownership claims. Backend workflows and authorization remain prerequisites.
