@@ -741,6 +741,5 @@
   background:#fff;
 }
 @media(max-width:767px){
-  .global-header{min-height:var(--pl-shell-header-height-mobile)}
   .global-quick-search{min-height:50px}
 }
