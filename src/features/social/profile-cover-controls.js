@@ -81,11 +81,9 @@ export function renderProfileCoverMenu() {
   return '<div class="social-profile-cover-menu-wrap">'
     + '<div class="social-profile-cover-menu" data-cover-menu role="menu" hidden>'
     + '<button type="button" class="social-profile-cover-menu-close" data-cover-menu-close aria-label="Tutup menu">×</button>'
-    + '<button type="button" role="menuitemcheckbox" data-cover-action="toggle" aria-checked="false"><span class="social-profile-cover-switch" aria-hidden="true"><span></span></span><span>Aktifkan sampul</span></button>'
+    + '<button type="button" role="menuitemcheckbox" data-cover-action="toggle" aria-checked="false"><span class="social-profile-cover-switch" aria-hidden="true"><span></span></span><span data-cover-toggle-label>Aktifkan sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="edit" disabled>'+renderIcon('image')+'<span>Edit sampul</span></button>'
     + '<button type="button" role="menuitem" data-cover-action="library">'+renderIcon('film')+'<span>Pustaka sampul</span></button>'
-    + '<button type="button" role="menuitem" data-cover-action="avatar">'+renderIcon('user')+'<span>Edit foto profil</span></button>'
-    + '<button type="button" role="menuitem" data-cover-action="remove-avatar" disabled>'+renderIcon('image')+'<span>Hapus foto profil</span></button>'
     + '</div></div>';
 }
 
@@ -201,6 +199,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   card.classList.toggle('is-cover-disabled', !coverEnabled);
   const syncCoverState = () => {
     toggleAction.setAttribute('aria-checked', String(coverEnabled));
+    toggleAction.querySelector('[data-cover-toggle-label]').textContent = coverEnabled ? 'Nonaktifkan sampul' : 'Aktifkan sampul';
     editAction.disabled = !coverEnabled;
   };
   let menuCloseTimer = null;
@@ -412,14 +411,6 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       } else if (selected === 'library') {
         closeMenu();
         openDialog('library');
-      } else if (selected === 'avatar') {
-        closeMenu();
-        avatarInput.click();
-      } else if (selected === 'remove-avatar') {
-        closeMenu();
-        removeAvatar(stableProfileKey).then(clearAvatarDisplay).catch(() => {
-          subtitle.textContent = 'Foto profil belum dapat dihapus. Coba lagi.';
-        });
       }
       return;
     }
@@ -572,6 +563,10 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     handlingCoverHistoryPop = false;
     if (!dialog.hidden) pushCoverHistoryState();
   };
+  const onOutsidePointerDown = event => {
+    if (menu.hidden || menu.contains(event.target) || trigger.contains(event.target)) return;
+    closeMenu();
+  };
   const onKeydown = event => {
     if (event.key === 'Escape') {
       if (!dialog.hidden && !unsavedConfirm.hidden) { unsavedConfirm.hidden = true; return; }
@@ -583,6 +578,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   };
 
   root.addEventListener('click', onClick);
+  document.addEventListener('pointerdown', onOutsidePointerDown);
   cropStage.addEventListener('pointerdown', onCropPointerDown);
   cropStage.addEventListener('pointermove', onCropPointerMove);
   cropStage.addEventListener('pointerup', onCropPointerUp);
@@ -595,6 +591,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   window.addEventListener('popstate', onCoverHistoryPop);
   return () => {
     root.removeEventListener('click', onClick);
+    document.removeEventListener('pointerdown', onOutsidePointerDown);
     cropStage.removeEventListener('pointerdown', onCropPointerDown);
     cropStage.removeEventListener('pointermove', onCropPointerMove);
     cropStage.removeEventListener('pointerup', onCropPointerUp);
