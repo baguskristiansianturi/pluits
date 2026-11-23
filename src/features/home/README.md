@@ -63,3 +63,13 @@ Run `npm test` and `npm run build`. Verify `#/home` for guest and authenticated 
 - Every illustrative post/product/category/live element is marked DEMO or otherwise labelled as a preview. These samples are not real user content, inventory, prices, transactions, or engagement metrics.
 - Regression coverage: `tests/features/home-responsive-visuals.test.js` checks responsive breakpoint contracts, horizontal rail behavior, complete demo fallbacks, and people-distance options.
 - Automated architecture checks and production build pass on commit 99c63b65babaee52cb2b8c34a3e7af7531dffdf2. Browser-based visual checks at 320, 360, 390, 430, 768, 1024, and 1440 CSS pixels and Android device acceptance are not available through the current repository toolchain; do not treat CSS contract tests as proof of pixel-perfect rendering.
+
+
+## Unified User Home search and local-first discovery — 23 November 2026
+- Replaced the decorative welcome/hero panel with one compact service-search shell beneath the full-width quick-service strip. The search shell has a single immediate/scheduled mode and service-specific fields for passenger transport, motorcycle, courier, food delivery, flight tickets, attractions, car rental, and accommodation.
+- Immediate transport/motorcycle/courier/food requests expose origin/destination or recipient address and a direct search action. Scheduled/ticketing/accommodation/rental contexts expose relevant date, return-date, and guest/passenger fields. Courier remains a separate service from passenger transport.
+- Search submits the selected service, mode, and entered fields as URL query parameters to the existing Discover route. This is a frontend handoff only; provider availability, geolocation, booking, inventory, and transactions are not implemented by this UI change.
+- The initial marketplace/discovery context is Denpasar, Bali as a visual default, not a verified device location or live geolocation. Users can use the existing Discover route to change exploration scope.
+- Home sequence below search: nearby local places carousel → people suggestions → Circle Stories → non-sticky Feed/Reels/Live/Blog tabs and full-width social stream → local product carousel → all eight Fluid Partner parent categories → calendar/activity block → about/footer.
+- Local discovery cards and product cards are visual catalogue content for layout evaluation; no claim of real-time business inventory, merchant verification, prices, or distance-based ranking is made.
+- No backend, database, authentication, shared design tokens, global header/footer, or service-module workflows were changed.
