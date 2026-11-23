@@ -48,7 +48,7 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - The mobile heading uses a time-aware greeting (morning, afternoon, evening, or night) with the signed-in user's first display-name token, followed by: "Apa yang ingin Anda bagikan hari ini?"
 - The five social-first actions are Story, Post, Reel, Live, and Blog. They appear as full-width navigation rows with compact monochrome icons, supporting descriptions, restrained separators, and a directional affordance. Blog opens the existing Blog Studio entry; no publishing success is implied.
 - A subtle divider separates social publishing from a dedicated "Ruang Bisnis" section.
-- The business section presents five entry concepts: Toko, Kafe, Restoran, Tempat, and PLUITS Partner. PLUITS Partner expands into a grouped category catalogue; its subcategories remain visibly locked until each module is deliberately released.
+- Ruang Bisnis presents exactly two entry points: PLUITS Partner and Tempat. PLUITS Partner expands into the grouped catalogue for all business, merchant, and service categories—including Toko, Kafe, and Restoran. Tempat opens Geo Directory. Toko, Kafe, and Restoran are not separate top-level Ruang Bisnis cards.
 - Store and Service labels are state-driven in the future: after creation, "Buat Toko"/"Buat Layanan" must become "Kelola Toko"/"Kelola Layanan". A claimed Geo Directory place becomes "Kelola Tempat". These labels must be derived from authorized server records, never guessed or simulated.
 - A Store with a physical address should link to its corresponding Geo Directory place record when available; the store and place are related but distinct records. Do not create duplicate place listings automatically.
 - "Tambahkan Bisnis" is the extensible entry for industries/categories not yet represented. If no suitable module exists, the user can submit a category request to Plugins for evaluation; accepted requests may lead to a new PLUITS module. The request/review/provisioning flow is future work.
@@ -104,14 +104,14 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 
 
 ## Expanded mobile Ruang Bisnis categories
-- The mobile Ruang Bisnis grid contains six entry cards in this order: Toko, Kafe, Restoran, Tempat, Bisnis, Layanan & Tempat Lainnya, and Bisnis dan Layanan Anda Lainnya.
-- Toko, Kafe, and Restoran open Akun Bisnis with their matching type selected. Tempat opens Geo Directory. Bisnis, Layanan & Tempat Lainnya opens Akun Bisnis with the other-category option selected. Bisnis dan Layanan Anda Lainnya opens the general Akun Bisnis view.
-- The Akun Bisnis type selector includes Toko, Kafe, Restoran, Layanan Profesional, and kategori lainnya. Cafe and restaurant icons are added to the existing local icon registry and reused here.
-- These are navigational entry points and temporary selections only. They do not create accounts, claim places, or represent verified business ownership; server-side workflows and authorization are still required.
+- Struktur final mobile Ruang Bisnis memiliki tepat dua kartu: PLUITS Partner dan Tempat.
+- PLUITS Partner membuka katalog kategori mitra. Kategori Toko & Perdagangan memuat rumpun toko/retail, sedangkan Makanan & Minuman memuat Kafe dan Restoran beserta jenis usaha makanan-minuman lainnya.
+- Tempat membuka Geo Directory. Kartu ini tetap terpisah karena tempat fisik dan akun/mitra usaha merupakan entitas yang berbeda.
+- Pemilihan atau pembukaan katalog hanya navigasi. Tidak ada akun bisnis yang dibuat, tempat yang diklaim, atau kepemilikan yang dianggap terverifikasi; seluruh alur tersebut tetap memerlukan API dan otorisasi server.
 
 
 ## PLUITS Partner — mobile category catalogue
-- The mobile Ruang Bisnis entry list includes one PLUITS Partner card (not duplicate generic-business cards).
+- The mobile Ruang Bisnis entry list includes exactly two cards: PLUITS Partner and Tempat. There are no separate Toko, Kafe, or Restoran cards.
 - Selecting PLUITS Partner expands the catalogue inline on the mobile Create page; it does not claim or create a business account.
 - The catalogue uses parent categories with subcategory cards. Current parent groups: Transportasi; Toko & Perdagangan; Akomodasi; Ticketing & Perjalanan; Layanan Profesional; Makanan & Minuman; Properti & Ruang; Iklan Baris & Lowongan; and Mitra Lainnya.
 - Every subcategory card displays a lock icon and a short scope description. Locked cards are informational articles, not active buttons.
