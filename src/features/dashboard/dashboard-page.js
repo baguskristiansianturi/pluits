@@ -115,20 +115,35 @@ function renderTabContent(tab, context) {
     '<section class="dashboard-panel dashboard-applications"><div class="dashboard-panel-heading"><div><span class="dashboard-kicker">EKOSISTEM PLUITS</span><h2>Modul aplikasi</h2><p>Pilih modul untuk membuka ruang pengelolaannya.</p></div></div><div class="dashboard-application-list">' + ecosystem.map((item) => '<button type="button" data-open-tab="' + item.id + '" class="dashboard-application-item"><span class="dashboard-application-icon">' + renderIcon(item.icon) + '</span><span><strong>' + item.label + '</strong><small>' + item.status + '</small></span><span class="dashboard-application-arrow">›</span></button>').join('') + '</div></section></section>';
 }
 
-function renderMobileCreate() {
+function renderMobileCreate(displayName) {
+  const hour = new Date().getHours();
+  const greeting = hour < 11 ? 'Selamat pagi' : hour < 15 ? 'Selamat siang' : hour < 18 ? 'Selamat sore' : 'Selamat malam';
+  const firstName = escapeHtml(String(displayName || 'Pengguna').trim().split(/\\s+/)[0]);
   const actions = [
     { id:'story', label:'Story', icon:'plus', description:'Bagikan momen' },
     { id:'post', label:'Post', icon:'image', description:'Foto atau tulisan' },
-    { id:'reel', label:'Reel', icon:'film', description:'Video pendek' },
+    { id:'blog', label:'Artikel', icon:'fileText', description:'Tulis di Blog' },
     { id:'live', label:'Live', icon:'play', description:'Siaran langsung' }
   ];
+  const businessEntries = [
+    { label:'Buat Toko', icon:'store', description:'Mulai jual produk fisik atau digital.' },
+    { label:'Buat Layanan', icon:'briefcase', description:'Tawarkan jasa dan keahlian Anda.' },
+    { label:'Klaim Tempat', icon:'mapPin', description:'Kelola lokasi usaha di Geo Directory.' },
+    { label:'Tambahkan Bisnis', icon:'grid', description:'Ajukan kategori bisnis lain ke PLUITS.' }
+  ];
   return '<section class="dashboard-mobile-create" aria-labelledby="mobile-create-title">' +
-    '<div class="dashboard-mobile-create-heading"><span class="dashboard-kicker">SOCIAL PLUITS</span><h1 id="mobile-create-title">Apa yang ingin Anda buat?</h1><p>Pilih cara untuk berbagi sesuatu dengan komunitas Anda.</p></div>' +
+    '<div class="dashboard-mobile-create-heading"><span class="dashboard-kicker">RUANG KREASI PLUITS</span><h1 id="mobile-create-title">' + greeting + ', ' + firstName + '</h1><p>Apa yang ingin Anda bagikan hari ini?</p></div>' +
     '<div class="dashboard-mobile-create-grid" aria-label="Buat konten sosial">' +
-      actions.map((item) => '<button type="button" class="dashboard-mobile-create-action" data-create-action="' + item.id + '" aria-label="Buat ' + item.label + '">' +
+      actions.map((item) => '<button type="button" class="dashboard-mobile-create-action" data-create-action="' + item.id + '" aria-label="' + (item.id === 'blog' ? 'Tulis artikel untuk Blog' : 'Buat ' + item.label) + '">' +
         '<span class="dashboard-mobile-create-icon">' + renderIcon(item.icon) + '</span><strong>' + item.label + '</strong><small>' + item.description + '</small></button>').join('') +
     '</div>' +
-    '<div class="dashboard-mobile-blog-entry"><span class="dashboard-mobile-blog-icon">' + renderIcon('book') + '</span><span><strong>Blog</strong><small>Tulis artikel dan cerita yang lebih panjang.</small></span><button type="button" data-create-action="blog" aria-label="Buka Blog Studio">' + renderIcon('arrow') + '</button></div>' +
+    '<div class="dashboard-mobile-create-divider" role="separator"></div>' +
+    '<section class="dashboard-mobile-business" aria-labelledby="mobile-business-title">' +
+      '<div class="dashboard-mobile-business-heading"><div><span class="dashboard-kicker">RUANG BISNIS</span><h2 id="mobile-business-title">Kembangkan bisnis Anda</h2><p>Kelola toko, layanan, dan tempat usaha dalam ekosistem PLUITS.</p></div></div>' +
+      '<div class="dashboard-mobile-business-grid">' +
+        businessEntries.map((item) => '<article class="dashboard-mobile-business-card"><span class="dashboard-mobile-business-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-business-copy"><strong>' + item.label + '</strong><small>' + item.description + '</small></span><span class="dashboard-mobile-business-arrow" aria-hidden="true">' + renderIcon('arrow') + '</span></article>').join('') +
+      '</div>' +
+    '</section>' +
   '</section>';
 }
 
@@ -219,7 +234,7 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
           '<div class="dashboard-toolbar"><div class="dashboard-toolbar-title"><span class="dashboard-kicker">RUANG KERJA PERSONAL</span><strong><span class="dashboard-desktop-title">Dashboard</span><span class="dashboard-mobile-title">Create</span></strong></div>' +
             '<div class="dashboard-toolbar-controls"><button type="button" data-toggle-left aria-expanded="' + state.leftOpen + '">' + (state.leftOpen ? 'Sembunyikan modul' : 'Tampilkan modul') + '</button><button type="button" data-toggle-right aria-expanded="' + state.rightOpen + '">' + (state.rightOpen ? 'Sembunyikan sosial' : 'Tampilkan sosial') + '</button></div></div>' +
           '<div class="dashboard-tabs" role="tablist" aria-label="Halaman yang sedang terbuka">' + tabMarkup + '</div>' +
-          renderMobileCreate() +
+          renderMobileCreate(displayName) +
           '<div class="dashboard-layout' + (state.leftOpen ? '' : ' is-left-hidden') + (state.rightOpen ? '' : ' is-right-hidden') + '" style="--dashboard-left-width:' + state.leftWidth + 'px;--dashboard-right-width:' + state.rightWidth + 'px">' +
             '<aside class="dashboard-sidebar" aria-label="Daftar modul"><div class="dashboard-sidebar-heading"><strong>Modul PLUITS</strong><span>Semua akses dalam satu akun</span></div>' + moduleMarkup + '<div class="dashboard-sidebar-footer"><span class="dashboard-sidebar-avatar">' + initial + '</span><span><strong>' + name + '</strong><small>Akun personal</small></span></div></aside>' +
             '<div class="dashboard-resizer dashboard-resizer--left" data-resize="left" role="separator" aria-label="Ubah lebar daftar modul" aria-orientation="vertical" tabindex="0"></div>' +
