@@ -109,13 +109,6 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     + '</div>'
     + '<footer class="social-profile-cover-dialog-actions"><button type="button" data-cover-remove hidden>Hapus sampul</button></footer>'
     + '<div class="social-profile-cover-unsaved" data-cover-unsaved hidden><section role="alertdialog" aria-modal="true" aria-labelledby="cover-unsaved-title"><h3 id="cover-unsaved-title">Perubahan belum disimpan</h3><p>Apakah Anda ingin menyimpan perubahan sampul sebelum keluar?</p><div><button type="button" data-cover-keep-editing>Lanjut edit</button><button type="button" data-cover-discard>Buang perubahan</button><button type="button" data-cover-save-pending>Simpan perubahan</button></div></section></div></section>';
-  const avatarInput = document.createElement('input');
-  avatarInput.type = 'file';
-  avatarInput.accept = 'image/jpeg,image/png,image/webp,image/gif';
-  avatarInput.setAttribute('aria-label', 'Pilih foto profil');
-  avatarInput.hidden = true;
-  avatarInput.dataset.profileAvatarFile = '';
-  card.append(avatarInput);
   card.append(dialog);
   let avatarObjectUrl = '';
   const applyAvatar = blob => {
@@ -134,30 +127,9 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     }
     image.src = avatarObjectUrl;
   };
-  const removeAvatarAction = menu.querySelector('[data-cover-action="remove-avatar"]');
-  const clearAvatarDisplay = () => {
-    if (avatarObjectUrl) URL.revokeObjectURL(avatarObjectUrl);
-    avatarObjectUrl = '';
-    const avatar = card.querySelector('.social-profile-avatar');
-    if (!avatar) return;
-    avatar.querySelector('[data-profile-avatar-image]')?.remove();
-    if (!avatar.querySelector('.social-profile-avatar-placeholder')) {
-      const placeholder = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      placeholder.setAttribute('class', 'social-profile-avatar-placeholder');
-      placeholder.setAttribute('viewBox', '0 0 120 120');
-      placeholder.setAttribute('aria-hidden', 'true');
-      placeholder.setAttribute('focusable', 'false');
-      placeholder.innerHTML = '<circle cx="60" cy="39" r="21" fill="currentColor"/><path d="M19 111c2-25 18-41 41-41s39 16 41 41" fill="currentColor"/>';
-      avatar.append(placeholder);
-    }
-    removeAvatarAction.disabled = true;
-  };
   getAvatar(stableProfileKey).then(saved => {
     if (!isMounted) return;
-    if (saved?.blob) {
-      applyAvatar(saved.blob);
-      removeAvatarAction.disabled = false;
-    }
+    if (saved?.blob) applyAvatar(saved.blob);
   }).catch(() => {});
 
   const editorView = dialog.querySelector('[data-cover-editor-view]');
@@ -534,23 +506,7 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
       subtitle.textContent = 'Sampul belum dapat dihapus. Silakan coba lagi.';
     }
   };
-  const onAvatarChange = async () => {
-    const file = avatarInput.files?.[0];
-    if (!file) return;
-    if (!/^image\/(jpeg|png|webp|gif)$/.test(file.type) || file.size > 10 * 1024 * 1024) {
-      avatarInput.value = '';
-      subtitle.textContent = 'Pilih foto JPG, PNG, WebP, atau GIF maksimal 10 MB.';
-      return;
-    }
-    try {
-      await putAvatar(stableProfileKey, file);
-      applyAvatar(file);
-      removeAvatarAction.disabled = false;
-      avatarInput.value = '';
-    } catch {
-      subtitle.textContent = 'Foto profil belum dapat disimpan di perangkat ini. Coba lagi.';
-    }
-  };
+
 
   const onCoverHistoryPop = () => {
     if (dialog.hidden) {
@@ -584,7 +540,6 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
   cropStage.addEventListener('pointerup', onCropPointerUp);
   cropStage.addEventListener('pointercancel', onCropPointerUp);
   fileInput.addEventListener('change', onChange);
-  avatarInput.addEventListener('change', onAvatarChange);
   dialog.addEventListener('click', onSave);
   dialog.addEventListener('click', onRemove);
   root.addEventListener('keydown', onKeydown);
@@ -597,7 +552,6 @@ export function mountProfileCoverControls({ root, profileKey = 'profile' } = {})
     cropStage.removeEventListener('pointerup', onCropPointerUp);
     cropStage.removeEventListener('pointercancel', onCropPointerUp);
     fileInput.removeEventListener('change', onChange);
-    avatarInput.removeEventListener('change', onAvatarChange);
     if (avatarObjectUrl) URL.revokeObjectURL(avatarObjectUrl);
     dialog.removeEventListener('click', onSave);
     dialog.removeEventListener('click', onRemove);
