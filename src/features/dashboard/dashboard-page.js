@@ -116,10 +116,7 @@ const PARTNER_CATEGORIES = Object.freeze([
     ['other-partner-types','Bidang Lainnya','Bidang mitra yang belum tercakup.']
   ]}
 ]);
-const BUSINESS_ENTRIES = Object.freeze([
-  { id:'partner', label:'PLUITS Partner', action:'Lihat kategori usaha & layanan', icon:'briefcase', partner:true },
-  { id:'place', label:'Tempat', action:'Jelajahi atau klaim tempat', icon:'mapPin', tab:'geo' }
-]);
+
 
 function readLayout() {
   try {
@@ -201,7 +198,7 @@ function renderTabContent(tab, context) {
     '<section class="dashboard-panel dashboard-applications"><div class="dashboard-panel-heading"><div><span class="dashboard-kicker">EKOSISTEM PLUITS</span><h2>Modul aplikasi</h2><p>Pilih modul untuk membuka ruang pengelolaannya.</p></div></div><div class="dashboard-application-list">' + ecosystem.map((item) => '<button type="button" data-open-tab="' + item.id + '" class="dashboard-application-item"><span class="dashboard-application-icon">' + renderIcon(item.icon) + '</span><span><strong>' + item.label + '</strong><small>' + item.status + '</small></span><span class="dashboard-application-arrow">›</span></button>').join('') + '</div></section></section>';
 }
 
-function renderMobileCreate(displayName, partnerExpanded = false) {
+function renderMobileCreate(displayName, state) {
   const hour = new Date().getHours();
   const greeting = hour < 11 ? 'Selamat pagi' : hour < 15 ? 'Selamat siang' : hour < 18 ? 'Selamat sore' : 'Selamat malam';
   const firstName = escapeHtml(String(displayName || 'Pengguna').trim().split(/\s+/)[0]);
@@ -212,28 +209,37 @@ function renderMobileCreate(displayName, partnerExpanded = false) {
     { id:'live', label:'Live', icon:'play', description:'Mulai siaran langsung' },
     { id:'blog', label:'Blog', icon:'fileText', description:'Tulis dan publikasikan artikel' }
   ];
-  const businessEntries = BUSINESS_ENTRIES;
   return '<section class="dashboard-mobile-create" aria-labelledby="mobile-create-title">' +
     '<div class="dashboard-mobile-create-heading"><span class="dashboard-kicker">CREATE</span><h1 id="mobile-create-title">' + greeting + ', ' + firstName + '</h1><p>Apa yang ingin Anda bagikan hari ini?</p></div>' +
-    '<section class="dashboard-mobile-social" aria-label="Buat konten sosial">' +
-      '<div class="dashboard-mobile-create-list">' +
-        actions.map((item) => '<button type="button" class="dashboard-mobile-create-action" data-create-action="' + item.id + '" aria-label="' + (item.id === 'blog' ? 'Tulis artikel untuk Blog' : 'Buat ' + item.label) + '">' +
-          '<span class="dashboard-mobile-create-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-create-copy"><strong>' + item.label + '</strong><small>' + item.description + '</small></span></button>').join('') +
-      '</div>' +
-    '</section>' +
-    '<div class="dashboard-mobile-create-divider" role="separator"></div>' +
-    '<section class="dashboard-mobile-business" aria-labelledby="mobile-business-title">' +
-      '<div class="dashboard-mobile-business-heading"><div><span class="dashboard-kicker">BUSINESS</span><h2 id="mobile-business-title">Ruang Bisnis</h2><p>Mulai dan kelola aktivitas bisnis Anda di PLUITS.</p></div></div>' +
-      '<div class="dashboard-mobile-business-list">' +
-        businessEntries.map((item) => '<button type="button" class="dashboard-mobile-business-entry' + (item.partner && partnerExpanded ? ' is-expanded' : '') + '" data-business-entry="' + item.id + '"' + (item.partner ? ' aria-expanded="' + partnerExpanded + '"' : '') + ' aria-label="' + item.action + ': ' + item.label + '"><span class="dashboard-mobile-business-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-business-copy"><strong>' + item.label + '</strong><em>' + (item.partner && partnerExpanded ? 'Sembunyikan kategori' : item.action) + '</em></span>' + (item.partner ? '<span class="dashboard-mobile-partner-toggle-icon">' + renderIcon(partnerExpanded ? 'eyeOff' : 'arrow') + '</span>' : '') + '</button>').join('') +
-      '</div>' +
-      (partnerExpanded ? '<section class="dashboard-partner-catalog" aria-labelledby="partner-catalog-title"><div class="dashboard-partner-catalog-heading"><span class="dashboard-kicker">KATALOG MITRA</span><h3 id="partner-catalog-title">Kategori PLUITS Partner</h3><p>Seluruh kategori dicatat sejak awal. Ikon gembok menandakan subkategori belum dibuka.</p></div>' +
-        PARTNER_CATEGORIES.map((category) => '<section class="dashboard-partner-category" aria-labelledby="partner-category-' + category.id + '"><div class="dashboard-partner-category-heading"><span class="dashboard-partner-category-icon">' + renderIcon(category.icon) + '</span><h4 id="partner-category-' + category.id + '">' + category.label + '</h4></div><div class="dashboard-partner-subcategory-grid">' +
-          category.subcategories.map((item) => '<article class="dashboard-partner-subcategory-card" aria-label="' + item[1] + ', terkunci"><span class="dashboard-partner-lock" aria-label="Terkunci">' + renderIcon('lock') + '</span><strong>' + item[1] + '</strong><small>' + item[2] + '</small></article>').join('') +
-        '</div></section>').join('') +
-        '<p class="dashboard-partner-catalog-note">Status gembok saat ini adalah penanda perencanaan antarmuka. Pembukaan kategori akan dikendalikan secara manual setelah modul terkait selesai disiapkan.</p></section>' : '') +
-    '</section>' +
-  '</section>';
+    '<section class="dashboard-mobile-social" aria-label="Buat konten sosial"><div class="dashboard-mobile-create-list">' +
+      actions.map((item) => '<button type="button" class="dashboard-mobile-create-action" data-create-action="' + item.id + '"><span class="dashboard-mobile-create-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-create-copy"><strong>' + item.label + '</strong><small>' + item.description + '</small></span></button>').join('') +
+    '</div></section><div class="dashboard-mobile-create-divider" role="separator"></div>' +
+    '<section class="dashboard-fluid-partner"><div class="dashboard-mobile-business-heading"><div><span class="dashboard-kicker">BUSINESS PARTNER</span><h2>Fluid Partner</h2><p>Bangun dan kelola kehadiran usaha atau layanan Anda.</p></div></div>' +
+    '<button type="button" class="dashboard-create-tile" data-open-partner aria-haspopup="dialog"><span class="dashboard-create-tile-icon">' + renderIcon('plus') + '</span><span><strong>Buat</strong><small>Daftarkan usaha atau layanan sebagai partner</small></span></button></section>' +
+    '<section class="dashboard-location-section"><div class="dashboard-section-heading"><div><span class="dashboard-kicker">GEO DIRECTORY</span><h2>Tambahkan dan klaim lokasi</h2><p>Cari lokasi yang sudah terdaftar sebelum membuat lokasi baru.</p></div></div>' +
+    '<form class="dashboard-location-search" data-location-search-form><label class="dashboard-location-search-field">' + renderIcon('search') + '<input type="search" name="location" value="' + escapeHtml(state.locationSearchQuery || '') + '" placeholder="Cari nama tempat atau alamat" aria-label="Cari lokasi yang sudah terdaftar"></label><button type="submit">Cari</button></form>' +
+    (state.locationSearchNotice ? '<p class="dashboard-location-notice" role="status">' + escapeHtml(state.locationSearchNotice) + '</p>' : '') +
+    '<div class="dashboard-location-owned"><button type="button" class="dashboard-create-tile dashboard-create-tile--location" data-create-location><span class="dashboard-create-tile-icon">' + renderIcon('plus') + '</span><span><strong>Tambah lokasi</strong><small>Buat lokasi atau lanjutkan klaim melalui Geo Directory</small></span></button><div class="dashboard-location-empty"><span class="dashboard-location-empty-icon">' + renderIcon('mapPin') + '</span><span><strong>Lokasi Anda</strong><small>Lokasi yang telah terhubung ke akun akan tampil di sini.</small></span></div></div></section>' +
+    '<section class="dashboard-classifieds-section"><div class="dashboard-section-heading"><div><span class="dashboard-kicker">CLASSIFIEDS</span><h2>Iklan Baris</h2><p>Buat iklan untuk menawarkan atau mencari sesuatu.</p></div></div>' +
+    '<button type="button" class="dashboard-create-tile" data-open-classifieds aria-haspopup="dialog"><span class="dashboard-create-tile-icon">' + renderIcon('plus') + '</span><span><strong>Buat iklan</strong><small>Pilih jenis iklan yang ingin Anda buat</small></span></button></section></section>';
+}
+
+function renderPartnerLayers(state) {
+  const category = PARTNER_CATEGORIES.find((item) => item.id === 'classifieds-jobs');
+  const parents = ['parents','subcategories'].includes(state.partnerLayer)
+    ? '<div class="dashboard-layer-backdrop" data-layer-backdrop><section class="dashboard-layer-panel" role="dialog" aria-modal="true" aria-labelledby="partner-layer-title"><div class="dashboard-layer-grabber"></div><header class="dashboard-layer-header"><div><span class="dashboard-kicker">FLUID PARTNER</span><h2 id="partner-layer-title">Buat partner</h2><p>Pilih kategori utama usaha atau layanan Anda.</p></div><button type="button" class="dashboard-layer-close" data-close-layer aria-label="Tutup">×</button></header><div class="dashboard-layer-content"><div class="dashboard-parent-category-list">' +
+      PARTNER_CATEGORIES.map((item) => '<button type="button" class="dashboard-parent-category" data-partner-parent="' + item.id + '"><span class="dashboard-parent-category-icon">' + renderIcon(item.icon) + '</span><span><strong>' + item.label + '</strong><small>' + item.subcategories.length + ' kategori tersedia</small></span><span class="dashboard-parent-category-arrow">' + renderIcon('arrow') + '</span></button>').join('') +
+    '</div></div></section></div>' : '';
+  const selected = PARTNER_CATEGORIES.find((item) => item.id === state.selectedPartnerCategory);
+  const subs = state.partnerLayer === 'subcategories' && selected
+    ? '<div class="dashboard-layer-backdrop dashboard-layer-backdrop--nested" data-layer-backdrop><section class="dashboard-layer-panel dashboard-layer-panel--nested" role="dialog" aria-modal="true" aria-labelledby="partner-subcategory-title"><div class="dashboard-layer-grabber"></div><header class="dashboard-layer-header"><button type="button" class="dashboard-layer-back" data-layer-back>‹ <span>Kategori utama</span></button><button type="button" class="dashboard-layer-close" data-close-layer aria-label="Tutup">×</button></header><div class="dashboard-layer-subheading"><span class="dashboard-kicker">FLUID PARTNER / ' + selected.label.toUpperCase() + '</span><h2 id="partner-subcategory-title">' + selected.label + '</h2><p>Subkategori yang belum dirilis tetap ditampilkan dengan tanda kunci.</p></div><div class="dashboard-layer-content"><div class="dashboard-partner-subcategory-grid">' +
+      selected.subcategories.map((item) => '<article class="dashboard-partner-subcategory-card" aria-label="' + item[1] + ', terkunci"><span class="dashboard-partner-lock" aria-label="Terkunci">' + renderIcon('lock') + '</span><strong>' + item[1] + '</strong><small>' + item[2] + '</small></article>').join('') +
+    '</div><p class="dashboard-partner-catalog-note">Kategori dibuka secara bertahap setelah modul terkait selesai disiapkan dan disetujui.</p></div></section></div>' : '';
+  const classified = state.partnerLayer === 'classifieds' && category
+    ? '<div class="dashboard-layer-backdrop" data-layer-backdrop><section class="dashboard-layer-panel" role="dialog" aria-modal="true" aria-labelledby="classified-layer-title"><div class="dashboard-layer-grabber"></div><header class="dashboard-layer-header"><div><span class="dashboard-kicker">IKLAN BARIS</span><h2 id="classified-layer-title">Apa yang ingin Anda buat?</h2><p>Pilih jenis iklan yang paling sesuai.</p></div><button type="button" class="dashboard-layer-close" data-close-layer aria-label="Tutup">×</button></header><div class="dashboard-layer-content"><div class="dashboard-classified-category-list">' +
+      category.subcategories.map((item) => '<button type="button" class="dashboard-classified-category' + (state.selectedClassifiedCategory === item[0] ? ' is-selected' : '') + '" data-classified-category="' + item[0] + '" aria-pressed="' + (state.selectedClassifiedCategory === item[0]) + '"><strong>' + item[1] + '</strong><small>' + item[2] + '</small></button>').join('') +
+    '</div>' + (state.selectedClassifiedCategory ? '<p class="dashboard-classified-note" role="status">Kategori dipilih. Alur penerbitan iklan dan penyimpanan masih menunggu modul Iklan Baris.</p>' : '') + '</div></section></div>' : '';
+  return parents + subs + classified;
 }
 function renderSocialPanel(view) {
   const story = '<section class="dashboard-social-section"><div class="dashboard-social-heading"><strong>Story</strong><span>Lingkaran sosial</span></div>' + renderEmpty('Belum ada Story','Story dari koneksi Anda akan muncul di sini.','eye') + '</section>';
@@ -269,7 +275,11 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
     transactionMode:'purchase',
     transactionStatus:'all',
     settingsSection:'account',
-    partnerExpanded:false
+    partnerLayer:'',
+    selectedPartnerCategory:'',
+    selectedClassifiedCategory:'',
+    locationSearchQuery:'',
+    locationSearchNotice:''
   };
 
   const saveLayout = () => {
@@ -323,7 +333,7 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
           '<div class="dashboard-toolbar"><div class="dashboard-toolbar-title"><span class="dashboard-kicker">RUANG KERJA PERSONAL</span><strong><span class="dashboard-desktop-title">Dashboard</span><span class="dashboard-mobile-title">Create</span></strong></div>' +
             '<div class="dashboard-toolbar-controls"><button type="button" data-toggle-left aria-expanded="' + state.leftOpen + '">' + (state.leftOpen ? 'Sembunyikan modul' : 'Tampilkan modul') + '</button><button type="button" data-toggle-right aria-expanded="' + state.rightOpen + '">' + (state.rightOpen ? 'Sembunyikan sosial' : 'Tampilkan sosial') + '</button></div></div>' +
           '<div class="dashboard-tabs" role="tablist" aria-label="Halaman yang sedang terbuka">' + tabMarkup + '</div>' +
-          renderMobileCreate(displayName, state.partnerExpanded) +
+          renderMobileCreate(displayName, state) +
           '<div class="dashboard-layout' + (state.leftOpen ? '' : ' is-left-hidden') + (state.rightOpen ? '' : ' is-right-hidden') + '" style="--dashboard-left-width:' + state.leftWidth + 'px;--dashboard-right-width:' + state.rightWidth + 'px">' +
             '<aside class="dashboard-sidebar" aria-label="Daftar modul"><div class="dashboard-sidebar-heading"><strong>Modul PLUITS</strong><span>Semua akses dalam satu akun</span></div>' + moduleMarkup + '<div class="dashboard-sidebar-footer"><span class="dashboard-sidebar-avatar">' + initial + '</span><span><strong>' + name + '</strong><small>Akun personal</small></span></div></aside>' +
             '<div class="dashboard-resizer dashboard-resizer--left" data-resize="left" role="separator" aria-label="Ubah lebar daftar modul" aria-orientation="vertical" tabindex="0"></div>' +
@@ -335,9 +345,16 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
           '</div>' +
           (state.notificationsOpen ? '<div class="dashboard-notification-popover" role="status"><div><strong>Notifikasi PLUITS</strong><button type="button" data-close-notifications aria-label="Tutup notifikasi">×</button></div>' + renderEmpty('Belum ada notifikasi','Pemberitahuan dari seluruh modul akan dikumpulkan di sini.','mail') + '</div>' : '') +
         '</main>' +
+        renderPartnerLayers(state) +
       '</div>';
   }
 
+  root.addEventListener('input', (event) => {
+    if (event.target.matches('[name="location"]')) state.locationSearchQuery = event.target.value;
+  }, { signal });
+  root.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && state.partnerLayer) { state.partnerLayer = ''; state.selectedPartnerCategory = ''; render(); }
+  }, { signal });
   root.addEventListener('click', async (event) => {
     const target = event.target.closest('button');
     if (!target || !root.contains(target)) return;
@@ -345,15 +362,22 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
       openTab(target.dataset.createAction === 'blog' ? 'blog' : 'social');
       return;
     }
-    if (target.matches('[data-business-entry]')) {
-      const entry = target.dataset.businessEntry;
-      const businessItem = BUSINESS_ENTRIES.find((item) => item.id === entry);
-      if (businessItem?.partner) { state.partnerExpanded = !state.partnerExpanded; render(); return; }
-      if (businessItem?.type) state.selectedBusinessType = businessItem.type;
-      openTab(entry === 'place' ? 'geo' : 'business');
+    if (target.matches('[data-open-partner]')) { state.partnerLayer = 'parents'; state.selectedPartnerCategory = ''; render(); return; }
+    if (target.matches('[data-partner-parent]')) { state.selectedPartnerCategory = target.dataset.partnerParent; state.partnerLayer = 'subcategories'; render(); return; }
+    if (target.matches('[data-layer-back]')) { state.partnerLayer = 'parents'; render(); return; }
+    if (target.matches('[data-close-layer]') || (target.matches('[data-layer-backdrop]') && event.target === target)) { state.partnerLayer = ''; state.selectedPartnerCategory = ''; render(); return; }
+    if (target.matches('[data-open-classifieds]')) { state.partnerLayer = 'classifieds'; state.selectedClassifiedCategory = ''; render(); return; }
+    if (target.matches('[data-classified-category]')) { state.selectedClassifiedCategory = target.dataset.classifiedCategory; render(); return; }
+    if (target.matches('[data-create-location]')) { openTab('geo'); return; }
+    if (target.matches('[data-open-tab]')) { openTab(target.dataset.openTab); return; }
+    if (target.matches('[data-location-search-form]')) {
+      event.preventDefault();
+      const query = String(new FormData(target).get('location') || '').trim();
+      state.locationSearchQuery = query;
+      state.locationSearchNotice = query ? 'Pencarian belum terhubung ke Geo Directory. Belum ada hasil yang dapat diverifikasi.' : 'Masukkan nama tempat atau alamat untuk mencari.';
+      render();
       return;
     }
-    if (target.matches('[data-open-tab]')) { openTab(target.dataset.openTab); return; }
     if (target.matches('[data-select-tab]')) { state.activeTab = target.dataset.selectTab; state.notificationsOpen = false; render(); return; }
     if (target.matches('[data-close-tab]')) { closeTab(target.dataset.closeTab); return; }
     if (target.matches('[data-toggle-left]')) { state.leftOpen = !state.leftOpen; saveLayout(); render(); return; }
