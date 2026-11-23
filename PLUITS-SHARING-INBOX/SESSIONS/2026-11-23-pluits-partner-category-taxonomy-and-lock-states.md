@@ -104,3 +104,10 @@ RAW
 - Di bawah Fluid Partner ada bagian **Tambahkan dan klaim lokasi** dengan search bar untuk memeriksa Geo Directory sebelum membuat lokasi. Lokasi yang sudah terhubung ke akun akan ditampilkan sebagai kartu-kartu di samping aksi tambah, hanya berdasarkan data server yang sah.
 - Di bawah lokasi ada bagian **Iklan Baris** dengan kartu **+ Buat iklan**. Aksi ini membuka panel pertanyaan jenis iklan dan menampilkan daftar kategori.
 - Implementasi frontend saat ini merupakan prototype interaksi. Pencarian lokasi belum terhubung ke Geo Directory; pembuatan/klaim lokasi, data lokasi milik pengguna, pembuatan iklan, dan penyimpanan masih memerlukan backend serta otorisasi server. UI tidak boleh menampilkan hasil pencarian atau kepemilikan palsu.
+
+
+## Koreksi batas kategori — Iklan Baris terpisah dari Fluid Partner — 2026-11-23
+
+- Iklan Baris tidak lagi menjadi kategori induk di dalam Fluid Partner.
+- Fluid Partner kini memiliki delapan kategori induk; subkategori Iklan Baris/Lowongan dipindahkan ke daftar pilihan khusus yang muncul dari kartu **+ Buat iklan** di bagian Iklan Baris.
+- Pemisahan ini menjaga direktori partner usaha/layanan tetap berbeda dari sistem iklan, lowongan, pencari kerja, dan listing barang/properti.
