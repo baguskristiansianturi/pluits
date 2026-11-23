@@ -29,6 +29,7 @@
 10. Compact dark **Tentang PLUITS** summary before the persistent app navigation.
 
 ## Layout and interaction rules
+- The service-shortcut rail sits directly after the shared header. The Social Home main content does not inherit the generic shell header-to-content gap; the page-owned 30px transition before the location row is the sole spacing between shortcuts and the search hero.
 - Preserve shared page shell, logo, header geometry, tokens, registered icons, and standard content gutters.
 - Use viewport-wide horizontal carousel tracks while retaining content gutters for section headings and card copy.
 - Carousels use horizontal touch panning and scroll snap; users can reach the last item without causing document-level horizontal overflow.
