@@ -914,3 +914,83 @@
  .global-post-media{aspect-ratio:4/5}
  .global-post-card{border:0;border-radius:0}
 }
+
+
+/* SOCIAL-HOME-MOBILE-WIDTH-FIX-001 — correct the outer layout constraints, not individual media only. */
+@media (max-width: 767px) {
+  .global-quick-search {
+    box-sizing: border-box;
+    width: calc(100% + 2 * var(--pl-page-gutter));
+    min-height: 42px;
+    margin-inline: calc(-1 * var(--pl-page-gutter));
+    padding: 3px 5px;
+    gap: 6px;
+    border: 0;
+    background: transparent;
+  }
+  .global-quick-search > a {
+    min-height: 36px;
+    padding-inline: 9px;
+    gap: 5px;
+    border: 1px solid var(--pl-color-border);
+    border-radius: 7px;
+    background: #fff;
+  }
+  .global-quick-search > a strong { font-size: 10px; }
+
+  /* Exactly 30px from the quick-search rail to the location/hero area. */
+  .global-home-page > .global-home-main { padding-block-start: 30px; }
+  .global-location-row { margin: 0 5px 8px; }
+  .global-unified-search {
+    margin: 0 5px 24px;
+    padding: 10px;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: none;
+  }
+
+  /* People carousel spans the viewport, while its first/last cards retain a 5px safety inset. */
+  .global-people-section .global-bleed-wrap {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+  .global-people-rail {
+    box-sizing: border-box;
+    width: 100%;
+    padding-inline: 5px;
+  }
+
+  /* Break the feed out of every constrained parent/container on mobile. */
+  .global-social-area,
+  .global-content-section,
+  .global-post-list {
+    min-width: 0;
+    max-width: none;
+  }
+  .global-post-list {
+    box-sizing: border-box;
+    width: calc(100% + 2 * var(--pl-page-gutter));
+    margin-inline: calc(-1 * var(--pl-page-gutter));
+    gap: 12px;
+  }
+  .global-post-card {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: #fff;
+    box-shadow: none;
+  }
+  .global-post-media {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+    object-fit: cover;
+  }
+}

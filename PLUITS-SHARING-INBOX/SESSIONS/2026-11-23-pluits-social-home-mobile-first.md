@@ -31,3 +31,13 @@ Jalankan test/build, verifikasi deployment GitHub Pages, lalu lakukan UAT browse
 
 ## Status akhir
 ACCEPTED — struktur prototype; integrasi data dan penerimaan visual masih pending.
+
+
+## 2026-11-23 — mobile layout correction
+- Removed the accidental duplicated/nested `global-social-area` wrapper and duplicate People You May Know section.
+- Moved the nearby-discovery section after the social feed, matching the approved page hierarchy.
+- People You May Know uses a viewport-wide carousel track with a 5px initial card inset.
+- Feed cards now break out of the constrained mobile content container; the list and card width are explicitly full-bleed.
+- Quick-service search rail is compact and transparent; individual controls retain white fill, border, restrained radius, and touch height.
+- Spacing from the quick-service rail to the location/search hero area is 30px.
+- Added responsive regression assertions for wrapper count, card width, rail inset, compact controls, and spacing.

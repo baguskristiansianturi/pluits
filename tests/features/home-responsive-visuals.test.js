@@ -48,3 +48,17 @@ test('people discovery has responsive portrait cards and all distance scopes', a
   assert.match(css, /\.social-category-grid article:nth-child\(1\):before/);
   assert.match(css, /@media\s*\(max-width:\s*359px\)/);
 });
+
+
+test('social home mobile layout keeps recommendation inset, feed full-bleed, and quick search compact', async () => {
+  const source = await readFile(homeJs, 'utf8');
+  const css = await readFile(homeCss, 'utf8');
+  assert.equal((source.match(/class="global-social-area"/g) || []).length, 1,
+    'social content must have one parent wrapper (no accidental nested duplicate)');
+  assert.match(css, /global-home-page > \.global-home-main\s*\{\s*padding-block-start:\s*30px/);
+  assert.match(css, /global-people-rail\s*\{[^}]*padding-inline:\s*5px/s);
+  assert.match(css, /global-post-list\s*\{[^}]*width:\s*calc\(100% \+ 2 \* var\(--pl-page-gutter\)\)[^}]*margin-inline:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
+  assert.match(css, /global-post-card\s*\{[^}]*width:\s*100%[^}]*max-width:\s*none/s);
+  assert.match(css, /global-quick-search\s*\{[^}]*background:\s*transparent/s);
+  assert.match(css, /global-quick-search > a\s*\{[^}]*min-height:\s*36px[^}]*background:\s*#fff/s);
+});
