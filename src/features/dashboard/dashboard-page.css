@@ -463,3 +463,72 @@
  .dashboard-mobile-business{padding:12px 10px}
  .dashboard-mobile-business-entry{min-height:138px;padding:10px}
 }
+
+
+/* Mobile Create — larger social icon tiles with close, quiet labels beneath. */
+@media(max-width:767px){
+ .dashboard-mobile-create-list{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  align-items:start;
+  gap:8px
+ }
+ .dashboard-mobile-create-action{
+  display:flex;
+  min-width:0;
+  min-height:0;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:2px;
+  padding:0 1px 4px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  text-align:center
+ }
+ .dashboard-mobile-create-action:hover{
+  border-color:transparent;
+  background:transparent
+ }
+ .dashboard-mobile-create-action:focus-visible{
+  outline:2px solid var(--pl-color-brand);
+  outline-offset:3px;
+  border-radius:10px
+ }
+ .dashboard-mobile-create-icon{
+  display:grid;
+  width:62px;
+  height:62px;
+  flex:0 0 auto;
+  place-items:center;
+  border:1px solid #e5e7e7;
+  border-radius:12px;
+  background:#fff;
+  color:var(--pl-color-brand)
+ }
+ .dashboard-mobile-create-icon .ui-icon{
+  width:30px;
+  height:30px
+ }
+ .dashboard-mobile-create-copy{
+  display:block;
+  min-width:0;
+  line-height:1
+ }
+ .dashboard-mobile-create-copy strong{
+  display:block;
+  color:var(--pl-color-text);
+  font-size:9px;
+  font-weight:650;
+  line-height:1.2;
+  white-space:nowrap
+ }
+ .dashboard-mobile-create-copy small{display:none}
+}
+@media(max-width:380px){
+ .dashboard-mobile-create-list{gap:5px}
+ .dashboard-mobile-create-icon{width:56px;height:56px}
+ .dashboard-mobile-create-icon .ui-icon{width:27px;height:27px}
+ .dashboard-mobile-create-copy strong{font-size:8px}
+}
