@@ -63,3 +63,12 @@ test('social home mobile layout keeps recommendation inset, feed full-bleed, and
   assert.match(css, /global-quick-search\s*\{[^}]*width:\s*100%[^}]*background:\s*transparent/s);
   assert.match(css, /global-quick-search > a\s*\{[^}]*min-height:\s*34px[^}]*background:\s*#fff/s);
 });
+
+
+test('social home owns the header-to-content transition after its service shortcut rail', async () => {
+  const shell = await readFile(new URL('../../src/design-system/page-shell.css', import.meta.url), 'utf8');
+  const home = await readFile(homeCss, 'utf8');
+  assert.match(shell, /\.pl-page-shell\.home-page\s*>\s*\.pl-page-main\s*\{\s*padding-block-start:\s*0/s);
+  assert.match(home, /\.global-location-row\s*\{\s*margin:\s*30px 5px 8px/s);
+  assert.match(home, /\.global-search-submit\s*\{[^}]*white-space:\s*nowrap/s);
+});

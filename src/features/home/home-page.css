@@ -778,7 +778,7 @@
 .global-search-fields label>span{font-size:9px;font-weight:650;color:#75818b}
 .global-search-fields input,.global-search-fields select{width:100%;min-width:0;height:24px;padding:0;border:0;outline:0;background:transparent;color:#243447;font:inherit;font-size:11px}
 .global-search-fields input::placeholder{color:#9aa4ad}
-.global-search-submit{display:flex;width:100%;min-height:42px;align-items:center;justify-content:center;gap:8px;margin-top:10px;border:0;border-radius:8px;background:var(--pl-color-ink);color:#fff;font:inherit;font-size:12px;font-weight:700}
+.global-search-submit{display:flex;width:100%;min-height:42px;align-items:center;justify-content:center;gap:8px;margin-top:10px;border:0;border-radius:8px;background:var(--pl-color-ink);color:#fff;font:inherit;font-size:12px;font-weight:700;line-height:1.2;white-space:nowrap}
 .global-search-submit .ui-icon{width:16px;height:16px}
 .global-search-hint{margin:7px 0 0;color:#85909a;font-size:9px;line-height:1.4}
 .global-social-area{display:flex;flex-direction:column;gap:0}
