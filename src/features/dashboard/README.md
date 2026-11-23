@@ -85,3 +85,11 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - On phone layouts, Story, Post, Artikel, and Live must appear as four compact cards in one horizontal row. Hide their supporting descriptions at this width so labels remain legible.
 - Ruang Bisnis remains a two-column card grid with enough room for its descriptions.
 - Desktop Dashboard remains unchanged.
+
+
+## Mobile Create — social icon tile treatment
+- Story, Post, Artikel, and Live remain in one four-column row on phone widths.
+- Each action uses a visibly larger, centered social icon inside its own white square tile with a soft grey border.
+- The action label sits directly below the tile with a very small gap (approximately 2px); use a compact, readable label size.
+- Keep the action surface itself visually light and avoid a second enclosing card, descriptions, arrows, or oversized padding.
+- Teal is limited to the icon accent; white remains dominant and grey remains the border/separator color.
