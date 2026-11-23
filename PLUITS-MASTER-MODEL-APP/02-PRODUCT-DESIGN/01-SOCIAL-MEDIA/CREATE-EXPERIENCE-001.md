@@ -24,7 +24,7 @@ Desktop Create remains the professional **Dashboard / Ruang Kerja**. It may use 
 ## Identity and behavior
 - One PLUITS account and identity across mobile and desktop.
 - Responsive composition may differ; route, authentication, permissions, and data ownership remain shared.
-- Mobile Story/Post/Artikel/Live controls are entry points only. They must not imply live publishing while composer and backend services are unavailable.
+- Mobile Story/Post/Reel/Live/Blog controls are entry points only. They must not imply live publishing while composer and backend services are unavailable.
 - Existing modules, data, routes, and backend contracts must not be deleted to simplify the mobile presentation.
 
 ## Visual foundation
@@ -40,7 +40,7 @@ Use existing PLUITS design tokens, page shell, and local icon registry. Do not a
 Uses existing `src/design-system/tokens.css`, `page-shell.js`, `page-shell.css`, and `icons.js`. Does not change shared tokens, icons, routes, auth, backend, database, or sibling features.
 
 ## Validation
-- Mobile: verify 360px, 390px, 420px widths; four social actions in the first row; no desktop module sidebar/tabs/resizers/social side panel; no horizontal overflow.
+- Mobile: verify 360px, 390px, 420px widths; five social actions in the first row; no desktop module sidebar/tabs/resizers/social side panel; no horizontal overflow.
 - Desktop: verify Dashboard work area, module navigation, tabs, resizers, and social panel remain available.
 - Keyboard: all visible actions focusable with visible focus.
 - Reduced-motion and safe-area behavior must remain consistent with the shared foundation.
@@ -48,7 +48,7 @@ Uses existing `src/design-system/tokens.css`, `page-shell.js`, `page-shell.css`,
 
 
 ## Mobile Create refresh — social + business hub
-The mobile greeting is time-aware and personal: "Selamat pagi/siang/sore/malam, [nama depan]" followed by "Apa yang ingin Anda bagikan hari ini?" The primary social actions are Story, Post, Artikel (Blog), and Live. A subtle horizontal divider closes this publishing area.
+The mobile greeting is time-aware and personal: "Selamat pagi/siang/sore/malam, [nama depan]" followed by "Apa yang ingin Anda bagikan hari ini?" The primary social actions are Story, Post, Reel, Live, and Blog. A subtle horizontal divider closes this publishing area.
 
 Below the divider, show a separate **Ruang Bisnis** section with four entry concepts:
 1. **Buat Toko** → after a Store exists, the label/action becomes **Kelola Toko**.
@@ -64,7 +64,7 @@ No sample ownership state may be fabricated. "Kelola" labels must only appear wh
 ## Mobile visual refinement — professional navigation
 The mobile Create visual language uses a restrained editorial composition, not a grid of oversized launcher cards:
 - Greeting and supporting question establish a clear typographic hierarchy.
-- Story, Post, Artikel, and Live are full-width navigation rows with compact monochrome icons, concise supporting descriptions, subtle separators, and a directional affordance.
+- Story, Post, Reel, Live, and Blog are full-width navigation rows with compact monochrome icons, concise supporting descriptions, subtle separators, and a directional affordance.
 - A thin divider clearly separates social publishing from business management.
 - Ruang Bisnis uses a matching full-width list. Each row has a compact icon, business name, short explanation, trailing action label, and directional affordance.
 - Use the existing PLUITS design tokens and icon registry. Do not add new global tokens, icon packages, gradients, decorative illustrations, or oversized rounded cards.
@@ -73,7 +73,7 @@ The mobile Create visual language uses a restrained editorial composition, not a
 
 
 ## Mobile compact grid composition
-- Arrange Story, Post, Artikel, and Live in a balanced two-column card grid.
+- Arrange Story, Post, Reel, Live, and Blog in a balanced two-column card grid.
 - Arrange the four Ruang Bisnis entry concepts in a matching two-column grid.
 - Keep card proportions consistent, with a compact icon above a clear title and concise supporting copy; business cards also show the intended action label.
 - Remove redundant directional arrows. Social action cards are fully clickable surfaces; business cards remain informational until their authorized workflows exist.
@@ -91,8 +91,8 @@ The mobile Create visual language uses a restrained editorial composition, not a
 ## Mobile Create — clarified white-first visual direction
 The dominant surface is white. Use one consistent soft neutral grey for borders and separators, and a matching very light grey for secondary backgrounds such as the Ruang Bisnis container. Avoid green-tinted neutral surfaces. PLUITS teal from the logo is reserved for restrained accents such as icon highlights or selected states; it is not a dominant background color.
 
-On phone widths, Story, Post, Artikel, and Live are four compact cards in a single horizontal row. Their icons and labels stay centered and legible; supporting descriptions are hidden at this compact size. Ruang Bisnis remains a two-column grid so each business card has room for its explanatory copy. Desktop Create and Dashboard composition remain unchanged.
+On phone widths, Story, Post, Reel, Live, and Blog are five compact actions in a single horizontal row. Their icons and labels stay centered and legible; supporting descriptions are hidden at this compact size. Ruang Bisnis remains a two-column grid so each business card has room for its explanatory copy. Desktop Create and Dashboard composition remain unchanged.
 
 
 ## Mobile social action icon tiles — detailed treatment
-At phone widths, the four social actions stay in a single horizontal row. Each action is composed as a larger white icon tile (approximately 56–62px square) with a soft grey border and a prominent 27–30px icon. The small action label sits immediately beneath the tile with an approximately 2px visual gap. Do not wrap the tile and label in another bordered card, and do not show supporting descriptions or arrows at this width. Use PLUITS teal only for the icon accent; preserve the white-first canvas and soft-grey border system.
+At phone widths, the five social actions stay in a single horizontal row. Each action is composed as a larger white icon tile (approximately 56–62px square) with a soft grey border and a prominent 27–30px icon. The small action label sits immediately beneath the tile with an approximately 2px visual gap. Do not wrap the tile and label in another bordered card, and do not show supporting descriptions or arrows at this width. Use PLUITS teal only for the icon accent; preserve the white-first canvas and soft-grey border system.
