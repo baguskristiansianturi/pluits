@@ -68,10 +68,9 @@ function renderTabContent(tab, context) {
     return '<section class="dashboard-view" aria-labelledby="view-title"><div class="dashboard-view-heading"><div><span class="dashboard-kicker">IDENTITAS USAHA</span><h1 id="view-title">Akun Bisnis</h1><p>Buat identitas bisnis yang terhubung dengan akun personal PLUITS Anda.</p></div></div>' +
       '<div class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>Buat akun bisnis</h2><p>Pilih jenis akun sesuai aktivitas usaha. Satu akun bisnis hanya memiliki satu jenis.</p></div><span class="dashboard-status-pill">Rancangan awal</span></div>' +
       '<div class="dashboard-business-options">' +
-      '<button type="button" class="dashboard-business-option' + (selectedBusinessType === 'store' ? ' is-selected' : '') + '" data-business-type="store" aria-pressed="' + (selectedBusinessType === 'store') + '"><span class="dashboard-option-symbol">' + renderIcon('book') + '</span><strong>Store</strong><p>Untuk usaha yang menjual produk fisik atau digital.</p><span>Pilih Store</span></button>' +
-      '<button type="button" class="dashboard-business-option' + (selectedBusinessType === 'service' ? ' is-selected' : '') + '" data-business-type="service" aria-pressed="' + (selectedBusinessType === 'service') + '"><span class="dashboard-option-symbol">' + renderIcon('message') + '</span><strong>Service</strong><p>Untuk penyedia jasa, layanan, dan keahlian profesional.</p><span>Pilih Service</span></button>' +
+      [{id:'store',label:'Toko',icon:'store',description:'Untuk usaha yang menjual produk fisik atau digital.'},{id:'cafe',label:'Kafe',icon:'coffee',description:'Untuk usaha kafe dan tempat penyajian minuman.'},{id:'restaurant',label:'Restoran',icon:'utensils',description:'Untuk usaha restoran dan penyedia makanan.'},{id:'service',label:'Layanan Profesional',icon:'briefcase',description:'Untuk penyedia jasa, layanan, dan keahlian profesional.'},{id:'other',label:'Bisnis, Layanan & Tempat Lainnya',icon:'grid',description:'Untuk kategori usaha lain yang belum tercantum.'}].map((item) => '<button type="button" class="dashboard-business-option' + (selectedBusinessType === item.id ? ' is-selected' : '') + '" data-business-type="' + item.id + '" aria-pressed="' + (selectedBusinessType === item.id) + '"><span class="dashboard-option-symbol">' + renderIcon(item.icon) + '</span><strong>' + item.label + '</strong><p>' + item.description + '</p><span>Pilih ' + item.label + '</span></button>').join('') +
       '</div>' +
-      '<div class="dashboard-business-next"><span>' + (selectedBusinessType ? 'Pilihan sementara: ' + (selectedBusinessType === 'store' ? 'Store' : 'Service') : 'Pilih jenis akun bisnis untuk melihat langkah berikutnya.') + '</span><button type="button" disabled>Pengaturan pembuatan belum tersedia</button></div><div class="dashboard-inline-note">Pembuatan akun bisnis menunggu API PLUITS dan pemeriksaan hak akses. Tidak ada data simulasi yang disimpan.</div>' +
+      '<div class="dashboard-business-next"><span>' + (selectedBusinessType ? 'Pilihan sementara: ' + ({store:'Toko',cafe:'Kafe',restaurant:'Restoran',service:'Layanan Profesional',other:'Bisnis, Layanan & Tempat Lainnya'}[selectedBusinessType] || 'Belum dipilih') : 'Pilih jenis akun bisnis untuk melihat langkah berikutnya.') + '</span><button type="button" disabled>Pengaturan pembuatan belum tersedia</button></div><div class="dashboard-inline-note">Pembuatan akun bisnis menunggu API PLUITS dan pemeriksaan hak akses. Tidak ada data simulasi yang disimpan.</div>' +
       '</div></section>';
   }
   if (tab === 'transactions') {
@@ -127,10 +126,12 @@ function renderMobileCreate(displayName) {
     { id:'blog', label:'Blog', icon:'fileText', description:'Tulis dan publikasikan artikel' }
   ];
   const businessEntries = [
-    { id:'store', label:'Toko', action:'Buat Toko', icon:'store', tab:'business', type:'store' },
-    { id:'service', label:'Layanan Profesional', action:'Buat Layanan', icon:'briefcase', tab:'business', type:'service' },
+    { id:'store', label:'Toko', action:'Buat Toko', icon:'store', type:'store' },
+    { id:'cafe', label:'Kafe', action:'Buat Kafe', icon:'coffee', type:'cafe' },
+    { id:'restaurant', label:'Restoran', action:'Buat Restoran', icon:'utensils', type:'restaurant' },
     { id:'place', label:'Tempat', action:'Klaim Tempat', icon:'mapPin', tab:'geo' },
-    { id:'business', label:'Bisnis dan Layanan Anda', action:'Buka akun bisnis', icon:'grid', tab:'business' }
+    { id:'other', label:'Bisnis, Layanan & Tempat Lainnya', action:'Tambahkan kategori', icon:'grid', type:'other' },
+    { id:'my-businesses', label:'Bisnis dan Layanan Anda Lainnya', action:'Tambahkan bisnis lainnya', icon:'briefcase', tab:'business' }
   ];
   return '<section class="dashboard-mobile-create" aria-labelledby="mobile-create-title">' +
     '<div class="dashboard-mobile-create-heading"><span class="dashboard-kicker">CREATE</span><h1 id="mobile-create-title">' + greeting + ', ' + firstName + '</h1><p>Apa yang ingin Anda bagikan hari ini?</p></div>' +
@@ -260,8 +261,8 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
     }
     if (target.matches('[data-business-entry]')) {
       const entry = target.dataset.businessEntry;
-      const businessType = entry === 'store' ? 'store' : entry === 'service' ? 'service' : '';
-      if (businessType) state.selectedBusinessType = businessType;
+      const businessItem = businessEntries.find((item) => item.id === entry);
+      if (businessItem?.type) state.selectedBusinessType = businessItem.type;
       openTab(entry === 'place' ? 'geo' : 'business');
       return;
     }
