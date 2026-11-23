@@ -1,6 +1,6 @@
 import { routeHref } from '../../config/paths.js';
 import '../../design-system/page-shell.css';
-import { renderPageHeader, renderBrand } from '../../design-system/page-shell.js';
+import { renderPageHeader, renderAppHeaderActions } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
 import { listDemoStores } from '../../services/store/local-demo-store-service.js';
 import './social-pages.css';
@@ -19,7 +19,7 @@ function bottomNav(active){
  + '<a href="'+routeHref('profile')+'" class="'+(active==='profile'?'is-active':'')+'">'+renderIcon('user')+'<span>Profil</span></a></nav>';
 }
 function shell(title,subtitle,active,content){
- const header=renderPageHeader({brandHref:routeHref('home'),rightContent:'<div class="social-header-tools"><span>'+title+'</span><a href="'+routeHref('profile')+'">Profil</a></div>',className:'social-header'});
+ const header=renderPageHeader({brandHref:routeHref('home'),rightContent:renderAppHeaderActions(),className:'social-header pl-app-header',dataGlobalHeader:true});
  return '<div class="pl-page-shell social-shell">'+header+'<main class="pl-page-main social-main"><section class="social-intro"><span class="social-kicker">PLUITS · '+title.toUpperCase()+'</span><h1>'+title+'</h1><p>'+subtitle+'</p></section>'+content+'</main>'+bottomNav(active)+'</div>';
 }
 function emptyPanel(title,text){return '<section class="social-empty-panel"><span>'+renderIcon('eye')+'</span><strong>'+title+'</strong><p>'+text+'</p></section>';}
