@@ -68,3 +68,11 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - Compact bordered surfaces retain the professional, restrained visual language; icons remain secondary to labels and descriptions.
 - Very narrow devices receive tighter spacing while retaining the two-column layout.
 - Desktop dashboard remains unchanged.
+
+
+## Mobile Create surface and background hierarchy
+- Use a clean white canvas as the primary mobile Create background.
+- Use restrained translucent neutral/canvas surfaces only to distinguish secondary areas, especially the Ruang Bisnis section; keep the social publishing area visually open.
+- Keep the entry cards as the foreground surfaces with subtle borders and minimal shadow, avoiding heavy panels, strong gradients, or stacked opaque boxes.
+- Use a soft fading divider to separate social publishing from business entry points.
+- Scope all background treatment to the mobile Create view; desktop Dashboard and other mobile views remain unchanged.
