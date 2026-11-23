@@ -355,7 +355,17 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
   root.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && state.partnerLayer) { state.partnerLayer = ''; state.selectedPartnerCategory = ''; render(); }
   }, { signal });
+  root.addEventListener('submit', (event) => {
+    if (!event.target.matches('[data-location-search-form]')) return;
+    event.preventDefault();
+    const query = String(new FormData(event.target).get('location') || '').trim();
+    state.locationSearchQuery = query;
+    state.locationSearchNotice = query ? 'Pencarian belum terhubung ke Geo Directory. Belum ada hasil yang dapat diverifikasi.' : 'Masukkan nama tempat atau alamat untuk mencari.';
+    render();
+  }, { signal });
+
   root.addEventListener('click', async (event) => {
+    if (event.target.matches('[data-layer-backdrop]')) { state.partnerLayer = ''; state.selectedPartnerCategory = ''; render(); return; }
     const target = event.target.closest('button');
     if (!target || !root.contains(target)) return;
     if (target.matches('[data-create-action]')) {
@@ -365,19 +375,11 @@ export function mountDashboardPage({ root, user, onSignOut } = {}) {
     if (target.matches('[data-open-partner]')) { state.partnerLayer = 'parents'; state.selectedPartnerCategory = ''; render(); return; }
     if (target.matches('[data-partner-parent]')) { state.selectedPartnerCategory = target.dataset.partnerParent; state.partnerLayer = 'subcategories'; render(); return; }
     if (target.matches('[data-layer-back]')) { state.partnerLayer = 'parents'; render(); return; }
-    if (target.matches('[data-close-layer]') || (target.matches('[data-layer-backdrop]') && event.target === target)) { state.partnerLayer = ''; state.selectedPartnerCategory = ''; render(); return; }
+    if (target.matches('[data-close-layer]')) { state.partnerLayer = ''; state.selectedPartnerCategory = ''; render(); return; }
     if (target.matches('[data-open-classifieds]')) { state.partnerLayer = 'classifieds'; state.selectedClassifiedCategory = ''; render(); return; }
     if (target.matches('[data-classified-category]')) { state.selectedClassifiedCategory = target.dataset.classifiedCategory; render(); return; }
     if (target.matches('[data-create-location]')) { openTab('geo'); return; }
     if (target.matches('[data-open-tab]')) { openTab(target.dataset.openTab); return; }
-    if (target.matches('[data-location-search-form]')) {
-      event.preventDefault();
-      const query = String(new FormData(target).get('location') || '').trim();
-      state.locationSearchQuery = query;
-      state.locationSearchNotice = query ? 'Pencarian belum terhubung ke Geo Directory. Belum ada hasil yang dapat diverifikasi.' : 'Masukkan nama tempat atau alamat untuk mencari.';
-      render();
-      return;
-    }
     if (target.matches('[data-select-tab]')) { state.activeTab = target.dataset.selectTab; state.notificationsOpen = false; render(); return; }
     if (target.matches('[data-close-tab]')) { closeTab(target.dataset.closeTab); return; }
     if (target.matches('[data-toggle-left]')) { state.leftOpen = !state.leftOpen; saveLayout(); render(); return; }
