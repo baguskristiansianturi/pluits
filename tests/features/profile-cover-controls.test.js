@@ -25,24 +25,18 @@ test('profile cover spans the top of the profile card, identity overlays its low
   assert.ok(styles.includes('.social-profile-identity-row {\n  position: relative;\n  z-index: 2;'));
 });
 
-test('profile cover menu contains the cover controls and edit profile photo', () => {
+test('profile cover menu contains only cover controls', () => {
   assert.match(pageSource, /import \{[^}]*renderProfileCoverMenuTrigger[^}]*\} from '\.\/profile-cover-controls\.js'/);
-  for (const action of ['toggle', 'edit', 'library', 'avatar']) {
+  for (const action of ['toggle', 'edit', 'library']) {
     assert.ok(moduleSource.includes('data-cover-action="' + action + '"'));
   }
   const menuMarkup = moduleSource.slice(moduleSource.indexOf('export function renderProfileCoverMenu()'), moduleSource.indexOf('export function mountProfileCoverControls'));
-  assert.equal((menuMarkup.match(/data-cover-action="/g) || []).length, 5);
+  assert.equal((menuMarkup.match(/data-cover-action="/g) || []).length, 3);
   assert.match(moduleSource, /Aktifkan sampul/);
   assert.match(moduleSource, /Edit sampul/);
   assert.match(moduleSource, /Pustaka sampul/);
-  assert.match(moduleSource, /Edit foto profil/);
-  assert.match(moduleSource, /data-cover-action="avatar"/);
-  assert.match(moduleSource, /data-cover-action="remove-avatar"/);
-  assert.match(moduleSource, /removeAvatar\(stableProfileKey\)/);
-  assert.match(moduleSource, /Hapus foto profil/);
-  assert.match(moduleSource, /putAvatar\(stableProfileKey, file\)/);
   assert.match(moduleSource, /data-profile-avatar-image/);
-  assert.doesNotMatch(moduleSource, /data-cover-action="text"/);
+  assert.doesNotMatch(moduleSource, /data-cover-action="(?:avatar|remove-avatar|text)"/);
   assert.match(pageSource, /mountProfileCoverControls\(\{root,profileKey:user\?\.id\|\|username\}\)/);
 });
 
@@ -100,7 +94,7 @@ test('cover switch applies immediately and menu closes only through its X contro
   assert.doesNotMatch(moduleSource, /data-cover-save-settings|data-cover-cancel|Simpan pengaturan/);
   assert.match(moduleSource, /coverEnabled = !coverEnabled/);
   assert.match(moduleSource, /card\.classList\.toggle\('is-cover-disabled', !coverEnabled\)/);
-  assert.match(moduleSource, /if \(event\.target\.closest\('\[data-cover-menu-close\]'\)\) \{ closeMenu\(\); return; \}/);
+  assert.match(moduleSource, /if \(event\.target\.closest\('\[data-cover-menu-close\]'\)\) \{ closeMenu\(\); return; \}/);\n  assert.match(moduleSource, /document\.addEventListener\('pointerdown', onOutsidePointerDown\)/);\n  assert.match(moduleSource, /document\.removeEventListener\('pointerdown', onOutsidePointerDown\)/);
   assert.match(moduleSource, /setTimeout\(\(\) => \{\s*menu\.hidden = true/);
   assert.match(styles, /\.social-profile-cover-menu\.is-open/);
   assert.match(styles, /\.social-profile-cover-menu-close/);
