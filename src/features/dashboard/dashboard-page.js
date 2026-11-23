@@ -117,11 +117,8 @@ const PARTNER_CATEGORIES = Object.freeze([
   ]}
 ]);
 const BUSINESS_ENTRIES = Object.freeze([
-  { id:'store', label:'Toko', action:'Buat Toko', icon:'store', type:'store' },
-  { id:'cafe', label:'Kafe', action:'Buat Kafe', icon:'coffee', type:'cafe' },
-  { id:'restaurant', label:'Restoran', action:'Buat Restoran', icon:'utensils', type:'restaurant' },
-  { id:'place', label:'Tempat', action:'Klaim Tempat', icon:'mapPin', tab:'geo' },
-  { id:'partner', label:'PLUITS Partner', action:'Lihat kategori mitra', icon:'briefcase', partner:true }
+  { id:'partner', label:'PLUITS Partner', action:'Lihat kategori usaha & layanan', icon:'briefcase', partner:true },
+  { id:'place', label:'Tempat', action:'Jelajahi atau klaim tempat', icon:'mapPin', tab:'geo' }
 ]);
 
 function readLayout() {
