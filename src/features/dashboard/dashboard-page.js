@@ -120,33 +120,34 @@ function renderMobileCreate(displayName) {
   const greeting = hour < 11 ? 'Selamat pagi' : hour < 15 ? 'Selamat siang' : hour < 18 ? 'Selamat sore' : 'Selamat malam';
   const firstName = escapeHtml(String(displayName || 'Pengguna').trim().split(/\\s+/)[0]);
   const actions = [
-    { id:'story', label:'Story', icon:'plus', description:'Bagikan momen' },
-    { id:'post', label:'Post', icon:'image', description:'Foto atau tulisan' },
-    { id:'blog', label:'Artikel', icon:'fileText', description:'Tulis di Blog' },
-    { id:'live', label:'Live', icon:'play', description:'Siaran langsung' }
+    { id:'story', label:'Story', icon:'plus', description:'Bagikan momen yang sedang berlangsung' },
+    { id:'post', label:'Post', icon:'image', description:'Bagikan foto, video, atau cerita' },
+    { id:'blog', label:'Artikel', icon:'fileText', description:'Tulis dan publikasikan artikel' },
+    { id:'live', label:'Live', icon:'play', description:'Mulai siaran langsung' }
   ];
   const businessEntries = [
-    { label:'Buat Toko', icon:'store', description:'Mulai jual produk fisik atau digital.' },
-    { label:'Buat Layanan', icon:'briefcase', description:'Tawarkan jasa dan keahlian Anda.' },
-    { label:'Klaim Tempat', icon:'mapPin', description:'Kelola lokasi usaha di Geo Directory.' },
-    { label:'Tambahkan Bisnis', icon:'grid', description:'Ajukan kategori bisnis lain ke PLUITS.' }
+    { label:'Toko', action:'Buat Toko', icon:'store', description:'Kelola produk dan penjualan' },
+    { label:'Layanan', action:'Buat Layanan', icon:'briefcase', description:'Tawarkan jasa dan keahlian profesional' },
+    { label:'Tempat', action:'Klaim Tempat', icon:'mapPin', description:'Kelola kehadiran bisnis di direktori' },
+    { label:'Bisnis lainnya', action:'Tambahkan Bisnis', icon:'grid', description:'Ajukan kategori bisnis lain ke PLUITS' }
   ];
   return '<section class="dashboard-mobile-create" aria-labelledby="mobile-create-title">' +
-    '<div class="dashboard-mobile-create-heading"><span class="dashboard-kicker">RUANG KREASI PLUITS</span><h1 id="mobile-create-title">' + greeting + ', ' + firstName + '</h1><p>Apa yang ingin Anda bagikan hari ini?</p></div>' +
-    '<div class="dashboard-mobile-create-grid" aria-label="Buat konten sosial">' +
-      actions.map((item) => '<button type="button" class="dashboard-mobile-create-action" data-create-action="' + item.id + '" aria-label="' + (item.id === 'blog' ? 'Tulis artikel untuk Blog' : 'Buat ' + item.label) + '">' +
-        '<span class="dashboard-mobile-create-icon">' + renderIcon(item.icon) + '</span><strong>' + item.label + '</strong><small>' + item.description + '</small></button>').join('') +
-    '</div>' +
+    '<div class="dashboard-mobile-create-heading"><span class="dashboard-kicker">CREATE</span><h1 id="mobile-create-title">' + greeting + ', ' + firstName + '</h1><p>Apa yang ingin Anda bagikan hari ini?</p></div>' +
+    '<section class="dashboard-mobile-social" aria-label="Buat konten sosial">' +
+      '<div class="dashboard-mobile-create-list">' +
+        actions.map((item) => '<button type="button" class="dashboard-mobile-create-action" data-create-action="' + item.id + '" aria-label="' + (item.id === 'blog' ? 'Tulis artikel untuk Blog' : 'Buat ' + item.label) + '">' +
+          '<span class="dashboard-mobile-create-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-create-copy"><strong>' + item.label + '</strong><small>' + item.description + '</small></span><span class="dashboard-mobile-create-arrow" aria-hidden="true">' + renderIcon('arrow') + '</span></button>').join('') +
+      '</div>' +
+    '</section>' +
     '<div class="dashboard-mobile-create-divider" role="separator"></div>' +
     '<section class="dashboard-mobile-business" aria-labelledby="mobile-business-title">' +
-      '<div class="dashboard-mobile-business-heading"><div><span class="dashboard-kicker">RUANG BISNIS</span><h2 id="mobile-business-title">Kembangkan bisnis Anda</h2><p>Kelola toko, layanan, dan tempat usaha dalam ekosistem PLUITS.</p></div></div>' +
-      '<div class="dashboard-mobile-business-grid">' +
-        businessEntries.map((item) => '<article class="dashboard-mobile-business-card"><span class="dashboard-mobile-business-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-business-copy"><strong>' + item.label + '</strong><small>' + item.description + '</small></span><span class="dashboard-mobile-business-arrow" aria-hidden="true">' + renderIcon('arrow') + '</span></article>').join('') +
+      '<div class="dashboard-mobile-business-heading"><div><span class="dashboard-kicker">BUSINESS</span><h2 id="mobile-business-title">Ruang Bisnis</h2><p>Mulai dan kelola aktivitas bisnis Anda di PLUITS.</p></div></div>' +
+      '<div class="dashboard-mobile-business-list">' +
+        businessEntries.map((item) => '<article class="dashboard-mobile-business-entry"><span class="dashboard-mobile-business-icon">' + renderIcon(item.icon) + '</span><span class="dashboard-mobile-business-copy"><strong>' + item.label + '</strong><small>' + item.description + '</small></span><span class="dashboard-mobile-business-action">' + item.action + '</span><span class="dashboard-mobile-business-arrow" aria-hidden="true">' + renderIcon('arrow') + '</span></article>').join('') +
       '</div>' +
     '</section>' +
   '</section>';
 }
-
 function renderSocialPanel(view) {
   const story = '<section class="dashboard-social-section"><div class="dashboard-social-heading"><strong>Story</strong><span>Lingkaran sosial</span></div>' + renderEmpty('Belum ada Story','Story dari koneksi Anda akan muncul di sini.','eye') + '</section>';
   const feed = '<section class="dashboard-social-section"><div class="dashboard-social-heading"><strong>Aktivitas sosial</strong><span>Feed</span></div>' + renderEmpty('Belum ada aktivitas','Postingan dan pembaruan dari koneksi Anda akan tampil di sini.','message') + '</section>';

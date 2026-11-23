@@ -59,3 +59,14 @@ Below the divider, show a separate **Ruang Bisnis** section with four entry conc
 A physical Store location should be associated with its Geo Directory place record where one exists. Store and Place remain separate domain records with a relationship; do not assume every Store automatically owns or claims a Place. If a user requests an industry/category without an available module, provide a future request-to-Plugins workflow for evaluation. Approved requests may be scheduled for a new module. Category catalog, plugin review, provisioning, and the entity-state-driven create/manage transitions require backend contracts and are not implemented by this visual update.
 
 No sample ownership state may be fabricated. "Kelola" labels must only appear when verified account/business/place records authorize them. Desktop Create remains unchanged.
+
+
+## Mobile visual refinement — professional navigation
+The mobile Create visual language uses a restrained editorial composition, not a grid of oversized launcher cards:
+- Greeting and supporting question establish a clear typographic hierarchy.
+- Story, Post, Artikel, and Live are full-width navigation rows with compact monochrome icons, concise supporting descriptions, subtle separators, and a directional affordance.
+- A thin divider clearly separates social publishing from business management.
+- Ruang Bisnis uses a matching full-width list. Each row has a compact icon, business name, short explanation, trailing action label, and directional affordance.
+- Use the existing PLUITS design tokens and icon registry. Do not add new global tokens, icon packages, gradients, decorative illustrations, or oversized rounded cards.
+- The business rows remain informational until the relevant creation, claim, and management flows are connected to authorized backend records.
+- Desktop composition remains unchanged.
