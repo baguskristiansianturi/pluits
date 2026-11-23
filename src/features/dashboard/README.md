@@ -72,7 +72,7 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 
 ## Mobile Create surface and background hierarchy
 - Use a clean white canvas as the primary mobile Create background.
-- Use restrained translucent neutral/canvas surfaces only to distinguish secondary areas, especially the Ruang Bisnis section; keep the social publishing area visually open.
+- Use restrained translucent neutral/canvas surfaces only to distinguish secondary areas, especially the Fluid Partner, location, and classifieds sections; keep the social publishing area visually open.
 - Keep the entry cards as the foreground surfaces with subtle borders and minimal shadow, avoiding heavy panels, strong gradients, or stacked opaque boxes.
 - Use a soft fading divider to separate social publishing from business entry points.
 - Scope all background treatment to the mobile Create view; desktop Dashboard and other mobile views remain unchanged.
@@ -80,10 +80,10 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 
 ## Mobile Create — clarified visual system
 - White is the dominant canvas and card surface.
-- Use soft neutral grey consistently for borders, dividers, and the secondary Ruang Bisnis background; avoid green-tinted grey surfaces.
+- Use soft neutral grey consistently for borders, dividers, and the secondary business-tools background; avoid green-tinted grey surfaces.
 - PLUITS logo teal is an accent only, used sparingly on small icon treatments or selected highlights rather than as a dominant card/background color.
 - On phone layouts, Story, Post, Reel, Live, and Blog must appear as five compact icon tiles in one horizontal row. Hide their supporting descriptions at this width so labels remain legible.
-- Ruang Bisnis remains a two-column card grid with enough room for its descriptions.
+- Fluid Partner, location management, and classifieds use the layered and sectioned mobile composition defined below.
 - Desktop Dashboard remains unchanged.
 
 
@@ -102,19 +102,3 @@ Run `npm test` and `npm run build`. Verify mobile 360px/390px/420px, social-firs
 - All surfaces are mobile-first, keyboard accessible, and use existing design tokens. Backend search, create, claim, persistence, and authorization remain pending.
 
 
-## Expanded mobile Ruang Bisnis categories
-- Struktur final mobile Ruang Bisnis memiliki tepat dua kartu: PLUITS Partner dan Tempat.
-- PLUITS Partner membuka katalog kategori mitra. Kategori Toko & Perdagangan memuat rumpun toko/retail, sedangkan Makanan & Minuman memuat Kafe dan Restoran beserta jenis usaha makanan-minuman lainnya.
-- Tempat membuka Geo Directory. Kartu ini tetap terpisah karena tempat fisik dan akun/mitra usaha merupakan entitas yang berbeda.
-- Pemilihan atau pembukaan katalog hanya navigasi. Tidak ada akun bisnis yang dibuat, tempat yang diklaim, atau kepemilikan yang dianggap terverifikasi; seluruh alur tersebut tetap memerlukan API dan otorisasi server.
-
-
-## PLUITS Partner — mobile category catalogue
-- The mobile Ruang Bisnis entry list includes exactly two cards: PLUITS Partner and Tempat. There are no separate Toko, Kafe, or Restoran cards.
-- Selecting PLUITS Partner expands the catalogue inline on the mobile Create page; it does not claim or create a business account.
-- The catalogue uses parent categories with subcategory cards. Current parent groups: Transportasi; Toko & Perdagangan; Akomodasi; Ticketing & Perjalanan; Layanan Profesional; Makanan & Minuman; Properti & Ruang; Iklan Baris & Lowongan; and Mitra Lainnya.
-- Every subcategory card displays a lock icon and a short scope description. Locked cards are informational articles, not active buttons.
-- The taxonomy is an initial planning catalogue and must be reviewed against existing module boundaries before operational work begins.
-- Existing Store and Restaurant & Café modules retain their operational ownership. Partner discovery/listings must link to those modules through contracts instead of cloning their operational systems.
-- Unlocking is a future manual admin-controlled release action after the relevant module passes its readiness criteria. The current lock state is presentation-only and is not a security/authorization control.
-- Desktop Dashboard / Ruang Kerja is unchanged.
