@@ -17,8 +17,8 @@ function demoRail(items,label) {
   return '<div class="global-bleed-wrap"><div class="global-demo-rail" aria-label="' + label + '">' + items.map((item,index)=>'<article class="global-demo-card global-demo-card--' + item[3] + '"><div class="global-demo-art"><span>' + item[0] + '</span><i>' + (index+1).toString().padStart(2,'0') + '</i></div><div class="global-demo-copy"><strong>' + item[1] + '</strong><p>' + item[2] + '</p></div></article>').join('') + '</div></div>';
 }
 function storyRail() {
-  const items=[['B','Bagus','story-a'],['A','Ayu','story-b'],['R','Raka','story-c'],['N','Nadia','story-d'],['D','Dimas','story-e'],['S','Sinta','story-f']];
-  return '<div class="global-bleed-wrap"><div class="global-story-rail" aria-label="Stories contoh">' + items.map((item,index)=>'<div class="global-story-item"><span class="global-story-ring global-story-ring--' + item[2] + '">' + item[0] + '</span><small>' + item[1] + (index===0?' · Anda':'') + '</small></div>').join('') + '</div></div>';
+  const items=[['+','Cerita Anda','story-own'],['A','Ayu','story-b'],['R','Raka','story-c'],['N','Nadia','story-d'],['D','Dimas','story-e'],['S','Sinta','story-f']];
+  return '<div class="global-bleed-wrap"><div class="global-story-rail" aria-label="Stories contoh">' + items.map((item,index)=>'<div class="global-story-item"><span class="global-story-ring global-story-ring--' + item[2] + '">' + item[0] + '</span><small>' + item[1] + '</small></div>').join('') + '</div></div>';
 }
 function bottomNav() {
   return '<nav class="global-bottom-nav" aria-label="Navigasi utama">' +
@@ -55,11 +55,8 @@ function demoContent(kind) {
 export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   const account = '<a class="global-icon-button" href="' + routeHref(user?'profile':'login') + '" aria-label="' + (user?'Akun':'Masuk') + '" title="' + (user?'Akun':'Masuk') + '">' + renderIcon('user') + '</a>';
   const actions = '<div class="global-header-actions">' + account + '<a class="global-icon-button" href="' + routeHref('discover') + '" aria-label="Cari" title="Cari">' + renderIcon('search') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Keranjang" title="Keranjang">' + renderIcon('cart') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Notifikasi" title="Notifikasi">' + renderIcon('bell') + '</a></div>';
-  const discovery = [
-    ['top-global','Top Global','Sorotan aktivitas dari seluruh Indonesia.','Lihat Semua',demoCards.global],
-    ['nearby','Di Sekitar Anda','Temukan hal menarik berdasarkan lokasi Anda.','Lihat Semua',demoCards.nearby],
-    ['people','Orang yang Mungkin Anda Kenal','Temukan akun dan komunitas baru.','Jelajahi',demoCards.people]
-  ].map(([id,title,note,cta,cards]) => '<section class="global-section" id="' + id + '">' + heading(title,note,cta,routeHref('discover')) + demoRail(cards,title) + '</section>').join('');
+  const discovery = '<section class="global-section" id="people">' + heading('Orang yang mungkin Anda kenal','Temukan akun dan komunitas yang mungkin cocok dengan minat Anda.','Jelajahi',routeHref('discover')) + demoRail(demoCards.people,'Saran akun contoh') + '</section>';
+  const nearby = '<section class="global-section global-nearby" id="nearby">' + heading('Jelajahi di sekitar Anda','Temukan tempat, kuliner, aktivitas, dan layanan berdasarkan lokasi pilihan Anda.','Jelajahi peta',routeHref('discover')) + demoRail(demoCards.nearby,'Kategori sekitar · pratinjau') + '</section>';
   const streams = contentTabs.map((tab,index) => {
     const body=tab.id==='feed'?'<div class="global-post-list" data-live-feed>' + renderFeedState('Memuat postingan publik…',true) + '</div>'
       :tab.id==='reels'?'<div class="global-post-list global-reels-list" data-live-reels>' + renderFeedState('Memuat Reels…',true) + '</div>'
@@ -75,18 +72,14 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   const pageHeaderMarkup=renderPageHeader({brandHref:routeHref('home'),rightContent:'<div class="global-header-tools"><a class="global-icon-button global-favorite-link" href="' + routeHref('dashboard') + '" aria-label="Favorit" title="Favorit">' + renderIcon('heart') + '</a>' + actions + '</div>',className:'global-header',dataGlobalHeader:true});
   root.innerHTML = '<div class="pl-page-shell home-page global-home-page">' +
     pageHeaderMarkup +
-    '<main class="pl-page-main home-main global-home-main"><section class="global-home-intro"><span class="global-kicker">PLUITS · INDONESIA</span><h1>Beranda Anda di PLUITS.</h1><p>Ikuti cerita, temukan orang, dan terhubung dengan komunitas dalam satu ruang sosial.</p></section>' + composerMarkup +
-    discovery +
-    '<section class="global-section global-stories" id="stories">' + heading('Stories','Momen terbaru dari akun yang Anda ikuti.') + storyRail() + '</section>' +
-    '<nav class="global-content-tabs" data-content-tabs aria-label="Kategori konten">' + contentTabs.map((tab,i)=>'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-controls="content-' + tab.id + '">' + tab.label + '</button>').join('') + '</nav>' +
-    streams +
-    '<section class="global-section global-products" id="local-products">' + heading('Produk Lokal','Temukan produk dari pelaku usaha di berbagai daerah.','Kunjungi Marketplace',routeHref('discover')) + '<div class="global-product-demo-rail">' + [['GADGET','Audio personal','product-a'],['FASHION','Gaya harian','product-b'],['HOME','Ruang nyaman','product-c'],['CREATIVE','Karya lokal','product-d']].map((item,i)=>'<article class="global-product-demo"><div class="global-product-art global-product-art--' + (i+1) + '"><span>' + item[0] + '</span></div><small>CONTOH PRODUK</small><strong>' + item[1] + '</strong><span>Pratinjau katalog</span></article>').join('') + '</div></section>' +
-    '<section class="global-section global-features" id="all-features">' + heading('Semua Fitur','Jelajahi layanan dan ruang yang terhubung di PLUITS.') + '<div class="global-feature-grid">' + [['Social & Community','message'],['Marketplace','cart'],['Restaurant & Café','book'],['Tickets & Accommodation','image'],['Geo Directory','mapPin'],['Logistics & Transportation','arrow'],['Digital Wallet','lock'],['More services','sparkles']].map(([label,icon])=>'<a href="' + routeHref('discover') + '">' + renderIcon(icon) + '<strong>' + label + '</strong></a>').join('') + '</div></section></main>' +
+    '<main class="pl-page-main home-main global-home-main"><section class="global-home-intro"><span class="global-kicker">PLUITS · CIRCLE ANDA</span><h1>Temukan cerita dan dunia di sekitar Anda.</h1><p>Terhubung dengan teman, ikuti hal yang Anda sukai, lalu jelajahi produk dan layanan lokal.</p><a class="global-home-search" href="' + routeHref('discover') + '">' + renderIcon('search') + '<span>Cari orang, tempat, produk, dan layanan</span>' + renderIcon('arrow') + '</a></section>' +
+    '<div class="global-social-area">' + discovery +
+    '<section class="global-section global-stories" id="stories">' + heading('Cerita dari circle Anda','Pratinjau story teman; konten akun akan tampil saat layanan Stories terhubung.') + storyRail() + '</section>' +
+    '<nav class="global-content-tabs" data-content-tabs aria-label="Kategori konten">' + contentTabs.map((tab,i)=>'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-controls="content-' + tab.id + '">' + tab.label + '</button>').join('') + '</nav>' + composerMarkup +
+    streams + '</div>' + nearby +
+    '<section class="global-section global-products" id="local-products">' + heading('Produk lokal pilihan','Pratinjau kategori produk lokal. Pilihan aktual mengikuti lokasi di Marketplace.','Lihat di Marketplace',routeHref('marketplace')) + '<div class="global-product-location"><span>' + renderIcon('mapPin') + '</span><div><strong>Mulai dari lokasi Anda</strong><small>Cakupan dapat diubah ke kota lain atau global di Marketplace.</small></div></div><div class="global-product-demo-rail">' + [['GADGET','Audio personal','product-a'],['FASHION','Gaya harian','product-b'],['HOME','Ruang nyaman','product-c'],['CREATIVE','Karya lokal','product-d']].map((item,i)=>'<article class="global-product-demo"><div class="global-product-art global-product-art--' + (i+1) + '"><span>' + item[0] + '</span></div><small>CONTOH PRODUK</small><strong>' + item[1] + '</strong><span>Pratinjau katalog</span></article>').join('') + '</div></section>' +
+    '<section class="global-section global-features" id="all-features">' + heading('Layanan PLUITS','Akses cepat ke layanan yang saling terhubung.','Jelajahi semua',routeHref('discover')) + '<div class="global-feature-rail">' + [['Transportasi','arrow'],['Kurir','briefcase'],['Tiket','fileText'],['Sewa Mobil','map'],['Akomodasi','image'],['Kuliner','book']].map(([label,icon])=>'<a class="global-feature-card" href="' + routeHref('discover') + '">' + renderIcon(icon) + '<strong>' + label + '</strong><span>Jelajahi layanan</span></a>').join('') + '</div></section>' + '<section class="global-about" aria-labelledby="global-about-title"><span class="global-kicker">SATU RUANG UNTUK BANYAK KEMUNGKINAN</span><h2 id="global-about-title">Terhubung, menemukan, dan bertransaksi bersama PLUITS.</h2><p>Mulai dari cerita teman, tempat menarik, produk lokal, hingga layanan sehari-hari—semuanya terhubung dalam satu ekosistem.</p><a href="' + routeHref('about') + '">Kenali PLUITS <span aria-hidden="true">→</span></a></section></main>' +
     bottomNav() + '</div>';
-  const header=root.querySelector('[data-global-header]');
-  const tabs=root.querySelector('[data-content-tabs]');
-  const updateSticky=()=>{if(header&&tabs)header.classList.toggle('is-released',tabs.getBoundingClientRect().top<=header.offsetHeight);};
-  window.addEventListener('scroll',updateSticky,{passive:true}); updateSticky();
   const buttons=[...root.querySelectorAll('[data-content-tab]')];
   buttons.forEach(button=>button.addEventListener('click',()=>{root.querySelector('#content-'+button.dataset.contentTab)?.scrollIntoView({behavior:'smooth',block:'start'});buttons.forEach(item=>item.classList.toggle('is-active',item===button));}));
   let observer=null;
@@ -139,5 +132,5 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   }
   loadFeed();
   if(reelsTarget)reelsTarget.innerHTML=renderFeedState('Reels belum tersedia di layanan PLUITS');
-  return ()=>{controller.abort();window.removeEventListener('scroll',updateSticky);observer?.disconnect();};
+  return ()=>{controller.abort();observer?.disconnect();};
 }
