@@ -79,3 +79,10 @@ The mobile Create visual language uses a restrained editorial composition, not a
 - Remove redundant directional arrows. Social action cards are fully clickable surfaces; business cards remain informational until their authorized workflows exist.
 - Preserve two columns on narrow devices with adjusted spacing and readable wrapping.
 - Desktop Create remains unchanged.
+
+
+## Mobile Create — white and translucent surface hierarchy
+- The primary mobile Create canvas is white to improve clarity and visual refinement.
+- Translucent neutral/canvas treatment may be used selectively behind secondary sections, especially Ruang Bisnis, while entry cards remain the clear foreground surfaces.
+- Keep card borders and shadows subtle; use a softly fading divider rather than a strong separator.
+- Scope these surface treatments to the mobile Create view only. Desktop Dashboard and other views remain unchanged.
