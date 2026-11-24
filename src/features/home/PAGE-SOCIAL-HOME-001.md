@@ -30,6 +30,7 @@
 - Quick search is one clear entry point; its overlay handles the search field and category shortcuts. Do not restore the old service shortcut filter rail or inline service form to the homepage.
 - Rekomendasi untuk Anda menampilkan minat/pengalaman, bukan bisnis, tempat, daftar menu, atau ranking. Setiap minat membuka discovery context yang sesuai; Seafood menyiapkan konteks Fluid Food setelah modul tersebut tersedia. Jangan mengarang personalisasi akun jika preferensi belum tersedia.
 - Di sekitar Anda mencakup semua kategori GeoDirectory. Mulai 5 km dan perluas bertahap bila hasil tidak mencukupi. Kartu menggunakan data lokasi/penyedia aktual; jangan mengarang jarak, ulasan, rating, atau identitas mitra. Lihat Semua menuju Jelajah dengan kontrol radius/wilayah yang lebih luas.
+- Fair exposure: ranking organik menyeimbangkan kedekatan, relevansi, kualitas, ketersediaan, trust, dan kesempatan penemuan bagi mitra eligible/baru. Popularitas atau frekuensi posting tidak boleh menjadi satu-satunya penentu; paid placement wajib dipisahkan dan diberi label.
 - Social posts remain full-width on mobile; tablet/desktop may retain a readable constrained feed width.
 - Tabs navigate to their corresponding content sections and update the active visual state as the user scrolls. They do not pin to the viewport.
 - Bottom navigation remains fixed and safe-area aware.
