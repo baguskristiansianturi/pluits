@@ -6,9 +6,9 @@ Dokumen ini merekam jalur efek CSS yang teridentifikasi pada repository saat aud
 
 ## 0. Dokumen platform yang sudah mengatur cascade
 
-Audit juga menemukan bahwa Platform UI Foundation sudah memiliki contract otoritatif: `../../../../06-PLATFORM-UI-FOUNDATION/01-DESIGN-TOKENS/CSS-OWNERSHIP-AND-CASCADE-CONTRACT-001.md`. Aturan Social Media ini merupakan penerapan spesifik domain dan tidak menggantikan atau menyalin ulang kontrak platform tersebut. Semua perubahan tetap harus mematuhi Foundation Governance, CSS Ownership and Cascade Contract, dan UI Foundation Preflight.
+Audit juga menemukan bahwa Platform UI Foundation sudah memiliki contract otoritatif: `../../../06-PLATFORM-UI-FOUNDATION/01-DESIGN-TOKENS/CSS-OWNERSHIP-AND-CASCADE-CONTRACT-001.md`. Aturan Social Media ini merupakan penerapan spesifik domain dan tidak menggantikan atau menyalin ulang kontrak platform tersebut. Semua perubahan tetap harus mematuhi Foundation Governance, CSS Ownership and Cascade Contract, dan UI Foundation Preflight.
 
-Ada pula `../../../../06-PLATFORM-UI-FOUNDATION/07-LAYOUT-PATTERNS/LAY-GLOBAL-SOCIAL-DISCOVERY-001.md` yang berstatus provisional dan mencatat pola Global Social Discovery dengan beberapa consumer Social. Sebelum isolasi, pola ini harus diaudit: tentukan apakah ia benar-benar primitive bersama yang disetujui atau komposisi khusus Social Media yang kebetulan ditempatkan di Foundation. Jangan memindahkan, menghapus, atau memperluas ownership-nya tanpa consumer mapping dan persetujuan sesuai governance.
+Ada pula `../../../06-PLATFORM-UI-FOUNDATION/07-LAYOUT-PATTERNS/LAY-GLOBAL-SOCIAL-DISCOVERY-001.md` yang berstatus provisional dan mencatat pola Global Social Discovery dengan beberapa consumer Social. Sebelum isolasi, pola ini harus diaudit: tentukan apakah ia benar-benar primitive bersama yang disetujui atau komposisi khusus Social Media yang kebetulan ditempatkan di Foundation. Jangan memindahkan, menghapus, atau memperluas ownership-nya tanpa consumer mapping dan persetujuan sesuai governance.
 
 ## 1. Jalur runtime yang ditemukan
 
