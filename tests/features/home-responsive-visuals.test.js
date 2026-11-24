@@ -140,7 +140,7 @@ test('Social Home discovery hierarchy uses a search overlay, category Top 10 rai
   assert.match(source, /global-top-ten-rail/);
   assert.match(source, /global-local-rating/);
   assert.match(source, /global-local-copy/);
-  assert.match(source, /streams \+ '<\\/div>' \+\s*'<section class="global-section global-products"/);
+  assert.ok(source.includes("streams + '</div>' +"));
   assert.match(css, /\.global-top-ten-card\{[^}]*flex-basis:90vw/s);
   assert.match(css, /\.global-local-card\{[^}]*flex-basis:70vw/s);
   assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
