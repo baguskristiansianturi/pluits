@@ -131,7 +131,7 @@
 .pl-page-shell--surface {
   background: var(--pl-color-surface);
 }
-.pl-page-shell--standard-content > .pl-page-main {
+.pl-page-shell.pl-page-shell--standard-content > .pl-page-main {
   box-sizing: border-box;
   width: min(100%, var(--pl-container-wide));
   max-width: var(--pl-container-wide);
