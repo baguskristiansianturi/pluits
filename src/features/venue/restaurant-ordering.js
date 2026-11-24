@@ -1,6 +1,6 @@
 import { renderIcon } from '../../design-system/icons.js';
 import './restaurant-ordering.css';
-const KEY='pluits-demo-merchant-carts-v1';
+const KEY='pluits-preview-merchant-carts-v1';
 const MENU=[
 {id:'eggs-benedict',cat:'Brunch',name:'Eggs Benedict',desc:'Poached eggs, toasted sourdough, smoked beef, and house hollandaise.',price:78000,img:'photo-1525351484163-752941434d8',tag:'PILIHAN RESTORAN',variants:[['Classic',0],['Smoked Beef',12000]],addons:[['Extra egg',12000],['Avocado',18000]]},
 {id:'avocado-toast',cat:'Brunch',name:'Avocado Toast',desc:'Sourdough toast, smashed avocado, cherry tomatoes, and garden herbs.',price:68000,img:'photo-1525351484163-752941434d8',tag:'FRESH',variants:[['Sourdough',0],['Multigrain',5000]],addons:[['Poached egg',12000],['Feta cheese',15000]]},
