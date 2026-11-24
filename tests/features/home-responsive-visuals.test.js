@@ -158,6 +158,6 @@ test('Social Home discovery hierarchy uses one mixed Top 10 carousel and profess
   assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
   assert.match(source, /setInterval\(advance,2600\)/);
   assert.match(spec, /Top 10 discovery/);
-  assert.match(spec, /single mixed-content carousel/);
+  assert.match(spec, /exactly one horizontal carousel containing ten mixed discovery cards/);
   assert.match(spec, /Di sekitar Anda/);
 });
