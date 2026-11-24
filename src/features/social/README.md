@@ -1,11 +1,14 @@
 # Social Media Runtime
 
-Social Media is an independently owned product domain inside PLUITS. Its pages, components, state, behavior and feature CSS live under this directory. Sibling domains may be opened only through documented user-initiated interactions or public integration contracts.
+Social Media is an independently owned product domain inside PLUITS. Its pages, components, state, behavior and feature CSS live under this directory. External domains are reached only through explicit user-initiated interactions or documented public contracts. Sibling domains may be opened only through documented user-initiated interactions or public integration contracts.
 
 ## Runtime ownership
 - `home/`: Social Home composition, its page CSS, product specification and active carousel inventory.
 - `feed/`: Feed post-card rendering, demo fixtures and social post interactions. Feed aggregates approved content; it does not own Blog/Reels/Stories/Live publishing lifecycles.
 - `blog/`: standalone Blog route and Blog-owned page/CSS. Current articles are frontend preview fixtures only.
+- `stories/`: Stories rail renderer and its own stylesheet; story lifecycle remains preview-only.
+- `live/`: Live preview renderer and its own stylesheet; broadcast/session lifecycle is not active.
+- `reels/`: short-video classification and media renderer/CSS consumed by Feed; authoring/transcoding/publishing lifecycle is not active.
 - `social-pages.js` / `social-pages.css`: current Discover, Messages, Profile and Settings surfaces. Their further page-level decomposition and CSS isolation remain tracked work.
 
 ## Platform contracts
