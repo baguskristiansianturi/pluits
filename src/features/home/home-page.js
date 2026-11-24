@@ -86,19 +86,18 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
       const target=routeHref('discover')+'?intent=interest&interest='+encodeURIComponent(item.id)+(item.app?'&app='+encodeURIComponent(item.app):'');
       return '<a class="global-interest-card" href="'+target+'" data-interest-id="'+item.id+'"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"><span class="global-interest-overlay"><strong>'+item.name+'</strong></span></a>';
     }).join('') + '</div></section>';
+  // Named layout fixtures only; replace with GeoDirectory records and calculated distances when connected.
   const nearbyItems = [
-    {category:'Restoran & kuliner',image:'photo-1517248135467-4c7edcad34c4',filter:'food'},
-    {category:'Apotek',image:'photo-1576602976047-174e57a47881',filter:'pharmacy'},
-    {category:'Klinik & kesehatan',image:'photo-1629909613654-28e377c37b09',filter:'health'},
-    {category:'Toko & fashion',image:'photo-1441986300917-64674bd600d8',filter:'stores'},
-    {category:'Wisata & aktivitas',image:'photo-1500530855697-b586d89ba3ee',filter:'activities'},
-    {category:'Coffee & café',image:'photo-1501339847302-ac426a4a7cbb',filter:'cafes'}
+    {id:'atlas-beach-club',name:'Atlas Beach Club',category:'Beach Club',location:'Berawa, Canggu',distance:'2,4 km',trust:'Ulasan pengunjung',description:'Beach club tepi pantai dengan kolam, restoran, dan hiburan.',image:'photo-1510414842594-a61c69b5ae57'},
+    {id:'la-brisa-bali',name:'La Brisa Bali',category:'Beach Club',location:'Echo Beach, Canggu',distance:'3,1 km',trust:'Ulasan pengunjung',description:'Tempat bersantai di tepi pantai dengan suasana tropis.',image:'photo-1507525428034-b723cf961d3e'},
+    {id:'finns-beach-club',name:'FINNS Beach Club',category:'Beach Club',location:'Berawa, Canggu',distance:'1,8 km',trust:'Ulasan pengunjung',description:'Beach club dengan kolam, pilihan bersantap, dan pemandangan laut.',image:'photo-1500375592092-40eb2168fd21'},
+    {id:'the-lawn-canggu',name:'The Lawn Canggu',category:'Beach Club',location:'Pantai Batu Bolong, Canggu',distance:'2,7 km',trust:'Ulasan pengunjung',description:'Ruang tepi pantai untuk menikmati suasana dan matahari terbenam.',image:'photo-1473116763249-2faaef81ccda'}
   ];
   const nearby = '<section class="global-section global-nearby" id="nearby">' +
     heading('Di sekitar Anda',null,'Lihat semua',routeHref('discover')+'?scope=nearby&radius=5') +
-    '<div class="global-local-rail" aria-label="Kategori di sekitar Anda">' + nearbyItems.map(item => {
-      const target=routeHref('discover')+'?scope=nearby&radius=5&category='+encodeURIComponent(item.filter);
-      return '<a class="global-local-card global-local-card--preview" href="'+target+'"><div class="global-local-image"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"></div><span class="global-local-copy"><strong>'+item.category+'</strong></span></a>';
+    '<div class="global-local-rail" aria-label="Tempat di sekitar Anda">' + nearbyItems.map(item => {
+      const target=routeHref('discover')+'?scope=nearby&radius=5&place='+encodeURIComponent(item.id);
+      return '<a class="global-local-card global-local-card--listing" href="'+target+'"><div class="global-local-image"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"><span class="global-local-distance">'+item.distance+'</span></div><span class="global-local-copy"><small class="global-local-category">'+item.category+' · '+item.location+'</small><strong>'+item.name+'</strong><span class="global-local-trust">'+renderIcon('star')+'<span>'+item.trust+'</span></span><em>'+item.description+'</em></span></a>';
     }).join('') + '</div></section>';
   const streams = contentTabs.map((tab,index) => {
     const body=tab.id==='feed'?'<div class="global-post-list" data-live-feed>' + renderDemoFeed('feed') + '</div>'
