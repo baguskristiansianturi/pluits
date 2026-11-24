@@ -976,8 +976,7 @@ body.global-search-open{overflow:hidden}
     -webkit-overflow-scrolling: touch;
   }
   .global-content-section:has(.global-post-list),
-  .global-content-section:has(.global-live-demo-grid),
-  .global-content-section:has(.global-blog-demo-grid) {
+  .global-content-section:has(.sm-live-preview-grid) {
     width: 100vw;
     max-width: none;
     margin-left: calc(50% - 50vw);
@@ -986,8 +985,7 @@ body.global-search-open{overflow:hidden}
     padding-right: 0;
   }
   .global-content-section:has(.global-post-list) .global-content-intro,
-  .global-content-section:has(.global-live-demo-grid) .global-content-intro,
-  .global-content-section:has(.global-blog-demo-grid) .global-content-intro {
+  .global-content-section:has(.sm-live-preview-grid) .global-content-intro {
     margin-left: 10px;
     margin-right: 10px;
   }
