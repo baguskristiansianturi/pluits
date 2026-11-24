@@ -75,7 +75,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   const topTenItems = [
     {name:'Pura Luhur Uluwatu',type:'Wisata & budaya',image:'photo-1537996194471-e657df975ab4',rating:'4,9',reviews:'2.840 ulasan',category:'places'},
     {name:'Warung Mak Beng',type:'Restoran · Seafood',image:'photo-1517248135467-4c7edcad34c4',rating:'4,7',reviews:'1.260 ulasan',category:'restaurants'},
-    {name:'Pantai Melasti',type:'Pantai & alam',image:'photo-1507525428034-b723cf961a3e',rating:'4,8',reviews:'3.120 ulasan',category:'places'},
+    {name:'Pantai Melasti',type:'Pantai & alam',image:'photo-1507525428034-b723cf961d3e',rating:'4,8',reviews:'3.120 ulasan',category:'places'},
     {name:'Nasi Ayam Kedewatan',type:'Kuliner khas Bali',image:'photo-1547592180-85f173990554',rating:'4,8',reviews:'986 ulasan',category:'food'},
     {name:'Tegallalang Rice Terrace',type:'Wisata alam',image:'photo-1518548419970-58e3b4079ab2',rating:'4,7',reviews:'2.410 ulasan',category:'places'},
     {name:'Sate Lilit Bali',type:'Kuliner khas Bali',image:'photo-1555939594-58d7cb561ad1',rating:'4,8',reviews:'742 ulasan',category:'food'},
@@ -109,7 +109,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   root.innerHTML = '<div class="pl-page-shell pl-page-shell--surface pl-page-shell--standard-content home-page global-home-page">' +
     pageHeaderMarkup +
     '<main class="pl-page-main home-main global-home-main"><button type="button" class="global-home-search-entry" data-open-quick-search><span>' + renderIcon('search') + '</span><span><strong>Cari di PLUITS</strong><small>Tempat, restoran, makanan, aktivitas, dan lainnya</small></span><b>' + renderIcon('arrow') + '</b></button>' +
-    '<div class="global-location-row"><span>' + renderIcon('mapPin') + '</span><span><small>Area rekomendasi</small><strong>Bali</strong></span><span class="global-location-context">Global · Pulau Bali</span></div>' + topTen + nearby +
+    '<div class="global-location-row"><span>' + renderIcon('mapPin') + '</span><span><small>Area rekomendasi</small><strong>Bali</strong></span><span class="global-location-context">Cakupan · Pulau Bali</span></div>' + topTen + nearby +
     '<div class="global-social-area">' + discovery +
     '<section class="global-section global-stories" id="stories">' + heading('Cerita dari circle Anda','Momen terbaru dari orang-orang di circle Anda.') + storyRail() + '</section>' +
     '<nav class="global-content-tabs" data-content-tabs aria-label="Kategori konten">' + contentTabs.map((tab,i)=>'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-controls="content-' + tab.id + '">' + tab.label + '</button>').join('') + '</nav>' + composerMarkup +
@@ -139,6 +139,10 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     const clone=first.cloneNode(true);clone.setAttribute('aria-hidden','true');clone.tabIndex=-1;rail.append(clone);
     if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
     let timer=null,resumeTimer=null,autoMoving=false;
+    const previousButton=root.querySelector('[data-top-ten-prev]');
+    const nextButton=root.querySelector('[data-top-ten-next]');
+    previousButton?.addEventListener('click',()=>{rail.scrollBy({left:-rail.clientWidth,behavior:'smooth'});pause();});
+    nextButton?.addEventListener('click',()=>{rail.scrollBy({left:rail.clientWidth,behavior:'smooth'});pause();});
     const advance=()=>{
       const next=rail.scrollLeft+rail.clientWidth;
       autoMoving=true;
