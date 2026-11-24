@@ -67,6 +67,9 @@ jobs:
         with:
           path: dist
 
+      - name: Allow Pages artifact metadata to settle
+        run: sleep 15
+
       - name: Deploy PLUITS to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
