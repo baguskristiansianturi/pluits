@@ -2,6 +2,15 @@
 
 Blueprint teknis khusus Social Media: module boundaries, frontend routes/pages/components/state/styles, backend domains/services/rules, database entities and ownership, API and event contracts, auth/roles/permissions, security, observability, testing, deployment boundaries, rollout dan rollback.
 
+## CSS isolation and runtime ownership
+
+- Social Media private layout, components, state, responsive behavior, and CSS must be isolated behind explicit module/root boundaries.
+- Shared logo, registered icons, approved global tokens, typography, spacing scale, breakpoints, and approved primitives are consumed from Platform UI Foundation; Social Media must not redefine those global sources.
+- Shared foundations must not absorb Social Media-specific page composition or layout rules.
+- CSS imported by JavaScript still participates in the document-wide cascade; file/folder placement is not isolation.
+- Before narrowing or moving a shared selector, trace all consumers and prepare non-Social Media consumers first.
+- The current dependency audit and staged migration requirements are recorded in [Rule 17](../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/00-ATURAN-PENGALAMAN/17-PETA-RUNTIME-DAN-TAHAP-MIGRASI-ISOLASI.md) and [Rule 16](../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/00-ATURAN-PENGALAMAN/16-ISOLASI-CSS-DAN-ALUR-DEPENDENSI.md).
+- Runtime isolation is not yet implemented; do not claim the current stylesheets are fully isolated.
 
 ## Account settings runtime contract
 
@@ -9,7 +18,6 @@ Blueprint teknis khusus Social Media: module boundaries, frontend routes/pages/c
 - The active category remains visible and keyboard-focusable on desktop and mobile. Arrow keys move between categories; Home and End move to the first and last category.
 - Account, privacy, notification, and profile-theme sections report unavailable server capabilities honestly. They must not imply that an unsaved UI-only toggle changed account data.
 - Runtime ownership: `src/features/social/social-pages.js` and `src/features/social/social-pages.css`.
-
 
 ## Social Feed API — first implementation slice
 
@@ -21,7 +29,6 @@ Blueprint teknis khusus Social Media: module boundaries, frontend routes/pages/c
 - Media, Reels, Stories, Blog, comments, reactions, follower-only audience, moderation, and realtime are explicitly out of scope until their own contracts and implementations exist.
 - Runtime implementation: `backend/internal/httpapi/social.go`, registered by `backend/cmd/api/main.go`.
 
-
 ## Authenticated Profile Feed — first integration slice
 
 - Profile Feed reads only the signed-in owner's posts from `GET /v1/social/posts/me`.
@@ -31,7 +38,6 @@ Blueprint teknis khusus Social Media: module boundaries, frontend routes/pages/c
 - This slice is text-post only because the current Go API contract is text-only. Media grid, reactions, comments, follower counts and public-profile routing remain unavailable until their own APIs and contracts are implemented.
 - Runtime owners: `src/app/create-app.js`, `src/features/social/social-pages.js`, `src/features/social/social-pages.css`.
 - Validation: `tests/features/social-composer.test.js` covers the authenticated endpoint, token forwarding, visibility labeling and request cleanup.
-
 
 ## Module boundaries — Blog, Reels, Stories, Live
 Four independent Social Media modules have their own technical contracts and implementation ownership:
@@ -43,7 +49,6 @@ Four independent Social Media modules have their own technical contracts and imp
 Feed is an aggregation/distribution surface. It consumes documented content references and render/deep-link contracts; it must not own or duplicate each module's private state machine, CSS, media lifecycle, or domain rules. Shared assets/tokens/layout primitives are owned by Platform UI Foundation. Module-private styles remain within their respective module boundaries.
 
 The existing first-slice text-only Feed API and its explicit out-of-scope list remain valid; this modularization does not claim Blog, Reels, Stories, or Live production functionality exists.
-
 
 ## Aturan pengalaman dan batas runtime
 Aturan lintas permukaan Social Media dirangkum pada [Aturan Pengalaman Social Media](../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/00-ATURAN-PENGALAMAN/README.md). Gunakan dokumen itu bersama kontrak teknis di halaman ini. Jangan menyamakan prototype dengan backend produksi, dan jangan mengubah runtime sebagai bagian dari pembaruan dokumentasi.

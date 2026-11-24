@@ -21,6 +21,7 @@ Jumlah aturan, dokumen, folder, dan checklist **tidak dibatasi empat atau sepulu
 - Product Design Social Media: `../../02-PRODUCT-DESIGN/01-SOCIAL-MEDIA/`.
 - Application Modularization Social Media: `../../03-APPLICATION-MODULARIZATION/01-SOCIAL-MEDIA/`.
 - Domain-specific layout, behavior, state, components, and CSS belong to the relevant module; do not create one global Social Media stylesheet that owns all experiences.
+- Social Media CSS isolation is mandatory. Reuse approved shared assets/tokens/primitives only; keep module-owned layout and behavior inside explicit boundaries. See rules 16 and 17.
 
 ## Aturan perubahan
 Perubahan pada Blog tidak boleh merusak Reels, Stories, atau Live. Shared code changes require consumer mapping, regression tests, and explicit review. Cross-module integrations must use documented contracts.
