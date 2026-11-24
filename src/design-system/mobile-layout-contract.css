@@ -1,5 +1,5 @@
 /* PLUITS responsive layout contract — shared geometry only.
-   Feature CSS continues to own typography, color, card styling and component dimensions. */
+   Feature CSS owns all Social Media and Marketplace component/layout details. */
 @media (max-width: 767px) {
   :root { --pl-page-gutter: 10px; }
 
@@ -7,93 +7,4 @@
   .mp-top,
   .mp-nav,
   .mp-main { width: calc(100% - 20px); }
-
-  /* Horizontal rails start at the content inset and bleed through the right gutter.
-     The scrollable track reaches the physical viewport edge; the final card stays swipeable. */
-  .global-demo-rail,
-  .global-story-rail,
-  .global-product-demo-rail,
-  .global-people-rail,
-  .global-local-rail {
-    width: calc(100% + 10px);
-    max-width: none;
-    margin-right: -10px;
-    padding-left: 0;
-    padding-right: 10px;
-    scroll-padding-inline: 0 10px;
-    overscroll-behavior-inline: contain;
-    -webkit-overflow-scrolling: touch;
-  }
-  .global-product-demo-rail {
-    margin-left: 0;
-  }
-  .global-content-tabs {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  /* Feed, Reels, Live and Blog content surfaces retain their full-viewport treatment. */
-  .global-content-section:has(.global-post-list),
-  .global-content-section:has(.global-live-demo-grid),
-  .global-content-section:has(.global-blog-demo-grid) {
-    width: 100vw;
-    max-width: none;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    padding-left: 0;
-    padding-right: 0;
-  }
-  .global-content-section:has(.global-post-list) .global-content-intro,
-  .global-content-section:has(.global-live-demo-grid) .global-content-intro,
-  .global-content-section:has(.global-blog-demo-grid) .global-content-intro {
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-  .global-post-list {
-    width: 100%;
-    max-width: none;
-    margin-left: 0;
-    margin-right: 0;
-  }
-  .global-post-card,
-  .global-live-demo,
-  .global-blog-demo {
-    width: 100%;
-    max-width: none;
-    box-sizing: border-box;
-  }
-
-  /* Social profile carousel: 10px leading inset, edge-to-edge trailing scroll area. */
-  .social-profile-entity-list.is-carousel {
-    width: calc(100% + 10px);
-    max-width: none;
-    box-sizing: border-box;
-    margin-left: 0;
-    margin-right: -10px;
-    padding-left: 0;
-    padding-right: 10px;
-    scroll-padding-left: 0;
-    scroll-padding-right: 10px;
-    overscroll-behavior-inline: contain;
-    -webkit-overflow-scrolling: touch;
-  }
-  .social-profile-entity-list.is-carousel .social-profile-business-card {
-    flex: 0 0 min(280px, 82vw);
-  }
-
-  /* Feed, Reels and Blog panels retain the prior full-viewport breakout. */
-  .social-profile-page .social-profile-tab-panel[data-profile-panel="feed"],
-  .social-profile-page .social-profile-tab-panel[data-profile-panel="reels"],
-  .social-profile-page .social-profile-tab-panel[data-profile-panel="blog"] {
-    width: calc(100% + 20px);
-    margin-left: -10px;
-    margin-right: -10px;
-  }
-  .social-profile-page .social-profile-tab-panel[data-profile-panel="feed"] .social-empty-panel,
-  .social-profile-page .social-profile-tab-panel[data-profile-panel="reels"] .social-empty-panel,
-  .social-profile-page .social-profile-tab-panel[data-profile-panel="blog"] .social-empty-panel {
-    border-left: 0;
-    border-right: 0;
-    border-radius: 0;
-  }
 }

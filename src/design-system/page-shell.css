@@ -48,11 +48,6 @@
   padding-block-end: var(--pl-shell-content-footer-gap);
 }
 
-/* Social Home places its service-shortcut rail between the header and page body.
-   Its page composition owns the transition spacing; do not apply the generic 50px shell gap. */
-.pl-page-shell.home-page > .pl-page-main {
-  padding-block-start: 0;
-}
 @media (max-width: 767px) {
   .pl-page-shell > .pl-page-main {
     padding-block-end: var(--pl-shell-content-footer-gap-mobile);

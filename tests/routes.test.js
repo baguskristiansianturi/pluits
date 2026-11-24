@@ -4,8 +4,8 @@ import {readFile} from 'node:fs/promises';
 import {resolveRoute,resolveAuthenticatedRoute} from '../src/app/routes.js';
 import {APP_ROUTES,routeHref} from '../src/config/paths.js';
 import {PUBLIC_INFO_PAGES} from '../src/features/public-info/pages/index.js';
-test('Social app and account settings routes',()=>{assert.deepEqual(Object.keys(APP_ROUTES),['venue','restaurant','home','marketplace','social','circle','discover','dashboard','messages','profile','settings','register','login','forgot','reset','terms','privacy','about','help','faq','contact','guidelines','marketplaceInfo','sellerTerms','paymentPolicy','refundPolicy','shippingPolicy','accountDeletion','safety','cookies','privacyChoices','complaints','prohibitedItems']);assert.equal(resolveRoute('/pluits/',''),'home');assert.equal(resolveRoute('/pluits/hangout-leisure/',''),'venue');assert.equal(resolveRoute('/pluits/restaurant/',''),'restaurant');assert.equal(routeHref('restaurant'),'/pluits/restaurant/');assert.equal(resolveRoute('/pluits/circle/',''),'circle');assert.equal(resolveRoute('/pluits/discover/',''),'discover');assert.equal(resolveRoute('/pluits/social/',''),'social');assert.equal(resolveRoute('/pluits/messages/',''),'messages');assert.equal(resolveRoute('/pluits/profile/',''),'profile');assert.equal(resolveRoute('/pluits/settings/',''),'settings');assert.equal(routeHref('home'),'/pluits/');assert.equal(routeHref('settings'),'/pluits/settings/');});
-test('public routes remain accessible without an account session',()=>{for(const route of ['dashboard','social','messages','settings','profile','discover','marketplace'])assert.equal(resolveAuthenticatedRoute(route,false),route);assert.equal(resolveAuthenticatedRoute('settings',true),'settings');assert.equal(resolveAuthenticatedRoute('home',true),'home');assert.equal(resolveAuthenticatedRoute('circle',false),'social');assert.equal(resolveAuthenticatedRoute('login',true),'social');assert.equal(resolveAuthenticatedRoute('register',false),'register');});
+test('Social app and account settings routes',()=>{assert.deepEqual(Object.keys(APP_ROUTES),['venue','restaurant','home','marketplace','social','blog','circle','discover','dashboard','messages','profile','settings','register','login','forgot','reset','terms','privacy','about','help','faq','contact','guidelines','marketplaceInfo','sellerTerms','paymentPolicy','refundPolicy','shippingPolicy','accountDeletion','safety','cookies','privacyChoices','complaints','prohibitedItems']);assert.equal(resolveRoute('/pluits/',''),'home');assert.equal(resolveRoute('/pluits/hangout-leisure/',''),'venue');assert.equal(resolveRoute('/pluits/restaurant/',''),'restaurant');assert.equal(routeHref('restaurant'),'/pluits/restaurant/');assert.equal(resolveRoute('/pluits/circle/',''),'circle');assert.equal(resolveRoute('/pluits/discover/',''),'discover');assert.equal(resolveRoute('/pluits/social/',''),'social');assert.equal(resolveRoute('/pluits/blog/',''),'blog');assert.equal(routeHref('blog'),'/pluits/blog/');assert.equal(resolveRoute('/pluits/messages/',''),'messages');assert.equal(resolveRoute('/pluits/profile/',''),'profile');assert.equal(resolveRoute('/pluits/settings/',''),'settings');assert.equal(routeHref('home'),'/pluits/');assert.equal(routeHref('settings'),'/pluits/settings/');});
+test('public routes remain accessible without an account session',()=>{for(const route of ['dashboard','social','blog','messages','settings','profile','discover','marketplace'])assert.equal(resolveAuthenticatedRoute(route,false),route);assert.equal(resolveAuthenticatedRoute('settings',true),'settings');assert.equal(resolveAuthenticatedRoute('home',true),'home');assert.equal(resolveAuthenticatedRoute('circle',false),'social');assert.equal(resolveAuthenticatedRoute('login',true),'social');assert.equal(resolveAuthenticatedRoute('register',false),'register');});
 test('shared brand always returns to public business homepage',async()=>{const shell=await readFile(new URL('../src/design-system/page-shell.js',import.meta.url),'utf8');assert.match(shell,/routeHref\('home'\)/);});
 test('social app surfaces have native app navigation and no website footer',async()=>{const social=await readFile(new URL('../src/features/social/social-pages.js',import.meta.url),'utf8');assert.match(social,/global-bottom-nav/);assert.match(social,/mountSettingsPage/);assert.doesNotMatch(social,/renderPageFooter/);assert.match(social,/data-sign-out/);assert.match(social,/routeHref\('settings'\)/);});
 test('login routes authenticated users to the social app',async()=>{const app=await readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8');assert.match(app,/navigate\('social'\)/);assert.match(app,/mountSettingsPage/);assert.match(app,/onSignOut:\s*\(\)\s*=>\s*authService\.signOut\(\)/);});
@@ -26,11 +26,11 @@ test('shared page headers and brand sizing follow one responsive foundation',asy
   read('../src/design-system/tokens.css'),
   read('../src/design-system/page-shell.css'),
   read('../src/styles/global.css'),
-  read('../src/features/home/home-page.css'),
+  read('../src/features/social/home/home-page.css'),
   read('../src/features/home/business-home.css'),
   read('../src/features/dashboard/dashboard-page.css'),
   read('../src/features/social/social-pages.css'),
-  read('../src/features/home/home-page.js'),
+  read('../src/features/social/home/home-page.js'),
   read('../src/features/home/business-home-page.js'),
   read('../src/features/auth/auth-page.js'),
   read('../src/features/dashboard/dashboard-page.js')
@@ -134,13 +134,40 @@ test('account settings include privacy, display name and username controls',asyn
  assert.match(social,/\^\[a-z0-9\.\_\]\{3,30\}\$/);
 });
 
-test('nearby restaurant preview opens the existing public restaurant profile',async()=>{
- const home=await readFile(new URL('../src/features/home/home-page.js',import.meta.url),'utf8');
+test('Social Home no longer embeds external merchant listings; venue remains a separate route owner',async()=>{
+ const home=await readFile(new URL('../src/features/social/home/home-page.js',import.meta.url),'utf8');
  const provider=await readFile(new URL('../src/features/venue/venue-provider-page.js',import.meta.url),'utf8');
  const app=await readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8');
- assert.match(home,/name:'The Garden Table'/);
- assert.match(home,/route:'restaurant'/);
- assert.match(home,/item\.route \? routeHref\(item\.route\)/);
+ assert.ok(!home.includes('The Garden Table') && !home.includes('global-local-card') && !home.includes("routeHref('restaurant')"));
  assert.match(provider,/mountVenueProviderPage/);
  assert.match(app,/route === 'restaurant'.*mountVenueProviderPage/s);
+});
+
+
+
+test('Social Media Blog is a standalone route with module-owned CSS and no cross-feature imports',async()=>{
+ const [blog,css,app,home]=await Promise.all([
+  readFile(new URL('../src/features/social/blog/blog-page.js',import.meta.url),'utf8'),
+  readFile(new URL('../src/features/social/blog/blog-page.css',import.meta.url),'utf8'),
+  readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8'),
+  readFile(new URL('../src/features/social/home/home-page.js',import.meta.url),'utf8')
+ ]);
+ assert.ok(app.includes("route === 'blog'") && app.includes('mountBlogPage'));
+ assert.ok(blog.includes('export function mountBlogPage'));
+ assert.ok(blog.includes("../../../design-system/page-shell.css"));
+ assert.ok(blog.includes("../../../design-system/icons.js"));
+ assert.ok(!blog.includes('features/home') && !blog.includes('features/marketplace') && !blog.includes('features/venue') && !blog.includes('features/dashboard'));
+ assert.ok(css.startsWith('/* Social Media Blog owns every selector'));
+ assert.ok(!css.includes('body{') && !css.includes('html{') && !css.includes(':root') && !css.includes('.global-') && !css.includes('.social-'));
+ assert.ok(home.includes("routeHref('blog')"));
+});
+
+
+test('Social Home stylesheet is owned by the Social Home module rather than the global bootstrap',async()=>{
+ const [main,home]=await Promise.all([
+  readFile(new URL('../src/main.js',import.meta.url),'utf8'),
+  readFile(new URL('../src/features/social/home/home-page.js',import.meta.url),'utf8')
+ ]);
+ assert.ok(!main.includes("features/home/home-page.css"));
+ assert.ok(home.includes("import './home-page.css'"));
 });

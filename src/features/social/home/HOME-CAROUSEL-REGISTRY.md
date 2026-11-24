@@ -42,3 +42,17 @@ Organic discovery balances proximity, relevance, quality, availability, trust an
 ## Data integrity
 
 Current Home cards are static layout fixtures for named venues and are not live GeoDirectory results. Their distances are illustrative; the review/reputation line demonstrates the intended information slot and does not assert a live rating or review count. Production values must come from GeoDirectory place records, location calculation, and the verified review service. Never render illustrative distance or trust values as production data.
+ 
+
+## 25 November 2026 — active Social Home inventory
+
+The Social Home route no longer renders product/merchant listings, nearby venue cards, service shortcuts, transport/ticketing promotions, calendar blocks, or ecosystem marketing content. Those are sibling-domain surfaces and must be reached only through explicit interaction contracts where relevant.
+
+| Component ID | Selector / owner | Current Home behavior |
+|---|---|---|
+| HOME-CAROUSEL-STORIES-001 | `.global-story-rail` | Circle Stories rail; source module owns Story lifecycle. |
+| HOME-CAROUSEL-PEOPLE-001 | `.global-people-rail` | People suggestions; Social Media-owned discovery interaction. |
+| SOCIAL-FEED-001 | Feed post list and post card module | Aggregates approved Social Media content; does not own Blog/Reels/Stories/Live lifecycle. |
+| SOCIAL-BLOG-ENTRY-001 | `/blog/` route | Opens the independent Blog module. |
+
+Interest-led local discovery, GeoDirectory listings, product carousels, merchant features and ecosystem shortcuts are not active Social Home components. They must not be restored to this page as visual-only fixtures. If required, they belong to their owning domain or an explicitly contracted Discover integration.

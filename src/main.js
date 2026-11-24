@@ -1,6 +1,5 @@
 import './design-system/tokens.css';
 import './styles/global.css';
-import './features/home/home-page.css';
 import './features/marketplace/marketplace-home.css';
 import './features/dashboard/dashboard-page.css';
 import './features/auth/auth-page.css';

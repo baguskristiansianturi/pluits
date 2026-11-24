@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 test('social home uses the first-party Go API for feed and text post creation', async () => {
-  const source = await readFile(new URL('../../src/features/home/home-page.js', import.meta.url), 'utf8');
+  const source = await readFile(new URL('../../src/features/social/home/home-page.js', import.meta.url), 'utf8');
   assert.match(source, /API_BASE_URL\s*\+\s*'\/v1\/social\/feed/);
   assert.match(source, /API_BASE_URL\s*\+\s*'\/v1\/social\/posts'/);
   assert.match(source, /Authorization:\s*'Bearer '\s*\+\s*accessToken/);

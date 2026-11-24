@@ -1,6 +1,6 @@
 # Audit Kepemilikan Domain Social Media dan Isolasi Runtime
 
-Status: **STATIC RUNTIME AUDIT COMPLETED — BROWSER BASELINE AND RUNTIME MIGRATION NOT YET VERIFIED**  
+Status: **SOCIAL MEDIA OWNERSHIP/CSS BOUNDARY AUDIT COMPLETE — RESPONSIVE BROWSER REGRESSION PASSED — FEATURE LIFECYCLE DELIVERY REMAINS IN PROGRESS**  
 Audit source: branch `main`, commit `3acb3a30ec04fba846de0201046ffec0d13b231e` (25 November 2026).  
 Scope: ownership boundaries, route/composition, JavaScript imports, CSS cascade, cross-domain dependencies, Blog runtime ownership, and available regression evidence.
 
@@ -154,4 +154,44 @@ Audit dan isolasi runtime Social Media hanya dinyatakan selesai bila:
 - interaksi lintas domain teruji dengan fallback/fault containment;
 - semua perubahan, commit, tests, deployment state, dan UAT dicatat.
 
-**Kesimpulan snapshot:** audit statis dependency/ownership telah menemukan titik coupling utama. Runtime isolation belum dimulai, browser baseline belum dibuktikan, dan Blog belum menjadi runtime module mandiri. Status keseluruhan tetap **IN PROGRESS**.
+**Kesimpulan snapshot pada commit audit awal:** audit statis dependency/ownership telah menemukan titik coupling utama. Pada snapshot tersebut runtime isolation belum dimulai, browser baseline belum dibuktikan, dan Blog belum menjadi runtime module mandiri. Perkembangan sesudah snapshot dicatat pada bagian Pembaruan runtime di bawah. Status keseluruhan tetap **IN PROGRESS**.
+
+## Pembaruan runtime — 25 November 2026 (PR #138)
+
+Peta historis di atas mencatat kondisi sebelum pemindahan pertama. Pada branch implementasi PR #138, kepemilikan runtime telah dipindahkan sebagai berikut:
+
+```text
+src/features/
+├── home/                         # public marketing homepage only
+└── social/
+    ├── home/                     # Social Home page, CSS, spec, carousel registry
+    ├── feed/                     # post-card renderer, interaction handlers, CSS
+    ├── blog/                     # independent /blog/ route, page, CSS, README
+    ├── stories/                  # owned Stories rail preview + CSS
+    ├── live/                     # owned Live preview + CSS
+    ├── reels/                    # owned short-video media renderer + CSS
+    ├── social-pages.js           # Discover, Messages, Profile, Settings (current combined surface)
+    └── social-pages.css
+```
+
+- `create-app.js` now mounts Social Home from `features/social/home/home-page.js`.
+- Feed post-card code and CSS are owned by `features/social/feed/`.
+- Blog has a public route `/blog/`, its own page module, category filtering, local search, and `.sm-blog-page` stylesheet namespace.
+- Social Home no longer renders Marketplace product previews, venue/merchant cards, service/transport/ticketing promotions, calendar blocks, or platform marketing sections. Its header/search now target Social Media experiences.
+- Social Home CSS is no longer imported directly by `main.js`; it is imported by the Social Home module.
+- Social-specific mobile geometry has been moved out of `design-system/mobile-layout-contract.css` into Social Home and Social Profile stylesheets. The shared contract retains platform gutter and Marketplace shell geometry only.
+
+This is an implemented ownership slice, not completion of all isolation. Remaining gaps: `social-pages.js` is still a combined runtime surface; Reels, Stories and Live now have owned preview/rendering modules and stylesheets, but their authoring, media processing, audience, publishing and lifecycle services are not active; Social Home retains legacy `.global-*` names for active Social-owned components, but obsolete product/merchant/service/calendar/story/live demo selectors have been pruned; complete selector/consumer mapping and browser visual regression are still required. Blog content is preview-only; backend publishing, persistence, article detail and comments are not active.
+
+
+## Hasil verifikasi akhir — PR #138
+
+**Status audit batas domain dan CSS: LULUS untuk cakupan runtime yang tersedia pada commit `0221b01113652329ccfe6dfabf130e510c3ca2b4`.**
+
+- PR validation workflow: architecture checks, seluruh `npm test`, dan production Vite build berhasil — [run #45457818716](https://github.com/baguskristiansianturi/pluits/actions/runs/45457818716).
+- Browser regression Chromium berhasil untuk 11 route pada 3 viewport (mobile 360px, tablet 768px, desktop 1440px). Pemeriksaan mencakup Social Home, Blog, Discover, Messages, Profile, Settings, Marketplace, Venue, Restaurant, Auth dan Legal; navigasi Blog, pencarian/kategori Blog, ketiadaan konten sibling-domain di Social Home, tidak ada horizontal page overflow, dan tidak ada uncaught page error — [run #45457818960](https://github.com/baguskristiansianturi/pluits/actions/runs/45457818960).
+- Screenshot baseline tersimpan sebagai artifact [social-media-browser-audit](https://github.com/baguskristiansianturi/pluits/actions/runs/45457818960/artifacts/14951921051), berlaku sampai 8 Desember 2026.
+- Shared mobile layout contract tidak lagi memuat selector Social; shared page shell tidak lagi memiliki pengecualian khusus Social Home. Social Home, Feed, Blog, Stories, Live, Reels dan Social pages mengimpor stylesheet pemiliknya; interaksi lintas domain menggunakan route/kontrak publik.
+
+### Batas penutupan
+Audit kepemilikan dan isolasi CSS pada implementasi yang tersedia dapat ditutup. Ini bukan pernyataan bahwa seluruh fitur Social Media sudah siap produksi: Blog masih memakai data preview; editor/publish/persistence/detail/komentar belum aktif; Stories/Live/Reels masih preview/media presentation; Discover, Messages, Profile dan Settings masih satu file runtime Social-owned. Pekerjaan lifecycle dan backend tetap menjadi pengembangan produk berikutnya, bukan blocker untuk audit batas CSS saat ini.

@@ -1,0 +1,14 @@
+/* Live module owns the preview-card presentation. Live session lifecycle is not active yet. */
+.sm-live-preview-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+.sm-live-preview-card { min-width: 0; overflow: hidden; border: 1px solid var(--pl-color-border); border-radius: var(--pl-radius-lg); background: var(--pl-color-surface); }
+.sm-live-preview-art { position: relative; display: flex; min-height: 220px; flex-direction: column; align-items: center; justify-content: center; gap: 10px; overflow: hidden; padding: 18px; background: radial-gradient(circle at 50% 45%,#dcebe7,#b8d4d0 58%,#8ea9ad); color: #17353a; text-align: center; }
+.sm-live-preview-art--two { background: radial-gradient(circle at 50% 45%,#f0e5d8,#d9c7b2 58%,#9e9386); }
+.sm-live-indicator { position: absolute; top: 12px; left: 12px; padding: 5px 8px; border-radius: 999px; background: rgba(255,255,255,.86); color: #31474c; font-size: 8px; font-weight: 850; letter-spacing: .1em; }
+.sm-live-orbit { display: grid; width: 58px; height: 58px; place-items: center; border: 1px solid rgba(255,255,255,.8); border-radius: 50%; background: rgba(255,255,255,.34); color: #fff; font-size: 22px; font-weight: 800; }
+.sm-live-preview-art strong { max-width: 230px; font-size: 15px; line-height: 1.25; }
+.sm-live-preview-art small { color: rgba(24,49,54,.76); font-size: 10px; }
+.sm-live-preview-meta { min-height: 112px; padding: 13px; }
+.sm-live-preview-meta strong { color: var(--pl-color-ink); font-size: 12px; }
+.sm-live-preview-meta p { margin: 6px 0 8px; color: var(--pl-color-muted); font-size: 10px; line-height: 1.5; }
+.sm-live-preview-meta>span { color: var(--pl-color-muted); font-size: 9px; }
+@media (max-width: 767px) { .sm-live-preview-grid { grid-template-columns: minmax(0,1fr); } .sm-live-preview-art { min-height: 190px; } .sm-live-preview-meta { min-height: 0; padding: 10px; } }

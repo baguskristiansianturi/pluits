@@ -2312,3 +2312,38 @@
  .social-category-grid article:hover:before{transform:scale(1.05)}
 }
 @media(prefers-reduced-motion:reduce){.social-category-grid article:before{transition:none}}
+
+
+/* Social Profile owns its mobile entity rail and tab-panel breakout. */
+@media (max-width: 767px) {
+  .social-profile-entity-list.is-carousel {
+    width: calc(100% + 10px);
+    max-width: none;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: -10px;
+    padding-left: 0;
+    padding-right: 10px;
+    scroll-padding-left: 0;
+    scroll-padding-right: 10px;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .social-profile-entity-list.is-carousel .social-profile-business-card {
+    flex: 0 0 min(280px, 82vw);
+  }
+  .social-profile-page .social-profile-tab-panel[data-profile-panel="feed"],
+  .social-profile-page .social-profile-tab-panel[data-profile-panel="reels"],
+  .social-profile-page .social-profile-tab-panel[data-profile-panel="blog"] {
+    width: calc(100% + 20px);
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  .social-profile-page .social-profile-tab-panel[data-profile-panel="feed"] .social-empty-panel,
+  .social-profile-page .social-profile-tab-panel[data-profile-panel="reels"] .social-empty-panel,
+  .social-profile-page .social-profile-tab-panel[data-profile-panel="blog"] .social-empty-panel {
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+  }
+}

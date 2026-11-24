@@ -302,3 +302,38 @@ Social Media baru dinyatakan modular dan terisolasi setelah:
 - Existing Social pages: `src/features/social/social-pages.js`
 - Existing Feed/Post Card: `src/features/home/social-post-card.js`
 - Platform CSS contract: `PLUITS-MASTER-MODEL-APP/06-PLATFORM-UI-FOUNDATION/01-DESIGN-TOKENS/CSS-OWNERSHIP-AND-CASCADE-CONTRACT-001.md`
+
+
+## Pembaruan runtime — 25 November 2026 (PR #138)
+
+Peta historis di atas mencatat kondisi sebelum pemindahan pertama. Pada branch implementasi PR #138, kepemilikan runtime telah dipindahkan sebagai berikut:
+
+```text
+src/features/
+├── home/                         # public marketing homepage only
+└── social/
+    ├── home/                     # Social Home page, CSS, spec, carousel registry
+    ├── feed/                     # post-card renderer, interaction handlers, CSS
+    ├── blog/                     # independent /blog/ route, page, CSS, README
+    ├── stories/                  # owned Stories rail preview + CSS
+    ├── live/                     # owned Live preview + CSS
+    ├── reels/                    # owned short-video media renderer + CSS
+    ├── social-pages.js           # Discover, Messages, Profile, Settings (current combined surface)
+    └── social-pages.css
+```
+
+- `create-app.js` now mounts Social Home from `features/social/home/home-page.js`.
+- Feed post-card code and CSS are owned by `features/social/feed/`.
+- Blog has a public route `/blog/`, its own page module, category filtering, local search, and `.sm-blog-page` stylesheet namespace.
+- Social Home no longer renders Marketplace product previews, venue/merchant cards, service/transport/ticketing promotions, calendar blocks, or platform marketing sections. Its header/search now target Social Media experiences.
+- Social Home CSS is no longer imported directly by `main.js`; it is imported by the Social Home module.
+- Social-specific mobile geometry has been moved out of `design-system/mobile-layout-contract.css` into Social Home and Social Profile stylesheets. The shared contract retains platform gutter and Marketplace shell geometry only.
+
+This is an implemented ownership slice, not completion of all isolation. Remaining gaps: `social-pages.js` is still a combined runtime surface; Reels, Stories and Live now have owned preview/rendering modules and stylesheets, but their authoring, media processing, audience, publishing and lifecycle services are not active; Social Home retains legacy `.global-*` names for active Social-owned components, but obsolete product/merchant/service/calendar/story/live demo selectors have been pruned; complete selector/consumer mapping and browser visual regression are still required. Blog content is preview-only; backend publishing, persistence, article detail and comments are not active.
+
+
+## Verifikasi akhir PR #138
+
+Canonical runtime tree saat ini: `src/features/social/home/`, `feed/`, `blog/`, `stories/`, `live/`, `reels/`, ditambah `social-pages.js` / `social-pages.css` untuk Discover, Messages, Profile dan Settings. Folder `src/features/home/` hanya memiliki public marketing homepage.
+
+Audit batas kepemilikan/CSS dan browser regression dinyatakan lulus pada commit `0221b01113652329ccfe6dfabf130e510c3ca2b4`. Architecture checks, `npm test`, production build, serta Chromium audit 11 route × 3 viewport lulus. Bukti dan screenshot tersedia pada [PR #138](https://github.com/baguskristiansianturi/pluits/pull/138) dan [browser audit artifact](https://github.com/baguskristiansianturi/pluits/actions/runs/45457818960/artifacts/14951921051).
