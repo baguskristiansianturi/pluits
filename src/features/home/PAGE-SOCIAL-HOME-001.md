@@ -85,3 +85,11 @@
 - Implementation: social-post-card.js and social-post-card.css; component specification: SOCIAL-POST-CARD-INTERACTIONS-001.md; regression test: tests/features/home-responsive-visuals.test.js.
 - Verification and membership remain separate. Premium/Silver/Gold/Platinum/Priority markers are presentation fixtures pending approved entitlement/schema mapping. The amber unverified marker means “not verified”, not “fake account”.
 - Backend wallet, social reaction/comment APIs, creator payout, verification records, membership entitlements, and schema changes are not part of this increment. Android UAT remains pending.
+
+
+### Social feed reading density and controls
+- Caption previews are limited to five lines and expanded on demand; comments show up to six entries before an explicit expand control.
+- Feed demo cards are progressively revealed in batches of six with a soft “Tampilkan postingan lainnya” action, ending with “Jelajahi lagi”.
+- Content filters are presented as icon-plus-label controls in this order: Semua, Reel, Blog, Live, followed by Perbarui.
+- Perbarui returns the viewport to the top, displays a refreshing state for at least 1.5 seconds, and reloads the feed.
+- Photo and video media fill the viewport-width feed card; landscape media uses 16:9, portrait media 4:5, and Reel media 9:16.
