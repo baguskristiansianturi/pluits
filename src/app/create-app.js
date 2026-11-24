@@ -4,6 +4,8 @@ import { routeHref } from '../config/paths.js';
 import { renderBottomNavigation } from '../design-system/page-shell.js';
 import { mountHomePage } from '../features/home/home-page.js';
 import { mountBusinessHomePage } from '../features/home/business-home-page.js';
+import { mountVenueHomePage } from '../features/venue/venue-home-page.js';
+import { mountVenueProviderPage } from '../features/venue/venue-provider-page.js';
 import { mountMarketplaceHomePage } from '../features/marketplace/marketplace-home-page.js';
 import { mountDiscoverPage, mountMessagesPage, mountProfilePage, mountSettingsPage } from '../features/social/social-pages.js';
 import { mountDashboardPage } from '../features/dashboard/dashboard-page.js';
@@ -58,6 +60,8 @@ export function createApp({ root, authService }) {
     }
 
     if (route === 'home') { mountWithNavigation('', () => mountBusinessHomePage({ root, user: session?.user || null })); return; }
+    if (route === 'venue') { cleanupPage = mountVenueHomePage({ root, user: session?.user || null }); return; }
+    if (route === 'restaurant') { cleanupPage = mountVenueProviderPage({ root, user: session?.user || null }); return; }
     if (route === 'marketplace') { mountWithNavigation('discover', () => mountMarketplaceHomePage({ root })); return; }
     if (route === 'social') { cleanupPage = mountWithNavigation('social', () => mountHomePage({ root, user: session?.user || null, accessToken: session?.access_token || null, onSignOut: () => authService.signOut() })); return; }
     if (route === 'circle') { navigate('social'); return; }
