@@ -10,28 +10,9 @@ import { renderLivePreview } from '../live/live-preview.js';
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const contentTabs = [{id:'all',icon:'grid',label:'Semua'},{id:'reels',icon:'film',label:'Reel'},{id:'blog',icon:'book',label:'Blog'},{id:'live',icon:'radio',label:'Live'}];
-const demoCards = {
-  global:[['TRENDING','Cerita dari Bali','Momen dan cerita yang sedang ramai','sunset'],['KOMUNITAS','Ruang kreatif','Temukan komunitas dengan minat serupa','creative'],['KULINER','Rasa Nusantara','Rekomendasi tempat dan pengalaman lokal','food'],['JELAJAH','Akhir pekan','Inspirasi perjalanan di Indonesia','travel']],
-  nearby:[['DENPASAR','Sudut kota hari ini','Tempat menarik di sekitar Anda','city'],['KULINER','Tempat ngopi','Ruang santai untuk bertemu','coffee'],['AKTIVITAS','Agenda lokal','Aktivitas menarik di sekitar','event'],['KOMUNITAS','Teman sekitar','Kenali komunitas di area Anda','people']],
-  people:[['TEMAN BARU','Ayu Pratiwi','Travel · Bali','person-a'],['TEMAN BARU','Raka Mahendra','Photography · Jakarta','person-b'],['TEMAN BARU','Nadia Putri','Food & Lifestyle · Bandung','person-c'],['TEMAN BARU','Dimas Saputra','Creative · Yogyakarta','person-d'],['TEMAN BARU','Sinta Maharani','Community · Surabaya','person-e']]
-};
 const heading = (title, note, action, href) => '<div class="global-section-heading"><div><h2>' + title + '</h2>' + (note ? '<p>' + note + '</p>' : '') + '</div>' + (action ? '<a href="' + href + '">' + action + ' ' + renderIcon('eye') + '</a>' : '') + '</div>';
-function demoRail(items,label) {
-  return '<div class="global-bleed-wrap"><div class="global-demo-rail" aria-label="' + label + '">' + items.map((item,index)=>'<article class="global-demo-card global-demo-card--' + item[3] + '"><div class="global-demo-art"><span>' + item[0] + '</span><i>' + (index+1).toString().padStart(2,'0') + '</i></div><div class="global-demo-copy"><strong>' + item[1] + '</strong><p>' + item[2] + '</p></div></article>').join('') + '</div></div>';
-}
-function bottomNav() {
-  return '<nav class="global-bottom-nav" aria-label="Navigasi utama">' +
-    '<a href="' + routeHref('social') + '" class="is-active" aria-current="page">' + renderIcon('book') + '<span>Beranda</span></a>' +
-    '<a href="' + routeHref('discover') + '">' + renderIcon('eye') + '<span>Jelajah</span></a>' +
-    '<a class="global-create-button" href="' + routeHref('dashboard') + '" aria-label="Buka Ruang Kerja" title="Ruang Kerja"><span>+</span></a>' +
-    '<a href="' + routeHref('messages') + '" aria-label="Pesan">' + renderIcon('message') + '<span>Pesan</span></a>' +
-    '<a href="' + routeHref('profile') + '" aria-label="Profil">' + renderIcon('user') + '<span>Profil</span></a></nav>';
-}
 function quickSearchSheet() {
   return '<div class="global-search-backdrop" data-quick-search-backdrop hidden><section class="global-search-sheet" role="dialog" aria-modal="true" aria-labelledby="quick-search-title"><header><div><span class="global-kicker">SOCIAL MEDIA PLUITS</span><h2 id="quick-search-title">Temukan orang dan cerita.</h2></div><button type="button" data-close-quick-search aria-label="Tutup pencarian">×</button></header><form data-quick-search-form><label class="global-search-entry"><span class="ui-icon">' + renderIcon('search') + '</span><input type="search" name="q" placeholder="Cari orang, cerita, artikel..." autocomplete="off" autofocus><button type="submit">Cari</button></label></form><p class="global-search-sheet-label">Jelajahi Social Media</p><div class="global-search-category-grid"><a href="' + routeHref('discover') + '?category=people">Orang & komunitas</a><a href="' + routeHref('blog') + '">Artikel Blog</a></div></section></div>';
-}
-function createSheet() {
-  return '<div class="global-create-backdrop" data-create-backdrop hidden><section class="global-create-sheet" role="dialog" aria-modal="true" aria-labelledby="create-title"><button type="button" class="global-create-close" data-close-create aria-label="Tutup">×</button><span class="global-kicker">MULAI SESUATU</span><h2 id="create-title">Buat di PLUITS</h2><p>Pilih format yang ingin disiapkan. Publikasi akan diaktifkan setelah layanan terkait tersedia.</p><div class="global-create-options"><button disabled>Feed <small>Belum tersedia</small></button><button disabled>Reels <small>Belum tersedia</small></button><button disabled>Story <small>Belum tersedia</small></button><button disabled>Live <small>Belum tersedia</small></button><button disabled>Blog <small>Belum tersedia</small></button></div><a href="' + routeHref('dashboard') + '">Buka Dashboard pengelolaan →</a></section></div>';
 }
 function renderFeedState(message,loading=false) {
   return '<div class="global-feed-state' + (loading?' is-loading':'') + '">' + (loading?'<span class="global-feed-spinner" aria-hidden="true"></span>':'<span class="global-feed-state-icon">' + renderIcon('image') + '</span>') + '<strong>' + message + '</strong>' + (!loading?'<p>Konten publik yang sudah diterbitkan akan muncul di sini.</p>':'') + '</div>';
@@ -55,7 +36,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     '<nav class="global-content-tabs" data-content-tabs aria-label="Filter konten">' + contentTabs.map((tab,i)=>tab.id==='blog'?'<a class="global-content-tab-link" href="' + routeHref('blog') + '" aria-label="Buka Blog">' + renderIcon(tab.icon) + '<span>' + tab.label + '</span></a>':'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-label="' + tab.label + '" aria-pressed="' + (i===0?'true':'false') + '">' + renderIcon(tab.icon) + '<span>' + tab.label + '</span></button>').join('') + '<button type="button" class="global-content-refresh" data-feed-refresh aria-label="Perbarui konten" title="Perbarui">' + renderIcon('refresh') + '<span data-feed-refresh-label>Perbarui</span></button></nav>' + composerMarkup +
     streams + '</div>' +
     '</main>' +
-    bottomNav() + quickSearchSheet() + '</div>';
+    quickSearchSheet() + '</div>';
   const unmountSocialPostInteractions=mountSocialPostInteractions(root);
   const searchBackdrop=root.querySelector('[data-quick-search-backdrop]');
   const searchInput=root.querySelector('[data-quick-search-form] input[name="q"]');
