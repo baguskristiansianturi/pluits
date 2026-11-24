@@ -2,14 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-const homeJs = new URL('../../src/features/home/home-page.js', import.meta.url);
-const homeCss = new URL('../../src/features/home/home-page.css', import.meta.url);
+const homeJs = new URL('../../src/features/social/home/home-page.js', import.meta.url);
+const homeCss = new URL('../../src/features/social/home/home-page.css', import.meta.url);
 const discoverJs = new URL('../../src/features/social/social-pages.js', import.meta.url);
 const discoverCss = new URL('../../src/features/social/social-pages.css', import.meta.url);
 
 test('social home keeps illustrative content separated from interactive demo post fixtures', async () => {
   const source = await readFile(homeJs, 'utf8');
-  const cardSource = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
+  const cardSource = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
   assert.match(source, /renderSocialPostCard as renderPostCard/);
   assert.match(source, /renderDemoFeed\('feed'\)/);
   assert.match(cardSource, /export const demoFeedPosts = \[/);
@@ -88,7 +88,7 @@ test('authenticated home uses 10px mobile content gutters, edge-bleed carousels 
 test('Social Home has one canonical mobile geometry owner and registered carousel fixtures', async () => {
   const css = await readFile(homeCss, 'utf8');
   const readme = await readFile(new URL('../../src/features/home/README.md', import.meta.url), 'utf8');
-  const registry = await readFile(new URL('../../src/features/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
+  const registry = await readFile(new URL('../../src/features/social/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
   assert.equal((css.match(/SOCIAL-HOME-GEOMETRY-004/g) || []).length, 1);
   assert.match(css, /var\(--pl-page-gutter\)/);
   assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
@@ -145,8 +145,8 @@ test('Social Home contains only Social Media experiences and links outward only 
 });
 
 test('Nearby discovery preserves radius fallback and fair exposure requirements', async () => {
-  const spec = await readFile(new URL('../../src/features/home/PAGE-SOCIAL-HOME-001.md', import.meta.url), 'utf8');
-  const registry = await readFile(new URL('../../src/features/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
+  const spec = await readFile(new URL('../../src/features/social/home/PAGE-SOCIAL-HOME-001.md', import.meta.url), 'utf8');
+  const registry = await readFile(new URL('../../src/features/social/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
   assert.match(spec, /perluas bertahap/);
   assert.match(spec, /Jelajah/);
   assert.match(spec, /kesempatan/);
@@ -174,8 +174,8 @@ test('homepage Explore actions use soft interactive styling and nearby distance 
 
 
 test('social post demo contains four distinct posts, sample comments/replies and fully wired interaction controls', async () => {
-  const cardSource = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
-  const cardCss = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
+  const cardSource = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
+  const cardCss = await readFile(new URL('../../src/features/social/feed/social-post-card.css', import.meta.url), 'utf8');
   assert.match(cardSource, /id:'demo-post-alya'/);
   assert.match(cardSource, /id:'demo-post-raka'/);
   assert.match(cardSource, /id:'demo-post-nadia'/);
@@ -205,8 +205,8 @@ test('social post demo contains four distinct posts, sample comments/replies and
 
 
 test('social post card keeps the established card while comments align by reply author and media actions overlay', async () => {
-  const cardSource = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
-  const cardCss = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
+  const cardSource = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
+  const cardCss = await readFile(new URL('../../src/features/social/feed/social-post-card.css', import.meta.url), 'utf8');
   assert.match(cardSource, /renderReplies\(replies, postOwner\)/);
   assert.match(cardSource, /reply\.name === postOwner/);
   assert.match(cardSource, /pl-post-reply ' \+ sideClass/);
@@ -223,8 +223,8 @@ test('social post card keeps the established card while comments align by reply 
 
 
 test('social post comment and reply profiles carry account tier and verification markers', async () => {
-  const cardSource = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
-  const cardCss = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
+  const cardSource = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
+  const cardCss = await readFile(new URL('../../src/features/social/feed/social-post-card.css', import.meta.url), 'utf8');
   assert.match(cardSource, /function resolveDemoProfile\(person\)/);
   assert.match(cardSource, /function renderCommentProfile\(person, kind = 'comment'\)/);
   assert.match(cardSource, /renderCommentProfile\(comment\)/);
@@ -238,8 +238,8 @@ test('social post comment and reply profiles carry account tier and verification
 test('social stream uses one mixed timeline, icon filters, full-bleed media and a bounded sticky bar', async () => {
   const home = await readFile(homeJs, 'utf8');
   const homeStyles = await readFile(homeCss, 'utf8');
-  const postStyles = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
-  const card = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
+  const postStyles = await readFile(new URL('../../src/features/social/feed/social-post-card.css', import.meta.url), 'utf8');
+  const card = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
   assert.match(home, /data-content-stream/);
   assert.match(home, /data-feed-refresh/);
   assert.match(home, /data-content-tab="\' \+ tab\.id/);
@@ -255,8 +255,8 @@ test('social stream uses one mixed timeline, icon filters, full-bleed media and 
 });
 
 test('social feed preview renders twenty mixed posts with commentable blog cards and orientation-aware interactions', async () => {
-  const card = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
-  const css = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
+  const card = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
+  const css = await readFile(new URL('../../src/features/social/feed/social-post-card.css', import.meta.url), 'utf8');
   const home = await readFile(homeJs, 'utf8');
   assert.equal((card.match(/id:'demo-post-/g) || []).length, 20);
   assert.match(card, /type:'blog'/);
@@ -277,8 +277,8 @@ test('social feed preview renders twenty mixed posts with commentable blog cards
 
 
 test('social feed limits caption and comment previews and progressively reveals feed posts', async () => {
-  const card = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
-  const cardCss = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
+  const card = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
+  const cardCss = await readFile(new URL('../../src/features/social/feed/social-post-card.css', import.meta.url), 'utf8');
   const home = await readFile(homeJs, 'utf8');
   const homeStyles = await readFile(homeCss, 'utf8');
   assert.match(card, /data-caption-expand/);
