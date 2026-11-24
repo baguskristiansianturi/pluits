@@ -6,6 +6,7 @@
 3. Read the relevant ecosystem model, Product Design, and Application Modularization documents for the requested scope.
 4. Read `PLUITS-SHARING-INBOX/README.md` when processing discussion notes. Inbox material is unapproved until explicitly sorted and accepted.
 5. Inspect the actual current code, routes, database migrations, tests, workflows, and runtime evidence before implementation.
+6. Before creating or changing any page/UI, complete `PLUITS-MASTER-MODEL-APP/06-PLATFORM-UI-FOUNDATION/09-DESIGN-AND-DEVELOPMENT-SOP/UI-FOUNDATION-PREFLIGHT-AND-CONSUMPTION-001.md`. This is mandatory; do not begin markup or page CSS until existing tokens, icons, components, layout patterns, responsive rules, and consumers have been inspected.
 
 ## Authority and status
 - Approved requirements and decisions in the Master Model App are authoritative.
