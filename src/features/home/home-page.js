@@ -84,7 +84,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     {name:'Desa Penglipuran',type:'Desa wisata & budaya',image:'photo-1519681393784-d120267933ba',rating:'4,7',reviews:'1.120 ulasan',category:'places'},
     {name:'Kopi Seniman Ubud',type:'Kafe & kopi',image:'photo-1501339847302-ac426a4a7cbb',rating:'4,7',reviews:'864 ulasan',category:'restaurants'}
   ];
-  const topTen = '<section class="global-section global-top-ten" aria-label="Top 10 pilihan di Bali"><div class="global-section-heading"><div><h2>Top 10 di Bali</h2><p>Pilihan tempat, restoran, kuliner, dan aktivitas yang sedang dijelajahi.</p></div><a href="' + routeHref('discover') + '?scope=bali">Jelajahi semua <span aria-hidden="true">→</span></a></div><div class="global-top-ten-controls"><span>10 pilihan teratas</span><div><button type="button" data-top-ten-prev aria-label="Geser Top 10 ke kiri">‹</button><button type="button" data-top-ten-next aria-label="Geser Top 10 ke kanan">›</button></div></div><div class="global-top-ten-rail" data-top-ten-rail aria-label="Sepuluh pilihan teratas di Bali">' + topTenItems.map((item,index) => '<a class="global-top-ten-card" href="' + routeHref('discover') + '?scope=bali"><img src="https://images.unsplash.com/' + item.image + '?auto=format&fit=crop&w=900&q=82" alt="' + item.name + '" loading="lazy"><span class="global-top-ten-rank">TOP ' + String(index+1).padStart(2,'0') + '</span><span class="global-top-ten-overlay"><small>' + item.type + '</small><strong>' + item.name + '</strong><span class="global-top-ten-meta">★ ' + item.rating + ' <i>·</i> ' + item.reviews + '</span></span></a>').join('') + '</div></section>';
+  const topTen = '<section class="global-section global-top-ten" aria-label="Top 10 pilihan di Bali"><div class="global-section-heading"><div><h2>Top 10 di Bali</h2><p>Pilihan tempat, restoran, kuliner, dan aktivitas yang sedang dijelajahi.</p></div><a href="' + routeHref('discover') + '?scope=bali">Jelajahi semua <span aria-hidden="true">→</span></a></div><div class="global-top-ten-controls"><span>10 pilihan teratas</span><div><button type="button" data-top-ten-prev aria-label="Geser Top 10 ke kiri">‹</button><button type="button" data-top-ten-next aria-label="Geser Top 10 ke kanan">›</button></div></div><div class="global-top-ten-rail" data-top-ten-rail aria-label="Sepuluh pilihan teratas di Bali">' + topTenItems.map((item,index) => '<a class="global-top-ten-card" href="' + routeHref('discover') + '?scope=bali"><img src="https://images.unsplash.com/' + item.image + '?auto=format&fit=crop&w=900&q=82" alt="' + item.name + '" loading="lazy" decoding="async" fetchpriority="low"><span class="global-top-ten-rank">TOP ' + String(index+1).padStart(2,'0') + '</span><span class="global-top-ten-overlay"><small>' + item.type + '</small><strong>' + item.name + '</strong><span class="global-top-ten-meta">★ ' + item.rating + ' <i>·</i> ' + item.reviews + '</span></span></a>').join('') + '</div></section>';
   const nearbyItems = [
     {name:'Sundara Beach Club',category:'Beach club & restoran',location:'Jimbaran, Denpasar Selatan',distance:'4,2 km',image:'photo-1519046904884-53103b34b206',rating:'4,8',reviews:'214 ulasan',quote:'“Pemandangan lautnya indah, staf sigap, dan area makannya tertata nyaman.”'},
     {name:'Kopi Nako Denpasar',category:'Kafe & kedai kopi',location:'Renon, Denpasar',distance:'1,1 km',image:'photo-1501339847302-ac426a4a7cbb',rating:'4,7',reviews:'186 ulasan',quote:'“Tempatnya nyaman untuk bekerja sebentar, pilihan kopi dan makanannya beragam.”'},
@@ -92,7 +92,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     {name:'Warung Wardani',category:'Kuliner khas Bali',location:'Renon, Denpasar',distance:'2,3 km',image:'photo-1547592180-85f173990554',rating:'4,6',reviews:'428 ulasan',quote:'“Nasi campurnya lengkap dengan rasa bumbu Bali yang kuat.”'},
     {name:'Taman Inspirasi Mertasari',category:'Pantai & ruang rekreasi',location:'Sanur, Denpasar Selatan',distance:'3,8 km',image:'photo-1507525428034-b723cf961a3e',rating:'4,5',reviews:'316 ulasan',quote:'“Area pantainya teduh dan enak untuk berjalan santai menjelang sore.”'}
   ];
-  const nearby = '<section class="global-section global-nearby" id="nearby">' + heading('Di sekitar Anda','Tempat, usaha, dan pengalaman menarik di area Denpasar.','Lihat semua',routeHref('discover')) + '<div class="global-local-rail">' + nearbyItems.map(item=>'<a class="global-local-card" href="' + routeHref('discover') + '"><div class="global-local-image"><img src="https://images.unsplash.com/' + item.image + '?auto=format&fit=crop&w=760&q=82" alt="' + item.name + '" loading="lazy"><span class="global-local-rating">★ ' + item.rating + ' <i>·</i> ' + item.reviews + '</span><span class="global-local-distance">' + item.distance + '</span></div><span class="global-local-copy"><small class="global-local-category">' + item.category + '</small><strong>' + item.name + '</strong><span class="global-local-location">' + item.location + '</span><span class="global-local-review"><b>ULASAN PENGUNJUNG</b>' + item.quote + '</span></span></a>').join('') + '</div></section>';
+  const nearby = '<section class="global-section global-nearby" id="nearby">' + heading('Di sekitar Anda','Tempat, usaha, dan pengalaman menarik di area Denpasar.','Lihat semua',routeHref('discover')) + '<div class="global-local-rail">' + nearbyItems.map(item=>'<a class="global-local-card" href="' + routeHref('discover') + '"><div class="global-local-image"><img src="https://images.unsplash.com/' + item.image + '?auto=format&fit=crop&w=760&q=82" alt="' + item.name + '" loading="lazy" decoding="async" fetchpriority="low"><span class="global-local-rating">★ ' + item.rating + ' <i>·</i> ' + item.reviews + '</span><span class="global-local-distance">' + item.distance + '</span></div><span class="global-local-copy"><small class="global-local-category">' + item.category + '</small><strong>' + item.name + '</strong><span class="global-local-location">' + item.location + '</span><span class="global-local-review"><b>ULASAN PENGUNJUNG</b>' + item.quote + '</span></span></a>').join('') + '</div></section>';
   const streams = contentTabs.map((tab,index) => {
     const body=tab.id==='feed'?'<div class="global-post-list" data-live-feed>' + renderDemoFeed('feed') + '</div>'
       :tab.id==='reels'?'<div class="global-post-list global-reels-list" data-live-reels>' + renderDemoFeed('reels') + '</div>'
@@ -136,29 +136,26 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   root.querySelectorAll('[data-top-ten-rail]').forEach(rail=>{
     const first=rail.firstElementChild;
     if(!first)return;
-    const clone=first.cloneNode(true);clone.setAttribute('aria-hidden','true');clone.tabIndex=-1;rail.append(clone);
-    if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
-    let timer=null,resumeTimer=null,autoMoving=false;
+    const clone=first.cloneNode(true);clone.setAttribute('aria-hidden','true');clone.removeAttribute('href');
+    clone.querySelectorAll('[id]').forEach(node=>node.removeAttribute('id'));rail.append(clone);
+    const reduceMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    let timer=null,resumeTimer=null,settleTimer=null,autoMoving=false,inViewport=false;
     const previousButton=root.querySelector('[data-top-ten-prev]');
     const nextButton=root.querySelector('[data-top-ten-next]');
-    previousButton?.addEventListener('click',()=>{rail.scrollBy({left:-rail.clientWidth,behavior:'smooth'});pause();});
-    nextButton?.addEventListener('click',()=>{rail.scrollBy({left:rail.clientWidth,behavior:'smooth'});pause();});
-    const advance=()=>{
-      const next=rail.scrollLeft+rail.clientWidth;
-      autoMoving=true;
-      rail.scrollTo({left:next,behavior:'smooth'});
-      window.setTimeout(()=>{
-        const atLoop=rail.scrollLeft+rail.clientWidth>=rail.scrollWidth-2;
-        if(atLoop){rail.scrollTo({left:0,behavior:'instant'});}
-        autoMoving=false;
-      },520);
-    };
-    const start=()=>{window.clearInterval(timer);timer=window.setInterval(advance,2600);};
-    const pause=()=>{window.clearInterval(timer);window.clearTimeout(resumeTimer);resumeTimer=window.setTimeout(start,6000);};
+    const step=()=>{const card=rail.firstElementChild;return card?card.getBoundingClientRect().width+(parseFloat(getComputedStyle(rail).columnGap)||0):rail.clientWidth;};
+    const clearAuto=()=>{window.clearTimeout(timer);timer=null;};
+    const schedule=()=>{clearAuto();if(!reduceMotion&&inViewport&&document.visibilityState==='visible'&&!resumeTimer)timer=window.setTimeout(advance,3200);};
+    const pause=()=>{clearAuto();window.clearTimeout(resumeTimer);resumeTimer=window.setTimeout(()=>{resumeTimer=null;schedule();},6000);};
+    const finishMove=()=>{window.clearTimeout(settleTimer);if(rail.scrollLeft>=rail.scrollWidth-rail.clientWidth-2)rail.scrollTo({left:0,behavior:'instant'});autoMoving=false;schedule();};
+    const advance=()=>{if(!inViewport||document.visibilityState!=='visible')return schedule();autoMoving=true;rail.scrollBy({left:step(),behavior:reduceMotion?'auto':'smooth'});settleTimer=window.setTimeout(finishMove,700);};
+    previousButton?.addEventListener('click',()=>{rail.scrollBy({left:-step(),behavior:'smooth'});pause();});
+    nextButton?.addEventListener('click',()=>{rail.scrollBy({left:step(),behavior:'smooth'});pause();});
     ['pointerdown','touchstart','wheel','focusin'].forEach(type=>rail.addEventListener(type,pause,{passive:true}));
     rail.addEventListener('scroll',()=>{if(!autoMoving)pause();},{passive:true});
-    start();
-    autoplayCleanups.push(()=>{window.clearInterval(timer);window.clearTimeout(resumeTimer);});
+    const visibilityChange=()=>{if(document.visibilityState!=='visible')clearAuto();else schedule();};document.addEventListener('visibilitychange',visibilityChange);
+    const observer=('IntersectionObserver' in window)?new IntersectionObserver(entries=>{inViewport=Boolean(entries[0]?.isIntersecting);if(inViewport)schedule();else clearAuto();},{threshold:0.15}):null;
+    if(observer)observer.observe(rail);else inViewport=true;schedule();
+    autoplayCleanups.push(()=>{clearAuto();window.clearTimeout(resumeTimer);window.clearTimeout(settleTimer);observer?.disconnect();document.removeEventListener('visibilitychange',visibilityChange);});
   });
   const controller=new AbortController();
   const feedTarget=root.querySelector('[data-live-feed]');
