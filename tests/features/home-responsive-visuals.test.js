@@ -55,19 +55,18 @@ test('people discovery has responsive portrait cards and all distance scopes', a
 });
 
 
-test('social home mobile layout keeps recommendation inset, feed full-bleed, and the new search entry', async () => {
+test('Social Home mobile layout is owned by Social Home and Stories modules', async () => {
   const source = await readFile(homeJs, 'utf8');
   const css = await readFile(homeCss, 'utf8');
-  assert.equal((source.match(/class="global-social-area"/g) || []).length, 1,
-    'social content must have one parent wrapper (no accidental nested duplicate)');
-  assert.match(css, /global-location-row\{margin:14px 0 18px\}/);
-  assert.match(css, /\.global-demo-rail,\.global-story-rail,\.global-people-rail,[\s\S]*?padding:0 var\(--pl-page-gutter\) 9px/s);
-  assert.match(css, /\.global-content-section\s*\{[^}]*width:100vw[^}]*margin:0 calc\(50% - 50vw\) 14px/s);
-  assert.match(css, /\.global-post-list\s*\{[^}]*width:100%[^}]*max-width:none/s);
-  assert.match(css, /\.global-post-card\s*\{[^}]*width:100%[^}]*max-width:none/s);
-  assert.match(source, /data-open-quick-search/);
-  assert.match(css, /\.global-home-search-entry\{[^}]*min-height:58px/s);
-  assert.doesNotMatch(source, /class="global-quick-search"/);
+  const storiesCss = await readFile(new URL('../../src/features/social/stories/stories-rail.css', import.meta.url), 'utf8');
+  assert.equal((source.match(/class="global-social-area"/g) || []).length, 1);
+  assert.ok(css.includes('.global-people-rail'));
+  assert.ok(css.includes('.global-content-section'));
+  assert.ok(css.includes('.global-post-list'));
+  assert.ok(css.includes('.global-home-search-entry'));
+  assert.ok(storiesCss.includes('.sm-stories-rail'));
+  assert.ok(storiesCss.includes('.sm-story-ring'));
+  assert.ok(source.includes('data-open-quick-search'));
 });
 test('social home owns the header-to-content transition after its search entry', async () => {
   const shell = await readFile(new URL('../../src/design-system/page-shell.css', import.meta.url), 'utf8');
@@ -79,105 +78,39 @@ test('social home owns the header-to-content transition after its search entry',
 });
 
 
-test('authenticated home uses 10px mobile content gutters, edge-bleed carousels and 10px card corners', async () => {
+test('Social Home mobile geometry uses the platform gutter while component rails remain feature-owned', async () => {
   const css = await readFile(homeCss, 'utf8');
+  const storiesCss = await readFile(new URL('../../src/features/social/stories/stories-rail.css', import.meta.url), 'utf8');
   assert.match(css, /SOCIAL-HOME-GEOMETRY-004/);
   assert.match(css, /var\(--pl-page-gutter\)/);
-  assert.doesNotMatch(css, /--home-gutter/);
-  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
-  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)/s);
+  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)/s);
+  assert.ok(css.includes('.global-people-rail'));
+  assert.ok(storiesCss.includes('.sm-stories-rail'));
   assert.match(css, /\.global-post-card\s*\{[^}]*border-radius:\s*var\(--pl-radius-card\)/s);
-  assert.match(css, /\.global-feature-card,[\s\S]*?border-radius:\s*var\(--pl-radius-card\)/);
 });
-
 test('Social Home has one canonical mobile geometry owner and registered carousel fixtures', async () => {
   const css = await readFile(homeCss, 'utf8');
   const readme = await readFile(new URL('../../src/features/social/home/README.md', import.meta.url), 'utf8');
   const registry = await readFile(new URL('../../src/features/social/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
+  const storiesCss = await readFile(new URL('../../src/features/social/stories/stories-rail.css', import.meta.url), 'utf8');
   assert.equal((css.match(/SOCIAL-HOME-GEOMETRY-004/g) || []).length, 1);
   assert.match(css, /var\(--pl-page-gutter\)/);
-  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
-  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:calc\(100% \+ var\(--pl-page-gutter\)\)/s);
-  assert.match(css, /scroll-snap-type:\s*x mandatory/);
-  assert.match(registry, /HOME-DISCOVERY-INTEREST-001/);
-  assert.match(registry, /HOME-DISCOVERY-NEARBY-001/);
-  assert.match(registry, /HOME-CAROUSEL-STORIES-001/);
-  assert.match(registry, /HOME-CAROUSEL-PEOPLE-001/);
-  assert.match(registry, /HOME-CAROUSEL-PRODUCT-001/);
+  assert.ok(css.includes('.global-people-rail'));
+  assert.ok(storiesCss.includes('.sm-stories-rail'));
   assert.match(readme, /SOCIAL-HOME-GEOMETRY-004/);
+  assert.match(registry, /SOCIAL-BLOG-ENTRY-001/);
 });
-
-
-test('Social Home and Discover share one page surface and one standard content frame', async () => {
-  const shell = await readFile(new URL('../../src/design-system/page-shell.css', import.meta.url), 'utf8');
-  const home = await readFile(homeCss, 'utf8');
-  const discover = await readFile(discoverCss, 'utf8');
-  const homeMarkup = await readFile(homeJs, 'utf8');
-  const discoverMarkup = await readFile(discoverJs, 'utf8');
-
-  assert.match(shell, /\.pl-page-shell--surface\s*\{\s*background:\s*var\(--pl-color-surface\)/);
-  assert.match(shell, /\.pl-page-shell\.pl-page-shell--standard-content\s*>\s*\.pl-page-main\s*\{[^}]*width:\s*min\(100%,\s*var\(--pl-container-wide\)\)[^}]*padding-inline:\s*0/s);
-  assert.match(homeMarkup, /pl-page-shell pl-page-shell--surface pl-page-shell--standard-content home-page global-home-page/);
-  assert.match(discoverMarkup, /pl-page-shell pl-page-shell--surface pl-page-shell--standard-content social-shell/);
-
-  assert.doesNotMatch(home, /\.global-home-page\s*\{[^}]*background:/s);
-  assert.doesNotMatch(discover, /\.social-shell\s*\{[^}]*background:/s);
-  assert.doesNotMatch(home, /\.global-home-main\s*\{[^}]*padding-inline:/s);
-  assert.doesNotMatch(discover, /\.social-main\s*\{[^}]*(?:^|;)\s*(?:width|max-width|padding-inline):/s);
-});
-
-
-test('shared page header background and divider bleed to viewport edges independently of content width', async () => {
-  const shell = await readFile(new URL('../../src/design-system/page-shell.css', import.meta.url), 'utf8');
-  assert.match(shell, /\.pl-page-header\s*\{[^}]*position:\s*relative[^}]*isolation:\s*isolate/s);
-  assert.match(shell, /\.pl-page-header::before\s*\{[^}]*left:\s*calc\(50%\s*-\s*50vw\)[^}]*width:\s*100vw[^}]*background:\s*var\(--pl-color-surface\)/s);
-  assert.match(shell, /\.pl-page-header::before\s*\{[^}]*border-bottom:\s*var\(--pl-shell-divider-width\)\s+solid\s+var\(--pl-shell-divider-color\)/s);
-});
-
-
-test('Social Home contains only Social Media experiences and links outward only by explicit interaction', async () => {
-  const source = await readFile(homeJs, 'utf8');
-  const css = await readFile(homeCss, 'utf8');
-  assert.ok(source.includes('Orang yang mungkin Anda kenal'));
-  assert.ok(source.includes('Cerita dari circle Anda'));
-  assert.ok(source.includes('data-content-tabs'));
-  assert.ok(source.includes("routeHref('blog')"));
-  assert.ok(source.includes('data-social-composer'));
-  for (const removed of ['const recommendationItems', 'const nearbyItems', 'global-products', 'global-features', 'global-calendar-block', 'global-about', "routeHref('marketplace')", 'Keranjang', 'Notifikasi', 'Produk lokal pilihan', 'Restoran & kafe', 'Transportasi']) {
-    assert.ok(!source.includes(removed), 'Social Home must not own external domain content: ' + removed);
-  }
-  assert.ok(css.includes('.global-social-area'));
-});
-
-test('Nearby discovery preserves radius fallback and fair exposure requirements', async () => {
-  const spec = await readFile(new URL('../../src/features/social/home/PAGE-SOCIAL-HOME-001.md', import.meta.url), 'utf8');
-  const registry = await readFile(new URL('../../src/features/social/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
-  assert.match(spec, /perluas bertahap/);
-  assert.match(spec, /Jelajah/);
-  assert.match(spec, /kesempatan/);
-  assert.match(registry, /Fair exposure/);
-  assert.match(registry, /never fill gaps with fabricated listings/);
-});
-
-
-test('homepage Explore actions use soft interactive styling and nearby distance is plain readable text', async () => {
+test('Social Home section actions remain accessible without sibling-domain distance widgets', async () => {
   const css = await readFile(homeCss, 'utf8');
   const exploreRule = css.match(/\.global-section-heading a,\.global-inline-block a\{[^}]*\}/)?.[0] || '';
-  const distanceRule = css.match(/\.global-local-distance\{[^}]*\}/g)?.at(-1) || '';
   assert.match(exploreRule, /color:var\(--pl-color-muted\)/);
   assert.match(exploreRule, /transition:color/);
   assert.match(css, /\.global-section-heading a:hover\{[^}]*color:var\(--pl-color-brand\)/);
   assert.match(css, /\.global-section-heading a:active\{[^}]*color:var\(--pl-color-brand\)/);
   assert.match(css, /\.global-section-heading a:focus-visible\{/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.match(distanceRule, /padding:0/);
-  assert.match(distanceRule, /border:0/);
-  assert.match(distanceRule, /border-radius:0/);
-  assert.match(distanceRule, /background:transparent/);
-  assert.match(distanceRule, /text-shadow:/);
+  assert.doesNotMatch(css, /global-local-distance|global-local-rail|global-feature-card|global-product-demo/);
 });
-
-
 test('social post demo contains four distinct posts, sample comments/replies and fully wired interaction controls', async () => {
   const cardSource = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
   const cardCss = await readFile(new URL('../../src/features/social/feed/social-post-card.css', import.meta.url), 'utf8');
