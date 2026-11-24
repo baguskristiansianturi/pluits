@@ -188,11 +188,11 @@ test('social stream uses one mixed timeline, icon filters, full-bleed media and 
   assert.match(home, /data-feed-refresh/);
   assert.ok(home.includes("data-content-tab=\"' + tab.id"));
   assert.doesNotMatch(home, /label:'Feed'/);
-  assert.match(homeStyles, /\.global-content-tabs\{position:sticky;top:0/);
-  assert.match(homeStyles, /\.global-header\{position:relative;top:auto/);
+  assert.match(homeStyles, /\.global-content-tabs\s*\{position:sticky;top:0/);
+  assert.match(homeStyles, /\.global-header\s*\{position:relative;top:auto/);
   assert.match(postStyles, /width:100vw;max-width:none;margin-inline:calc\(50% - 50vw\)/);
-  assert.match(postStyles, /\.pl-post-card\.is-horizontal[\s\S]*?aspect-ratio:16\/9/);
-  assert.match(postStyles, /\.pl-post-card\.is-vertical[\s\S]*?aspect-ratio:4\/5/);
+  assert.match(postStyles, /\.pl-post-card\.is-horizontal\s*\{[\s\S]*?aspect-ratio:16\/9/);
+  assert.match(postStyles, /\.pl-post-card\.is-vertical\s*\{[\s\S]*?aspect-ratio:4\/5/);
   assert.match(card, /durationSeconds:43/);
   assert.match(card, /durationSeconds:78/);
   assert.match(reels, /Number\(post\.durationSeconds \|\| 0\) <= 60/);
