@@ -122,3 +122,10 @@ Automated tests and production deployment verify source contracts and build outp
 - Organic exposure must balance proximity, relevance, quality, availability, trust and fair opportunity for eligible/new partners. Popularity and posting frequency cannot monopolize discovery.
 - Home currently shows explicitly labelled structural preview cards only. GPS, GeoDirectory listings, live distances, ratings/reviews, partner ranking and Fluid Food handoff are not connected in this frontend build.
 - Runtime: `home-page.js` and `home-page.css`; discovery component inventory: `HOME-CAROUSEL-REGISTRY.md`; product specification: `PAGE-SOCIAL-HOME-001.md`.
+
+
+## Editorial presentation refinement — 24 November 2026
+- Home discovery keeps only the section title and the relevant "Lihat semua" action outside cards; explanatory and implementation-status paragraphs do not appear in the consumer-facing layout.
+- Interest cards show one concise interest label over the image. Nearby preview tiles show GeoDirectory category names over imagery and do not fabricate merchant names, ratings, distances, or GPS state.
+- Technical integration caveats belong in product/developer documentation, not in the Home discovery UI.
+- The search entry uses a short label without a descriptive paragraph; do not show a hardcoded sample city as if it were the user's active location.
