@@ -134,16 +134,15 @@ test('account settings include privacy, display name and username controls',asyn
  assert.match(social,/\^\[a-z0-9\.\_\]\{3,30\}\$/);
 });
 
-test('nearby restaurant preview opens the existing public restaurant profile',async()=>{
+test('Social Home no longer embeds external merchant listings; venue remains a separate route owner',async()=>{
  const home=await readFile(new URL('../src/features/home/home-page.js',import.meta.url),'utf8');
  const provider=await readFile(new URL('../src/features/venue/venue-provider-page.js',import.meta.url),'utf8');
  const app=await readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8');
- assert.match(home,/name:'The Garden Table'/);
- assert.match(home,/route:'restaurant'/);
- assert.match(home,/item\.route \? routeHref\(item\.route\)/);
+ assert.doesNotMatch(home,/The Garden Table|global-local-card|routeHref\\('restaurant'\\)/);
  assert.match(provider,/mountVenueProviderPage/);
  assert.match(app,/route === 'restaurant'.*mountVenueProviderPage/s);
 });
+
 
 
 test('Social Media Blog is a standalone route with module-owned CSS and no cross-feature imports',async()=>{
