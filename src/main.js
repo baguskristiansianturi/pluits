@@ -5,6 +5,7 @@ import './features/marketplace/marketplace-home.css';
 import './features/dashboard/dashboard-page.css';
 import './features/auth/auth-page.css';
 import './features/legal/policy-page.css';
+import './design-system/mobile-layout-contract.css';
 import { createFirstPartyAuthService } from './services/auth/first-party-auth-service.js';
 import { createApp } from './app/create-app.js';
 import { APP_BASE_URL, API_BASE_URL } from './config/runtime.js';
