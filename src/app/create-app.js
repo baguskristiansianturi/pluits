@@ -2,7 +2,7 @@ import { resolveAuthenticatedRoute, resolveRoute } from './routes.js';
 import { restoreInitialSession } from './restore-initial-session.js';
 import { routeHref } from '../config/paths.js';
 import { renderBottomNavigation } from '../design-system/page-shell.js';
-import { mountHomePage } from '../features/home/home-page.js';
+import { mountHomePage } from '../features/social/home/home-page.js';
 import { mountBusinessHomePage } from '../features/home/business-home-page.js';
 import { mountVenueHomePage } from '../features/venue/venue-home-page.js';
 import { mountVenueProviderPage } from '../features/venue/venue-provider-page.js';
