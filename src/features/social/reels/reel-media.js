@@ -1,3 +1,5 @@
+import './reel-media.css';
+
 export function isReelPost(post) {
   return post?.type === 'video' && Number(post.durationSeconds || 0) <= 60;
 }
