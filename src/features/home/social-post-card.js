@@ -7,7 +7,7 @@ const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => 
 export const demoFeedPosts = [
   {
     id:'demo-post-alya',authorName:'Alya Prameswari',username:'alya.prameswari',avatar:'photo-1534528741775-53994a69daeb',
-    verification:'verified',membership:'Premium',membershipMark:'✦',time:'Baru saja',type:'photo',
+    verification:'verified',membership:'Gold',membershipMark:'G',premium:true,time:'Baru saja',type:'photo',
     caption:'Golden hour, little moments, and a view I never get tired of. 🌅\\n\\nSudut favorit untuk menikmati sore dan cerita baru. #Bali #Sunset',
     mediaUrl:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=85',
     likes:2486,likeLabel:'2,4 rb',giftCount:32,commentsCount:184,
@@ -74,7 +74,8 @@ let demoWallet = 500;
 function avatarMarkup(post) {
   const image = post.avatar ? '<img src="https://images.unsplash.com/' + escapeHtml(post.avatar) + '?auto=format&fit=crop&w=120&h=120&q=75" alt="" loading="lazy">' : '<span>' + escapeHtml((post.authorName || 'P').slice(0,1)) + '</span>';
   const tierClass = post.membership === 'Premium' ? 'premium' : post.membership === 'Silver' ? 'silver' : post.membership === 'Gold' ? 'gold' : post.membership === 'Platinum' ? 'platinum' : 'priority';
-  return '<span class="pl-post-avatar-wrap"><span class="pl-post-avatar">' + image + '</span><span class="pl-post-tier pl-post-tier--' + tierClass + '" title="' + escapeHtml(post.membership) + '" aria-label="Membership ' + escapeHtml(post.membership) + '">' + escapeHtml(post.membershipMark || '•') + '</span></span>';
+  const premiumMark = post.premium ? '<span class="pl-post-premium-mark" title="Premium" aria-label="Premium">✦</span>' : '';
+  return '<span class="pl-post-avatar-wrap"><span class="pl-post-avatar">' + image + '</span>' + premiumMark + '<span class="pl-post-tier pl-post-tier--' + tierClass + '" title="' + escapeHtml(post.membership) + '" aria-label="Membership ' + escapeHtml(post.membership) + '">' + escapeHtml(post.membershipMark || '•') + '</span></span>';
 }
 function statusMarkup(post) {
   return post.verification === 'unverified'
