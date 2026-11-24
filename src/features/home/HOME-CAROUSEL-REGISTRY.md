@@ -5,7 +5,7 @@ Status: canonical inventory for Social Home visual components. Geometry consumes
 | Component ID | Selector | Mobile behavior | Content / ownership |
 |---|---|---|---|
 | HOME-DISCOVERY-INTEREST-001 | `.global-interest-grid` / `.global-interest-card` | Two-column visual interest grid | Interest and experience prompts; never business listings or ranked places |
-| HOME-DISCOVERY-NEARBY-001 | `.global-local-rail` / `.global-local-card--preview` | Horizontal swipe rail, approximately 70vw cards | All-category GeoDirectory listing cards; production data must come from GeoDirectory |
+| HOME-DISCOVERY-NEARBY-001 | `.global-local-rail` / `.global-local-card--listing` | Horizontal swipe rail, approximately 70vw cards | Named place/business cards with specific type, locality, km distance, review context, and concise description |
 | HOME-CAROUSEL-STORIES-001 | `.global-story-rail` | Horizontal swipe rail | `storyRail()` in `home-page.js` |
 | HOME-CAROUSEL-PEOPLE-001 | `.global-people-rail` | Horizontal swipe rail | People discovery collection in `mountHomePage()` |
 | HOME-CAROUSEL-PRODUCT-001 | `.global-product-demo-rail` | Horizontal swipe rail | Product preview collection in `home-page.js` |
@@ -25,7 +25,7 @@ Status: canonical inventory for Social Home visual components. Geometry consumes
 - Includes all eligible GeoDirectory categories: food, pharmacies, clinics, dental care, shops, attractions, activities, services and more.
 - Starts at a 5 km radius. Expand progressively (for example, 5–10 km) when eligible results are insufficient; never fill gaps with fabricated listings.
 - Home is a preview. "Lihat semua" opens Jelajah, where users can change radius continuously and explore other areas.
-- Each real listing must derive name, category, location, distance and trust/review metadata from the canonical provider/location records.
+- Cards represent individual named places/providers, never generic category tiles (for example, show Atlas Beach Club — Beach Club, not a Coffee & Café or Pharmacy category card).\n- Card hierarchy: place image; distance in km; place name; specific venue type and locality; review/reputation context; one short description.\n- Rating and review totals may appear only when sourced from real, eligible review records. Never invent scores, counts, review quotes, or verification badges.\n- Descriptions must be concise and factual, sourced from the canonical place/provider profile.
 - If location permission or GeoDirectory data is unavailable, explain the limitation and avoid implying GPS or live proximity.
 
 ## Fair exposure
@@ -41,4 +41,4 @@ Organic discovery balances proximity, relevance, quality, availability, trust an
 
 ## Data integrity
 
-Current cards are labelled as visual previews and are not live businesses, verified listings, ratings, reviews, location results or transactions. Production integration requires the GeoDirectory service and approved data contract.
+Current Home cards are static layout fixtures for named venues and are not live GeoDirectory results. Their distances are illustrative; the review/reputation line demonstrates the intended information slot and does not assert a live rating or review count. Production values must come from GeoDirectory place records, location calculation, and the verified review service. Never render illustrative distance or trust values as production data.

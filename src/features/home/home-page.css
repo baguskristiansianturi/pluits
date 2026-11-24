@@ -918,7 +918,7 @@ body.global-search-open{overflow:hidden}
 .global-local-card{contain:layout paint}
 .global-home-main>.global-social-area,.global-home-main>.global-products,.global-home-main>.global-features,.global-home-main>.global-calendar-block,.global-home-main>.global-about{content-visibility:auto;contain-intrinsic-size:auto 900px}
 
-/* HOME-DISCOVERY-CLEAN-002 — editorial discovery surfaces with concise labels. */
+/* HOME-DISCOVERY-CLEAN-002 — concise, place-led discovery cards. */
 .global-recommendations{min-width:0;margin-bottom:22px}
 .global-interest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .global-interest-card{position:relative;display:block;min-width:0;min-height:164px;overflow:hidden;aspect-ratio:1.35/1;border-radius:var(--pl-radius-card);background:var(--pl-color-canvas);color:#fff;text-decoration:none;isolation:isolate}
@@ -928,19 +928,25 @@ body.global-search-open{overflow:hidden}
 .global-interest-overlay{position:absolute;z-index:1;right:12px;bottom:12px;left:12px;display:grid;gap:4px}
 .global-interest-overlay strong{font-size:clamp(13px,1.5vw,17px);line-height:1.2}
 .global-nearby{min-width:0;margin-bottom:24px}
-.global-local-card--preview{position:relative;display:block;flex:0 0 70vw;max-width:300px;min-height:0;aspect-ratio:1.35/1;border:0;border-radius:var(--pl-radius-card);background:var(--pl-color-canvas)}
-.global-local-card--preview .global-local-image{position:absolute;inset:0;aspect-ratio:auto}
-.global-local-card--preview .global-local-image:after{position:absolute;inset:35% 0 0;background:linear-gradient(180deg,transparent,rgba(8,17,29,.82));content:""}
-.global-local-card--preview .global-local-copy{position:absolute;z-index:1;right:12px;bottom:12px;left:12px;display:block;padding:0;color:#fff}
-.global-local-card--preview .global-local-copy strong{font-size:14px;line-height:1.2}
+.global-local-card--listing{display:flex;flex:0 0 70vw;max-width:310px;min-width:0;overflow:hidden;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-card);background:var(--pl-color-surface);color:var(--pl-color-ink);text-decoration:none;scroll-snap-align:start}
+.global-local-card--listing .global-local-image{position:relative;aspect-ratio:1.55/1;overflow:hidden;background:var(--pl-color-canvas)}
+.global-local-card--listing .global-local-image img{display:block;width:100%;height:100%;object-fit:cover}
+.global-local-distance{position:absolute;top:9px;right:9px;padding:6px 8px;border:1px solid rgba(255,255,255,.22);border-radius:6px;background:rgba(12,25,38,.82);color:#fff;font-size:10px;font-weight:750;backdrop-filter:blur(6px)}
+.global-local-card--listing .global-local-copy{display:grid;gap:5px;padding:11px 12px 13px}
+.global-local-card--listing .global-local-category{color:var(--pl-color-muted);font-size:10px;font-weight:650;line-height:1.35}
+.global-local-card--listing .global-local-copy strong{color:var(--pl-color-ink);font-size:15px;font-weight:750;line-height:1.25}
+.global-local-trust{display:flex;align-items:center;gap:5px;color:var(--pl-color-muted);font-size:10px;line-height:1.3}
+.global-local-trust .ui-icon{width:13px;height:13px;color:var(--pl-color-brand)}
+.global-local-card--listing .global-local-copy em{color:var(--pl-color-text);font-size:11px;font-style:normal;line-height:1.45}
 @media(max-width:767px){
  .global-recommendations{margin-bottom:20px}
  .global-interest-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
  .global-interest-card{min-height:142px;aspect-ratio:1.18/1}
  .global-interest-overlay{right:9px;bottom:9px;left:9px}
  .global-interest-overlay strong{font-size:13px}
- .global-local-card--preview{flex-basis:70vw;max-width:300px;aspect-ratio:1.25/1}
- .global-local-card--preview .global-local-copy{right:9px;bottom:9px;left:9px}
+ .global-local-card--listing{flex-basis:70vw;max-width:300px}
+ .global-local-card--listing .global-local-image{aspect-ratio:1.5/1}
+ .global-local-card--listing .global-local-copy{padding:10px}
 }
 @media(max-width:359px){.global-interest-card{min-height:126px}}
 @media(min-width:768px) and (max-width:1023px){.global-interest-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.global-interest-card{min-height:148px}}
