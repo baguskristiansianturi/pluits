@@ -151,7 +151,7 @@ test('Social Home separates interest-led recommendations from all-category nearb
   assert.doesNotMatch(source, /topTen|Top 10|global-top-ten/i);
   assert.doesNotMatch(css, /global-top-ten/i);
   assert.match(css, /\.global-interest-grid\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/s);
-  assert.match(css, /\.global-local-card--preview/);
+  assert.match(css, /\.global-local-card--listing/);
   assert.match(css, /HOME-DISCOVERY-CLEAN-002/);
   assert.doesNotMatch(css, /global-discovery-context|global-nearby-context|global-local-preview-note|global-local-preview-tag/);
   assert.match(spec, /Rekomendasi untuk Anda/);
