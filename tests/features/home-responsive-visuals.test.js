@@ -156,7 +156,7 @@ test('Social Home discovery hierarchy uses one mixed Top 10 carousel and profess
   assert.match(css, /\.global-local-review\{[^}]*border-left:2px solid var\(--pl-color-brand\)/s);
   assert.match(css, /\.global-local-card\{[^}]*flex-basis:70vw/s);
   assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
-  assert.match(source, /setInterval\(advance,2600\)/);
+  assert.match(source, /setTimeout\(advance,3200\)/);\n  assert.match(source, /new IntersectionObserver\(entries=>\{/);
   assert.match(spec, /Top 10 discovery/);
   assert.match(spec, /exactly one horizontal carousel containing ten mixed discovery cards/);
   assert.match(spec, /Di sekitar Anda/);
