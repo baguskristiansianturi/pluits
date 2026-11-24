@@ -1,38 +1,44 @@
-# Social Home carousel registry
+# Social Home discovery and carousel registry
 
-Status: canonical inventory for Social Home mobile rails. Geometry owner: `src/features/home/home-page.css` / `SOCIAL-HOME-GEOMETRY-004`. Shared gutter token: `--pl-page-gutter` (10px mobile).
+Status: canonical inventory for Social Home visual components. Geometry consumes the shared PLUITS page gutter and responsive foundation.
 
-| Component ID | Selector | Card width on mobile | Gap | Content source |
-|---|---|---:|---:|---|
-| HOME-CAROUSEL-TOP10-001 | `.global-top-ten-rail` | 90vw mobile | 9px | One mixed ten-item `topTenItems` fixture collection; 2.6s autoplay, manual controls, forward loop |
-| HOME-CAROUSEL-STORIES-001 | `.global-story-rail` | 62px item | 12px | `storyRail()` in `home-page.js` |
-| HOME-CAROUSEL-PEOPLE-001 | `.global-people-rail` | 37vw, min 126px, max 170px | 9px | `discovery` people collection in `mountHomePage()` |
-| HOME-CAROUSEL-LOCAL-001 | `.global-local-rail` | 70vw mobile | 9px | nearby visual fixtures in `mountHomePage()`; image, rating overlay and review excerpt |
-| HOME-CAROUSEL-PRODUCT-001 | `.global-product-demo-rail` | 142px | 9px | product preview collection in `home-page.js` |
-| HOME-CAROUSEL-FEATURE-001 | `.global-feature-rail` | 138px | 9px | feature category collection in `home-page.js` |
-| HOME-SEARCH-ENTRY-001 | `.global-home-search-entry` | full content width | n/a | `quickSearchSheet()` overlay and category links |
+| Component ID | Selector | Mobile behavior | Content / ownership |
+|---|---|---|---|
+| HOME-DISCOVERY-INTEREST-001 | `.global-interest-grid` / `.global-interest-card` | Two-column visual interest grid | Interest and experience prompts; never business listings or ranked places |
+| HOME-DISCOVERY-NEARBY-001 | `.global-local-rail` / `.global-local-card--preview` | Horizontal swipe rail, approximately 70vw cards | All-category GeoDirectory listing cards; production data must come from GeoDirectory |
+| HOME-CAROUSEL-STORIES-001 | `.global-story-rail` | Horizontal swipe rail | `storyRail()` in `home-page.js` |
+| HOME-CAROUSEL-PEOPLE-001 | `.global-people-rail` | Horizontal swipe rail | People discovery collection in `mountHomePage()` |
+| HOME-CAROUSEL-PRODUCT-001 | `.global-product-demo-rail` | Horizontal swipe rail | Product preview collection in `home-page.js` |
+| HOME-CAROUSEL-FEATURE-001 | `.global-feature-rail` | Horizontal swipe rail | Ecosystem/service entry points |
+| HOME-SEARCH-ENTRY-001 | `.global-home-search-entry` | Full content width | `quickSearchSheet()` overlay and category links |
 
-## Shared behavior
+## Discovery model
 
-- Mobile breakpoint: up to 767 CSS px; the same 10px content gutter applies from 320px through 767px.
-- Leading edge: first card begins exactly at the content gutter.
-- Trailing edge: the scrollport reaches the physical viewport edge; keep 10px track end padding so the final card can be fully scrolled into view.
-- Overflow: horizontal auto-scroll, horizontal overscroll containment, touch panning, hidden scrollbar, mandatory start snapping.
-- Card widths are not compressed to fit the visible viewport; a partial next card is an intentional affordance.
-- Desktop/tablet geometry is owned by existing desktop/tablet rules and is not changed by this mobile contract.
+### Recommendations for You — interest-led
+- Shows interests/experiences such as beaches, seafood, coffee, culture, family activities and wellness.
+- These cards are not places, providers, menus, rankings or popularity charts.
+- Selecting an interest hands off its context to Jelajah. Seafood carries the future Fluid Food destination context; Fluid Food is not yet an implemented runtime route/module.
+- Personalization must use declared preferences and permitted behavior. Do not claim a user's interests are known when no preference data exists.
+- Geographic context still applies: recommend experiences relevant to the user's current/selected region.
 
-## Data reuse and change control
+### Around You — GeoDirectory-led
+- Includes all eligible GeoDirectory categories: food, pharmacies, clinics, dental care, shops, attractions, activities, services and more.
+- Starts at a 5 km radius. Expand progressively (for example, 5–10 km) when eligible results are insufficient; never fill gaps with fabricated listings.
+- Home is a preview. "Lihat semua" opens Jelajah, where users can change radius continuously and explore other areas.
+- Each real listing must derive name, category, location, distance and trust/review metadata from the canonical provider/location records.
+- If location permission or GeoDirectory data is unavailable, explain the limitation and avoid implying GPS or live proximity.
 
-The source paths above are the current owners of the sample collections. Treat those collections as the canonical fixtures for this UI, not as production inventory or real users. Future data-model extraction must move each collection once into a shared typed registry and update all consumers to import it; do not duplicate arrays per page. Any new carousel requires a new stable component ID, source owner, responsive dimensions, and a regression test before use.
+## Fair exposure
 
-## Top 10 autoplay and local discovery behavior
-- Top 10 is one single mixed-content rail of ten cards (places, restaurants, food, activities, and similar discovery items), not multiple category rails. Cards link to Jelajah and show rank, type, title, rating, and review count.
-- The current Top 10 content is a visual fixture only; it does not assert real ranking order or actual review data.
-- The single rail uses a 90vw mobile card width so the next card remains visible as a swipe cue. Previous/next buttons and touch scrolling remain available. Autoplay advances approximately every 2.6 seconds. User interaction pauses it temporarily. The final card transitions forward to the first card without a visible reverse sweep. Respect `prefers-reduced-motion`.
-- Around You uses approximately 70vw mobile cards. Each card contains a photo, rating and review-count overlay, distance badge, category, business/place name, locality, and a structured visitor-review excerpt. Current values are fixtures only.
+Organic discovery balances proximity, relevance, quality, availability, trust and exposure opportunity. Popularity, follower counts and posting frequency must not monopolize ranking. Eligible/new partners should receive measured exploration opportunities without lowering safety, quality or relevance requirements. Paid placement, if ever introduced, must be clearly labelled and kept separate from organic results.
 
-### HOME-PERFORMANCE-003 — bounded Top 10 and low-end rendering
-- The Top 10 rail is constrained to the shared content frame (`width:100%`, no viewport bleed or negative margins).
-- Mobile cards target 82% of the content rail with a maximum height of 168px; narrow phones cap at 150px.
-- Autoplay is viewport- and document-visibility-aware, advances one card per cycle, and pauses on direct interaction. Reduced-motion disables autoplay.
-- Offscreen page sections use `content-visibility:auto` with intrinsic-size hints; discovery imagery uses async decode and low fetch priority.
+## Responsive behavior
+
+- Mobile breakpoint follows the shared design-system contract; no new breakpoint/token is introduced.
+- Interest cards use a compact two-column grid on mobile and three columns on wider screens.
+- Nearby cards remain horizontally scrollable with the shared page gutter and partial next-card affordance.
+- No autoplay is used for discovery cards; touch, pointer, keyboard and reduced-motion behavior remain native and predictable.
+
+## Data integrity
+
+Current cards are labelled as visual previews and are not live businesses, verified listings, ratings, reviews, location results or transactions. Production integration requires the GeoDirectory service and approved data contract.
