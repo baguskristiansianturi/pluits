@@ -112,7 +112,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     const feed=stream?.querySelector('[data-live-feed]');
     if(feed)feed.hidden=filter==='live';
     const moreButton=stream?.querySelector('[data-feed-more]');
-    if(moreButton){const hasMore=[...(stream.querySelectorAll('[data-feed-page-hidden]'))].some(card=>filter==='all'||(filter==='reels'&&card.dataset.contentKind==='reel')||(filter==='blog'&&card.dataset.contentKind==='blog'));moreButton.hidden=!hasMore;moreButton.textContent=moreButton.dataset.exhausted==='true'?'Jelajahi lagi':'Tampilkan postingan lainnya';}
+    if(moreButton){const hasMore=[...(stream.querySelectorAll('[data-feed-page-hidden]'))].some(card=>filter==='all'||(filter==='reels'&&card.dataset.contentKind==='reel')||(filter==='blog'&&card.dataset.contentKind==='blog'));moreButton.hidden=false;moreButton.dataset.exhausted=String(!hasMore);moreButton.textContent=hasMore?'Tampilkan postingan lainnya':'Jelajahi lagi';}
     stream?.querySelectorAll('.pl-post-demo-stream-heading').forEach(heading=>heading.hidden=filter!=='all');
   };
   buttons.forEach(button=>button.addEventListener('click',()=>applyContentFilter(button.dataset.contentTab)));
