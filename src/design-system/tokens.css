@@ -67,9 +67,10 @@
   --pl-font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Mobile page gutters: 10px on each side for all feature pages. */
+/* Mobile page gutters: 5px on each side for standard content.
+   Full-bleed media/content sections and carousel rails are handled by the layout contract. */
 @media (max-width: 767px) {
   :root {
-    --pl-page-gutter: 10px;
+    --pl-page-gutter: 5px;
   }
 }
