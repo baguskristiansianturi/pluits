@@ -1,3 +1,7 @@
+## Domain ownership and team lanes
+
+Social Media is one owned domain with distinct frontend and backend responsibility lanes. Blog, Reels, Stories, Live, Feed, and Social experience each retain their own internal responsibility boundaries. Future contributors must use the platform-wide [module ownership and team governance](../00-MODULAR-OWNERSHIP-AND-TEAM-BOUNDARIES.md), together with the [Social Media GitHub tree and integration map](../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/05-POHON-GITHUB-DAN-KONTRAK-INTEGRASI.md). The current runtime paths remain authoritative until a separately reviewed migration changes them.
+
 # Social Media — Application Modularization
 
 Blueprint teknis khusus Social Media: module boundaries, frontend routes/pages/components/state/styles, backend domains/services/rules, database entities and ownership, API and event contracts, auth/roles/permissions, security, observability, testing, deployment boundaries, rollout dan rollback.
