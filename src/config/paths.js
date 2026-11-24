@@ -4,6 +4,7 @@ export const APP_ROUTES = Object.freeze({
   home: '',
   marketplace: 'marketplace',
   social: 'social',
+  blog: 'blog',
   circle: 'circle',
   discover: 'discover',
   dashboard: 'dashboard',
