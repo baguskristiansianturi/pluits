@@ -1,6 +1,7 @@
 import { renderIcon } from '../../../design-system/icons.js';
 import { routeHref } from '../../../config/paths.js';
 import './social-post-card.css';
+import { getVideoContentKind, isReelPost, renderVideoMedia } from '../reels/reel-media.js';
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 
@@ -168,7 +169,7 @@ function renderCaption(value) {
 function renderMedia(post) {
   const horizontal=post.orientation==='horizontal'||post.type==='blog';
   const media=post.type==='video'
-    ? '<video class="pl-post-media pl-post-video" data-demo-video data-video-limit="10" src="'+escapeHtml(post.mediaUrl)+'" poster="'+escapeHtml(post.poster||'')+'" controls playsinline preload="none" aria-label="Video postingan '+escapeHtml(post.authorName)+'"></video><span class="pl-post-video-limit">Video demo · maksimal 10 detik</span>'
+    ? renderVideoMedia(post, escapeHtml)
     : '<img class="pl-post-media" src="'+escapeHtml(post.mediaUrl)+'" alt="'+(post.type==='blog'?'Sampul artikel ':'Foto postingan ')+escapeHtml(post.authorName)+'" loading="lazy" decoding="async">';
   const actions='<div class="pl-post-media-actions">'+
     '<button type="button" class="pl-post-media-action pl-post-media-action--reaction" data-reaction-trigger aria-expanded="false" aria-label="Like"><span class="pl-post-media-action-icon" data-reaction-icon>'+renderIcon('heart')+'</span><span class="pl-post-media-action-count" data-overlay-like-count>'+escapeHtml(post.likeLabel)+'</span></button>'+
@@ -191,7 +192,7 @@ export function renderSocialPostCard(post) {
   if (!post.isDemo) {
     return '<article class="global-post-card"><header class="global-post-author"><span class="global-post-avatar">' + escapeHtml((post.authorName || 'P').slice(0,1)) + '</span><span class="global-post-author-copy"><strong>' + escapeHtml(post.authorName || 'Pengguna PLUITS') + '</strong><small>@' + escapeHtml(post.username || 'pengguna') + ' · ' + escapeHtml(post.created_at ? new Date(post.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'}) : '') + '</small></span></header><p class="global-post-caption">' + escapeHtml(post.caption || '') + '</p></article>';
   }
-  return '<article class="global-post-card pl-post-card is-demo' + (post.type === 'video' && Number(post.durationSeconds || 0) <= 60 ? ' is-reel' : '') + (post.orientation === 'horizontal' || post.type === 'blog' ? ' is-horizontal' : ' is-vertical') + (post.type === 'blog' ? ' is-blog' : '') + '" data-post-card data-content-kind="' + (post.type === 'blog' ? 'blog' : post.type === 'video' ? (Number(post.durationSeconds || 0) <= 60 ? 'reel' : 'video') : 'photo') + '" data-content-orientation="' + (post.orientation || 'vertical') + '" data-post-id="' + escapeHtml(post.id) + '" data-base-likes="' + post.likes + '" data-base-gifts="' + post.giftCount + '" data-base-comments="' + post.commentsCount + '">' +
+  return '<article class="global-post-card pl-post-card is-demo' + (isReelPost(post) ? ' is-reel' : '') + (post.orientation === 'horizontal' || post.type === 'blog' ? ' is-horizontal' : ' is-vertical') + (post.type === 'blog' ? ' is-blog' : '') + '" data-post-card data-content-kind="' + (post.type === 'blog' ? 'blog' : post.type === 'video' ? getVideoContentKind(post) : 'photo') + '" data-content-orientation="' + (post.orientation || 'vertical') + '" data-post-id="' + escapeHtml(post.id) + '" data-base-likes="' + post.likes + '" data-base-gifts="' + post.giftCount + '" data-base-comments="' + post.commentsCount + '">' +
     '<header class="global-post-author pl-post-author"><span class="global-post-avatar pl-post-avatar-shell">' + avatarMarkup(post) + '</span><span class="global-post-author-copy pl-post-author-copy"><strong>' + escapeHtml(post.authorName) + ' ' + statusMarkup(post) + '</strong><small>@' + escapeHtml(post.username) + ' · ' + escapeHtml(post.time) + '</small></span><button type="button" class="pl-post-more" data-post-more aria-label="Opsi postingan">' + renderIcon('moreVertical') + '</button>' + renderMenu() + '</header>' +
     '<div class="global-post-caption pl-post-caption" data-caption-content>' + renderCaption(post.caption) + '</div><button type="button" class="pl-post-caption-more" data-caption-expand' + (String(post.caption||'').length<=150?' hidden':'') + ' aria-expanded="false">Selengkapnya ' + renderIcon('chevronDown') + '</button>' + renderMedia(post) +
     '<div class="pl-post-social-proof"><button type="button" data-reaction-summary aria-label="Lihat reaksi">' + renderIcon('heart') + '<span data-post-like-count>' + escapeHtml(post.likeLabel) + '</span> <small>reaksi</small></button><span><b data-post-comment-count>' + post.commentsCount + '</b> komentar</span></div>' +
