@@ -1,3 +1,5 @@
+import './live-preview.css';
+
 const previewSessions = [
   { id: 'sore-bali', title: 'Ngobrol santai menjelang senja', description: 'Ruang obrolan terbuka untuk berbagi cerita dan rekomendasi.', viewers: 'Pratinjau sesi', art: 'one', headline: 'Suasana sore di Bali', subline: 'Berbagi cerita dan momen bersama' },
   { id: 'jelajah-rasa', title: 'Jelajah rasa Nusantara', description: 'Tur singkat mengenal hidangan dan ruang lokal.', viewers: 'Pratinjau sesi', art: 'two', headline: 'Eksplorasi kuliner lokal', subline: 'Menjelajahi rasa dan cerita lokal' }
