@@ -93,3 +93,11 @@
 - Content filters are presented as icon-plus-label controls in this order: Semua, Reel, Blog, Live, followed by Perbarui.
 - Perbarui returns the viewport to the top, displays a refreshing state for at least 1.5 seconds, and reloads the feed.
 - Photo and video media fill the viewport-width feed card; landscape media uses 16:9, portrait media 4:5, and Reel media 9:16.
+
+
+## Domain-boundary amendment — 25 November 2026 (supersedes earlier mixed-home hierarchy)
+Social Home is a Social Media surface, not a mixed ecosystem homepage. Its active content is limited to people/connections discovery, Stories, Feed aggregation, Reels/Live surfaces, Blog entry/preview, and social creation/interactions. Remove local merchant/product cards, service shortcuts, transport/ticketing/venue promotions, ecosystem calendar blocks, and general platform marketing from Social Home.
+
+External domains may appear only as explicit user-initiated interactions (navigation/deep links, authorized public previews, or documented API/event contracts). The destination domain retains its own CSS, data, state, transaction, and lifecycle. Social Home must not import sibling CSS or private implementation. The public marketing homepage remains a separate route and owner.
+
+Implementation note: the current runtime removes those cross-domain content sections from Social Home and limits its header/search actions to Social Media. This is a scope correction, not proof that the remaining Social Media CSS cascade is isolated. Browser visual baseline and full CSS migration remain required before audit closure.
