@@ -186,7 +186,7 @@ test('social stream uses one mixed timeline, icon filters, full-bleed media and 
   const reels = await readFile(new URL('../../src/features/social/reels/reel-media.js', import.meta.url), 'utf8');
   assert.match(home, /data-content-stream/);
   assert.match(home, /data-feed-refresh/);
-  assert.match(home, /data-content-tab="\\' \\+ tab\\.id/);
+  assert.ok(home.includes("data-content-tab=\"' + tab.id"));
   assert.doesNotMatch(home, /label:'Feed'/);
   assert.match(homeStyles, /\.global-content-tabs\{position:sticky;top:0/);
   assert.match(homeStyles, /\.global-header\{position:relative;top:auto/);
