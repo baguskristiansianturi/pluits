@@ -1,39 +1,43 @@
-/* PLUITS responsive layout contract — scoped geometry only.
-   Keep visual styling (type, color, radius, card dimensions) owned by feature CSS. */
+/* PLUITS responsive layout contract — shared geometry only.
+   Feature CSS continues to own typography, color, card styling and component dimensions. */
 @media (max-width: 767px) {
-  :root { --pl-page-gutter: 5px; }
+  :root { --pl-page-gutter: 10px; }
 
-  /* Public marketplace uses its own page wrapper rather than .pl-page-shell. */
+  /* Marketplace shell: standard content has a 10px inset on both sides. */
   .mp-top,
   .mp-nav,
-  .mp-main { width: calc(100% - 10px); }
+  .mp-main { width: calc(100% - 20px); }
 
-  /* Horizontal rails: 5px leading inset; trailing edge remains swipe-accessible. */
+  /* Horizontal rails start at the content inset and bleed through the right gutter.
+     The scrollable track reaches the physical viewport edge; the final card stays swipeable. */
   .global-demo-rail,
   .global-story-rail,
   .global-product-demo-rail,
   .global-people-rail,
   .global-local-rail {
-    padding-left: 5px;
-    padding-right: 5px;
-    scroll-padding-inline: 5px;
+    width: calc(100% + 10px);
+    max-width: none;
+    margin-right: -10px;
+    padding-left: 0;
+    padding-right: 10px;
+    scroll-padding-inline: 0 10px;
     overscroll-behavior-inline: contain;
     -webkit-overflow-scrolling: touch;
   }
   .global-product-demo-rail {
-    width: 100vw;
-    margin-inline: calc(50% - 50vw);
+    margin-left: 0;
   }
   .global-content-tabs {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
-  /* Feed, Reels, Live and Blog are full-viewport content surfaces. */
+  /* Feed, Reels, Live and Blog content surfaces retain their full-viewport treatment. */
   .global-content-section:has(.global-post-list),
   .global-content-section:has(.global-live-demo-grid),
   .global-content-section:has(.global-blog-demo-grid) {
     width: 100vw;
+    max-width: none;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     padding-left: 0;
@@ -42,8 +46,8 @@
   .global-content-section:has(.global-post-list) .global-content-intro,
   .global-content-section:has(.global-live-demo-grid) .global-content-intro,
   .global-content-section:has(.global-blog-demo-grid) .global-content-intro {
-    margin-left: 5px;
-    margin-right: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
   }
   .global-post-list {
     width: 100%;
@@ -58,18 +62,18 @@
     max-width: none;
     box-sizing: border-box;
   }
-}
 
-/* Shared social shell: normal content follows the same 5px page gutter. */
-@media (max-width: 767px) {
+  /* Social profile carousel: 10px leading inset, edge-to-edge trailing scroll area. */
   .social-profile-entity-list.is-carousel {
     width: calc(100% + 10px);
     max-width: none;
     box-sizing: border-box;
-    margin-left: -5px;
-    padding-left: 5px;
-    padding-right: 5px;
-    scroll-padding-left: 5px;
+    margin-left: 0;
+    margin-right: -10px;
+    padding-left: 0;
+    padding-right: 10px;
+    scroll-padding-left: 0;
+    scroll-padding-right: 10px;
     overscroll-behavior-inline: contain;
     -webkit-overflow-scrolling: touch;
   }
@@ -77,13 +81,13 @@
     flex: 0 0 min(280px, 82vw);
   }
 
-  /* Profile Feed, Reels and Blog panels use the viewport width, not the reading gutter. */
+  /* Feed, Reels and Blog panels retain the prior full-viewport breakout. */
   .social-profile-page .social-profile-tab-panel[data-profile-panel="feed"],
   .social-profile-page .social-profile-tab-panel[data-profile-panel="reels"],
   .social-profile-page .social-profile-tab-panel[data-profile-panel="blog"] {
-    width: calc(100% + 10px);
-    margin-left: -5px;
-    margin-right: -5px;
+    width: calc(100% + 20px);
+    margin-left: -10px;
+    margin-right: -10px;
   }
   .social-profile-page .social-profile-tab-panel[data-profile-panel="feed"] .social-empty-panel,
   .social-profile-page .social-profile-tab-panel[data-profile-panel="reels"] .social-empty-panel,
