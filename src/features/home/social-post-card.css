@@ -11,7 +11,7 @@
 .pl-post-avatar-wrap{position:relative;display:block;width:42px;height:42px;flex:none}
 .pl-post-avatar{display:grid;width:42px;height:42px;place-items:center;overflow:hidden;border:1px solid var(--pl-color-border);border-radius:50%;background:var(--pl-color-canvas);color:var(--pl-color-ink);font-size:15px;font-weight:800}
 .pl-post-avatar img{display:block;width:100%;height:100%;object-fit:cover}
-.pl-post-tier{position:absolute;right:-2px;bottom:-2px;display:grid;min-width:17px;height:17px;place-items:center;padding:0 3px;border:2px solid var(--pl-color-surface);border-radius:var(--pl-radius-pill);background:#82909a;color:#fff;font-size:8px;font-weight:900;line-height:1}
+.pl-post-premium-mark{position:absolute;top:-2px;right:-2px;display:grid;width:15px;height:15px;place-items:center;border:2px solid var(--pl-color-surface);border-radius:50%;background:#0b9e93;color:#fff;font-size:8px;font-weight:900;line-height:1}.pl-post-tier{position:absolute;right:-2px;bottom:-2px;display:grid;min-width:17px;height:17px;place-items:center;padding:0 3px;border:2px solid var(--pl-color-surface);border-radius:var(--pl-radius-pill);background:#82909a;color:#fff;font-size:8px;font-weight:900;line-height:1}
 .pl-post-tier--premium{background:#0b9e93}
 .pl-post-tier--silver{background:#8496a5}
 .pl-post-tier--gold{background:#b88720;color:#fff8df}
