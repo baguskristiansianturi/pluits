@@ -26,11 +26,11 @@ test('shared page headers and brand sizing follow one responsive foundation',asy
   read('../src/design-system/tokens.css'),
   read('../src/design-system/page-shell.css'),
   read('../src/styles/global.css'),
-  read('../src/features/home/home-page.css'),
+  read('../src/features/social/home/home-page.css'),
   read('../src/features/home/business-home.css'),
   read('../src/features/dashboard/dashboard-page.css'),
   read('../src/features/social/social-pages.css'),
-  read('../src/features/home/home-page.js'),
+  read('../src/features/social/home/home-page.js'),
   read('../src/features/home/business-home-page.js'),
   read('../src/features/auth/auth-page.js'),
   read('../src/features/dashboard/dashboard-page.js')
@@ -135,7 +135,7 @@ test('account settings include privacy, display name and username controls',asyn
 });
 
 test('Social Home no longer embeds external merchant listings; venue remains a separate route owner',async()=>{
- const home=await readFile(new URL('../src/features/home/home-page.js',import.meta.url),'utf8');
+ const home=await readFile(new URL('../src/features/social/home/home-page.js',import.meta.url),'utf8');
  const provider=await readFile(new URL('../src/features/venue/venue-provider-page.js',import.meta.url),'utf8');
  const app=await readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8');
  assert.ok(!home.includes('The Garden Table') && !home.includes('global-local-card') && !home.includes("routeHref('restaurant')"));
@@ -150,7 +150,7 @@ test('Social Media Blog is a standalone route with module-owned CSS and no cross
   readFile(new URL('../src/features/social/blog/blog-page.js',import.meta.url),'utf8'),
   readFile(new URL('../src/features/social/blog/blog-page.css',import.meta.url),'utf8'),
   readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8'),
-  readFile(new URL('../src/features/home/home-page.js',import.meta.url),'utf8')
+  readFile(new URL('../src/features/social/home/home-page.js',import.meta.url),'utf8')
  ]);
  assert.ok(app.includes("route === 'blog'") && app.includes('mountBlogPage'));
  assert.ok(blog.includes('export function mountBlogPage'));
@@ -166,7 +166,7 @@ test('Social Media Blog is a standalone route with module-owned CSS and no cross
 test('Social Home stylesheet is owned by the Social Home module rather than the global bootstrap',async()=>{
  const [main,home]=await Promise.all([
   readFile(new URL('../src/main.js',import.meta.url),'utf8'),
-  readFile(new URL('../src/features/home/home-page.js',import.meta.url),'utf8')
+  readFile(new URL('../src/features/social/home/home-page.js',import.meta.url),'utf8')
  ]);
  assert.ok(!main.includes("features/home/home-page.css"));
  assert.ok(home.includes("import './home-page.css'"));
