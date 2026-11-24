@@ -37,8 +37,8 @@ test('Social Home responsive styles and content-module styles cover their own su
   assert.match(css, /@media\s*\(min-width:\s*1024px\)/);
   assert.match(css, /\.global-search-backdrop\[hidden\]\s*\{\s*display:none\s*\}/);
   assert.match(css, /\.global-people-rail[\s\S]*?scroll-snap-type:\s*x\s+mandatory/);
-  assert.match(css, /\.global-content-tabs button\{[^}]*display:flex[^}]*align-items:center[^}]*justify-content:center/);
-  assert.match(postCss, /\.pl-post-card\.is-reel[\s\S]*?aspect-ratio:\s*9\/16/);
+  assert.match(css, /\.global-content-tabs button\s*\{[^}]*display:flex[^}]*align-items:center[^}]*justify-content:center/s);
+  assert.match(postCss, /\.pl-post-card\.is-reel\s*\{[\s\S]*?aspect-ratio:\s*9\/16/);
   assert.match(storiesCss, /\.sm-stories-rail/);
   assert.match(liveCss, /\.sm-live-preview-grid/);
   assert.match(reelsCss, /\.sm-reel-video/);
