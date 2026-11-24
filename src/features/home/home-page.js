@@ -100,8 +100,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   searchBackdrop?.addEventListener('click',event=>{if(event.target===searchBackdrop)closeQuickSearch();});
   root.querySelector('[data-quick-search-form]')?.addEventListener('submit',event=>{event.preventDefault();const query=searchInput?.value.trim()||'';window.location.href=routeHref('discover')+(query?'?q='+encodeURIComponent(query):'');});
   root.addEventListener('keydown',event=>{if(event.key==='Escape'&&searchBackdrop&&!searchBackdrop.hidden)closeQuickSearch();});
-  root.addEventListener('click',event=>{const more=event.target.closest('[data-feed-more]');if(!more||!root.contains(more))return;const hidden=[...root.querySelectorAll('[data-feed-page-hidden]')].filter(card=>card.hidden);hidden.slice(0,6).forEach(card=>{card.hidden=false;card.removeAttribute('data-feed-page-hidden');});if(!root.querySelector('[data-feed-page-hidden]')){more.textContent='Jelajahi lagi';more.dataset.exhausted='true';}else{more.textContent='Tampilkan postingan lainnya';}});
-  root.addEventListener('click',event=>{const more=event.target.closest('[data-feed-more][data-exhausted="true"]');if(more)window.location.href=routeHref('discover');});
+  root.addEventListener('click',event=>{const more=event.target.closest('[data-feed-more]');if(!more||!root.contains(more))return;if(more.dataset.exhausted==='true'){window.location.href=routeHref('discover');return;}const hidden=[...root.querySelectorAll('[data-feed-page-hidden]')].filter(card=>card.hidden);hidden.slice(0,6).forEach(card=>{card.hidden=false;card.removeAttribute('data-feed-page-hidden');});if(!root.querySelector('[data-feed-page-hidden]')){more.textContent='Jelajahi lagi';more.dataset.exhausted='true';}else{more.textContent='Tampilkan postingan lainnya';}});
   const buttons=[...root.querySelectorAll('[data-content-tab]')];
   const stream=root.querySelector('[data-content-stream]');
   let activeContentFilter='all';
