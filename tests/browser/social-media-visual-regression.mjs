@@ -57,15 +57,17 @@ try {
     for (const route of routes) {
       const response = await page.goto(base + route.path, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(500);
-      const mounted = await page.locator('.pl-page-shell').count();
-      if (!mounted) {
-        const diagnostics = await page.evaluate(() => ({
-          title: document.title,
-          url: location.href,
-          appText: document.querySelector('#app')?.innerText?.slice(0, 500) || '',
-          appHtml: document.querySelector('#app')?.innerHTML?.slice(0, 1200) || ''
-        }));
-        throw new Error('Route ' + route.name + ' did not mount a page shell at ' + viewport.name + '. HTTP=' + response?.status() + ' diagnostics=' + JSON.stringify(diagnostics) + ' pageErrors=' + pageErrors.join(' | '));
+      const diagnostics = await page.evaluate(() => ({
+        title: document.title,
+        url: location.href,
+        appText: document.querySelector('#app')?.innerText?.slice(0, 500) || '',
+        appHtml: document.querySelector('#app')?.innerHTML?.slice(0, 1200) || ''
+      }));
+      if (!diagnostics.appText.trim()) {
+        throw new Error('Route ' + route.name + ' rendered an empty application at ' + viewport.name + '. HTTP=' + response?.status() + ' diagnostics=' + JSON.stringify(diagnostics) + ' pageErrors=' + pageErrors.join(' | '));
+      }
+      if (!diagnostics.url.endsWith('/pluits/' + route.path)) {
+        throw new Error('Route ' + route.name + ' redirected unexpectedly: ' + diagnostics.url);
       }
       const dimensions = await page.evaluate(() => ({
         viewport: document.documentElement.clientWidth,
