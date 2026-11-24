@@ -114,3 +114,11 @@ Automated tests and production deployment verify source contracts and build outp
 - Autoplay uses a single scheduled timeout, advances by one card, and only runs while the rail intersects the viewport and the document is visible. Manual interaction pauses it before resuming; reduced-motion preference disables automatic movement.
 - Discovery images declare asynchronous decoding and low fetch priority. Lower Social Home and subsequent sections use content visibility with intrinsic-size hints to reduce offscreen layout and paint work.
 - Performance changes are progressive enhancements; real-device scroll smoothness still requires Android acceptance testing, especially on 2 GB RAM devices.
+
+## Interest-led and GeoDirectory discovery — 24 November 2026
+- The former Top 10 section is retired. "Rekomendasi untuk Anda" presents interest/experience prompts, not ranked venues or business listings.
+- "Di Sekitar Anda" is a location-first preview across all GeoDirectory categories. Its search starts at 5 km and should expand progressively when eligible results are insufficient; "Lihat Semua" opens Jelajah for adjustable radius and broader areas.
+- Interests persist when a user changes region; the geographic candidates and ranking context update to the user's current/selected location.
+- Organic exposure must balance proximity, relevance, quality, availability, trust and fair opportunity for eligible/new partners. Popularity and posting frequency cannot monopolize discovery.
+- Home currently shows explicitly labelled structural preview cards only. GPS, GeoDirectory listings, live distances, ratings/reviews, partner ranking and Fluid Food handoff are not connected in this frontend build.
+- Runtime: `home-page.js` and `home-page.css`; discovery component inventory: `HOME-CAROUSEL-REGISTRY.md`; product specification: `PAGE-SOCIAL-HOME-001.md`.
