@@ -252,3 +252,21 @@ test('social post comment and reply profiles carry account tier and verification
   assert.match(cardCss, /\.pl-post-comment-profile-status \.pl-post-verification/);
   assert.match(cardCss, /\.pl-post-comment-profile--reply \.pl-post-tier/);
 });
+
+test('social stream uses one mixed timeline, icon filters, full-bleed media and a bounded sticky bar', async () => {
+  const home = await readFile(homeJs, 'utf8');
+  const homeStyles = await readFile(homeCss, 'utf8');
+  const postStyles = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
+  const card = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
+  assert.match(home, /data-content-stream/);
+  assert.match(home, /data-feed-refresh/);
+  assert.match(home, /data-content-tab="\' \+ tab\.id/);
+  assert.doesNotMatch(home, /label:'Feed'/);
+  assert.match(homeStyles, /\.global-content-tabs\{position:sticky;top:0/);
+  assert.match(homeStyles, /\.global-header\{position:relative;top:auto/);
+  assert.match(postStyles, /width:100vw;max-width:none;margin-inline:calc\(50% - 50vw\)/);
+  assert.match(postStyles, /aspect-ratio:auto;object-fit:contain/);
+  assert.match(card, /durationSeconds:43/);
+  assert.match(card, /durationSeconds:78/);
+  assert.match(card, /durationSeconds \|\| 0\) <= 60/);
+});

@@ -4,7 +4,7 @@
 .pl-post-demo-stream-heading p{margin:0;color:var(--pl-color-muted);font-size:10px;line-height:1.5}
 .pl-post-demo-wallet{display:inline-flex;align-items:center;gap:5px;flex:none;padding:6px 9px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-pill);color:var(--pl-color-muted);font-size:9px;white-space:nowrap}
 .pl-post-demo-wallet b{color:var(--pl-color-ink)}
-.pl-post-card{position:relative;isolation:isolate}
+.pl-post-card{position:relative;isolation:isolate;width:100vw;max-width:none;margin-inline:calc(50% - 50vw);border:0;border-bottom:1px solid var(--pl-color-border);border-radius:0;box-shadow:none}
 .pl-post-card.is-demo-hidden{display:none}
 .pl-post-author{position:relative}
 .pl-post-avatar-shell{display:grid;width:42px;height:42px;place-items:center;overflow:visible;border-radius:50%;background:transparent}
@@ -33,7 +33,7 @@
 .pl-post-menu button:hover,.pl-post-share-panel button:hover{background:var(--pl-color-canvas)}
 .pl-post-caption{padding:4px 14px 13px;font-size:12px;line-height:1.6}.pl-post-tag{color:var(--pl-color-brand);font-weight:700}
 .pl-post-media-wrap{position:relative;width:100%;overflow:hidden;background:var(--pl-color-canvas);isolation:isolate}
-.pl-post-media-wrap .pl-post-media{display:block;width:100%;height:auto;max-height:620px;aspect-ratio:4/5;object-fit:cover}
+.pl-post-media-wrap .pl-post-media{display:block;width:100%;height:auto;max-height:none;aspect-ratio:auto;object-fit:contain}.pl-post-card.is-reel .pl-post-media-wrap .pl-post-media{width:100%;max-height:min(177.78vw,760px);aspect-ratio:9/16;object-fit:cover}.pl-post-media-wrap .pl-post-video{width:100%;aspect-ratio:16/9;object-fit:contain}.pl-post-card.is-reel .pl-post-media-wrap .pl-post-video{aspect-ratio:9/16}
 .pl-post-media-wrap--video{background:#172b45}
 .pl-post-video{background:#172b45}
 .pl-post-video-limit{position:absolute;z-index:1;left:10px;bottom:10px;padding:5px 8px;border-radius:var(--pl-radius-pill);background:rgba(15,31,45,.72);color:#fff;font-size:9px;font-weight:700;pointer-events:none}
