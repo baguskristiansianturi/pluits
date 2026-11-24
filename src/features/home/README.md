@@ -108,3 +108,9 @@ Automated tests and production deployment verify source contracts and build outp
 - Mobile Top 10 cards use approximately 90vw width with a visible next-card cue; tablet and desktop have separate responsive sizing. Swipe, previous/next controls, 2.6-second autoplay, interaction pause, and forward looping are supported.
 - Di sekitar Anda cards use approximately 70vw mobile width and communicate actual place/business information in the visual hierarchy: photo, rating and review count, distance, category, name, locality, and a readable visitor-review excerpt. Current entries remain visual fixtures only.
 - The canonical behavior and responsive contract live in `PAGE-SOCIAL-HOME-001.md` and `HOME-CAROUSEL-REGISTRY.md`.
+
+## Social Home performance and bounded Top 10 — 24 November 2026
+- Top 10 rail remains inside the shared standard content frame; it no longer bleeds to the viewport edge. Mobile cards are shorter and use a restrained 82% rail width so the next item remains discoverable without making the carousel full-bleed.
+- Autoplay uses a single scheduled timeout, advances by one card, and only runs while the rail intersects the viewport and the document is visible. Manual interaction pauses it before resuming; reduced-motion preference disables automatic movement.
+- Discovery images declare asynchronous decoding and low fetch priority. Lower Social Home and subsequent sections use content visibility with intrinsic-size hints to reduce offscreen layout and paint work.
+- Performance changes are progressive enhancements; real-device scroll smoothness still requires Android acceptance testing, especially on 2 GB RAM devices.
