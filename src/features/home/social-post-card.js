@@ -224,6 +224,7 @@ export function mountSocialPostInteractions(root) {
     }
     const reply=document.createElement('div');reply.className='pl-post-reply';const strong=document.createElement('strong');strong.textContent='Anda';const span=document.createElement('span');span.textContent=value;reply.append(strong,span);form.before(reply);form.remove();showToast(root,'Balasan ditambahkan ke preview.');
   },{signal:controller.signal});
-  root.addEventListener('timeupdate',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]'))return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.pause();video.currentTime=limit;showToast(root,'Preview video dibatasi hingga 10 detik.');}},{capture:true,signal:controller.signal});
+  root.addEventListener('play',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]'))return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.currentTime=0;video.dataset.demoCapped='false';}},{capture:true,signal:controller.signal});
+  root.addEventListener('timeupdate',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]')||video.dataset.demoCapped==='true')return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.dataset.demoCapped='true';video.pause();video.currentTime=limit;showToast(root,'Preview video dibatasi hingga 10 detik.');}},{capture:true,signal:controller.signal});
   return ()=>controller.abort();
 }
