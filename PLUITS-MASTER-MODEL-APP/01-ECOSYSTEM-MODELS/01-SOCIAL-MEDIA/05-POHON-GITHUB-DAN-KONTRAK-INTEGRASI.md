@@ -315,6 +315,9 @@ src/features/
     ├── home/                     # Social Home page, CSS, spec, carousel registry
     ├── feed/                     # post-card renderer, interaction handlers, CSS
     ├── blog/                     # independent /blog/ route, page, CSS, README
+    ├── stories/                  # owned Stories rail preview + CSS
+    ├── live/                     # owned Live preview + CSS
+    ├── reels/                    # owned short-video media renderer + CSS
     ├── social-pages.js           # Discover, Messages, Profile, Settings (current combined surface)
     └── social-pages.css
 ```
@@ -326,4 +329,4 @@ src/features/
 - Social Home CSS is no longer imported directly by `main.js`; it is imported by the Social Home module.
 - Social-specific mobile geometry has been moved out of `design-system/mobile-layout-contract.css` into Social Home and Social Profile stylesheets. The shared contract retains platform gutter and Marketplace shell geometry only.
 
-This is an implemented ownership slice, not completion of all isolation. Remaining gaps: `social-pages.js` is still a combined runtime surface; Reels, Stories and Live do not yet have fully independent runtime modules/lifecycles; Social Home retains legacy `.global-*` selectors and unused styles from removed cross-domain sections; complete selector/consumer mapping and browser visual regression are still required. Blog content is preview-only; backend publishing, persistence, article detail and comments are not active.
+This is an implemented ownership slice, not completion of all isolation. Remaining gaps: `social-pages.js` is still a combined runtime surface; Reels, Stories and Live now have owned preview/rendering modules and stylesheets, but their authoring, media processing, audience, publishing and lifecycle services are not active; Social Home retains legacy `.global-*` selectors and unused styles from removed cross-domain sections; complete selector/consumer mapping and browser visual regression are still required. Blog content is preview-only; backend publishing, persistence, article detail and comments are not active.
