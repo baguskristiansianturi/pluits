@@ -63,3 +63,8 @@
 - Fair exposure must balance relevance, proximity, quality, availability, trust and opportunities for eligible/new partners. Popularity and posting frequency must not monopolize organic discovery; paid placements, if ever introduced, must be disclosed and separated.
 - Current Home UI uses clearly labelled structural preview cards only. It does not claim live GPS, active GeoDirectory listings, live distance, real ratings/reviews, or a connected Fluid Food route.
 - Offscreen sections and images should defer expensive rendering/decoding where supported.\n\n### Named place card refinement — 24 November 2026\n- Di sekitar Anda adalah daftar tempat dan bisnis individual, bukan navigasi kategori. Kartu kategori generik dilarang di bagian ini.\n- Metadata membedakan jenis tempat spesifik (misalnya Beach Club) dari kategori GeoDirectory yang lebih luas.\n- Tampilkan jarak dalam km, deskripsi singkat, dan konteks review/reputasi. Rating serta jumlah ulasan hanya muncul jika ada rekaman ulasan nyata.\n- Frontend saat ini memakai fixture bernama untuk tata letak; jarak dan konteks ulasan pada fixture bukan data live. Integrasi GeoDirectory dan review service tetap menjadi pekerjaan backend/service berikutnya.\n
+
+### Homepage discovery action — 24 November 2026
+- Tautan aksi pada bagian discovery homepage menggunakan label **Jelajahi** dengan ikon mata terdaftar (`renderIcon('eye')`).
+- Tautan tersebut mengarahkan pengguna ke halaman Jelajah (`discover`) sebagai pusat eksplorasi; cakupan minat dan tempat sekitar tetap diteruskan melalui parameter konteks.
+- Perubahan hanya pada label/ikon aksi dan penamaan modifier CSS kompatibel; komposisi visual kartu discovery yang sudah ada tetap dipertahankan.
