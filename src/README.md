@@ -7,6 +7,7 @@ Status: current modular frontend implementation; consult the change map for exac
 - [CHANGE-MAP.md](./CHANGE-MAP.md) — canonical technical map for route ownership, feature ownership, dependencies, backend contracts, protected surfaces and required regression checks.
 - [../AGENTS.md](../AGENTS.md) — repository-wide engineering rules and mandatory change workflow.
 - [Platform UI Foundation](../PLUITS-MASTER-MODEL-APP/06-PLATFORM-UI-FOUNDATION/README.md) — canonical cross-platform UI standards and approval status.
+- [Mandatory UI Foundation Preflight](../PLUITS-MASTER-MODEL-APP/06-PLATFORM-UI-FOUNDATION/09-DESIGN-AND-DEVELOPMENT-SOP/UI-FOUNDATION-PREFLIGHT-AND-CONSUMPTION-001.md) — required checklist and runtime source map before any page markup or page CSS is written.
 
 ## Runtime ownership
 
