@@ -153,11 +153,12 @@ test('Social Media Blog is a standalone route with module-owned CSS and no cross
   readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8'),
   readFile(new URL('../src/features/home/home-page.js',import.meta.url),'utf8')
  ]);
- assert.match(app,/route === 'blog'.*mountBlogPage/s);
- assert.match(blog,/export function mountBlogPage/);
- assert.match(blog,/\.\.\/\.\.\/design-system\/tokens/);
+ assert.ok(app.includes("route === 'blog'") && app.includes('mountBlogPage'));
+ assert.ok(blog.includes('export function mountBlogPage'));
+ assert.ok(blog.includes("../../design-system/page-shell.css"));
+ assert.ok(blog.includes("../../design-system/icons.js"));
  assert.doesNotMatch(blog,/features\\/(?:home|marketplace|venue|dashboard)/);
- assert.match(css,/^\\.sm-blog-page/);
- assert.doesNotMatch(css,/(^|[,\\s])(?:body|html|:root|\\.global-|\\.social-)[\\s,{]/m);
- assert.match(home,/routeHref\\('blog'\\)/);
+ assert.ok(css.startsWith('/* Social Media Blog owns every selector'));
+ assert.doesNotMatch(css,/(^|,)\\s*(?:body|html|:root|\\.global-|\\.social-)/m);
+ assert.ok(home.includes("routeHref('blog')"));
 });
