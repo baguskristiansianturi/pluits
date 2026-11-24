@@ -129,3 +129,13 @@ Automated tests and production deployment verify source contracts and build outp
 - Interest cards show one concise interest label over the image. Nearby preview tiles show GeoDirectory category names over imagery and do not fabricate merchant names, ratings, distances, or GPS state.
 - Technical integration caveats belong in product/developer documentation, not in the Home discovery UI.
 - The search entry uses a short label without a descriptive paragraph; do not show a hardcoded sample city as if it were the user's active location.
+
+
+## Social Post Card prototype — 24 November 2026
+- Component ID: SOCIAL-POST-CARD-001, owned by features/home.
+- Renderer and interaction controller: social-post-card.js; scoped presentation: social-post-card.css.
+- Four sample Feed posts and two video entries exercise the post UX. The fixture is explicitly labelled and separate from real API content.
+- Prototype controls: reaction picker/toggle, comment add/like, reply, gift selection/send with a demo-only coin balance, share/copy demo URL, vertical menu/save/hide/report, and 10-second video preview cap.
+- Account status and membership badges are independent. Badge states are UI examples only; the membership/verification schema and business rules remain pending.
+- No fixture is persisted; reload/remount resets interaction state. No production wallet or social data is written.
+- Canonical behavior: SOCIAL-POST-CARD-INTERACTIONS-001.md; page-level contract: PAGE-SOCIAL-HOME-001.md.
