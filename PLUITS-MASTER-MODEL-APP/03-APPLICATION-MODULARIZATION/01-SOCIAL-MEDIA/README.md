@@ -43,3 +43,7 @@ Four independent Social Media modules have their own technical contracts and imp
 Feed is an aggregation/distribution surface. It consumes documented content references and render/deep-link contracts; it must not own or duplicate each module's private state machine, CSS, media lifecycle, or domain rules. Shared assets/tokens/layout primitives are owned by Platform UI Foundation. Module-private styles remain within their respective module boundaries.
 
 The existing first-slice text-only Feed API and its explicit out-of-scope list remain valid; this modularization does not claim Blog, Reels, Stories, or Live production functionality exists.
+
+
+## Aturan pengalaman dan batas runtime
+Aturan lintas permukaan Social Media dirangkum pada [Aturan Pengalaman Social Media](../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/00-ATURAN-PENGALAMAN/README.md). Gunakan dokumen itu bersama kontrak teknis di halaman ini. Jangan menyamakan prototype dengan backend produksi, dan jangan mengubah runtime sebagai bagian dari pembaruan dokumentasi.
