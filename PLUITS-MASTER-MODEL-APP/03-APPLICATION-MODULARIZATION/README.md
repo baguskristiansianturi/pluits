@@ -1,3 +1,7 @@
+## Governance kepemilikan modul dan tim
+
+Gunakan [Modular Ownership, Team Boundaries, and Change Governance](00-MODULAR-OWNERSHIP-AND-TEAM-BOUNDARIES.md) sebagai aturan kanonis untuk pembagian domain, jalur frontend/backend, onboarding staff, penggunaan GitHub, integrasi, versioning, dan fault containment. Pohon target di dokumen tersebut tidak boleh dianggap sebagai lokasi runtime yang sudah diterapkan; setiap domain tetap wajib mencatat kondisi aktual dan migrasinya.
+
 # Application Modularization
 
 Area spesifikasi implementasi per aplikasi: module boundaries, frontend, backend, database, API/event contracts, auth, roles, permissions, RLS, security, testing, deployment dan rollback.
