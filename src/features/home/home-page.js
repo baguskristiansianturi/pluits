@@ -82,7 +82,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   ];
   const recommendations = '<section class="global-section global-recommendations" id="recommendations" aria-label="Rekomendasi berdasarkan minat">' +
     heading('Rekomendasi untuk Anda','Temukan ide dan pengalaman yang selaras dengan minat Anda.','Jelajahi minat',routeHref('discover')+'?scope=interests') +
-    '<p class="global-discovery-context">Mulai dari hal yang Anda sukai. Pilih minat untuk menemukan pengalaman dan layanan yang sesuai dengan konteks wilayah Anda.</p>' +
+    '<p class="global-discovery-context">Contoh minat untuk discovery. Preferensi pengguna dan wilayah aktif akan menentukan pengalaman yang ditampilkan.</p>' +
     '<div class="global-interest-grid">' + recommendationItems.map(item => {
       const target=routeHref('discover')+'?intent=interest&interest='+encodeURIComponent(item.id)+(item.app?'&app='+encodeURIComponent(item.app):'');
       return '<a class="global-interest-card" href="'+target+'" data-interest-id="'+item.id+'"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"><span class="global-interest-overlay"><small>'+item.kind+'</small><strong>'+item.name+'</strong><span>'+item.note+'</span></span></a>';
@@ -101,7 +101,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     '<p class="global-local-preview-note">Contoh tampilan kartu mitra · data lokasi dan listing GeoDirectory belum terhubung.</p>' +
     '<div class="global-local-rail">' + nearbyItems.map(item => {
       const target=routeHref('discover')+'?scope=nearby&radius=5&category='+encodeURIComponent(item.filter);
-      return '<a class="global-local-card global-local-card--preview" href="'+target+'"><div class="global-local-image"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"><span class="global-local-distance">Dalam jangkauan</span><span class="global-local-preview-tag">CONTOH KARTU</span></div><span class="global-local-copy"><small class="global-local-category">'+item.category+'</small><strong>'+item.name+'</strong><span class="global-local-location">Lokasi dan jarak ditampilkan dari GeoDirectory</span></span></a>';
+      return '<a class="global-local-card global-local-card--preview" href="'+target+'"><div class="global-local-image"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"><span class="global-local-distance">Jarak ditampilkan saat lokasi aktif</span><span class="global-local-preview-tag">CONTOH KARTU</span></div><span class="global-local-copy"><small class="global-local-category">'+item.category+'</small><strong>'+item.name+'</strong><span class="global-local-location">Lokasi dan jarak ditampilkan dari GeoDirectory</span></span></a>';
     }).join('') + '</div></section>';
   const streams = contentTabs.map((tab,index) => {
     const body=tab.id==='feed'?'<div class="global-post-list" data-live-feed>' + renderDemoFeed('feed') + '</div>'
