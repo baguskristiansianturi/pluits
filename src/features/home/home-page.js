@@ -4,6 +4,7 @@ import { renderPageHeader } from '../../design-system/page-shell.js';
 import { renderIcon } from '../../design-system/icons.js';
 import { API_BASE_URL } from '../../config/runtime.js';
 import './home-page.css';
+import { renderSocialPostCard as renderPostCard, renderDemoFeed, mountSocialPostInteractions } from './social-post-card.js';
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const contentTabs = [{id:'feed',label:'Feed'},{id:'reels',label:'Reels'},{id:'live',label:'Live'},{id:'blog',label:'Blog'}];
@@ -33,33 +34,6 @@ function quickSearchSheet() {
 }
 function createSheet() {
   return '<div class="global-create-backdrop" data-create-backdrop hidden><section class="global-create-sheet" role="dialog" aria-modal="true" aria-labelledby="create-title"><button type="button" class="global-create-close" data-close-create aria-label="Tutup">×</button><span class="global-kicker">MULAI SESUATU</span><h2 id="create-title">Buat di PLUITS</h2><p>Pilih format yang ingin disiapkan. Publikasi akan diaktifkan setelah layanan terkait tersedia.</p><div class="global-create-options"><button disabled>Feed <small>Belum tersedia</small></button><button disabled>Reels <small>Belum tersedia</small></button><button disabled>Story <small>Belum tersedia</small></button><button disabled>Live <small>Belum tersedia</small></button><button disabled>Blog <small>Belum tersedia</small></button></div><a href="' + routeHref('dashboard') + '">Buka Dashboard pengelolaan →</a></section></div>';
-}
-function renderPostCard(post) {
-  const media = post.mediaUrl
-    ? (post.media_type === 'video'
-      ? '<video class="global-post-media" src="' + escapeHtml(post.mediaUrl) + '" controls playsinline preload="none"></video>'
-      : '<img class="global-post-media" src="' + escapeHtml(post.mediaUrl) + '" alt="Konten dari ' + escapeHtml(post.authorName) + '" loading="lazy">')
-    : '';
-  const avatar = post.avatarUrl
-    ? '<img src="' + escapeHtml(post.avatarUrl) + '" alt="" loading="lazy">'
-    : '<span>' + escapeHtml((post.authorName || 'P').slice(0,1).toUpperCase()) + '</span>';
-  const caption = post.caption ? '<p class="global-post-caption">' + escapeHtml(post.caption) + '</p>' : '';
-  const kind = (post.visibility === 'private' ? 'PRIVAT · ' : '') + (post.content_kind === 'reel' ? 'REELS' : 'FEED');
-  const date = post.created_at ? new Date(post.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'}) : (post.isDemo?'2 jam yang lalu':'');
-  return '<article class="global-post-card' + (post.isDemo?' is-demo':'') + (post.content_kind==='reel'?' is-reel':'') + '"><header class="global-post-author"><span class="global-post-avatar">' + avatar + '</span><span class="global-post-author-copy"><strong>' + escapeHtml(post.authorName) + '</strong><small>@' + escapeHtml(post.username || 'pengguna') + ' · ' + date + '</small></span><span class="global-post-kind">' + kind + '</span></header>' + media + caption + (post.isDemo?'':'') + '<footer class="global-post-actions"><span>' + renderIcon('heart') + ' ' + (post.isDemo?post.likes+' suka':'Suka') + '</span><span>' + renderIcon('message') + ' ' + (post.isDemo?post.comments+' komentar':'Komentar') + '</span><span>' + renderIcon('arrow') + ' Bagikan</span></footer></article>';
-}
-const demoFeedPosts = [
-  {authorName:'Ayu Pratiwi',username:'ayu.pratiwi',avatarUrl:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=75',caption:'Senja di pesisir Bali selalu punya cara sendiri untuk membuat kita berhenti sejenak. 🌅\n\nSudut favorit untuk menikmati sore dan cerita baru.',mediaUrl:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=85',created_at:'',likes:245,comments:48,isDemo:true},
-  {authorName:'Raka Mahendra',username:'raka.visual',avatarUrl:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=75',caption:'Mencari detail kecil di tengah hiruk pikuk kota. Kadang perspektif baru datang dari berjalan lebih pelan. 📷',mediaUrl:'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1100&q=85',created_at:'',likes:182,comments:23,isDemo:true},
-  {authorName:'Nadia Putri',username:'nadia.tastes',avatarUrl:'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=120&h=120&q=75',caption:'Akhir pekan, secangkir kopi, dan tempat nyaman untuk bertukar cerita. Ada rekomendasi tempat serupa?',mediaUrl:'https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=1100&q=85',created_at:'',likes:136,comments:19,isDemo:true}
-];
-const demoReels = [
-  {authorName:'Dimas Saputra',username:'dimas.moves',avatarUrl:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=75',caption:'Potongan suasana pagi di Ubud. 🌿',mediaUrl:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=700&h=1000&q=85',content_kind:'reel',likes:324,comments:31,isDemo:true},
-  {authorName:'Sinta Maharani',username:'sinta.explores',avatarUrl:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&h=1000&q=85',caption:'Warna-warni pasar lokal yang selalu menarik untuk dijelajahi.',mediaUrl:'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=700&h=1000&q=85',content_kind:'reel',likes:291,comments:27,isDemo:true}
-];
-function renderDemoFeed(kind='feed') {
-  const posts=kind==='reels'?demoReels:demoFeedPosts;
-  return posts.map(renderPostCard).join('');
 }
 function renderFeedState(message,loading=false) {
   return '<div class="global-feed-state' + (loading?' is-loading':'') + '">' + (loading?'<span class="global-feed-spinner" aria-hidden="true"></span>':'<span class="global-feed-state-icon">' + renderIcon('image') + '</span>') + '<strong>' + message + '</strong>' + (!loading?'<p>Konten publik yang sudah diterbitkan akan muncul di sini.</p>':'') + '</div>';
@@ -123,6 +97,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     '<section class="global-section global-products" id="local-products">' + heading('Produk lokal pilihan','Temukan pilihan dari sekitar Anda. Katalog dan cakupan lokasi diatur di Marketplace.','Jelajahi',routeHref('marketplace')) + '<div class="global-product-location"><span>' + renderIcon('mapPin') + '</span><div><strong>Jelajahi berdasarkan lokasi</strong><small>Marketplace dimulai dari cakupan lokasi pilihan; kota lain dan global dapat dipilih di sana.</small></div></div><div class="global-product-demo-rail">' + [['TAS ANYAMAN BALI','Tas Anyaman Bali','Rp159.000','Rp199.000','-20%'],['AKSESORI','Kacamata Vintage','Rp254.000','Rp299.000','-15%'],['KARYA LOKAL','Kalung Bali','Rp120.000','',''],['FASHION','Sandal Santai','Rp149.000','Rp199.000','-25%']].map((item,i)=>'<article class="global-product-demo"><div class="global-product-art global-product-art--' + (i+1) + '">' + (item[4]?'<b class="global-product-discount">' + item[4] + '</b>':'') + '</div><small>' + item[0] + '</small><strong>' + item[1] + '</strong><div class="global-product-price"><b>' + item[2] + '</b>' + (item[3]?'<del>' + item[3] + '</del>':'') + '</div><span>Pilihan dari pelaku usaha lokal</span></article>').join('') + '</div><a class="global-marketplace-cta" href="' + routeHref('marketplace') + '"><span class="global-marketplace-mark">' + renderIcon('store') + '</span><span><strong>Jelajahi Marketplace PLUITS</strong><small>Produk lokal, toko, kafe, restoran, dan lainnya</small></span><b>Belanja sekarang ' + renderIcon('arrow') + '</b></a></section>' +
     '<section class="global-section global-features" id="all-features">' + heading('Layanan PLUITS','Akses cepat ke layanan yang saling terhubung.','Jelajahi',routeHref('discover')) + '<div class="global-feature-rail">' + [['Transportasi','car'],['Toko & Perdagangan','store'],['Akomodasi','mapPin'],['Ticketing & Perjalanan','fileText'],['Layanan Profesional','briefcase'],['Makanan & Minuman','utensils'],['Properti & Ruang','mapPin'],['Mitra Lainnya','grid']].map(([label,icon])=>'<a class="global-feature-card" href="' + routeHref('discover') + '">' + renderIcon(icon) + '<strong>' + label + '</strong><span>Jelajahi mitra</span></a>').join('') + '</div></section>' + '<section class="global-section global-calendar-block"><div class="global-section-heading"><div><h2>Kalender & aktivitas</h2><p>Rencanakan agenda, perjalanan, dan pengalaman Anda.</p></div><a href="' + routeHref('discover') + '">Jelajahi ' + renderIcon('eye') + '</a></div><a class="global-calendar-card" href="' + routeHref('discover') + '"><span class="global-calendar-icon">' + renderIcon('book') + '</span><span><strong>Semua agenda dalam satu tempat</strong><small>Aktivitas, atraksi, perjalanan, dan jadwal pilihan Anda.</small></span><b>→</b></a></section>' + '<section class="global-about" aria-labelledby="global-about-title"><span class="global-kicker">SATU RUANG UNTUK BANYAK KEMUNGKINAN</span><h2 id="global-about-title">Terhubung, menemukan, dan bertransaksi bersama PLUITS.</h2><p>Mulai dari cerita teman, tempat menarik, produk lokal, hingga layanan sehari-hari—semuanya terhubung dalam satu ekosistem.</p><a href="' + routeHref('about') + '">Kenali PLUITS <span aria-hidden="true">→</span></a></section></main>' +
     bottomNav() + quickSearchSheet() + '</div>';
+  const unmountSocialPostInteractions=mountSocialPostInteractions(root);
   const searchBackdrop=root.querySelector('[data-quick-search-backdrop]');
   const searchInput=root.querySelector('[data-quick-search-form] input[name="q"]');
   const closeQuickSearch=()=>{if(searchBackdrop)searchBackdrop.hidden=true;document.body.classList.remove('global-search-open');};
@@ -150,7 +125,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
       if(!response.ok)throw new Error('Feed belum dapat dimuat.');
       const payload=await response.json();
       const posts=Array.isArray(payload.posts)?payload.posts:[];
-      feedTarget.innerHTML=posts.length?posts.map(post=>renderPostCard({authorName:post.author_name,username:post.username,caption:post.caption,content_kind:post.content_kind,created_at:post.created_at})).join(''):renderDemoFeed('feed');
+      feedTarget.innerHTML=(posts.length?posts.map(post=>renderPostCard({authorName:post.author_name,username:post.username,caption:post.caption,content_kind:post.content_kind,created_at:post.created_at})).join(''):'')+renderDemoFeed('feed');
     } catch(error) {
       if(error.name!=='AbortError')feedTarget.innerHTML=renderDemoFeed('feed');
     }
@@ -183,5 +158,5 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   }
   loadFeed();
   if(reelsTarget)reelsTarget.innerHTML=renderDemoFeed('reels');
-  return ()=>{controller.abort();observer?.disconnect();document.body.classList.remove('global-search-open');};
+  return ()=>{controller.abort();observer?.disconnect();unmountSocialPostInteractions();document.body.classList.remove('global-search-open');};
 }
