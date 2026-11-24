@@ -4,7 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {resolveRoute,resolveAuthenticatedRoute} from '../src/app/routes.js';
 import {APP_ROUTES,routeHref} from '../src/config/paths.js';
 import {PUBLIC_INFO_PAGES} from '../src/features/public-info/pages/index.js';
-test('Social app and account settings routes',()=>{assert.deepEqual(Object.keys(APP_ROUTES),['venue','restaurant','home','marketplace','social','circle','discover','dashboard','messages','profile','settings','register','login','forgot','reset','terms','privacy','about','help','faq','contact','guidelines','marketplaceInfo','sellerTerms','paymentPolicy','refundPolicy','shippingPolicy','accountDeletion','safety','cookies','privacyChoices','complaints','prohibitedItems']);assert.equal(resolveRoute('/pluits/',''),'home');assert.equal(resolveRoute('/pluits/hangout-leisure/',''),'venue');assert.equal(resolveRoute('/pluits/restaurant/',''),'restaurant');assert.equal(routeHref('restaurant'),'/pluits/restaurant/');assert.equal(resolveRoute('/pluits/circle/',''),'circle');assert.equal(resolveRoute('/pluits/discover/',''),'discover');assert.equal(resolveRoute('/pluits/social/',''),'social');assert.equal(resolveRoute('/pluits/messages/',''),'messages');assert.equal(resolveRoute('/pluits/profile/',''),'profile');assert.equal(resolveRoute('/pluits/settings/',''),'settings');assert.equal(routeHref('home'),'/pluits/');assert.equal(routeHref('settings'),'/pluits/settings/');});
+test('Social app and account settings routes',()=>{assert.deepEqual(Object.keys(APP_ROUTES),['venue','restaurant','home','marketplace','social','blog','circle','discover','dashboard','messages','profile','settings','register','login','forgot','reset','terms','privacy','about','help','faq','contact','guidelines','marketplaceInfo','sellerTerms','paymentPolicy','refundPolicy','shippingPolicy','accountDeletion','safety','cookies','privacyChoices','complaints','prohibitedItems']);assert.equal(resolveRoute('/pluits/',''),'home');assert.equal(resolveRoute('/pluits/hangout-leisure/',''),'venue');assert.equal(resolveRoute('/pluits/restaurant/',''),'restaurant');assert.equal(routeHref('restaurant'),'/pluits/restaurant/');assert.equal(resolveRoute('/pluits/circle/',''),'circle');assert.equal(resolveRoute('/pluits/discover/',''),'discover');assert.equal(resolveRoute('/pluits/social/',''),'social');assert.equal(resolveRoute('/pluits/blog/',''),'blog');assert.equal(routeHref('blog'),'/pluits/blog/');assert.equal(resolveRoute('/pluits/messages/',''),'messages');assert.equal(resolveRoute('/pluits/profile/',''),'profile');assert.equal(resolveRoute('/pluits/settings/',''),'settings');assert.equal(routeHref('home'),'/pluits/');assert.equal(routeHref('settings'),'/pluits/settings/');});
 test('public routes remain accessible without an account session',()=>{for(const route of ['dashboard','social','messages','settings','profile','discover','marketplace'])assert.equal(resolveAuthenticatedRoute(route,false),route);assert.equal(resolveAuthenticatedRoute('settings',true),'settings');assert.equal(resolveAuthenticatedRoute('home',true),'home');assert.equal(resolveAuthenticatedRoute('circle',false),'social');assert.equal(resolveAuthenticatedRoute('login',true),'social');assert.equal(resolveAuthenticatedRoute('register',false),'register');});
 test('shared brand always returns to public business homepage',async()=>{const shell=await readFile(new URL('../src/design-system/page-shell.js',import.meta.url),'utf8');assert.match(shell,/routeHref\('home'\)/);});
 test('social app surfaces have native app navigation and no website footer',async()=>{const social=await readFile(new URL('../src/features/social/social-pages.js',import.meta.url),'utf8');assert.match(social,/global-bottom-nav/);assert.match(social,/mountSettingsPage/);assert.doesNotMatch(social,/renderPageFooter/);assert.match(social,/data-sign-out/);assert.match(social,/routeHref\('settings'\)/);});
@@ -143,4 +143,21 @@ test('nearby restaurant preview opens the existing public restaurant profile',as
  assert.match(home,/item\.route \? routeHref\(item\.route\)/);
  assert.match(provider,/mountVenueProviderPage/);
  assert.match(app,/route === 'restaurant'.*mountVenueProviderPage/s);
+});
+
+
+test('Social Media Blog is a standalone route with module-owned CSS and no cross-feature imports',async()=>{
+ const [blog,css,app,home]=await Promise.all([
+  readFile(new URL('../src/features/social/blog/blog-page.js',import.meta.url),'utf8'),
+  readFile(new URL('../src/features/social/blog/blog-page.css',import.meta.url),'utf8'),
+  readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8'),
+  readFile(new URL('../src/features/home/home-page.js',import.meta.url),'utf8')
+ ]);
+ assert.match(app,/route === 'blog'.*mountBlogPage/s);
+ assert.match(blog,/export function mountBlogPage/);
+ assert.match(blog,/\.\.\/\.\.\/design-system\/tokens/);
+ assert.doesNotMatch(blog,/features\\/(?:home|marketplace|venue|dashboard)/);
+ assert.match(css,/^\\.sm-blog-page/);
+ assert.doesNotMatch(css,/(^|[,\\s])(?:body|html|:root|\\.global-|\\.social-)[\\s,{]/m);
+ assert.match(home,/routeHref\\('blog'\\)/);
 });
