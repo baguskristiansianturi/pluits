@@ -1,32 +1,28 @@
 # Mobile Layout Contract
 
-Status: implementation for mobile UI review.
+Status: shared mobile geometry contract.
 
 ## Standard mobile content
 - Breakpoint: viewport width up to 767px.
-- Shared page gutter: 5px from the left and right screen edges.
-- This applies to ordinary page content, headings, forms and standard cards unless a feature has a documented independent composition.
+- Standard page content, headings, supporting copy and form content use a 10px left/right inset.
+- Standard page containers must not introduce inconsistent nested gutters.
+- Feature-owned card appearance and dimensions remain controlled by their feature styles.
 
 ## Horizontal carousels
-- The rail begins 5px from the left viewport edge.
-- The rail may scroll horizontally to the full right viewport edge.
-- The last item must remain reachable; do not clip the scrollable content at the page container boundary.
-- Section heading and supporting copy remain aligned to the standard 5px gutter.
-- Carousel item dimensions, gaps, typography, colors and card treatments remain feature-owned.
+- The first card begins at the standard 10px left inset.
+- The scrollable rail extends through the right 10px content gutter to the physical right edge of the mobile viewport.
+- The rail must not be clipped by the page content container.
+- Cards keep their intrinsic/fixed responsive widths; do not shrink them to fit the viewport. A partial next card is intentional and signals horizontal scrolling.
+- The last card remains fully reachable by swiping.
+- Desktop/tablet carousels remain within the normal page content boundary.
 
 ## Full-viewport content surfaces
-The following content families are exempt from the standard horizontal gutter:
-- Feed
-- Reels
-- Blog
-- Live
-
-Their media/content surface may extend to both viewport edges. Their section title and description may retain a 5px inset for readability.
+Feed, Reels, Blog and Live content surfaces retain their full-viewport treatment. Their headings and supporting copy use the standard 10px inset where applicable.
 
 ## Desktop and tablet
-No geometry changes are introduced above the mobile breakpoint. Existing feature layouts remain authoritative.
+No new mobile breakout rules apply above 767px. Existing desktop content boundaries and carousel behavior remain authoritative.
 
 ## Change safety
-- Implement layout geometry in the shared responsive layout contract.
-- Do not alter colors, typography, radii, iconography, media aspect ratios, card dimensions or interaction behavior as part of a gutter change.
-- Check homepage, social profile, marketplace, auth and workspace surfaces for overflow and regressions after each update.
+- Implement shared geometry in the design-system responsive layout contract.
+- Do not change colors, typography, card dimensions, component interaction or unrelated visual treatments as part of a gutter adjustment.
+- Verify homepage, social profile, marketplace, auth and workspace layouts for overflow and clipping.
