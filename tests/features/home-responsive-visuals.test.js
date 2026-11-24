@@ -212,7 +212,7 @@ test('social post demo contains four distinct posts, sample comments/replies and
   assert.match(cardSource, /data-share-toggle/);
   assert.match(cardSource, /data-post-more/);
   assert.match(cardSource, /data-comment-like/);
-  assert.match(cardSource, /data-comment-count/);
+  assert.match(cardSource, /data-post-comment-count/);
   assert.match(cardCss, /pl-post-verification--warning/);
   assert.match(cardCss, /pl-post-tier--priority/);
   assert.match(cardCss, /pl-post-reaction-picker/);
