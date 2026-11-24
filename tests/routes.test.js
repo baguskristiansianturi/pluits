@@ -138,7 +138,7 @@ test('Social Home no longer embeds external merchant listings; venue remains a s
  const home=await readFile(new URL('../src/features/home/home-page.js',import.meta.url),'utf8');
  const provider=await readFile(new URL('../src/features/venue/venue-provider-page.js',import.meta.url),'utf8');
  const app=await readFile(new URL('../src/app/create-app.js',import.meta.url),'utf8');
- assert.doesNotMatch(home,/The Garden Table|global-local-card|routeHref\\('restaurant'\\)/);
+ assert.ok(!home.includes('The Garden Table') && !home.includes('global-local-card') && !home.includes("routeHref('restaurant')"));
  assert.match(provider,/mountVenueProviderPage/);
  assert.match(app,/route === 'restaurant'.*mountVenueProviderPage/s);
 });
