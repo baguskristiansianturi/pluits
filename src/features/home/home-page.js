@@ -100,7 +100,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   searchBackdrop?.addEventListener('click',event=>{if(event.target===searchBackdrop)closeQuickSearch();});
   root.querySelector('[data-quick-search-form]')?.addEventListener('submit',event=>{event.preventDefault();const query=searchInput?.value.trim()||'';window.location.href=routeHref('discover')+(query?'?q='+encodeURIComponent(query):'');});
   root.addEventListener('keydown',event=>{if(event.key==='Escape'&&searchBackdrop&&!searchBackdrop.hidden)closeQuickSearch();});
-  root.addEventListener('click',event=>{const more=event.target.closest('[data-feed-more]');if(!more||!root.contains(more))return;if(more.dataset.exhausted==='true'){window.location.href=routeHref('discover');return;}const hidden=[...root.querySelectorAll('[data-feed-page-hidden]')].filter(card=>card.hidden);hidden.slice(0,6).forEach(card=>{card.hidden=false;card.removeAttribute('data-feed-page-hidden');});if(!root.querySelector('[data-feed-page-hidden]')){more.textContent='Jelajahi lagi';more.dataset.exhausted='true';}else{more.textContent='Tampilkan postingan lainnya';}});
+  root.addEventListener('click',event=>{const more=event.target.closest('[data-feed-more]');if(!more||!root.contains(more))return;if(more.dataset.exhausted==='true'){window.location.href=routeHref('discover');return;}const hidden=[...root.querySelectorAll('[data-feed-page-hidden]')].filter(card=>card.hidden&&(activeContentFilter==='all'||(activeContentFilter==='reels'&&card.dataset.contentKind==='reel')||(activeContentFilter==='blog'&&card.dataset.contentKind==='blog')));hidden.slice(0,6).forEach(card=>{card.removeAttribute('data-feed-page-hidden');});applyContentFilter(activeContentFilter);if(!root.querySelector('[data-feed-page-hidden]')){more.textContent='Jelajahi lagi';more.dataset.exhausted='true';}});
   const buttons=[...root.querySelectorAll('[data-content-tab]')];
   const stream=root.querySelector('[data-content-stream]');
   let activeContentFilter='all';
@@ -108,9 +108,11 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     activeContentFilter=filter;
     buttons.forEach(button=>{const active=button.dataset.contentTab===filter;button.classList.toggle('is-active',active);button.setAttribute('aria-pressed',String(active));});
     stream?.querySelectorAll('[data-content-kind]').forEach(item=>{item.hidden=filter!=='all'&&item.dataset.contentKind!==filter;});
-    stream?.querySelectorAll('[data-post-card]').forEach(card=>{const kind=card.dataset.contentKind||'photo';card.hidden=filter==='all'?false:filter==='reels'?kind!=='reel':filter==='blog'?kind!=='blog':true;});
+    stream?.querySelectorAll('[data-post-card]').forEach(card=>{const kind=card.dataset.contentKind||'photo',matches=filter==='all'||(filter==='reels'&&kind==='reel')||(filter==='blog'&&kind==='blog');card.hidden=card.hasAttribute('data-feed-page-hidden')||!matches;});
     const feed=stream?.querySelector('[data-live-feed]');
     if(feed)feed.hidden=filter==='live';
+    const moreButton=stream?.querySelector('[data-feed-more]');
+    if(moreButton){const hasMore=[...(stream.querySelectorAll('[data-feed-page-hidden]'))].some(card=>filter==='all'||(filter==='reels'&&card.dataset.contentKind==='reel')||(filter==='blog'&&card.dataset.contentKind==='blog'));moreButton.hidden=!hasMore;moreButton.textContent=moreButton.dataset.exhausted==='true'?'Jelajahi lagi':'Tampilkan postingan lainnya';}
     stream?.querySelectorAll('.pl-post-demo-stream-heading').forEach(heading=>heading.hidden=filter!=='all');
   };
   buttons.forEach(button=>button.addEventListener('click',()=>applyContentFilter(button.dataset.contentTab)));
