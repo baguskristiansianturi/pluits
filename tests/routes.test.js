@@ -157,8 +157,8 @@ test('Social Media Blog is a standalone route with module-owned CSS and no cross
  assert.ok(blog.includes('export function mountBlogPage'));
  assert.ok(blog.includes("../../design-system/page-shell.css"));
  assert.ok(blog.includes("../../design-system/icons.js"));
- assert.doesNotMatch(blog,/features\\/(?:home|marketplace|venue|dashboard)/);
+ assert.ok(!blog.includes('features/home') && !blog.includes('features/marketplace') && !blog.includes('features/venue') && !blog.includes('features/dashboard'));
  assert.ok(css.startsWith('/* Social Media Blog owns every selector'));
- assert.doesNotMatch(css,/(^|,)\\s*(?:body|html|:root|\\.global-|\\.social-)/m);
+ assert.ok(!css.includes('body{') && !css.includes('html{') && !css.includes(':root') && !css.includes('.global-') && !css.includes('.social-'));
  assert.ok(home.includes("routeHref('blog')"));
 });
