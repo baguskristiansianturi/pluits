@@ -92,7 +92,7 @@
 .global-blog-demo strong{color:var(--pl-color-ink);font-size:13px;line-height:1.35}
 .global-blog-demo p{margin:0;color:var(--pl-color-muted);font-size:10px;line-height:1.5}
 .global-products{padding-top:30px}
-.global-product-demo-rail{width:100vw;margin-inline:calc(50% - 50vw);padding-inline:10px}
+.global-product-demo-rail{width:100vw;margin-inline:calc(50% - 50vw);padding-inline:var(--pl-page-gutter)}
 .global-product-demo{display:flex;flex:0 0 158px;flex-direction:column;gap:5px;scroll-snap-align:start}
 .global-product-art{display:flex;min-height:128px;align-items:flex-end;padding:12px;border-radius:var(--pl-radius-md);background:linear-gradient(140deg,#dbe7e8,#c9d7df)}
 .global-product-art--2{background:linear-gradient(140deg,#e8ddd6,#d7dfe9)}
@@ -205,7 +205,7 @@
 .global-product-location>div{display:grid;gap:2px}
 .global-product-location strong{color:var(--pl-color-ink);font-size:11px}
 .global-product-location small{color:var(--pl-color-muted);font-size:9px;line-height:1.45}
-.global-feature-rail{display:flex;gap:10px;width:100vw;margin-inline:calc(50% - 50vw);overflow-x:auto;padding:0 10px 9px;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-inline:contain;touch-action:pan-x}
+.global-feature-rail{display:flex;gap:10px;width:100vw;margin-inline:calc(50% - 50vw);overflow-x:auto;padding:0 var(--pl-page-gutter) 9px;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-inline:contain;touch-action:pan-x}
 .global-feature-rail::-webkit-scrollbar{display:none}
 .global-feature-card{display:flex;flex:0 0 132px;min-height:112px;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:9px;padding:13px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-md);background:var(--pl-color-surface);color:var(--pl-color-ink);text-decoration:none;scroll-snap-align:start}
 .global-feature-card>.ui-icon{width:21px;height:21px;color:var(--pl-color-brand)}
@@ -857,10 +857,9 @@
 
 /* SOCIAL-HOME-GEOMETRY-004 — Social Home rail/card geometry. Page gutter and content frame belong to the shared shell. */
 @media (max-width: 767px) {
-  .global-home-page{}
   .global-home-page > .global-home-main{box-sizing:border-box;min-width:0}
   .global-home-main > * { min-width:0}
-  .global-quick-search { box-sizing:border-box; width:100vw; max-width:100vw; margin-inline:calc(50% - 50vw); padding:5px 10px 6px; gap:6px; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x mandatory}
+  .global-quick-search { box-sizing:border-box; width:100vw; max-width:100vw; margin-inline:calc(50% - 50vw); padding:5px var(--pl-page-gutter) 6px; gap:6px; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x mandatory}
   .global-quick-search > a { min-height:34px; padding-inline:9px; gap:5px; border:1px solid var(--pl-color-border); border-radius:7px; background:#fff; }
   .global-location-row { margin:30px 0 8px; padding-inline:0}
   .global-unified-search { margin:0 0 24px}
@@ -870,7 +869,7 @@
   .global-demo-rail,.global-story-rail,.global-people-rail,.global-local-rail,.global-product-demo-rail,.global-feature-rail,.global-service-rail {
     box-sizing:border-box; display:flex; width:100%; max-width:none; min-width:0; margin:0;
     padding:0 10px 9px; overflow-x:auto; gap:9px; scroll-snap-type:x mandatory;
-    scroll-padding-inline:0 10px; overscroll-behavior-inline:contain;
+    scroll-padding-inline:0 var(--pl-page-gutter); overscroll-behavior-inline:contain;
     -webkit-overflow-scrolling:touch; scrollbar-width:none; touch-action:pan-x}
   .global-demo-rail::-webkit-scrollbar,.global-story-rail::-webkit-scrollbar,.global-people-rail::-webkit-scrollbar,
   .global-local-rail::-webkit-scrollbar,.global-product-demo-rail::-webkit-scrollbar,
@@ -885,13 +884,13 @@
   .global-product-demo { flex:0 0 142px}
   .global-feature-card { flex:0 0 138px}
   .global-service-rail { gap:8px}
-  .global-content-tabs { box-sizing:border-box; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); width:100vw; max-width:100vw; margin:4px calc(50% - 50vw) 16px; padding:7px 10px; gap:3px}
+  .global-content-tabs { box-sizing:border-box; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); width:100vw; max-width:100vw; margin:4px calc(50% - 50vw) 16px; padding:7px var(--pl-page-gutter); gap:3px}
   .global-content-section { box-sizing:border-box; width:100vw; max-width:100vw; min-width:0; margin:0 calc(50% - 50vw) 14px; padding:16px 0 24px}
-  .global-content-section .global-content-intro { margin:0 10px 12px; padding:0}
+  .global-content-section .global-content-intro { margin:0 var(--pl-page-gutter) 12px; padding:0}
   .global-post-list { box-sizing:border-box; display:grid; width:100%; max-width:none; min-width:0; margin:0; padding:0; gap:12px}
   .global-post-card { box-sizing:border-box; display:block; width:100%; max-width:none; min-width:0; margin:0; overflow:hidden; border-radius:var(--pl-radius-card)}
   .global-post-author { padding-inline:10px}
-  .global-post-caption,.global-post-actions { padding-left:10px; padding-right:10px}
+  .global-post-caption,.global-post-actions { padding-left:var(--pl-page-gutter); padding-right:var(--pl-page-gutter)}
   .global-post-media { width:100vw; max-width:100vw; margin-inline:calc(50% - 50vw)}
   .global-composer,.global-about { margin-inline:0}
   .global-calendar-block { margin-inline:0}
@@ -899,4 +898,3 @@
   .global-calendar-card,.global-product-art,.global-marketplace-cta,.global-about,.global-composer,.global-service-shortcut {
     border-radius:var(--pl-radius-card)}
 }
-@media (max-width: 359px) { .global-home-page { --home-gutter:10px} }
