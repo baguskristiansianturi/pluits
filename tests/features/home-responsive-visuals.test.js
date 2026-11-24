@@ -78,6 +78,7 @@ test('authenticated home uses 10px mobile content gutters, edge-bleed carousels 
   const css = await readFile(homeCss, 'utf8');
   assert.match(css, /SOCIAL-HOME-GEOMETRY-004/);
   assert.match(css, /var\(--pl-page-gutter\)/);
+  assert.doesNotMatch(css, /--home-gutter/);
   assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
   assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)/s);
   assert.match(css, /\.global-post-card\s*\{[^}]*border-radius:\s*var\(--pl-radius-card\)/s);
@@ -116,5 +117,5 @@ test('Social Home and Discover share one page surface and one standard content f
   assert.doesNotMatch(home, /\.global-home-page\s*\{[^}]*background:/s);
   assert.doesNotMatch(discover, /\.social-shell\s*\{[^}]*background:/s);
   assert.doesNotMatch(home, /\.global-home-main\s*\{[^}]*padding-inline:/s);
-  assert.doesNotMatch(discover, /\.social-main\s*\{[^}]*padding-inline:/s);
+  assert.doesNotMatch(discover, /\.social-main\s*\{[^}]*(?:width|max-width|padding-inline):/s);
 });
