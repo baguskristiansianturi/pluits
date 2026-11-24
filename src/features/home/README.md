@@ -145,3 +145,10 @@ Automated tests and production deployment verify source contracts and build outp
 The public marketing homepage remains owned by `src/features/home/business-home-page.js` and `business-home.css`. The authenticated Social Home currently still lives in this historical folder, but that is a legacy runtime location, not its intended domain ownership. Social Home, Feed, Blog, Reels, Stories, Live, Discover, Profile, and Connections belong to the Social Media domain and must be migrated to its owned runtime boundary in controlled, tested slices.
 
 Blog is not yet a standalone runtime feature in this snapshot: the Blog presentation in `home-page.js` is demo content. It must not be treated as the Blog module or as an implemented editor/publishing lifecycle. Until a separate Blog runtime exists, preserve the current presentation as baseline and keep the implementation status explicit. See the Social Media runtime ownership and isolation audit in the Master Model documentation.
+
+
+## Social Media domain boundary — 25 November 2026
+- Social Home is now limited to Social Media-owned experiences: people discovery, Circle Stories, Feed/Reels/Live aggregation, Blog handoff, and the social composer.
+- Marketplace products, merchant/place listings, transportation/service shortcuts, calendar/activities and general ecosystem promotion are not Social Home content. They remain owned by their respective domains and may be opened only through explicit, user-initiated navigation/integration contracts.
+- Blog has a dedicated runtime entry at `/blog/` under `src/features/social/blog/`; see the module README and the Social Media runtime audit for implementation status.
+- This does not mean the full CSS migration is complete. `home-page.css` still has legacy `.global-*` selectors and the app bootstrap still has shared/eager CSS imports. Keep the audit open until consumer mapping, CSS root isolation, and browser regression are verified.
