@@ -544,8 +544,6 @@
 .global-header:before{display:none}
 .global-header .pl-page-header-inner{width:100%;max-width:none}
 
-
-
 .global-quick-search>a>span:first-child{display:grid;place-items:center}
 .global-quick-search .ui-icon{width:15px;height:15px}
 .global-quick-search strong{font-size:11px;font-weight:650;letter-spacing:-.01em}
@@ -678,16 +676,8 @@
   padding-inline:var(--pl-page-gutter);
   background:#fff}
 
-@media(max-width:767px){
-  
-}
-
 /* Unified service search and local-first social home */
 .global-home-page{overflow-x:clip}
-
-
-
-
 
 .global-location-row{display:flex;align-items:center;gap:9px;margin:10px 10px 9px;color:#243447}
 .global-location-row>span:first-child{color:var(--pl-color-brand)}
@@ -700,18 +690,12 @@
 .global-search-heading>div>small{font-size:9px;font-weight:750;letter-spacing:.1em;color:#7a8792}
 .global-search-heading h1{margin:3px 0 0;font-size:21px;line-height:1.15;letter-spacing:-.04em;color:#172b45}
 
-
-
-
-
 .global-search-services{display:flex;gap:6px;overflow-x:auto;margin:0 -12px 11px;padding:0 12px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .global-search-services::-webkit-scrollbar{display:none}
 .global-search-services button{flex:0 0 auto;min-height:31px;padding:0 11px;border:1px solid #e8edf0;border-radius:999px;background:#fff;color:#5e6a76;font:inherit;font-size:10px;font-weight:600;white-space:nowrap}
 .global-search-services button.is-active{border-color:var(--pl-color-brand);background:var(--pl-color-brand-soft);color:var(--pl-color-brand)}
 
-
 .global-search-fields label[hidden]{display:none}
-
 
 .global-search-fields input::placeholder{color:#9aa4ad}
 
@@ -784,24 +768,8 @@
 /* SOCIAL-HOME-PRO-POLISH-003 — PLUITS palette, compact search and precise mobile gutters. */
 .global-home-page{color:var(--pl-color-text)}
 
-
-
-
 .global-location-row{margin:14px 0 18px}
 .global-location-row>span:first-child,
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .global-section-heading{padding-inline:10px;margin-bottom:10px}
 .global-nearby,.global-people-section,.global-stories{padding-inline:0}
@@ -921,7 +889,7 @@ body.global-search-open{overflow:hidden}
  .global-search-sheet{padding:17px;border-radius:14px}
 }
 @media(min-width:768px){.global-local-card{flex-basis:280px}}
-@media(prefers-reduced-motion:reduce){}
+
 .global-local-card{flex:0 0 70vw;max-width:310px;min-width:0}
 .global-local-image{aspect-ratio:1.48/1}
 .global-local-rating{right:auto;bottom:9px;left:9px;display:inline-flex;align-items:center;gap:3px;width:auto;padding:7px 9px;border:1px solid rgba(255,255,255,.18);border-radius:7px;background:rgba(12,25,38,.82);font-size:10px}
@@ -945,14 +913,10 @@ body.global-search-open{overflow:hidden}
 @media(min-width:1024px){
  .global-local-card{flex-basis:280px}
 }
-@media(prefers-reduced-motion:reduce){}
+
 .global-local-rail{max-width:100%;min-width:0}
 .global-local-card{contain:layout paint}
 .global-home-main>.global-social-area,.global-home-main>.global-products,.global-home-main>.global-features,.global-home-main>.global-calendar-block,.global-home-main>.global-about{content-visibility:auto;contain-intrinsic-size:auto 900px}
-@media(max-width:767px){}
-@media(max-width:359px){}
-@media(min-width:768px){}
-@media(prefers-reduced-motion:reduce){}
 
 /* HOME-DISCOVERY-INTEREST-GEO-001 — interest-led ideas and location-led directory preview. */
 .global-recommendations{min-width:0;margin-bottom:24px}
