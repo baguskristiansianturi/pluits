@@ -7,19 +7,21 @@ const homeCss = new URL('../../src/features/home/home-page.css', import.meta.url
 const discoverJs = new URL('../../src/features/social/social-pages.js', import.meta.url);
 const discoverCss = new URL('../../src/features/social/social-pages.css', import.meta.url);
 
-test('social home keeps rich test content visually clean without technical demo labels', async () => {
+test('social home keeps illustrative content separated from interactive demo post fixtures', async () => {
   const source = await readFile(homeJs, 'utf8');
-  assert.match(source, /const demoFeedPosts\s*=\s*\[/);
-  assert.match(source, /const demoReels\s*=\s*\[/);
-  assert.match(source, /function renderDemoFeed/);
-  assert.doesNotMatch(source, /DEMO · |LIVE · DEMO|Konten ilustrasi|Contoh profil|Foto profil contoh|Simulasi|Pratinjau/);
+  const cardSource = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
+  assert.match(source, /renderSocialPostCard as renderPostCard/);
+  assert.match(source, /renderDemoFeed\('feed'\)/);
+  assert.match(cardSource, /export const demoFeedPosts = \[/);
+  assert.match(cardSource, /export function renderDemoFeed/);
+  assert.match(cardSource, /Contoh postingan/);
+  assert.match(cardSource, /data demo/);
   assert.match(source, /function storyRail\(\)/);
   assert.match(source, /global-live-demo-grid/);
   assert.match(source, /global-blog-demo-grid/);
   assert.match(source, /global-product-demo-rail/);
   assert.match(source, /global-marketplace-cta/);
 });
-
 test('social home responsive styles cover narrow mobile, tablet, desktop and horizontal carousels', async () => {
   const css = await readFile(homeCss, 'utf8');
   assert.match(css, /@media\s*\(max-width:\s*359px\)/);
@@ -186,4 +188,34 @@ test('homepage Explore actions use soft interactive styling and nearby distance 
   assert.match(distanceRule, /border-radius:0/);
   assert.match(distanceRule, /background:transparent/);
   assert.match(distanceRule, /text-shadow:/);
+});
+
+
+test('social post demo contains four distinct posts, sample comments/replies and fully wired interaction controls', async () => {
+  const cardSource = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
+  const cardCss = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
+  assert.match(cardSource, /id:'demo-post-alya'/);
+  assert.match(cardSource, /id:'demo-post-raka'/);
+  assert.match(cardSource, /id:'demo-post-nadia'/);
+  assert.match(cardSource, /id:'demo-post-dimas'/);
+  assert.match(cardSource, /verification:'unverified'/);
+  assert.match(cardSource, /membership:'Premium'/);
+  assert.match(cardSource, /membership:'Silver'/);
+  assert.match(cardSource, /membership:'Platinum'/);
+  assert.match(cardSource, /membership:'PLUITS Priority'/);
+  assert.match(cardSource, /data-video-limit="10"/);
+  assert.match(cardSource, /data-reaction-trigger/);
+  assert.match(cardSource, /data-gift-toggle/);
+  assert.match(cardSource, /data-comment-form/);
+  assert.match(cardSource, /data-reply-comment/);
+  assert.match(cardSource, /data-share-toggle/);
+  assert.match(cardSource, /data-post-more/);
+  assert.match(cardSource, /data-comment-like/);
+  assert.match(cardSource, /data-comment-count/);
+  assert.match(cardCss, /pl-post-verification--warning/);
+  assert.match(cardCss, /pl-post-tier--priority/);
+  assert.match(cardCss, /pl-post-reaction-picker/);
+  assert.match(cardCss, /pl-post-gift-panel/);
+  assert.match(cardCss, /pl-post-comment-replies/);
+  assert.match(cardCss, /pl-post-more/);
 });
