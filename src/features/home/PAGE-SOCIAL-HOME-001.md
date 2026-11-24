@@ -18,25 +18,22 @@
 
 ## Mobile-first content hierarchy
 1. Shared PLUITS header with compact account, search, cart, and notification actions.
-2. Compact location-scope row and welcome hero with one unified discovery/search entry point for people, places, products, and services. Location selection remains explicit until the location service is connected; do not imply GPS detection is active.
-3. Compact horizontal service-shortcut carousel: Transportasi, Tiket, Sewa Mobil, Akomodasi, Kurir, and Kuliner. These are entry shortcuts only; each service keeps its own module and search/transaction flow.
-4. **Orang yang mungkin Anda kenal** — horizontal profile-suggestion carousel.
-5. **Cerita dari circle Anda** — horizontal story carousel, including the user's own add-story entry.
-6. Social content tabs in this order: **Feed, Reels, Live, Blog**. Tabs belong only to the social area, scroll with the page, and are not sticky.
-7. Sequential, vertically scrollable social content. Feed cards use full-width, Instagram-like media presentation on mobile. Existing published Feed/Reels data integration is retained; Live, Stories, and Blog remain prototype surfaces until their services are connected.
-8. **Jelajahi di sekitar Anda** — horizontal local discovery carousel for places, food, activities, and services.
-9. **Produk lokal pilihan** — horizontal product/category preview leading to Marketplace, followed by a clear Marketplace CTA. Marketplace should start from the user's current/selected location and allow the user to change scope to another city or global. Location-aware product data and location selection remain pending Marketplace/service integration; current home cards are visibly demo-only.
-10. Compact dark **Tentang PLUITS** summary before the persistent app navigation.
+2. A single quick-search entry directly below the header. It opens a search overlay/sheet with a search field and category shortcuts; the former horizontal service-filter rail and inline service-search form are removed from the home surface.
+3. **Top 10 discovery** — separate horizontal carousels by category (initial visual fixtures: Wisata, Restoran, Seafood, and Kuliner Lokal). The scope label reflects the selected/global region; the current visual prototype uses Bali as the island-level scope for a user around Denpasar. Each carousel shows about 90% of a card on mobile and advances automatically every 2.6 seconds, while remaining manually swipeable. At the end, it loops forward seamlessly rather than reversing. These are design fixtures, not real rankings or verified reviews.
+4. **Di sekitar Anda** — local discovery carousel immediately after Top 10 and before the social feed. Cards are taller/larger, approximately 70% of the mobile viewport width, with a large photo, rating/review overlay on the photo, business/place name, category/location, and a short review excerpt below. Fixtures remain illustrative until connected to verified local data.
+5. Social experience remains the dominant product identity: people suggestions, Stories from the user's circle, Feed/Reels/Live/Blog tabs, and vertically scrolling social content. Feed cards remain full-width on mobile.
+6. **Produk lokal pilihan** — horizontal product/category preview leading to Marketplace, followed by a clear Marketplace CTA. Marketplace should start from the user's current/selected location and allow the user to change scope to another city or global. Location-aware product data and location selection remain pending Marketplace/service integration.
+7. Compact dark **Tentang PLUITS** summary before the persistent app navigation.
 
 ## Layout and interaction rules
-- The service-shortcut rail sits directly after the shared header. The Social Home main content does not inherit the generic shell header-to-content gap; the page-owned 30px transition before the location row is the sole spacing between shortcuts and the search hero.
 - Preserve shared page shell, logo, header geometry, tokens, registered icons, and standard content gutters.
-- Use viewport-wide horizontal carousel tracks while retaining content gutters for section headings and card copy.
-- Carousels use horizontal touch panning and scroll snap; users can reach the last item without causing document-level horizontal overflow.
-- Social posts are full-width on mobile; desktop/tablet may retain a readable constrained feed width.
+- Quick search is one clear entry point; its overlay handles the search field and category shortcuts. Do not restore the old service shortcut filter rail or inline service form to the homepage.
+- Top 10 carousels use viewport-wide tracks, about 90vw card width on mobile, touch panning, scroll snap, and a forward-only seamless loop. Autoplay interval is approximately 2.6 seconds; manual touch, pointer, wheel, or keyboard interaction temporarily pauses autoplay. Respect reduced-motion preferences.
+- Around You uses a viewport-wide horizontal track, about 70vw card width on mobile, larger portrait-ish photo area, readable rating overlay and review excerpt. Keep the next card partially visible.
+- Social posts remain full-width on mobile; tablet/desktop may retain a readable constrained feed width.
 - Tabs navigate to their corresponding content sections and update the active visual state as the user scrolls. They do not pin to the viewport.
 - Bottom navigation remains fixed and safe-area aware.
-- Keep the authenticated home distinct from the public marketing homepage. The compact dark About summary is the final content section before persistent app navigation; do not import business-owner marketing sections.
+- Keep the authenticated home distinct from the public marketing homepage. The compact dark About summary remains the final content section before persistent app navigation; do not import business-owner marketing sections.
 
 ## Data integrity and availability
 - Real Feed/Reels content must come only from the first-party PLUITS social API and existing authorization rules.
