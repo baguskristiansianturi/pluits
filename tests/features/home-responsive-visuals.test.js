@@ -128,7 +128,7 @@ test('shared page header background and divider bleed to viewport edges independ
 });
 
 
-test('Social Home discovery hierarchy uses a search overlay, category Top 10 rails, and larger Around You cards before the feed', async () => {
+test('Social Home discovery hierarchy uses one mixed Top 10 carousel and professional Around You cards before the feed', async () => {
   const source = await readFile(homeJs, 'utf8');
   const css = await readFile(homeCss, 'utf8');
   const spec = await readFile(new URL('../../src/features/home/PAGE-SOCIAL-HOME-001.md', import.meta.url), 'utf8');
@@ -136,15 +136,25 @@ test('Social Home discovery hierarchy uses a search overlay, category Top 10 rai
   assert.match(source, /data-quick-search-backdrop/);
   assert.doesNotMatch(source, /class="global-quick-search"/);
   assert.doesNotMatch(source, /class="global-unified-search"/);
-  assert.match(source, /const topTenCategories = \[/);
-  assert.match(source, /global-top-ten-rail/);
+  assert.match(source, /const topTenItems = \[/);
+  assert.equal((source.match(/class="global-top-ten-rail"/g) || []).length, 1);
+  assert.match(source, /data-top-ten-prev/);
+  assert.match(source, /data-top-ten-next/);
   assert.match(source, /global-local-rating/);
   assert.match(source, /global-local-copy/);
+  assert.match(source, /global-local-category/);
+  assert.match(source, /global-local-location/);
+  assert.match(source, /global-local-review/);
+  assert.match(source, /ULASAN PENGUNJUNG/);
+  assert.match(source, /const nearbyItems = \[/);
   assert.ok(source.includes("streams + '</div>' +"));
   assert.match(css, /\.global-top-ten-card\{[^}]*flex-basis:90vw/s);
+  assert.match(css, /\.global-top-ten-card\{[^}]*aspect-ratio:1\.42\/1/s);
+  assert.match(css, /\.global-local-review\{[^}]*border-left:2px solid var\(--pl-color-brand\)/s);
   assert.match(css, /\.global-local-card\{[^}]*flex-basis:70vw/s);
   assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
   assert.match(source, /setInterval\(advance,2600\)/);
   assert.match(spec, /Top 10 discovery/);
+  assert.match(spec, /single mixed-content carousel/);
   assert.match(spec, /Di sekitar Anda/);
 });
