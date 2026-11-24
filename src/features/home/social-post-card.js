@@ -82,11 +82,20 @@ function statusMarkup(post) {
     ? '<span class="pl-post-verification pl-post-verification--warning" title="Belum terverifikasi. Periksa informasi akun sebelum mempercayainya." aria-label="Akun belum terverifikasi"><span aria-hidden="true">!</span></span>'
     : '<span class="pl-post-verification pl-post-verification--verified" title="Akun terverifikasi" aria-label="Akun terverifikasi">' + renderIcon('check') + '</span>';
 }
-function renderReplies(replies) {
-  return (replies || []).map((reply) => '<div class="pl-post-reply"><strong>' + escapeHtml(reply.name) + '</strong><span>' + escapeHtml(reply.text) + '</span></div>').join('');
+function commentAvatarMarkup(person, size = 80) {
+  return person.avatar
+    ? '<img src="https://images.unsplash.com/' + escapeHtml(person.avatar) + '?auto=format&fit=crop&w=' + size + '&h=' + size + '&q=70" alt="" loading="lazy">'
+    : escapeHtml((person.name || 'P').slice(0,1));
 }
-function renderComment(comment) {
-  return '<article class="pl-post-comment" data-comment-id="' + escapeHtml(comment.id) + '"><div class="pl-post-comment-avatar">' + (comment.avatar ? '<img src="https://images.unsplash.com/' + escapeHtml(comment.avatar) + '?auto=format&fit=crop&w=80&h=80&q=70" alt="" loading="lazy">' : escapeHtml(comment.name.slice(0,1))) + '</div><div class="pl-post-comment-body"><div class="pl-post-comment-bubble"><strong>' + escapeHtml(comment.name) + '</strong><p>' + escapeHtml(comment.text) + '</p></div><div class="pl-post-comment-tools"><button type="button" data-comment-like>♡ <span>' + Number(comment.likes || 0) + '</span></button><button type="button" data-reply-comment>Balas</button><button type="button" data-comment-more aria-label="Opsi komentar">' + renderIcon('moreVertical') + '</button></div><div class="pl-post-comment-replies">' + renderReplies(comment.replies) + '</div></div></article>';
+function renderReplies(replies, postOwner) {
+  return (replies || []).map((reply) => {
+    const isOwner = reply.name === postOwner;
+    const sideClass = isOwner ? 'is-owner' : 'is-right';
+    return '<div class="pl-post-reply ' + sideClass + '"><div class="pl-post-reply-bubble"><strong>' + escapeHtml(reply.name) + '</strong><span>' + escapeHtml(reply.text) + '</span></div><div class="pl-post-reply-avatar">' + commentAvatarMarkup(reply, 64) + '</div></div>';
+  }).join('');
+}
+function renderComment(comment, postOwner) {
+  return '<article class="pl-post-comment" data-comment-id="' + escapeHtml(comment.id) + '"><div class="pl-post-comment-avatar">' + commentAvatarMarkup(comment) + '</div><div class="pl-post-comment-body"><div class="pl-post-comment-bubble"><strong>' + escapeHtml(comment.name) + '</strong><p>' + escapeHtml(comment.text) + '</p></div><div class="pl-post-comment-tools"><button type="button" data-comment-like aria-pressed="false" aria-label="Sukai komentar">' + renderIcon('heart') + ' <span>' + Number(comment.likes || 0) + '</span></button><button type="button" data-reply-comment>Balas</button><button type="button" data-comment-more aria-label="Opsi komentar">' + renderIcon('moreVertical') + '</button></div><div class="pl-post-comment-replies">' + renderReplies(comment.replies, postOwner) + '</div></div></article>';
 }
 function renderReactionPicker() {
   return '<div class="pl-post-reaction-picker" data-reaction-picker hidden>' + reactions.map((reaction) => '<button type="button" data-reaction="' + reaction.id + '" aria-label="' + reaction.label + '" title="' + reaction.label + '">' + reaction.emoji + '<span>' + reaction.label + '</span></button>').join('') + '</div>';
@@ -105,10 +114,18 @@ function renderCaption(value) {
   return escaped.replace(/(^|\s)(#[\p{L}\p{N}_]+|@[\p{L}\p{N}._]+)/gu,'$1<span class="pl-post-tag">$2</span>');
 }
 function renderMedia(post) {
-  if (post.type === 'video') {
-    return '<div class="pl-post-media-wrap pl-post-media-wrap--video"><video class="pl-post-media pl-post-video" data-demo-video data-video-limit="10" src="' + escapeHtml(post.mediaUrl) + '" poster="' + escapeHtml(post.poster || '') + '" controls playsinline preload="none" aria-label="Video postingan ' + escapeHtml(post.authorName) + '"></video><span class="pl-post-video-limit">Video demo · maksimal 10 detik</span></div>';
-  }
-  return '<div class="pl-post-media-wrap"><img class="pl-post-media" src="' + escapeHtml(post.mediaUrl) + '" alt="Foto postingan ' + escapeHtml(post.authorName) + '" loading="lazy" decoding="async"></div>';
+  const media = post.type === 'video'
+    ? '<video class="pl-post-media pl-post-video" data-demo-video data-video-limit="10" src="' + escapeHtml(post.mediaUrl) + '" poster="' + escapeHtml(post.poster || '') + '" controls playsinline preload="none" aria-label="Video postingan ' + escapeHtml(post.authorName) + '"></video><span class="pl-post-video-limit">Video demo · maksimal 10 detik</span>'
+    : '<img class="pl-post-media" src="' + escapeHtml(post.mediaUrl) + '" alt="Foto postingan ' + escapeHtml(post.authorName) + '" loading="lazy" decoding="async">';
+  return '<div class="pl-post-media-wrap' + (post.type === 'video' ? ' pl-post-media-wrap--video' : '') + '">' + media +
+    '<div class="pl-post-media-overlay"><div class="pl-post-media-actions">' +
+    '<button type="button" class="pl-post-media-action pl-post-media-action--reaction" data-reaction-trigger aria-expanded="false" aria-label="Like"><span class="pl-post-media-action-icon" data-reaction-icon>' + renderIcon('heart') + '</span><span class="pl-post-media-action-count" data-overlay-like-count>' + escapeHtml(post.likeLabel) + '</span></button>' +
+    '<button type="button" class="pl-post-media-action" data-comment-focus aria-label="Komentar"><span class="pl-post-media-action-icon">' + renderIcon('message') + '</span><span class="pl-post-media-action-count" data-overlay-comment-count>' + post.commentsCount + '</span></button>' +
+    '<button type="button" class="pl-post-media-action pl-post-media-action--gift" data-gift-toggle aria-expanded="false" aria-label="Kirim gift"><span class="pl-post-media-action-icon">' + renderIcon('sparkles') + '</span><span class="pl-post-media-action-label">Gift</span></button>' +
+    '<button type="button" class="pl-post-media-action" data-share-toggle aria-expanded="false" aria-label="Bagikan"><span class="pl-post-media-action-icon">' + renderIcon('arrow') + '</span><span class="pl-post-media-action-label">Bagikan</span></button>' +
+    renderReactionPicker() + '</div>' +
+    '<button type="button" class="pl-post-received-gifts" data-gift-received-toggle aria-expanded="false" aria-label="' + post.giftCount + ' gift diterima"><span class="pl-post-received-gifts-icon">' + renderIcon('sparkles') + '</span><span data-post-gift-count>' + post.giftCount + '</span><span>gift</span></button>' +
+    renderGiftPanel(post) + renderSharePanel(post) + '</div></div>';
 }
 export function renderSocialPostCard(post) {
   if (!post.isDemo) {
@@ -117,9 +134,8 @@ export function renderSocialPostCard(post) {
   return '<article class="global-post-card pl-post-card is-demo" data-post-card data-post-id="' + escapeHtml(post.id) + '" data-base-likes="' + post.likes + '" data-base-gifts="' + post.giftCount + '" data-base-comments="' + post.commentsCount + '">' +
     '<header class="global-post-author pl-post-author"><span class="global-post-avatar pl-post-avatar-shell">' + avatarMarkup(post) + '</span><span class="global-post-author-copy pl-post-author-copy"><strong>' + escapeHtml(post.authorName) + ' ' + statusMarkup(post) + '</strong><small>@' + escapeHtml(post.username) + ' · ' + escapeHtml(post.time) + '</small></span><button type="button" class="pl-post-more" data-post-more aria-label="Opsi postingan">' + renderIcon('moreVertical') + '</button>' + renderMenu() + '</header>' +
     '<p class="global-post-caption pl-post-caption">' + renderCaption(post.caption) + '</p>' + renderMedia(post) +
-    '<div class="pl-post-social-proof"><button type="button" data-reaction-summary aria-label="Lihat reaksi">' + renderIcon('heart') + '<span data-post-like-count>' + escapeHtml(post.likeLabel) + '</span> <small>reaksi</small></button><span><b data-post-comment-count>' + post.commentsCount + '</b> komentar · <b data-post-gift-count>' + post.giftCount + '</b> gift</span></div>' +
-    '<div class="pl-post-action-area"><div class="pl-post-action-row"><div class="pl-post-reaction-action"><button type="button" class="pl-post-action" data-reaction-trigger aria-expanded="false">♡ <span>Like</span></button>' + renderReactionPicker() + '</div><button type="button" class="pl-post-action" data-comment-focus>' + renderIcon('message') + '<span>Komentar</span></button><button type="button" class="pl-post-action pl-post-action--gift" data-gift-toggle>' + renderIcon('sparkles') + '<span>Gift</span></button><button type="button" class="pl-post-action" data-share-toggle>' + renderIcon('arrow') + '<span>Bagikan</span></button></div>' + renderGiftPanel(post) + renderSharePanel(post) + '</div>' +
-    '<section class="pl-post-comments" data-comments-section><div class="pl-post-comments-heading"><strong>Komentar</strong><button type="button" data-comments-toggle aria-expanded="true">Sembunyikan</button></div><div class="pl-post-comments-list" data-comment-list>' + post.comments.map(renderComment).join('') + '</div><form class="pl-post-comment-form" data-comment-form><input type="text" maxlength="500" placeholder="Tulis komentar..." aria-label="Tulis komentar" data-comment-input><button type="submit">Kirim</button></form></section>' +
+    '<div class="pl-post-social-proof"><button type="button" data-reaction-summary aria-label="Lihat reaksi">' + renderIcon('heart') + '<span data-post-like-count>' + escapeHtml(post.likeLabel) + '</span> <small>reaksi</small></button><span><b data-post-comment-count>' + post.commentsCount + '</b> komentar</span></div>' +
+    '<section class="pl-post-comments" data-comments-section><div class="pl-post-comments-heading"><strong>Komentar</strong><button type="button" data-comments-toggle aria-expanded="true">Sembunyikan</button></div><div class="pl-post-comments-list" data-comment-list>' + post.comments.map((comment) => renderComment(comment, post.authorName)).join('') + '</div><form class="pl-post-comment-form" data-comment-form><input type="text" maxlength="500" placeholder="Tulis komentar..." aria-label="Tulis komentar" data-comment-input><button type="submit">Kirim</button></form></section>' +
     '<div class="pl-post-demo-label">Contoh UI · interaksi demo · perubahan tidak disimpan setelah reload</div></article>';
 }
 export function renderDemoFeed(kind = 'feed') {
@@ -167,13 +183,13 @@ export function mountSocialPostInteractions(root) {
       const item=reactions.find((reaction)=>reaction.id===selected);
       trigger.innerHTML=(was?'♡':item.emoji)+' <span>'+(was?'Like':item.label)+'</span>';trigger.classList.toggle('is-active',!was);
       trigger.setAttribute('aria-expanded','false');picker.hidden=true;
-      const count=Number(card.dataset.baseLikes)+(card.dataset.myReaction?1:0);card.querySelector('[data-post-like-count]').textContent=formatCount(count);
+      const count=Number(card.dataset.baseLikes)+(card.dataset.myReaction?1:0);card.querySelector('[data-post-like-count]').textContent=formatCount(count);card.querySelector('[data-overlay-like-count]').textContent=formatCount(count);
       showToast(root,was?'Reaksi dibatalkan.':'Reaksi '+item.label+' ditambahkan (demo).');return;
     }
     if(button.matches('[data-comment-focus]')){
       card.querySelector('[data-comment-input]')?.focus();card.querySelector('[data-comments-section]')?.scrollIntoView({behavior:'smooth',block:'nearest'});return;
     }
-    if(button.matches('[data-gift-toggle]')){
+    if(button.matches('[data-gift-toggle],[data-gift-received-toggle]')){
       const panel=card.querySelector('[data-gift-panel]');closePanels(card,panel);panel.hidden=!panel.hidden;button.setAttribute('aria-expanded',String(!panel.hidden));return;
     }
     if(button.matches('[data-gift]')){
@@ -209,7 +225,7 @@ export function mountSocialPostInteractions(root) {
     if(button.matches('[data-post-report]')){showToast(root,'Laporan dicatat sebagai simulasi UI, tidak dikirim ke server.');closePanels(card);return;}
     if(button.matches('[data-reaction-summary]')){showToast(root,'Reaksi contoh: Like, Love, Haha, Wow, Sad, dan Angry.');return;}
     if(button.matches('[data-comments-toggle]')){const list=card.querySelector('[data-comment-list]'),collapsed=list.hidden;list.hidden=!collapsed;button.textContent=collapsed?'Sembunyikan':'Tampilkan';button.setAttribute('aria-expanded',String(collapsed));return;}
-    if(button.matches('[data-comment-like]')){const count=button.querySelector('span'),active=button.classList.toggle('is-active');count.textContent=Math.max(0,Number(count.textContent)+(active?1:-1));button.firstChild.textContent=active?'♥ ':'♡ ';return;}
+    if(button.matches('[data-comment-like]')){const count=button.querySelector('span'),active=button.classList.toggle('is-active');count.textContent=Math.max(0,Number(count.textContent)+(active?1:-1));button.setAttribute('aria-pressed',String(active));return;}
     if(button.matches('[data-reply-comment]')){createReplyForm(button.closest('[data-comment-id]'));return;}
     if(button.matches('[data-comment-more]')){const comment=button.closest('[data-comment-id]');let menu=comment.querySelector('[data-comment-menu]');if(!menu){menu=document.createElement('div');menu.className='pl-post-comment-menu';menu.dataset.commentMenu='';menu.innerHTML='<button type="button" data-comment-copy>Salin komentar</button><button type="button" data-comment-report>Laporkan komentar</button>';comment.querySelector('.pl-post-comment-tools').appendChild(menu);}menu.hidden=!menu.hidden;return;}
     if(button.matches('[data-comment-copy]')){showToast(root,'Teks komentar siap disalin pada preview.');return;}
@@ -225,10 +241,10 @@ export function mountSocialPostInteractions(root) {
       const list=card.querySelector('[data-comment-list]'),comment=document.createElement('article');comment.className='pl-post-comment';comment.dataset.commentId='demo-new-'+Date.now();
       comment.innerHTML='<div class="pl-post-comment-avatar">A</div><div class="pl-post-comment-body"><div class="pl-post-comment-bubble"><strong>Anda</strong><p></p></div><div class="pl-post-comment-tools"><button type="button" data-comment-like>♡ <span>0</span></button><button type="button" data-reply-comment>Balas</button><button type="button" data-comment-more aria-label="Opsi komentar">'+renderIcon('moreVertical')+'</button></div><div class="pl-post-comment-replies"></div></div>';
       comment.querySelector('p').textContent=value;list.appendChild(comment);input.value='';
-      const count=card.querySelector('[data-post-comment-count]');count.textContent=Number(count.textContent)+1;
+      const count=card.querySelector('[data-post-comment-count]');count.textContent=Number(count.textContent)+1;card.querySelector('[data-overlay-comment-count]').textContent=count.textContent;
       showToast(root,'Komentar ditambahkan ke preview.');return;
     }
-    const reply=document.createElement('div');reply.className='pl-post-reply';const strong=document.createElement('strong');strong.textContent='Anda';const span=document.createElement('span');span.textContent=value;reply.append(strong,span);form.before(reply);form.remove();showToast(root,'Balasan ditambahkan ke preview.');
+    const reply=document.createElement('div');reply.className='pl-post-reply is-right';const bubble=document.createElement('div');bubble.className='pl-post-reply-bubble';const strong=document.createElement('strong');strong.textContent='Anda';const span=document.createElement('span');span.textContent=value;bubble.append(strong,span);const avatar=document.createElement('div');avatar.className='pl-post-reply-avatar';avatar.textContent='A';reply.append(bubble,avatar);form.before(reply);form.remove();showToast(root,'Balasan ditambahkan ke preview.');
   },{signal:controller.signal});
   root.addEventListener('play',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]'))return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.currentTime=0;video.dataset.demoCapped='false';}},{capture:true,signal:controller.signal});
   root.addEventListener('timeupdate',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]')||video.dataset.demoCapped==='true')return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.dataset.demoCapped='true';video.pause();video.currentTime=limit;showToast(root,'Preview video dibatasi hingga 10 detik.');}},{capture:true,signal:controller.signal});
