@@ -54,3 +54,9 @@
 - No database schema, RLS, storage policy, auth provider, design token, shared component, or Marketplace operational workflow changes are part of this home-page implementation.
 - Verify guest/authenticated routing, Feed/Reels loading/empty/error states, carousel touch behavior, non-sticky tabs, full-width mobile posts, fixed bottom navigation and safe area, tablet/desktop layouts, keyboard focus, reduced motion, and no horizontal page overflow.
 - Automated build/tests do not replace browser/device visual acceptance on a real mobile viewport.
+
+### Performance and bounded Top 10 — 24 November 2026
+- The Top 10 rail is contained by the same standard content frame as the sections below it; it must not use `100vw` viewport bleed or negative viewport margins.
+- Mobile card height is capped at 168px (150px on very narrow phones), with a partial next card visible.
+- Automatic movement is permitted only while the rail is visible and the browser tab is active. It advances one card at a time, pauses after user interaction, and respects reduced-motion preferences.
+- Offscreen sections and images should defer expensive rendering/decoding where supported.
