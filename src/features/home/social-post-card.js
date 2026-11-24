@@ -18,7 +18,7 @@ export const demoFeedPosts = [
   },
   {
     id:'demo-post-raka',authorName:'Raka Mahendra',username:'raka.visual',avatar:'photo-1500648767791-00dcc994a43e',
-    verification:'unverified',membership:'Platinum',membershipMark:'Pt',time:'1 jam lalu',type:'video',
+    verification:'unverified',membership:'Platinum',membershipMark:'Pt',time:'1 jam lalu',type:'video',durationSeconds:43,
     caption:'Mencari detail kecil di tengah kota. Kadang perspektif baru datang dari berjalan lebih pelan. 📷 #StreetStory',
     mediaUrl:'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
     poster:'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1000&q=85',
@@ -41,7 +41,7 @@ export const demoFeedPosts = [
   },
   {
     id:'demo-post-dimas',authorName:'Dimas Wirawan',username:'dimas.w',avatar:'photo-1506794778202-cad84cf45f1d',
-    verification:'verified',membership:'PLUITS Priority',membershipMark:'★',time:'3 hari lalu',type:'video',
+    verification:'verified',membership:'PLUITS Priority',membershipMark:'★',time:'3 hari lalu',type:'video',durationSeconds:78,
     caption:'Potongan suasana pagi di Ubud. Alam selalu punya cara untuk mengingatkan kita agar pelan-pelan. 🌿 #ExploreBali',
     mediaUrl:'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
     poster:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=85',
@@ -53,7 +53,7 @@ export const demoFeedPosts = [
   }
 ];
 
-export const demoReels = demoFeedPosts.filter((post) => post.type === 'video');
+export const demoReels = demoFeedPosts.filter((post) => post.type === 'video' && Number(post.durationSeconds || 0) <= 60);
 
 const reactions = [
   {id:'like',emoji:'👍',label:'Like'},
@@ -152,7 +152,7 @@ export function renderSocialPostCard(post) {
   if (!post.isDemo) {
     return '<article class="global-post-card"><header class="global-post-author"><span class="global-post-avatar">' + escapeHtml((post.authorName || 'P').slice(0,1)) + '</span><span class="global-post-author-copy"><strong>' + escapeHtml(post.authorName || 'Pengguna PLUITS') + '</strong><small>@' + escapeHtml(post.username || 'pengguna') + ' · ' + escapeHtml(post.created_at ? new Date(post.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'}) : '') + '</small></span></header><p class="global-post-caption">' + escapeHtml(post.caption || '') + '</p></article>';
   }
-  return '<article class="global-post-card pl-post-card is-demo" data-post-card data-post-id="' + escapeHtml(post.id) + '" data-base-likes="' + post.likes + '" data-base-gifts="' + post.giftCount + '" data-base-comments="' + post.commentsCount + '">' +
+  return '<article class="global-post-card pl-post-card is-demo' + (post.type === 'video' && Number(post.durationSeconds || 0) <= 60 ? ' is-reel' : '') + '" data-post-card data-content-kind="' + (post.type === 'video' ? (Number(post.durationSeconds || 0) <= 60 ? 'reel' : 'video') : 'photo') + '" data-post-id="' + escapeHtml(post.id) + '" data-base-likes="' + post.likes + '" data-base-gifts="' + post.giftCount + '" data-base-comments="' + post.commentsCount + '">' +
     '<header class="global-post-author pl-post-author"><span class="global-post-avatar pl-post-avatar-shell">' + avatarMarkup(post) + '</span><span class="global-post-author-copy pl-post-author-copy"><strong>' + escapeHtml(post.authorName) + ' ' + statusMarkup(post) + '</strong><small>@' + escapeHtml(post.username) + ' · ' + escapeHtml(post.time) + '</small></span><button type="button" class="pl-post-more" data-post-more aria-label="Opsi postingan">' + renderIcon('moreVertical') + '</button>' + renderMenu() + '</header>' +
     '<p class="global-post-caption pl-post-caption">' + renderCaption(post.caption) + '</p>' + renderMedia(post) +
     '<div class="pl-post-social-proof"><button type="button" data-reaction-summary aria-label="Lihat reaksi">' + renderIcon('heart') + '<span data-post-like-count>' + escapeHtml(post.likeLabel) + '</span> <small>reaksi</small></button><span><b data-post-comment-count>' + post.commentsCount + '</b> komentar</span></div>' +
