@@ -161,3 +161,13 @@ test('Social Media Blog is a standalone route with module-owned CSS and no cross
  assert.ok(!css.includes('body{') && !css.includes('html{') && !css.includes(':root') && !css.includes('.global-') && !css.includes('.social-'));
  assert.ok(home.includes("routeHref('blog')"));
 });
+
+
+test('Social Home stylesheet is owned by the Social Home module rather than the global bootstrap',async()=>{
+ const [main,home]=await Promise.all([
+  readFile(new URL('../src/main.js',import.meta.url),'utf8'),
+  readFile(new URL('../src/features/home/home-page.js',import.meta.url),'utf8')
+ ]);
+ assert.ok(!main.includes("features/home/home-page.css"));
+ assert.ok(home.includes("import './home-page.css'"));
+});
