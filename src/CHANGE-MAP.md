@@ -58,3 +58,12 @@ Run npm test and npm run build. Verify Public homepage, Social Home, legacy Circ
 - Messages remains an initial empty inbox surface. Profile now has a borderless identity card, tier badge, follower-stat placeholders, upgrade entry point, quick profile settings panel, and account-settings shortcut. Profile editing, cover upload persistence, privacy persistence, subscription checkout, follower counts, notification preferences, and published profile media are not yet connected. Profile cover controls provide a session-only image/text preview, a no-cover layout, and a reserved Fluvara library state; no unapproved library artwork is presented.
 - Location permission request flow is not implemented; Circle displays a clear no-location fallback.
 - Real Android visual acceptance and founder product approval remain NOT TESTED / NOT READY.
+
+
+## Interactive Social Post Card — 24 November 2026
+- Social Home Feed/Reels demo component: src/features/home/social-post-card.js and social-post-card.css, owned by features/home.
+- Page integration and feed/API boundary: src/features/home/home-page.js.
+- Canonical behavior and demo-data boundary: src/features/home/SOCIAL-POST-CARD-INTERACTIONS-001.md.
+- Product page contract: src/features/home/PAGE-SOCIAL-HOME-001.md.
+- Regression tests: tests/features/home-responsive-visuals.test.js.
+- The demo fixture is explicitly labelled, contains four sample posts, seeded comments/replies and short video previews capped at 10 seconds. All local actions reset on reload and do not write backend data.
