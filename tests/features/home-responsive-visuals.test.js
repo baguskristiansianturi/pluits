@@ -93,7 +93,8 @@ test('Social Home has one canonical mobile geometry owner and registered carouse
   assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
   assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:calc\(100% \+ var\(--pl-page-gutter\)\)/s);
   assert.match(css, /scroll-snap-type:\s*x mandatory/);
-  assert.match(registry, /HOME-CAROUSEL-TOP10-001/);
+  assert.match(registry, /HOME-DISCOVERY-INTEREST-001/);
+  assert.match(registry, /HOME-DISCOVERY-NEARBY-001/);
   assert.match(registry, /HOME-CAROUSEL-STORIES-001/);
   assert.match(registry, /HOME-CAROUSEL-PEOPLE-001/);
   assert.match(registry, /HOME-CAROUSEL-PRODUCT-001/);
