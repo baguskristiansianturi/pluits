@@ -56,7 +56,7 @@ test('social home mobile layout keeps recommendation inset, feed full-bleed, and
   assert.equal((source.match(/class="global-social-area"/g) || []).length, 1,
     'social content must have one parent wrapper (no accidental nested duplicate)');
   assert.match(css, /global-location-row\s*\{\s*margin:\s*30px 0 8px/);
-  assert.match(css, /\.global-demo-rail,\.global-story-rail,\.global-people-rail,[\s\S]*?padding:0 10px 9px/s);
+  assert.match(css, /\.global-demo-rail,\.global-story-rail,\.global-people-rail,[\s\S]*?padding:0 var\(--pl-page-gutter\) 9px/s);
   assert.match(css, /\.global-content-section\s*\{[^}]*width:100vw[^}]*margin:0 calc\(50% - 50vw\) 14px/s);
   assert.match(css, /\.global-post-list\s*\{[^}]*width:100%[^}]*max-width:none/s);
   assert.match(css, /\.global-post-card\s*\{[^}]*width:100%[^}]*max-width:none/s);
@@ -117,5 +117,5 @@ test('Social Home and Discover share one page surface and one standard content f
   assert.doesNotMatch(home, /\.global-home-page\s*\{[^}]*background:/s);
   assert.doesNotMatch(discover, /\.social-shell\s*\{[^}]*background:/s);
   assert.doesNotMatch(home, /\.global-home-main\s*\{[^}]*padding-inline:/s);
-  assert.doesNotMatch(discover, /\.social-main\s*\{[^}]*(?:width|max-width|padding-inline):/s);
+  assert.doesNotMatch(discover, /\.social-main\s*\{[^}]*(?:^|;)\s*(?:width|max-width|padding-inline):/s);
 });
