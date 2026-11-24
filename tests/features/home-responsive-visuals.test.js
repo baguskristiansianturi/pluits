@@ -303,3 +303,15 @@ test('social content filters use icon and label pairs in the requested order', a
   assert.match(home, /filter==='blog'&&kind==='blog'/);
   assert.match(styles, /\.global-content-tabs button\{[^}]*display:flex/);
 });
+
+
+test('Social responsive rules are owned by Social stylesheets, not the shared mobile contract',async()=>{
+ const [contract,home,social]=await Promise.all([
+  readFile(new URL('../../src/design-system/mobile-layout-contract.css',import.meta.url),'utf8'),
+  readFile(new URL('../../src/features/social/home/home-page.css',import.meta.url),'utf8'),
+  readFile(new URL('../../src/features/social/social-pages.css',import.meta.url),'utf8')
+ ]);
+ assert.ok(!contract.includes('.global-') && !contract.includes('.social-'));
+ assert.ok(home.includes('.global-demo-rail') && home.includes('.global-content-section:has(.global-post-list)'));
+ assert.ok(social.includes('.social-profile-entity-list.is-carousel') && social.includes('.social-profile-page .social-profile-tab-panel'));
+});
