@@ -8,6 +8,11 @@ Status: shared mobile geometry contract.
 - Standard page containers must not introduce inconsistent nested gutters.
 - Feature-owned card appearance and dimensions remain controlled by their feature styles.
 
+## Card appearance
+- Card containers use the shared 10px corner radius token: `--pl-radius-card`.
+- Buttons, pills, avatars, badges, dialogs and other non-card controls keep their own shape rules.
+- A card with a deliberate exceptional shape may opt out with `data-card-radius="custom"`.
+
 ## Horizontal carousels
 - The first card begins at the standard 10px left inset.
 - The scrollable rail extends through the right 10px content gutter to the physical right edge of the mobile viewport.
