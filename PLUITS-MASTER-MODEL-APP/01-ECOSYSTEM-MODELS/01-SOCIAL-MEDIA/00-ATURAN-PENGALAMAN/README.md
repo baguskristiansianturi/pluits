@@ -50,3 +50,7 @@ Aturan ini disusun dengan memeriksa:
 - Integrasi route dan app: `src/config/paths.js` dan `src/app/create-app.js`
 
 Jalur dan isi sumber tersebut harus diverifikasi ulang saat ada perubahan. Jangan menganggap dokumen ini menggantikan kode atau kontrak teknis yang lebih baru.
+
+18. [Audit kepemilikan domain dan isolasi runtime](18-AUDIT-KEPEMILIKAN-DOMAIN-DAN-ISOLASI-RUNTIME.md)
+
+Aturan 18 adalah snapshot audit teknis dan definition of done. Status audit statis, browser baseline, migrasi runtime, serta implementasi Blog wajib dilaporkan terpisah.
