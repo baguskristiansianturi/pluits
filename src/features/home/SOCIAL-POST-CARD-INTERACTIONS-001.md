@@ -26,6 +26,8 @@ Verification and membership are separate concepts.
 - Verified: small blue circle with the registered check icon.
 - Unverified: small amber outlined exclamation marker with accessible label and caution tooltip. It means only “not verified”; it does not assert that the account is fake or malicious.
 - Membership badge: a small, high-contrast marker attached to the avatar edge. Prototype examples cover Premium, Silver, Gold, Platinum, and PLUITS Priority.
+- Account identity treatment is consistent wherever the profile appears: post header, top-level comment, and nested reply all reuse the same profile avatar and membership tier marker. The tier badge keeps the same lower-right avatar attachment position; only its tier symbol/color differs.
+- Verification state travels with the account profile into comments and replies. Verified accounts show the check marker; accounts not verified by the system show a small caution exclamation marker. This is a system verification status, not a claim that the person, photo, or video is fake or unsafe. The warning is a neutral prompt to exercise care and the platform's community-safety measure.
 - The badge is intentionally compact and must not obscure the avatar or compete with the display name.
 - Membership levels, eligibility, entitlement, badge artwork, and backend fields are not finalized. This presentation must later map to the approved account/membership schema without assuming that verification automatically grants a tier.
 
@@ -35,7 +37,7 @@ Verification and membership are separate concepts.
 - Like/reaction, comment, gift-send, and share controls sit in a vertical right-side rail over the media. White icon/count treatment uses translucent dark backing, soft shadow, and focus/active contrast for varied image/video backgrounds.
 - Received gifts are shown as a compact clickable overlay at the lower-left of the media; tapping it opens the gift panel upward over the media. The gift count is not duplicated in the clean engagement summary below the media.
 - The summary below media shows only reaction/like count and comment count.
-- Top-level comments and their profile avatars align left. Replies from other users align right with their avatar on the right. Replies authored by the post owner align left with their avatar on the left. Bubble backgrounds and corner treatment distinguish the two directions while retaining readable contrast.
+- Top-level comments and their profile avatars align left. Replies from other users align right with their profile/avatar on the right. Replies authored by the post owner align left with their profile/avatar on the left. All comment/reply profiles carry the account's membership level and verification marker just like the post header. Bubble backgrounds and corner treatment distinguish the two directions while retaining readable contrast.
 - Comment-love icons use the registered heart icon with a refined active state; do not introduce an external icon library.
 
 ## Interaction states in the demo
