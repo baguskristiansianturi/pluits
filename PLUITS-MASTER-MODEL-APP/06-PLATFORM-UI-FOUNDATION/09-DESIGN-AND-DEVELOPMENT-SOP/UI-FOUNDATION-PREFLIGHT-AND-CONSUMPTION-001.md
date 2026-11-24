@@ -53,14 +53,14 @@ These are the canonical implementation locations. Search and reuse them before c
 | Global spacing, page gutter, containers, breakpoints, colors, radii, shadows, font family, shell dimensions | `src/design-system/tokens.css` |
 | Icon artwork, icon IDs/names, icon renderer and registry | `src/design-system/icons.js` |
 | Shared logo, navbar, page header, footer and shell markup | `src/design-system/page-shell.js` |
-| Shared shell/header/footer geometry | `src/design-system/page-shell.css` |
+| Shared shell/header/footer geometry, page surface variants, and standard content frame/gutter | `src/design-system/page-shell.css` |
 | Global base typography, default icon box, logo rendering and reset | `src/styles/global.css` |
 | Registered reusable layout patterns | `src/design-system/layouts.js` |
 | Global responsive layout contract | `src/design-system/mobile-layout-contract.css` and `MOBILE-LAYOUT-CONTRACT.md` |
 | App stylesheet import order and runtime entry | `src/main.js` |
 | Page-specific composition and behavior | The owning `src/features/<feature>/` module only |
 
-Do not create another token file, icon registry, shared component registry, shell implementation, or global CSS scale inside a feature folder.
+The shared shell modifiers `.pl-page-shell--surface` and `.pl-page-shell--standard-content` are the required source for pages using the common surface and standard content frame. The shell owns the outer page gutter; the child main content must not add a second page gutter. Do not create another token file, icon registry, shared component registry, shell implementation, or global CSS scale inside a feature folder.
 
 ## 3. Current runtime baseline — inspect, do not guess
 
