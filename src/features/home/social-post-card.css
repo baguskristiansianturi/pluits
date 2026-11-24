@@ -31,7 +31,7 @@
 .pl-post-menu[hidden],.pl-post-reaction-picker[hidden],.pl-post-gift-panel[hidden],.pl-post-share-panel[hidden]{display:none}
 .pl-post-menu button,.pl-post-share-panel button{padding:10px;border:0;border-radius:8px;background:transparent;color:var(--pl-color-text);font:inherit;font-size:11px;text-align:left;cursor:pointer}
 .pl-post-menu button:hover,.pl-post-share-panel button:hover{background:var(--pl-color-canvas)}
-.pl-post-caption{padding:4px 14px 13px;font-size:12px;line-height:1.6}
+.pl-post-caption{padding:4px 14px 13px;font-size:12px;line-height:1.6}.pl-post-tag{color:var(--pl-color-brand);font-weight:700}
 .pl-post-media-wrap{position:relative;width:100%;overflow:hidden;background:var(--pl-color-canvas)}
 .pl-post-media-wrap .pl-post-media{display:block;width:100%;height:auto;max-height:620px;aspect-ratio:4/5;object-fit:cover}
 .pl-post-media-wrap--video{background:#172b45}
