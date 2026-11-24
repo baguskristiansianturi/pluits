@@ -19,8 +19,7 @@ test('social home keeps illustrative content separated from interactive demo pos
   assert.match(source, /function storyRail\(\)/);
   assert.match(source, /global-live-demo-grid/);
   assert.match(source, /global-blog-demo-grid/);
-  assert.match(source, /global-product-demo-rail/);
-  assert.match(source, /global-marketplace-cta/);
+  assert.doesNotMatch(source, /global-product-demo-rail|global-marketplace-cta|global-products|global-features|global-calendar-block|global-about/);
 });
 test('social home responsive styles cover narrow mobile, tablet, desktop and horizontal carousels', async () => {
   const css = await readFile(homeCss, 'utf8');
@@ -131,35 +130,17 @@ test('shared page header background and divider bleed to viewport edges independ
 });
 
 
-test('Social Home separates interest-led recommendations from all-category nearby discovery', async () => {
+test('Social Home contains only Social Media experiences and links outward only by explicit interaction', async () => {
   const source = await readFile(homeJs, 'utf8');
   const css = await readFile(homeCss, 'utf8');
-  const spec = await readFile(new URL('../../src/features/home/PAGE-SOCIAL-HOME-001.md', import.meta.url), 'utf8');
-  const registry = await readFile(new URL('../../src/features/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
-
-  assert.match(source, /const recommendationItems = \[/);
-  assert.match(source, /Rekomendasi untuk Anda/);
-  assert.match(source, /data-interest-id=/);
-  assert.match(source, /id:'seafood'/);
-  assert.match(source, /app:'fluid-food'/);
-  assert.match(source, /const nearbyItems = \[/);
-  assert.match(source, /Di sekitar Anda/);
-  assert.match(source, /scope=nearby&radius=5/);
-  assert.match(source, /heading\('Rekomendasi untuk Anda',null/);
-  assert.match(source, /heading\('Di sekitar Anda',null/);
-  const discoveryMarkup = source.slice(source.indexOf('const recommendationItems = ['), source.indexOf('const streams = contentTabs.map'));
-  assert.doesNotMatch(discoveryMarkup, /Contoh minat untuk discovery|Lokasi contoh|GPS belum terhubung|Radius awal 5 km|CONTOH KARTU|Jarak ditampilkan saat lokasi aktif|Jangkauan diperluas bertahap/);
-  assert.doesNotMatch(source, /<small>Tempat, restoran, makanan, aktivitas, dan lainnya<\/small>/);
-  assert.doesNotMatch(source, /topTen|Top 10|global-top-ten/i);
-  assert.doesNotMatch(css, /global-top-ten/i);
-  assert.match(css, /\.global-interest-grid\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/s);
-  assert.match(css, /\.global-local-card--listing/);
-  assert.match(css, /HOME-DISCOVERY-CLEAN-002/);
-  assert.doesNotMatch(css, /global-discovery-context|global-nearby-context|global-local-preview-note|global-local-preview-tag/);
-  assert.match(spec, /Rekomendasi untuk Anda/);
-  assert.match(spec, /seluruh kategori GeoDirectory/);
-  assert.match(registry, /HOME-DISCOVERY-INTEREST-001/);
-  assert.match(registry, /HOME-DISCOVERY-NEARBY-001/);
+  assert.match(source, /Orang yang mungkin Anda kenal/);
+  assert.match(source, /Cerita dari circle Anda/);
+  assert.match(source, /data-content-tabs/);
+  assert.match(source, /routeHref\\('blog'\\)/);
+  assert.match(source, /data-social-composer/);
+  assert.doesNotMatch(source, /const recommendationItems|const nearbyItems|global-products|global-features|global-calendar-block|global-about|routeHref\\('marketplace'\\)/);
+  assert.doesNotMatch(source, /Keranjang|Notifikasi|Produk lokal pilihan|Restoran & kafe|Transportasi/);
+  assert.doesNotMatch(css, /body\\.global-search-open[^}]*background|html\\s*\\{/);
 });
 
 test('Nearby discovery preserves radius fallback and fair exposure requirements', async () => {
