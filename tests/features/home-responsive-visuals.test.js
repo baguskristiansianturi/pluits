@@ -68,7 +68,8 @@ test('social home mobile layout keeps recommendation inset, feed full-bleed, and
 test('social home owns the header-to-content transition after its search entry', async () => {
   const shell = await readFile(new URL('../../src/design-system/page-shell.css', import.meta.url), 'utf8');
   const home = await readFile(homeCss, 'utf8');
-  assert.match(shell, /\.pl-page-shell\.home-page\s*>\s*\.pl-page-main\s*\{\s*padding-block-start:\s*0/s);
+  assert.doesNotMatch(shell, /\.pl-page-shell\.home-page/);
+  assert.match(home, /\.global-home-page\s*>\s*\.global-home-main\s*\{[^}]*padding-block-start:\s*0/s);
   assert.match(home, /\.global-location-row\s*\{\s*margin:\s*14px 0 18px/s);
   assert.match(home, /\.global-home-search-entry\{[^}]*min-height:58px/s);
 });
