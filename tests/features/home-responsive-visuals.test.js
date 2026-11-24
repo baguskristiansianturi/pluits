@@ -10,16 +10,20 @@ const discoverCss = new URL('../../src/features/social/social-pages.css', import
 test('social home keeps illustrative content separated from interactive demo post fixtures', async () => {
   const source = await readFile(homeJs, 'utf8');
   const cardSource = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
+  const storiesSource = await readFile(new URL('../../src/features/social/stories/stories-rail.js', import.meta.url), 'utf8');
+  const liveSource = await readFile(new URL('../../src/features/social/live/live-preview.js', import.meta.url), 'utf8');
   assert.match(source, /renderSocialPostCard as renderPostCard/);
   assert.match(source, /renderDemoFeed\('feed'\)/);
   assert.match(cardSource, /export const demoFeedPosts = \[/);
   assert.match(cardSource, /export function renderDemoFeed/);
   assert.match(cardSource, /Contoh postingan/);
   assert.match(cardSource, /data contoh/);
-  assert.match(source, /function storyRail\(\)/);
-  assert.match(source, /global-live-demo-grid/);
-  assert.match(source, /global-blog-demo-grid/);
-  assert.doesNotMatch(source, /global-product-demo-rail|global-marketplace-cta|global-products|global-features|global-calendar-block|global-about/);
+  assert.match(source, /renderStoriesRail\(\)/);
+  assert.match(source, /renderLivePreview\(\)/);
+  assert.match(storiesSource, /export function renderStoriesRail/);
+  assert.match(liveSource, /export function renderLivePreview/);
+  assert.match(liveSource, /data-content-kind=\\'live\\'/);
+  assert.doesNotMatch(source, /global-product-demo-rail|global-marketplace-cta|global-products|global-features|global-calendar-block|global-about|global-live-demo-grid|global-blog-demo-grid/);
 });
 test('social home responsive styles cover narrow mobile, tablet, desktop and horizontal carousels', async () => {
   const css = await readFile(homeCss, 'utf8');
@@ -177,6 +181,8 @@ test('homepage Explore actions use soft interactive styling and nearby distance 
 test('social post demo contains four distinct posts, sample comments/replies and fully wired interaction controls', async () => {
   const cardSource = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
   const cardCss = await readFile(new URL('../../src/features/social/feed/social-post-card.css', import.meta.url), 'utf8');
+  const reelsSource = await readFile(new URL('../../src/features/social/reels/reel-media.js', import.meta.url), 'utf8');
+  const reelsCss = await readFile(new URL('../../src/features/social/reels/reel-media.css', import.meta.url), 'utf8');
   assert.match(cardSource, /id:'demo-post-alya'/);
   assert.match(cardSource, /id:'demo-post-raka'/);
   assert.match(cardSource, /id:'demo-post-nadia'/);
@@ -187,7 +193,10 @@ test('social post demo contains four distinct posts, sample comments/replies and
   assert.match(cardSource, /membership:'Silver'/);
   assert.match(cardSource, /membership:'Platinum'/);
   assert.match(cardSource, /membership:'PLUITS Priority'/);
-  assert.match(cardSource, /data-video-limit="10"/);
+  assert.match(reelsSource, /data-video-limit="10"/);
+  assert.match(reelsSource, /export function isReelPost/);
+  assert.match(reelsSource, /export function renderVideoMedia/);
+  assert.match(reelsCss, /\.sm-reel-video/);
   assert.match(cardSource, /data-reaction-trigger/);
   assert.match(cardSource, /data-gift-toggle/);
   assert.match(cardSource, /data-comment-form/);
