@@ -1005,3 +1005,7 @@ body.global-search-open{overflow:hidden}
     box-sizing: border-box;
   }
 }
+
+
+/* Social Home owns its header-to-content transition locally. */
+.global-home-page > .global-home-main { padding-block-start: 0; }
