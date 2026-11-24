@@ -55,12 +55,12 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   const pageHeaderMarkup=renderPageHeader({brandHref:routeHref('home'),rightContent:'<div class="global-header-tools">' + actions + '</div>',className:'global-header',dataGlobalHeader:true});
   root.innerHTML = '<div class="pl-page-shell pl-page-shell--surface pl-page-shell--standard-content home-page global-home-page">' +
     pageHeaderMarkup +
-    '<main class="pl-page-main home-main global-home-main"><button type="button" class="global-home-search-entry" data-open-quick-search><span>' + renderIcon('search') + '</span><span><strong>Cari di PLUITS</strong></span><b>' + renderIcon('arrow') + '</b></button>' +
+    '<main class="pl-page-main home-main global-home-main"><button type="button" class="global-home-search-entry" data-open-quick-search><span>' + renderIcon('search') + '</span><span><strong>Cari di Social Media</strong></span><b>' + renderIcon('arrow') + '</b></button>' +
         '<div class="global-social-area">' + discovery +
     '<section class="global-section global-stories" id="stories">' + heading('Cerita dari circle Anda','Momen terbaru dari orang-orang di circle Anda.') + storyRail() + '</section>' +
-    '<nav class="global-content-tabs" data-content-tabs aria-label="Filter konten">' + contentTabs.map((tab,i)=>tab.id==='blog'?'<a class="global-content-tab-link" href="' + routeHref('blog') + '" aria-label="Buka Blog">' + renderIcon(tab.icon) + '<span>' + tab.label + '</span></a>':'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-label="' + tab.label + '" aria-pressed="' + (i===0?'true':'false') + '">' + renderIcon(tab.icon) + '<span>' + tab.label + '</span></button>').join('') + '<a class="global-content-tab-link" href="' + routeHref('blog') + '" aria-label="Buka Blog">' + renderIcon('book') + '<span>Blog</span></a>' + '<button type="button" class="global-content-refresh" data-feed-refresh aria-label="Perbarui konten" title="Perbarui">' + renderIcon('refresh') + '<span data-feed-refresh-label>Perbarui</span></button></nav>' + composerMarkup +
+    '<nav class="global-content-tabs" data-content-tabs aria-label="Filter konten">' + contentTabs.map((tab,i)=>tab.id==='blog'?'<a class="global-content-tab-link" href="' + routeHref('blog') + '" aria-label="Buka Blog">' + renderIcon(tab.icon) + '<span>' + tab.label + '</span></a>':'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-label="' + tab.label + '" aria-pressed="' + (i===0?'true':'false') + '">' + renderIcon(tab.icon) + '<span>' + tab.label + '</span></button>').join('') + '<button type="button" class="global-content-refresh" data-feed-refresh aria-label="Perbarui konten" title="Perbarui">' + renderIcon('refresh') + '<span data-feed-refresh-label>Perbarui</span></button></nav>' + composerMarkup +
     streams + '</div>' +
-    '</main>'' +
+    '</main>' +
     bottomNav() + quickSearchSheet() + '</div>';
   const unmountSocialPostInteractions=mountSocialPostInteractions(root);
   const searchBackdrop=root.querySelector('[data-quick-search-backdrop]');
