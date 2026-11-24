@@ -161,3 +161,16 @@ test('Social Home discovery hierarchy uses one mixed Top 10 carousel and profess
   assert.match(spec, /exactly one horizontal carousel containing ten mixed discovery cards/);
   assert.match(spec, /Di sekitar Anda/);
 });
+
+test('Top 10 stays inside the shared content frame and autoplay pauses offscreen', async () => {
+  const source = await readFile(homeJs, 'utf8');
+  const css = await readFile(homeCss, 'utf8');
+  assert.match(css, /HOME-PERFORMANCE-003/);
+  assert.match(css, /\.global-top-ten-rail\{[^}]*width:100%[^}]*max-width:100%[^}]*margin:0/s);
+  assert.match(css, /\.global-top-ten-card\{[^}]*max-height:168px/s);
+  assert.match(source, /new IntersectionObserver\(entries=>\{/);
+  assert.match(source, /document\.visibilityState==='visible'/);
+  assert.match(source, /setTimeout\(advance,3200\)/);
+  assert.match(source, /fetchpriority="low"/);
+  assert.match(css, /content-visibility:auto/);
+});
