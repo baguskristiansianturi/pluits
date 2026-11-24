@@ -87,7 +87,7 @@ test('authenticated home uses 10px mobile content gutters, edge-bleed carousels 
 
 test('Social Home has one canonical mobile geometry owner and registered carousel fixtures', async () => {
   const css = await readFile(homeCss, 'utf8');
-  const readme = await readFile(new URL('../../src/features/home/README.md', import.meta.url), 'utf8');
+  const readme = await readFile(new URL('../../src/features/social/home/README.md', import.meta.url), 'utf8');
   const registry = await readFile(new URL('../../src/features/social/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
   assert.equal((css.match(/SOCIAL-HOME-GEOMETRY-004/g) || []).length, 1);
   assert.match(css, /var\(--pl-page-gutter\)/);
