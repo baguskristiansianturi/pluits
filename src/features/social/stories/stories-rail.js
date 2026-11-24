@@ -1,3 +1,5 @@
+import './stories-rail.css';
+
 const stories = [
   { name: 'Cerita Anda', tone: 'own', image: '' },
   { name: 'Ayu', tone: 'ayu', image: 'photo-1534528741775-53994a69daeb' },
