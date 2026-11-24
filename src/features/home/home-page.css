@@ -313,8 +313,8 @@
 @media(max-width:767px){
  .global-header{width:calc(100% + 2 * var(--pl-page-gutter));margin-inline:calc(-1 * var(--pl-page-gutter));padding-inline:var(--pl-page-gutter)}
  .global-header:before{inset-inline:calc(50% - 50vw)}
- .global-quick-search{gap:8px;padding:9px 16px 11px}
- .global-quick-search a{min-height:36px;min-width:0;padding:7px 10px}
+ .global-quick-search{}
+ .global-quick-search a{min-height:36px;min-width:0}
  .global-quick-search a strong{font-size:9px}
  .global-home-main{}
  .global-home-intro{padding:14px 0 19px}
@@ -337,8 +337,8 @@
  .global-post-card{;}
 }
 @media(max-width:380px){
- .global-quick-search{gap:7px;padding-inline:14px}
- .global-quick-search a{padding-inline:9px}
+ .global-quick-search{}
+ .global-quick-search a{}
  .global-home-hero h1{font-size:20px}
  .global-section-heading h2{font-size:15px}
  .global-person-card{flex-basis:37vw;min-width:120px}
@@ -352,10 +352,10 @@
 
 /* Keep primary home cards comfortably inset while rails still bleed to viewport edges. */
 @media(max-width:767px){
- .global-home-main{padding-inline:16px}
+ .global-home-main{}
  .global-home-hero{margin-inline:0}
- .global-section-heading{padding-inline:0}
- .global-content-tabs{padding-inline:16px}
+ .global-section-heading{}
+ .global-content-tabs{}
 }
 @media(max-width:380px){
  .global-home-main{}
@@ -464,7 +464,7 @@
  .global-home-main{}
  .global-header-tools,.global-header-actions{gap:2px}
  .global-icon-button{width:31px;height:31px}
- .global-quick-search{padding-inline:14px}
+ .global-quick-search{}
  .global-content-tabs{}
  .global-content-tabs button{font-size:9px}
  .global-post-actions{gap:7px 10px;font-size:8px}
@@ -919,92 +919,82 @@
 /* SOCIAL-HOME-MOBILE-WIDTH-FIX-002 — each component has its own explicit edge rule. */
 @media (max-width: 767px) {
   .global-quick-search {
-    box-sizing: border-box;
-    width: 100%;
+    ;
+    ;
     min-height: 40px;
-    margin: 0;
-    padding: 3px 5px;
-    gap: 6px;
+    ;
+    ;
+    ;
     border: 0;
-    background: transparent;
-  }
+    background: transparent}
   .global-quick-search > a {
     min-height: 34px;
-    padding-inline: 9px;
-    gap: 5px;
+    ;
+    ;
     border: 1px solid var(--pl-color-border);
     border-radius: 7px;
-    background: #fff;
-  }
-  .global-quick-search > a strong { font-size: 10px; }
+    background: #fff}
+  .global-quick-search > a strong { font-size: 10px}
 
   /* The 30px gap is BELOW quick search, before location/search hero. */
   .global-home-page > .global-home-main {
-    box-sizing: border-box;
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 0;
-  }
-  .global-location-row { margin: 30px 5px 8px; }
+    ;
+    ;
+    ;
+    ;
+    }
+  .global-location-row { }
   .global-unified-search {
-    margin: 0 5px 24px;
-    padding: 10px;
+    ;
+    ;
     border-radius: 9px;
     background: #fff;
-    box-shadow: none;
-  }
+    box-shadow: none}
 
   /* People You May Know: viewport rail, with a 5px inset for the first/last cards. */
   .global-people-section {
-    width: 100%;
-    max-width: none;
-    padding-inline: 0;
-  }
+    ;
+    ;
+    }
   .global-people-section .global-bleed-wrap {
-    box-sizing: border-box;
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-  }
+    ;
+    ;
+    ;
+    }
   .global-people-rail {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 0 5px 9px;
-  }
+    ;
+    ;
+    }
 
   /* Feed section breaks out of the page gutter; each post card fills the viewport. */
   .global-content-section {
-    box-sizing: border-box;
-    width: 100vw;
-    max-width: 100vw;
-    min-width: 0;
-    margin-inline: calc(50% - 50vw);
-    padding-inline: 0;
-  }
-  .global-content-intro { padding-inline: 10px; }
+    ;
+    ;
+    ;
+    ;
+    ;
+    }
+  .global-content-intro { }
   .global-post-list {
-    box-sizing: border-box;
+    ;
     display: grid;
-    width: 100%;
-    min-width: 0;
-    max-width: none;
-    margin: 0;
-    padding: 0;
-    gap: 12px;
-  }
+    ;
+    ;
+    ;
+    ;
+    ;
+    }
   .global-post-card {
-    box-sizing: border-box;
+    ;
     display: block;
-    width: 100%;
-    min-width: 0;
-    max-width: none;
-    margin: 0;
+    ;
+    ;
+    ;
+    ;
     border: 0;
-    border-radius: 0;
+    ;
     background: #fff;
-    box-shadow: none;
-  }
+    box-shadow: none}
   .global-post-media {
     display: block;
     width: 100%;
@@ -1020,115 +1010,97 @@
    Feed/Reels/Live/Blog media intentionally remain full-bleed. */
 @media (max-width: 767px) {
   .global-home-page > .global-home-main {
-    box-sizing: border-box;
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding-inline: 10px;
-  }
+    ;
+    ;
+    ;
+    ;
+    }
 
   .global-quick-search {
-    box-sizing: border-box;
-    width: 100vw;
-    max-width: 100vw;
-    margin-inline: calc(50% - 50vw);
-    padding: 9px 10px 11px;
-  }
+    ;
+    ;
+    ;
+    ;
+    }
   .global-quick-search > a {
-    border-radius: var(--pl-radius-card);
-  }
+    border-radius: var(--pl-radius-card)}
 
   .global-location-row {
-    margin: 30px 0 8px;
-    padding-inline: 0;
-  }
+    ;
+    }
   .global-unified-search {
-    margin: 0 0 24px;
-    border-radius: var(--pl-radius-card);
-  }
+    ;
+    border-radius: var(--pl-radius-card)}
 
   .global-section-heading {
     margin-bottom: 12px;
-    padding-inline: 0;
-  }
+    }
   .global-content-intro {
-    margin-inline: 10px;
-    padding-inline: 0;
-  }
+    ;
+    }
 
   /* Carousel wrappers begin at the content gutter and extend to the viewport edge. */
   .global-bleed-wrap {
-    box-sizing: border-box;
-    width: calc(100% + 10px);
-    max-width: none;
-    margin-left: 0;
-    margin-right: -10px;
-    overflow: hidden;
-  }
+    ;
+    ;
+    ;
+    ;
+    ;
+    }
   .global-demo-rail,
   .global-story-rail,
   .global-people-rail {
-    box-sizing: border-box;
-    width: 100%;
-    max-width: none;
-    padding: 0 10px 9px;
-  }
+    ;
+    ;
+    ;
+    }
   .global-local-rail,
   .global-product-demo-rail,
   .global-feature-rail {
-    box-sizing: border-box;
-    width: calc(100% + 10px);
-    max-width: none;
-    margin-left: 0;
-    margin-right: -10px;
-    padding: 0 10px 9px;
-  }
+    ;
+    ;
+    ;
+    ;
+    ;
+    }
 
   .global-content-tabs {
-    width: 100vw;
-    max-width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    padding-left: 10px;
-    padding-right: 10px;
-  }
+    ;
+    ;
+    ;
+    ;
+    ;
+    }
   .global-content-section {
-    width: 100vw;
-    max-width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    padding-inline: 0;
-  }
+    ;
+    ;
+    ;
+    ;
+    }
   .global-content-section .global-content-intro {
-    margin-inline: 10px;
-  }
+    }
   .global-post-list {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    gap: 12px;
-  }
+    ;
+    ;
+    ;
+    }
   .global-post-card {
-    width: 100%;
-    max-width: none;
-    margin: 0;
+    ;
+    ;
+    ;
     overflow: hidden;
-    border-radius: var(--pl-radius-card);
-  }
+    }
   .global-post-author {
-    padding-inline: 10px;
-  }
+    }
   .global-post-caption,
   .global-post-actions {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
+    ;
+    }
 
   .global-composer,
   .global-about {
-    margin-left: 0;
-    margin-right: 0;
-  }
+    ;
+    }
 
   /* Shared 10px radius for actual Home cards; circular avatars/story rings and pills stay distinct. */
   .global-demo-card,
@@ -1145,8 +1117,7 @@
   .global-product-location,
   .global-product-art,
   .global-service-shortcut {
-    border-radius: var(--pl-radius-card);
-  }
+    }
 }
 
 
@@ -1155,6 +1126,7 @@
   .global-home-page { --home-gutter: var(--pl-page-gutter); }
   .global-home-page > .global-home-main { box-sizing:border-box; width:100%; max-width:none; min-width:0; margin:0; padding-inline:var(--home-gutter); }
   .global-home-main > * { min-width:0; }
+  .global-quick-search { box-sizing:border-box; width:100vw; max-width:100vw; margin-inline:calc(50% - 50vw); padding:5px 10px 6px; gap:6px; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x mandatory; }
   .global-location-row { margin:30px 0 8px; padding-inline:0; }
   .global-unified-search { margin:0 0 24px; }
   .global-section-heading { margin:0 0 12px; padding-inline:0; gap:10px; }
@@ -1195,6 +1167,4 @@
     border-radius:var(--pl-radius-card);
   }
 }
-@media (max-width: 359px) {
-  .global-home-page { --home-gutter: 10px; }
-}
+@media (max-width: 359px) { .global-home-page { --home-gutter:10px; } }
