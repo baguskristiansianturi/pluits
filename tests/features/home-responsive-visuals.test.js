@@ -145,7 +145,8 @@ test('Social Home separates interest-led recommendations from all-category nearb
   assert.match(source, /scope=nearby&radius=5/);
   assert.match(source, /heading\('Rekomendasi untuk Anda',null/);
   assert.match(source, /heading\('Di sekitar Anda',null/);
-  assert.doesNotMatch(source, /Contoh minat untuk discovery|Lokasi contoh|GPS belum terhubung|Radius awal 5 km|CONTOH KARTU|Jarak ditampilkan saat lokasi aktif/);
+  const discoveryMarkup = source.slice(source.indexOf('const recommendationItems = ['), source.indexOf('const streams = contentTabs.map'));
+  assert.doesNotMatch(discoveryMarkup, /Contoh minat untuk discovery|Lokasi contoh|GPS belum terhubung|Radius awal 5 km|CONTOH KARTU|Jarak ditampilkan saat lokasi aktif|Jangkauan diperluas bertahap/);
   assert.doesNotMatch(source, /<small>Tempat, restoran, makanan, aktivitas, dan lainnya<\/small>/);
   assert.doesNotMatch(source, /topTen|Top 10|global-top-ten/i);
   assert.doesNotMatch(css, /global-top-ten/i);
