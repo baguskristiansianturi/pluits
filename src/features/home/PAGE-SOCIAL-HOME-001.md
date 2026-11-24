@@ -74,3 +74,14 @@
 - Aksi **Jelajahi** memakai warna muted dari token platform, bukan warna ink/heading. Hover, focus keyboard, dan active/touch memberi respons warna brand yang halus; animasi menghormati `prefers-reduced-motion`.
 - Jarak pada kartu Di sekitar Anda ditampilkan sebagai teks putih langsung di atas foto, tanpa badge/kapsul, border, latar, atau sudut membulat. Text-shadow halus menjaga kontras pada foto terang maupun gelap.
 - Komposisi kartu gambar penuh dan overlay informasi tetap dipertahankan.
+
+
+## Interactive Social Post Card — 24 November 2026
+- Social Feed cards now use the PLUITS single-media presentation: one photo or one short video per card, never stacked media.
+- Four explicitly labelled sample posts exercise account identity, relative timestamps, verification and membership markers, reaction selection, comments/replies, gifts, sharing, and the vertical post menu.
+- Sample interaction data is fictional and in-memory only; refresh/remount resets it. The demo wallet is not a real wallet or transaction.
+- Video previews are user-initiated, use no autoplay, and stop at 10 seconds. The remote sample asset may be longer; the UI enforces a 10-second preview cap.
+- If first-party API posts are returned, they are rendered separately with only the fields currently supplied by the API. The labelled demo stream remains separate for UX review.
+- Implementation: social-post-card.js and social-post-card.css; component specification: SOCIAL-POST-CARD-INTERACTIONS-001.md; regression test: tests/features/home-responsive-visuals.test.js.
+- Verification and membership remain separate. Premium/Silver/Gold/Platinum/Priority markers are presentation fixtures pending approved entitlement/schema mapping. The amber unverified marker means “not verified”, not “fake account”.
+- Backend wallet, social reaction/comment APIs, creator payout, verification records, membership entitlements, and schema changes are not part of this increment. Android UAT remains pending.

@@ -28,3 +28,11 @@ Status rancangan: PROPOSED → IN-DESIGN → REVIEW → APPROVED.
 - The folders currently contain governance notes only; no production artwork or animation files have been approved or added.
 - Do not merge reaction-character assets into Fluvara. They serve different product surfaces.
 - Fluvara is the approved working product name; trademark availability and legal clearance remain pending.
+
+
+## Social Post Card interaction prototype — 24 November 2026
+- Founder-directed UI/UX prototype for Social Media Feed: single-media cards, familiar social actions, expressive reactions, virtual gift interaction, seeded comments/replies, and relative time labels.
+- The prototype uses four sample accounts with distinct verification and membership marker examples. Verification and membership are separate states.
+- Gift UX is simulated with an in-memory demo wallet only. Monetization rules, coin purchase, revenue split, creator payout, entitlement schema, and account verification data remain open; no production schema is inferred.
+- External URLs are not rendered as post links in the demo caption; @mention and #hashtag patterns remain plain social text.
+- Runtime and acceptance contract: src/features/home/SOCIAL-POST-CARD-INTERACTIONS-001.md.
