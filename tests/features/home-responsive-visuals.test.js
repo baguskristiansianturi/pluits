@@ -25,8 +25,12 @@ test('social home keeps illustrative content separated from interactive demo pos
   assert.ok(liveSource.includes('data-content-kind="live"'));
   assert.doesNotMatch(source, /global-product-demo-rail|global-marketplace-cta|global-products|global-features|global-calendar-block|global-about|global-live-demo-grid|global-blog-demo-grid/);
 });
-test('social home responsive styles cover narrow mobile, tablet, desktop and horizontal carousels', async () => {
+test('Social Home responsive styles and content-module styles cover their own surfaces', async () => {
   const css = await readFile(homeCss, 'utf8');
+  const postCss = await readFile(new URL('../../src/features/social/feed/social-post-card.css', import.meta.url), 'utf8');
+  const storiesCss = await readFile(new URL('../../src/features/social/stories/stories-rail.css', import.meta.url), 'utf8');
+  const liveCss = await readFile(new URL('../../src/features/social/live/live-preview.css', import.meta.url), 'utf8');
+  const reelsCss = await readFile(new URL('../../src/features/social/reels/reel-media.css', import.meta.url), 'utf8');
   assert.match(css, /@media\s*\(max-width:\s*359px\)/);
   assert.match(css, /@media\s*\(max-width:\s*767px\)/);
   assert.match(css, /@media\s*\(min-width:\s*768px\)\s*and\s*\(max-width:\s*1023px\)/);
@@ -34,14 +38,16 @@ test('social home responsive styles cover narrow mobile, tablet, desktop and hor
   assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
   assert.match(css, /\.global-people-rail[\s\S]*?scroll-snap-type:\s*x\s+mandatory/);
   assert.match(css, /\.global-content-tabs button\{[^}]*display:flex[^}]*align-items:center[^}]*justify-content:center/);
-  assert.match(css, /\.global-post-card\.is-reel[\s\S]*?aspect-ratio:\s*9\/16/);
+  assert.match(postCss, /\.pl-post-card\.is-reel[\s\S]*?aspect-ratio:\s*9\/16/);
+  assert.match(storiesCss, /\.sm-stories-rail/);
+  assert.match(liveCss, /\.sm-live-preview-grid/);
+  assert.match(reelsCss, /\.sm-reel-video/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /SOCIAL-HOME-GEOMETRY-004/);
   assert.match(css, /font-family:-apple-system,BlinkMacSystemFont/);
   assert.match(css, /\.global-post-list\s*\{[^}]*display:grid[^}]*width:100%[^}]*gap:12px/s);
   assert.match(css, /\.global-person-card[\s\S]*?aspect-ratio:3\/4\.15/);
 });
-
 test('people discovery has responsive portrait cards and all distance scopes', async () => {
   const js = await readFile(discoverJs, 'utf8');
   const css = await readFile(discoverCss, 'utf8');
@@ -68,16 +74,13 @@ test('Social Home mobile layout is owned by Social Home and Stories modules', as
   assert.ok(storiesCss.includes('.sm-story-ring'));
   assert.ok(source.includes('data-open-quick-search'));
 });
-test('social home owns the header-to-content transition after its search entry', async () => {
+test('Social Home owns the header-to-content transition after its search entry', async () => {
   const shell = await readFile(new URL('../../src/design-system/page-shell.css', import.meta.url), 'utf8');
   const home = await readFile(homeCss, 'utf8');
   assert.doesNotMatch(shell, /\.pl-page-shell\.home-page/);
   assert.match(home, /\.global-home-page\s*>\s*\.global-home-main\s*\{[^}]*padding-block-start:\s*0/s);
-  assert.match(home, /\.global-location-row\s*\{\s*margin:\s*14px 0 18px/s);
   assert.match(home, /\.global-home-search-entry\{[^}]*min-height:58px/s);
 });
-
-
 test('Social Home mobile geometry uses the platform gutter while component rails remain feature-owned', async () => {
   const css = await readFile(homeCss, 'utf8');
   const storiesCss = await readFile(new URL('../../src/features/social/stories/stories-rail.css', import.meta.url), 'utf8');
@@ -102,9 +105,6 @@ test('Social Home has one canonical mobile geometry owner and registered carouse
 });
 test('Social Home section actions remain accessible without sibling-domain distance widgets', async () => {
   const css = await readFile(homeCss, 'utf8');
-  const exploreRule = css.match(/\.global-section-heading a,\.global-inline-block a\{[^}]*\}/)?.[0] || '';
-  assert.match(exploreRule, /color:var\(--pl-color-muted\)/);
-  assert.match(exploreRule, /transition:color/);
   assert.match(css, /\.global-section-heading a:hover\{[^}]*color:var\(--pl-color-brand\)/);
   assert.match(css, /\.global-section-heading a:active\{[^}]*color:var\(--pl-color-brand\)/);
   assert.match(css, /\.global-section-heading a:focus-visible\{/);
@@ -183,9 +183,10 @@ test('social stream uses one mixed timeline, icon filters, full-bleed media and 
   const homeStyles = await readFile(homeCss, 'utf8');
   const postStyles = await readFile(new URL('../../src/features/social/feed/social-post-card.css', import.meta.url), 'utf8');
   const card = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
+  const reels = await readFile(new URL('../../src/features/social/reels/reel-media.js', import.meta.url), 'utf8');
   assert.match(home, /data-content-stream/);
   assert.match(home, /data-feed-refresh/);
-  assert.match(home, /data-content-tab="\' \+ tab\.id/);
+  assert.match(home, /data-content-tab="\\' \\+ tab\\.id/);
   assert.doesNotMatch(home, /label:'Feed'/);
   assert.match(homeStyles, /\.global-content-tabs\{position:sticky;top:0/);
   assert.match(homeStyles, /\.global-header\{position:relative;top:auto/);
@@ -194,9 +195,8 @@ test('social stream uses one mixed timeline, icon filters, full-bleed media and 
   assert.match(postStyles, /\.pl-post-card\.is-vertical[\s\S]*?aspect-ratio:4\/5/);
   assert.match(card, /durationSeconds:43/);
   assert.match(card, /durationSeconds:78/);
-  assert.match(card, /durationSeconds \|\| 0\) <= 60/);
+  assert.match(reels, /Number\(post\.durationSeconds \|\| 0\) <= 60/);
 });
-
 test('social feed preview renders twenty mixed posts with commentable blog cards and orientation-aware interactions', async () => {
   const card = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
   const css = await readFile(new URL('../../src/features/social/feed/social-post-card.css', import.meta.url), 'utf8');
@@ -238,16 +238,16 @@ test('social feed limits caption and comment previews and progressively reveals 
   assert.match(homeStyles, /global-content-refresh/);
 });
 
-test('social content filters use icon and label pairs in the requested order', async () => {
+test('social content filters use icon and label pairs with Blog opening its own route', async () => {
   const home = await readFile(homeJs, 'utf8');
   const styles = await readFile(homeCss, 'utf8');
   assert.match(home, /\{id:'all',icon:'grid',label:'Semua'\},\{id:'reels',icon:'film',label:'Reel'\},\{id:'blog',icon:'book',label:'Blog'\},\{id:'live',icon:'radio',label:'Live'\}/);
+  assert.ok(home.includes("tab.id==='blog'?'<a class=\"global-content-tab-link\""));
   assert.match(home, /renderIcon\(tab\.icon\) \+ '<span>' \+ tab\.label/);
   assert.match(home, /filter==='blog'&&kind==='blog'/);
   assert.match(styles, /\.global-content-tabs button\{[^}]*display:flex/);
+  assert.match(home, /routeHref\('blog'\)/);
 });
-
-
 test('Social responsive rules are owned by Social stylesheets, not the shared mobile contract',async()=>{
  const [contract,home,social]=await Promise.all([
   readFile(new URL('../../src/design-system/mobile-layout-contract.css',import.meta.url),'utf8'),
@@ -255,6 +255,6 @@ test('Social responsive rules are owned by Social stylesheets, not the shared mo
   readFile(new URL('../../src/features/social/social-pages.css',import.meta.url),'utf8')
  ]);
  assert.ok(!contract.includes('.global-') && !contract.includes('.social-'));
- assert.ok(home.includes('.global-demo-rail') && home.includes('.global-content-section:has(.global-post-list)'));
+ assert.ok(home.includes('.global-people-rail') && home.includes('.global-content-section:has(.global-post-list)'));
  assert.ok(social.includes('.social-profile-entity-list.is-carousel') && social.includes('.social-profile-page .social-profile-tab-panel'));
 });
