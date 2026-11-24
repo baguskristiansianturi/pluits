@@ -1,7 +1,7 @@
-import { routeHref } from '../../config/paths.js';
-import '../../design-system/page-shell.css';
-import { renderPageHeader } from '../../design-system/page-shell.js';
-import { renderIcon } from '../../design-system/icons.js';
+import { routeHref } from '../../../config/paths.js';
+import '../../../design-system/page-shell.css';
+import { renderPageHeader } from '../../../design-system/page-shell.js';
+import { renderIcon } from '../../../design-system/icons.js';
 import './blog-page.css';
 
 const articles = [
