@@ -101,3 +101,10 @@ The component IDs, selectors, viewport card sizing, gaps and content sources are
 ### Validation boundary
 
 Automated tests and production deployment verify source contracts and build output. They do not replace Android visual acceptance at 320/360/390/430px and tablet/desktop checks.
+
+
+## Social Home discovery correction — 24 November 2026
+- The current Top 10 section is one mixed-content carousel with exactly ten discovery cards, not separate carousels for each category. Cards represent a mix of places, restaurants, food, activities, and similar items; selecting a card opens Jelajah. The regional example is Pulau Bali.
+- Mobile Top 10 cards use approximately 90vw width with a visible next-card cue; tablet and desktop have separate responsive sizing. Swipe, previous/next controls, 2.6-second autoplay, interaction pause, and forward looping are supported.
+- Di sekitar Anda cards use approximately 70vw mobile width and communicate actual place/business information in the visual hierarchy: photo, rating and review count, distance, category, name, locality, and a readable visitor-review excerpt. Current entries remain visual fixtures only.
+- The canonical behavior and responsive contract live in `PAGE-SOCIAL-HOME-001.md` and `HOME-CAROUSEL-REGISTRY.md`.
