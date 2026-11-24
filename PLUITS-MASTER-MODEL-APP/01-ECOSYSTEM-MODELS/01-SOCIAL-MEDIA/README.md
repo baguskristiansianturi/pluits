@@ -11,6 +11,10 @@ Social Media memiliki empat modul konten mandiri:
 ## Feed bukan modul konten kelima
 Feed adalah permukaan agregasi dan distribusi yang menghubungkan konten dari modul-modul tersebut serta format post lain yang disetujui. Feed memiliki kontrak distribusi, ranking, audience filtering, dan render integration sendiri; ia tidak mengambil alih domain atau lifecycle modul sumber.
 
+## Pohon GitHub dan kontrak integrasi
+
+Baca [Pohon GitHub Social Media dan Kontrak Integrasi](05-POHON-GITHUB-DAN-KONTRAK-INTEGRASI.md) untuk membedakan struktur runtime yang benar-benar ada dari struktur target modular, melihat pemilik halaman/fitur, dan memahami hubungan Social Media dengan Marketplace, Venue, serta domain masa depan seperti Ticketing.
+
 ## Aturan pengalaman Social Media
 Aturan operasional Social Media mengikuti ritme pengalaman yang sudah ada dan kebutuhan domainnya sendiri. Baca indeks [Aturan Pengalaman Social Media](00-ATURAN-PENGALAMAN/README.md).
 
