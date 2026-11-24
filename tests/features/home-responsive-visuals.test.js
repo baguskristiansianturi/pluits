@@ -31,7 +31,7 @@ test('social home responsive styles cover narrow mobile, tablet, desktop and hor
   assert.match(css, /\.global-content-tabs[\s\S]*?grid-template-columns:\s*repeat\(4,minmax\(0,1fr\)\)/);
   assert.match(css, /\.global-post-card\.is-reel[\s\S]*?aspect-ratio:\s*9\/16/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.match(css, /padding:\s*0 0 8px 5px/);
+  assert.match(css, /SOCIAL-HOME-GEOMETRY-003/);
   assert.match(css, /font-family:-apple-system,BlinkMacSystemFont/);
   assert.match(css, /\.global-post-list\{display:grid;gap:20px;width:100%;max-width:none;margin:0\}/);
   assert.match(css, /\.global-person-card[\s\S]*?aspect-ratio:3\/4\.15/);
@@ -55,8 +55,8 @@ test('social home mobile layout keeps recommendation inset, feed full-bleed, and
   const css = await readFile(homeCss, 'utf8');
   assert.equal((source.match(/class="global-social-area"/g) || []).length, 1,
     'social content must have one parent wrapper (no accidental nested duplicate)');
-  assert.match(css, /global-location-row\s*\{\s*margin:\s*30px 5px 8px/);
-  assert.match(css, /global-people-rail\s*\{[^}]*padding:\s*0 5px 9px/s);
+  assert.match(css, /global-location-row\s*\{\s*margin:\s*30px 0 8px/);
+  assert.match(css, /global-people-rail\s*\{[^}]*padding:\s*0 10px 9px/s);
   assert.match(css, /global-content-section\s*\{[^}]*width:\s*100vw[^}]*margin-inline:\s*calc\(50% - 50vw\)/s);
   assert.match(css, /global-post-list\s*\{[^}]*width:\s*100%[^}]*max-width:\s*none/s);
   assert.match(css, /global-post-card\s*\{[^}]*width:\s*100%[^}]*max-width:\s*none/s);
@@ -69,6 +69,17 @@ test('social home owns the header-to-content transition after its service shortc
   const shell = await readFile(new URL('../../src/design-system/page-shell.css', import.meta.url), 'utf8');
   const home = await readFile(homeCss, 'utf8');
   assert.match(shell, /\.pl-page-shell\.home-page\s*>\s*\.pl-page-main\s*\{\s*padding-block-start:\s*0/s);
-  assert.match(home, /\.global-location-row\s*\{\s*margin:\s*30px 5px 8px/s);
+  assert.match(home, /\.global-location-row\s*\{\s*margin:\s*30px 0 8px/s);
   assert.match(home, /\.global-search-submit\s*\{[^}]*white-space:\s*nowrap/s);
+});
+
+
+test('authenticated home uses 10px mobile content gutters, edge-bleed carousels and 10px card corners', async () => {
+  const css = await readFile(homeCss, 'utf8');
+  assert.match(css, /SOCIAL-HOME-GEOMETRY-003/);
+  assert.match(css, /\.global-home-page > \.global-home-main\s*\{[^}]*padding-inline:\s*10px/s);
+  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ 10px\)[^}]*margin-right:\s*-10px/s);
+  assert.match(css, /\.global-local-rail,[\s\S]*?width:\s*calc\(100% \+ 10px\)/);
+  assert.match(css, /\.global-post-card\s*\{[^}]*border-radius:\s*var\(--pl-radius-card\)/s);
+  assert.match(css, /\.global-feature-card,[\s\S]*?border-radius:\s*var\(--pl-radius-card\)/);
 });

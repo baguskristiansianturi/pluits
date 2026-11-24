@@ -1014,3 +1014,137 @@
     object-fit: cover;
   }
 }
+
+/* SOCIAL-HOME-GEOMETRY-003 — one mobile gutter and card radius contract.
+   Standard copy/content: 10px. Horizontal rails: 10px leading inset, edge-to-edge trailing edge.
+   Feed/Reels/Live/Blog media intentionally remain full-bleed. */
+@media (max-width: 767px) {
+  .global-home-page > .global-home-main {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding-inline: 10px;
+  }
+
+  .global-quick-search {
+    box-sizing: border-box;
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    padding: 9px 10px 11px;
+  }
+  .global-quick-search > a {
+    border-radius: var(--pl-radius-card);
+  }
+
+  .global-location-row {
+    margin: 30px 0 8px;
+    padding-inline: 0;
+  }
+  .global-unified-search {
+    margin: 0 0 24px;
+    border-radius: var(--pl-radius-card);
+  }
+
+  .global-section-heading {
+    margin-bottom: 12px;
+    padding-inline: 0;
+  }
+  .global-content-intro {
+    margin-inline: 10px;
+    padding-inline: 0;
+  }
+
+  /* Carousel wrappers begin at the content gutter and extend to the viewport edge. */
+  .global-bleed-wrap {
+    box-sizing: border-box;
+    width: calc(100% + 10px);
+    max-width: none;
+    margin-left: 0;
+    margin-right: -10px;
+    overflow: hidden;
+  }
+  .global-demo-rail,
+  .global-story-rail,
+  .global-people-rail {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    padding: 0 10px 9px;
+  }
+  .global-local-rail,
+  .global-product-demo-rail,
+  .global-feature-rail {
+    box-sizing: border-box;
+    width: calc(100% + 10px);
+    max-width: none;
+    margin-left: 0;
+    margin-right: -10px;
+    padding: 0 10px 9px;
+  }
+
+  .global-content-tabs {
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .global-content-section {
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding-inline: 0;
+  }
+  .global-content-section .global-content-intro {
+    margin-inline: 10px;
+  }
+  .global-post-list {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    gap: 12px;
+  }
+  .global-post-card {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--pl-radius-card);
+  }
+  .global-post-author {
+    padding-inline: 10px;
+  }
+  .global-post-caption,
+  .global-post-actions {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .global-composer,
+  .global-about {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Shared 10px radius for actual Home cards; circular avatars/story rings and pills stay distinct. */
+  .global-demo-card,
+  .global-person-card,
+  .global-local-card,
+  .global-post-card,
+  .global-live-demo,
+  .global-blog-demo,
+  .global-feature-card,
+  .global-calendar-card,
+  .global-marketplace-cta,
+  .global-about,
+  .global-composer,
+  .global-product-location,
+  .global-product-art,
+  .global-service-shortcut {
+    border-radius: var(--pl-radius-card);
+  }
+}

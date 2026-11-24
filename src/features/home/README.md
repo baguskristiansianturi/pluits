@@ -77,6 +77,15 @@ Run `npm test` and `npm run build`. Verify `#/home` for guest and authenticated 
 ## PLUITS Social Home visual refinement — 23 November 2026
 - Search uses the service quick-navigation strip directly beneath the navbar as the single service selector; duplicate service chips inside the search panel are removed.
 - Feature-local colors use the PLUITS brand token (logo teal), white, soft grey, and navy. No generic blue action palette is introduced.
-- Mobile content gutters use 10px for readable section/content edges and 5px for compact full-width navigation/tab rails. Horizontal carousels begin with a 10px inset while remaining horizontally scrollable.
+- Mobile Beranda uses one 10px gutter for standard copy and content. Horizontal carousels start 10px from the left and extend to the physical right edge so the next card can remain partially visible. Feed/Reels/Live/Blog media retain their intentional full-bleed presentation.
 - Feed post media remains full viewport width on mobile and uses a consistent 4:5 display frame with cover cropping. CSS cropping affects presentation only; it does not rewrite or downsample uploaded source files. Original media storage/processing remains the responsibility of the upload pipeline.
 - Browser-based visual acceptance is still required on Android; build checks do not establish pixel-perfect device rendering.
+
+
+## Beranda pengguna — penyelarasan geometri 24 November 2026
+- Semua teks, heading, dan konten standar pada mobile memakai gutter kiri/kanan 10px.
+- Semua carousel dimulai pada inset 10px di kiri dan area scroll melewati gutter kanan sampai tepi viewport; lebar card tidak dipaksa mengecil agar seluruh card muat.
+- Card pada Beranda memakai token radius bersama `--pl-radius-card: 10px`. Avatar, story ring, dan elemen pill mempertahankan bentuk khususnya.
+- Feed/Reels/Live/Blog tetap menggunakan media full-bleed; teks dan metadata tetap memiliki inset 10px.
+- Aturan hanya berlaku pada Social Home mobile (<=767px); layout tablet dan desktop tidak diubah.
+- Pengujian regresi memeriksa gutter, bleed carousel, radius card, dan kontrak full-bleed feed.
