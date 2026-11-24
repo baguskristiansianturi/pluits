@@ -10,6 +10,7 @@ Folder ini merekam ritme, perilaku, batas, dan kontrak pengalaman Social Media P
 - Struktur dokumentasi harus mengikuti domain, perilaku, dan siklus kerja Social Media; jangan memaksakan pola dokumentasi ekosistem lain.
 - Aturan yang sudah disetujui dan perilaku website yang sedang berjalan harus dipertahankan. Perubahan desain atau perilaku hanya dilakukan melalui permintaan dan persetujuan perubahan tersendiri.
 - Catat kondisi aktual, status prototype, status backend, dan pekerjaan yang belum tersedia secara terpisah.
+- Aturan isolasi CSS dan runtime adalah bagian wajib tata kelola Social Media, meskipun istilah "isolasi" sebelumnya belum dicantumkan.
 - Aturan ini menjadi panduan untuk pekerjaan berikutnya, bukan izin untuk mengubah website secara otomatis.
 
 ## Indeks aturan
@@ -29,6 +30,8 @@ Folder ini merekam ritme, perilaku, batas, dan kontrak pengalaman Social Media P
 13. [Fondasi visual dan kepemilikan CSS](13-FONDASI-VISUAL-DAN-KEPEMILIKAN-CSS.md)
 14. [Aksesibilitas, responsivitas, dan performa](14-AKSESIBILITAS-RESPONSIVITAS-DAN-PERFORMA.md)
 15. [Prosedur perubahan, pengujian, dan bukti](15-PERUBAHAN-PENGUJIAN-DAN-BUKTI.md)
+16. [Isolasi CSS dan alur dependensi](16-ISOLASI-CSS-DAN-ALUR-DEPENDENSI.md)
+17. [Peta runtime dan tahap migrasi isolasi](17-PETA-RUNTIME-DAN-TAHAP-MIGRASI-ISOLASI.md)
 
 ## Hubungan dengan modul konten
 
