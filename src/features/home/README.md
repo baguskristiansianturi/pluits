@@ -139,3 +139,9 @@ Automated tests and production deployment verify source contracts and build outp
 - Account status and membership badges are independent. Badge states are UI examples only; the membership/verification schema and business rules remain pending.
 - No fixture is persisted; reload/remount resets interaction state. No production wallet or social data is written.
 - Canonical behavior: SOCIAL-POST-CARD-INTERACTIONS-001.md; page-level contract: PAGE-SOCIAL-HOME-001.md.
+
+
+## Social Home ownership transition — 25 November 2026
+The public marketing homepage remains owned by `src/features/home/business-home-page.js` and `business-home.css`. The authenticated Social Home currently still lives in this historical folder, but that is a legacy runtime location, not its intended domain ownership. Social Home, Feed, Blog, Reels, Stories, Live, Discover, Profile, and Connections belong to the Social Media domain and must be migrated to its owned runtime boundary in controlled, tested slices.
+
+Blog is not yet a standalone runtime feature in this snapshot: the Blog presentation in `home-page.js` is demo content. It must not be treated as the Blog module or as an implemented editor/publishing lifecycle. Until a separate Blog runtime exists, preserve the current presentation as baseline and keep the implementation status explicit. See the Social Media runtime ownership and isolation audit in the Master Model documentation.

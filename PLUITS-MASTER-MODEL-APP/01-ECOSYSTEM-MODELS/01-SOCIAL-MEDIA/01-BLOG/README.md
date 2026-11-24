@@ -26,3 +26,18 @@ Gunakan logo, icon library, typography, design tokens, layout primitives, breakp
 
 ## Status
 Dokumen fondasi ini tidak menyatakan bahwa halaman, API, database, atau fitur produksi telah tersedia. Implementasi harus dicatat di jalur Project dan dibuktikan melalui checklist audit.
+
+
+## Kemandirian modul dan kontrak interaksi
+Blog adalah modul runtime mandiri di dalam domain Social Media, bukan sekadar tipe kartu atau tab Feed. Blog memiliki route/page, editor, draft, preview/review, publish/update/archive lifecycle, state, komponen, CSS, API/data contract, test, dan release gate sendiri sesuai tahap implementasi yang disetujui.
+
+Feed/Social Home hanya boleh:
+- membaca public read model artikel yang sudah lolos audience/visibility authorization;
+- menampilkan preview melalui adapter/renderer contract;
+- membuka deep-link menuju halaman detail Blog;
+- mengirim interaksi sosial melalui API/event contract yang disetujui.
+
+Feed dan domain luar tidak boleh mengubah draft, konten editorial, revision history, audience policy, status publikasi, atau stylesheet Blog. Blog tidak boleh mengimpor private CSS/DOM/state sibling modules. Integrasi ke Marketplace, Venue, Ticketing, GeoDirectory, atau layanan lain hanya berupa link/embed/read model/API/event contract; proses bisnis dan lifecycle tetap dimiliki domain sumber.
+
+## Status runtime yang diaudit
+Pada snapshot audit 25 November 2026 (commit `3acb3a30ec04fba846de0201046ffec0d13b231e`), belum ditemukan route/page/editor/state/API Blog runtime yang mandiri. Contoh Blog masih dirender sebagai demo presentation dari Social Home. Karena itu, status Blog runtime tetap **NOT IMPLEMENTED AS AN INDEPENDENT MODULE** sampai route, lifecycle, CSS boundary, tests, dan integrasi read model benar-benar tersedia.
