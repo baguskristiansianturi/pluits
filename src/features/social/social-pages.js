@@ -19,7 +19,7 @@ function bottomNav(active){
 }
 function shell(title,subtitle,active,content){
  const header=renderPageHeader({brandHref:routeHref('home'),rightContent:'<div class="social-header-tools"><span>'+title+'</span><a href="'+routeHref('profile')+'">Profil</a></div>',className:'social-header'});
- return '<div class="pl-page-shell social-shell">'+header+'<main class="pl-page-main social-main"><section class="social-intro"><span class="social-kicker">PLUITS · '+title.toUpperCase()+'</span><h1>'+title+'</h1><p>'+subtitle+'</p></section>'+content+'</main>'+bottomNav(active)+'</div>';
+ return '<div class="pl-page-shell pl-page-shell--surface pl-page-shell--standard-content social-shell">'+header+'<main class="pl-page-main social-main"><section class="social-intro"><span class="social-kicker">PLUITS · '+title.toUpperCase()+'</span><h1>'+title+'</h1><p>'+subtitle+'</p></section>'+content+'</main>'+bottomNav(active)+'</div>';
 }
 function emptyPanel(title,text){return '<section class="social-empty-panel"><span>'+renderIcon('eye')+'</span><strong>'+title+'</strong><p>'+text+'</p></section>';}
 export function mountCircleHomePage({root}={}){root.innerHTML=shell('Beranda Circle','Ruang personal yang mengikuti Circle, minat, dan konteks lokasi Anda.','social','<section class="social-home-section"><div class="social-section-heading"><h2>Circle Anda</h2><a href="'+routeHref('discover')+'">Temukan akun →</a></div>'+emptyPanel('Belum ada aktivitas Circle','Postingan dan pembaruan dari akun dalam Circle Anda akan muncul di sini.')+'</section><section class="social-home-section"><div class="social-section-heading"><h2>Di sekitar Anda</h2><span>Berbasis lokasi</span></div>'+emptyPanel('Rekomendasi lokasi belum tersedia','Aktifkan izin lokasi jika ingin melihat rekomendasi yang lebih akurat. Anda tetap dapat menggunakan PLUITS tanpa memberikan izin lokasi.')+'</section>');}
@@ -92,7 +92,7 @@ export function mountProfilePage({root,user=null,accessToken=null}={}) {
   +'<section class="social-profile-tab-panel" role="tabpanel" id="profile-panel-blog" aria-labelledby="profile-tab-blog" data-profile-panel="blog" hidden>'+emptyPanel('Belum ada Blog','Artikel blog yang dipublikasikan akan tampil di sini.')+'</section>'
   +businessPanels()
   +'</section>';
- root.innerHTML='<div class="pl-page-shell social-shell social-profile-shell">'+renderPageHeader({brandHref:routeHref('home'),label:'PLUITS — Profil',rightContent:'<div class="social-header-tools"><span>'+(profileSetupMode?'Profil Saya':'Profil')+'</span><a href="'+routeHref('settings')+'">Pengaturan</a></div>',className:'social-header'})+'<main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
+ root.innerHTML='<div class="pl-page-shell pl-page-shell--surface pl-page-shell--standard-content social-shell social-profile-shell">'+renderPageHeader({brandHref:routeHref('home'),label:'PLUITS — Profil',rightContent:'<div class="social-header-tools"><span>'+(profileSetupMode?'Profil Saya':'Profil')+'</span><a href="'+routeHref('settings')+'">Pengaturan</a></div>',className:'social-header'})+'<main class="pl-page-main social-main">'+profileContent+'</main>'+bottomNav('profile')+'</div>';
  const unmountCoverControls=mountProfileCoverControls({root,profileKey:user?.id||username});
  const controller=new AbortController();
  root.addEventListener('click',event=>{
