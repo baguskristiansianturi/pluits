@@ -26,7 +26,7 @@ test('social home responsive styles cover narrow mobile, tablet, desktop and hor
   assert.match(css, /@media\s*\(max-width:\s*767px\)/);
   assert.match(css, /@media\s*\(min-width:\s*768px\)\s*and\s*\(max-width:\s*1023px\)/);
   assert.match(css, /@media\s*\(min-width:\s*1024px\)/);
-  assert.match(css, /\.global-quick-search[\s\S]*?overflow-x:\s*auto/);
+  assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
   assert.match(css, /\.global-people-rail[\s\S]*?scroll-snap-type:\s*x\s+mandatory/);
   assert.match(css, /\.global-content-tabs[\s\S]*?grid-template-columns:\s*repeat\(4,minmax\(0,1fr\)\)/);
   assert.match(css, /\.global-post-card\.is-reel[\s\S]*?aspect-ratio:\s*9\/16/);
@@ -64,7 +64,7 @@ test('social home mobile layout keeps recommendation inset, feed full-bleed, and
   assert.match(css, /\.global-home-search-entry\{[^}]*min-height:58px/s);
   assert.doesNotMatch(source, /class="global-quick-search"/);
 });
-test('social home owns the header-to-content transition after its service shortcut rail', async () => {
+test('social home owns the header-to-content transition after its search entry', async () => {
   const shell = await readFile(new URL('../../src/design-system/page-shell.css', import.meta.url), 'utf8');
   const home = await readFile(homeCss, 'utf8');
   assert.match(shell, /\.pl-page-shell\.home-page\s*>\s*\.pl-page-main\s*\{\s*padding-block-start:\s*0/s);
