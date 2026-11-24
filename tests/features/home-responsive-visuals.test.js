@@ -136,9 +136,9 @@ test('Social Home contains only Social Media experiences and links outward only 
   assert.match(source, /Orang yang mungkin Anda kenal/);
   assert.match(source, /Cerita dari circle Anda/);
   assert.match(source, /data-content-tabs/);
-  assert.match(source, /routeHref\\('blog'\\)/);
+  assert.ok(source.includes("routeHref('blog')"));
   assert.match(source, /data-social-composer/);
-  assert.doesNotMatch(source, /const recommendationItems|const nearbyItems|global-products|global-features|global-calendar-block|global-about|routeHref\\('marketplace'\\)/);
+  assert.ok(!source.includes('const recommendationItems') && !source.includes('const nearbyItems') && !source.includes('global-products') && !source.includes('global-features') && !source.includes('global-calendar-block') && !source.includes('global-about') && !source.includes("routeHref('marketplace')"));
   assert.doesNotMatch(source, /Keranjang|Notifikasi|Produk lokal pilihan|Restoran & kafe|Transportasi/);
   assert.doesNotMatch(css, /body\\.global-search-open[^}]*background|html\\s*\\{/);
 });
