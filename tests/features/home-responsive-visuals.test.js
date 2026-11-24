@@ -220,3 +220,21 @@ test('social post demo contains four distinct posts, sample comments/replies and
   assert.match(cardCss, /pl-post-comment-replies/);
   assert.match(cardCss, /pl-post-more/);
 });
+
+
+test('social post card keeps the established card while comments align by reply author and media actions overlay', async () => {
+  const cardSource = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
+  const cardCss = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
+  assert.match(cardSource, /renderReplies\(replies, postOwner\)/);
+  assert.match(cardSource, /reply\.name === postOwner/);
+  assert.match(cardSource, /pl-post-reply ' \+ sideClass/);
+  assert.match(cardSource, /data-gift-received-toggle/);
+  assert.match(cardSource, /data-overlay-like-count/);
+  assert.match(cardSource, /data-overlay-comment-count/);
+  assert.doesNotMatch(cardSource, /pl-post-action-row/);
+  assert.match(cardCss, /\.pl-post-media-actions\{[^}]*flex-direction:column/);
+  assert.match(cardCss, /\.pl-post-reply\.is-right\{[^}]*margin-left:auto/);
+  assert.match(cardCss, /\.pl-post-reply\.is-owner\{[^}]*margin-right:auto/);
+  assert.match(cardCss, /\.pl-post-received-gifts\{[^}]*position:absolute/);
+  assert.match(cardCss, /\.pl-post-media-overlay \.pl-post-gift-panel\[hidden\]\{display:none\}/);
+});
