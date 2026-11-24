@@ -31,3 +31,15 @@ Blueprint teknis khusus Social Media: module boundaries, frontend routes/pages/c
 - This slice is text-post only because the current Go API contract is text-only. Media grid, reactions, comments, follower counts and public-profile routing remain unavailable until their own APIs and contracts are implemented.
 - Runtime owners: `src/app/create-app.js`, `src/features/social/social-pages.js`, `src/features/social/social-pages.css`.
 - Validation: `tests/features/social-composer.test.js` covers the authenticated endpoint, token forwarding, visibility labeling and request cleanup.
+
+
+## Module boundaries — Blog, Reels, Stories, Live
+Four independent Social Media modules have their own technical contracts and implementation ownership:
+- Blog: `../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/01-BLOG/02-DEVELOPMENT/`
+- Reels: `../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/02-REELS/02-DEVELOPMENT/`
+- Stories: `../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/03-STORIES/02-DEVELOPMENT/`
+- Live: `../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/04-LIVE/02-DEVELOPMENT/`
+
+Feed is an aggregation/distribution surface. It consumes documented content references and render/deep-link contracts; it must not own or duplicate each module's private state machine, CSS, media lifecycle, or domain rules. Shared assets/tokens/layout primitives are owned by Platform UI Foundation. Module-private styles remain within their respective module boundaries.
+
+The existing first-slice text-only Feed API and its explicit out-of-scope list remain valid; this modularization does not claim Blog, Reels, Stories, or Live production functionality exists.
