@@ -102,7 +102,9 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   root.addEventListener('keydown',event=>{if(event.key==='Escape'&&searchBackdrop&&!searchBackdrop.hidden)closeQuickSearch();});
   const buttons=[...root.querySelectorAll('[data-content-tab]')];
   const stream=root.querySelector('[data-content-stream]');
+  let activeContentFilter='all';
   const applyContentFilter=(filter='all')=>{
+    activeContentFilter=filter;
     buttons.forEach(button=>{const active=button.dataset.contentTab===filter;button.classList.toggle('is-active',active);button.setAttribute('aria-pressed',String(active));});
     stream?.querySelectorAll('[data-content-kind]').forEach(item=>{item.hidden=filter!=='all'&&item.dataset.contentKind!==filter;});
     stream?.querySelectorAll('[data-post-card]').forEach(card=>{const kind=card.dataset.contentKind||'photo';card.hidden=filter==='reels'?kind!=='reel':filter==='live'||filter==='blog';});
@@ -116,7 +118,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
 
   const loadFeed = async () => {
     if (!feedTarget) return;
-    if (!API_BASE_URL) { feedTarget.innerHTML=renderDemoFeed('feed'); return; }
+    if (!API_BASE_URL) { feedTarget.innerHTML=renderDemoFeed('feed'); applyContentFilter(activeContentFilter); return; }
     feedTarget.innerHTML=renderFeedState('Memuat postingan publik…',true);
     try {
       const response=await fetch(API_BASE_URL+'/v1/social/feed?limit=20',{headers:{Accept:'application/json'},mode:'cors',credentials:'omit',cache:'no-store',signal:controller.signal});
@@ -124,8 +126,9 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
       const payload=await response.json();
       const posts=Array.isArray(payload.posts)?payload.posts:[];
       feedTarget.innerHTML=(posts.length?posts.map(post=>renderPostCard({authorName:post.author_name,username:post.username,caption:post.caption,content_kind:post.content_kind,created_at:post.created_at})).join(''):'')+renderDemoFeed('feed');
+      applyContentFilter(activeContentFilter);
     } catch(error) {
-      if(error.name!=='AbortError')feedTarget.innerHTML=renderDemoFeed('feed');
+      if(error.name!=='AbortError'){feedTarget.innerHTML=renderDemoFeed('feed');applyContentFilter(activeContentFilter);}
     }
   };
   const composer=root.querySelector('[data-social-composer]');
@@ -148,6 +151,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
         const post=payload;
         const card=renderPostCard({authorName:post.author_name,username:post.username,caption:post.caption,content_kind:post.content_kind,created_at:post.created_at});
         feedTarget?.insertAdjacentHTML('afterbegin',card);
+        applyContentFilter(activeContentFilter);
         captionField.value='';if(count)count.textContent='0 / 5.000';
         status.textContent=post.visibility==='private'?'Postingan privat tersimpan dan hanya terlihat oleh Anda.':'Postingan berhasil diterbitkan.';
       }catch(error){if(error.name!=='AbortError')status.textContent=error.message||'Postingan belum berhasil diterbitkan.';}
