@@ -56,11 +56,11 @@ test('social home mobile layout keeps recommendation inset, feed full-bleed, and
   assert.equal((source.match(/class="global-social-area"/g) || []).length, 1,
     'social content must have one parent wrapper (no accidental nested duplicate)');
   assert.match(css, /global-location-row\s*\{\s*margin:\s*30px 0 8px/);
-  assert.match(css, /\.global-demo-rail,\.global-story-rail,\.global-people-rail,[\s\S]*?padding:0 10px 9px/s);
+  assert.match(css, /\.global-demo-rail,\.global-story-rail,\.global-people-rail,[\s\S]*?padding:0 var\(--pl-page-gutter\) 9px/s);
   assert.match(css, /\.global-content-section\s*\{[^}]*width:100vw[^}]*margin:0 calc\(50% - 50vw\) 14px/s);
   assert.match(css, /\.global-post-list\s*\{[^}]*width:100%[^}]*max-width:none/s);
   assert.match(css, /\.global-post-card\s*\{[^}]*width:100%[^}]*max-width:none/s);
-  assert.match(css, /\.global-quick-search\s*\{[^}]*width:100vw[^}]*padding:5px 10px 6px/s);
+  assert.match(css, /\.global-quick-search\s*\{[^}]*width:100vw[^}]*padding:5px var\(--pl-page-gutter\) 6px/s);
   assert.match(css, /global-quick-search > a\s*\{[^}]*min-height:\s*34px[^}]*background:\s*#fff/s);
 });
 
@@ -77,9 +77,10 @@ test('social home owns the header-to-content transition after its service shortc
 test('authenticated home uses 10px mobile content gutters, edge-bleed carousels and 10px card corners', async () => {
   const css = await readFile(homeCss, 'utf8');
   assert.match(css, /SOCIAL-HOME-GEOMETRY-004/);
-  assert.match(css, /\.global-home-page > \.global-home-main\s*\{[^}]*padding-inline:\s*var\(--home-gutter\)/s);
-  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--home-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--home-gutter\)\)/s);
-  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:\s*calc\(100% \+ var\(--home-gutter\)\)/s);
+  assert.match(css, /var\(--pl-page-gutter\)/);
+  assert.doesNotMatch(css, /--home-gutter/);
+  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
+  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)/s);
   assert.match(css, /\.global-post-card\s*\{[^}]*border-radius:\s*var\(--pl-radius-card\)/s);
   assert.match(css, /\.global-feature-card,[\s\S]*?border-radius:\s*var\(--pl-radius-card\)/);
 });
@@ -89,14 +90,32 @@ test('Social Home has one canonical mobile geometry owner and registered carouse
   const readme = await readFile(new URL('../../src/features/home/README.md', import.meta.url), 'utf8');
   const registry = await readFile(new URL('../../src/features/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
   assert.equal((css.match(/SOCIAL-HOME-GEOMETRY-004/g) || []).length, 1);
-  assert.match(css, /--home-gutter:\s*var\(--pl-page-gutter\)/);
-  assert.match(css, /\.global-home-page > \.global-home-main\s*\{[^}]*padding-inline:\s*var\(--home-gutter\)/s);
-  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--home-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--home-gutter\)\)/s);
-  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:calc\(100% \+ var\(--home-gutter\)\)/s);
+  assert.match(css, /var\(--pl-page-gutter\)/);
+  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
+  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:calc\(100% \+ var\(--pl-page-gutter\)\)/s);
   assert.match(css, /scroll-snap-type:\s*x mandatory/);
   assert.match(registry, /HOME-CAROUSEL-DEMO-001/);
   assert.match(registry, /HOME-CAROUSEL-STORIES-001/);
   assert.match(registry, /HOME-CAROUSEL-PEOPLE-001/);
   assert.match(registry, /HOME-CAROUSEL-PRODUCT-001/);
   assert.match(readme, /SOCIAL-HOME-GEOMETRY-004/);
+});
+
+
+test('Social Home and Discover share one page surface and one standard content frame', async () => {
+  const shell = await readFile(new URL('../../src/design-system/page-shell.css', import.meta.url), 'utf8');
+  const home = await readFile(homeCss, 'utf8');
+  const discover = await readFile(discoverCss, 'utf8');
+  const homeMarkup = await readFile(homeJs, 'utf8');
+  const discoverMarkup = await readFile(discoverJs, 'utf8');
+
+  assert.match(shell, /\.pl-page-shell--surface\s*\{\s*background:\s*var\(--pl-color-surface\)/);
+  assert.match(shell, /\.pl-page-shell\.pl-page-shell--standard-content\s*>\s*\.pl-page-main\s*\{[^}]*width:\s*min\(100%,\s*var\(--pl-container-wide\)\)[^}]*padding-inline:\s*0/s);
+  assert.match(homeMarkup, /pl-page-shell pl-page-shell--surface pl-page-shell--standard-content home-page global-home-page/);
+  assert.match(discoverMarkup, /pl-page-shell pl-page-shell--surface pl-page-shell--standard-content social-shell/);
+
+  assert.doesNotMatch(home, /\.global-home-page\s*\{[^}]*background:/s);
+  assert.doesNotMatch(discover, /\.social-shell\s*\{[^}]*background:/s);
+  assert.doesNotMatch(home, /\.global-home-main\s*\{[^}]*padding-inline:/s);
+  assert.doesNotMatch(discover, /\.social-main\s*\{[^}]*(?:^|;)\s*(?:width|max-width|padding-inline):/s);
 });

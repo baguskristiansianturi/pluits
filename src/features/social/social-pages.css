@@ -1,10 +1,9 @@
-.social-shell{background:var(--pl-color-surface);padding-bottom:calc(74px + env(safe-area-inset-bottom,0px))}
+.social-shell{padding-bottom:calc(74px + env(safe-area-inset-bottom,0px))}
 .social-header{position:sticky;top:0;z-index:30;background:var(--pl-color-surface)}
 .social-header-tools{display:flex;min-width:0;align-items:center;gap:18px}
 .social-header-tools>span{overflow:hidden;color:var(--pl-color-ink);font-size:12px;font-weight:750;text-overflow:ellipsis;white-space:nowrap}
 .social-header-tools>a{color:var(--pl-color-ink);font-size:11px;font-weight:700;text-decoration:none;white-space:nowrap}
 @media(max-width:767px){.social-header-tools{gap:10px}.social-header-tools>span{font-size:10px}.social-header-tools>a{font-size:10px}}
-.social-main{width:min(100%,var(--pl-container-wide));margin-inline:auto}
 .social-intro{margin-bottom:34px}.social-kicker{color:var(--pl-color-brand);font-size:10px;font-weight:800;letter-spacing:.13em}
 .social-intro h1{margin:10px 0;color:var(--pl-color-ink);font-size:clamp(30px,4vw,44px);letter-spacing:-.04em}
 .social-intro p{max-width:620px;margin:0;color:var(--pl-color-muted);font-size:13px;line-height:1.7}
@@ -31,7 +30,6 @@
 @media(max-width:767px){.social-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.social-intro{margin-bottom:25px}.social-section-heading h2{font-size:17px}}
 
 .social-profile-card{display:flex;align-items:center;gap:16px;padding:22px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-md);background:var(--pl-color-surface)}.social-profile-avatar{display:grid;width:68px;height:68px;flex:0 0 auto;place-items:center;border-radius:50%;background:var(--pl-color-brand-soft);color:var(--pl-color-ink);font-size:24px;font-weight:800}.social-profile-card h2{margin:0 0 4px}.social-profile-card p{margin:0;color:var(--pl-color-muted);font-size:12px}.social-profile-card span{color:var(--pl-color-muted);font-size:10px}.social-profile-tabs{display:flex;gap:8px;overflow:auto;margin:22px 0}.social-profile-tabs button{padding:9px 15px;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-pill);background:var(--pl-color-surface);color:var(--pl-color-text);font-size:11px;font-weight:700;white-space:nowrap}
-
 
 /* Account settings hub — app surface, not website footer chrome. */
 .social-profile-card{flex-wrap:wrap}
@@ -69,7 +67,6 @@
  .social-profile-card{padding:16px}
  .social-settings-account{align-items:flex-start;flex-direction:column}
 }
-
 
 /* Refined profile header: aligned identity, clear account tier and balanced actions. */
 .social-profile-page{max-width:100%;padding-top:4px}
@@ -171,7 +168,6 @@
 .social-profile-tabs button.is-active .ui-icon{color:var(--pl-color-brand)}
 @media(max-width:560px){.social-profile-entity-list{grid-template-columns:minmax(0,1fr)}}
 
-
 /* PROFILE-BUBBLE-CONNECTIONS-DEMO-001 — isolated soft-body interaction prototype. */
 .social-profile-bubble-demo{position:relative;margin:0 0 12px;overflow:hidden;border:1px solid var(--pl-color-border);border-radius:var(--pl-radius-lg);background:var(--pl-color-surface)}
 .social-profile-cover{position:relative;height:clamp(112px,24vw,176px);overflow:hidden;background:linear-gradient(115deg,#dcefeb 0%,#d8e5ed 42%,#e9e7df 100%)}
@@ -198,7 +194,6 @@
 @media(max-width:480px){.social-profile-bubble-field{height:104px;margin-top:-52px}.social-profile-bubble-caption{align-items:flex-start;flex-direction:column;gap:7px}.social-profile-bubble-caption button{min-height:32px}}
 @media(prefers-reduced-motion:reduce){.social-profile-bubble{will-change:auto;transition:none}}
 
-
 /* Soft portrait bubbles: translucent hairline edges and shared elastic contact. */
 .social-profile-bubble{border:1px solid rgba(255,255,255,.62);background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(219,239,235,.78));box-shadow:0 5px 14px rgba(23,43,69,.12),inset 0 1px 3px rgba(255,255,255,.82);transition:box-shadow .12s ease,filter .12s ease}
 .social-profile-bubble.is-contacting{box-shadow:0 3px 10px rgba(23,43,69,.10),0 0 12px rgba(190,235,226,.58),inset 0 1px 4px rgba(255,255,255,.9);filter:saturate(1.05)}
@@ -209,7 +204,6 @@
 .social-profile-bubble:nth-child(4) .social-profile-bubble-avatar svg{filter:hue-rotate(28deg)}
 .social-profile-bubble:nth-child(5) .social-profile-bubble-avatar svg{filter:hue-rotate(-32deg)}
 @media(prefers-reduced-motion:reduce){.social-profile-bubble,.social-profile-bubble.is-contacting{transition:none}}
-
 
 /* Settings accessibility: selected category and keyboard focus remain clear. */
 .social-settings-menu button:focus-visible,
@@ -226,13 +220,11 @@
   min-width: 0;
 }
 
-
 /* Profile Feed — text posts from the authenticated owner's API response. */
 .social-profile-post{padding:16px 0;border-bottom:1px solid var(--pl-color-border)}
 .social-profile-post-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--pl-color-muted);font-size:10px}
 .social-profile-post-meta>span{font-weight:750;text-transform:uppercase;letter-spacing:.06em}
 .social-profile-post p{margin:10px 0 2px;color:var(--pl-color-ink);font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
-
 
 /* Profile foundation: cover, identity and preview layout. */
 .social-profile-card{grid-template-rows:auto auto auto auto;row-gap:0;padding-top:0}
@@ -310,7 +302,6 @@
  .social-profile-actions{grid-template-columns:minmax(0,1fr);gap:8px}
 }
 
-
 /* Public profile identity details and guest actions. */
 .social-profile-bio{max-width:620px;margin:9px 0 0;color:var(--pl-color-ink);font-size:13px;line-height:1.65;overflow-wrap:anywhere}
 .social-profile-location{display:inline-flex;align-items:center;gap:6px;margin-top:8px;color:var(--pl-color-muted);font-size:11px}
@@ -318,7 +309,6 @@
 .social-profile-preview-label{display:inline-flex;align-items:center;margin-top:9px;padding:5px 9px;border:1px solid var(--pl-color-border);border-radius:999px;background:var(--pl-color-canvas);color:var(--pl-color-muted);font-size:10px}
 .social-profile-actions [data-profile-share]{cursor:pointer}
 @media(max-width:767px){.social-profile-bio{font-size:12px}.social-profile-location{font-size:10px}}
-
 
 /* Profile page mobile composition: the cover is the first visible element. */
 @media (max-width: 767px) {
@@ -330,7 +320,6 @@
     padding-block-start: 0;
   }
 }
-
 
 /* Mobile profile rhythm: compact identity, balanced controls and clear section spacing. */
 @media (max-width: 767px) {
@@ -376,7 +365,6 @@
   .social-profile-identity h1 { font-size: 17px; }
   .social-profile-actions { gap: 8px; }
 }
-
 
 /* Profile cover + identity composition: avatar overlaps the cover by ~30%. */
 .social-profile-card {
@@ -552,7 +540,6 @@
   .social-profile-identity > p:not(.social-profile-bio) { font-size: 11px; }
 }
 
-
 /* The cover region owns its controls; the menu panel remains outside the clipped media surface. */
 .social-profile-cover-region {
   position: relative;
@@ -575,7 +562,6 @@
     border-radius: 0;
   }
 }
-
 
 /* Profile hero: keep the avatar overlap to roughly 40% of its diameter. */
 .social-profile-cover { position: relative; z-index: 1; }
@@ -611,7 +597,6 @@
   .social-profile-identity-row { margin-top: -34px; }
   .social-profile-identity { padding-top: 34px; }
 }
-
 
 /* The menu panel is a sibling of the clipped cover region so it can open outside the hero. */
 .social-profile-card > .social-profile-cover-menu-wrap {
@@ -860,7 +845,6 @@
 .social-profile-cover-upload [data-cover-file-preview] { display: block; width: min(100%, 260px); max-height: 118px; object-fit: cover; border-radius: 8px; }
 .social-profile-cover-upload [data-cover-file-preview][hidden] { display: none; }
 
-
 /* Empty profile cover is an intentionally blank transparent image slot. */
 .social-profile-cover {
   background: transparent !important;
@@ -873,7 +857,6 @@
   display: none !important;
 }
 
-
 /* The menu's position and touch target are defined with the cover controls above. */
 .social-profile-cover-menu-trigger .ui-icon { width: 22px; height: 22px; }
 .social-profile-card.is-cover-disabled > .social-profile-cover-region > .social-profile-cover { display: none; }
@@ -884,8 +867,6 @@
   padding-top: clamp(40px, 9vw, 50px);
 }
 .social-profile-card.is-cover-disabled .social-profile-cover-image { display: none; }
-
-
 
 /* Compact close affordance and gentle menu motion. */
 .social-profile-cover-menu {
@@ -919,7 +900,6 @@
 .social-profile-cover-upload [data-cover-video-preview] { display: block; width: min(100%, 260px); max-height: 118px; object-fit: contain; border-radius: 8px; }
 .social-profile-cover-upload [data-cover-video-preview][hidden] { display: none; }
 
-
 /* Explicit media removal is separate from temporarily disabling the cover. */
 .social-profile-cover-dialog-actions [data-cover-remove] {
   margin-right: auto;
@@ -929,9 +909,6 @@
 .social-profile-cover-dialog-actions [data-cover-remove]:hover {
   background: rgba(161,61,61,.07);
 }
-
-
-
 
 /* Native label activation opens the device picker reliably on mobile browsers. */
 .social-profile-cover-browse {
@@ -962,7 +939,6 @@
   cursor: pointer;
 }
 
-
 /* Profile cover crop editor — frame matches the live cover's responsive ratio. */
 .social-profile-cover-crop-stage[hidden]{display:none}
 .social-profile-cover-crop-stage{position:relative;width:100%;aspect-ratio:4/1;overflow:hidden;border:1px solid var(--pl-color-border);border-radius:12px;background:#172b45;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
@@ -989,7 +965,6 @@
  .social-profile-cover-dialog{place-items:center;align-items:center;justify-items:center;padding:14px}
  .social-profile-cover-dialog-panel{width:min(100%,440px);max-height:84vh;max-height:84dvh;padding:16px;border-radius:18px}
 }
-
 
 /* Profile cover editor refinement — translucent, spacious, and touch-friendly. */
 .social-profile-cover-dialog {
@@ -1147,7 +1122,6 @@
   .social-profile-cover-dialog-actions button { transition: none; }
 }
 
-
 /* Profile cover dialog: light blur with a dark translucent scrim. */
 .social-profile-cover-dialog {
   background: rgba(5, 12, 22, .42);
@@ -1265,7 +1239,6 @@
   transform: none;
 }
 
-
 /* Cover media picker: centered icon-only trigger with a native input activated in the same tap. */
 .social-profile-cover-picker { position:relative; display:flex; width:100%; min-height:48px; align-items:center; justify-content:center; }
 .social-profile-cover-picker .social-profile-cover-browse { display:inline-flex; width:44px; min-width:44px; height:44px; min-height:44px; align-items:center; justify-content:center; padding:0; border:1px solid rgba(8,173,158,.58); border-radius:50%; background:transparent; color:var(--pl-color-brand); cursor:pointer; -webkit-tap-highlight-color:transparent; transition:background .18s ease,border-color .18s ease,transform .18s ease; }
@@ -1276,7 +1249,6 @@
 .social-profile-cover-picker .social-profile-cover-browse { position:relative; z-index:1; pointer-events:none; }
 .social-profile-cover-picker .social-profile-cover-file-input { position:absolute!important; top:50%!important; left:50%!important; right:auto!important; bottom:auto!important; z-index:2!important; display:block!important; width:44px!important; height:44px!important; min-height:44px!important; max-width:44px!important; margin:0!important; padding:0!important; opacity:0!important; visibility:visible!important; clip:auto!important; clip-path:none!important; overflow:hidden!important; border:0!important; border-radius:50%!important; background:transparent!important; transform:translate(-50%,-50%)!important; cursor:pointer!important; pointer-events:auto!important; touch-action:manipulation; }
 .social-profile-cover-picker .social-profile-cover-file-input:focus-visible { outline:2px solid var(--pl-color-brand)!important; outline-offset:4px!important; opacity:0!important; }
-
 
 /* Large cover-first picker: the whole cover canvas is the native file-input target. */
 .social-profile-cover-upload {
@@ -1364,7 +1336,6 @@
   .social-profile-cover-crop-stage { min-height: 142px; border-radius: 14px; }
   .social-profile-cover-picker-art svg { width: 48px; height: 36px; }
 }
-
 
 /* Pinch-to-zoom and clear save/cancel actions for the profile-cover editor. */
 .social-profile-cover-crop-stage {
@@ -1456,7 +1427,6 @@
   .social-profile-cover-dialog-actions-main button { padding-inline: 12px; }
 }
 
-
 /* Final mobile fix: the native file input must cover the entire visible picker canvas. */
 .social-profile-cover-picker {
   position: relative !important;
@@ -1513,7 +1483,6 @@
   pointer-events: auto !important;
   touch-action: manipulation !important;
 }
-
 
 /* Cover crop is performed on the real cover-shaped frame, with the avatar overlap as a live alignment guide. */
 .social-profile-cover-dialog-header {
@@ -1636,7 +1605,6 @@
   .social-profile-cover-dialog-header > div:first-child p { max-width: 120px; }
 }
 
-
 .social-profile-cover-upload.is-cropping {
   display: block;
   min-height: 0;
@@ -1659,7 +1627,6 @@
     overflow-y: auto;
   }
 }
-
 
 /* Give the mobile cover-cropping stage more vertical room and breathing space. */
 @media (max-width: 767px) {
@@ -1707,7 +1674,6 @@
   }
 }
 
-
 /* Account settings center — first usable frontend settings surfaces. */
 .social-profile-card > .social-profile-gear {
   top: 60px;
@@ -1746,7 +1712,6 @@
   .social-settings-save { width: 100%; }
 }
 
-
 /* Account settings shortcut: quiet grey, aligned with the profile identity below the cover. */
 .social-profile-card > .social-profile-gear {
   top: calc(clamp(170px, 24vw, 230px) + 10px);
@@ -1780,7 +1745,6 @@
     right: 8px;
   }
 }
-
 
 /* Profile identity meta row: location on the left, social counts on the right. */
 .social-profile-meta-row {
@@ -1884,7 +1848,6 @@
   .social-profile-follow-stats small { font-size: 8px; }
 }
 
-
 /* Profile avatar shortcut: 30% smaller, centered on the avatar's upper-right circumference. */
 .social-profile-avatar-story-link {
   position: relative;
@@ -1982,14 +1945,11 @@
   }
 }
 
-
-
 /* Profile settings gear: align its top edge with the profile name,
    10px below the cover, and keep the same 5px right inset as the cover menu. */
 .social-profile-card > .social-profile-gear {
   right: 5px;
 }
-
 
 /* Keep the native input outside hidden preview panels so replacement remains available on mobile. */
 .social-profile-cover-file-input {
@@ -2027,7 +1987,6 @@
 }
 .social-profile-cover-replace[hidden] { display: none !important; }
 
-
 /* User-selected profile photo fills the existing avatar frame without changing its dimensions. */
 .social-profile-page .social-profile-card .social-profile-avatar-image {
   display: block;
@@ -2036,7 +1995,6 @@
   object-fit: cover;
   border-radius: inherit;
 }
-
 
 /* Profile avatar: remove the decorative ring; soften the photo edge instead. */
 .social-profile-page .social-profile-card .social-profile-avatar {
@@ -2060,7 +2018,6 @@
     #fff 100%
   );
 }
-
 
 /* Final avatar correction: photo fills the circle edge-to-edge, with no ring, gap, fade, or shadow. */
 .social-profile-page .social-profile-card .social-profile-avatar {
@@ -2092,7 +2049,6 @@
   mask-image: none !important;
   box-shadow: none !important;
 }
-
 
 /* Profile finishing pass: seamless cover-to-content transition and clean avatar. */
 .social-profile-page .social-profile-card {
@@ -2165,14 +2121,12 @@
   }
 }
 
-
 /* Profile identity alignment: move name, username, and location 5px left on mobile. */
 @media (max-width: 767px) {
   .social-profile-page .social-profile-card .social-profile-identity-row .social-profile-identity {
     transform: translateX(-5px);
   }
 }
-
 
 /* Profile cover menu — refined, compact surface with explicit close control. */
 .social-profile-cover-menu {
@@ -2266,7 +2220,6 @@
   .social-profile-cover-menu button { transition: none; }
 }
 
-
 /* PEOPLE-DISCOVERY-001 — portrait-first, distance-scoped discovery prototype. */
 .social-people-discovery{display:grid;gap:18px}
 .social-people-discovery .social-section-heading{align-items:flex-end;gap:12px}
@@ -2309,9 +2262,8 @@
  .social-people-grid{gap:8px}
 }
 
-
 /* PEOPLE-DISCOVERY-RESPONSIVE-QA-002 — complete discovery category art and fluid narrow layout. */
-.social-main{width:100%;max-width:var(--pl-container-wide);min-width:0}
+.social-main{min-width:0}
 .social-main>*{min-width:0;max-width:100%}
 .social-people-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .social-people-card-action{cursor:pointer}
@@ -2332,7 +2284,6 @@
 .social-people-distance{min-width:0}
 .social-people-distance select{min-width:0}
 @media(max-width:767px){
- .social-main{width:100%;padding-inline:0}
  .social-intro{margin-bottom:22px}
  .social-intro h1{font-size:clamp(25px,7vw,34px)}
  .social-section-heading{align-items:flex-start}
@@ -2349,7 +2300,6 @@
  .social-category-grid span{font-size:8px}
 }
 @media(max-width:359px){
- .social-main{padding-inline:0}
  .social-people-card-copy{right:9px;bottom:10px;left:9px}
  .social-people-card-copy strong{font-size:14px}
  .social-people-card-copy span{font-size:8px}

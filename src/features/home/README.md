@@ -77,7 +77,7 @@ Run `npm test` and `npm run build`. Verify `#/home` for guest and authenticated 
 ## PLUITS Social Home visual refinement — 23 November 2026
 - Search uses the service quick-navigation strip directly beneath the navbar as the single service selector; duplicate service chips inside the search panel are removed.
 - Feature-local colors use the PLUITS brand token (logo teal), white, soft grey, and navy. No generic blue action palette is introduced.
-- Mobile Beranda uses one 10px gutter for standard copy and content. Horizontal carousels start 10px from the left and extend to the physical right edge so the next card can remain partially visible. Feed/Reels/Live/Blog media retain their intentional full-bleed presentation.
+- Mobile Beranda and Jelajah inherit the same 10px page gutter from `--pl-page-gutter` through the shared `.pl-page-shell` frame. The main content does not add a second local gutter. Horizontal carousels start at the shared content edge and extend through the trailing gutter to the physical right edge so the next card can remain partially visible. Feed/Reels/Live/Blog media retain their intentional full-bleed presentation.
 - Feed post media remains full viewport width on mobile and uses a consistent 4:5 display frame with cover cropping. CSS cropping affects presentation only; it does not rewrite or downsample uploaded source files. Original media storage/processing remains the responsibility of the upload pipeline.
 - Browser-based visual acceptance is still required on Android; build checks do not establish pixel-perfect device rendering.
 
@@ -92,7 +92,7 @@ Run `npm test` and `npm run build`. Verify `#/home` for guest and authenticated 
 
 ## Social Home carousel and content geometry — canonical contract
 
-The single mobile geometry source is `home-page.css`, marker `SOCIAL-HOME-GEOMETRY-004`. Do not add later overrides for its selectors. The mobile content gutter is the shared `--pl-page-gutter` token (10px). Each horizontal rail begins at that content edge and its scrollport extends through the trailing gutter to the viewport edge. The track retains its own card widths, scroll snapping and final-card reachability; a partial next card is intentional. Feed/Reels/Live/Blog remain full-width content surfaces, while their headings and text metadata retain the 10px inset.
+The shared page frame in `src/design-system/page-shell.css` owns the page background (`.pl-page-shell--surface`), standard content width (`.pl-page-shell--standard-content`), and horizontal page gutter (`--pl-page-gutter`). Social Home and Discover consume that same frame; neither feature may add a second main-content gutter or redefine its background. `home-page.css`, marker `SOCIAL-HOME-GEOMETRY-004`, owns only Social Home's carousel/card composition. Each horizontal rail begins at the shared content edge and its scrollport extends through the trailing gutter to the viewport edge. The track retains its own card widths, scroll snapping and final-card reachability; a partial next card is intentional. Feed/Reels/Live/Blog remain full-width content surfaces, while their headings and text metadata retain the 10px inset.
 
 ### Reusable carousel inventory
 
