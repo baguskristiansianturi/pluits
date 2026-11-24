@@ -238,3 +238,17 @@ test('social post card keeps the established card while comments align by reply 
   assert.match(cardCss, /\.pl-post-received-gifts\{[^}]*position:absolute/);
   assert.match(cardCss, /\.pl-post-media-overlay \.pl-post-gift-panel\[hidden\]\{display:none\}/);
 });
+
+
+test('social post comment and reply profiles carry account tier and verification markers', async () => {
+  const cardSource = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
+  const cardCss = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
+  assert.match(cardSource, /function resolveDemoProfile\(person\)/);
+  assert.match(cardSource, /function renderCommentProfile\(person, kind = 'comment'\)/);
+  assert.match(cardSource, /renderCommentProfile\(comment\)/);
+  assert.match(cardSource, /renderCommentProfile\(reply, 'reply'\)/);
+  assert.match(cardSource, /pl-post-comment-profile-status/);
+  assert.match(cardCss, /\.pl-post-comment-profile \.pl-post-tier/);
+  assert.match(cardCss, /\.pl-post-comment-profile-status \.pl-post-verification/);
+  assert.match(cardCss, /\.pl-post-comment-profile--reply \.pl-post-tier/);
+});

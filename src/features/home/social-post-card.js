@@ -73,9 +73,10 @@ let demoWallet = 500;
 
 function avatarMarkup(post) {
   const image = post.avatar ? '<img src="https://images.unsplash.com/' + escapeHtml(post.avatar) + '?auto=format&fit=crop&w=120&h=120&q=75" alt="" loading="lazy">' : '<span>' + escapeHtml((post.authorName || 'P').slice(0,1)) + '</span>';
-  const tierClass = post.membership === 'Premium' ? 'premium' : post.membership === 'Silver' ? 'silver' : post.membership === 'Gold' ? 'gold' : post.membership === 'Platinum' ? 'platinum' : 'priority';
+  const tierClass = post.membership === 'Premium' ? 'premium' : post.membership === 'Silver' ? 'silver' : post.membership === 'Gold' ? 'gold' : post.membership === 'Platinum' ? 'platinum' : post.membership === 'PLUITS Priority' ? 'priority' : '';
   const premiumMark = post.premium ? '<span class="pl-post-premium-mark" title="Premium" aria-label="Premium">✦</span>' : '';
-  return '<span class="pl-post-avatar-wrap"><span class="pl-post-avatar">' + image + '</span>' + premiumMark + '<span class="pl-post-tier pl-post-tier--' + tierClass + '" title="' + escapeHtml(post.membership) + '" aria-label="Membership ' + escapeHtml(post.membership) + '">' + escapeHtml(post.membershipMark || '•') + '</span></span>';
+  const tierMark = post.membership ? '<span class="pl-post-tier pl-post-tier--' + tierClass + '" title="' + escapeHtml(post.membership) + '" aria-label="Membership ' + escapeHtml(post.membership) + '">' + escapeHtml(post.membershipMark || '•') + '</span>' : '';
+  return '<span class="pl-post-avatar-wrap"><span class="pl-post-avatar">' + image + '</span>' + premiumMark + tierMark + '</span>';
 }
 function statusMarkup(post) {
   return post.verification === 'unverified'
@@ -87,17 +88,35 @@ function commentAvatarMarkup(person, size = 80) {
     ? '<img src="https://images.unsplash.com/' + escapeHtml(person.avatar) + '?auto=format&fit=crop&w=' + size + '&h=' + size + '&q=70" alt="" loading="lazy">'
     : escapeHtml((person.name || 'P').slice(0,1));
 }
+function resolveDemoProfile(person) {
+  const match = demoFeedPosts.find((post) => (person.username && post.username === person.username) || post.authorName === person.name);
+  return Object.assign({
+    authorName: person.name || 'Pengguna PLUITS',
+    username: person.username || '',
+    avatar: person.avatar || '',
+    verification: 'unverified',
+    membership: '',
+    membershipMark: '',
+    premium: false
+  }, match || {}, person);
+}
+function renderCommentProfile(person, kind = 'comment') {
+  const profile = resolveDemoProfile(person);
+  const avatar = avatarMarkup(profile);
+  const status = statusMarkup(profile);
+  return '<span class="pl-post-comment-profile pl-post-comment-profile--' + kind + '" title="' + escapeHtml(profile.authorName) + '">' + avatar + '<span class="pl-post-comment-profile-status">' + status + '</span></span>';
+}
 function renderReplies(replies, postOwner) {
   return (replies || []).map((reply) => {
     const isOwner = reply.name === postOwner;
     const sideClass = isOwner ? 'is-owner' : 'is-right';
-    const avatar = '<div class="pl-post-reply-avatar">' + commentAvatarMarkup(reply, 64) + '</div>';
+    const avatar = '<span class="pl-post-reply-profile">' + renderCommentProfile(reply, 'reply') + '</span>';
     const bubble = '<div class="pl-post-reply-bubble"><strong>' + escapeHtml(reply.name) + '</strong><span>' + escapeHtml(reply.text) + '</span></div>';
     return '<div class="pl-post-reply ' + sideClass + '">' + (isOwner ? avatar + bubble : bubble + avatar) + '</div>';
   }).join('');
 }
 function renderComment(comment, postOwner) {
-  return '<article class="pl-post-comment" data-comment-id="' + escapeHtml(comment.id) + '"><div class="pl-post-comment-avatar">' + commentAvatarMarkup(comment) + '</div><div class="pl-post-comment-body"><div class="pl-post-comment-bubble"><strong>' + escapeHtml(comment.name) + '</strong><p>' + escapeHtml(comment.text) + '</p></div><div class="pl-post-comment-tools"><button type="button" data-comment-like aria-pressed="false" aria-label="Sukai komentar">' + renderIcon('heart') + ' <span>' + Number(comment.likes || 0) + '</span></button><button type="button" data-reply-comment>Balas</button><button type="button" data-comment-more aria-label="Opsi komentar">' + renderIcon('moreVertical') + '</button></div><div class="pl-post-comment-replies">' + renderReplies(comment.replies, postOwner) + '</div></div></article>';
+  return '<article class="pl-post-comment" data-comment-id="' + escapeHtml(comment.id) + '">' + renderCommentProfile(comment) + '<div class="pl-post-comment-body"><div class="pl-post-comment-bubble"><strong>' + escapeHtml(comment.name) + '</strong><p>' + escapeHtml(comment.text) + '</p></div><div class="pl-post-comment-tools"><button type="button" data-comment-like aria-pressed="false" aria-label="Sukai komentar">' + renderIcon('heart') + ' <span>' + Number(comment.likes || 0) + '</span></button><button type="button" data-reply-comment>Balas</button><button type="button" data-comment-more aria-label="Opsi komentar">' + renderIcon('moreVertical') + '</button></div><div class="pl-post-comment-replies">' + renderReplies(comment.replies, postOwner) + '</div></div></article>';
 }
 function renderReactionPicker() {
   return '<div class="pl-post-reaction-picker" data-reaction-picker hidden>' + reactions.map((reaction) => '<button type="button" data-reaction="' + reaction.id + '" aria-label="' + reaction.label + '" title="' + reaction.label + '">' + reaction.emoji + '<span>' + reaction.label + '</span></button>').join('') + '</div>';

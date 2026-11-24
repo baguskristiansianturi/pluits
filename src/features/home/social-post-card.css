@@ -96,7 +96,25 @@
 .pl-post-comments-list{display:grid;gap:10px}
 .pl-post-comment{display:flex;align-items:flex-start;gap:8px;min-width:0}
 .pl-post-comment-avatar{display:grid;width:27px;height:27px;flex:none;place-items:center;overflow:hidden;border-radius:50%;background:var(--pl-color-canvas);color:var(--pl-color-muted);font-size:10px;font-weight:800}
-.pl-post-comment-avatar img{width:100%;height:100%;object-fit:cover}
+
+.pl-post-comment-profile{position:relative;display:inline-flex;width:32px;height:32px;flex:none;align-items:center;justify-content:center}
+.pl-post-comment-profile .pl-post-avatar-wrap{width:27px;height:27px}
+.pl-post-comment-profile .pl-post-avatar{width:27px;height:27px;font-size:10px}
+.pl-post-comment-profile .pl-post-tier{right:-3px;bottom:-3px;min-width:13px;height:13px;padding:0 2px;border-width:1.5px;font-size:6px}
+.pl-post-comment-profile .pl-post-premium-mark{top:-2px;right:-2px;width:11px;height:11px;border-width:1.5px;font-size:6px}
+.pl-post-comment-profile-status{position:absolute;top:-1px;left:-1px;display:grid;width:13px;height:13px;place-items:center}
+.pl-post-comment-profile-status .pl-post-verification{width:13px;height:13px;border-width:1.5px;font-size:8px}
+.pl-post-comment-profile-status .pl-post-verification .ui-icon{width:7px;height:7px}
+.pl-post-comment-profile--reply{width:29px;height:29px}
+.pl-post-comment-profile--reply .pl-post-avatar-wrap{width:24px;height:24px}
+.pl-post-comment-profile--reply .pl-post-avatar{width:24px;height:24px;font-size:9px}
+.pl-post-comment-profile--reply .pl-post-tier{min-width:12px;height:12px;font-size:5px}
+.pl-post-comment-profile--reply .pl-post-premium-mark{width:10px;height:10px;font-size:5px}
+.pl-post-comment-profile--reply .pl-post-comment-profile-status{width:12px;height:12px}
+.pl-post-comment-profile--reply .pl-post-comment-profile-status .pl-post-verification{width:12px;height:12px;font-size:7px}
+.pl-post-comment-profile--reply .pl-post-comment-profile-status .pl-post-verification .ui-icon{width:6px;height:6px}
+.pl-post-comment-profile--comment{align-self:flex-start}
+.pl-post-comment-profile--reply{align-self:flex-end}
 .pl-post-comment-body{min-width:0;flex:1}
 .pl-post-comment-bubble{display:inline-block;max-width:100%;padding:8px 10px;border-radius:0 var(--pl-radius-md) var(--pl-radius-md) var(--pl-radius-md);background:var(--pl-color-canvas);overflow-wrap:anywhere}
 .pl-post-comment-bubble strong{display:block;margin-bottom:2px;color:var(--pl-color-ink);font-size:10px}
@@ -116,8 +134,7 @@
 .pl-post-reply.is-owner .pl-post-reply-bubble{border-radius:12px 12px 12px 3px;background:var(--pl-color-canvas)}
 .pl-post-reply-bubble strong{color:var(--pl-color-ink);font-size:9px}
 .pl-post-reply-bubble span{color:var(--pl-color-text)}
-.pl-post-reply-avatar{display:grid;width:25px;height:25px;flex:none;place-items:center;overflow:hidden;border-radius:50%;background:var(--pl-color-canvas);color:var(--pl-color-muted);font-size:9px;font-weight:800}
-.pl-post-reply-avatar img{width:100%;height:100%;object-fit:cover}
+
 .pl-post-reply-form{width:100%;justify-content:flex-end;padding-left:30px}
 .pl-post-reply-form input{background:var(--pl-color-brand-soft)}
 .pl-post-comment-bubble{border-radius:3px 12px 12px 12px;background:var(--pl-color-canvas)}
