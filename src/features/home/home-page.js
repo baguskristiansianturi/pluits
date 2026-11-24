@@ -12,7 +12,7 @@ const demoCards = {
   nearby:[['DENPASAR','Sudut kota hari ini','Tempat menarik di sekitar Anda','city'],['KULINER','Tempat ngopi','Ruang santai untuk bertemu','coffee'],['AKTIVITAS','Agenda lokal','Aktivitas menarik di sekitar','event'],['KOMUNITAS','Teman sekitar','Kenali komunitas di area Anda','people']],
   people:[['TEMAN BARU','Ayu Pratiwi','Travel · Bali','person-a'],['TEMAN BARU','Raka Mahendra','Photography · Jakarta','person-b'],['TEMAN BARU','Nadia Putri','Food & Lifestyle · Bandung','person-c'],['TEMAN BARU','Dimas Saputra','Creative · Yogyakarta','person-d'],['TEMAN BARU','Sinta Maharani','Community · Surabaya','person-e']]
 };
-const heading = (title, note, action, href) => '<div class="global-section-heading"><div><h2>' + title + '</h2><p>' + note + '</p></div>' + (action ? '<a href="' + href + '">' + action + ' <span aria-hidden="true">→</span></a>' : '') + '</div>';
+const heading = (title, note, action, href) => '<div class="global-section-heading"><div><h2>' + title + '</h2>' + (note ? '<p>' + note + '</p>' : '') + '</div>' + (action ? '<a href="' + href + '">' + action + ' <span aria-hidden="true">→</span></a>' : '') + '</div>';
 function demoRail(items,label) {
   return '<div class="global-bleed-wrap"><div class="global-demo-rail" aria-label="' + label + '">' + items.map((item,index)=>'<article class="global-demo-card global-demo-card--' + item[3] + '"><div class="global-demo-art"><span>' + item[0] + '</span><i>' + (index+1).toString().padStart(2,'0') + '</i></div><div class="global-demo-copy"><strong>' + item[1] + '</strong><p>' + item[2] + '</p></div></article>').join('') + '</div></div>';
 }
@@ -73,35 +73,32 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   const actions = '<div class="global-header-actions">' + account + '<a class="global-icon-button" href="' + routeHref('discover') + '" aria-label="Cari" title="Cari">' + renderIcon('search') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Keranjang" title="Keranjang">' + renderIcon('cart') + '</a><a class="global-icon-button" href="' + routeHref('dashboard') + '" aria-label="Notifikasi" title="Notifikasi">' + renderIcon('bell') + '</a></div>';
   const discovery = '<section class="global-section global-people-section" id="people"><div class="global-section-heading"><div><h2>Orang yang mungkin Anda kenal</h2><p>Temukan kenalan baru dari sekitar Anda.</p></div><a href="' + routeHref('discover') + '?mode=people">Lihat semua <span aria-hidden="true">→</span></a></div><div class="global-bleed-wrap"><div class="global-people-rail" aria-label="Rekomendasi orang">' + [['Ayu Pratiwi','Bali','photo-1534528741775-53994a69daeb'],['Raka Mahendra','Jakarta','photo-1500648767791-00dcc994a43e'],['Nadia Putri','Bandung','photo-1531123897727-8f129e1688ce'],['Dimas Saputra','Yogyakarta','photo-1506794778202-cad84cf45f1d'],['Sinta Maharani','Surabaya','photo-1544005313-94ddf0286df2']].map((person,i)=>'<a class="global-person-card" href="' + routeHref('discover') + '?mode=people"><img src="https://images.unsplash.com/' + person[2] + '?auto=format&fit=crop&w=480&q=80" alt="Foto profil ' + person[0] + '" loading="lazy"><span class="global-person-overlay"><strong>' + person[0] + '</strong><small>' + person[1] + '</small></span><span class="global-person-add" aria-hidden="true">+</span></a>').join('') + '</div></div></section>';
   const recommendationItems = [
-    {id:'beach',name:'Pantai & alam',note:'Inspirasi untuk menikmati alam dan pesisir.',image:'photo-1507525428034-b723cf961d3e',kind:'PENGALAMAN'},
-    {id:'seafood',name:'Seafood',note:'Temukan pengalaman kuliner laut.',image:'photo-1510130387422-82bed34b37e9',kind:'KULINER',app:'fluid-food'},
-    {id:'coffee',name:'Coffee & café',note:'Ruang untuk rehat, bekerja, dan bertemu.',image:'photo-1495474472287-4d71bcdd2085',kind:'GAYA HIDUP'},
-    {id:'family',name:'Wisata keluarga',note:'Ide aktivitas untuk dinikmati bersama.',image:'photo-1511895426328-dc8714191300',kind:'AKTIVITAS'},
-    {id:'culture',name:'Budaya lokal',note:'Cerita, tradisi, dan pengalaman setempat.',image:'photo-1518548419970-58e3b4079ab2',kind:'PENGALAMAN'},
-    {id:'wellness',name:'Wellness & spa',note:'Waktu untuk merawat diri dan beristirahat.',image:'photo-1540555700478-4be289fbeeff',kind:'GAYA HIDUP'}
+    {id:'beach',name:'Pantai & alam',image:'photo-1507525428034-b723cf961d3e',app:null},
+    {id:'seafood',name:'Seafood',image:'photo-1510130387422-82bed34b37e9',app:'fluid-food'},
+    {id:'coffee',name:'Coffee & café',image:'photo-1495474472287-4d71bcdd2085',app:null},
+    {id:'family',name:'Wisata keluarga',image:'photo-1511895426328-dc8714191300',app:null},
+    {id:'culture',name:'Budaya lokal',image:'photo-1518548419970-58e3b4079ab2',app:null},
+    {id:'wellness',name:'Wellness & spa',image:'photo-1540555700478-4be289fbeeff',app:null}
   ];
-  const recommendations = '<section class="global-section global-recommendations" id="recommendations" aria-label="Rekomendasi berdasarkan minat">' +
-    heading('Rekomendasi untuk Anda','Temukan ide dan pengalaman yang selaras dengan minat Anda.','Jelajahi minat',routeHref('discover')+'?scope=interests') +
-    '<p class="global-discovery-context">Contoh minat untuk discovery. Preferensi pengguna dan wilayah aktif akan menentukan pengalaman yang ditampilkan.</p>' +
+  const recommendations = '<section class="global-section global-recommendations" id="recommendations" aria-label="Rekomendasi untuk Anda">' +
+    heading('Rekomendasi untuk Anda',null,'Lihat semua',routeHref('discover')+'?scope=interests') +
     '<div class="global-interest-grid">' + recommendationItems.map(item => {
       const target=routeHref('discover')+'?intent=interest&interest='+encodeURIComponent(item.id)+(item.app?'&app='+encodeURIComponent(item.app):'');
-      return '<a class="global-interest-card" href="'+target+'" data-interest-id="'+item.id+'"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"><span class="global-interest-overlay"><small>'+item.kind+'</small><strong>'+item.name+'</strong><span>'+item.note+'</span></span></a>';
+      return '<a class="global-interest-card" href="'+target+'" data-interest-id="'+item.id+'"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"><span class="global-interest-overlay"><strong>'+item.name+'</strong></span></a>';
     }).join('') + '</div></section>';
   const nearbyItems = [
-    {category:'Restoran & kuliner',name:'Nama restoran',image:'photo-1517248135467-4c7edcad34c4',filter:'food'},
-    {category:'Apotek',name:'Nama apotek',image:'photo-1576602976047-174e57a47881',filter:'pharmacy'},
-    {category:'Klinik & dokter gigi',name:'Nama klinik',image:'photo-1629909613654-28e377c37b09',filter:'health'},
-    {category:'Toko & fashion',name:'Nama toko',image:'photo-1441986300917-64674bd600d8',filter:'stores'},
-    {category:'Wisata & aktivitas',name:'Nama tempat',image:'photo-1500530855697-b586d89ba3ee',filter:'activities'},
-    {category:'Coffee & café',name:'Nama kafe',image:'photo-1501339847302-ac426a4a7cbb',filter:'cafes'}
+    {category:'Restoran & kuliner',image:'photo-1517248135467-4c7edcad34c4',filter:'food'},
+    {category:'Apotek',image:'photo-1576602976047-174e57a47881',filter:'pharmacy'},
+    {category:'Klinik & kesehatan',image:'photo-1629909613654-28e377c37b09',filter:'health'},
+    {category:'Toko & fashion',image:'photo-1441986300917-64674bd600d8',filter:'stores'},
+    {category:'Wisata & aktivitas',image:'photo-1500530855697-b586d89ba3ee',filter:'activities'},
+    {category:'Coffee & café',image:'photo-1501339847302-ac426a4a7cbb',filter:'cafes'}
   ];
   const nearby = '<section class="global-section global-nearby" id="nearby">' +
-    heading('Di sekitar Anda','Tempat dan penyedia dari seluruh kategori GeoDirectory, dimulai dari yang terdekat.','Lihat semua',routeHref('discover')+'?scope=nearby&radius=5') +
-    '<div class="global-nearby-context"><span class="global-nearby-radius">'+renderIcon('mapPin')+' Radius awal 5 km</span><span>Jangkauan diperluas bertahap jika hasil relevan belum cukup.</span></div>' +
-    '<p class="global-local-preview-note">Contoh tampilan kartu mitra · data lokasi dan listing GeoDirectory belum terhubung.</p>' +
+    heading('Di sekitar Anda',null,'Lihat semua',routeHref('discover')+'?scope=nearby&radius=5') +
     '<div class="global-local-rail">' + nearbyItems.map(item => {
       const target=routeHref('discover')+'?scope=nearby&radius=5&category='+encodeURIComponent(item.filter);
-      return '<a class="global-local-card global-local-card--preview" href="'+target+'"><div class="global-local-image"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"><span class="global-local-distance">Jarak ditampilkan saat lokasi aktif</span><span class="global-local-preview-tag">CONTOH KARTU</span></div><span class="global-local-copy"><small class="global-local-category">'+item.category+'</small><strong>'+item.name+'</strong><span class="global-local-location">Lokasi dan jarak ditampilkan dari GeoDirectory</span></span></a>';
+      return '<a class="global-local-card global-local-card--preview" href="'+target+'"><div class="global-local-image"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"></div><span class="global-local-copy"><strong>'+item.category+'</strong></span></a>';
     }).join('') + '</div></section>';
   const streams = contentTabs.map((tab,index) => {
     const body=tab.id==='feed'?'<div class="global-post-list" data-live-feed>' + renderDemoFeed('feed') + '</div>'
@@ -118,8 +115,8 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   const pageHeaderMarkup=renderPageHeader({brandHref:routeHref('home'),rightContent:'<div class="global-header-tools"><a class="global-icon-button global-favorite-link" href="' + routeHref('dashboard') + '" aria-label="Favorit" title="Favorit">' + renderIcon('heart') + '</a>' + actions + '</div>',className:'global-header',dataGlobalHeader:true});
   root.innerHTML = '<div class="pl-page-shell pl-page-shell--surface pl-page-shell--standard-content home-page global-home-page">' +
     pageHeaderMarkup +
-    '<main class="pl-page-main home-main global-home-main"><button type="button" class="global-home-search-entry" data-open-quick-search><span>' + renderIcon('search') + '</span><span><strong>Cari di PLUITS</strong><small>Tempat, restoran, makanan, aktivitas, dan lainnya</small></span><b>' + renderIcon('arrow') + '</b></button>' +
-    '<div class="global-location-row"><span>' + renderIcon('mapPin') + '</span><span><small>Lokasi penelusuran</small><strong>Denpasar, Bali</strong></span><span class="global-location-context">Lokasi contoh · GPS belum terhubung</span></div>' + recommendations + nearby +
+    '<main class="pl-page-main home-main global-home-main"><button type="button" class="global-home-search-entry" data-open-quick-search><span>' + renderIcon('search') + '</span><span><strong>Cari di PLUITS</strong></span><b>' + renderIcon('arrow') + '</b></button>' +
+    recommendations + nearby +
     '<div class="global-social-area">' + discovery +
     '<section class="global-section global-stories" id="stories">' + heading('Cerita dari circle Anda','Momen terbaru dari orang-orang di circle Anda.') + storyRail() + '</section>' +
     '<nav class="global-content-tabs" data-content-tabs aria-label="Kategori konten">' + contentTabs.map((tab,i)=>'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-controls="content-' + tab.id + '">' + tab.label + '</button>').join('') + '</nav>' + composerMarkup +
