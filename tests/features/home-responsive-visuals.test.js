@@ -77,9 +77,9 @@ test('social home owns the header-to-content transition after its service shortc
 test('authenticated home uses 10px mobile content gutters, edge-bleed carousels and 10px card corners', async () => {
   const css = await readFile(homeCss, 'utf8');
   assert.match(css, /SOCIAL-HOME-GEOMETRY-004/);
-  assert.match(css, /--home-gutter:\s*var\(--pl-page-gutter\)/);
-  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--home-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--home-gutter\)\)/s);
-  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:\s*calc\(100% \+ var\(--home-gutter\)\)/s);
+  assert.match(css, /var\(--pl-page-gutter\)/);
+  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
+  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)/s);
   assert.match(css, /\.global-post-card\s*\{[^}]*border-radius:\s*var\(--pl-radius-card\)/s);
   assert.match(css, /\.global-feature-card,[\s\S]*?border-radius:\s*var\(--pl-radius-card\)/);
 });
@@ -89,9 +89,9 @@ test('Social Home has one canonical mobile geometry owner and registered carouse
   const readme = await readFile(new URL('../../src/features/home/README.md', import.meta.url), 'utf8');
   const registry = await readFile(new URL('../../src/features/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
   assert.equal((css.match(/SOCIAL-HOME-GEOMETRY-004/g) || []).length, 1);
-  assert.match(css, /--home-gutter:\s*var\(--pl-page-gutter\)/);
-  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--home-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--home-gutter\)\)/s);
-  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:calc\(100% \+ var\(--home-gutter\)\)/s);
+  assert.match(css, /var\(--pl-page-gutter\)/);
+  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
+  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:calc\(100% \+ var\(--pl-page-gutter\)\)/s);
   assert.match(css, /scroll-snap-type:\s*x mandatory/);
   assert.match(registry, /HOME-CAROUSEL-DEMO-001/);
   assert.match(registry, /HOME-CAROUSEL-STORIES-001/);
