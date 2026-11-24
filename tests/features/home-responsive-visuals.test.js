@@ -60,7 +60,7 @@ test('social home mobile layout keeps recommendation inset, feed full-bleed, and
   assert.match(css, /\.global-content-section\s*\{[^}]*width:100vw[^}]*margin:0 calc\(50% - 50vw\) 14px/s);
   assert.match(css, /\.global-post-list\s*\{[^}]*width:100%[^}]*max-width:none/s);
   assert.match(css, /\.global-post-card\s*\{[^}]*width:100%[^}]*max-width:none/s);
-  assert.match(css, /\.global-quick-search\s*\{[^}]*width:100vw[^}]*padding:5px 10px 6px/s);
+  assert.match(css, /\.global-quick-search\s*\{[^}]*width:100vw[^}]*padding:5px var\(--pl-page-gutter\) 6px/s);
   assert.match(css, /global-quick-search > a\s*\{[^}]*min-height:\s*34px[^}]*background:\s*#fff/s);
 });
 
