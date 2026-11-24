@@ -33,7 +33,7 @@
 .pl-post-menu button:hover,.pl-post-share-panel button:hover{background:var(--pl-color-canvas)}
 .pl-post-caption{padding:4px 14px 13px;font-size:12px;line-height:1.6}.pl-post-tag{color:var(--pl-color-brand);font-weight:700}
 .pl-post-media-wrap{position:relative;width:100%;overflow:hidden;background:var(--pl-color-canvas);isolation:isolate}
-.pl-post-media-wrap .pl-post-media{display:block;width:100%;height:auto;max-height:none;aspect-ratio:auto;object-fit:contain}.pl-post-card.is-reel .pl-post-media-wrap .pl-post-media{width:100%;max-height:min(177.78vw,760px);aspect-ratio:9/16;object-fit:cover}.pl-post-video{width:100%;aspect-ratio:16/9;object-fit:contain}.pl-post-card.is-reel .pl-post-video{aspect-ratio:9/16}
+.pl-post-media-wrap .pl-post-media{display:block;width:100%;height:auto;max-height:none;aspect-ratio:auto;object-fit:contain}.pl-post-card.is-reel .pl-post-media-wrap .pl-post-media{width:100%;max-height:min(177.78vw,760px);aspect-ratio:9/16;object-fit:cover}.pl-post-media-wrap .pl-post-video{width:100%;aspect-ratio:16/9;object-fit:contain}.pl-post-card.is-reel .pl-post-media-wrap .pl-post-video{aspect-ratio:9/16}
 .pl-post-media-wrap--video{background:#172b45}
 .pl-post-video{background:#172b45}
 .pl-post-video-limit{position:absolute;z-index:1;left:10px;bottom:10px;padding:5px 8px;border-radius:var(--pl-radius-pill);background:rgba(15,31,45,.72);color:#fff;font-size:9px;font-weight:700;pointer-events:none}
