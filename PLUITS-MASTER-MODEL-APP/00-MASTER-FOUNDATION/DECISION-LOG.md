@@ -232,3 +232,13 @@ Salin untuk keputusan berikutnya:
 - **Dokumen yang diperbarui:** `03-APPLICATION-MODULARIZATION/BACKEND-MODULE-MAP.md` dan `backend/README.md`.
 - **Supersedes:** tidak menghapus keputusan arsitektur Supabase historis; menetapkan arah transisi first-party backend.
 - **Status implementasi:** IN PROGRESS — Go 1.27 API, PostgreSQL connection pool, migration CLI, checksum/advisory-lock/transaction runner, initial isolated `pluits` namespace, PostgreSQL integration CI, dan database migration strategy telah dibuat di branch `backend/independent-foundation`. Identity/domain tables, hosting, production data migration, dan cutover belum dimulai.
+
+
+## D-014 — Interactive Social Post Card UX prototype
+- **Tanggal keputusan:** 24 November 2026
+- **Status:** DECIDED — frontend UX prototype scope only; backend/data/monetization contracts remain open.
+- **Founder approval:** eksplisit melalui permintaan implementasi prototype Social Feed pada 24 November 2026.
+- **Keputusan:** (1) Post card memakai single-media focus, satu foto atau video per kartu tanpa media bertumpuk. (2) Empat sample post disediakan untuk menguji reaction, komentar, comment like, reply, gift, share, dan menu vertikal. (3) Video preview dibatasi 10 detik dan tidak autoplay. (4) Timestamp contoh memakai Baru saja, 1 jam lalu, 1 hari lalu, dan 3 hari lalu. (5) Status verified memakai check; unverified memakai caution marker yang tidak menuduh akun palsu. (6) Membership markers Premium, Silver, Gold, Platinum, dan PLUITS Priority ditampilkan kecil di avatar; verification dan membership tetap terpisah. (7) Demo gift memakai koin simulasi dan tidak membuat transaksi/payout. (8) Caption demo tidak menampilkan link eksternal; mention dan hashtag diperbolehkan sebagai teks.
+- **Batas:** seluruh konten, angka engagement, komentar, status, membership, dan saldo koin merupakan fixture UI yang dilabeli. Interaksi hanya in-memory dan reset saat reload/remount. Tidak ada perubahan schema, backend, wallet, production data, atau real user records.
+- **Dokumen:** src/features/home/SOCIAL-POST-CARD-INTERACTIONS-001.md; PAGE-SOCIAL-HOME-001.md; PLUITS Sharing Inbox session 2026-11-24-social-post-card-ux-implementation.md.
+- **Status implementasi:** IN PROGRESS pada branch social-feed-interactive-post-cards; CI/build/deploy dan founder Android UAT belum diverifikasi.
