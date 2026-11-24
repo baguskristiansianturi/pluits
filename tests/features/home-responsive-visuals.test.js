@@ -169,3 +169,21 @@ test('Nearby discovery preserves radius fallback and fair exposure requirements'
   assert.match(registry, /Fair exposure/);
   assert.match(registry, /never fill gaps with fabricated listings/);
 });
+
+
+test('homepage Explore actions use soft interactive styling and nearby distance is plain readable text', async () => {
+  const css = await readFile(homeCss, 'utf8');
+  const exploreRule = css.match(/\.global-section-heading a,\.global-inline-block a\{[^}]*\}/)?.[0] || '';
+  const distanceRule = css.match(/\.global-local-distance\{[^}]*\}/g)?.at(-1) || '';
+  assert.match(exploreRule, /color:var\(--pl-color-muted\)/);
+  assert.match(exploreRule, /transition:color/);
+  assert.match(css, /\.global-section-heading a:hover\{[^}]*color:var\(--pl-color-brand\)/);
+  assert.match(css, /\.global-section-heading a:active\{[^}]*color:var\(--pl-color-brand\)/);
+  assert.match(css, /\.global-section-heading a:focus-visible\{/);
+  assert.match(css, /prefers-reduced-motion:\s*reduce/);
+  assert.match(distanceRule, /padding:0/);
+  assert.match(distanceRule, /border:0/);
+  assert.match(distanceRule, /border-radius:0/);
+  assert.match(distanceRule, /background:transparent/);
+  assert.match(distanceRule, /text-shadow:/);
+});
