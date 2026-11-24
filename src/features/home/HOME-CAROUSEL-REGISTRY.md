@@ -30,3 +30,9 @@ The source paths above are the current owners of the sample collections. Treat t
 - The current Top 10 content is a visual fixture only; it does not assert real ranking order or actual review data.
 - The single rail uses a 90vw mobile card width so the next card remains visible as a swipe cue. Previous/next buttons and touch scrolling remain available. Autoplay advances approximately every 2.6 seconds. User interaction pauses it temporarily. The final card transitions forward to the first card without a visible reverse sweep. Respect `prefers-reduced-motion`.
 - Around You uses approximately 70vw mobile cards. Each card contains a photo, rating and review-count overlay, distance badge, category, business/place name, locality, and a structured visitor-review excerpt. Current values are fixtures only.
+
+### HOME-PERFORMANCE-003 — bounded Top 10 and low-end rendering
+- The Top 10 rail is constrained to the shared content frame (`width:100%`, no viewport bleed or negative margins).
+- Mobile cards target 82% of the content rail with a maximum height of 168px; narrow phones cap at 150px.
+- Autoplay is viewport- and document-visibility-aware, advances one card per cycle, and pauses on direct interaction. Reduced-motion disables autoplay.
+- Offscreen page sections use `content-visibility:auto` with intrinsic-size hints; discovery imagery uses async decode and low fetch priority.
