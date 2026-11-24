@@ -98,7 +98,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   const nearby = '<section class="global-section global-nearby" id="nearby">' +
     heading('Di sekitar Anda','Tempat dan penyedia dari seluruh kategori GeoDirectory, dimulai dari yang terdekat.','Lihat semua',routeHref('discover')+'?scope=nearby&radius=5') +
     '<div class="global-nearby-context"><span class="global-nearby-radius">'+renderIcon('mapPin')+' Radius awal 5 km</span><span>Jangkauan diperluas bertahap jika hasil relevan belum cukup.</span></div>' +
-    '<p class="global-local-preview-note">Pratinjau desain kartu mitra · data lokasi dan listing GeoDirectory belum terhubung.</p>' +
+    '<p class="global-local-preview-note">Contoh tampilan kartu mitra · data lokasi dan listing GeoDirectory belum terhubung.</p>' +
     '<div class="global-local-rail">' + nearbyItems.map(item => {
       const target=routeHref('discover')+'?scope=nearby&radius=5&category='+encodeURIComponent(item.filter);
       return '<a class="global-local-card global-local-card--preview" href="'+target+'"><div class="global-local-image"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"><span class="global-local-distance">Dalam jangkauan</span><span class="global-local-preview-tag">CONTOH KARTU</span></div><span class="global-local-copy"><small class="global-local-category">'+item.category+'</small><strong>'+item.name+'</strong><span class="global-local-location">Lokasi dan jarak ditampilkan dari GeoDirectory</span></span></a>';
