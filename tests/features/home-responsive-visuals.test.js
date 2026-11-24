@@ -26,7 +26,7 @@ test('social home responsive styles cover narrow mobile, tablet, desktop and hor
   assert.match(css, /@media\s*\(max-width:\s*767px\)/);
   assert.match(css, /@media\s*\(min-width:\s*768px\)\s*and\s*\(max-width:\s*1023px\)/);
   assert.match(css, /@media\s*\(min-width:\s*1024px\)/);
-  assert.match(css, /\.global-quick-search[\s\S]*?overflow-x:\s*auto/);
+  assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
   assert.match(css, /\.global-people-rail[\s\S]*?scroll-snap-type:\s*x\s+mandatory/);
   assert.match(css, /\.global-content-tabs[\s\S]*?grid-template-columns:\s*repeat\(4,minmax\(0,1fr\)\)/);
   assert.match(css, /\.global-post-card\.is-reel[\s\S]*?aspect-ratio:\s*9\/16/);
@@ -50,27 +50,26 @@ test('people discovery has responsive portrait cards and all distance scopes', a
 });
 
 
-test('social home mobile layout keeps recommendation inset, feed full-bleed, and quick search compact', async () => {
+test('social home mobile layout keeps recommendation inset, feed full-bleed, and the new search entry', async () => {
   const source = await readFile(homeJs, 'utf8');
   const css = await readFile(homeCss, 'utf8');
   assert.equal((source.match(/class="global-social-area"/g) || []).length, 1,
     'social content must have one parent wrapper (no accidental nested duplicate)');
-  assert.match(css, /global-location-row\s*\{\s*margin:\s*30px 0 8px/);
+  assert.match(css, /global-location-row\{margin:14px 0 18px\}/);
   assert.match(css, /\.global-demo-rail,\.global-story-rail,\.global-people-rail,[\s\S]*?padding:0 var\(--pl-page-gutter\) 9px/s);
   assert.match(css, /\.global-content-section\s*\{[^}]*width:100vw[^}]*margin:0 calc\(50% - 50vw\) 14px/s);
   assert.match(css, /\.global-post-list\s*\{[^}]*width:100%[^}]*max-width:none/s);
   assert.match(css, /\.global-post-card\s*\{[^}]*width:100%[^}]*max-width:none/s);
-  assert.match(css, /\.global-quick-search\s*\{[^}]*width:100vw[^}]*padding:5px var\(--pl-page-gutter\) 6px/s);
-  assert.match(css, /global-quick-search > a\s*\{[^}]*min-height:\s*34px[^}]*background:\s*#fff/s);
+  assert.match(source, /data-open-quick-search/);
+  assert.match(css, /\.global-home-search-entry\{[^}]*min-height:58px/s);
+  assert.doesNotMatch(source, /class="global-quick-search"/);
 });
-
-
-test('social home owns the header-to-content transition after its service shortcut rail', async () => {
+test('social home owns the header-to-content transition after its search entry', async () => {
   const shell = await readFile(new URL('../../src/design-system/page-shell.css', import.meta.url), 'utf8');
   const home = await readFile(homeCss, 'utf8');
   assert.match(shell, /\.pl-page-shell\.home-page\s*>\s*\.pl-page-main\s*\{\s*padding-block-start:\s*0/s);
-  assert.match(home, /\.global-location-row\s*\{\s*margin:\s*30px 0 8px/s);
-  assert.match(home, /\.global-search-submit\s*\{[^}]*white-space:\s*nowrap/s);
+  assert.match(home, /\.global-location-row\s*\{\s*margin:\s*14px 0 18px/s);
+  assert.match(home, /\.global-home-search-entry\{[^}]*min-height:58px/s);
 });
 
 
@@ -94,7 +93,7 @@ test('Social Home has one canonical mobile geometry owner and registered carouse
   assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--pl-page-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--pl-page-gutter\)\)/s);
   assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:calc\(100% \+ var\(--pl-page-gutter\)\)/s);
   assert.match(css, /scroll-snap-type:\s*x mandatory/);
-  assert.match(registry, /HOME-CAROUSEL-DEMO-001/);
+  assert.match(registry, /HOME-CAROUSEL-TOP10-001/);
   assert.match(registry, /HOME-CAROUSEL-STORIES-001/);
   assert.match(registry, /HOME-CAROUSEL-PEOPLE-001/);
   assert.match(registry, /HOME-CAROUSEL-PRODUCT-001/);
@@ -126,4 +125,26 @@ test('shared page header background and divider bleed to viewport edges independ
   assert.match(shell, /\.pl-page-header\s*\{[^}]*position:\s*relative[^}]*isolation:\s*isolate/s);
   assert.match(shell, /\.pl-page-header::before\s*\{[^}]*left:\s*calc\(50%\s*-\s*50vw\)[^}]*width:\s*100vw[^}]*background:\s*var\(--pl-color-surface\)/s);
   assert.match(shell, /\.pl-page-header::before\s*\{[^}]*border-bottom:\s*var\(--pl-shell-divider-width\)\s+solid\s+var\(--pl-shell-divider-color\)/s);
+});
+
+
+test('Social Home discovery hierarchy uses a search overlay, category Top 10 rails, and larger Around You cards before the feed', async () => {
+  const source = await readFile(homeJs, 'utf8');
+  const css = await readFile(homeCss, 'utf8');
+  const spec = await readFile(new URL('../../src/features/home/PAGE-SOCIAL-HOME-001.md', import.meta.url), 'utf8');
+  assert.match(source, /data-open-quick-search/);
+  assert.match(source, /data-quick-search-backdrop/);
+  assert.doesNotMatch(source, /class="global-quick-search"/);
+  assert.doesNotMatch(source, /class="global-unified-search"/);
+  assert.match(source, /const topTenCategories = \[/);
+  assert.match(source, /global-top-ten-rail/);
+  assert.match(source, /global-local-rating/);
+  assert.match(source, /global-local-copy/);
+  assert.ok(source.includes("streams + '</div>' +"));
+  assert.match(css, /\.global-top-ten-card\{[^}]*flex-basis:90vw/s);
+  assert.match(css, /\.global-local-card\{[^}]*flex-basis:70vw/s);
+  assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
+  assert.match(source, /setInterval\(advance,2600\)/);
+  assert.match(spec, /Top 10 discovery/);
+  assert.match(spec, /Di sekitar Anda/);
 });
