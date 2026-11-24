@@ -35,7 +35,7 @@ test('Social Home responsive styles and content-module styles cover their own su
   assert.match(css, /@media\s*\(max-width:\s*767px\)/);
   assert.match(css, /@media\s*\(min-width:\s*768px\)\s*and\s*\(max-width:\s*1023px\)/);
   assert.match(css, /@media\s*\(min-width:\s*1024px\)/);
-  assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
+  assert.match(css, /\.global-search-backdrop\[hidden\]\s*\{\s*display:none\s*\}/);
   assert.match(css, /\.global-people-rail[\s\S]*?scroll-snap-type:\s*x\s+mandatory/);
   assert.match(css, /\.global-content-tabs button\{[^}]*display:flex[^}]*align-items:center[^}]*justify-content:center/);
   assert.match(postCss, /\.pl-post-card\.is-reel[\s\S]*?aspect-ratio:\s*9\/16/);
@@ -79,7 +79,7 @@ test('Social Home owns the header-to-content transition after its search entry',
   const home = await readFile(homeCss, 'utf8');
   assert.doesNotMatch(shell, /\.pl-page-shell\.home-page/);
   assert.match(home, /\.global-home-page\s*>\s*\.global-home-main\s*\{[^}]*padding-block-start:\s*0/s);
-  assert.match(home, /\.global-home-search-entry\{[^}]*min-height:58px/s);
+  assert.match(home, /\.global-home-search-entry\s*\{[^}]*min-height:\s*58px/s);
 });
 test('Social Home mobile geometry uses the platform gutter while component rails remain feature-owned', async () => {
   const css = await readFile(homeCss, 'utf8');
@@ -105,9 +105,9 @@ test('Social Home has one canonical mobile geometry owner and registered carouse
 });
 test('Social Home section actions remain accessible without sibling-domain distance widgets', async () => {
   const css = await readFile(homeCss, 'utf8');
-  assert.match(css, /\.global-section-heading a:hover\{[^}]*color:var\(--pl-color-brand\)/);
-  assert.match(css, /\.global-section-heading a:active\{[^}]*color:var\(--pl-color-brand\)/);
-  assert.match(css, /\.global-section-heading a:focus-visible\{/);
+  assert.match(css, /\.global-section-heading a:hover\s*\{[^}]*color:var\(--pl-color-brand\)/);
+  assert.match(css, /\.global-section-heading a:active\s*\{[^}]*color:var\(--pl-color-brand\)/);
+  assert.match(css, /\.global-section-heading a:focus-visible\s*\{/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.doesNotMatch(css, /global-local-distance|global-local-rail|global-feature-card|global-product-demo/);
 });
@@ -245,7 +245,7 @@ test('social content filters use icon and label pairs with Blog opening its own 
   assert.ok(home.includes("tab.id==='blog'?'<a class=\"global-content-tab-link\""));
   assert.match(home, /renderIcon\(tab\.icon\) \+ '<span>' \+ tab\.label/);
   assert.match(home, /filter==='blog'&&kind==='blog'/);
-  assert.match(styles, /\.global-content-tabs button\{[^}]*display:flex/);
+  assert.match(styles, /\.global-content-tabs button\s*\{[^}]*display:flex/s);
   assert.match(home, /routeHref\('blog'\)/);
 });
 test('Social responsive rules are owned by Social stylesheets, not the shared mobile contract',async()=>{
