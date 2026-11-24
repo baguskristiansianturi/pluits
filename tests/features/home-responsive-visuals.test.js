@@ -133,14 +133,15 @@ test('shared page header background and divider bleed to viewport edges independ
 test('Social Home contains only Social Media experiences and links outward only by explicit interaction', async () => {
   const source = await readFile(homeJs, 'utf8');
   const css = await readFile(homeCss, 'utf8');
-  assert.match(source, /Orang yang mungkin Anda kenal/);
-  assert.match(source, /Cerita dari circle Anda/);
-  assert.match(source, /data-content-tabs/);
+  assert.ok(source.includes('Orang yang mungkin Anda kenal'));
+  assert.ok(source.includes('Cerita dari circle Anda'));
+  assert.ok(source.includes('data-content-tabs'));
   assert.ok(source.includes("routeHref('blog')"));
-  assert.match(source, /data-social-composer/);
-  assert.ok(!source.includes('const recommendationItems') && !source.includes('const nearbyItems') && !source.includes('global-products') && !source.includes('global-features') && !source.includes('global-calendar-block') && !source.includes('global-about') && !source.includes("routeHref('marketplace')"));
-  assert.doesNotMatch(source, /Keranjang|Notifikasi|Produk lokal pilihan|Restoran & kafe|Transportasi/);
-  assert.doesNotMatch(css, /body\\.global-search-open[^}]*background|html\\s*\\{/);
+  assert.ok(source.includes('data-social-composer'));
+  for (const removed of ['const recommendationItems', 'const nearbyItems', 'global-products', 'global-features', 'global-calendar-block', 'global-about', "routeHref('marketplace')", 'Keranjang', 'Notifikasi', 'Produk lokal pilihan', 'Restoran & kafe', 'Transportasi']) {
+    assert.ok(!source.includes(removed), 'Social Home must not own external domain content: ' + removed);
+  }
+  assert.ok(css.includes('.global-social-area'));
 });
 
 test('Nearby discovery preserves radius fallback and fair exposure requirements', async () => {
