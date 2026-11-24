@@ -149,6 +149,8 @@ function createReplyForm(comment) {
 }
 export function mountSocialPostInteractions(root) {
   if(!root)return ()=>{};
+  demoWallet=500;
+  root.querySelectorAll('[data-demo-wallet]').forEach((wallet)=>wallet.textContent=demoWallet);
   const controller=new AbortController();
   root.addEventListener('click',(event)=>{
     const button=event.target.closest('button');
