@@ -91,7 +91,9 @@ function renderReplies(replies, postOwner) {
   return (replies || []).map((reply) => {
     const isOwner = reply.name === postOwner;
     const sideClass = isOwner ? 'is-owner' : 'is-right';
-    return '<div class="pl-post-reply ' + sideClass + '"><div class="pl-post-reply-bubble"><strong>' + escapeHtml(reply.name) + '</strong><span>' + escapeHtml(reply.text) + '</span></div><div class="pl-post-reply-avatar">' + commentAvatarMarkup(reply, 64) + '</div></div>';
+    const avatar = '<div class="pl-post-reply-avatar">' + commentAvatarMarkup(reply, 64) + '</div>';
+    const bubble = '<div class="pl-post-reply-bubble"><strong>' + escapeHtml(reply.name) + '</strong><span>' + escapeHtml(reply.text) + '</span></div>';
+    return '<div class="pl-post-reply ' + sideClass + '">' + (isOwner ? avatar + bubble : bubble + avatar) + '</div>';
   }).join('');
 }
 function renderComment(comment, postOwner) {
@@ -154,7 +156,7 @@ function showToast(root,message) {
 }
 function closePanels(card,except) {
   card.querySelectorAll('[data-reaction-picker],[data-gift-panel],[data-share-panel],[data-post-menu]').forEach((panel)=>{if(panel!==except)panel.hidden=true;});
-  card.querySelectorAll('[data-reaction-trigger],[data-gift-toggle],[data-share-toggle],[data-post-more]').forEach((button)=>button.setAttribute('aria-expanded','false'));
+  card.querySelectorAll('[data-reaction-trigger],[data-gift-toggle],[data-gift-received-toggle],[data-share-toggle],[data-post-more]').forEach((button)=>button.setAttribute('aria-expanded','false'));
 }
 function createReplyForm(comment) {
   if(comment.querySelector('[data-reply-form]'))return;
@@ -181,8 +183,8 @@ export function mountSocialPostInteractions(root) {
       const selected=button.dataset.reaction,was=card.dataset.myReaction===selected;
       card.dataset.myReaction=was?'':selected;
       const item=reactions.find((reaction)=>reaction.id===selected);
-      trigger.innerHTML=(was?'♡':item.emoji)+' <span>'+(was?'Like':item.label)+'</span>';trigger.classList.toggle('is-active',!was);
-      trigger.setAttribute('aria-expanded','false');picker.hidden=true;
+      const reactionIcon=trigger.querySelector('[data-reaction-icon]');reactionIcon.innerHTML=was?renderIcon('heart'):item.emoji;trigger.classList.toggle('is-active',!was);
+      trigger.setAttribute('aria-label',was?'Like':item.label);trigger.setAttribute('aria-expanded','false');picker.hidden=true;
       const count=Number(card.dataset.baseLikes)+(card.dataset.myReaction?1:0);card.querySelector('[data-post-like-count]').textContent=formatCount(count);card.querySelector('[data-overlay-like-count]').textContent=formatCount(count);
       showToast(root,was?'Reaksi dibatalkan.':'Reaksi '+item.label+' ditambahkan (demo).');return;
     }
