@@ -270,3 +270,24 @@ test('social stream uses one mixed timeline, icon filters, full-bleed media and 
   assert.match(card, /durationSeconds:78/);
   assert.match(card, /durationSeconds \|\| 0\) <= 60/);
 });
+
+test('social feed preview renders twenty mixed posts with commentable blog cards and orientation-aware interactions', async () => {
+  const card = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
+  const css = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
+  const home = await readFile(homeJs, 'utf8');
+  assert.equal((card.match(/id:'demo-post-/g) || []).length, 20);
+  assert.match(card, /type:'blog'/);
+  assert.match(card, /blogTitle:/);
+  assert.match(card, /data-blog-expand/);
+  assert.match(card, /data-comment-form/);
+  assert.match(card, /data-content-kind=.*blog/);
+  assert.match(card, /pl-post-horizontal-controls/);
+  assert.match(card, /data-content-orientation/);
+  assert.match(css, /\.pl-post-card\.is-horizontal[\s\S]*?aspect-ratio:16\/9/);
+  assert.match(css, /\.pl-post-card\.is-vertical[\s\S]*?aspect-ratio:4\/5/);
+  assert.match(css, /\.pl-post-horizontal-controls \.pl-post-media-actions\{[^}]*flex-direction:row/);
+  assert.match(css, /\.pl-post-media-actions\{[^}]*flex-direction:column/);
+  assert.match(css, /\.pl-post-blog-body/);
+  assert.match(home, /renderDemoFeed\('feed'\)/);
+  assert.doesNotMatch(home, /demoContent\('blog'\)/);
+});
