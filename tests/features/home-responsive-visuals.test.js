@@ -119,3 +119,11 @@ test('Social Home and Discover share one page surface and one standard content f
   assert.doesNotMatch(home, /\.global-home-main\s*\{[^}]*padding-inline:/s);
   assert.doesNotMatch(discover, /\.social-main\s*\{[^}]*(?:^|;)\s*(?:width|max-width|padding-inline):/s);
 });
+
+
+test('shared page header background and divider bleed to viewport edges independently of content width', async () => {
+  const shell = await readFile(new URL('../../src/design-system/page-shell.css', import.meta.url), 'utf8');
+  assert.match(shell, /\.pl-page-header\s*\{[^}]*position:\s*relative[^}]*isolation:\s*isolate/s);
+  assert.match(shell, /\.pl-page-header::before\s*\{[^}]*left:\s*calc\(50%\s*-\s*50vw\)[^}]*width:\s*100vw[^}]*background:\s*var\(--pl-color-surface\)/s);
+  assert.match(shell, /\.pl-page-header::before\s*\{[^}]*border-bottom:\s*var\(--pl-shell-divider-width\)\s+solid\s+var\(--pl-shell-divider-color\)/s);
+});
