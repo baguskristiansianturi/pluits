@@ -855,7 +855,7 @@
  .global-post-card{border:0;border-radius:0}
 }
 
-/* SOCIAL-HOME-GEOMETRY-004 — canonical mobile geometry. One source of truth for gutters, rails and content surfaces. */
+/* SOCIAL-HOME-GEOMETRY-004 — Social Home rail/card geometry. Page gutter and content frame belong to the shared shell. */
 @media (max-width: 767px) {
   .global-home-page{--home-gutter: var(--pl-page-gutter)}
   .global-home-page > .global-home-main{box-sizing:border-box;min-width:0}
