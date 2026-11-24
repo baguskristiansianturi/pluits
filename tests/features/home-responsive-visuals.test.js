@@ -72,3 +72,14 @@ test('social home owns the header-to-content transition after its service shortc
   assert.match(home, /\.global-location-row\s*\{\s*margin:\s*30px 5px 8px/s);
   assert.match(home, /\.global-search-submit\s*\{[^}]*white-space:\s*nowrap/s);
 });
+
+
+test('authenticated home uses 10px mobile content gutters, edge-bleed carousels and 10px card corners', async () => {
+  const css = await readFile(homeCss, 'utf8');
+  assert.match(css, /SOCIAL-HOME-GEOMETRY-003/);
+  assert.match(css, /\.global-home-page > \.global-home-main\s*\{[^}]*padding-inline:\s*10px/s);
+  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ 10px\)[^}]*margin-right:\s*-10px/s);
+  assert.match(css, /\.global-local-rail,[\s\S]*?width:\s*calc\(100% \+ 10px\)/);
+  assert.match(css, /\.global-post-card\s*\{[^}]*border-radius:\s*var\(--pl-radius-card\)/s);
+  assert.match(css, /\.global-feature-card,[\s\S]*?border-radius:\s*var\(--pl-radius-card\)/);
+});
