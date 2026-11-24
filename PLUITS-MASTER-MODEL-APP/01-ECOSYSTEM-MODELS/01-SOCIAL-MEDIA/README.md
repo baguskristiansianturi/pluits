@@ -37,3 +37,12 @@ Pembaruan dokumentasi tidak berarti izin untuk mengubah website. Desain, tampila
 Social Media hanya berinteraksi dengan domain luar melalui route/deep-link, API, event, atau public read model yang terdokumentasi. Tidak boleh mengimpor private code/CSS, membaca DOM/state/storage, atau mengambil alih lifecycle sibling domain. Fondasi Platform UI Foundation yang disetujui tetap boleh dikonsumsi sebagai kontrak platform; CSS feature-specific tetap milik modul masing-masing.
 
 Blog harus menjadi modul runtime mandiri di dalam Social Media. Feed/Social Home hanya mengonsumsi preview dan public read model Blog; lifecycle artikel tetap milik Blog. Lihat [Audit Kepemilikan Domain Social Media dan Isolasi Runtime](00-ATURAN-PENGALAMAN/18-AUDIT-KEPEMILIKAN-DOMAIN-DAN-ISOLASI-RUNTIME.md) untuk temuan aktual, gap, dan definition of done.
+
+
+## Implementasi runtime — 25 November 2026
+- Blog sudah memiliki entry route mandiri `/blog/` dan source owner `src/features/social/blog/` (page + stylesheet). Page memiliki filter kategori dan pencarian lokal; stylesheet memakai namespace `.sm-blog-*` dan tidak menarget selector global/sibling.
+- Social Home telah dibatasi ke pengalaman sosial: people discovery, Stories, Feed/Reels/Live, composer, dan interaksi menuju Blog. Listing produk/merchant/tempat, shortcut layanan, kalender, dan promosi ekosistem dihapus dari komposisi Home.
+- Header Social Home tidak lagi menampilkan favorit/keranjang/notifikasi. Quick search diarahkan ke orang/komunitas dan Blog.
+- Konten Blog masih preview statis. Editor, artikel detail, publish, persistence, komentar, dan backend Blog belum aktif.
+- Isolasi CSS seluruh Social Media belum selesai: Home masih memiliki selector legacy `.global-*`, stylesheet Social masih perlu audit consumer/root lengkap, dan mobile layout contract masih memuat aturan yang menyentuh Social Media. Browser visual baseline dan regresi lintas route belum terverifikasi.
+- PR implementasi: [#138](https://github.com/baguskristiansianturi/pluits/pull/138). Jangan menutup audit sampai semua tahap CSS dan browser verification lulus.
