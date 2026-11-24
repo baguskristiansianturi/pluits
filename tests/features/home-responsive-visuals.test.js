@@ -31,9 +31,9 @@ test('social home responsive styles cover narrow mobile, tablet, desktop and hor
   assert.match(css, /\.global-content-tabs[\s\S]*?grid-template-columns:\s*repeat\(4,minmax\(0,1fr\)\)/);
   assert.match(css, /\.global-post-card\.is-reel[\s\S]*?aspect-ratio:\s*9\/16/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.match(css, /SOCIAL-HOME-GEOMETRY-003/);
+  assert.match(css, /SOCIAL-HOME-GEOMETRY-004/);
   assert.match(css, /font-family:-apple-system,BlinkMacSystemFont/);
-  assert.match(css, /\.global-post-list\{display:grid;gap:20px;width:100%;max-width:none;margin:0\}/);
+  assert.match(css, /\.global-post-list\s*\{[^}]*display:grid[^}]*width:100%[^}]*gap:12px/s);
   assert.match(css, /\.global-person-card[\s\S]*?aspect-ratio:3\/4\.15/);
 });
 
@@ -56,11 +56,11 @@ test('social home mobile layout keeps recommendation inset, feed full-bleed, and
   assert.equal((source.match(/class="global-social-area"/g) || []).length, 1,
     'social content must have one parent wrapper (no accidental nested duplicate)');
   assert.match(css, /global-location-row\s*\{\s*margin:\s*30px 0 8px/);
-  assert.match(css, /global-people-rail\s*\{[^}]*padding:\s*0 10px 9px/s);
-  assert.match(css, /global-content-section\s*\{[^}]*width:\s*100vw[^}]*margin-inline:\s*calc\(50% - 50vw\)/s);
-  assert.match(css, /global-post-list\s*\{[^}]*width:\s*100%[^}]*max-width:\s*none/s);
-  assert.match(css, /global-post-card\s*\{[^}]*width:\s*100%[^}]*max-width:\s*none/s);
-  assert.match(css, /global-quick-search\s*\{[^}]*width:\s*100%[^}]*background:\s*transparent/s);
+  assert.match(css, /\.global-demo-rail,\.global-story-rail,\.global-people-rail,[\s\S]*?padding:0 10px 9px/s);
+  assert.match(css, /\.global-content-section\s*\{[^}]*width:100vw[^}]*margin:0 calc\(50% - 50vw\) 14px/s);
+  assert.match(css, /\.global-post-list\s*\{[^}]*width:100%[^}]*max-width:none/s);
+  assert.match(css, /\.global-post-card\s*\{[^}]*width:100%[^}]*max-width:none/s);
+  assert.match(css, /\.global-quick-search\s*\{[^}]*width:100vw[^}]*padding:5px 10px 6px/s);
   assert.match(css, /global-quick-search > a\s*\{[^}]*min-height:\s*34px[^}]*background:\s*#fff/s);
 });
 
@@ -76,10 +76,27 @@ test('social home owns the header-to-content transition after its service shortc
 
 test('authenticated home uses 10px mobile content gutters, edge-bleed carousels and 10px card corners', async () => {
   const css = await readFile(homeCss, 'utf8');
-  assert.match(css, /SOCIAL-HOME-GEOMETRY-003/);
-  assert.match(css, /\.global-home-page > \.global-home-main\s*\{[^}]*padding-inline:\s*10px/s);
-  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ 10px\)[^}]*margin-right:\s*-10px/s);
-  assert.match(css, /\.global-local-rail,[\s\S]*?width:\s*calc\(100% \+ 10px\)/);
+  assert.match(css, /SOCIAL-HOME-GEOMETRY-004/);
+  assert.match(css, /\.global-home-page > \.global-home-main\s*\{[^}]*padding-inline:\s*var\(--home-gutter\)/s);
+  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--home-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--home-gutter\)\)/s);
+  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:\s*calc\(100% \+ var\(--home-gutter\)\)/s);
   assert.match(css, /\.global-post-card\s*\{[^}]*border-radius:\s*var\(--pl-radius-card\)/s);
   assert.match(css, /\.global-feature-card,[\s\S]*?border-radius:\s*var\(--pl-radius-card\)/);
+});
+
+test('Social Home has one canonical mobile geometry owner and registered carousel fixtures', async () => {
+  const css = await readFile(homeCss, 'utf8');
+  const readme = await readFile(new URL('../../src/features/home/README.md', import.meta.url), 'utf8');
+  const registry = await readFile(new URL('../../src/features/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
+  assert.equal((css.match(/SOCIAL-HOME-GEOMETRY-004/g) || []).length, 1);
+  assert.match(css, /--home-gutter:\s*var\(--pl-page-gutter\)/);
+  assert.match(css, /\.global-home-page > \.global-home-main\s*\{[^}]*padding-inline:\s*var\(--home-gutter\)/s);
+  assert.match(css, /\.global-bleed-wrap\s*\{[^}]*width:\s*calc\(100% \+ var\(--home-gutter\)\)[^}]*margin-left:\s*0[^}]*margin-right:\s*calc\(-1 \* var\(--home-gutter\)\)/s);
+  assert.match(css, /\.global-local-rail,\.global-product-demo-rail,\.global-feature-rail,\.global-service-rail\s*\{[^}]*width:calc\(100% \+ var\(--home-gutter\)\)/s);
+  assert.match(css, /scroll-snap-type:\s*x mandatory/);
+  assert.match(registry, /HOME-CAROUSEL-DEMO-001/);
+  assert.match(registry, /HOME-CAROUSEL-STORIES-001/);
+  assert.match(registry, /HOME-CAROUSEL-PEOPLE-001/);
+  assert.match(registry, /HOME-CAROUSEL-PRODUCT-001/);
+  assert.match(readme, /SOCIAL-HOME-GEOMETRY-004/);
 });
