@@ -102,7 +102,7 @@ function renderSharePanel(post) {
 }
 function renderCaption(value) {
   const escaped = escapeHtml(value).replace(/\\n/g,'<br>');
-  return escaped.replace(/(^|\\s)(#[\\p{L}\\p{N}_]+|@[\\p{L}\\p{N}._]+)/gu,'$1<span class="pl-post-tag">$2</span>');
+  return escaped.replace(/(^|\s)(#[\p{L}\p{N}_]+|@[\p{L}\p{N}._]+)/gu,'$1<span class="pl-post-tag">$2</span>');
 }
 function renderMedia(post) {
   if (post.type === 'video') {
