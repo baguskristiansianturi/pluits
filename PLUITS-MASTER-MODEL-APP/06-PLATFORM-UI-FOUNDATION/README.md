@@ -70,3 +70,7 @@ The directory and governance workflow are established first. Specific values, fo
 5. Reuse approved assets, tokens, components, patterns, and tools.
 6. Report missing resources or conflicting requirements before inventing replacements or adding dependencies.
 7. Implement, test all relevant viewports, perform impact analysis, and document the result.
+
+## Mandatory page-work preflight
+
+Before any page markup, page CSS, redesign, or responsive adjustment begins, complete [UI-FOUNDATION-PREFLIGHT-AND-CONSUMPTION-001](./09-DESIGN-AND-DEVELOPMENT-SOP/UI-FOUNDATION-PREFLIGHT-AND-CONSUMPTION-001.md). It is the required entry point for developers and AI agents. It maps each design concern to its single runtime source, lists the current runtime baseline, and provides pre-coding and completion checklists. The rule is product-wide: pages may differ in composition and content, but must reuse the same platform tokens, icon artwork, shared components, responsive contracts, and interaction patterns. Do not create page-local substitutes or arbitrary global measurements.

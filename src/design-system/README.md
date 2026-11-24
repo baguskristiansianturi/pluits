@@ -10,6 +10,10 @@ The first frontend screen establishes a small, reviewable foundation in the exac
 
 All token values, icon IDs, and layouts are marked PROVISIONAL until reviewed and approved. The feature screens consume these tokens and scoped styles; they must not create competing global scales.
 
+## Mandatory use before every page change
+
+Before creating or changing any page, complete [UI-FOUNDATION-PREFLIGHT-AND-CONSUMPTION-001](../../PLUITS-MASTER-MODEL-APP/06-PLATFORM-UI-FOUNDATION/09-DESIGN-AND-DEVELOPMENT-SOP/UI-FOUNDATION-PREFLIGHT-AND-CONSUMPTION-001.md). This runtime folder is the implementation source, not permission to create page-local alternatives. `tokens.css`, `icons.js`, `page-shell.js`/`page-shell.css`, `layouts.js`, and `mobile-layout-contract.css` remain the canonical shared sources. Feature pages may compose them differently but must not redefine their shared values or artwork. When a required standard is absent, update the relevant Foundation register and follow its approval/change process before using a local substitute.
+
 
 ## Shared account and legal page frame
 
