@@ -127,3 +127,25 @@ test('shared page header background and divider bleed to viewport edges independ
   assert.match(shell, /\.pl-page-header::before\s*\{[^}]*left:\s*calc\(50%\s*-\s*50vw\)[^}]*width:\s*100vw[^}]*background:\s*var\(--pl-color-surface\)/s);
   assert.match(shell, /\.pl-page-header::before\s*\{[^}]*border-bottom:\s*var\(--pl-shell-divider-width\)\s+solid\s+var\(--pl-shell-divider-color\)/s);
 });
+
+
+test('Social Home discovery hierarchy uses a search overlay, category Top 10 rails, and larger Around You cards before the feed', async () => {
+  const source = await readFile(homeJs, 'utf8');
+  const css = await readFile(homeCss, 'utf8');
+  const spec = await readFile(new URL('../../src/features/home/PAGE-SOCIAL-HOME-001.md', import.meta.url), 'utf8');
+  assert.match(source, /data-open-quick-search/);
+  assert.match(source, /data-quick-search-backdrop/);
+  assert.doesNotMatch(source, /class="global-quick-search"/);
+  assert.doesNotMatch(source, /class="global-unified-search"/);
+  assert.match(source, /const topTenCategories = \[/);
+  assert.match(source, /global-top-ten-rail/);
+  assert.match(source, /global-local-rating/);
+  assert.match(source, /global-local-copy/);
+  assert.match(source, /streams \+ '<\\/div>' \+\s*'<section class="global-section global-products"/);
+  assert.match(css, /\.global-top-ten-card\{[^}]*flex-basis:90vw/s);
+  assert.match(css, /\.global-local-card\{[^}]*flex-basis:70vw/s);
+  assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
+  assert.match(source, /setInterval\(advance,2600\)/);
+  assert.match(spec, /Top 10 discovery/);
+  assert.match(spec, /Di sekitar Anda/);
+});
