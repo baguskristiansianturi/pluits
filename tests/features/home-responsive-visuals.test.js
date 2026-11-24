@@ -30,7 +30,7 @@ test('social home responsive styles cover narrow mobile, tablet, desktop and hor
   assert.match(css, /@media\s*\(min-width:\s*1024px\)/);
   assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
   assert.match(css, /\.global-people-rail[\s\S]*?scroll-snap-type:\s*x\s+mandatory/);
-  assert.match(css, /\.global-content-tabs[\s\S]*?grid-template-columns:\s*repeat\(4,minmax\(0,1fr\)\)/);
+  assert.match(css, /\.global-content-tabs button\{[^}]*display:flex[^}]*align-items:center[^}]*justify-content:center/);
   assert.match(css, /\.global-post-card\.is-reel[\s\S]*?aspect-ratio:\s*9\/16/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /SOCIAL-HOME-GEOMETRY-004/);
@@ -265,7 +265,8 @@ test('social stream uses one mixed timeline, icon filters, full-bleed media and 
   assert.match(homeStyles, /\.global-content-tabs\{position:sticky;top:0/);
   assert.match(homeStyles, /\.global-header\{position:relative;top:auto/);
   assert.match(postStyles, /width:100vw;max-width:none;margin-inline:calc\(50% - 50vw\)/);
-  assert.match(postStyles, /aspect-ratio:auto;object-fit:contain/);
+  assert.match(postStyles, /\.pl-post-card\.is-horizontal[\s\S]*?aspect-ratio:16\/9/);
+  assert.match(postStyles, /\.pl-post-card\.is-vertical[\s\S]*?aspect-ratio:4\/5/);
   assert.match(card, /durationSeconds:43/);
   assert.match(card, /durationSeconds:78/);
   assert.match(card, /durationSeconds \|\| 0\) <= 60/);
@@ -290,4 +291,33 @@ test('social feed preview renders twenty mixed posts with commentable blog cards
   assert.match(css, /\.pl-post-blog-body/);
   assert.match(home, /renderDemoFeed\('feed'\)/);
   assert.doesNotMatch(home, /demoContent\('blog'\)/);
+});
+
+
+test('social feed limits caption and comment previews and progressively reveals feed posts', async () => {
+  const card = await readFile(new URL('../../src/features/home/social-post-card.js', import.meta.url), 'utf8');
+  const cardCss = await readFile(new URL('../../src/features/home/social-post-card.css', import.meta.url), 'utf8');
+  const home = await readFile(homeJs, 'utf8');
+  const homeStyles = await readFile(homeCss, 'utf8');
+  assert.match(card, /data-caption-expand/);
+  assert.match(card, /data-comments-more/);
+  assert.match(card, /data-comment-extra/);
+  assert.match(card, /data-feed-page-hidden/);
+  assert.match(card, /data-feed-more/);
+  assert.match(card, /index>=6/);
+  assert.match(cardCss, /-webkit-line-clamp:5/);
+  assert.match(cardCss, /pl-post-comments-more/);
+  assert.match(home, /Tampilkan postingan lainnya/);
+  assert.match(home, /window\.scrollTo\(\{top:0,behavior:'smooth'\}\)/);
+  assert.match(home, /window\.setTimeout\(resolve,1500\)/);
+  assert.match(homeStyles, /global-content-refresh/);
+});
+
+test('social content filters use icon and label pairs in the requested order', async () => {
+  const home = await readFile(homeJs, 'utf8');
+  const styles = await readFile(homeCss, 'utf8');
+  assert.match(home, /\{id:'all',icon:'grid',label:'Semua'\},\{id:'reels',icon:'film',label:'Reel'\},\{id:'blog',icon:'book',label:'Blog'\},\{id:'live',icon:'radio',label:'Live'\}/);
+  assert.match(home, /renderIcon\(tab\.icon\) \+ '<span>' \+ tab\.label/);
+  assert.match(home, /filter==='blog'\?kind!=='blog'/);
+  assert.match(styles, /\.global-content-tabs button\{[^}]*display:flex/);
 });
