@@ -100,6 +100,10 @@ function renderMenu() {
 function renderSharePanel(post) {
   return '<section class="pl-post-share-panel" data-share-panel hidden><strong>Bagikan postingan</strong><button type="button" data-share-circle>Bagikan ke Circle</button><button type="button" data-share-copy>Salin tautan demo</button><button type="button" data-share-close>Tutup</button></section>';
 }
+function renderCaption(value) {
+  const escaped = escapeHtml(value).replace(/\\n/g,'<br>');
+  return escaped.replace(/(^|\\s)(#[\\p{L}\\p{N}_]+|@[\\p{L}\\p{N}._]+)/gu,'$1<span class="pl-post-tag">$2</span>');
+}
 function renderMedia(post) {
   if (post.type === 'video') {
     return '<div class="pl-post-media-wrap pl-post-media-wrap--video"><video class="pl-post-media pl-post-video" data-demo-video data-video-limit="10" src="' + escapeHtml(post.mediaUrl) + '" poster="' + escapeHtml(post.poster || '') + '" controls playsinline preload="none" aria-label="Video postingan ' + escapeHtml(post.authorName) + '"></video><span class="pl-post-video-limit">Video demo · maksimal 10 detik</span></div>';
@@ -112,7 +116,7 @@ export function renderSocialPostCard(post) {
   }
   return '<article class="global-post-card pl-post-card is-demo" data-post-card data-post-id="' + escapeHtml(post.id) + '" data-base-likes="' + post.likes + '" data-base-gifts="' + post.giftCount + '" data-base-comments="' + post.commentsCount + '">' +
     '<header class="global-post-author pl-post-author"><span class="global-post-avatar pl-post-avatar-shell">' + avatarMarkup(post) + '</span><span class="global-post-author-copy pl-post-author-copy"><strong>' + escapeHtml(post.authorName) + ' ' + statusMarkup(post) + '</strong><small>@' + escapeHtml(post.username) + ' · ' + escapeHtml(post.time) + '</small></span><button type="button" class="pl-post-more" data-post-more aria-label="Opsi postingan">' + renderIcon('moreVertical') + '</button>' + renderMenu() + '</header>' +
-    '<p class="global-post-caption pl-post-caption">' + escapeHtml(post.caption).replace(/\\n/g,'<br>') + '</p>' + renderMedia(post) +
+    '<p class="global-post-caption pl-post-caption">' + renderCaption(post.caption) + '</p>' + renderMedia(post) +
     '<div class="pl-post-social-proof"><button type="button" data-reaction-summary aria-label="Lihat reaksi">' + renderIcon('heart') + '<span data-post-like-count>' + escapeHtml(post.likeLabel) + '</span> <small>reaksi</small></button><span><b data-post-comment-count>' + post.commentsCount + '</b> komentar · <b data-post-gift-count>' + post.giftCount + '</b> gift</span></div>' +
     '<div class="pl-post-action-area"><div class="pl-post-action-row"><div class="pl-post-reaction-action"><button type="button" class="pl-post-action" data-reaction-trigger aria-expanded="false">♡ <span>Like</span></button>' + renderReactionPicker() + '</div><button type="button" class="pl-post-action" data-comment-focus>' + renderIcon('message') + '<span>Komentar</span></button><button type="button" class="pl-post-action pl-post-action--gift" data-gift-toggle>' + renderIcon('sparkles') + '<span>Gift</span></button><button type="button" class="pl-post-action" data-share-toggle>' + renderIcon('arrow') + '<span>Bagikan</span></button></div>' + renderGiftPanel(post) + renderSharePanel(post) + '</div>' +
     '<section class="pl-post-comments" data-comments-section><div class="pl-post-comments-heading"><strong>Komentar</strong><button type="button" data-comments-toggle aria-expanded="true">Sembunyikan</button></div><div class="pl-post-comments-list" data-comment-list>' + post.comments.map(renderComment).join('') + '</div><form class="pl-post-comment-form" data-comment-form><input type="text" maxlength="500" placeholder="Tulis komentar..." aria-label="Tulis komentar" data-comment-input><button type="submit">Kirim</button></form></section>' +
