@@ -330,3 +330,10 @@ src/features/
 - Social-specific mobile geometry has been moved out of `design-system/mobile-layout-contract.css` into Social Home and Social Profile stylesheets. The shared contract retains platform gutter and Marketplace shell geometry only.
 
 This is an implemented ownership slice, not completion of all isolation. Remaining gaps: `social-pages.js` is still a combined runtime surface; Reels, Stories and Live now have owned preview/rendering modules and stylesheets, but their authoring, media processing, audience, publishing and lifecycle services are not active; Social Home retains legacy `.global-*` names for active Social-owned components, but obsolete product/merchant/service/calendar/story/live demo selectors have been pruned; complete selector/consumer mapping and browser visual regression are still required. Blog content is preview-only; backend publishing, persistence, article detail and comments are not active.
+
+
+## Verifikasi akhir PR #138
+
+Canonical runtime tree saat ini: `src/features/social/home/`, `feed/`, `blog/`, `stories/`, `live/`, `reels/`, ditambah `social-pages.js` / `social-pages.css` untuk Discover, Messages, Profile dan Settings. Folder `src/features/home/` hanya memiliki public marketing homepage.
+
+Audit batas kepemilikan/CSS dan browser regression dinyatakan lulus pada commit `0221b01113652329ccfe6dfabf130e510c3ca2b4`. Architecture checks, `npm test`, production build, serta Chromium audit 11 route × 3 viewport lulus. Bukti dan screenshot tersedia pada [PR #138](https://github.com/baguskristiansianturi/pluits/pull/138) dan [browser audit artifact](https://github.com/baguskristiansianturi/pluits/actions/runs/45457818960/artifacts/14951921051).
