@@ -128,50 +128,40 @@ test('shared page header background and divider bleed to viewport edges independ
 });
 
 
-test('Social Home discovery hierarchy uses one mixed Top 10 carousel and professional Around You cards before the feed', async () => {
+test('Social Home separates interest-led recommendations from all-category nearby discovery', async () => {
   const source = await readFile(homeJs, 'utf8');
   const css = await readFile(homeCss, 'utf8');
   const spec = await readFile(new URL('../../src/features/home/PAGE-SOCIAL-HOME-001.md', import.meta.url), 'utf8');
-  assert.match(source, /data-open-quick-search/);
-  assert.match(source, /data-quick-search-backdrop/);
-  assert.doesNotMatch(source, /class="global-quick-search"/);
-  assert.doesNotMatch(source, /class="global-unified-search"/);
-  assert.match(source, /const topTenItems = \[/);
-  const topTenBlock = source.split('const topTenItems = [')[1].split('];')[0];
-  assert.equal((topTenBlock.match(/\{name:/g) || []).length, 10);
-  assert.doesNotMatch(source, /topTenCategories/);
-  assert.equal((source.match(/class="global-top-ten-rail"/g) || []).length, 1);
-  assert.match(source, /data-top-ten-prev/);
-  assert.match(source, /data-top-ten-next/);
-  assert.match(source, /global-local-rating/);
-  assert.match(source, /global-local-copy/);
-  assert.match(source, /global-local-category/);
-  assert.match(source, /global-local-location/);
-  assert.match(source, /global-local-review/);
-  assert.match(source, /ULASAN PENGUNJUNG/);
+  const registry = await readFile(new URL('../../src/features/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
+
+  assert.match(source, /const recommendationItems = \[/);
+  assert.match(source, /Rekomendasi untuk Anda/);
+  assert.match(source, /data-interest-id=/);
+  assert.match(source, /interest=seafood/);
+  assert.match(source, /app=fluid-food/);
   assert.match(source, /const nearbyItems = \[/);
-  assert.ok(source.includes("streams + '</div>' +"));
-  assert.match(css, /\.global-top-ten-card\{[^}]*flex-basis:90vw/s);
-  assert.match(css, /\.global-top-ten-card\{[^}]*aspect-ratio:1\.42\/1/s);
-  assert.match(css, /\.global-local-review\{[^}]*border-left:2px solid var\(--pl-color-brand\)/s);
-  assert.match(css, /\.global-local-card\{[^}]*flex-basis:70vw/s);
-  assert.match(css, /\.global-search-backdrop\[hidden\]\{display:none\}/);
-  assert.match(source, /setTimeout\(advance,3200\)/);
-  assert.match(source, /new IntersectionObserver\(entries=>\{/);
-  assert.match(spec, /Top 10 discovery/);
-  assert.match(spec, /exactly one horizontal carousel containing ten mixed discovery cards/);
-  assert.match(spec, /Di sekitar Anda/);
+  assert.match(source, /Di sekitar Anda/);
+  assert.match(source, /scope=nearby&radius=5/);
+  assert.match(source, /Radius awal 5 km/);
+  assert.match(source, /Jangkauan diperluas bertahap/);
+  assert.match(source, /CONTOH KARTU/);
+  assert.match(source, /GPS belum terhubung/);
+  assert.doesNotMatch(source, /topTen|Top 10|global-top-ten/i);
+  assert.doesNotMatch(css, /global-top-ten/i);
+  assert.match(css, /\.global-interest-grid\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/s);
+  assert.match(css, /\.global-local-card--preview/);
+  assert.match(spec, /Rekomendasi untuk Anda/);
+  assert.match(spec, /seluruh kategori GeoDirectory/);
+  assert.match(registry, /HOME-DISCOVERY-INTEREST-001/);
+  assert.match(registry, /HOME-DISCOVERY-NEARBY-001/);
 });
 
-test('Top 10 stays inside the shared content frame and autoplay pauses offscreen', async () => {
-  const source = await readFile(homeJs, 'utf8');
-  const css = await readFile(homeCss, 'utf8');
-  assert.match(css, /HOME-PERFORMANCE-003/);
-  assert.match(css, /\.global-top-ten-rail\{[^}]*width:100%[^}]*max-width:100%[^}]*margin:0/s);
-  assert.match(css, /\.global-top-ten-card\{[^}]*max-height:168px/s);
-  assert.match(source, /new IntersectionObserver\(entries=>\{/);
-  assert.match(source, /document\.visibilityState==='visible'/);
-  assert.match(source, /setTimeout\(advance,3200\)/);
-  assert.match(source, /fetchpriority="low"/);
-  assert.match(css, /content-visibility:auto/);
+test('Nearby discovery preserves radius fallback and fair exposure requirements', async () => {
+  const spec = await readFile(new URL('../../src/features/home/PAGE-SOCIAL-HOME-001.md', import.meta.url), 'utf8');
+  const registry = await readFile(new URL('../../src/features/home/HOME-CAROUSEL-REGISTRY.md', import.meta.url), 'utf8');
+  assert.match(spec, /perluas bertahap/);
+  assert.match(spec, /Jelajah/);
+  assert.match(spec, /kesempatan/);
+  assert.match(registry, /Fair exposure/);
+  assert.match(registry, /never fill gaps with fabricated listings/);
 });
