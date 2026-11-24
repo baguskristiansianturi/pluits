@@ -36,3 +36,13 @@ Status rancangan: PROPOSED → IN-DESIGN → REVIEW → APPROVED.
 - Gift UX is simulated with an in-memory demo wallet only. Monetization rules, coin purchase, revenue split, creator payout, entitlement schema, and account verification data remain open; no production schema is inferred.
 - External URLs are not rendered as post links in the demo caption; @mention and #hashtag patterns remain plain social text.
 - Runtime and acceptance contract: src/features/home/SOCIAL-POST-CARD-INTERACTIONS-001.md.
+
+
+## Modular ownership — Blog, Reels, Stories, Live
+The Social Media ecosystem model now separates four content experiences into independent modules. Their product requirements, journeys, page inventories, acceptance criteria, and module-specific visual behavior are governed in:
+- `../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/01-BLOG/`
+- `../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/02-REELS/`
+- `../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/03-STORIES/`
+- `../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/04-LIVE/`
+
+Feed remains the aggregation/distribution surface, not the owner of the source modules' editorial, playback, expiry, or live-session behavior. Keep existing Feed and profile-tab decisions above intact. Shared visual standards continue to come from Platform UI Foundation.
