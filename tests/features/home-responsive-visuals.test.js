@@ -138,7 +138,7 @@ test('Social Home separates interest-led recommendations from all-category nearb
   assert.match(source, /const recommendationItems = \[/);
   assert.match(source, /Rekomendasi untuk Anda/);
   assert.match(source, /data-interest-id=/);
-  assert.match(source, /interest=seafood/);
+  assert.match(source, /id:'seafood'/);
   assert.match(source, /app=fluid-food/);
   assert.match(source, /const nearbyItems = \[/);
   assert.match(source, /Di sekitar Anda/);
