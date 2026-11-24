@@ -318,6 +318,6 @@ test('social content filters use icon and label pairs in the requested order', a
   const styles = await readFile(homeCss, 'utf8');
   assert.match(home, /\{id:'all',icon:'grid',label:'Semua'\},\{id:'reels',icon:'film',label:'Reel'\},\{id:'blog',icon:'book',label:'Blog'\},\{id:'live',icon:'radio',label:'Live'\}/);
   assert.match(home, /renderIcon\(tab\.icon\) \+ '<span>' \+ tab\.label/);
-  assert.match(home, /filter==='blog'\?kind!=='blog'/);
+  assert.match(home, /filter==='blog'&&kind==='blog'/);
   assert.match(styles, /\.global-content-tabs button\{[^}]*display:flex/);
 });
