@@ -96,7 +96,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
   ];
   const nearby = '<section class="global-section global-nearby" id="nearby">' +
     heading('Di sekitar Anda',null,'Lihat semua',routeHref('discover')+'?scope=nearby&radius=5') +
-    '<div class="global-local-rail">' + nearbyItems.map(item => {
+    '<div class="global-local-rail" aria-label="Kategori di sekitar Anda">' + nearbyItems.map(item => {
       const target=routeHref('discover')+'?scope=nearby&radius=5&category='+encodeURIComponent(item.filter);
       return '<a class="global-local-card global-local-card--preview" href="'+target+'"><div class="global-local-image"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"></div><span class="global-local-copy"><strong>'+item.category+'</strong></span></a>';
     }).join('') + '</div></section>';
