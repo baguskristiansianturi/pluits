@@ -156,3 +156,27 @@ Audit dan isolasi runtime Social Media hanya dinyatakan selesai bila:
 
 **Kesimpulan snapshot:** audit statis dependency/ownership telah menemukan titik coupling utama. Runtime isolation belum dimulai, browser baseline belum dibuktikan, dan Blog belum menjadi runtime module mandiri. Status keseluruhan tetap **IN PROGRESS**.
 undefined
+
+## Pembaruan runtime — 25 November 2026 (PR #138)
+
+Peta historis di atas mencatat kondisi sebelum pemindahan pertama. Pada branch implementasi PR #138, kepemilikan runtime telah dipindahkan sebagai berikut:
+
+```text
+src/features/
+├── home/                         # public marketing homepage only
+└── social/
+    ├── home/                     # Social Home page, CSS, spec, carousel registry
+    ├── feed/                     # post-card renderer, interaction handlers, CSS
+    ├── blog/                     # independent /blog/ route, page, CSS, README
+    ├── social-pages.js           # Discover, Messages, Profile, Settings (current combined surface)
+    └── social-pages.css
+```
+
+- `create-app.js` now mounts Social Home from `features/social/home/home-page.js`.
+- Feed post-card code and CSS are owned by `features/social/feed/`.
+- Blog has a public route `/blog/`, its own page module, category filtering, local search, and `.sm-blog-page` stylesheet namespace.
+- Social Home no longer renders Marketplace product previews, venue/merchant cards, service/transport/ticketing promotions, calendar blocks, or platform marketing sections. Its header/search now target Social Media experiences.
+- Social Home CSS is no longer imported directly by `main.js`; it is imported by the Social Home module.
+- Social-specific mobile geometry has been moved out of `design-system/mobile-layout-contract.css` into Social Home and Social Profile stylesheets. The shared contract retains platform gutter and Marketplace shell geometry only.
+
+This is an implemented ownership slice, not completion of all isolation. Remaining gaps: `social-pages.js` is still a combined runtime surface; Reels, Stories and Live do not yet have fully independent runtime modules/lifecycles; Social Home retains legacy `.global-*` selectors and unused styles from removed cross-domain sections; complete selector/consumer mapping and browser visual regression are still required. Blog content is preview-only; backend publishing, persistence, article detail and comments are not active.
