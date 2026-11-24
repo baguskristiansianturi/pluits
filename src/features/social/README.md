@@ -16,3 +16,7 @@ Only approved shared primitives may be imported from `src/design-system/`: brand
 
 ## Validation and status
 Run `npm test` and `npm run build`. Browser visual regression across mobile/tablet/desktop remains a separate release gate. See the canonical Social Media model and runtime audit under `PLUITS-MASTER-MODEL-APP/01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/`.
+
+
+## CSS ownership progress
+Social Home now retains only active Social-owned selectors and shared interaction primitives. Obsolete product, merchant, local-service, feature, calendar, old story, old Live and Blog-demo style rules have been removed from the Home stylesheet. Stories, Live and Reels now import their own stylesheets. Full root namespace cleanup and browser verification remain open.
