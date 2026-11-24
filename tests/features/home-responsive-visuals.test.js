@@ -137,6 +137,9 @@ test('Social Home discovery hierarchy uses one mixed Top 10 carousel and profess
   assert.doesNotMatch(source, /class="global-quick-search"/);
   assert.doesNotMatch(source, /class="global-unified-search"/);
   assert.match(source, /const topTenItems = \[/);
+  const topTenBlock = source.split('const topTenItems = [')[1].split('];')[0];
+  assert.equal((topTenBlock.match(/\{name:/g) || []).length, 10);
+  assert.doesNotMatch(source, /topTenCategories/);
   assert.equal((source.match(/class="global-top-ten-rail"/g) || []).length, 1);
   assert.match(source, /data-top-ten-prev/);
   assert.match(source, /data-top-ten-next/);
