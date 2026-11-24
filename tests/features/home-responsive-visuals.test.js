@@ -22,7 +22,7 @@ test('social home keeps illustrative content separated from interactive demo pos
   assert.match(source, /renderLivePreview\(\)/);
   assert.match(storiesSource, /export function renderStoriesRail/);
   assert.match(liveSource, /export function renderLivePreview/);
-  assert.match(liveSource, /data-content-kind=\\'live\\'/);
+  assert.ok(liveSource.includes('data-content-kind="live"'));
   assert.doesNotMatch(source, /global-product-demo-rail|global-marketplace-cta|global-products|global-features|global-calendar-block|global-about|global-live-demo-grid|global-blog-demo-grid/);
 });
 test('social home responsive styles cover narrow mobile, tablet, desktop and horizontal carousels', async () => {
