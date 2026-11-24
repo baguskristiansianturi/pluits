@@ -61,6 +61,13 @@ button:disabled {
   opacity: 0.65;
 }
 
+/* Shared card surface radius: one consistent 10px corner treatment.
+   Components can opt out only with data-card-radius="custom". */
+:where(article, div, section, a)[class*="-card"]:not([data-card-radius="custom"]),
+:where(article, div, section, a)[class~="card"]:not([data-card-radius="custom"]) {
+  border-radius: var(--pl-radius-card);
+}
+
 #app {
   min-height: 100vh;
 }
