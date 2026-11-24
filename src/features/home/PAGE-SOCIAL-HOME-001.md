@@ -68,3 +68,9 @@
 - Tautan aksi pada bagian discovery homepage menggunakan label **Jelajahi** dengan ikon mata terdaftar (`renderIcon('eye')`).
 - Tautan tersebut mengarahkan pengguna ke halaman Jelajah (`discover`) sebagai pusat eksplorasi; cakupan minat dan tempat sekitar tetap diteruskan melalui parameter konteks.
 - Perubahan hanya pada label/ikon aksi dan penamaan modifier CSS kompatibel; komposisi visual kartu discovery yang sudah ada tetap dipertahankan.
+
+
+### Homepage discovery micro-interactions — 24 November 2026
+- Aksi **Jelajahi** memakai warna muted dari token platform, bukan warna ink/heading. Hover, focus keyboard, dan active/touch memberi respons warna brand yang halus; animasi menghormati `prefers-reduced-motion`.
+- Jarak pada kartu Di sekitar Anda ditampilkan sebagai teks putih langsung di atas foto, tanpa badge/kapsul, border, latar, atau sudut membulat. Text-shadow halus menjaga kontras pada foto terang maupun gelap.
+- Komposisi kartu gambar penuh dan overlay informasi tetap dipertahankan.
