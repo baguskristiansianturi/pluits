@@ -959,3 +959,49 @@ body.global-search-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.global-interest-card>img{transition:none}}
 
 .global-content-tabs .global-content-tab-link{display:flex;flex:1;min-width:0;min-height:44px;align-items:center;justify-content:center;gap:6px;padding:0 7px;border-radius:var(--pl-radius-pill);color:var(--pl-color-muted);font-size:11px;font-weight:750;text-decoration:none;white-space:nowrap}.global-content-tabs .global-content-tab-link .ui-icon{width:18px;height:18px;flex:none}.global-content-tabs .global-content-tab-link span{overflow:hidden;text-overflow:ellipsis}.global-content-tabs .global-content-tab-link:focus-visible{outline:2px solid var(--pl-color-brand);outline-offset:2px}.global-content-tabs .global-content-tab-link:hover,.global-content-tabs .global-content-tab-link:active{background:var(--pl-color-brand-soft);color:var(--pl-color-ink)}
+
+
+/* Social Home owns its mobile rail and feed geometry; this must not live in the platform layout contract. */
+@media (max-width: 767px) {
+  .global-demo-rail,
+  .global-story-rail,
+  .global-people-rail {
+    width: calc(100% + 10px);
+    max-width: none;
+    margin-right: -10px;
+    padding-left: 0;
+    padding-right: 10px;
+    scroll-padding-inline: 0 10px;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .global-content-section:has(.global-post-list),
+  .global-content-section:has(.global-live-demo-grid),
+  .global-content-section:has(.global-blog-demo-grid) {
+    width: 100vw;
+    max-width: none;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .global-content-section:has(.global-post-list) .global-content-intro,
+  .global-content-section:has(.global-live-demo-grid) .global-content-intro,
+  .global-content-section:has(.global-blog-demo-grid) .global-content-intro {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .global-post-list {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .global-post-card,
+  .global-live-demo,
+  .global-blog-demo {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+}
