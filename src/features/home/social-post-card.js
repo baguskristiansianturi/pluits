@@ -73,9 +73,10 @@ let demoWallet = 500;
 
 function avatarMarkup(post) {
   const image = post.avatar ? '<img src="https://images.unsplash.com/' + escapeHtml(post.avatar) + '?auto=format&fit=crop&w=120&h=120&q=75" alt="" loading="lazy">' : '<span>' + escapeHtml((post.authorName || 'P').slice(0,1)) + '</span>';
-  const tierClass = post.membership === 'Premium' ? 'premium' : post.membership === 'Silver' ? 'silver' : post.membership === 'Gold' ? 'gold' : post.membership === 'Platinum' ? 'platinum' : 'priority';
+  const tierClass = post.membership === 'Premium' ? 'premium' : post.membership === 'Silver' ? 'silver' : post.membership === 'Gold' ? 'gold' : post.membership === 'Platinum' ? 'platinum' : post.membership === 'PLUITS Priority' ? 'priority' : '';
   const premiumMark = post.premium ? '<span class="pl-post-premium-mark" title="Premium" aria-label="Premium">✦</span>' : '';
-  return '<span class="pl-post-avatar-wrap"><span class="pl-post-avatar">' + image + '</span>' + premiumMark + '<span class="pl-post-tier pl-post-tier--' + tierClass + '" title="' + escapeHtml(post.membership) + '" aria-label="Membership ' + escapeHtml(post.membership) + '">' + escapeHtml(post.membershipMark || '•') + '</span></span>';
+  const tierMark = post.membership ? '<span class="pl-post-tier pl-post-tier--' + tierClass + '" title="' + escapeHtml(post.membership) + '" aria-label="Membership ' + escapeHtml(post.membership) + '">' + escapeHtml(post.membershipMark || '•') + '</span>' : '';
+  return '<span class="pl-post-avatar-wrap"><span class="pl-post-avatar">' + image + '</span>' + premiumMark + tierMark + '</span>';
 }
 function statusMarkup(post) {
   return post.verification === 'unverified'
