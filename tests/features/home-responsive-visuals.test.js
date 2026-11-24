@@ -15,7 +15,7 @@ test('social home keeps illustrative content separated from interactive demo pos
   assert.match(cardSource, /export const demoFeedPosts = \[/);
   assert.match(cardSource, /export function renderDemoFeed/);
   assert.match(cardSource, /Contoh postingan/);
-  assert.match(cardSource, /data demo/);
+  assert.match(cardSource, /data contoh/);
   assert.match(source, /function storyRail\(\)/);
   assert.match(source, /global-live-demo-grid/);
   assert.match(source, /global-blog-demo-grid/);
@@ -199,7 +199,8 @@ test('social post demo contains four distinct posts, sample comments/replies and
   assert.match(cardSource, /id:'demo-post-nadia'/);
   assert.match(cardSource, /id:'demo-post-dimas'/);
   assert.match(cardSource, /verification:'unverified'/);
-  assert.match(cardSource, /membership:'Premium'/);
+  assert.match(cardSource, /membership:'Gold'/);
+  assert.match(cardSource, /premium:true/);
   assert.match(cardSource, /membership:'Silver'/);
   assert.match(cardSource, /membership:'Platinum'/);
   assert.match(cardSource, /membership:'PLUITS Priority'/);
