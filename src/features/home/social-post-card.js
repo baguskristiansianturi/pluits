@@ -139,7 +139,7 @@ function createReplyForm(comment) {
   if(comment.querySelector('[data-reply-form]'))return;
   const form=document.createElement('form');form.className='pl-post-reply-form';form.dataset.replyForm='';
   form.innerHTML='<input type="text" maxlength="400" placeholder="Tulis balasan..." aria-label="Tulis balasan" data-reply-input><button type="submit">Balas</button>';
-  comment.querySelector('[data-post-comment-replies]')?.appendChild(form) || comment.querySelector('.pl-post-comment-replies').appendChild(form);
+  comment.querySelector('.pl-post-comment-replies').appendChild(form);
   form.querySelector('input')?.focus();
 }
 export function mountSocialPostInteractions(root) {
@@ -223,8 +223,6 @@ export function mountSocialPostInteractions(root) {
     }
     const reply=document.createElement('div');reply.className='pl-post-reply';const strong=document.createElement('strong');strong.textContent='Anda';const span=document.createElement('span');span.textContent=value;reply.append(strong,span);form.before(reply);form.remove();showToast(root,'Balasan ditambahkan ke preview.');
   },{signal:controller.signal});
-  root.querySelectorAll('[data-demo-video]').forEach((video)=>{
-    video.addEventListener('timeupdate',()=>{if(video.currentTime>=Number(video.dataset.videoLimit||10)){video.pause();video.currentTime=Number(video.dataset.videoLimit||10);showToast(root,'Preview video dibatasi hingga 10 detik.');}},{signal:controller.signal});
-  });
+  root.addEventListener('timeupdate',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]'))return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.pause();video.currentTime=limit;showToast(root,'Preview video dibatasi hingga 10 detik.');}},{capture:true,signal:controller.signal});
   return ()=>controller.abort();
 }
