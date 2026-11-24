@@ -89,3 +89,15 @@ Run `npm test` and `npm run build`. Verify `#/home` for guest and authenticated 
 - Feed/Reels/Live/Blog tetap menggunakan media full-bleed; teks dan metadata tetap memiliki inset 10px.
 - Aturan hanya berlaku pada Social Home mobile (<=767px); layout tablet dan desktop tidak diubah.
 - Pengujian regresi memeriksa gutter, bleed carousel, radius card, dan kontrak full-bleed feed.
+
+## Social Home carousel and content geometry — canonical contract
+
+The single mobile geometry source is `home-page.css`, marker `SOCIAL-HOME-GEOMETRY-004`. Do not add later overrides for its selectors. The mobile content gutter is the shared `--pl-page-gutter` token (10px). Each horizontal rail begins at that content edge and its scrollport extends through the trailing gutter to the viewport edge. The track retains its own card widths, scroll snapping and final-card reachability; a partial next card is intentional. Feed/Reels/Live/Blog remain full-width content surfaces, while their headings and text metadata retain the 10px inset.
+
+### Reusable carousel inventory
+
+The component IDs, selectors, viewport card sizing, gaps and content sources are registered in `HOME-CAROUSEL-REGISTRY.md`. Keep card data in the existing feature-owned data source and render through the registered component; do not create page-specific duplicate card markup or invent replacement datasets. Changes to geometry must update the registry and responsive regression tests in the same change.
+
+### Validation boundary
+
+Automated tests and production deployment verify source contracts and build output. They do not replace Android visual acceptance at 320/360/390/430px and tablet/desktop checks.
