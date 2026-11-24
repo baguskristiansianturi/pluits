@@ -908,6 +908,7 @@
   .global-home-page > .global-home-main { box-sizing:border-box; width:100%; max-width:none; min-width:0; margin:0; padding-inline:var(--home-gutter)}
   .global-home-main > * { min-width:0}
   .global-quick-search { box-sizing:border-box; width:100vw; max-width:100vw; margin-inline:calc(50% - 50vw); padding:5px 10px 6px; gap:6px; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x mandatory}
+  .global-quick-search > a { min-height:34px; padding-inline:9px; gap:5px; border:1px solid var(--pl-color-border); border-radius:7px; background:#fff; }
   .global-location-row { margin:30px 0 8px; padding-inline:0}
   .global-unified-search { margin:0 0 24px}
   .global-section-heading { margin:0 0 12px; padding-inline:0; gap:10px}
