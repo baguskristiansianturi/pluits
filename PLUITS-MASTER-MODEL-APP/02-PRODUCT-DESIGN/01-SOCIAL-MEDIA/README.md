@@ -46,3 +46,7 @@ The Social Media ecosystem model now separates four content experiences into ind
 - `../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/04-LIVE/`
 
 Feed remains the aggregation/distribution surface, not the owner of the source modules' editorial, playback, expiry, or live-session behavior. Keep existing Feed and profile-tab decisions above intact. Shared visual standards continue to come from Platform UI Foundation.
+
+
+## Aturan pengalaman Social Media yang sedang berjalan
+Gunakan [Aturan Pengalaman Social Media](../../01-ECOSYSTEM-MODELS/01-SOCIAL-MEDIA/00-ATURAN-PENGALAMAN/README.md) sebagai catatan aturan lintas permukaan aplikasi yang disusun dari implementasi dan keputusan produk yang sudah ada. Dokumen tersebut bukan permintaan redesign. Perubahan UI hanya dilakukan melalui scope perubahan tersendiri.
