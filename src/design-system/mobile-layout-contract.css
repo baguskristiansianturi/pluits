@@ -8,13 +8,17 @@
   .mp-nav,
   .mp-main { width: calc(100% - 10px); }
 
-  /* Homepage horizontal rails: 5px leading inset, natural full-width trailing reach. */
+  /* Horizontal rails: 5px leading inset; trailing edge remains swipe-accessible. */
   .global-demo-rail,
   .global-story-rail,
-  .global-product-demo-rail {
+  .global-product-demo-rail,
+  .global-people-rail,
+  .global-local-rail {
     padding-left: 5px;
     padding-right: 5px;
     scroll-padding-inline: 5px;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
   }
   .global-product-demo-rail {
     width: 100vw;
@@ -25,9 +29,9 @@
     padding-right: 5px;
   }
 
-  /* Full-bleed content families: escape the page gutter without changing their internals. */
+  /* Feed, Reels, Live and Blog are full-viewport content surfaces. */
   .global-content-section:has(.global-post-list),
-  .global-content-section:has(.global-live-demo),
+  .global-content-section:has(.global-live-demo-grid),
   .global-content-section:has(.global-blog-demo-grid) {
     width: 100vw;
     margin-left: calc(50% - 50vw);
@@ -36,7 +40,7 @@
     padding-right: 0;
   }
   .global-content-section:has(.global-post-list) .global-content-intro,
-  .global-content-section:has(.global-live-demo) .global-content-intro,
+  .global-content-section:has(.global-live-demo-grid) .global-content-intro,
   .global-content-section:has(.global-blog-demo-grid) .global-content-intro {
     margin-left: 5px;
     margin-right: 5px;
@@ -73,7 +77,7 @@
     flex: 0 0 min(280px, 82vw);
   }
 
-  /* Feed, Reels and Blog panels are media/content surfaces, not inset reading columns. */
+  /* Profile Feed, Reels and Blog panels use the viewport width, not the reading gutter. */
   .social-profile-page .social-profile-tab-panel[data-profile-panel="feed"],
   .social-profile-page .social-profile-tab-panel[data-profile-panel="reels"],
   .social-profile-page .social-profile-tab-panel[data-profile-panel="blog"] {
