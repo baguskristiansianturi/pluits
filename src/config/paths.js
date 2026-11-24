@@ -1,4 +1,6 @@
 export const APP_ROUTES = Object.freeze({
+  venue: 'hangout-leisure',
+  restaurant: 'restaurant',
   home: '',
   marketplace: 'marketplace',
   social: 'social',

@@ -62,15 +62,12 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     }).join('') + '</div></section>';
   // Named layout fixtures only; replace with GeoDirectory records and calculated distances when connected.
   const nearbyItems = [
-    {id:'atlas-beach-club',name:'Atlas Beach Club',category:'Beach Club',location:'Berawa, Canggu',distance:'2,4 km',trust:'Ulasan pengunjung',description:'Beach club tepi pantai dengan kolam, restoran, dan hiburan.',image:'photo-1510414842594-a61c69b5ae57'},
-    {id:'la-brisa-bali',name:'La Brisa Bali',category:'Beach Club',location:'Echo Beach, Canggu',distance:'3,1 km',trust:'Ulasan pengunjung',description:'Tempat bersantai di tepi pantai dengan suasana tropis.',image:'photo-1507525428034-b723cf961d3e'},
-    {id:'finns-beach-club',name:'FINNS Beach Club',category:'Beach Club',location:'Berawa, Canggu',distance:'1,8 km',trust:'Ulasan pengunjung',description:'Beach club dengan kolam, pilihan bersantap, dan pemandangan laut.',image:'photo-1500375592092-40eb2168fd21'},
-    {id:'the-lawn-canggu',name:'The Lawn Canggu',category:'Beach Club',location:'Pantai Batu Bolong, Canggu',distance:'2,7 km',trust:'Ulasan pengunjung',description:'Ruang tepi pantai untuk menikmati suasana dan matahari terbenam.',image:'photo-1473116763249-2faaef81ccda'}
+    {id:'the-garden-table',name:'The Garden Table',category:'Restaurant · Brunch & Dining',location:'Seminyak, Bali',distance:'Preview',trust:'Profil restoran pratinjau',description:'Jelajahi suasana, area bersantap, menu, dan pengalaman di The Garden Table.',image:'photo-1517248135467-4c7edcad34c4',route:'restaurant'}
   ];
   const nearby = '<section class="global-section global-nearby" id="nearby">' +
     heading('Di sekitar Anda',null,'Jelajahi',routeHref('discover')+'?scope=nearby&radius=5') +
     '<div class="global-local-rail" aria-label="Tempat di sekitar Anda">' + nearbyItems.map(item => {
-      const target=routeHref('discover')+'?scope=nearby&radius=5&place='+encodeURIComponent(item.id);
+      const target=item.route ? routeHref(item.route) : routeHref('discover')+'?scope=nearby&radius=5&place='+encodeURIComponent(item.id);
       return '<a class="global-local-card global-local-card--listing global-local-card--preview" href="'+target+'"><div class="global-local-image"><img src="https://images.unsplash.com/'+item.image+'?auto=format&fit=crop&w=760&q=78" alt="" loading="lazy" decoding="async" fetchpriority="low"><span class="global-local-distance">'+item.distance+'</span></div><span class="global-local-copy"><small class="global-local-category">'+item.category+' · '+item.location+'</small><strong>'+item.name+'</strong><span class="global-local-trust">'+renderIcon('message')+'<span>'+item.trust+'</span></span><em>'+item.description+'</em></span></a>';
     }).join('') + '</div></section>';
   const streams = '<section class="global-content-section" id="content-all" data-content-stream><div class="global-post-list" data-live-feed>' + renderDemoFeed('feed') + '</div>' + demoContent('live').replace(/<article class="global-live-demo"/g,'<article class="global-live-demo" data-content-kind="live"') + '</section>';
