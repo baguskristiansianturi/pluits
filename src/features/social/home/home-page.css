@@ -573,6 +573,9 @@
    Kept inside the Social Home root; does not alter Stories or shared app navigation. */
 @media (max-width: 767px) {
   /* Keep the tab's sticky scrollport tied to the page viewport; the page root clips horizontal bleed. */
+  .global-home-page > .global-home-main {
+    overflow: visible;
+  }
   .global-home-page .global-social-area {
     overflow: visible;
   }
