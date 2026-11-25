@@ -284,7 +284,7 @@ export function mountSocialPostInteractions(root) {
     if(button.matches('[data-post-more]')){
       const menu=card.querySelector('[data-post-menu]');closePanels(card,menu);menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));return;
     }
-    if(button.matches('[data-post-save]')){button.textContent=button.dataset.saved==='true'?'Simpan postingan':'Postingan tersimpan';button.dataset.saved=button.dataset.saved==='true'?'false':'true';showToast(root,button.dataset.saved==='true'?'Postingan disimpan .':'Postingan dihapus dari simpanan .');return;}
+    if(button.matches('[data-post-save]')){button.textContent=button.dataset.saved==='true'?'Simpan postingan':'Postingan tersimpan';button.dataset.saved=button.dataset.saved==='true'?'false':'true';showToast(root,button.dataset.saved==='true'?'Postingan disimpan.':'Postingan dihapus dari simpanan.');return;}
     if(button.matches('[data-post-hide]')){card.classList.toggle('is-demo-hidden');showToast(root,card.classList.contains('is-demo-hidden')?'Postingan disembunyikan dari feed.':'Postingan ditampilkan kembali.');return;}
     if(button.matches('[data-post-report]')){showToast(root,'Laporan dicatat.');closePanels(card);return;}
     if(button.matches('[data-reaction-summary]')){showToast(root,'Reaksi yang tersedia: Like, Love, Haha, Wow, Sad, dan Angry.');return;}
@@ -292,8 +292,8 @@ export function mountSocialPostInteractions(root) {
     if(button.matches('[data-comment-like]')){const count=button.querySelector('span'),active=button.classList.toggle('is-active');count.textContent=Math.max(0,Number(count.textContent)+(active?1:-1));button.setAttribute('aria-pressed',String(active));return;}
     if(button.matches('[data-reply-comment]')){createReplyForm(button.closest('[data-comment-id]'));return;}
     if(button.matches('[data-comment-more]')){const comment=button.closest('[data-comment-id]');let menu=comment.querySelector('[data-comment-menu]');if(!menu){menu=document.createElement('div');menu.className='pl-post-comment-menu';menu.dataset.commentMenu='';menu.innerHTML='<button type="button" data-comment-copy>Salin komentar</button><button type="button" data-comment-report>Laporkan komentar</button>';comment.querySelector('.pl-post-comment-tools').appendChild(menu);}menu.hidden=!menu.hidden;return;}
-    if(button.matches('[data-comment-copy]')){showToast(root,'Teks komentar siap disalin .');return;}
-    if(button.matches('[data-comment-report]')){showToast(root,'Laporan komentar .');return;}
+    if(button.matches('[data-comment-copy]')){showToast(root,'Teks komentar siap disalin.');return;}
+    if(button.matches('[data-comment-report]')){showToast(root,'Laporan komentar dikirim.');return;}
   },{signal:controller.signal});
   root.addEventListener('submit',(event)=>{
     const form=event.target.closest('[data-comment-form],[data-reply-form]');
@@ -306,9 +306,9 @@ export function mountSocialPostInteractions(root) {
       comment.innerHTML='<div class="pl-post-comment-avatar">A</div><div class="pl-post-comment-body"><div class="pl-post-comment-bubble"><strong>Anda</strong><p></p></div><div class="pl-post-comment-tools"><button type="button" data-comment-like>♡ <span>0</span></button><button type="button" data-reply-comment>Balas</button><button type="button" data-comment-more aria-label="Opsi komentar">'+renderIcon('moreVertical')+'</button></div><div class="pl-post-comment-replies"></div></div>';
       comment.querySelector('p').textContent=value;list.appendChild(comment);input.value='';
       const count=card.querySelector('[data-post-comment-count]');count.textContent=Number(count.textContent)+1;card.querySelectorAll('[data-overlay-comment-count]').forEach((node)=>node.textContent=count.textContent);
-      showToast(root,'Komentar ditambahkan ke .');return;
+      showToast(root,'Komentar ditambahkan.');return;
     }
-    const reply=document.createElement('div');reply.className='pl-post-reply is-right';const bubble=document.createElement('div');bubble.className='pl-post-reply-bubble';const strong=document.createElement('strong');strong.textContent='Anda';const span=document.createElement('span');span.textContent=value;bubble.append(strong,span);const avatar=document.createElement('div');avatar.className='pl-post-reply-avatar';avatar.textContent='A';reply.append(bubble,avatar);form.before(reply);form.remove();showToast(root,'Balasan ditambahkan ke .');
+    const reply=document.createElement('div');reply.className='pl-post-reply is-right';const bubble=document.createElement('div');bubble.className='pl-post-reply-bubble';const strong=document.createElement('strong');strong.textContent='Anda';const span=document.createElement('span');span.textContent=value;bubble.append(strong,span);const avatar=document.createElement('div');avatar.className='pl-post-reply-avatar';avatar.textContent='A';reply.append(bubble,avatar);form.before(reply);form.remove();showToast(root,'Balasan ditambahkan.');
   },{signal:controller.signal});
   root.addEventListener('play',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]'))return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.currentTime=0;video.dataset.demoCapped='false';}},{capture:true,signal:controller.signal});
   root.addEventListener('timeupdate',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]')||video.dataset.demoCapped==='true')return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.dataset.demoCapped='true';video.pause();video.currentTime=limit;showToast(root,'Video diputar hingga 10 detik.');}},{capture:true,signal:controller.signal});
