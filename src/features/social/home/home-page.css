@@ -732,3 +732,13 @@
   .global-home-page > .global-header { transition: none; }
   .global-home-page .global-content-tabs .global-content-refresh.is-refreshing .ui-icon { animation: none; }
 }
+
+
+/* SOCIAL HOME CONTENT FLOW — keep product content directly beneath the tabs. */
+.global-home-page .global-composer { order: 2; }
+.global-home-page .global-content-tabs { margin-bottom: 4px; }
+.global-home-page .global-content-section { padding-top: 4px; }
+@media (max-width: 767px) {
+  .global-home-page .global-content-tabs { margin-bottom: 4px; }
+  .global-home-page .global-content-section { padding-top: 4px; }
+}
