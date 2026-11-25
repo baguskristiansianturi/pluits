@@ -126,7 +126,8 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
       const areaBottom=socialArea.getBoundingClientRect().bottom;
       const bottomChromeSpace=parseFloat(getComputedStyle(pageShell).paddingBottom)||0;
       const handoffOffset=headerHeight+4;
-      const tabsOwnStickyLayer=tabsRect.top<=handoffOffset+1&&areaBottom>tabsRect.height+bottomChromeSpace+1;
+      const contentStillExtendsBelowViewport=areaBottom>window.innerHeight-bottomChromeSpace;
+      const tabsOwnStickyLayer=tabsRect.top<=handoffOffset+1&&contentStillExtendsBelowViewport;
       pageShell.classList.toggle('has-content-tabs-pinned',tabsOwnStickyLayer);
     });
   };
