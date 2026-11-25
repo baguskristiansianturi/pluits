@@ -31,7 +31,7 @@ const pageErrors = [];
 page.on('pageerror', error => pageErrors.push(error.message));
 
 try {
-  await page.setViewportSize({ width: 360, height: 800 });
+  await page.setViewportSize({ width: 320, height: 800 });
   await page.goto(base + 'social/', { waitUntil: 'domcontentloaded' });
   await page.locator('.global-home-page').waitFor({ state: 'visible', timeout: 20000 });
   if (!(await page.getByText('Orang yang mungkin Anda kenal').count())) {
