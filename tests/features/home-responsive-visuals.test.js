@@ -16,7 +16,7 @@ test('social home keeps feed fixtures product-ready without development labels',
   assert.match(source, /renderDemoFeed\('feed'\)/);
   assert.match(cardSource, /export const demoFeedPosts = \[/);
   assert.match(cardSource, /export function renderDemoFeed/);
-  assert.doesNotMatch(cardSource, /Contoh postingan|data contoh|UJI UI\\s*\\/\\s*UX|Contoh UI|interaksi demo/);
+  assert.doesNotMatch(cardSource, /Contoh postingan|data contoh|UJI UI|Contoh UI|interaksi demo/);
   assert.doesNotMatch(source, /global-composer is-guest|Setiap cerita punya ruang/);
   assert.match(source, /renderStoriesRail\(\)/);
   assert.match(source, /renderLivePreview\(\)/);
