@@ -160,7 +160,7 @@ function renderMenu() {
   return '<div class="pl-post-menu" data-post-menu hidden><button type="button" data-post-save>Simpan postingan</button><button type="button" data-post-hide>Sembunyikan dari feed</button><button type="button" data-post-report>Laporkan postingan</button></div>';
 }
 function renderSharePanel(post) {
-  return '<section class="pl-post-share-panel" data-share-panel hidden><strong>Bagikan postingan</strong><button type="button" data-share-circle>Bagikan ke Circle</button><button type="button" data-share-copy>Salin tautan demo</button><button type="button" data-share-close>Tutup</button></section>';
+  return '<section class="pl-post-share-panel" data-share-panel hidden><strong>Bagikan postingan</strong><button type="button" data-share-circle>Bagikan ke Circle</button><button type="button" data-share-copy>Salin tautan</button><button type="button" data-share-close>Tutup</button></section>';
 }
 function renderCaption(value) {
   const escaped = escapeHtml(value).replace(/\\n/g,'<br>');
@@ -285,9 +285,9 @@ export function mountSocialPostInteractions(root) {
       const menu=card.querySelector('[data-post-menu]');closePanels(card,menu);menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));return;
     }
     if(button.matches('[data-post-save]')){button.textContent=button.dataset.saved==='true'?'Simpan postingan':'Postingan tersimpan';button.dataset.saved=button.dataset.saved==='true'?'false':'true';showToast(root,button.dataset.saved==='true'?'Postingan disimpan .':'Postingan dihapus dari simpanan .');return;}
-    if(button.matches('[data-post-hide]')){card.classList.toggle('is-demo-hidden');showToast(root,card.classList.contains('is-demo-hidden')?'Postingan disembunyikan dari .':'Postingan ditampilkan kembali.');return;}
+    if(button.matches('[data-post-hide]')){card.classList.toggle('is-demo-hidden');showToast(root,card.classList.contains('is-demo-hidden')?'Postingan disembunyikan dari feed.':'Postingan ditampilkan kembali.');return;}
     if(button.matches('[data-post-report]')){showToast(root,'Laporan dicatat.');closePanels(card);return;}
-    if(button.matches('[data-reaction-summary]')){showToast(root,'Reaksi contoh: Like, Love, Haha, Wow, Sad, dan Angry.');return;}
+    if(button.matches('[data-reaction-summary]')){showToast(root,'Reaksi yang tersedia: Like, Love, Haha, Wow, Sad, dan Angry.');return;}
     if(button.matches('[data-comments-toggle]')){const list=card.querySelector('[data-comment-list]'),collapsed=list.hidden;list.hidden=!collapsed;button.textContent=collapsed?'Sembunyikan':'Tampilkan';button.setAttribute('aria-expanded',String(collapsed));return;}
     if(button.matches('[data-comment-like]')){const count=button.querySelector('span'),active=button.classList.toggle('is-active');count.textContent=Math.max(0,Number(count.textContent)+(active?1:-1));button.setAttribute('aria-pressed',String(active));return;}
     if(button.matches('[data-reply-comment]')){createReplyForm(button.closest('[data-comment-id]'));return;}
@@ -311,6 +311,6 @@ export function mountSocialPostInteractions(root) {
     const reply=document.createElement('div');reply.className='pl-post-reply is-right';const bubble=document.createElement('div');bubble.className='pl-post-reply-bubble';const strong=document.createElement('strong');strong.textContent='Anda';const span=document.createElement('span');span.textContent=value;bubble.append(strong,span);const avatar=document.createElement('div');avatar.className='pl-post-reply-avatar';avatar.textContent='A';reply.append(bubble,avatar);form.before(reply);form.remove();showToast(root,'Balasan ditambahkan ke .');
   },{signal:controller.signal});
   root.addEventListener('play',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]'))return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.currentTime=0;video.dataset.demoCapped='false';}},{capture:true,signal:controller.signal});
-  root.addEventListener('timeupdate',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]')||video.dataset.demoCapped==='true')return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.dataset.demoCapped='true';video.pause();video.currentTime=limit;showToast(root,'Preview video dibatasi hingga 10 detik.');}},{capture:true,signal:controller.signal});
+  root.addEventListener('timeupdate',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]')||video.dataset.demoCapped==='true')return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.dataset.demoCapped='true';video.pause();video.currentTime=limit;showToast(root,'Video diputar hingga 10 detik.');}},{capture:true,signal:controller.signal});
   return ()=>controller.abort();
 }
