@@ -2,6 +2,5 @@
 .sm-reel-video { display: block; width: 100%; height: auto; max-width: 100%; background: #111; object-fit: contain; }
 .sm-reel-video-note { display: block; padding: 6px 10px; color: var(--pl-color-muted); font-size: 9px; line-height: 1.4; }
 
-/* Playback behavior only — keep the established feed card geometry unchanged. */
-.sm-reel-video.is-reel-autoplay{display:block;cursor:pointer;object-fit:cover;}
-.sm-reel-video.is-long-video{display:block;object-fit:contain;}
+/* Reel cards open the dedicated viewer when selected. */
+.sm-reel-video.is-reel-autoplay{cursor:pointer;}
