@@ -168,7 +168,8 @@ function renderCaption(value) {
 }
 function renderMedia(post) {
   const horizontal=post.orientation==='horizontal'||post.type==='blog';
-  const media=post.type==='video'
+  const hasVideoMedia=post.type==='video'||post.mediaType==='video'||post.media_type==='video';
+  const media=hasVideoMedia
     ? renderVideoMedia(post, escapeHtml)
     : '<img class="pl-post-media" src="'+escapeHtml(post.mediaUrl)+'" alt="'+(post.type==='blog'?'Sampul artikel ':'Foto postingan ')+escapeHtml(post.authorName)+'" loading="lazy" decoding="async">';
   const actions='<div class="pl-post-media-actions">'+
@@ -182,7 +183,7 @@ function renderMedia(post) {
   const blog=post.type==='blog'
     ? '<section class="pl-post-blog-body"><div class="pl-post-blog-meta"><span>'+escapeHtml(post.blogCategory||'BLOG')+'</span><span>'+escapeHtml(post.readTime||'4 menit baca')+'</span></div><h2>'+escapeHtml(post.blogTitle||'Cerita dari komunitas')+'</h2><p>'+escapeHtml(post.blogExcerpt||post.caption)+'</p><div class="pl-post-blog-full" data-blog-full hidden>'+escapeHtml(post.blogBody||post.blogExcerpt||post.caption).replace(/\\n/g,'<br>')+'</div><button type="button" class="pl-post-blog-read" data-blog-expand aria-expanded="false">Baca selengkapnya '+renderIcon('chevronDown')+'</button></section>'
     : '';
-  const mediaWrap='<div class="pl-post-media-wrap'+(post.type==='video'?' pl-post-media-wrap--video':'')+'">'+media+'</div>';
+  const mediaWrap='<div class="pl-post-media-wrap'+(hasVideoMedia?' pl-post-media-wrap--video':'')+'">'+media+'</div>';
   if(horizontal){
     return mediaWrap+blog+'<div class="pl-post-horizontal-controls">'+actions+giftsReceived+panels+'</div>';
   }
