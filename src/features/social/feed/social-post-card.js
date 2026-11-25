@@ -1,7 +1,7 @@
 import { renderIcon } from '../../../design-system/icons.js';
 import { routeHref } from '../../../config/paths.js';
 import './social-post-card.css';
-import { getVideoContentKind, isReelPost, renderVideoMedia } from '../reels/reel-media.js';
+import { getVideoContentKind, isReelPost, renderVideoMedia, mountReelPlayback } from '../reels/reel-media.js';
 
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 
@@ -229,6 +229,11 @@ export function mountSocialPostInteractions(root) {
   demoWallet=500;
   root.querySelectorAll('[data-demo-wallet]').forEach((wallet)=>wallet.textContent=demoWallet);
   const controller=new AbortController();
+  const unmountReelPlayback=mountReelPlayback(root);
+  root.addEventListener('click',(event)=>{
+    const reelVideo=event.target.closest?.('video[data-reel-autoplay]');
+    if(reelVideo){const reelCard=reelVideo.closest('[data-post-card]');window.location.href=routeHref('reels')+(reelCard?.dataset.postId?'?id='+encodeURIComponent(reelCard.dataset.postId):'');return;}
+  },{signal:controller.signal});
   root.addEventListener('click',(event)=>{
     const button=event.target.closest('button');
     if(!button||!root.contains(button))return;
@@ -310,7 +315,5 @@ export function mountSocialPostInteractions(root) {
     }
     const reply=document.createElement('div');reply.className='pl-post-reply is-right';const bubble=document.createElement('div');bubble.className='pl-post-reply-bubble';const strong=document.createElement('strong');strong.textContent='Anda';const span=document.createElement('span');span.textContent=value;bubble.append(strong,span);const avatar=document.createElement('div');avatar.className='pl-post-reply-avatar';avatar.textContent='A';reply.append(bubble,avatar);form.before(reply);form.remove();showToast(root,'Balasan ditambahkan.');
   },{signal:controller.signal});
-  root.addEventListener('play',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]'))return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.currentTime=0;video.dataset.demoCapped='false';}},{capture:true,signal:controller.signal});
-  root.addEventListener('timeupdate',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]')||video.dataset.demoCapped==='true')return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.dataset.demoCapped='true';video.pause();video.currentTime=limit;showToast(root,'Video diputar hingga 10 detik.');}},{capture:true,signal:controller.signal});
-  return ()=>controller.abort();
+  return ()=>{controller.abort();unmountReelPlayback();};
 }
