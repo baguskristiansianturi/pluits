@@ -43,7 +43,7 @@ try {
     const items = [...nav.children];
     const rects = items.map(item => item.getBoundingClientRect());
     const labels = items.map(item => {
-      const span = item.querySelector('span');
+      const span = item.querySelector('span:not(.ui-icon)');
       return span ? getComputedStyle(span).position === 'absolute' && span.getBoundingClientRect().width <= 1 : false;
     });
     return {
