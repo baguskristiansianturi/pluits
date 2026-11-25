@@ -14,3 +14,13 @@
 5. Halaman yang belum memiliki layanan backend harus menyampaikan status kosong atau belum tersedia secara jujur.
 6. Jangan membuat halaman baru atau mengubah alur navigasi tanpa scope implementasi tersendiri.
 7. Saat mengubah route di masa depan, audit deep link, navigasi bawah, autentikasi, tombol kembali, dan konsumen lintas halaman.
+
+
+## Tab konten Social Home
+- Urutan lima aksi tetap: Semua, Reel, Blog, Live, Perbarui.
+- Pada viewport mobile, kelima aksi wajib berada dalam satu baris lima kolom yang setara; hitung ruang mulai dari lebar mobile terkecil yang didukung (320px), termasuk gutter dan safe area.
+- Tampilan mobile menggunakan ikon saja. Nama aksi tetap tersedia melalui accessible name/label dan tooltip yang sesuai; jangan menampilkan teks visual di samping ikon.
+- Ikon Perbarui memakai aksen warna yang berbeda dari ikon navigasi/filter lain, tanpa mengubah warna global token.
+- Header Social Home sticky sejak awal. Saat tab konten mencapai area atas viewport, header disembunyikan dan tab mengambil alih lapisan sticky. Sticky tab dibatasi oleh kontainer konten Social Home; setelah kontainer berakhir, tab berhenti dan header kembali terlihat.
+- Perilaku handoff hanya dimiliki Social Home, bukan shared navbar atau halaman modul lain.
+- Perubahan tab tidak boleh mengubah Stories rail, avatar Stories, Feed card, maupun shell/navigation lintas modul.

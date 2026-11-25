@@ -33,7 +33,7 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
     '<main class="pl-page-main home-main global-home-main"><button type="button" class="global-home-search-entry" data-open-quick-search><span>' + renderIcon('search') + '</span><span><strong>Cari di Social Media</strong></span><b>' + renderIcon('arrow') + '</b></button>' +
         '<div class="global-social-area">' + discovery +
     '<section class="global-section global-stories" id="stories">' + heading('Cerita dari circle Anda','Momen terbaru dari orang-orang di circle Anda.') + renderStoriesRail() + '</section>' +
-    '<nav class="global-content-tabs" data-content-tabs aria-label="Filter konten">' + contentTabs.map((tab,i)=>tab.id==='blog'?'<a class="global-content-tab-link" href="' + routeHref('blog') + '" aria-label="Buka Blog">' + renderIcon(tab.icon) + '<span>' + tab.label + '</span></a>':'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-label="' + tab.label + '" aria-pressed="' + (i===0?'true':'false') + '">' + renderIcon(tab.icon) + '<span>' + tab.label + '</span></button>').join('') + '<button type="button" class="global-content-refresh" data-feed-refresh aria-label="Perbarui konten" title="Perbarui">' + renderIcon('refresh') + '<span data-feed-refresh-label>Perbarui</span></button></nav>' + composerMarkup +
+    '<nav class="global-content-tabs" data-content-tabs aria-label="Filter konten">' + contentTabs.map((tab,i)=>tab.id==='blog'?'<a class="global-content-tab-link" href="' + routeHref('blog') + '" aria-label="Buka Blog" title="Blog">' + renderIcon(tab.icon) + '<span>' + tab.label + '</span></a>':'<button type="button" data-content-tab="' + tab.id + '" class="' + (i===0?'is-active':'') + '" aria-label="' + tab.label + '" aria-pressed="' + (i===0?'true':'false') + '">' + renderIcon(tab.icon) + '<span>' + tab.label + '</span></button>').join('') + '<button type="button" class="global-content-refresh" data-feed-refresh aria-label="Perbarui konten" title="Perbarui">' + renderIcon('refresh') + '<span data-feed-refresh-label>Perbarui</span></button></nav>' + composerMarkup +
     streams + '</div>' +
     '</main>' +
     quickSearchSheet() + '</div>';
@@ -107,7 +107,34 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
       finally{submit.disabled=false;}
     });
   }
+  const pageShell=root.querySelector('.global-home-page');
+  const pageHeader=root.querySelector('[data-global-header]');
+  const contentTabsNav=root.querySelector('[data-content-tabs]');
+  const socialArea=root.querySelector('.global-social-area');
+  let stickyHandoffFrame=0;
+  const updateStickyHandoff=()=>{
+    if(stickyHandoffFrame)return;
+    stickyHandoffFrame=window.requestAnimationFrame(()=>{
+      stickyHandoffFrame=0;
+      if(!pageShell||!pageHeader||!contentTabsNav||!socialArea)return;
+      if(!window.matchMedia('(max-width: 767px)').matches){
+        pageShell.classList.remove('has-content-tabs-pinned');
+        return;
+      }
+      const headerHeight=pageHeader.getBoundingClientRect().height;
+      const tabsRect=contentTabsNav.getBoundingClientRect();
+      const areaBottom=socialArea.getBoundingClientRect().bottom;
+      const bottomChromeSpace=parseFloat(getComputedStyle(pageShell).paddingBottom)||0;
+      const handoffOffset=headerHeight+4;
+      const contentStillExtendsBelowViewport=areaBottom>window.innerHeight-bottomChromeSpace;
+      const tabsOwnStickyLayer=tabsRect.top<=handoffOffset+1&&contentStillExtendsBelowViewport;
+      pageShell.classList.toggle('has-content-tabs-pinned',tabsOwnStickyLayer);
+    });
+  };
+  window.addEventListener('scroll',updateStickyHandoff,{passive:true});
+  window.addEventListener('resize',updateStickyHandoff);
+  updateStickyHandoff();
   loadFeed();
   root.querySelector('[data-feed-refresh]')?.addEventListener('click',async()=>{const refresh=root.querySelector('[data-feed-refresh]'),label=root.querySelector('[data-feed-refresh-label]');if(refresh?.classList.contains('is-refreshing'))return;window.scrollTo({top:0,behavior:'smooth'});refresh?.classList.add('is-refreshing');if(label)label.textContent='Memperbarui…';const minimumDelay=new Promise(resolve=>window.setTimeout(resolve,1500));try{await Promise.all([loadFeed(),minimumDelay]);}finally{refresh?.classList.remove('is-refreshing');if(label)label.textContent='Perbarui';}});
-  return ()=>{controller.abort();observer?.disconnect();unmountSocialPostInteractions();document.body.classList.remove('global-search-open');};
+  return ()=>{controller.abort();observer?.disconnect();window.removeEventListener('scroll',updateStickyHandoff);window.removeEventListener('resize',updateStickyHandoff);if(stickyHandoffFrame)window.cancelAnimationFrame(stickyHandoffFrame);pageShell?.classList.remove('has-content-tabs-pinned');unmountSocialPostInteractions();document.body.classList.remove('global-search-open');};
 }

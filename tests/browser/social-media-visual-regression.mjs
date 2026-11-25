@@ -6,6 +6,7 @@ const output = 'artifacts/social-media-browser-audit';
 await mkdir(output, { recursive: true });
 
 const viewports = [
+  { name: 'mobile-smallest', width: 320, height: 800 },
   { name: 'mobile', width: 360, height: 800 },
   { name: 'tablet', width: 768, height: 1024 },
   { name: 'desktop', width: 1440, height: 900 }
@@ -30,11 +31,78 @@ const pageErrors = [];
 page.on('pageerror', error => pageErrors.push(error.message));
 
 try {
-  await page.setViewportSize({ width: 360, height: 800 });
+  await page.setViewportSize({ width: 320, height: 800 });
   await page.goto(base + 'social/', { waitUntil: 'domcontentloaded' });
   await page.locator('.global-home-page').waitFor({ state: 'visible', timeout: 20000 });
   if (!(await page.getByText('Orang yang mungkin Anda kenal').count())) {
     throw new Error('Social Home people discovery did not render.');
+  }
+  const contentTabNav = page.locator('[data-content-tabs]');
+  await contentTabNav.waitFor({ state: 'visible' });
+  const tabLayout = await contentTabNav.evaluate(nav => {
+    const items = [...nav.children];
+    const rects = items.map(item => item.getBoundingClientRect());
+    const labels = items.map(item => {
+      const span = item.querySelector('span:not(.ui-icon)');
+      return span ? getComputedStyle(span).position === 'absolute' && span.getBoundingClientRect().width <= 1 : false;
+    });
+    return {
+      count: items.length,
+      sameRow: rects.every(rect => Math.abs(rect.top - rects[0].top) <= 1),
+      widths: rects.map(rect => Math.round(rect.width)),
+      labelsVisuallyHidden: labels.every(Boolean),
+      refreshColor: getComputedStyle(items[4]).color,
+      firstTabColor: getComputedStyle(items[0]).color,
+      headerPosition: getComputedStyle(document.querySelector('[data-global-header]')).position
+    };
+  });
+  if (tabLayout.count !== 5 || !tabLayout.sameRow || !tabLayout.labelsVisuallyHidden) {
+    throw new Error('Social Home content tabs must be five icon-only items on one row at 320px: ' + JSON.stringify(tabLayout));
+  }
+  if (tabLayout.headerPosition !== 'sticky') {
+    throw new Error('Social Home header must be sticky before the content-tab handoff.');
+  }
+  if (tabLayout.refreshColor === tabLayout.firstTabColor) {
+    throw new Error('Refresh icon must use a distinct accent color.');
+  }
+  const handoff = await page.evaluate(async () => {
+    const nav = document.querySelector('[data-content-tabs]');
+    const header = document.querySelector('[data-global-header]');
+    const area = document.querySelector('.global-social-area');
+    const target = window.scrollY + nav.getBoundingClientRect().top - header.getBoundingClientRect().height - 4;
+    window.scrollTo(0, target);
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    return {
+      active: document.querySelector('.global-home-page').classList.contains('has-content-tabs-pinned'),
+      tabsTop: Math.round(nav.getBoundingClientRect().top),
+      computedTop: getComputedStyle(nav).top,
+      marginTop: getComputedStyle(nav).marginTop,
+      rootClass: document.querySelector('.global-home-page').className,
+      headerHeight: Math.round(header.getBoundingClientRect().height)
+    };
+  });
+  if (!handoff.active || handoff.tabsTop > 2) {
+    throw new Error('Content tabs did not take over the sticky layer: ' + JSON.stringify(handoff));
+  }
+  const handback = await page.evaluate(async () => {
+    const area = document.querySelector('.global-social-area');
+    const nav = document.querySelector('[data-content-tabs]');
+    const shell = document.querySelector('.global-home-page');
+    window.scrollTo(0, document.documentElement.scrollHeight);
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    return {
+      active: shell.classList.contains('has-content-tabs-pinned'),
+      areaBottom: Math.round(area.getBoundingClientRect().bottom),
+      tabsHeight: Math.round(nav.getBoundingClientRect().height),
+      bottomChromeSpace: parseFloat(getComputedStyle(shell).paddingBottom) || 0,
+      scrollY: Math.round(window.scrollY),
+      maxScroll: document.documentElement.scrollHeight - window.innerHeight
+    };
+  });
+  await page.waitForTimeout(220);
+  const headerTransform = await page.locator('[data-global-header]').evaluate(header => getComputedStyle(header).transform);
+  if (handback.active || headerTransform !== 'none') {
+    throw new Error('Social Home header did not return after the content container ended: ' + JSON.stringify({ ...handback, headerTransform }));
   }
   for (const selector of ['.global-products', '.global-feature-rail', '.global-local-rail', '.global-calendar-block', '.global-about']) {
     if (await page.locator(selector).count()) throw new Error('Sibling-domain content remains on Social Home: ' + selector);
