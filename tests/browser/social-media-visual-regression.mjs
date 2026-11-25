@@ -60,6 +60,9 @@ try {
       headerPosition: getComputedStyle(document.querySelector('[data-global-header]')).position
     };
   });
+  if (Math.max(...tabLayout.widths) - Math.min(...tabLayout.widths) > 1) {
+    throw new Error('All five Social Home tabs must use equal-width columns at 320px: ' + JSON.stringify(tabLayout));
+  }
   if (tabLayout.count !== 5 || !tabLayout.sameRow || !tabLayout.labelsVisible || !tabLayout.firstTabIconOnly) {
     throw new Error('Social Home tabs must show four labels, one icon-only first tab, and remain on one row at 320px: ' + JSON.stringify(tabLayout));
   }
@@ -88,6 +91,20 @@ try {
   });
   if (!handoff.active || handoff.tabsTop > 2 || handoff.tabsPosition !== 'sticky') {
     throw new Error('Content tabs did not take over the sticky layer: ' + JSON.stringify(handoff));
+  }
+  const sustainedSticky = await page.evaluate(async () => {
+    const nav = document.querySelector('[data-content-tabs]');
+    window.scrollBy(0, 260);
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    return {
+      top: Math.round(nav.getBoundingClientRect().top),
+      active: document.querySelector('.global-home-page').classList.contains('has-content-tabs-pinned'),
+      transform: getComputedStyle(nav).transform,
+      columns: getComputedStyle(nav).gridTemplateColumns
+    };
+  });
+  if (sustainedSticky.top > 2 || !sustainedSticky.active || sustainedSticky.transform !== 'none') {
+    throw new Error('Content tabs must remain visible at the top after the header disappears: ' + JSON.stringify(sustainedSticky));
   }
   const composerBeforeTabs = await page.evaluate(() => {
     const composer = document.querySelector('.global-composer');
