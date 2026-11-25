@@ -86,10 +86,17 @@ try {
   }
   const handback = await page.evaluate(async () => {
     const area = document.querySelector('.global-social-area');
-    window.scrollTo(0, window.scrollY + area.getBoundingClientRect().bottom - 20);
+    const nav = document.querySelector('[data-content-tabs]');
+    const shell = document.querySelector('.global-home-page');
+    window.scrollTo(0, document.documentElement.scrollHeight);
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     return {
-      active: document.querySelector('.global-home-page').classList.contains('has-content-tabs-pinned')
+      active: shell.classList.contains('has-content-tabs-pinned'),
+      areaBottom: Math.round(area.getBoundingClientRect().bottom),
+      tabsHeight: Math.round(nav.getBoundingClientRect().height),
+      bottomChromeSpace: parseFloat(getComputedStyle(shell).paddingBottom) || 0,
+      scrollY: Math.round(window.scrollY),
+      maxScroll: document.documentElement.scrollHeight - window.innerHeight
     };
   });
   await page.waitForTimeout(220);
