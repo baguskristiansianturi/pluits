@@ -34,7 +34,7 @@ The central renderer currently accepts an optional CSS class, not a size or beha
 
 ## 3. Current icon catalogue
 
-The runtime registry contains 27 semantic names. These are observed entries, not a blanket approval that every meaning or artwork is final.
+The runtime registry contains 28 semantic names. These are observed entries, not a blanket approval that every meaning or artwork is final.
 
 | Semantic name | Registry ID |
 |---|---|
@@ -65,6 +65,7 @@ The runtime registry contains 27 semantic names. These are observed entries, not
 | `fileText` | `ICO-PLU-FILE-TEXT` |
 | `briefcase` | `ICO-PLU-BRIEFCASE` |
 | `sparkles` | `ICO-PLU-SPARKLES` |
+| `menu` | `ICO-PLU-MENU` |
 
 **Important:** the runtime registry currently marks all 27 entries `PROVISIONAL`. The product/design approval status must be reconciled explicitly; do not silently promote the entire catalogue to Approved.
 

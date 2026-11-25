@@ -18,7 +18,7 @@ function renderReelActions(reel) {
 function renderTopBar() {
   const actions = '<div class="sm-reels-header-actions"><a class="sm-reels-icon-button" href="' + routeHref('discover') + '" aria-label="Cari" title="Cari">' + renderIcon('search') + '</a>'
     + iconButton('bell', 'Notifikasi', 'data-reels-notifications-toggle aria-expanded="false"')
-    + iconButton('grid', 'Menu', 'data-reels-menu-toggle aria-expanded="false"') + '</div>';
+    + iconButton('menu', 'Menu', 'data-reels-menu-toggle aria-expanded="false"') + '</div>';
   return renderPageHeader({ brandHref: routeHref('social'), label: 'PLUITS', rightContent: actions, className: 'sm-reels-header' });
 }
 export function mountReelsPage({ root } = {}) {
