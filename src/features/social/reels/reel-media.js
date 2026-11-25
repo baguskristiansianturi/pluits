@@ -9,8 +9,36 @@ export function getVideoContentKind(post) {
 }
 
 export function renderVideoMedia(post, escapeHtml) {
-  const label = isReelPost(post) ? 'Reels' : 'Video';
+  const reel = isReelPost(post);
+  const label = reel ? 'Reels' : 'Video';
   const duration = Number(post.durationSeconds || 0);
-  return '<video class="pl-post-media pl-post-video sm-reel-video" data-demo-video data-video-limit="10" src="' + escapeHtml(post.mediaUrl) + '" poster="' + escapeHtml(post.poster || '') + '" controls playsinline preload="none" aria-label="' + label + ' postingan ' + escapeHtml(post.authorName) + '"></video>'
-    + '<span class="sm-reel-video-note">' + (isReelPost(post) ? 'Reels · video singkat' : 'Video · ' + duration + ' detik') + '</span>';
+  const videoAttributes = reel
+    ? ' data-reel-autoplay muted loop playsinline preload="metadata" aria-label="Buka Reel ' + escapeHtml(post.authorName) + '"'
+    : ' controls playsinline preload="none" aria-label="Video postingan ' + escapeHtml(post.authorName) + '"';
+  return '<video class="pl-post-media pl-post-video sm-reel-video' + (reel ? ' is-reel-autoplay' : ' is-long-video') + '" data-social-video' + videoAttributes + ' src="' + escapeHtml(post.mediaUrl) + '" poster="' + escapeHtml(post.poster || '') + '"></video>'
+    + (reel ? '' : '<span class="sm-reel-video-note">Video · ' + duration + ' detik</span>');
+}
+
+// Reels owns playback timing. Only the most visible short video may play;
+// every other video pauses as soon as it leaves the viewing threshold.
+export function mountReelPlayback(root) {
+  if (!root) return () => {};
+  const videos = [...root.querySelectorAll('video[data-reel-autoplay]')];
+  if (!videos.length || !('IntersectionObserver' in window)) return () => {};
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const video = entry.target;
+      if (reducedMotion || !entry.isIntersecting || entry.intersectionRatio < 0.65) {
+        video.pause();
+        return;
+      }
+      videos.forEach((other) => { if (other !== video) other.pause(); });
+      video.muted = true;
+      const playback = video.play();
+      if (playback && typeof playback.catch === 'function') playback.catch(() => {});
+    });
+  }, { threshold: [0, 0.35, 0.65, 0.9] });
+  videos.forEach((video) => observer.observe(video));
+  return () => { observer.disconnect(); videos.forEach((video) => video.pause()); };
 }
