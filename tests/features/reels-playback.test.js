@@ -12,6 +12,9 @@ test('Reels autoplay only while visible and pause when leaving the viewing area'
   assert.match(source, /video\.muted = true/);
   assert.match(source, /video\.play\(\)/);
   assert.match(source, /prefers-reduced-motion/);
+  const feed = await read('../../src/features/social/feed/social-post-card.js');
+  assert.match(feed, /post\.mediaType==='video'\|\|post\.media_type==='video'/);
+  assert.match(source, /post\?\.type === 'video'/);
 });
 
 test('short videos loop silently in feed while long videos require user playback', async () => {
