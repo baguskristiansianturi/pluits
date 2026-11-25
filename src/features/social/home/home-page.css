@@ -520,8 +520,7 @@
 @media(min-width:768px) and (max-width:1023px){
 }
 @media(min-width:1024px){
-}.global-home-main>.global-social-area
-{content-visibility:auto;contain-intrinsic-size:auto 900px}/* HOME-DISCOVERY-CLEAN-002 — concise
+}.global-home-main>.global-social-area{content-visibility:visible;contain:none}/* HOME-DISCOVERY-CLEAN-002 — concise
 {min-width:0;margin-bottom:22px}
 @media(max-width:767px){
 }
@@ -658,11 +657,13 @@
 }
 
 
-/* SOCIAL HOME — refined sticky content navigation and immediate feed refresh. */
+/* SOCIAL HOME — one canonical sticky handoff and five equal tab columns. */
 @media (max-width: 767px) {
-  .global-home-page > .global-home-main { overflow: visible; }
+  .global-home-page > .global-home-main,
   .global-home-page .global-social-area {
     overflow: visible;
+  }
+  .global-home-page .global-social-area {
     content-visibility: visible;
     contain: none;
   }
@@ -678,41 +679,48 @@
   }
   .global-home-page .global-content-tabs {
     position: sticky;
-    top: 0;
+    top: var(--pl-shell-header-height-mobile);
     z-index: 65;
     align-self: flex-start;
     box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    align-items: center;
+    align-items: stretch;
     gap: 2px;
     width: 100vw;
     max-width: 100vw;
     margin: 4px calc(50% - 50vw) 14px;
-    padding: 7px 8px;
+    padding: 7px 6px;
     border-top: 1px solid var(--pl-color-border);
     border-bottom: 1px solid var(--pl-color-border);
     background: rgba(255,255,255,.98);
     box-shadow: 0 5px 14px rgba(23,43,69,.055);
     backdrop-filter: blur(14px);
   }
+  .global-home-page.has-content-tabs-pinned .global-content-tabs {
+    top: 0;
+    margin-top: 0;
+    transform: none;
+  }
   .global-home-page .global-content-tabs > button,
   .global-home-page .global-content-tabs > a {
     position: relative;
+    box-sizing: border-box;
     display: flex;
+    flex-direction: column;
     width: 100%;
     min-width: 0;
-    min-height: 48px;
+    min-height: 54px;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    padding: 0 2px;
+    gap: 3px;
+    padding: 4px 1px;
     border: 0;
     border-radius: 9px;
     background: transparent;
     color: var(--pl-color-muted);
     font-family: inherit;
-    font-size: 10px;
+    font-size: clamp(8px, 2.65vw, 10px);
     font-weight: 650;
     line-height: 1.1;
     text-decoration: none;
@@ -739,9 +747,12 @@
     display: inline;
     width: auto;
     height: auto;
-    overflow: visible;
+    max-width: 100%;
+    overflow: hidden;
     clip: auto;
     clip-path: none;
+    font-size: inherit;
+    text-overflow: ellipsis;
     white-space: nowrap;
   }
   .global-home-page .global-content-tabs > button[data-content-tab="all"] {
@@ -764,6 +775,7 @@
     content: "";
   }
   .global-home-page .global-content-tabs .global-content-refresh {
+    min-width: 0;
     color: var(--pl-color-brand);
   }
   .global-home-page .global-content-tabs .global-content-refresh .ui-icon {
@@ -785,6 +797,7 @@
   }
   .global-home-page .global-content-tabs > button,
   .global-home-page .global-content-tabs > a {
+    min-width: 0;
     min-height: 48px;
     gap: 7px;
     color: var(--pl-color-muted);
@@ -796,7 +809,12 @@
   .global-home-page .global-content-tabs > a .ui-icon { width: 18px; height: 18px; }
   .global-home-page .global-content-tabs > button > span:not(.ui-icon),
   .global-home-page .global-content-tabs > a > span:not(.ui-icon) {
-    position: static; width: auto; height: auto; overflow: visible; clip: auto; clip-path: none;
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
