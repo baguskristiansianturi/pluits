@@ -29,7 +29,7 @@ test('Reels autoplay only after portrait metadata validation and while visible',
 
 test('short Reels loop silently while long and non-portrait videos require user playback', async () => {
   const source = await read('../../src/features/social/reels/reel-media.js');
-  assert.match(source, /data-reel-autoplay muted loop playsinline preload="metadata"/);
+  assert.match(source, /data-reel-candidate data-reel-autoplay muted loop playsinline preload="metadata"/);
   assert.match(source, /controls playsinline preload="none"/);
   assert.match(source, /video\.controls = true/);
   assert.doesNotMatch(source, /data-video-limit|data-demo-video|currentTime\s*>?=/);

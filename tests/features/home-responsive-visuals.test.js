@@ -197,7 +197,7 @@ test('social stream uses one mixed timeline, icon filters, full-bleed media and 
   assert.ok(postStyles.includes('.pl-post-card.is-vertical') && postStyles.includes('aspect-ratio:4/5'));
   assert.match(card, /durationSeconds:43/);
   assert.match(card, /durationSeconds:78/);
-  assert.match(reels, /Number\(post\.durationSeconds \|\| 0\) <= 60/);
+  assert.match(reels, /orientation === 'vertical'/);
 });
 test('social feed preview renders twenty mixed posts with commentable blog cards and orientation-aware interactions', async () => {
   const card = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
