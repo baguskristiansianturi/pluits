@@ -246,7 +246,7 @@ test('social content filters use a refined icon-first tab and labeled actions wi
   assert.ok(home.includes("tab.id==='blog'?'<a class=\"global-content-tab-link\""));
   assert.match(home, /renderIcon\(tab\.id==='all'\?'sparkles':tab\.id==='reels'\?'play':tab\.id==='live'\?'radio':'refresh'\)/);
   assert.match(home, /tab\.id==='all'\?'':'<span>' \+ tab\.label/);
-  assert.match(home, /'Perbarui feed'/);
+  assert.match(home, /Perbarui feed/);
   assert.match(styles, /\.global-home-page \.global-content-tabs\s*\{[^}]*position:\s*sticky/s);
   assert.match(home, /composerMarkup \+ '<nav class="global-content-tabs"/);
   assert.match(home, /filter==='blog'&&kind==='blog'/);
