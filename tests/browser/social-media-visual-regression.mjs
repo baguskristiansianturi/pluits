@@ -89,12 +89,13 @@ try {
     window.scrollTo(0, window.scrollY + area.getBoundingClientRect().bottom - 20);
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     return {
-      active: document.querySelector('.global-home-page').classList.contains('has-content-tabs-pinned'),
-      headerTransform: getComputedStyle(document.querySelector('[data-global-header]')).transform
+      active: document.querySelector('.global-home-page').classList.contains('has-content-tabs-pinned')
     };
   });
-  if (handback.active || handback.headerTransform !== 'none') {
-    throw new Error('Social Home header did not return after the content container ended: ' + JSON.stringify(handback));
+  await page.waitForTimeout(220);
+  const headerTransform = await page.locator('[data-global-header]').evaluate(header => getComputedStyle(header).transform);
+  if (handback.active || headerTransform !== 'none') {
+    throw new Error('Social Home header did not return after the content container ended: ' + JSON.stringify({ ...handback, headerTransform }));
   }
   for (const selector of ['.global-products', '.global-feature-rail', '.global-local-rail', '.global-calendar-block', '.global-about']) {
     if (await page.locator(selector).count()) throw new Error('Sibling-domain content remains on Social Home: ' + selector);
