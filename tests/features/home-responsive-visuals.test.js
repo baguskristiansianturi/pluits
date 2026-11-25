@@ -233,17 +233,22 @@ test('social feed limits caption and comment previews and progressively reveals 
   assert.match(cardCss, /-webkit-line-clamp:5/);
   assert.match(cardCss, /pl-post-comments-more/);
   assert.match(home, /Tampilkan postingan lainnya/);
-  assert.match(home, /window\.scrollTo\(\{top:0,behavior:'smooth'\}\)/);
-  assert.match(home, /window\.setTimeout\(resolve,1500\)/);
+  assert.doesNotMatch(home, /window\.scrollTo\(\{top:0,behavior:'smooth'\}\)/);
+  assert.match(home, /await loadFeed\(\)/);
+  assert.doesNotMatch(home, /window\.setTimeout\(resolve,1500\)/);
   assert.match(homeStyles, /global-content-refresh/);
 });
 
-test('social content filters use icon and label pairs with Blog opening its own route', async () => {
+test('social content filters use a refined icon-first tab and labeled actions with Blog opening its own route', async () => {
   const home = await readFile(homeJs, 'utf8');
   const styles = await readFile(homeCss, 'utf8');
   assert.match(home, /\{id:'all',icon:'grid',label:'Semua'\},\{id:'reels',icon:'film',label:'Reel'\},\{id:'blog',icon:'book',label:'Blog'\},\{id:'live',icon:'radio',label:'Live'\}/);
   assert.ok(home.includes("tab.id==='blog'?'<a class=\"global-content-tab-link\""));
-  assert.match(home, /renderIcon\(tab\.icon\) \+ '<span>' \+ tab\.label/);
+  assert.match(home, /renderIcon\(tab\.id==='all'\?'sparkles':tab\.id==='reels'\?'play':tab\.id==='live'\?'radio':'refresh'\)/);
+  assert.match(home, /tab\.id==='all'\?'':'<span>' \+ tab\.label/);
+  assert.match(home, /'Perbarui feed'/);
+  assert.match(styles, /\.global-home-page \.global-content-tabs\s*\{[^}]*position:\s*sticky/s);
+  assert.match(home, /composerMarkup \+ '<nav class="global-content-tabs"/);
   assert.match(home, /filter==='blog'&&kind==='blog'/);
   assert.match(styles, /\.global-content-tabs button\s*\{[^}]*display:flex/s);
   assert.match(home, /routeHref\('blog'\)/);
