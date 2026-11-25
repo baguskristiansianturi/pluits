@@ -107,7 +107,32 @@ export function mountHomePage({root,user=null,onSignOut,accessToken=null}={}) {
       finally{submit.disabled=false;}
     });
   }
+  const pageShell=root.querySelector('.global-home-page');
+  const pageHeader=root.querySelector('[data-global-header]');
+  const contentTabsNav=root.querySelector('[data-content-tabs]');
+  const socialArea=root.querySelector('.global-social-area');
+  let stickyHandoffFrame=0;
+  const updateStickyHandoff=()=>{
+    if(stickyHandoffFrame)return;
+    stickyHandoffFrame=window.requestAnimationFrame(()=>{
+      stickyHandoffFrame=0;
+      if(!pageShell||!pageHeader||!contentTabsNav||!socialArea)return;
+      if(!window.matchMedia('(max-width: 767px)').matches){
+        pageShell.classList.remove('has-content-tabs-pinned');
+        return;
+      }
+      const headerHeight=pageHeader.getBoundingClientRect().height;
+      const tabsRect=contentTabsNav.getBoundingClientRect();
+      const areaBottom=socialArea.getBoundingClientRect().bottom;
+      const handoffOffset=headerHeight+4;
+      const tabsOwnStickyLayer=tabsRect.top<=handoffOffset+1&&areaBottom>tabsRect.height+1;
+      pageShell.classList.toggle('has-content-tabs-pinned',tabsOwnStickyLayer);
+    });
+  };
+  window.addEventListener('scroll',updateStickyHandoff,{passive:true});
+  window.addEventListener('resize',updateStickyHandoff);
+  updateStickyHandoff();
   loadFeed();
   root.querySelector('[data-feed-refresh]')?.addEventListener('click',async()=>{const refresh=root.querySelector('[data-feed-refresh]'),label=root.querySelector('[data-feed-refresh-label]');if(refresh?.classList.contains('is-refreshing'))return;window.scrollTo({top:0,behavior:'smooth'});refresh?.classList.add('is-refreshing');if(label)label.textContent='Memperbarui…';const minimumDelay=new Promise(resolve=>window.setTimeout(resolve,1500));try{await Promise.all([loadFeed(),minimumDelay]);}finally{refresh?.classList.remove('is-refreshing');if(label)label.textContent='Perbarui';}});
-  return ()=>{controller.abort();observer?.disconnect();unmountSocialPostInteractions();document.body.classList.remove('global-search-open');};
+  return ()=>{controller.abort();observer?.disconnect();window.removeEventListener('scroll',updateStickyHandoff);window.removeEventListener('resize',updateStickyHandoff);if(stickyHandoffFrame)window.cancelAnimationFrame(stickyHandoffFrame);pageShell?.classList.remove('has-content-tabs-pinned');unmountSocialPostInteractions();document.body.classList.remove('global-search-open');};
 }
