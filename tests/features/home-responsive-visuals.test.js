@@ -7,7 +7,7 @@ const homeCss = new URL('../../src/features/social/home/home-page.css', import.m
 const discoverJs = new URL('../../src/features/social/social-pages.js', import.meta.url);
 const discoverCss = new URL('../../src/features/social/social-pages.css', import.meta.url);
 
-test('social home keeps illustrative content separated from interactive demo post fixtures', async () => {
+test('social home keeps feed fixtures product-ready without development labels', async () => {
   const source = await readFile(homeJs, 'utf8');
   const cardSource = await readFile(new URL('../../src/features/social/feed/social-post-card.js', import.meta.url), 'utf8');
   const storiesSource = await readFile(new URL('../../src/features/social/stories/stories-rail.js', import.meta.url), 'utf8');
@@ -16,8 +16,8 @@ test('social home keeps illustrative content separated from interactive demo pos
   assert.match(source, /renderDemoFeed\('feed'\)/);
   assert.match(cardSource, /export const demoFeedPosts = \[/);
   assert.match(cardSource, /export function renderDemoFeed/);
-  assert.match(cardSource, /Contoh postingan/);
-  assert.match(cardSource, /data contoh/);
+  assert.doesNotMatch(cardSource, /Contoh postingan|data contoh|UJI UI\\s*\\/\\s*UX|Contoh UI|interaksi demo/);
+  assert.doesNotMatch(source, /global-composer is-guest|Setiap cerita punya ruang/);
   assert.match(source, /renderStoriesRail\(\)/);
   assert.match(source, /renderLivePreview\(\)/);
   assert.match(storiesSource, /export function renderStoriesRail/);
