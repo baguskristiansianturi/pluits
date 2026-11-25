@@ -22,10 +22,9 @@ export function renderVideoMedia(post, escapeHtml) {
 // Reels owns playback timing. Only the most visible short video may play;
 // every other video pauses as soon as it leaves the viewing threshold.
 export function mountReelPlayback(root) {
-  if (!root) return () => {};
-  const videos = [...root.querySelectorAll('video[data-reel-autoplay]')];
-  if (!videos.length || !('IntersectionObserver' in window)) return () => {};
+  if (!root || !('IntersectionObserver' in window)) return () => {};
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const observed = new Set();
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       const video = entry.target;
@@ -33,12 +32,23 @@ export function mountReelPlayback(root) {
         video.pause();
         return;
       }
-      videos.forEach((other) => { if (other !== video) other.pause(); });
+      observed.forEach((other) => { if (other !== video) other.pause(); });
       video.muted = true;
       const playback = video.play();
       if (playback && typeof playback.catch === 'function') playback.catch(() => {});
     });
   }, { threshold: [0, 0.35, 0.65, 0.9] });
-  videos.forEach((video) => observer.observe(video));
-  return () => { observer.disconnect(); videos.forEach((video) => video.pause()); };
+  const observeVideos = (scope) => scope.querySelectorAll?.('video[data-reel-autoplay]').forEach((video) => {
+    if (observed.has(video)) return;
+    observed.add(video);
+    observer.observe(video);
+  });
+  observeVideos(root);
+  const mutations = new MutationObserver((records) => records.forEach((record) => record.addedNodes.forEach((node) => {
+    if (node.nodeType !== 1) return;
+    if (node.matches?.('video[data-reel-autoplay]')) observeVideos({ querySelectorAll: () => [node] });
+    else observeVideos(node);
+  })));
+  mutations.observe(root, { childList: true, subtree: true });
+  return () => { mutations.disconnect(); observer.disconnect(); observed.forEach((video) => video.pause()); observed.clear(); };
 }
