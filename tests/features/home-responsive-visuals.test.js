@@ -126,7 +126,9 @@ test('social post demo contains four distinct posts, sample comments/replies and
   assert.match(cardSource, /membership:'Silver'/);
   assert.match(cardSource, /membership:'Platinum'/);
   assert.match(cardSource, /membership:'PLUITS Priority'/);
-  assert.match(reelsSource, /data-video-limit="10"/);
+  assert.match(reelsSource, /data-reel-autoplay muted loop playsinline/);
+  assert.match(reelsSource, /controls playsinline preload="none"/);
+  assert.match(reelsSource, /intersectionRatio < 0\.65/);
   assert.match(reelsSource, /export function isReelPost/);
   assert.match(reelsSource, /export function renderVideoMedia/);
   assert.match(reelsCss, /\.sm-reel-video/);
