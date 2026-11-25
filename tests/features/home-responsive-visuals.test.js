@@ -248,6 +248,9 @@ test('social content filters use a refined icon-first tab and labeled actions wi
   assert.match(home, /tab\.id==='all'\?'':'<span>' \+ tab\.label/);
   assert.match(home, /Perbarui feed/);
   assert.match(styles, /\.global-home-page \.global-content-tabs\s*\{[^}]*position:\s*sticky/s);
+  assert.match(styles, /grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(styles, /\.global-home-page\.has-content-tabs-pinned \.global-content-tabs\s*\{[^}]*transform:\s*none/s);
+  assert.doesNotMatch(styles, /translateY\(calc\(-1 \* var\(--pl-shell-header-height-mobile\)\)\)/);
   assert.match(home, /composerMarkup \+ '<nav class="global-content-tabs"/);
   assert.match(home, /filter==='blog'&&kind==='blog'/);
   assert.match(styles, /\.global-content-tabs button\s*\{[^}]*display:flex/s);
