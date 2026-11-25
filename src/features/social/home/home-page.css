@@ -585,7 +585,7 @@
   .global-home-page .global-content-tabs {
     box-sizing: border-box;
     position: sticky;
-    top: calc(var(--pl-shell-header-height-mobile) + 4px);
+    top: var(--pl-shell-header-height-mobile);
     z-index: 55;
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -599,6 +599,7 @@
   }
   .global-home-page.has-content-tabs-pinned .global-content-tabs {
     top: 0;
+    margin-top: 0;
   }
   .global-home-page .global-content-tabs > button,
   .global-home-page .global-content-tabs > a {
