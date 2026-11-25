@@ -44,7 +44,8 @@ test('dedicated viewer uses shared header, right action rail and safe fallback s
   assert.match(page, /renderPageHeader/);
   assert.match(page, /renderIcon\('search'\)/);
   assert.match(page, /iconButton\('bell'/);
-  assert.match(page, /data-reels-menu-toggle/);\n  assert.match(page, /iconButton\\('menu'/);
+  assert.match(page, /data-reels-menu-toggle/);
+  assert.ok(page.includes("iconButton('menu', 'Menu'"));
   assert.match(page, /data-reels-notifications/);
   assert.match(page, /sm-reels-actions/);
   assert.match(page, /data-reel-share/);
