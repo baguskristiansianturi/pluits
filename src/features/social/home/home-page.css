@@ -607,6 +607,7 @@
   .global-home-page.has-content-tabs-pinned .global-content-tabs {
     top: 0;
     margin-top: 0;
+    transform: translateY(calc(-1 * var(--pl-shell-header-height-mobile)));
   }
   .global-home-page .global-content-tabs > button,
   .global-home-page .global-content-tabs > a {
