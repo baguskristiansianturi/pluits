@@ -50,9 +50,14 @@ try {
       count: items.length,
       sameRow: rects.every(rect => Math.abs(rect.top - rects[0].top) <= 1),
       widths: rects.map(rect => Math.round(rect.width)),
+      heights: rects.map(rect => Math.round(rect.height)),
       labelsVisible: labels.slice(1).every((visible, index) => {
         const span = items[index + 1].querySelector('span:not(.ui-icon)');
         return span && getComputedStyle(span).position !== 'absolute' && span.getBoundingClientRect().width > 1;
+      }),
+      labelsFit: items.slice(1).every(item => {
+        const span = item.querySelector('span:not(.ui-icon)');
+        return span && span.getBoundingClientRect().right <= item.getBoundingClientRect().right + 1;
       }),
       firstTabIconOnly: !items[0].querySelector('span:not(.ui-icon)'),
       refreshColor: getComputedStyle(items[4]).color,
@@ -60,10 +65,11 @@ try {
       headerPosition: getComputedStyle(document.querySelector('[data-global-header]')).position
     };
   });
-  if (Math.max(...tabLayout.widths) - Math.min(...tabLayout.widths) > 1) {
-    throw new Error('All five Social Home tabs must use equal-width columns at 320px: ' + JSON.stringify(tabLayout));
+  if (Math.max(...tabLayout.widths) - Math.min(...tabLayout.widths) > 1 ||
+      Math.max(...tabLayout.heights) - Math.min(...tabLayout.heights) > 1) {
+    throw new Error('All five Social Home tabs must use equal-width and equal-height cells at 320px: ' + JSON.stringify(tabLayout));
   }
-  if (tabLayout.count !== 5 || !tabLayout.sameRow || !tabLayout.labelsVisible || !tabLayout.firstTabIconOnly) {
+  if (tabLayout.count !== 5 || !tabLayout.sameRow || !tabLayout.labelsVisible || !tabLayout.labelsFit || !tabLayout.firstTabIconOnly) {
     throw new Error('Social Home tabs must show four labels, one icon-only first tab, and remain on one row at 320px: ' + JSON.stringify(tabLayout));
   }
   if (tabLayout.headerPosition !== 'sticky') {
