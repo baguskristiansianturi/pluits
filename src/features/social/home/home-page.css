@@ -621,8 +621,8 @@
     height: 20px;
     flex: 0 0 20px;
   }
-  .global-home-page .global-content-tabs > button > span,
-  .global-home-page .global-content-tabs > a > span {
+  .global-home-page .global-content-tabs > button > span:not(.ui-icon),
+  .global-home-page .global-content-tabs > a > span:not(.ui-icon) {
     position: absolute;
     width: 1px;
     height: 1px;
