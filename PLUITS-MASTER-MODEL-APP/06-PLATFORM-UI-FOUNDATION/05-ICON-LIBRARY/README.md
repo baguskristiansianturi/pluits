@@ -40,7 +40,7 @@ If two controls have genuinely different meanings and need different artwork, gi
 - SVG artwork uses `currentColor`; the consuming control supplies color.
 - Feature CSS can size the wrapper locally without modifying the central SVG.
 - Unknown names currently return an empty string.
-- The current runtime registry contains 27 names and marks all generated entries `PROVISIONAL`.
+- The current runtime registry contains 28 names and marks all generated entries `PROVISIONAL`.
 
 See [ICON-INVENTORY-AND-USAGE-AUDIT-001.md](./ICON-INVENTORY-AND-USAGE-AUDIT-001.md) for the observed catalogue, confirmed consumers, bypasses, documentation discrepancies and next audit steps.
 
