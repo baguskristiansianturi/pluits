@@ -197,11 +197,11 @@ export function renderSocialPostCard(post) {
     '<div class="global-post-caption pl-post-caption" data-caption-content>' + renderCaption(post.caption) + '</div><button type="button" class="pl-post-caption-more" data-caption-expand' + (String(post.caption||'').length<=150?' hidden':'') + ' aria-expanded="false">Selengkapnya ' + renderIcon('chevronDown') + '</button>' + renderMedia(post) +
     '<div class="pl-post-social-proof"><button type="button" data-reaction-summary aria-label="Lihat reaksi">' + renderIcon('heart') + '<span data-post-like-count>' + escapeHtml(post.likeLabel) + '</span> <small>reaksi</small></button><span><b data-post-comment-count>' + post.commentsCount + '</b> komentar</span></div>' +
     '<section class="pl-post-comments" data-comments-section><div class="pl-post-comments-heading"><strong>Komentar</strong><button type="button" data-comments-toggle aria-expanded="true">Sembunyikan</button></div><div class="pl-post-comments-list" data-comment-list>' + post.comments.map((comment,index) => { const markup=renderComment(comment, post.authorName); return index>=6 ? markup.replace('class="pl-post-comment"','class="pl-post-comment" hidden data-comment-extra') : markup; }).join('') + '</div><button type="button" class="pl-post-comments-more" data-comments-more' + (post.comments.length<=6?' hidden':'') + '>Lihat semua komentar (' + Math.max(0,post.comments.length-6) + ')</button><form class="pl-post-comment-form" data-comment-form><input type="text" maxlength="500" placeholder="Tulis komentar..." aria-label="Tulis komentar" data-comment-input><button type="submit">Kirim</button></form></section>' +
-    '<div class="pl-post-demo-label">Contoh UI · interaksi demo · perubahan tidak disimpan setelah reload</div></article>';
+    '</article>';
 }
 export function renderDemoFeed(kind = 'feed') {
   const posts = kind === 'reels' ? demoReels : demoFeedPosts;
-  return '<section class="pl-post-demo-stream" data-demo-stream><div class="pl-post-demo-stream-heading"><div><span class="global-kicker">UJI UI / UX</span><h3>' + (kind === 'reels' ? 'Video singkat' : 'Contoh postingan') + '</h3><p>Konten, angka, komentar, dan status akun di bawah ini adalah data contoh.</p></div><span class="pl-post-demo-wallet">✦ <b data-demo-wallet>' + demoWallet + '</b> koin demo</span></div>' + posts.map((post,index) => { const markup=renderSocialPostCard(Object.assign({},post,{isDemo:true})); return index>=6 ? markup.replace('data-post-card','data-post-card hidden data-feed-page-hidden') : markup; }).join('') + '<div class="pl-post-feed-more-wrap"><button type="button" class="pl-post-feed-more" data-feed-more' + (posts.length<=6?' hidden':'') + '>Tampilkan postingan lainnya</button></div></section>';
+  return '<section class="pl-post-demo-stream" data-demo-stream>' + posts.map((post,index) => { const markup=renderSocialPostCard(Object.assign({},post,{isDemo:true})); return index>=6 ? markup.replace('data-post-card','data-post-card hidden data-feed-page-hidden') : markup; }).join('') + '<div class="pl-post-feed-more-wrap"><button type="button" class="pl-post-feed-more" data-feed-more' + (posts.length<=6?' hidden':'') + '>Tampilkan postingan lainnya</button></div></section>';
 }
 function formatCount(value) {
   return new Intl.NumberFormat('id-ID',{notation:'compact',maximumFractionDigits:1}).format(value);
@@ -245,7 +245,7 @@ export function mountSocialPostInteractions(root) {
       const reactionIcon=trigger.querySelector('[data-reaction-icon]');reactionIcon.innerHTML=was?renderIcon('heart'):item.emoji;trigger.classList.toggle('is-active',!was);
       trigger.setAttribute('aria-label',was?'Like':item.label);trigger.setAttribute('aria-expanded','false');picker.hidden=true;
       const count=Number(card.dataset.baseLikes)+(card.dataset.myReaction?1:0);card.querySelector('[data-post-like-count]').textContent=formatCount(count);card.querySelectorAll('[data-overlay-like-count]').forEach((node)=>node.textContent=formatCount(count));
-      showToast(root,was?'Reaksi dibatalkan.':'Reaksi '+item.label+' ditambahkan (demo).');return;
+      showToast(root,was?'Reaksi dibatalkan.':'Reaksi '+item.label+' ditambahkan.');return;
     }
     if(button.matches('[data-caption-expand]')){const expanded=card.classList.toggle('is-caption-expanded');button.setAttribute('aria-expanded',String(expanded));button.innerHTML=(expanded?'Tampilkan lebih sedikit ':'Selengkapnya ')+renderIcon(expanded?'chevronUp':'chevronDown');return;}
     if(button.matches('[data-comments-more]')){const extras=card.querySelectorAll('[data-comment-extra]'),expanded=button.dataset.expanded==='true';extras.forEach(item=>{item.hidden=expanded;});button.dataset.expanded=String(!expanded);button.textContent=expanded?'Lihat semua komentar ('+extras.length+')':'Tampilkan lebih sedikit komentar';return;}
@@ -259,41 +259,41 @@ export function mountSocialPostInteractions(root) {
     if(button.matches('[data-gift]')){
       const panel=card.querySelector('[data-gift-panel]');panel.querySelectorAll('[data-gift]').forEach((item)=>item.classList.toggle('is-selected',item===button));
       panel.dataset.selectedGift=button.dataset.gift;panel.dataset.selectedCoins=button.dataset.coins;panel.dataset.selectedEmoji=button.dataset.emoji;
-      const send=panel.querySelector('[data-gift-send]');send.disabled=false;send.textContent='Kirim '+button.dataset.emoji+' · '+button.dataset.coins+' koin demo';return;
+      const send=panel.querySelector('[data-gift-send]');send.disabled=false;send.textContent='Kirim '+button.dataset.emoji+' · '+button.dataset.coins+' koin';return;
     }
     if(button.matches('[data-gift-send]')){
       const panel=card.querySelector('[data-gift-panel]'),cost=Number(panel.dataset.selectedCoins||0);
       if(!cost){showToast(root,'Pilih hadiah terlebih dahulu.');return;}
-      if(demoWallet<cost){showToast(root,'Koin demo tidak cukup.');return;}
+      if(demoWallet<cost){showToast(root,'Koin tidak cukup.');return;}
       demoWallet-=cost;root.querySelectorAll('[data-demo-wallet]').forEach((wallet)=>wallet.textContent=demoWallet);
       const count=card.querySelector('[data-post-gift-count]');count.textContent=Number(count.textContent)+1;
       closePanels(card);panel.querySelectorAll('[data-gift]').forEach((item)=>item.classList.remove('is-selected'));panel.querySelector('[data-gift-send]').disabled=true;panel.querySelector('[data-gift-send]').textContent='Pilih hadiah';
-      showToast(root,'Hadiah terkirim! Saldo demo tersisa '+demoWallet+' koin.');return;
+      showToast(root,'Hadiah terkirim! Sisa saldo '+demoWallet+' koin.');return;
     }
     if(button.matches('[data-share-toggle]')){
       const panel=card.querySelector('[data-share-panel]');closePanels(card,panel);panel.hidden=!panel.hidden;button.setAttribute('aria-expanded',String(!panel.hidden));return;
     }
-    if(button.matches('[data-share-circle]')){closePanels(card);showToast(root,'Postingan dibagikan ke Circle (demo).');return;}
+    if(button.matches('[data-share-circle]')){closePanels(card);showToast(root,'Postingan dibagikan ke Circle.');return;}
     if(button.matches('[data-share-copy]')){
       const url=window.location.origin+routeHref('social')+'?demo-post='+encodeURIComponent(card.dataset.postId);
-      if(navigator.clipboard?.writeText)navigator.clipboard.writeText(url).then(()=>showToast(root,'Tautan demo disalin.')).catch(()=>showToast(root,'Tautan demo: '+url));
-      else showToast(root,'Tautan demo: '+url);
+      if(navigator.clipboard?.writeText)navigator.clipboard.writeText(url).then(()=>showToast(root,'Tautan disalin.')).catch(()=>showToast(root,'Tautan: '+url));
+      else showToast(root,'Tautan: '+url);
       return;
     }
     if(button.matches('[data-share-close]')){closePanels(card);return;}
     if(button.matches('[data-post-more]')){
       const menu=card.querySelector('[data-post-menu]');closePanels(card,menu);menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));return;
     }
-    if(button.matches('[data-post-save]')){button.textContent=button.dataset.saved==='true'?'Simpan postingan':'Postingan tersimpan';button.dataset.saved=button.dataset.saved==='true'?'false':'true';showToast(root,button.dataset.saved==='true'?'Postingan disimpan pada preview.':'Postingan dihapus dari simpanan preview.');return;}
-    if(button.matches('[data-post-hide]')){card.classList.toggle('is-demo-hidden');showToast(root,card.classList.contains('is-demo-hidden')?'Postingan disembunyikan dari preview.':'Postingan ditampilkan kembali.');return;}
-    if(button.matches('[data-post-report]')){showToast(root,'Laporan dicatat sebagai simulasi UI, tidak dikirim ke server.');closePanels(card);return;}
+    if(button.matches('[data-post-save]')){button.textContent=button.dataset.saved==='true'?'Simpan postingan':'Postingan tersimpan';button.dataset.saved=button.dataset.saved==='true'?'false':'true';showToast(root,button.dataset.saved==='true'?'Postingan disimpan .':'Postingan dihapus dari simpanan .');return;}
+    if(button.matches('[data-post-hide]')){card.classList.toggle('is-demo-hidden');showToast(root,card.classList.contains('is-demo-hidden')?'Postingan disembunyikan dari .':'Postingan ditampilkan kembali.');return;}
+    if(button.matches('[data-post-report]')){showToast(root,'Laporan dicatat.');closePanels(card);return;}
     if(button.matches('[data-reaction-summary]')){showToast(root,'Reaksi contoh: Like, Love, Haha, Wow, Sad, dan Angry.');return;}
     if(button.matches('[data-comments-toggle]')){const list=card.querySelector('[data-comment-list]'),collapsed=list.hidden;list.hidden=!collapsed;button.textContent=collapsed?'Sembunyikan':'Tampilkan';button.setAttribute('aria-expanded',String(collapsed));return;}
     if(button.matches('[data-comment-like]')){const count=button.querySelector('span'),active=button.classList.toggle('is-active');count.textContent=Math.max(0,Number(count.textContent)+(active?1:-1));button.setAttribute('aria-pressed',String(active));return;}
     if(button.matches('[data-reply-comment]')){createReplyForm(button.closest('[data-comment-id]'));return;}
     if(button.matches('[data-comment-more]')){const comment=button.closest('[data-comment-id]');let menu=comment.querySelector('[data-comment-menu]');if(!menu){menu=document.createElement('div');menu.className='pl-post-comment-menu';menu.dataset.commentMenu='';menu.innerHTML='<button type="button" data-comment-copy>Salin komentar</button><button type="button" data-comment-report>Laporkan komentar</button>';comment.querySelector('.pl-post-comment-tools').appendChild(menu);}menu.hidden=!menu.hidden;return;}
-    if(button.matches('[data-comment-copy]')){showToast(root,'Teks komentar siap disalin pada preview.');return;}
-    if(button.matches('[data-comment-report]')){showToast(root,'Laporan komentar simulasi.');return;}
+    if(button.matches('[data-comment-copy]')){showToast(root,'Teks komentar siap disalin .');return;}
+    if(button.matches('[data-comment-report]')){showToast(root,'Laporan komentar .');return;}
   },{signal:controller.signal});
   root.addEventListener('submit',(event)=>{
     const form=event.target.closest('[data-comment-form],[data-reply-form]');
@@ -306,9 +306,9 @@ export function mountSocialPostInteractions(root) {
       comment.innerHTML='<div class="pl-post-comment-avatar">A</div><div class="pl-post-comment-body"><div class="pl-post-comment-bubble"><strong>Anda</strong><p></p></div><div class="pl-post-comment-tools"><button type="button" data-comment-like>♡ <span>0</span></button><button type="button" data-reply-comment>Balas</button><button type="button" data-comment-more aria-label="Opsi komentar">'+renderIcon('moreVertical')+'</button></div><div class="pl-post-comment-replies"></div></div>';
       comment.querySelector('p').textContent=value;list.appendChild(comment);input.value='';
       const count=card.querySelector('[data-post-comment-count]');count.textContent=Number(count.textContent)+1;card.querySelectorAll('[data-overlay-comment-count]').forEach((node)=>node.textContent=count.textContent);
-      showToast(root,'Komentar ditambahkan ke preview.');return;
+      showToast(root,'Komentar ditambahkan ke .');return;
     }
-    const reply=document.createElement('div');reply.className='pl-post-reply is-right';const bubble=document.createElement('div');bubble.className='pl-post-reply-bubble';const strong=document.createElement('strong');strong.textContent='Anda';const span=document.createElement('span');span.textContent=value;bubble.append(strong,span);const avatar=document.createElement('div');avatar.className='pl-post-reply-avatar';avatar.textContent='A';reply.append(bubble,avatar);form.before(reply);form.remove();showToast(root,'Balasan ditambahkan ke preview.');
+    const reply=document.createElement('div');reply.className='pl-post-reply is-right';const bubble=document.createElement('div');bubble.className='pl-post-reply-bubble';const strong=document.createElement('strong');strong.textContent='Anda';const span=document.createElement('span');span.textContent=value;bubble.append(strong,span);const avatar=document.createElement('div');avatar.className='pl-post-reply-avatar';avatar.textContent='A';reply.append(bubble,avatar);form.before(reply);form.remove();showToast(root,'Balasan ditambahkan ke .');
   },{signal:controller.signal});
   root.addEventListener('play',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]'))return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.currentTime=0;video.dataset.demoCapped='false';}},{capture:true,signal:controller.signal});
   root.addEventListener('timeupdate',(event)=>{const video=event.target;if(!video?.matches?.('[data-demo-video]')||video.dataset.demoCapped==='true')return;const limit=Number(video.dataset.videoLimit||10);if(video.currentTime>=limit){video.dataset.demoCapped='true';video.pause();video.currentTime=limit;showToast(root,'Preview video dibatasi hingga 10 detik.');}},{capture:true,signal:controller.signal});
