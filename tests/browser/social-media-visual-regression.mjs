@@ -74,7 +74,11 @@ try {
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     return {
       active: document.querySelector('.global-home-page').classList.contains('has-content-tabs-pinned'),
-      tabsTop: Math.round(nav.getBoundingClientRect().top)
+      tabsTop: Math.round(nav.getBoundingClientRect().top),
+      computedTop: getComputedStyle(nav).top,
+      marginTop: getComputedStyle(nav).marginTop,
+      rootClass: document.querySelector('.global-home-page').className,
+      headerHeight: Math.round(header.getBoundingClientRect().height)
     };
   });
   if (!handoff.active || handoff.tabsTop > 2) {
