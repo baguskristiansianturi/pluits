@@ -3,7 +3,7 @@
 Status: **IN-DESIGN**
 
 ## Purpose
-Define product behavior and user experience before runtime changes. Product Design canonical details belong in `../../02-PRODUCT-DESIGN/07-FLUIDS-MESSAGING/`; this folder is the design work lane and decision entry point.
+Define product behavior and user experience before runtime changes. Product Design canonical details belong in ../../02-PRODUCT-DESIGN/07-FLUIDS-MESSAGING/; this folder is the design work lane and decision entry point.
 
 ## Required design rules
 1. Establish audience, use cases, conversation eligibility, message request flow, and user journey before styling.
@@ -21,3 +21,6 @@ Define product behavior and user experience before runtime changes. Product Desi
 - Privacy, safety, notification, retention, and attachment rules.
 - Approved mobile/desktop interaction and responsive specs.
 - Acceptance criteria and out-of-scope list.
+
+## Historical reference and reconciliation
+The legacy PLUITS Inbox WhatsApp-style architecture and two-account UAT records in PLUITS-SHARING-INBOX/LEGACY-TO-SORT/PLUITS-CORE-REFERENCES/ describe a prior direct-message/voice-note design. They are historical reference, not automatic active requirements. Earlier notes describe Supabase; the current repository directive requires PLUITS-owned Go API + PostgreSQL. Retain useful user-facing behaviors for review, but do not restore prohibited hosted-backend SDKs or assume historical UAT passed.
