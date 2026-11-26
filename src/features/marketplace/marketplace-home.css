@@ -513,3 +513,20 @@
  .mp-home .mp-card--beauty .mp-card-image{aspect-ratio:.78/1}
 }
 @media(prefers-reduced-motion:reduce){.mp-home .mp-service-grid>a{transition:none}}
+
+/* Marketplace catalogue cleanup: product-first cards, no storefront metadata. */
+.mp-home .mp-card{display:flex;flex-direction:column;height:100%;min-width:0}
+.mp-home .mp-card-open{display:flex;flex:1 1 auto;flex-direction:column;min-width:0}
+.mp-home .mp-card-image{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:#f1f2ef}
+.mp-home .mp-card-image img{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;object-fit:cover!important;object-position:center!important;background:transparent!important}
+.mp-home .mp-card-tag{max-width:calc(100% - 64px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mp-home .mp-card-body{padding:10px 0 12px!important;gap:0!important}
+.mp-home .mp-card-kicker{margin-bottom:5px}
+.mp-home .mp-card-title{min-height:2.8em!important;font-size:11px!important;line-height:1.4!important}
+.mp-home .mp-price-line{margin-top:7px}
+.mp-home .mp-price-line>b{font-size:13px!important}
+.mp-home .mp-add{flex:0 0 auto;width:100%;min-height:35px;margin:0!important;border:1px solid #dfe5e1;background:#fff;color:#26312c}
+.mp-home .mp-food-copy{grid-template-columns:1fr;padding:9px 0 0}
+.mp-home .mp-food-copy strong{grid-column:auto;font-size:12px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.mp-home .mp-food-copy>b{grid-column:auto;margin-top:2px}
+@media(max-width:640px){.mp-home .mp-card-image{aspect-ratio:1/1!important}.mp-home .mp-card-body{padding:9px 0 10px!important}.mp-home .mp-card-title{min-height:2.8em!important;font-size:10px!important}.mp-home .mp-price-line>b{font-size:12px!important}.mp-home .mp-add{min-height:34px;font-size:9px}.mp-home .mp-food-copy strong{font-size:11px}.mp-home .mp-food-copy>b{font-size:11px}}
