@@ -9,6 +9,10 @@ Urutan enam model utama PLUITS:
 5. Logistics, Courier & Transportation
 6. Digital Wallet
 
+## Fluids Messaging — layanan komunikasi lintas ekosistem
+
+[Fluids Messaging](07-FLUIDS-MESSAGING/README.md) adalah modul komunikasi independen yang digunakan oleh Social Media, Marketplace, dan consumer PLUITS lainnya. Fluids dirancang untuk menjadi aplikasi mandiri di masa depan; penempatannya di katalog model ekosistem tidak menjadikannya bagian internal Social Media.
+
 ## Struktur di dalam model
 
 Marketplace menampung indeks vertikal merchant yang terhubung dengannya, saat ini:
