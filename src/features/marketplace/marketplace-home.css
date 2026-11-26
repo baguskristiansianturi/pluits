@@ -122,10 +122,7 @@
 .mp-home .mp-wish:hover{color:var(--mp-accent);transform:translateY(-1px)}
 .mp-home .mp-wish{transition:color .18s ease,transform .18s ease}
 
-/* Fashion / Beauty: taller editorial photography and restrained product information. */
-.mp-home .mp-card--fashion .mp-card-image,.mp-home .mp-card--beauty .mp-card-image{aspect-ratio:1/1}
-.mp-home .mp-card--fashion .mp-card-title,.mp-home .mp-card--beauty .mp-card-title{font-size:12px;letter-spacing:.005em}
-.mp-home .mp-card--fashion .mp-price-line>b,.mp-home .mp-card--beauty .mp-price-line>b{font-size:14px}
+/* Every category uses one consistent product-card proportion and content rhythm. */
 
 /* Electronics: square image and concise practical product hierarchy. */
 .mp-home .mp-card--electronics .mp-card-image{aspect-ratio:1/1}
