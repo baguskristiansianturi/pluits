@@ -3,7 +3,7 @@
 Status: **IN-DESIGN**
 
 ## Purpose
-Define product behavior and user experience before runtime changes. Product Design canonical details belong in ../../02-PRODUCT-DESIGN/07-FLUIDS-MESSAGING/; this folder is the design work lane and decision entry point.
+Define product behavior and user experience before runtime changes. Product Design canonical details belong in ../../../02-PRODUCT-DESIGN/07-FLUIDS-MESSAGING/; this folder is the design work lane and decision entry point.
 
 ## Required design rules
 1. Establish audience, use cases, conversation eligibility, message request flow, and user journey before styling.
