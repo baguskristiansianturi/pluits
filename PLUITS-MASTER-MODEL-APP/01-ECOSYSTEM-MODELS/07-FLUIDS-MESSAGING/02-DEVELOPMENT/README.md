@@ -3,12 +3,12 @@
 Status: **ARCHITECTURE BASELINE / IMPLEMENTATION NOT YET VERIFIED**
 
 ## Technical ownership
-- Frontend feature owner: `src/features/fluids-messaging/` (target; verify actual runtime tree before implementation).
-- Routes/bootstrap: owned by `src/app/`; route integration must be minimal and reviewed.
-- API orchestration: `src/services/` adapter only; no page DOM rendering and no secrets.
-- Backend domain: PLUITS Go API under `backend/`, with Fluids-owned domain/service/repository boundaries and additive PostgreSQL migrations.
+- Frontend feature owner: src/features/fluids-messaging/ (target; verify actual runtime tree before implementation).
+- Routes/bootstrap: owned by src/app/; route integration must be minimal and reviewed.
+- API orchestration: src/services/ adapter only; no page DOM rendering and no secrets.
+- Backend domain: PLUITS Go API under backend/, with Fluids-owned domain/service/repository boundaries and additive PostgreSQL migrations.
 - Shared identity: PLUITS first-party Identity API. No separate user account store or external auth fallback.
-- Shared UI: consume approved `src/design-system/` assets/tokens; feature CSS must be namespaced to Fluids root.
+- Shared UI: consume approved src/design-system/ assets/tokens; feature CSS must be namespaced to Fluids root.
 
 ## Required development rules
 1. Inspect current routes, source ownership, API contracts, migrations, tests, and workflow before touching code. This path is a target, not proof that folders exist.
@@ -23,3 +23,6 @@ Status: **ARCHITECTURE BASELINE / IMPLEMENTATION NOT YET VERIFIED**
 
 ## Required technical artifacts
 Domain model, API contract, permission matrix, event schema, migration plan, error contract, observability plan, test plan, deployment/rollback plan, and dependency map.
+
+## Legacy code and data audit gate
+The prior Inbox design document describes Supabase tables, RPCs, Realtime, private voice-note storage, and local text outbox. Current PLUITS engineering instructions supersede that vendor-bound implementation direction. Before any runtime change, inspect actual main-branch source, backend migrations, any live database/data/media, current APIs and tests. Do not delete, rewrite, or migrate existing messages/media until inventory, backup, reconciliation, rollback, and owner acceptance are documented. Historical two-account UAT checklist is not current pass evidence.
