@@ -26,7 +26,7 @@
 .mp-home .mp-discovery-strip{display:flex;min-height:48px;align-items:center;justify-content:space-between;gap:12px;padding:9px 0 7px}
 .mp-home .mp-location{display:inline-flex;align-items:center;gap:7px;padding:0;border:0;background:transparent;color:#263b32;font-size:12px;font-weight:750;cursor:pointer}
 .mp-home .mp-location-mark{color:var(--mp-accent);font-size:17px;line-height:1}
-.mp-home .mp-location-range{color:var(--mp-muted);font-size:10px;font-weight:600;white-space:nowrap}
+.mp-home .mp-location-range{color:var(--mp-muted);font-size:10px;font-weight:650;white-space:nowrap}
 
 /* 02. Homepage sequence: hero, local needs, curated goods, campaign, full catalogue. */
 .mp-home .mp-main{display:flex;flex-direction:column}
@@ -245,6 +245,7 @@
  .mp-home .mp-promo-band{grid-template-columns:1fr;gap:14px;margin:14px 0 8px;padding:17px}
  .mp-home .mp-promo-band h2,.mp-home .mp-feature-row h2{font-size:23px}
  .mp-home .mp-promo-visual{aspect-ratio:16/9}
+ .mp-home .mp-location-explore .ui-icon{width:13px;height:13px}
  .mp-home .mp-feature-row{grid-template-columns:1fr;gap:13px;margin:16px 0;padding:16px}
  .mp-home .mp-feature-mini{gap:9px}
  .mp-home .mp-feature-mini .mp-card-body{padding:8px}
