@@ -213,7 +213,9 @@
  .mp-home .mp-nav{width:calc(100% - 20px);min-height:38px;gap:17px}
  .mp-home .mp-nav a{font-size:10px}
  .mp-home .mp-main{width:calc(100% - 20px)}
- .mp-home .mp-hero-controls{right:14px;bottom:14px;gap:0}\n .mp-home .mp-hero-controls .mp-hero-arrow{display:none}\n .mp-home .mp-hero-dots{gap:6px;padding:7px 9px;border-radius:20px;background:rgba(15,29,24,.28);backdrop-filter:blur(8px)}
+ .mp-home .mp-hero-controls{right:14px;bottom:14px;gap:0}
+ .mp-home .mp-hero-controls .mp-hero-arrow{display:none}
+ .mp-home .mp-hero-dots{gap:6px;padding:7px 9px;border-radius:20px;background:rgba(15,29,24,.28);backdrop-filter:blur(8px)}
  .mp-home .mp-hero-controls>button{width:30px;height:30px}
  .mp-home .mp-hero-dots{gap:5px}
  .mp-home .mp-discovery-strip{min-height:42px;padding:8px 0 5px}
