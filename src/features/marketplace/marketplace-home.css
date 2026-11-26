@@ -41,14 +41,14 @@
 /* 03. Hero: full-bleed campaign image with readable message and one action. */
 .mp-home .mp-hero{position:relative;left:50%;display:block;width:100vw;max-width:none;min-height:350px;margin:12px 0 22px -50vw;padding:0;overflow:hidden;border-radius:0;background:#243c36}
 .mp-home .mp-hero-image,.mp-home .mp-hero-shade{position:absolute;inset:0}
-.mp-home .mp-hero-image{background-position:center;background-size:cover;transition:opacity .2s}
+.mp-home .mp-hero-image{background-position:center 42%;background-size:cover;background-repeat:no-repeat;transform:scale(1.002);transition:opacity .28s ease,transform .6s ease}
 .mp-home .mp-hero-image.is-changing{opacity:.65}
-.mp-home .mp-hero-shade{background:linear-gradient(0deg,rgba(13,31,27,.66),rgba(13,31,27,.08) 58%,rgba(13,31,27,0))}
-.mp-home .mp-hero-content{position:relative;z-index:1;display:flex;min-height:350px;max-width:470px;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:24px 44px 48px;color:#fff}
+.mp-home .mp-hero-shade{background:linear-gradient(90deg,rgba(10,24,20,.42),rgba(10,24,20,.04) 72%),linear-gradient(0deg,rgba(10,24,20,.58),rgba(10,24,20,0) 68%)}
+.mp-home .mp-hero-content{position:relative;z-index:1;display:flex;min-height:350px;width:min(100%,1240px);max-width:1240px;margin-inline:auto;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:28px 44px 48px;color:#fff}
 .mp-home .mp-hero-content>small{color:#c1e9dc;font-size:9px;font-weight:800;letter-spacing:.12em}
-.mp-home .mp-hero-content h1{max-width:420px;margin:6px 0;color:#fff;font-size:clamp(23px,3vw,34px);line-height:1.08;letter-spacing:-.035em}
+.mp-home .mp-hero-content h1{max-width:460px;margin:7px 0;color:#fff;font-size:clamp(25px,3.2vw,38px);font-weight:760;line-height:1.06;letter-spacing:-.04em;text-shadow:0 2px 18px rgba(0,0,0,.12)}
 .mp-home .mp-hero-content p{max-width:300px;margin:0;color:rgba(255,255,255,.92);font-size:10px;line-height:1.45}
-.mp-home .mp-hero-cta{display:inline-flex;margin-top:10px;padding:9px 13px;background:#fff;color:#183d36;font-size:10px;font-weight:850}
+.mp-home .mp-hero-cta{display:inline-flex;align-items:center;min-height:36px;margin-top:13px;padding:0 15px;background:#fff;color:#183d36;font-size:10px;font-weight:850;letter-spacing:.01em;transition:background .2s ease,color .2s ease}
 .mp-home .mp-hero-controls{position:absolute;z-index:2;right:22px;bottom:20px;display:flex;align-items:center;gap:12px}
 .mp-home .mp-hero-controls>button{display:grid;width:34px;height:34px;place-items:center;border:1px solid rgba(255,255,255,.58);border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:22px;line-height:1;cursor:pointer;backdrop-filter:blur(8px)}
 .mp-home .mp-hero-controls>button:hover{background:#fff;color:#243b34}
@@ -213,17 +213,17 @@
  .mp-home .mp-nav{width:calc(100% - 20px);min-height:38px;gap:17px}
  .mp-home .mp-nav a{font-size:10px}
  .mp-home .mp-main{width:calc(100% - 20px)}
- .mp-home .mp-hero-controls{right:13px;bottom:13px;gap:8px}
+ .mp-home .mp-hero-controls{right:14px;bottom:14px;gap:0}\n .mp-home .mp-hero-controls .mp-hero-arrow{display:none}\n .mp-home .mp-hero-dots{gap:6px;padding:7px 9px;border-radius:20px;background:rgba(15,29,24,.28);backdrop-filter:blur(8px)}
  .mp-home .mp-hero-controls>button{width:30px;height:30px}
  .mp-home .mp-hero-dots{gap:5px}
  .mp-home .mp-discovery-strip{min-height:42px;padding:8px 0 5px}
  .mp-home .mp-location{font-size:11px}
  .mp-home .mp-location-range{font-size:9px}
- .mp-home .mp-hero{left:50%;width:100vw;min-height:285px;margin:8px 0 12px -50vw}
- .mp-home .mp-hero-content{min-height:285px;max-width:82%;justify-content:flex-end;padding:18px 20px 40px}
- .mp-home .mp-hero-content h1{max-width:270px;margin:5px 0;font-size:23px}
- .mp-home .mp-hero-content p{max-width:245px;font-size:9px;line-height:1.35}
- .mp-home .mp-hero-cta{margin-top:9px;padding:8px 11px;font-size:9px}
+ .mp-home .mp-hero{left:50%;width:100vw;min-height:300px;margin:8px 0 12px -50vw}
+ .mp-home .mp-hero-content{min-height:300px;width:100%;max-width:none;justify-content:flex-end;padding:20px 20px 42px}
+ .mp-home .mp-hero-content h1{max-width:300px;margin:6px 0;font-size:25px}
+ .mp-home .mp-hero-content p{max-width:260px;font-size:10px;line-height:1.4}
+ .mp-home .mp-hero-cta{min-height:34px;margin-top:11px;padding:0 13px;font-size:9px}
  .mp-home .mp-needs{padding:17px 0 14px}
  .mp-home .mp-entry-track{grid-auto-columns:90%;gap:9px;padding-right:10px}
  .mp-home .mp-entry-card{aspect-ratio:1.63/1}
