@@ -65,7 +65,7 @@
 .mp-home .mp-needs .mp-heading{margin-bottom:13px}
 .mp-home .mp-entry-track{display:grid;grid-auto-columns:minmax(20%,20%);grid-auto-flow:column;gap:12px;overflow-x:auto;padding:2px 1px 12px;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-inline:contain;scroll-behavior:smooth}
 .mp-home .mp-entry-track::-webkit-scrollbar{display:none}
-.mp-home .mp-entry-card{position:relative;display:block;min-width:0;aspect-ratio:1.08/1;overflow:hidden;background:#e8ece7;scroll-snap-align:start}
+.mp-home .mp-entry-card{position:relative;display:block;min-width:0;aspect-ratio:1.54/1;overflow:hidden;background:#e8ece7;scroll-snap-align:start}
 .mp-home .mp-entry-card:after{position:absolute;inset:25% 0 0;content:"";background:linear-gradient(0deg,rgba(14,29,24,.82),rgba(14,29,24,0))}
 .mp-home .mp-entry-card img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
 .mp-home .mp-entry-card:hover img{transform:scale(1.04)}
@@ -142,12 +142,16 @@
 .mp-home .mp-service-grid>a>small{color:var(--mp-muted);font-size:10px;line-height:1.5}
 
 /* 10. Discovery directory, filters, empty state and footer */
-.mp-home .mp-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:18px 0}
-.mp-home .mp-toolbar>div{display:flex;flex-wrap:wrap;gap:7px}
+.mp-home .mp-toolbar{display:flex;flex-direction:column;gap:10px;margin:18px 0}
+.mp-home .mp-sort-controls{display:flex;gap:7px}
+.mp-home .mp-category-track{display:flex;gap:7px;overflow-x:auto;padding:2px 1px 7px;scroll-snap-type:x proximity;scrollbar-width:none;overscroll-behavior-inline:contain}
+.mp-home .mp-category-track::-webkit-scrollbar{display:none}
 .mp-home .mp-toolbar button{display:inline-flex;align-items:center;gap:7px;padding:5px 10px 5px 5px;border:1px solid var(--mp-line);background:#fff;color:#65716a;font-size:10px;cursor:pointer}
 .mp-home .mp-toolbar button img{width:25px;height:25px;object-fit:cover;border-radius:2px}
 .mp-home .mp-toolbar button span{white-space:nowrap}
 .mp-home .mp-toolbar button.is-active{border-color:#243b34;background:#243b34;color:#fff}
+.mp-home .mp-sort-controls button{min-height:30px;padding:6px 12px}
+.mp-home .mp-category-track button{flex:0 0 auto;scroll-snap-align:start}
 .mp-home .mp-toolbar button.is-active img{outline:1px solid rgba(255,255,255,.6);outline-offset:-1px}
 .mp-home .mp-toolbar label{display:flex;align-items:center;gap:8px;color:var(--mp-muted);font-size:10px;white-space:nowrap}
 .mp-home .mp-toolbar select{min-height:35px;border:1px solid var(--mp-line);background:#fff;color:var(--mp-ink);font-size:11px}
@@ -222,7 +226,7 @@
  .mp-home .mp-hero-cta{margin-top:9px;padding:8px 11px;font-size:9px}
  .mp-home .mp-needs{padding:17px 0 14px}
  .mp-home .mp-entry-track{grid-auto-columns:90%;gap:9px;padding-right:10px}
- .mp-home .mp-entry-card{aspect-ratio:1.14/1}
+ .mp-home .mp-entry-card{aspect-ratio:1.63/1}
  .mp-home .mp-entry-card>span{right:10px;bottom:11px;left:10px}
  .mp-home .mp-entry-card strong{font-size:15px}
  .mp-home .mp-entry-card small{font-size:8px}
@@ -258,10 +262,11 @@
  .mp-home .mp-service-grid>a>span{grid-row:1/3;align-self:center}
  .mp-home .mp-service-grid>a>strong{font-size:11px}
  .mp-home .mp-service-grid>a>small{font-size:9px}
- .mp-home .mp-toolbar{align-items:flex-start;flex-direction:column}
- .mp-home .mp-toolbar>div{gap:5px}
- .mp-home .mp-toolbar button{padding:7px 9px;font-size:9px}
- .mp-home .mp-toolbar label{align-self:flex-end}
+ .mp-home .mp-toolbar{gap:8px}
+ .mp-home .mp-sort-controls{gap:6px}
+ .mp-home .mp-category-track{width:100%;gap:6px}
+ .mp-home .mp-toolbar button{padding:5px 8px;font-size:9px}
+ .mp-home .mp-toolbar button img{width:21px;height:21px}
  .mp-home .mp-directory-links{grid-template-columns:1fr}
  .mp-home .mp-editorial-directory{margin:20px 0 28px;padding:18px}
  .mp-home .mp-directory-tail{flex-direction:column}
