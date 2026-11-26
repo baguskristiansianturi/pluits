@@ -67,3 +67,34 @@ Eligibility is checked again at product detail and checkout; homepage cache is n
 - Precise location is optional; do not require it for basic browsing.
 - Do not imply a product is nearby or deliverable until serviceability is checked.
 - Country-specific catalog, currency and language must be explicit.
+
+## 8. Customer-facing visual and content rules
+
+### Homepage sequence
+- The first discovery shelf after the hero is Food: image-led choices with a direct invitation to explore all Food.
+- Follow Food with products available around the selected area.
+- Follow nearby discovery with personal picks based on interests and interaction signals; do not describe internal ranking or algorithm mechanics to customers.
+- Keep services in their own section, separate from nearby products.
+- Place campaign offers between discovery shelves where they support the browsing journey; do not let promotions overwhelm product discovery.
+- Continue with categories and the broader catalogue.
+
+### Product catalogue cards
+- Product cards are product-first. Do not show store name, seller address, or store distance on catalogue cards.
+- Seller identity, public store profile, address, and fulfillment details belong on the provider profile or the appropriate product/checkout detail surface.
+- The product image owns the entire image frame. No opaque white inset panel, inner mat, or nested white image background may cover the photo.
+- Use a real image element with a defined frame and cover behavior; preserve the full card image surface and overlay only small purposeful labels/actions.
+- Fashion and Beauty use taller editorial photography and restrained copy (Zalora-led visual direction).
+- Electronics and general merchandise use practical, square image framing and concise product information (balanced Zalora/Shopee direction).
+- Food cards prioritize appetizing food photography, clear product name, and price. Do not insert internal system terms or operational/algorithm language.
+
+### Customer-facing language
+- Write headings and actions as natural invitations based on what a customer wants to do.
+- Food CTA should clearly invite exploration, e.g. “Jelajahi semua Food”.
+- Recommendations should use customer language about relevant choices, not internal concepts such as ranking, signals, proximity weighting, or algorithms.
+- Do not expose internal implementation, kitchen, ranking, or algorithm terminology in customer-facing copy.
+
+### CSS ownership and isolation
+- Marketplace homepage styles live in `src/features/marketplace/marketplace-home.css` and are scoped under `.mp-home`.
+- The stylesheet is organized by owned sections: foundation/header, hero, Food, product shelves/cards, categories, offers/recommendations, services, directory/footer, modal, responsive rules.
+- Change a rule in its owning section. Do not append override blocks or duplicate selectors at the end of the stylesheet.
+- Keep Store and Restaurant & Café operational styles out of the Marketplace homepage stylesheet.
