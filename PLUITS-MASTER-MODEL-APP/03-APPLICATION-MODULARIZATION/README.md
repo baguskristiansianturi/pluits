@@ -8,3 +8,6 @@ Area spesifikasi implementasi per aplikasi: module boundaries, frontend, backend
 - Pemetaan antara spesifikasi UI dan file runtime dicatat di `06-PLATFORM-UI-FOUNDATION/11-IMPLEMENTATION-MAPPING/`, sedangkan keputusan arsitektur dan kepemilikan teknis tetap dicatat di sini.
 
 Jangan campur spesifikasi visual/wireframe dengan arsitektur teknis. Jangan mengubah shared runtime tanpa audit konsumen dan dampak.
+
+## Fluids Messaging
+Arsitektur teknis Fluids Messaging mengikuti jalur model [Fluids Messaging](../01-ECOSYSTEM-MODELS/07-FLUIDS-MESSAGING/README.md). Source ownership target, backend Go/PostgreSQL, authorization, realtime, media, integration contracts, tests, deployment, dan rollback harus ditetapkan serta diverifikasi di dokumen modularisasi khusus sebelum implementasi runtime.
