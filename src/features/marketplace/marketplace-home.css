@@ -535,3 +535,18 @@
 .mp-home .mp-card-image,.mp-home .mp-food-image{background-repeat:no-repeat!important;background-position:center!important;background-size:cover!important;background-color:#f1f2ef!important}
 .mp-home .mp-card-image[role="img"],.mp-home .mp-food-image[role="img"]{display:block!important}
 .mp-home .mp-card-image img,.mp-home .mp-food-image img{display:none!important}
+
+/* Customer-facing discovery copy: clear actions, no internal ranking language. */
+.mp-home .mp-feature-cta{display:inline-flex;align-items:center;margin-top:12px;color:#078f83;font-size:11px;font-weight:850;text-decoration:none}
+.mp-home .mp-feature-cta:hover{color:#172b45;text-decoration:underline;text-underline-offset:3px}
+.mp-home #offers-for-you{order:4}
+.mp-home #recommendations{order:5}
+.mp-home .mp-promo-band{order:6}
+.mp-home #services{order:7}
+.mp-home #categories{order:8}
+.mp-home .mp-food-nearby .mp-heading h2{max-width:620px}
+@media(max-width:640px){
+ .mp-home .mp-feature-cta{margin-top:9px;font-size:10px}
+ .mp-home .mp-food-nearby .mp-heading{align-items:flex-end}
+ .mp-home .mp-food-actions>a{font-size:9px}
+}
