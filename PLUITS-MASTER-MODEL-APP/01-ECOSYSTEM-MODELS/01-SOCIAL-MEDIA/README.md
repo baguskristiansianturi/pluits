@@ -32,12 +32,13 @@ Perubahan pada Blog tidak boleh merusak Reels, Stories, atau Live. Shared code c
 
 Pembaruan dokumentasi tidak berarti izin untuk mengubah website. Desain, tampilan, struktur halaman, CSS, JavaScript, API, dan perilaku runtime hanya berubah melalui scope implementasi terpisah yang diminta secara eksplisit.
 
-
 ## Kemandirian domain dan audit runtime
 Social Media hanya berinteraksi dengan domain luar melalui route/deep-link, API, event, atau public read model yang terdokumentasi. Tidak boleh mengimpor private code/CSS, membaca DOM/state/storage, atau mengambil alih lifecycle sibling domain. Fondasi Platform UI Foundation yang disetujui tetap boleh dikonsumsi sebagai kontrak platform; CSS feature-specific tetap milik modul masing-masing.
 
 Blog harus menjadi modul runtime mandiri di dalam Social Media. Feed/Social Home hanya mengonsumsi preview dan public read model Blog; lifecycle artikel tetap milik Blog. Lihat [Audit Kepemilikan Domain Social Media dan Isolasi Runtime](00-ATURAN-PENGALAMAN/18-AUDIT-KEPEMILIKAN-DOMAIN-DAN-ISOLASI-RUNTIME.md) untuk temuan aktual, gap, dan definition of done.
 
+## Fluids Messaging integration
+Social Media Messages adalah **entry point/consumer** untuk [Fluids Messaging](../07-FLUIDS-MESSAGING/README.md), bukan owner dari conversation/message service. Social Media dapat membuka inbox atau memulai percakapan melalui route/deep-link/API/event contract yang disetujui. Jangan memasukkan private Fluids UI/CSS/state/database logic ke Social Media. Status runtime saat ini tetap inbox skeleton/empty state sampai implementasi dan backend terverifikasi.
 
 ## Implementasi runtime — 25 November 2026
 - Blog sudah memiliki entry route mandiri `/blog/` dan source owner `src/features/social/blog/` (page + stylesheet). Page memiliki filter kategori dan pencarian lokal; stylesheet memakai namespace `.sm-blog-*` dan tidak menarget selector global/sibling.
