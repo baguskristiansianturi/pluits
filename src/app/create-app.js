@@ -9,7 +9,8 @@ import { mountVenueProviderPage } from '../features/venue/venue-provider-page.js
 import { mountMarketplaceHomePage } from '../features/marketplace/marketplace-home-page.js';
 import { mountBlogPage } from '../features/social/blog/blog-page.js';
 import { mountReelsPage } from '../features/social/reels/reels-page.js';
-import { mountDiscoverPage, mountMessagesPage, mountProfilePage, mountSettingsPage } from '../features/social/social-pages.js';
+import { mountDiscoverPage, mountProfilePage, mountSettingsPage } from '../features/social/social-pages.js';
+import { mountFluidsMessagingPage } from '../features/fluids-messaging/fluids-messaging-page.js';
 import { mountDashboardPage } from '../features/dashboard/dashboard-page.js';
 import { mountAuthPage } from '../features/auth/auth-page.js';
 import { mountPolicyPage } from '../features/legal/policy-page.js';
@@ -69,7 +70,7 @@ export function createApp({ root, authService }) {
     if (route === 'blog') { cleanupPage = mountWithNavigation('social', () => mountBlogPage({ root, user: session?.user || null })); return; }
     if (route === 'reels') { cleanupPage = mountReelsPage({ root }); return; }
     if (route === 'circle') { navigate('social'); return; }
-    if (route === 'messages') { mountWithNavigation('messages', () => mountMessagesPage({ root, user: session?.user || null })); return; }
+    if (route === 'messages') { cleanupPage = mountFluidsMessagingPage({ root, user: session?.user || null }); return; }
     if (route === 'settings') { mountWithNavigation('', () => mountSettingsPage({ root, user: session?.user || null, onSignOut: () => authService.signOut() })); return; }
     if (route === 'discover') { mountWithNavigation('discover', () => mountDiscoverPage({ root, user: session?.user || null })); return; }
     if (route === 'dashboard') { mountWithNavigation('', () => mountDashboardPage({ root, user: session?.user || null, onSignOut: () => authService.signOut() })); return; }
