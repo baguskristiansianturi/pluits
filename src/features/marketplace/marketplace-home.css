@@ -534,7 +534,7 @@
 /* Image rendering fix: use the image as the card surface, never a nested white image panel. */
 .mp-home .mp-card-image,.mp-home .mp-food-image{background-repeat:no-repeat!important;background-position:center!important;background-size:cover!important;background-color:#f1f2ef!important}
 .mp-home .mp-card-image[role="img"],.mp-home .mp-food-image[role="img"]{display:block!important}
-.mp-home .mp-card-image img,.mp-home .mp-food-image img{display:none!important}
+.mp-home .mp-card-image img,.mp-home .mp-food-image img{display:block!important}
 
 /* Customer-facing discovery copy: clear actions, no internal ranking language. */
 .mp-home .mp-feature-cta{display:inline-flex;align-items:center;margin-top:12px;color:#078f83;font-size:11px;font-weight:850;text-decoration:none}
@@ -550,3 +550,9 @@
  .mp-home .mp-food-nearby .mp-heading{align-items:flex-end}
  .mp-home .mp-food-actions>a{font-size:9px}
 }
+
+/* Definitive catalogue photo layer: a real img fills the complete image frame. */
+.mp-home .mp-card-image,.mp-home .mp-food-image{position:relative;isolation:isolate;overflow:hidden;background:#f1f2ef}
+.mp-home .mp-card-image>.mp-product-photo,.mp-home .mp-food-image>.mp-food-photo{position:absolute!important;inset:0!important;z-index:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;object-fit:cover!important;object-position:center!important;background:transparent!important}
+.mp-home .mp-card-image>.mp-card-tag,.mp-home .mp-card-image>.mp-card-discount,.mp-home .mp-card-image>.mp-wish,.mp-home .mp-food-image>.mp-food-type,.mp-home .mp-food-image>.mp-food-distance{z-index:2}
+.mp-home .mp-food-image:after{z-index:1}
