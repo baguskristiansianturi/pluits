@@ -409,3 +409,50 @@
  .mp-home .mp-card-seller,.mp-home .mp-card-distance{font-size:7px}
 }
 @media(prefers-reduced-motion:reduce){.mp-home .mp-add{transition:none}}
+
+
+/* Precision finish: sharp card geometry, reliable imagery and tighter discovery rhythm. */
+.mp-home .mp-card,
+.mp-home .mp-food-card,
+.mp-home .mp-promo-tiles button,
+.mp-home .mp-feature-row,
+.mp-home .mp-promo-band,
+.mp-home .mp-categories button,
+.mp-home .mp-card-image,
+.mp-home .mp-food-image,
+.mp-home .mp-card-tag,
+.mp-home .mp-card-discount,
+.mp-home .mp-add,
+.mp-home .mp-hero-cta,
+.mp-home .mp-food-controls button {
+  border-radius:2px!important;
+}
+.mp-home .mp-food-nearby{padding:19px 0 4px}
+.mp-home .mp-food-nearby .mp-heading{margin-bottom:10px}
+.mp-home .mp-food-actions{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.mp-home .mp-food-actions>a{white-space:nowrap}
+.mp-home .mp-food-controls{display:flex;gap:5px}
+.mp-home .mp-food-controls button{
+ display:grid;place-items:center;width:27px;height:27px;padding:0;
+ border:1px solid #dfe5e1;background:#fff;color:#26332c;
+ font-size:19px;line-height:1;cursor:pointer;
+}
+.mp-home .mp-food-controls button:hover{background:#202923;color:#fff;border-color:#202923}
+.mp-home .mp-food-track{gap:11px;padding-bottom:7px}
+.mp-home .mp-food-image{aspect-ratio:1.32/1}
+.mp-home .mp-food-card{transition:transform .2s ease}
+.mp-home .mp-food-card:hover{transform:translateY(-2px)}
+.mp-home .mp-section#local-picks{padding-top:13px}
+.mp-home .mp-section#local-picks .mp-heading{margin-bottom:11px}
+@media(max-width:640px){
+ .mp-home .mp-food-nearby{padding:14px 0 2px}
+ .mp-home .mp-food-nearby .mp-heading{margin-bottom:9px}
+ .mp-home .mp-food-track{grid-auto-columns:68%;gap:9px;padding-bottom:5px}
+ .mp-home .mp-food-image{aspect-ratio:1.24/1}
+ .mp-home .mp-food-controls{display:none}
+ .mp-home .mp-food-actions{gap:0}
+ .mp-home .mp-section#local-picks{padding-top:10px}
+ .mp-home .mp-section#local-picks .mp-heading{margin-bottom:9px}
+}
+@media(max-width:370px){.mp-home .mp-food-track{grid-auto-columns:74%}}
+@media(prefers-reduced-motion:reduce){.mp-home .mp-food-card{transition:none}}
