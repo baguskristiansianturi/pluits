@@ -28,13 +28,13 @@ Instagram does not publish a universal CSS font-size specification for its app U
 | --- | ---: | --- |
 | Author display name | 15 px | medium/semibold |
 | Username / post metadata | 13 px | subdued, still readable |
-| Main caption | 16 px | 1.5 |
-| Comment body | 14 px | 1.45 |
-| Comment author | 13 px | semibold |
+| Main caption | 11 px | 1.5 |
+| Comment body | 10 px | 1.5 |
+| Comment author | 10 px | semibold |
 | Caption expand / feed actions | 14 px | touch-friendly |
-| Secondary metadata | 12 px minimum | small labels only |
+| Secondary metadata | 10 px minimum | small labels only; meaningful text follows its element-specific size |
 
-Tiny decorative marks, tier indicators, and compact icon badges may be smaller; meaningful content and action labels should not be reduced to 9–11 px. Respect browser zoom and system text scaling where possible.
+Caption and comment sizing are intentionally compact for this feed: caption 11 px and comment body/author 10 px. Keep action targets comfortably tappable even when their labels are compact. Respect browser zoom and system text scaling where possible.
 
 ## Implementation boundaries
 
