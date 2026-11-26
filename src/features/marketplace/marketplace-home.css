@@ -456,3 +456,60 @@
 }
 @media(max-width:370px){.mp-home .mp-food-track{grid-auto-columns:74%}}
 @media(prefers-reduced-motion:reduce){.mp-home .mp-food-card{transition:none}}
+
+
+/* Marketplace discovery hierarchy: nearby, personal recommendations, services, then offers. */
+.mp-home .mp-main{display:flex;flex-direction:column}
+.mp-home .mp-discovery-strip{order:0}
+.mp-home .mp-hero{order:1}
+.mp-home .mp-food-nearby{order:2}
+.mp-home #local-picks{order:3}
+.mp-home #recommendations{order:4}
+.mp-home #services{order:5}
+.mp-home #offers-for-you{order:6}
+.mp-home #categories{order:7}
+.mp-home .mp-promo-band{order:8}
+.mp-home #new-shops{order:9}
+.mp-home #popular-needs{order:10}
+.mp-home #food-home{order:11}
+.mp-home #all-products{order:12}
+.mp-home .mp-editorial-directory{order:13}
+
+/* Fashion and beauty: editorial, Zalora-led image-first cards. */
+.mp-home .mp-card--fashion .mp-card-image,
+.mp-home .mp-card--beauty .mp-card-image{aspect-ratio:.76/1}
+.mp-home .mp-card--fashion .mp-card-body,
+.mp-home .mp-card--beauty .mp-card-body{padding-top:12px}
+.mp-home .mp-card--fashion .mp-card-title,
+.mp-home .mp-card--beauty .mp-card-title{font-size:12px;letter-spacing:.005em}
+.mp-home .mp-card--fashion .mp-price-line>b,
+.mp-home .mp-card--beauty .mp-price-line>b{font-size:14px}
+
+/* Electronics and general merchandise: balanced practical information, blended style. */
+.mp-home .mp-card--electronics .mp-card-image{aspect-ratio:1/1}
+.mp-home .mp-card--electronics .mp-card-body{padding-top:10px}
+.mp-home .mp-card--electronics .mp-card-title{font-size:11px}
+.mp-home .mp-card--electronics .mp-card-detail{margin-top:8px}
+.mp-home .mp-card--electronics .mp-card-proof{margin-top:6px}
+
+/* PLUITS services are distinct from location-based product discovery. */
+.mp-home .mp-services{padding-top:24px}
+.mp-home .mp-service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mp-home .mp-service-grid>a{display:flex;flex-direction:column;align-items:flex-start;gap:9px;min-height:132px;padding:17px 16px;border:1px solid #e7ece8;background:#fafbf9;color:#202923;text-decoration:none;border-radius:2px}
+.mp-home .mp-service-grid>a>span{color:#8b958e;font-size:9px;font-weight:750;letter-spacing:.12em}
+.mp-home .mp-service-grid>a>strong{font-size:13px;font-weight:700;line-height:1.35}
+.mp-home .mp-service-grid>a>small{color:#7c8780;font-size:10px;line-height:1.5}
+.mp-home .mp-service-grid>a:hover{border-color:#b9c7bf;background:#f4f7f4}
+.mp-home #recommendations{scroll-margin-top:100px}
+.mp-home #services{scroll-margin-top:100px}
+@media(max-width:640px){
+ .mp-home .mp-services{padding-top:18px}
+ .mp-home .mp-service-grid{grid-template-columns:1fr;gap:8px}
+ .mp-home .mp-service-grid>a{min-height:0;display:grid;grid-template-columns:24px 1fr;gap:4px 10px;padding:13px 12px}
+ .mp-home .mp-service-grid>a>span{grid-row:1/3;align-self:center}
+ .mp-home .mp-service-grid>a>strong{font-size:11px}
+ .mp-home .mp-service-grid>a>small{font-size:9px}
+ .mp-home .mp-card--fashion .mp-card-image,
+ .mp-home .mp-card--beauty .mp-card-image{aspect-ratio:.78/1}
+}
+@media(prefers-reduced-motion:reduce){.mp-home .mp-service-grid>a{transition:none}}
