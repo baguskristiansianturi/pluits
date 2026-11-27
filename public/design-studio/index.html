@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f6f4"><meta name="robots" content="noindex,nofollow">
+<title>Mockup Hoodie PLUITS — Design Studio</title>
+<style>
+:root{color-scheme:light;--ink:#183044;--muted:#73818a;--line:#e3e9e6;--teal:#08ad9e;--paper:#fff;--bg:#f4f6f4}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+header{height:62px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 18px;gap:10px}
+.mark{width:27px;height:27px;border-radius:9px;background:#e5f7f4;display:grid;place-items:center;color:var(--teal);font-weight:900;font-size:18px}
+header strong{font-size:14px;letter-spacing:.01em}header span{margin-left:auto;font-size:11px;color:var(--muted)}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 36px}
+.eyebrow{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#078e82;font-weight:800}
+h1{font-size:clamp(22px,4vw,32px);letter-spacing:-.04em;margin:7px 0 5px}
+.sub{font-size:13px;color:var(--muted);margin:0 0 20px;line-height:1.5}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:18px;align-items:start}
+.preview{background:#e9eeea;border:1px solid var(--line);border-radius:20px;padding:14px;display:flex;justify-content:center}
+.preview img{display:block;width:min(100%,590px);height:auto;border-radius:12px;box-shadow:0 16px 38px #20352a1a}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;position:sticky;top:14px}
+.panel h2{font-size:14px;margin:0 0 7px}.panel p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 16px}
+button,.download{width:100%;border:0;border-radius:11px;padding:13px 14px;font:700 13px inherit;cursor:pointer;display:block;text-align:center;text-decoration:none;margin-top:9px}
+.primary{background:#078f84;color:white}.secondary{background:#eef5f3;color:#1c4a45}.plain{background:#f4f6f5;color:#52615e}
+.note{font-size:10px!important;margin:15px 0 0!important;padding-top:13px;border-top:1px solid var(--line)}
+@media(max-width:700px){main{padding:20px 12px 28px}.stage{grid-template-columns:1fr}.panel{position:static}.preview{padding:8px;border-radius:15px}.preview img{border-radius:9px;width:100%}.panel{padding:16px}header{padding:0 14px}}
+</style>
+</head>
+<body>
+<header><div class="mark">p</div><strong>PLUITS Design Studio</strong><span>Eksperimen visual · 001</span></header>
+<main>
+<div class="eyebrow">Design experiment / apparel</div>
+<h1>PLUITS Hoodie</h1>
+<p class="sub">Konsep ilustrasi wanita dewasa dengan kesan hangat dan keibuan, mengenakan hoodie oatmeal dengan identitas PLUITS di bagian dada.</p>
+<div class="stage">
+  <div class="preview"><img id="art" src="./hoodie-pluits.svg" alt="Ilustrasi wanita dewasa memakai hoodie PLUITS"></div>
+  <aside class="panel">
+    <h2>Pratinjau desain</h2>
+    <p>Master desain tersimpan dalam format SVG. Kamu bisa mengunduh versi JPG atau PNG untuk dipakai sebagai gambar, atau SVG untuk menjaga kualitas saat diperbesar.</p>
+    <button class="primary" id="jpg">Unduh JPG</button>
+    <button class="secondary" id="png">Unduh PNG</button>
+    <a class="download plain" href="./hoodie-pluits.svg" download="pluits-hoodie-mockup.svg">Unduh SVG</a>
+    <p class="note">Catatan: ini mockup ilustrasi vektor, bukan foto manusia. Logo simbol menggunakan artwork resmi PLUITS dari repository.</p>
+  </aside>
+</div>
+</main>
+<script>
+const img=document.getElementById('art');
+async function exportImage(type){
+  if(!img.complete) await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject});
+  const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;
+  const ctx=canvas.getContext('2d');
+  if(type==='image/jpeg'){ctx.fillStyle='#f1eee8';ctx.fillRect(0,0,1080,1350)}
+  ctx.drawImage(img,0,0,1080,1350);
+  canvas.toBlob(blob=>{if(!blob){alert('Gagal menyiapkan gambar. Coba lagi.');return}
+    const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=type==='image/jpeg'?'pluits-hoodie-mockup.jpg':'pluits-hoodie-mockup.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+  },type,type==='image/jpeg'?.94:undefined);
+}
+document.getElementById('jpg').addEventListener('click',()=>exportImage('image/jpeg'));
+document.getElementById('png').addEventListener('click',()=>exportImage('image/png'));
+</script>
+</body></html>
