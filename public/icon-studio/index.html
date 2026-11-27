@@ -72,7 +72,7 @@
   <article class="badge-test">
    <h3>Feed / postingan</h3><p>Foto profil 42 px · nama 15 px. Bandingkan ikon di samping nama atau menempel pada avatar.</p>
    <div class="mock-feed"><div class="mock-person"><div class="mock-avatar">A</div><div class="mock-person-copy"><strong>Aditya Pratama <span class="badge-inline" id="feedBadge"></span></strong><small>@aditya.pratama · 2 jam</small></div></div><div class="mock-post-lines"><i></i><i></i><i></i></div></div>
-   <div class="badge-controls"><div class="badge-control"><label for="feedSize">UKURAN IKON</label><output id="feedSizeOut">16 px</output><input id="feedSize" type="range" min="10" max="24" value="16"></div></div>
+   <div class="badge-controls"><div class="badge-control"><label for="feedSize">UKURAN IKON</label><output id="feedSizeOut">17 px</output><input id="feedSize" type="range" min="10" max="24" value="17"></div></div>
    <div class="badge-placement"><label for="feedPlacement">POSISI</label><select id="feedPlacement"><option value="name">Di samping nama</option><option value="avatar">Di sudut avatar</option></select></div>
   </article>
   <article class="badge-test">
@@ -122,7 +122,7 @@ const svg=icon(current());$('lightSizes').innerHTML=[16,24,40].map(n=>'<div clas
 $('darkSizes').innerHTML=[16,24,40].map(n=>'<div class="size-item">'+svg.replace('<svg ','<svg width="'+n+'" height="'+n+'" ')+'<span>'+n+' px</span></div>').join('');
 $('assetName').value='Account Level — '+current().name;
 }
-function select(id){selected=id;render();$('status').textContent='';}
+function select(id){selected=id;render();renderBadgeLab();$('status').textContent='';}
 function save(){const t=current();const name=$('assetName').value.trim();if(!name){$('status').textContent='Nama aset harus diisi.';return}
 const a={id:'PLU-'+Date.now(),name,category:$('category').value,version:$('version').value.trim()||'1.0',status:$('assetStatus').value,svg:icon(t),level:t.name,createdAt:new Date().toISOString()};
 assets.unshift(a);persist();$('status').textContent='Tersimpan di pustaka perangkat ini.';renderLibrary();}
