@@ -49,7 +49,7 @@
 <div class="preview"><h3>LATAR TERANG</h3><div class="sizes" id="lightSizes"></div></div>
 <div class="preview dark"><h3>LATAR GELAP</h3><div class="sizes" id="darkSizes"></div></div>
 </div>
-<div class="notice section-gap">PLUITS Priority menggunakan logo resmi PLUITS apa adanya, dengan satu garis bingkai tipis bersudut membulat. Sederhana dan tetap membawa identitas asli.</div>
+<div class="notice section-gap">Golden memakai tanda kimia emas (Au), sedangkan Platinum memakai tanda kimia platinum (Pt). Keduanya dibuat seperti cap logam tipis agar maknanya jelas dan tetap terbaca pada ukuran kecil. Ini masih konsep untuk dibandingkan, belum desain final.</div>
 </div>
 <aside class="panel">
 <div class="panel-head"><h2>Simpan ke pustaka</h2><span class="hint">SVG vector</span></div>
@@ -82,13 +82,13 @@
    <div class="badge-placement"><label for="commentPlacement">POSISI</label><select id="commentPlacement"><option value="name">Di samping nama</option><option value="avatar">Di sudut avatar</option></select></div>
   </article>
   <article class="badge-test">
-   <h3>Profil</h3><p>Foto profil mobile 86 px · nama 20 px. Nama level tetap ditampilkan bersama ikon.</p>
+   <h3>Profil</h3><p>Foto profil mobile 98 px · nama 20 px. Nama level tetap ditampilkan bersama ikon.</p>
    <div class="mock-profile"><div class="mock-profile-avatar"></div><div class="mock-profile-meta"><strong>Bagus Kristian</strong><small>@bagus.kristian</small><span class="mock-profile-tier"><span class="badge-inline" id="profileBadge"></span><span id="profileTierName">Silver</span></span></div></div>
    <div class="badge-controls"><div class="badge-control"><label for="profileSize">UKURAN IKON</label><output id="profileSizeOut">18 px</output><input id="profileSize" type="range" min="12" max="28" value="18"></div></div>
    <div class="badge-placement"><label for="profilePlacement">POSISI</label><select id="profilePlacement"><option value="label">Di dalam label level</option><option value="name">Di samping nama</option><option value="avatar">Di sudut avatar</option></select></div>
   </article>
  </div>
- <div class="badge-measure-note">Ukuran awal diambil dari aturan tampilan yang sedang ada: ikon tier lama sekitar 17 px pada avatar feed dan 13 px pada avatar komentar; avatar feed 42 px, avatar komentar 27 px, dan avatar profil mobile 86 px. Angka ikon pada preview ini bisa diubah untuk pengujian—belum menjadi ukuran final.</div>
+ <div class="badge-measure-note">Ukuran awal diambil dari aturan tampilan yang sedang ada: ikon tier lama sekitar 17 px pada avatar feed dan 13 px pada avatar komentar; avatar feed 42 px, avatar komentar 27 px, dan avatar profil mobile 98 px. Angka ikon pada preview ini bisa diubah untuk pengujian—belum menjadi ukuran final.</div>
 </div>
 </section>
 <section class="library" id="libraryView">
@@ -111,8 +111,8 @@ function icon(t,uid){const c=t.color;let shape='';let detail='';
 if(t.type==='regular'){shape='<path d="M50 9 86 29v42L50 91 14 71V29L50 9Z" fill="#fff" stroke="'+c+'" stroke-width="3"/><path d="M50 27v27" stroke="'+c+'" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="68" r="3.5" fill="'+c+'"/>';}
 if(t.type==='verified'){shape='<path d="M50 8 87 22v27c0 22-15 36-37 44C28 85 13 71 13 49V22L50 8Z" fill="#fff" stroke="'+c+'" stroke-width="3"/><path d="m31 50 13 13 26-29" fill="none" stroke="'+c+'" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>';}
 if(t.type==='silver'){shape='<path d="M50 8 87 29v42L50 92 13 71V29L50 8Z" fill="#f8fafb" stroke="'+c+'" stroke-width="3"/><path d="M50 19 77 34v32L50 81 23 66V34L50 19Z" fill="none" stroke="#d3dbe0" stroke-width="1.5"/><path d="m36 51 9 9 20-23" fill="none" stroke="#8796a1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';}
-if(t.type==='golden'){shape='<path d="M50 7 89 29v44L50 95 11 73V29L50 7Z" fill="#fffaf1" stroke="'+c+'" stroke-width="3"/><path d="M50 17 79 34v34L50 85 21 68V34L50 17Z" fill="none" stroke="#d8b77c" stroke-width="1.5"/><path d="M50 31v39M31 50h38" stroke="'+c+'" stroke-width="2.2" stroke-linecap="round"/><circle cx="50" cy="50" r="10" fill="none" stroke="'+c+'" stroke-width="2"/>';}
-if(t.type==='platinum'){shape='<path d="M50 6 89 28v46L50 96 11 74V28L50 6Z" fill="#f8fafc" stroke="'+c+'" stroke-width="3"/><path d="M50 16 79 33v36L50 86 21 69V33L50 16Z" fill="none" stroke="#c4d0d9" stroke-width="1.5"/><path d="m50 28 7 15 16 7-16 7-7 15-7-15-16-7 16-7 7-15Z" fill="none" stroke="'+c+'" stroke-width="2.2" stroke-linejoin="round"/><circle cx="50" cy="50" r="4" fill="'+c+'"/>';}
+if(t.type==='golden'){shape='<circle cx="50" cy="50" r="39" fill="#fffaf1" stroke="'+c+'" stroke-width="2.8"/><circle cx="50" cy="50" r="33" fill="none" stroke="#dfc18f" stroke-width="1"/><text x="50" y="63" text-anchor="middle" font-family="Georgia,serif" font-size="38" font-weight="600" letter-spacing="-2" fill="'+c+'">Au</text>';}
+if(t.type==='platinum'){shape='<circle cx="50" cy="50" r="39" fill="#f8fafc" stroke="'+c+'" stroke-width="2.8"/><circle cx="50" cy="50" r="33" fill="none" stroke="#cbd5dc" stroke-width="1"/><text x="50" y="63" text-anchor="middle" font-family="Georgia,serif" font-size="36" font-weight="600" letter-spacing="-2.5" fill="'+c+'">Pt</text>';}
 if(t.type==='priority'){shape='<rect x="5.5" y="5.5" width="89" height="89" rx="19" fill="none" stroke="#08ad9e" stroke-width="1.6"/><defs><linearGradient id="pluitsPriorityTeal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#18c8b5"/><stop offset="1" stop-color="#08ad9e"/></linearGradient></defs><path transform="translate(17 17) scale(.0515625)" fill="url(#pluitsPriorityTeal)" fill-rule="evenodd" d="M640 40C361 40 130 270 130 550V1210Q130 1250 170 1250H380Q420 1250 420 1210V1048C485 1078 558 1095 640 1095C922 1095 1150 867 1150 585C1150 285 930 40 640 40ZM640 340A210 210 0 1 1 640 760A210 210 0 1 1 640 340Z"/>';}
 return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="'+t.name+'">'+shape+'</svg>';}
 function current(){return tiers.find(t=>t.id===selected)}
