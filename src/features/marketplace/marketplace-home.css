@@ -56,14 +56,11 @@
 .mp-home .mp-hero-content p{max-width:300px;margin:0;color:rgba(255,255,255,.92);font-size:10px;line-height:1.45}
 .mp-home .mp-hero-cta{position:absolute;left:44px;bottom:22px;display:inline-flex;align-items:center;width:max-content;max-width:calc(100% - 180px);min-height:28px;box-sizing:border-box;margin:0;padding:0 12px;white-space:normal;overflow-wrap:anywhere;background:rgba(255,255,255,.96);color:#183d36;font-size:10px;font-weight:800;letter-spacing:.01em;transition:background .2s ease,color .2s ease,transform .2s ease}
 .mp-home .mp-hero-cta:hover{background:#fff;transform:translateY(-1px)}
-.mp-home .mp-hero-controls{position:absolute;z-index:2;right:max(20px,calc((100vw - 1240px)/2 + 44px));bottom:22px;display:flex;align-items:center;gap:7px}
-.mp-home .mp-hero-controls>button{display:grid;width:34px;height:34px;place-items:center;border:1px solid rgba(255,255,255,.58);border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:22px;line-height:1;cursor:pointer;backdrop-filter:blur(8px)}
-.mp-home .mp-hero-controls>button:hover{background:#fff;color:#243b34}
-.mp-home .mp-hero-controls .mp-hero-toggle{width:30px;height:30px;font-size:12px;font-weight:800}
-.mp-home .mp-hero-controls>button:focus-visible,.mp-home .mp-hero-dots button:focus-visible{outline:2px solid #fff;outline-offset:3px}
-.mp-home .mp-hero-dots{display:flex;gap:6px}
-.mp-home .mp-hero-dots button{width:7px;height:7px;padding:0;border:0;border-radius:10px;background:rgba(255,255,255,.55);cursor:pointer;transition:width .2s ease,background .2s ease}
-.mp-home .mp-hero-dots button.is-active{width:21px;background:#fff}
+.mp-home .mp-hero-controls{position:absolute;z-index:2;right:0;bottom:13px;left:0;display:flex;justify-content:center;pointer-events:none}
+.mp-home .mp-hero-dots{display:flex;align-items:center;gap:7px;padding:5px 8px;pointer-events:auto}
+.mp-home .mp-hero-dots button{width:5px;height:5px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.58);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:pointer;transition:width .2s ease,background .2s ease}
+.mp-home .mp-hero-dots button.is-active{width:15px;border-radius:5px;background:#fff}
+.mp-home .mp-hero-dots button:focus-visible{outline:2px solid #fff;outline-offset:3px}
 
 /* 04. Needs discovery: one visual doorway per customer intent. */
 .mp-home .mp-location-explore{display:inline-flex;align-items:center;gap:5px;color:var(--mp-accent);font-size:10px;font-weight:800;white-space:nowrap}
@@ -225,12 +222,9 @@
  .mp-home .mp-nav{width:calc(100% - 20px);min-height:38px;gap:17px}
  .mp-home .mp-nav a{font-size:10px}
  .mp-home .mp-main{width:calc(100% - 20px)}
- .mp-home .mp-hero-controls{right:12px;bottom:14px;gap:0}
- .mp-home .mp-hero-controls .mp-hero-arrow{display:none}
- .mp-home .mp-hero-controls .mp-hero-toggle{display:grid;width:28px;height:28px;font-size:11px}
- .mp-home .mp-hero-dots{gap:6px;padding:7px 9px;border-radius:20px;background:rgba(15,29,24,.28);backdrop-filter:blur(8px)}
- .mp-home .mp-hero-controls>button{width:30px;height:30px}
- .mp-home .mp-hero-dots{gap:5px;max-width:calc(100vw - 150px)}
+ .mp-home .mp-hero-controls{bottom:12px}
+ .mp-home .mp-hero-dots{gap:6px;padding:5px 8px}
+ .mp-home .mp-hero-dots{gap:6px;max-width:100%}
  .mp-home .mp-discovery-strip{min-height:42px;padding:8px 0 5px}
  .mp-home .mp-location{font-size:11px}
  .mp-home .mp-location-range{font-size:9px}
