@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" role="img" aria-labelledby="title desc">
+<title id="title">PLUITS Hoodie — Motherly Lifestyle Mockup</title>
+<desc id="desc">An elegant vector fashion illustration of an adult woman wearing an oatmeal hoodie with the official teal PLUITS symbol and wordmark on the chest.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5f2ec"/><stop offset="1" stop-color="#e7ece8"/></linearGradient>
+  <radialGradient id="halo"><stop stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+  <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e9b994"/><stop offset=".55" stop-color="#d99d78"/><stop offset="1" stop-color="#bf805f"/></linearGradient>
+  <linearGradient id="hair" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#49352d"/><stop offset=".55" stop-color="#2f2724"/><stop offset="1" stop-color="#171b1a"/></linearGradient>
+  <linearGradient id="hoodie" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffaf0"/><stop offset=".48" stop-color="#e9e0d2"/><stop offset="1" stop-color="#cfc4b5"/></linearGradient>
+  <linearGradient id="hoodieLight" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fffdf8"/><stop offset="1" stop-color="#e8dfd3"/></linearGradient>
+  <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#18c8b5"/><stop offset="1" stop-color="#08ad9e"/></linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur stdDeviation="24"/></filter>
+</defs>
+<rect width="1080" height="1350" fill="url(#bg)"/>
+<ellipse cx="540" cy="525" rx="475" ry="540" fill="url(#halo)"/>
+<ellipse cx="540" cy="1272" rx="330" ry="35" fill="#6f7771" opacity=".17" filter="url(#shadow)"/>
+
+<!-- Hair silhouette behind the hood -->
+<path d="M315 390C275 240 342 108 490 91C652 71 777 180 773 359C772 470 731 573 681 627L389 625C334 565 291 485 315 390Z" fill="url(#hair)"/>
+<path d="M344 357C315 234 388 132 500 119C628 105 731 187 738 318C710 280 680 253 644 235C593 305 494 336 382 330Z" fill="#594137" opacity=".55"/>
+
+<!-- Neck -->
+<path d="M464 440L461 560C459 609 621 612 620 559L608 432Z" fill="url(#skin)"/>
+<path d="M463 478C498 531 566 548 614 491L620 558C611 603 472 600 461 556Z" fill="#a96850" opacity=".22"/>
+
+<!-- Arms and hoodie body -->
+<path d="M341 573C274 589 229 645 195 747L105 1104C89 1173 129 1221 197 1230L350 1248L405 832Z" fill="url(#hoodie)"/>
+<path d="M739 573C806 589 851 645 885 747L975 1104C991 1173 951 1221 883 1230L730 1248L675 832Z" fill="url(#hoodie)"/>
+<path d="M341 571C390 533 449 520 540 520C631 520 690 533 739 571C824 613 861 695 868 822L902 1251H178L212 822C219 695 256 613 341 571Z" fill="url(#hoodieLight)"/>
+
+<!-- Hood drape -->
+<path d="M399 526C403 594 456 648 540 659C624 648 677 594 681 526C724 544 765 576 787 621C738 671 674 715 540 719C406 715 342 671 293 621C315 576 356 544 399 526Z" fill="#d7cbbb"/>
+<path d="M410 537C425 594 474 628 540 640C606 628 655 594 670 537C687 550 703 562 716 578C681 641 626 674 540 683C454 674 399 641 364 578C377 562 393 550 410 537Z" fill="#f5eee4"/>
+
+<!-- Face -->
+<path d="M369 292C369 190 438 137 540 137C642 137 711 190 711 292L700 405C687 503 617 565 540 565C463 565 393 503 380 405Z" fill="url(#skin)"/>
+<path d="M369 304C355 210 407 123 510 105C617 86 709 151 725 258C699 222 666 203 625 193C585 246 490 275 389 272Z" fill="url(#hair)"/>
+<path d="M371 272C348 368 360 462 420 520C381 501 342 445 332 369C322 277 337 197 398 142C382 182 371 224 371 272Z" fill="#302723"/>
+<path d="M710 270C731 365 716 466 658 520C697 500 738 444 748 369C760 273 741 194 683 142C699 181 710 224 710 270Z" fill="#241f1d"/>
+<path d="M428 334C452 318 480 319 501 333" fill="none" stroke="#684537" stroke-width="9" stroke-linecap="round"/>
+<path d="M579 333C600 319 628 318 652 334" fill="none" stroke="#684537" stroke-width="9" stroke-linecap="round"/>
+<path d="M435 365C453 353 477 353 494 365" fill="none" stroke="#302522" stroke-width="8" stroke-linecap="round"/>
+<path d="M586 365C603 353 627 353 645 365" fill="none" stroke="#302522" stroke-width="8" stroke-linecap="round"/>
+<ellipse cx="465" cy="368" rx="5" ry="7" fill="#282321"/><ellipse cx="615" cy="368" rx="5" ry="7" fill="#282321"/>
+<path d="M539 369C530 402 521 420 539 425" fill="none" stroke="#b9785e" stroke-width="6" stroke-linecap="round"/>
+<path d="M493 463C519 482 561 482 587 463" fill="none" stroke="#985d50" stroke-width="7" stroke-linecap="round"/>
+<path d="M506 462C527 470 553 470 574 462" fill="none" stroke="#fff0e7" stroke-width="5" stroke-linecap="round"/>
+<ellipse cx="419" cy="416" rx="27" ry="14" fill="#d77f70" opacity=".22"/><ellipse cx="660" cy="416" rx="27" ry="14" fill="#d77f70" opacity=".22"/>
+<path d="M408 493C445 535 489 554 540 555C591 554 635 535 672 493C657 552 607 590 540 590C473 590 423 552 408 493Z" fill="#b77559" opacity=".13"/>
+
+<!-- Hoodie seams, cuffs and pocket -->
+<path d="M540 719V1228" stroke="#c9beaf" stroke-width="3" opacity=".7"/>
+<path d="M280 829C335 865 398 885 458 892" fill="none" stroke="#d4c9bb" stroke-width="4" opacity=".7"/>
+<path d="M800 829C745 865 682 885 622 892" fill="none" stroke="#d4c9bb" stroke-width="4" opacity=".7"/>
+<path d="M350 1003C398 1031 459 1044 540 1044C621 1044 682 1031 730 1003L713 1157C663 1182 605 1193 540 1193C475 1193 417 1182 367 1157Z" fill="#e4dacd" opacity=".72" stroke="#c9beaf" stroke-width="3"/>
+<path d="M105 1104C161 1130 222 1140 289 1135L280 1238C213 1248 155 1236 118 1212Z" fill="#d9cfc2"/>
+<path d="M975 1104C919 1130 858 1140 791 1135L800 1238C867 1248 925 1236 962 1212Z" fill="#d9cfc2"/>
+<path d="M465 686C482 708 510 723 540 727C570 723 598 708 615 686" fill="none" stroke="#c4b8a9" stroke-width="4" stroke-linecap="round"/>
+<path d="M458 700L443 754M622 700L637 754" stroke="#b7aa9a" stroke-width="3" stroke-linecap="round"/>
+<circle cx="443" cy="759" r="7" fill="#b7aa9a"/><circle cx="637" cy="759" r="7" fill="#b7aa9a"/>
+
+<!-- Official PLUITS symbol and wordmark on chest -->
+<g transform="translate(474 797) scale(.105)">
+  <path fill="url(#teal)" fill-rule="evenodd" d="M640 40C361 40 130 270 130 550V1210Q130 1250 170 1250H380Q420 1250 420 1210V1048C485 1078 558 1095 640 1095C922 1095 1150 867 1150 585C1150 285 930 40 640 40ZM640 340A210 210 0 1 1 640 760A210 210 0 1 1 640 340Z"/>
+</g>
+<text x="540" y="944" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="800" letter-spacing="8" fill="#183b3a">PLUITS</text>
+
+<!-- Fine garment highlights -->
+<path d="M253 758C230 831 215 914 204 1012M827 758C850 831 865 914 876 1012" fill="none" stroke="#fff" stroke-width="7" opacity=".35" stroke-linecap="round"/>
+<path d="M390 1180C435 1198 484 1206 540 1206C596 1206 645 1198 690 1180" fill="none" stroke="#c8bdae" stroke-width="3" opacity=".8"/>
+</svg>
