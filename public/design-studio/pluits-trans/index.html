@@ -27,6 +27,24 @@
 .toast{position:absolute;left:14px;right:14px;bottom:14px;z-index:50;background:#17383e;color:#fff;padding:11px 13px;border-radius:12px;font-size:10px;line-height:1.5;box-shadow:0 8px 25px #17383e35;display:none}.toast.show{display:block}
 @media(max-width:760px){.studio{padding:0 0 28px}.studio-head{height:48px;padding:0 14px;margin:0;border-bottom:1px solid var(--line)}.studio-label{display:none}.studio-intro{display:none}.workspace{display:block}.device{max-width:none;border:0;border-radius:0;padding:0;box-shadow:none}.app{border-radius:0;min-height:100vh}.appbar{height:53px;padding:0 14px}.map-area{height:235px}.content{padding:14px 13px 22px}.studio-side{display:none}.status-screen{padding:15px 13px 22px}}
 @media(min-width:761px){.app{min-height:850px}.map-area{height:260px}}
+
+/* Mobile trip screen: reserve the area below the map for the live status panel. */
+@media(max-width:600px){
+  .app.status-active{height:100dvh;min-height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+  .app.status-active .appbar{flex:0 0 57px}
+  .app.status-active .map-area{flex:0 0 32vh;height:32vh;min-height:190px;max-height:270px}
+  .app.status-active .booking-screen.hide{display:none!important}
+  .app.status-active .status-screen.show{display:block!important;flex:1 1 auto;min-height:0;height:auto;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:12px 14px calc(28px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#f4faf8 0%,#fff 78%);-webkit-overflow-scrolling:touch}
+  .app.status-active .status-top{position:relative;z-index:1}
+  .app.status-active .status-eta-strip{position:sticky;top:0;z-index:6;background:#eff9f5;border-color:#cfe9df;box-shadow:0 5px 16px #173b3512}
+  .app.status-active #searchStage,.app.status-active #driverStage{display:block;width:100%;min-height:120px}
+  .app.status-active #driverStage[style*="display: none"]{display:none!important}
+  .app.status-active .status-title{margin-top:4px;font-size:18px}
+  .app.status-active .status-copy{font-size:11px;line-height:1.5;margin-bottom:12px}
+  .app.status-active .driver-card{margin-top:10px}
+  .app.status-active .timeline{margin-bottom:18px}
+}
+
 </style>
 </head>
 <body>
