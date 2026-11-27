@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7faf9"><meta name="robots" content="noindex,nofollow">
 <title>PLUITS Trans — Design Studio</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@6.19.0/dist/maplibre-gl.css">
 <style>
 :root{--teal:#08ad9e;--teal-dark:#087f77;--ink:#19343b;--muted:#71838a;--line:#e5ecea;--bg:#f5f8f7;--white:#fff;--soft:#eaf7f5;--shadow:0 12px 32px rgba(25,52,59,.08)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}
@@ -16,7 +16,7 @@ main{max-width:1120px;margin:auto;padding:22px 16px 48px}.intro{display:flex;ali
 .booking{padding:0 14px 18px}.field-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px;box-shadow:0 4px 14px rgba(30,60,55,.035)}.field{display:flex;gap:9px;align-items:center;min-width:0}.field+.field{border-top:1px solid #edf1ef;margin-top:10px;padding-top:10px}.dot{width:9px;height:9px;border-radius:50%;background:var(--teal);flex:none;box-shadow:0 0 0 4px #e7f7f4}.dot.dest{background:#ef9d48;box-shadow:0 0 0 4px #fff3e8}.field-content{min-width:0;flex:1}.field label{display:block;font-size:9px;color:#8a999d;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}.field input{width:100%;border:0;outline:0;padding:0;background:transparent;color:var(--ink);font-size:13px;font-weight:700;min-width:0}.field input::placeholder{color:#a1adaf;font-weight:500}.map-pick{flex:none;border:1px solid #e2eeeb;background:#f5fbf9;color:#087f77;border-radius:9px;padding:7px 8px;font-size:9px;font-weight:800}.map-pick.active{background:#087f77;color:#fff}
 .suggestions{display:none;margin-top:7px;background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden;box-shadow:var(--shadow);position:relative;z-index:20}.suggestions.show{display:block}.suggestion{width:100%;border:0;background:#fff;display:flex;align-items:center;gap:10px;text-align:left;padding:10px 11px;border-bottom:1px solid #f0f3f2;color:var(--ink)}.suggestion:last-child{border:0}.suggestion:active{background:#f0faf8}.sicon{width:31px;height:31px;border-radius:10px;background:#f0f5f3;display:grid;place-items:center;color:#718783;flex:none;font-size:14px}.suggestion b{display:block;font-size:11px;line-height:1.35}.suggestion small{display:block;color:#8b999c;font-size:9px;margin-top:3px;line-height:1.35}.search-status{padding:10px 12px;color:#829195;font-size:10px}
 .map-head{display:flex;align-items:center;justify-content:space-between;margin:14px 1px 7px}.map-head b{font-size:12px}.map-head button{border:0;background:none;color:#078c80;font-size:10px;font-weight:800;padding:4px}.map-wrap{height:228px;border:1px solid #dbe6e1;border-radius:15px;overflow:hidden;position:relative;background:#e7efeb}.map-wrap #map{height:100%;width:100%;z-index:1}.map-loading{position:absolute;inset:0;display:grid;place-items:center;color:#718783;font-size:11px;background:#e7efeb;z-index:0}.map-instruction{position:absolute;left:9px;right:9px;top:9px;z-index:500;pointer-events:none;background:#ffffffed;border-radius:9px;padding:7px 9px;font-size:9px;color:#4d6868;box-shadow:0 2px 8px #203c3214}.map-center{position:absolute;right:9px;bottom:10px;z-index:500;width:35px;height:35px;border:0;border-radius:11px;background:#fff;color:#087f77;box-shadow:0 2px 9px #203c3222;font-size:17px}
-.map-wrap .leaflet-control-attribution{font-size:8px}.map-wrap .leaflet-control-zoom{display:none}.leaflet-div-icon{background:transparent;border:0}.pin-marker{width:27px;height:27px;border:3px solid #fff;border-radius:50% 50% 50% 5px;transform:rotate(-45deg);box-shadow:0 3px 9px #183c3440;position:relative}.pin-marker:after{content:"";position:absolute;width:7px;height:7px;background:#fff;border-radius:50%;left:7px;top:7px}.pin-pickup{background:#08ad9e}.pin-dest{background:#ed9848}
+.map-wrap .maplibregl-ctrl-attrib{font-size:8px}.map-wrap .maplibregl-ctrl-bottom-right{right:4px;bottom:2px}.pin-marker{width:27px;height:27px;border:3px solid #fff;border-radius:50% 50% 50% 5px;transform:rotate(-45deg);box-shadow:0 3px 9px #183c3440;position:relative}.pin-marker:after{content:"";position:absolute;width:7px;height:7px;background:#fff;border-radius:50%;left:7px;top:7px}.pin-pickup{background:#08ad9e}.pin-dest{background:#ed9848}
 .section-title{display:flex;align-items:center;justify-content:space-between;margin:16px 1px 8px}.section-title b{font-size:13px}.section-title span{font-size:10px;color:#8a999d}.vehicles{display:grid;grid-template-columns:1fr 1fr;gap:9px}.vehicle{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:11px 9px;text-align:left;display:flex;gap:9px;align-items:center;min-width:0}.vehicle.active{border-color:var(--teal);background:#f0faf8;box-shadow:0 0 0 2px #08ad9e14}.vehicle-icon{width:37px;height:37px;border-radius:12px;background:#f2f5f4;display:grid;place-items:center;font-size:21px;flex:none}.vehicle.active .vehicle-icon{background:#ddf4ef}.vehicle b{display:block;font-size:12px}.vehicle small{display:block;font-size:9px;color:#879699;margin-top:3px}
 .gender-wrap{display:none;margin-top:14px}.gender-wrap.show{display:block}.gender-note{background:#fff8ed;border:1px solid #f5e4c8;border-radius:12px;padding:9px 10px;font-size:9px;line-height:1.5;color:#785c32;margin:0 0 8px}.gender-note strong{color:#664719}.gender-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.gender{background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:9px;text-align:left;display:flex;align-items:center;gap:8px}.gender.active{border-color:var(--teal);background:#f0faf8}.gender .face{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#f2f4f6;font-size:17px}.gender b{font-size:10px;display:block}.gender small{font-size:8px;color:#88979a;display:block;margin-top:2px}
 .next{margin-top:14px;width:100%;border:0;border-radius:13px;background:var(--teal);color:white;font-size:13px;font-weight:850;padding:14px;box-shadow:0 7px 16px #08ad9e33}.next:disabled{opacity:.45;box-shadow:none;cursor:not-allowed}.fineprint{font-size:9px;color:#9aa6a8;text-align:center;margin:8px 0 0}
@@ -49,7 +49,7 @@ main{max-width:1120px;margin:auto;padding:22px 16px 48px}.intro{display:flex;ali
 <div class="toast" id="toast"></div>
 <div class="overlay" id="overlay"><div class="sheet"><div class="grab"></div><h3>Periksa perjalananmu</h3><p>Pastikan titik jemput dan tujuan sudah benar.</p><div class="summary" id="summary"></div><button class="confirm" id="confirm">Konfirmasi simulasi</button><button class="cancel" id="close">Kembali</button></div></div>
 </div></section>
-<aside class="panel"><h3>Pencarian lokasi yang lebih cerdas</h3><p>Hasil pencarian diambil dari nama tempat dan alamat OpenStreetMap melalui Photon. Peta memakai Leaflet dan peta OpenStreetMap.</p>
+<aside class="panel"><h3>Pencarian lokasi yang lebih cerdas</h3><p>Hasil pencarian diambil dari nama tempat dan alamat OpenStreetMap melalui Photon. Tampilan peta menggunakan MapLibre GL dengan vector tiles OpenFreeMap berbasis OpenStreetMap.</p>
 <div class="flowlist">
 <div class="flowitem"><span class="num">1</span><div><b>Ketik nama tempat</b><small>Contoh “Swiss-Bel”. Beberapa cabang atau lokasi yang namanya mirip muncul sebagai daftar.</small></div></div>
 <div class="flowitem"><span class="num">2</span><div><b>Pilih hasil yang tepat</b><small>Nama tempat tampil tegas, alamat atau kawasan tampil lebih kecil di bawahnya.</small></div></div>
@@ -58,43 +58,42 @@ main{max-width:1120px;margin:auto;padding:22px 16px 48px}.intro{display:flex;ali
 </div><div class="rule"></div><p class="hint"><strong>Catatan pengujian:</strong> ini sudah memakai pencarian tempat dan peta sungguhan, tetapi layanan geocoding publik masih untuk prototipe. Untuk penggunaan ramai, PLUITS perlu layanan geocoding dan peta sendiri atau penyedia dengan SLA agar tidak bergantung pada server demo gratis.</p><button class="reset" id="reset">↻ Atur ulang simulasi</button></aside>
 </div>
 </main>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<script>
+<script type="module">
+import * as maplibregl from "https://unpkg.com/maplibre-gl@6.19.0/dist/maplibre-gl.mjs";
 const $=id=>document.getElementById(id);
 let vehicle='motor',gender='perempuan',activeField='destination',mapMode=null,map=null,markers={pickup:null,destination:null},coords={pickup:null,destination:null},searchTimer=null,searchController=null,reverseTimer=null,userLocation=null,lastResults=[];
-const bali=[-8.65,115.216];
+const bali={lat:-8.65,lng:115.216};
 function notify(title,msg){$('toast').innerHTML='<b>'+title+'</b>'+msg;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),3800)}
 function updateContinue(){$('continue').disabled=!$('pickup').value.trim()||!$('destination').value.trim()}
 function setAddress(field,label,latlng,zoom=16){
  $(field).value=label;coords[field]=latlng?[latlng.lat,latlng.lng]:null;
- if(map&&latlng){map.setView(latlng,zoom);putMarker(field,latlng)}
+ if(map&&latlng){map.easeTo({center:[latlng.lng,latlng.lat],zoom});putMarker(field,latlng)}
  $('suggestions').classList.remove('show');$('suggestions').innerHTML='';updateContinue();
 }
-function pinIcon(field){return L.divIcon({className:'',html:'<div class="pin-marker '+(field==='pickup'?'pin-pickup':'pin-dest')+'"></div>',iconSize:[27,34],iconAnchor:[13,32]})}
+function pinIcon(field){const el=document.createElement("div");el.className="pin-marker "+(field==="pickup"?"pin-pickup":"pin-dest");return el}
 function putMarker(field,latlng){
  if(!map)return;
- if(markers[field])markers[field].setLatLng(latlng);
- else markers[field]=L.marker(latlng,{draggable:true,icon:pinIcon(field),autoPan:true}).addTo(map);
- markers[field].on('dragend',()=>reversePoint(field,markers[field].getLatLng()));
+ if(markers[field])markers[field].setLngLat([latlng.lng,latlng.lat]);
+ else markers[field]=new maplibregl.Marker({element:pinIcon(field),draggable:true,anchor:'bottom'}).setLngLat([latlng.lng,latlng.lat]).addTo(map);
+ markers[field].on('dragend',()=>{const p=markers[field].getLngLat();reversePoint(field,{lat:p.lat,lng:p.lng})});
 }
 function initMap(){
- if(!window.L){$('mapLoading').textContent='Peta belum dapat dimuat. Periksa koneksi internet.';return}
- map=L.map('map',{zoomControl:false,scrollWheelZoom:false}).setView(bali,13);
- L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(map);
- $('mapLoading').style.display='none';
- map.on('click',e=>{if(!mapMode){notify('Pilih titik terlebih dahulu','Tekan tombol “Pilih peta” di samping lokasi jemput atau tujuan.');return}putMarker(mapMode,e.latlng);reversePoint(mapMode,e.latlng)});
- setTimeout(()=>map.invalidateSize(),250);
+ map=new maplibregl.Map({container:'map',style:'https://tiles.openfreemap.org/styles/liberty',center:[bali.lng,bali.lat],zoom:13,attributionControl:true,dragRotate:false,pitchWithRotate:false,antialias:true});
+ map.addControl(new maplibregl.NavigationControl({showCompass:false,showZoom:false}),'top-right');
+ map.on('load',()=>{$('mapLoading').style.display='none';map.resize()});
+ map.on('error',()=>{if(!$('mapLoading').dataset.failed){$('mapLoading').dataset.failed='1';$('mapLoading').textContent='Peta belum dapat dimuat. Periksa koneksi internet.'}});
+ map.on('click',e=>{if(!mapMode){notify('Pilih titik terlebih dahulu','Tekan tombol “Pilih peta” di samping lokasi jemput atau tujuan.');return}const p={lat:e.lngLat.lat,lng:e.lngLat.lng};putMarker(mapMode,p);reversePoint(mapMode,p)});
+ setTimeout(()=>map.resize(),350);
 }
 function chooseMap(field){
  mapMode=field;activeField=field;
  document.querySelectorAll('.map-pick').forEach(b=>b.classList.toggle('active',b.dataset.mapFor===field));
  $('mapInstruction').textContent=field==='pickup'?'Pilih titik jemput: ketuk peta atau geser pin.':'Pilih titik tujuan: ketuk peta atau geser pin.';
- if(coords[field]&&map)map.setView(coords[field],17);
- else if(map)map.setZoom(15);
+ if(coords[field]&&map)map.easeTo({center:[coords[field].lng,coords[field].lat],zoom:17});else if(map)map.easeTo({zoom:15});
  $('map').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 async function reversePoint(field,latlng){
- $(field).value='Mencari alamat titik…';coords[field]=[latlng.lat,latlng.lng];updateContinue();
+ $(field).value='Mencari alamat titik…';coords[field]={lat:latlng.lat,lng:latlng.lng};updateContinue();
  try{
   const url='https://photon.komoot.io/reverse/?lat='+encodeURIComponent(latlng.lat)+'&lon='+encodeURIComponent(latlng.lng)+'&lang=id';
   const response=await fetch(url,{headers:{Accept:'application/json'}});
@@ -117,13 +116,13 @@ function renderResults(features,status){
  if(status){box.innerHTML='<div class="search-status">'+status+'</div>';box.classList.add('show');return}
  if(!features.length){box.innerHTML='<div class="search-status">Tempat belum ditemukan. Coba nama lain atau tentukan titiknya langsung di peta.</div>';box.classList.add('show');return}
  box.innerHTML=features.map((f,i)=>{const p=f.properties||{};return '<button class="suggestion" data-index="'+i+'"><span class="sicon">⌖</span><span><b>'+escapeHtml(resultLabel(p))+'</b><small>'+escapeHtml([p.street,p.district||p.suburb,p.city||p.county,p.state].filter(Boolean).filter((v,j,a)=>a.indexOf(v)===j).join(', ')||p.country||'Tempat')+'</small></span></button>'}).join('');
- box.classList.add('show');box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const f=lastResults[Number(b.dataset.index)],p=f.properties||{},[lon,lat]=f.geometry.coordinates;setAddress(activeField,formatPlace(p),L.latLng(lat,lon),17)}));
+ box.classList.add('show');box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const f=lastResults[Number(b.dataset.index)],p=f.properties||{},[lon,lat]=f.geometry.coordinates;setAddress(activeField,formatPlace(p),{lat,lng:lon},17)}));
 }
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 async function searchPlaces(q){
  if(searchController)searchController.abort();searchController=new AbortController();
  const params=new URLSearchParams({q,limit:'8',lang:'id'});
- const bias=userLocation|| (map?map.getCenter():L.latLng(bali[0],bali[1]));
+ const bias=userLocation||(map?map.getCenter():bali);
  if(bias){params.set('lat',bias.lat);params.set('lon',bias.lng)}
  try{
   const res=await fetch('https://photon.komoot.io/api/?'+params.toString(),{signal:searchController.signal,headers:{Accept:'application/json'}});
@@ -145,8 +144,8 @@ function locateUser(){
  if(!navigator.geolocation){notify('Lokasi tidak tersedia','Perangkat atau browser tidak mendukung lokasi.');return}
  $('locate').textContent='Mencari…';
  navigator.geolocation.getCurrentPosition(pos=>{
-  userLocation=L.latLng(pos.coords.latitude,pos.coords.longitude);
-  if(map){map.setView(userLocation,18);putMarker('pickup',userLocation)}
+  userLocation={lat:pos.coords.latitude,lng:pos.coords.longitude};
+  if(map){map.easeTo({center:[userLocation.lng,userLocation.lat],zoom:18});putMarker('pickup',userLocation)}
   setAddress('pickup','Lokasi saya · '+pos.coords.latitude.toFixed(5)+', '+pos.coords.longitude.toFixed(5),userLocation,18);
   $('locate').textContent='◎ Lokasi saya';notify('Lokasi ditemukan','Titik jemput sudah diarahkan ke posisi perangkat. Geser pin jika belum tepat.');
  },err=>{
@@ -155,7 +154,7 @@ function locateUser(){
  },{enableHighAccuracy:true,timeout:12000,maximumAge:5000});
 }
 $('locate').addEventListener('click',locateUser);
-$('centerMap').addEventListener('click',()=>{if(map){const c=userLocation||map.getCenter();map.setView(c,userLocation?18:15)}});
+$('centerMap').addEventListener('click',()=>{if(map){const c=userLocation||map.getCenter();map.easeTo({center:[c.lng,c.lat],zoom:userLocation?18:15})}});
 document.querySelectorAll('.vehicle').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.vehicle').forEach(x=>x.classList.remove('active'));b.classList.add('active');vehicle=b.dataset.vehicle;$('genderWrap').classList.toggle('show',vehicle==='motor');updateContinue()}));
 document.querySelectorAll('.gender').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.gender').forEach(x=>x.classList.remove('active'));b.classList.add('active');gender=b.dataset.gender;$('genderNote').style.display=gender==='perempuan'?'block':'none'}));
 $('continue').addEventListener('click',()=>{if($('continue').disabled)return;$('summary').innerHTML='<b>Jemput:</b> '+escapeHtml($('pickup').value)+'<br><b>Tujuan:</b> '+escapeHtml($('destination').value)+'<br><b>Kendaraan:</b> '+(vehicle==='motor'?'Motor':'Mobil')+(vehicle==='motor'?'<br><b>Pilihan driver:</b> '+(gender==='perempuan'?'Perempuan':'Laki-laki'):'');$('overlay').classList.add('show')});
@@ -164,11 +163,11 @@ $('confirm').addEventListener('click',()=>{$('overlay').classList.remove('show')
 $('help').addEventListener('click',()=>notify('Butuh bantuan?','Di aplikasi sebenarnya, bagian ini akan menghubungkan pengguna ke pusat bantuan PLUITS Trans.'));
 $('reset').addEventListener('click',()=>{
  $('pickup').value='Lokasi saya';$('destination').value='';vehicle='motor';gender='perempuan';coords={pickup:null,destination:null};mapMode=null;
- Object.keys(markers).forEach(k=>{if(markers[k]&&map){map.removeLayer(markers[k]);markers[k]=null}});
+ Object.keys(markers).forEach(k=>{if(markers[k]&&map){markers[k].remove();markers[k]=null}});
  document.querySelectorAll('.vehicle').forEach(x=>x.classList.toggle('active',x.dataset.vehicle==='motor'));
  document.querySelectorAll('.gender').forEach(x=>x.classList.toggle('active',x.dataset.gender==='perempuan'));
  document.querySelectorAll('.map-pick').forEach(x=>x.classList.remove('active'));
- $('genderWrap').classList.add('show');$('genderNote').style.display='block';$('suggestions').classList.remove('show');$('mapInstruction').textContent='Pilih “Pilih peta”, lalu ketuk peta atau geser pin untuk menentukan titik.';if(map)map.setView(bali,13);updateContinue();
+ $('genderWrap').classList.add('show');$('genderNote').style.display='block';$('suggestions').classList.remove('show');$('mapInstruction').textContent='Pilih “Pilih peta”, lalu ketuk peta atau geser pin untuk menentukan titik.';if(map)map.easeTo({center:[bali.lng,bali.lat],zoom:13});updateContinue();
 });
 document.addEventListener('click',e=>{if(!e.target.closest('.field-card')&&!e.target.closest('.suggestions'))$('suggestions').classList.remove('show')});
 initMap();updateContinue();
