@@ -23,7 +23,7 @@
 <div class="preview"><h3>LATAR TERANG</h3><div class="sizes" id="lightSizes"></div></div>
 <div class="preview dark"><h3>LATAR GELAP</h3><div class="sizes" id="darkSizes"></div></div>
 </div>
-<div class="notice section-gap">Arah visual awal menggunakan geometri khusus dan detail tipis yang lebih elegan. Ini adalah bahan eksplorasi, bukan keputusan final untuk level membership.</div>
+<div class="notice section-gap">PLUITS Priority menggunakan logo resmi PLUITS apa adanya, dengan satu garis bingkai tipis bersudut membulat. Sederhana dan tetap membawa identitas asli.</div>
 </div>
 <aside class="panel">
 <div class="panel-head"><h2>Simpan ke pustaka</h2><span class="hint">SVG vector</span></div>
@@ -61,7 +61,7 @@ if(t.type==='verified'){shape='<path d="M50 8 87 22v27c0 22-15 36-37 44C28 85 13
 if(t.type==='silver'){shape='<path d="M50 8 87 29v42L50 92 13 71V29L50 8Z" fill="#f8fafb" stroke="'+c+'" stroke-width="3"/><path d="M50 19 77 34v32L50 81 23 66V34L50 19Z" fill="none" stroke="#d3dbe0" stroke-width="1.5"/><path d="m36 51 9 9 20-23" fill="none" stroke="#8796a1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';}
 if(t.type==='golden'){shape='<path d="M50 7 89 29v44L50 95 11 73V29L50 7Z" fill="#fffaf1" stroke="'+c+'" stroke-width="3"/><path d="M50 17 79 34v34L50 85 21 68V34L50 17Z" fill="none" stroke="#d8b77c" stroke-width="1.5"/><path d="M50 31v39M31 50h38" stroke="'+c+'" stroke-width="2.2" stroke-linecap="round"/><circle cx="50" cy="50" r="10" fill="none" stroke="'+c+'" stroke-width="2"/>';}
 if(t.type==='platinum'){shape='<path d="M50 6 89 28v46L50 96 11 74V28L50 6Z" fill="#f8fafc" stroke="'+c+'" stroke-width="3"/><path d="M50 16 79 33v36L50 86 21 69V33L50 16Z" fill="none" stroke="#c4d0d9" stroke-width="1.5"/><path d="m50 28 7 15 16 7-16 7-7 15-7-15-16-7 16-7 7-15Z" fill="none" stroke="'+c+'" stroke-width="2.2" stroke-linejoin="round"/><circle cx="50" cy="50" r="4" fill="'+c+'"/>';}
-if(t.type==='priority'){shape='<path d="M50 5 91 27v46L50 95 9 73V27L50 5Z" fill="#f8fbfa" stroke="#08ad9e" stroke-width="3.5"/><path d="M50 14 82 32v36L50 86 18 68V32L50 14Z" fill="none" stroke="#b6dcd6" stroke-width="1.5"/><path d="M34 73V29h18c13 0 21 8 21 20S65 69 52 69H34" fill="none" stroke="#08ad9e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="M34 73V29" fill="none" stroke="#08ad9e" stroke-width="9" stroke-linecap="round"/><circle cx="52" cy="49" r="7" fill="#f8fbfa"/>';}
+if(t.type==='priority'){shape='<rect x="5.5" y="5.5" width="89" height="89" rx="19" fill="none" stroke="#08ad9e" stroke-width="1.6"/><defs><linearGradient id="pluitsPriorityTeal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#18c8b5"/><stop offset="1" stop-color="#08ad9e"/></linearGradient></defs><path transform="translate(17 17) scale(.0515625)" fill="url(#pluitsPriorityTeal)" fill-rule="evenodd" d="M640 40C361 40 130 270 130 550V1210Q130 1250 170 1250H380Q420 1250 420 1210V1048C485 1078 558 1095 640 1095C922 1095 1150 867 1150 585C1150 285 930 40 640 40ZM640 340A210 210 0 1 1 640 760A210 210 0 1 1 640 340Z"/>';}
 return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="'+t.name+'">'+shape+'</svg>';}
 function current(){return tiers.find(t=>t.id===selected)}
 function render(){ $('tierGrid').innerHTML=tiers.map(t=>'<button class="tier '+(selected===t.id?'selected':'')+'" data-id="'+t.id+'"><div class="art">'+icon(t)+'</div><strong>'+t.name+'</strong><span>'+t.sub+'</span></button>').join('');
